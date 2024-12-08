@@ -1,0 +1,110 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "owlsight"
+dynamic = ["version"]
+description = "Owlsight is a commandline tool which combines open-source AI models with Python functionality to create a powerful AI assistant."
+authors = [{ name = "Vincent Ouwendijk" }]
+license = { text = "MIT" }
+readme = "README.md"
+dependencies = [
+    "transformers",
+    "pandas",
+    "numpy",
+    "torch",
+    "bitsandbytes",
+    "accelerate",
+    "sentencepiece",
+    "prompt_toolkit",
+    "keyboard",
+    "scikit-learn",
+    "beautifulsoup4",
+    "jinja2",
+    "tqdm",
+    "pydantic"
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "twine",
+    "pytest",
+    "pytest-asyncio<=0.24",
+    "ruff",
+    "black",
+    "pynput",
+]
+
+gguf = [
+    "llama-cpp-python==0.3.1",
+]
+
+onnx = [
+    "onnxruntime-genai",
+    "onnxruntime-genai-cuda",
+]
+
+search = [
+    "sentence-transformers",
+]
+
+multimodal = [
+    "pytesseract",
+]
+
+# Define the "all" option to include everything (base + optional dependencies)
+all = [
+    # Base dependencies
+    "psutil",
+    "transformers",
+    "pandas",
+    "numpy",
+    "torch",
+    "bitsandbytes",
+    "accelerate",
+    "sentencepiece",
+    "prompt_toolkit",
+    "keyboard",
+    "scikit-learn",
+    "beautifulsoup4",
+    "jinja2",
+    "tqdm",
+    # Optional dependencies
+    "llama-cpp-python",
+    "onnxruntime-genai",
+    "onnxruntime-genai-cuda",
+    "sentence-transformers",
+    "pytesseract",
+    # Dev dependencies
+    "build",
+    "twine",
+    "pytest",
+    "pytest-asyncio<=0.24",
+    "ruff",
+    "black",
+    "pynput",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+
+[project.entry-points.console_scripts]
+owlsight = "owlsight.main:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 120
+
+[tool.setuptools_scm]
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
