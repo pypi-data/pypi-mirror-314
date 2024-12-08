@@ -1,0 +1,739 @@
+model: trbhm
+features:
+  adc2mv: true
+  dac_sweep: false
+  ext_dac: true
+  pedestals: true
+  threshold_scan: true
+  tia_dac: false
+  timing_calibration: true
+  naludaq_rs: true
+params:
+  chanmask: 0xF000
+  channels: 8
+  chanshift: 10
+  chips:
+    0..1:
+      !include_chip
+      from: aardvarcv3::params
+  clock_file: Si5341_TRBHM_10GSaps_GCCsstx2_Registers.txt
+  connections:
+    - serial
+    - d2xx
+    - udp
+  si5341_address: 0xEE
+  timing_hack: true
+  default_baud:
+    115200: 868
+  default_baudrate: 115200
+  default_clock: 100000000.0
+  default_divider: 868
+  threshold_scan:
+    min_vref: 0
+    max_vref: 2500
+    start: 500
+    stop: 3500
+    stepsize: 5
+    units: counts
+  ext_dac:
+    chip: ltc2620
+    max_mv: 1200
+    max_counts: 4095
+    channels:
+      0..7: 2048
+    chip_mapping: # asic channel: dac chip number
+      0..3: 0
+      4..7: 1
+      cal0: 0
+      cal1: 1
+    channel_mapping: # asic channel: ext. dac channel
+      0, 4: 0
+      1, 5: 2
+      2, 6: 5
+      3, 7: 7
+      cal0: 4
+      cal1: 4
+  headers: 3
+  new_firmware: True
+  numregs: 64
+  pedestals_blocks: 16
+  peripherals:
+    current:
+      chan: 0
+      addr: 0xD0
+      bits: 16
+      gain: 8
+    vadjn:
+      chan: 0
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp:
+      chan: 1
+      addr: 0xD8
+      bits: 16
+      gain: 1
+  possible_bauds:
+    115200: 868
+    1000000: 100
+    2000000: 50
+    3000000: 33
+  resolution: 12
+  samples: 64
+  samplingrate: 10.0
+  stop_word: BEEFBEEF
+  register_stop_word: FACE
+  strobe_values_correction: True  # Shift the strobe values on certain boards with swapped internal routing.
+  strobe_correction_keys:
+    - calstrb_le
+    - calstrb_te
+    - wrstrb1_le
+    - wrstrb1_te
+    - wrstrb2_le
+    - wrstrb2_te
+    - wrsync1_le
+    - wrsync1_te
+    - wrsync2_le
+    - wrsync2_te
+  wait: AE000001
+  trigger:
+    wbias: 
+      0..3: 2000
+    default_trigger_value: 2000
+  windmask: 0x3FE
+  windows: 510
+registers:
+  analog_registers:
+    !include_registers
+      from: aardvarcv3::registers::analog_registers
+      value_count: 2
+      override:
+        isel:
+          value: [3400, 3400]
+  digital_registers:
+    !include_registers
+      from: aardvarcv3::registers::digital_registers
+      value_count: 2
+      override:
+        chipid:
+          value: [2730, 2730]
+        miscreg:
+          value: [2, 2]
+  control_registers:
+    1v2_en:
+      address: 0x17
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    2v5_en:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    3v3_i2c_en:
+      address: 0x17
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    8b10b_en:
+      address: 0x19
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    amp_en:
+      address: 0x1A
+      bitposition: 0
+      bitwidth: 8
+      description: Enable onboard amplifiers
+      readwrite: rw
+      value: 0
+    addr:
+      address: 0x16
+      bitposition: 0
+      bitwidth: 9
+      description: ''
+      readwrite: rw
+      value: 0
+    addr_user:
+      address: 0x16
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    chansel:
+      address: 0x06
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    clk1v8_en:
+      address: 0x17
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk2v5_en:
+      address: 0x17
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk_fdec:
+      address: 0x17
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_finc:
+      address: 0x17
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_i2c_sel:
+      address: 0x17
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk_oeb:
+      address: 0x17
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_reset:
+      address: 0x17
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_sync:
+      address: 0x17
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    data:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    data_user:
+      address: 0x14
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    debug_data:
+      address: 0x15
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    debug_data_user:
+      address: 0x15
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    digrst:
+      address: 0x16
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    digser_rst:
+      address: 0x19
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    eth_addr_sel:
+      address: 0x2F
+      bitposition: 0
+      bitwidth: 2
+      description: 'enables manually set destination (bit 0) and source (bit 1) IP addresses'
+      readwrite: rw
+      value: 0
+    eth_port_sel:
+      address: 0x2F
+      bitposition: 2
+      bitwidth: 2
+      description: 'enables manually set destination (bit 0) and source (bit 1) UDP ports'
+      readwrite: rw
+      value: 0
+    tx_mode:
+      address: 0x2F
+      bitposition: 4
+      bitwidth: 1
+      description: 'selects ethernet (value = 1) or UART (value = 0) transmission'
+      readwrite: rw
+      value: 0
+    eth_ar_en:
+      address: 0x2F
+      bitposition: 5
+      bitwidth: 1
+      description: 'enables auto-response destination IP address; currently unused'
+      readwrite: rw
+      value: 0
+    eth_dhcp_en:
+      address: 0x2F
+      bitposition: 6
+      bitwidth: 1
+      description: 'enables DHCP resolution of source IP address; currently unused'
+      readwrite: rw
+      value: 0
+    eth_dest_addr15_0:
+      address: 0x30
+      bitposition: 0
+      bitwidth: 16
+      description: 'lower 16 bits of ethernet destination IP address'
+      readwrite: rw
+      value: 0
+    eth_dest_addr31_16:
+      address: 0x31
+      bitposition: 0
+      bitwidth: 16
+      description: 'upper 16 bits of ethernet destination IP address'
+      readwrite: rw
+      value: 0
+    eth_src_addr15_0:
+      address: 0x32
+      bitposition: 0
+      bitwidth: 16
+      description: 'lower 16 bits of ethernet source IP address'
+      readwrite: rw
+      value: 0
+    eth_src_addr31_16:
+      address: 0x33
+      bitposition: 0
+      bitwidth: 16
+      description: 'upper 16 bits of ethernet source IP address'
+      readwrite: rw
+      value: 0
+    eth_dest_port:
+      address: 0x34
+      bitposition: 0
+      bitwidth: 16
+      description: 'UDP destination port'
+      readwrite: rw
+      value: 0
+    eth_src_port:
+      address: 0x35
+      bitposition: 0
+      bitwidth: 16
+      description: 'UDP source port'
+      readwrite: rw
+      value: 0
+    exttrig:
+      address: 0x04
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    gccclr:
+      address: 0x04
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    idac_update:
+      address: 0x1B
+      bitposition: 14
+      bitwidth: 2
+      description: 'This bit toggled 0-1-0 will start the SPI firmware block that loads the DAC values base on the other registers'
+      readwrite: rw
+      value: 0
+    idac_command:
+      address: 0x1B
+      bitposition: 8
+      bitwidth: 4
+      description: 'Is the command from the data sheet with options on what the LTC2620 does with the data written to it. The data sheet is attached most often this is an "0011'
+      readwrite: rw
+      value: 0
+    idac_address:
+      address: 0x1B
+      bitposition: 4
+      bitwidth: 4
+      description: 'Is the DAC Channel number from the data sheet.'
+      readwrite: rw
+      value: 0
+    idac_chip_number:
+      address: 0x1B
+      bitposition: 0
+      bitwidth: 4
+      description: 'IS the DAC number "0000" or "0001"  there are two DACs in the design.'
+      readwrite: rw
+      value: 0
+    idac_value:
+      address: 0x1C
+      bitposition: 0
+      bitwidth: 12
+      description: '12 bit DAC value.'
+      readwrite: rw
+      value: 0
+    fifo_unload_or_event_en:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 1
+      description: 'Once data is loaded into the FIFO it will not be sent out to the UART until the end of the current event. Use this mode for capturing sampled data events. '
+      readwrite: rw
+      value: 0
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 43714
+    iomode0:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    iomode1:
+      address: 0x04
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    leds:
+      address: 0x18
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    loadwait:
+      address: 0x07
+      bitposition: 8
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    nramp:
+      address: 0x04
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    nrw:
+      address: 0x04
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    numwinds:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 1
+    pclk:
+      address: 0x04
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    pclkwidth:
+      address: 0x07
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    ramplen:
+      address: 0x06
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 2000
+    regclr:
+      address: 0x04
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    runevs:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1
+    rx_en:
+      address: 0x19
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_num_words:
+      address: 0x19
+      bitposition: 2
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_oneshot:
+      address: 0x19
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_speed:
+      address: 0x19
+      bitposition: 8
+      bitwidth: 2
+      description: ''
+      readwrite: rw
+      value: 0
+    sel:
+      address: 0x04
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    selany:
+      address: 0x04
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    slow_sysclk:
+      address: 0x19
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    stopacq:
+      address: 0x04
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    syncloc:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    sysclk:
+      address: 0x04
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    sysrst:
+      address: 0x04
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    tx_en:
+      address: 0x19
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    uart_tx_disable:
+      address: 0x28
+      bitposition: 2
+      bitwidth: 1
+      description: Set to 1 to disable UART output from the board
+      readwrite: rw
+      value: 0
+    windsel:
+      address: 0x07
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    wrstrboff:
+      address: 0x04
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    rxout_pol:
+      address: 0x22
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 6400
+    txin_pol:
+      address: 0x23
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 4412
+    ard_header:
+      address: 0x21
+      bitposition: 0
+      bitwidth: 1
+      description: 'Enable AARDVARC debug header.'
+      readwrite: rw
+      value: 1
+    ard_rx_en:
+      address: 0x1D
+      bitposition: 0
+      bitwidth: 16
+      description: 'TR-BHM ASIC Rx Enable register 29dec. Bit 0 and 1 enable transmitting data to ASICs. Need to set these bits to send data to the ASICs'
+      readwrite: rw
+      value: 3
+    ard_tx_en:
+      address: 0x1E
+      bitposition: 0
+      bitwidth: 16
+      description: 'TR-BHM ASIC Tx Enable register 30dec. Bit 0 and 1 enable receiving data from ASICs. Need to set these bits to get data back from the ASICs'
+      readwrite: rw
+      value: 3
+    ard_clk_select_0:
+      address: 0x24
+      bitposition: 0
+      bitwidth: 1
+      description: 'TR-BHM chip 0 phase select\n 00: 0 deg\n 01: 90 deg\n 10: 180 deg\n 11: 270 deg'
+      readwrite: rw
+      value: 0
+    ard_clk_select_1:
+      address: 0x25
+      bitposition: 0
+      bitwidth: 1
+      description: 'TR-BHM chip 1 phase select\n 00: 0 deg\n 01: 90 deg\n 10: 180 deg\n 11: 270 deg'
+      readwrite: rw
+      value: 0
+  i2c_registers:
+    i2c_en:
+      address: 0x0F
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    i2c_send:
+      address: 0x0F
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_addr:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data0:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data1:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data2:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data3:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_words:
+      address: 0x0F
+      bitposition: 8
+      bitwidth: 3
+      description: ''
+      readwrite: rw
+      value: 0
+    response0:
+      address: 0x48
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response1:
+      address: 0x49
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response2:
+      address: 0x4A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response3:
+      address: 0x4B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0

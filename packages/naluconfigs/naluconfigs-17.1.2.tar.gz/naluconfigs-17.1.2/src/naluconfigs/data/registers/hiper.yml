@@ -1,0 +1,937 @@
+model: hiper
+features:
+  adc2mv: false
+  dac_sweep: false
+  ext_dac: true
+  pedestals: true
+  threshold_scan: false
+  tia_dac: false
+  timing_calibration: false
+  naludaq_rs: false
+params:
+  uart:
+    tx_pause: 0.01
+    bundle: true
+  chanmask: 3072
+  channels: 56
+  chanshift: 10
+  chips:
+    0..13:
+      !include_chip
+      from: hiper::params
+  num_chips: 14
+  installed_chips: []  # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+  clock_file: Si5341-RevD-HIPeR_78_125SysClk_312_5GccClk-Registers.txt
+  connections:
+    - serial
+    - d2xx
+  si5341_address: 0xEE
+  default_baud:
+    3000000: 33
+  default_baudrate: 3000000
+  default_clock: 100000000.0
+  default_divider: 33
+  ext_dac:
+    max_mv: 1200
+    max_counts: 4095
+    channels:
+      0..55: 2730
+    side_mapping: # asic channel: dac side (0 = left, 1 = right)
+      0..27: 0
+      28..55: 1
+    chip_mapping: # asic channel: dac chip number
+      0..3: 0
+      4..7: 1
+      8..11: 2
+      12..15: 3
+      16..19: 4
+      20..23: 5
+      24..27: 6
+      28..31: 0
+      32..35: 1
+      36..39: 2
+      40..43: 3
+      44..47: 4
+      48..51: 5
+      52..55: 6
+    channel_mapping: # asic channel: ext. dac channel
+      0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52: 0
+      1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53: 6
+      2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54: 3
+      3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55: 4
+  headers: 3
+  numregs: 64
+  pedestals_blocks: 8
+  pedestals:
+    trigger_limit: 3.0
+  peripherals:
+    current:
+      chan: 0
+      addr: 0xD0
+      bits: 16
+      gain: 8
+    vadjn:
+      chan: 0
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp:
+      chan: 1
+      addr: 0xD8
+      bits: 16
+      gain: 1
+  possible_bauds:
+    #115200: 53
+    # 230400: 26
+    # 691200: 8
+    # 1041667: 5
+    3000000: 33
+  resolution: 12
+  samples: 64
+  samplingrate: 10.0
+  register_stop_word: FACE
+  stop_word: FACE  # A5AF5AFC3C3C
+  wait: AE000001
+  trigger:
+    wbias: 
+      0..48: 2000
+    default_trigger_value: 1500
+    ext_trig_cycles: 3
+  windmask: 1022
+  windows: 64
+registers:
+  analog_registers:
+    !include_registers
+      from: hiper::registers::analog_registers
+      value_count: 14
+      override:
+        isel:
+          value: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000]
+  digital_registers:
+    !include_registers
+      from: hiper::registers::digital_registers
+      value_count: 14
+      # override:
+        # txspeed:
+          # value: 0
+  control_registers:
+    1v2_en:
+      address: 0x17
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    2v5_en:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    3v3_i2c_en:
+      address: 0x17
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    8b10b_en:
+      address: 0x19
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    addr:
+      address: 0x16
+      bitposition: 0
+      bitwidth: 9
+      description: ''
+      readwrite: rw
+      value: 0
+    addr_user:
+      address: 0x16
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    ard_trig_0_in:  # TODO: New register, verify address and value
+      address: 0x47
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    chansel:
+      address: 0x06
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    clk1v8_en:
+      address: 0x17
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk2v5_en:
+      address: 0x17
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk_fdec:
+      address: 0x17
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_finc:
+      address: 0x17
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_i2c_sel:
+      address: 0x17
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk_oeb:
+      address: 0x17
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_reset:
+      address: 0x17
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_sync:
+      address: 0x17
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_sel0:  # TODO: Newly added, verify default value
+      address: 0x17
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_sel1:  # TODO: Newly added, verify default value
+      address: 0x17
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    data:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    data_user:
+      address: 0x14
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    debug_data:
+      address: 0x15
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    debug_data_user:
+      address: 0x15
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    digrst:
+      address: 0x16
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    digser_rst:
+      address: 0x19
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    digser_tx_storage0:  # TODO: New register, verify address and value
+      address: 0x4D
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage1:  # TODO: New register, verify address and value
+      address: 0x4E
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage2:  # TODO: New register, verify address and value
+      address: 0x4F
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage3:  # TODO: New register, verify address and value
+      address: 0x50
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage4:  # TODO: New register, verify address and value
+      address: 0x51
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage5:  # TODO: New register, verify address and value
+      address: 0x52
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage6:  # TODO: New register, verify address and value
+      address: 0x53
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage7:  # TODO: New register, verify address and value
+      address: 0x54
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage8:  # TODO: New register, verify address and value
+      address: 0x55
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    digser_tx_storage9:  # TODO: New register, verify address and value
+      address: 0x56
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    exttrig:
+      address: 0x04
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    gccclr:
+      address: 0x04
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    iaddr_read:  # TODO: New register, verify address and value
+      address: 0x44
+      bitposition: 0
+      bitwidth: 9
+      description: ''
+      readwrite: r
+      value: 0
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: 'Board model/version unique identifier'
+      readwrite: r
+      value: 43714
+    idigital_lastdigread:  # TODO: New register, verify address and value
+      address: 0x43
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: r
+      value: 0
+    idigital_readout_count:  # TODO: New register, verify address and value
+      address: 0x45
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    iomode0:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 1
+      description: 'HIPeR 10bit Serial Mode0=0'
+      readwrite: rw
+      value: false
+    iomode1:
+      address: 0x04
+      bitposition: 6
+      bitwidth: 1
+      description: 'HIPeR 10bit Serial Mode1=1'
+      readwrite: rw
+      value: true
+    leds:
+      address: 0x18
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    loadwait:
+      address: 0x07
+      bitposition: 8
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    nramp:
+      address: 0x04
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    nrw:
+      address: 0x04
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    numwinds:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 1
+    pclk:
+      address: 0x04
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    pclkwidth:
+      address: 0x07
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    ramplen:
+      address: 0x06
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 2000
+    regclr:
+      address: 0x04
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    runevs:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1
+    rx_data0:
+      address: 0x1A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data1:
+      address: 0x1B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data2:
+      address: 0x1C
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data3:
+      address: 0x1D
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data4:
+      address: 0x1E
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data5:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data6:
+      address: 0x20
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_en:
+      address: 0x19
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_num_words:
+      address: 0x19
+      bitposition: 2
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_oneshot:
+      address: 0x19
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_speed:
+      address: 0x19
+      bitposition: 8
+      bitwidth: 2
+      description: ''
+      readwrite: rw
+      value: 0
+    sel:
+      address: 0x04
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    selany:
+      address: 0x04
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    slow_sysclk:
+      address: 0x19
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    sst_double:  # TODO: OR rx_off?? John S documnentation ot clear
+      address: 0x19
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    stopacq:
+      address: 0x04
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    syncloc:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    sysclk:
+      address: 0x04
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    sysrst:
+      address: 0x04
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    tx_en:
+      address: 0x19
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    version:  # TODO: New register, verify address and value
+      address: 0x01
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    windsel:
+      address: 0x07
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    wrstrboff:
+      address: 0x04
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    crc_en:
+      address: 0x21
+      bitposition: 0
+      bitwidth: 1
+      description: 'HIPeR Serial Command CRC Enable'
+      readwrite: rw
+      value: 0
+    eof_en:
+      address: 0x21
+      bitposition: 1
+      bitwidth: 1
+      description: 'HIPeR Serial Command EOF Enable'
+      readwrite: rw
+      value: 0
+    header_en:
+      address: 0x21
+      bitposition: 2
+      bitwidth: 1
+      description: 'HIPeR Chip data header, add a header to all data from a chip: BBB + chip_number(hex)'
+      readwrite: rw
+      value: 1
+    footer_en:
+      address: 0x21
+      bitposition: 3
+      bitwidth: 1
+      description: 'HIPeR Chip data footer, add a footer to all data from a chip: FFF + chip_number(hex)'
+      readwrite: rw
+      value: 1
+    packet_footer_en:
+      address: 0x21
+      bitposition: 4
+      bitwidth: 1
+      description: 'HIPeR pack footer, add a footer after all chips data have been read. 0xFACE'
+      readwrite: rw
+      value: 1
+    rxout_pol:
+      address: 0x22
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR RxOut Input Polarity Control'
+      readwrite: rw
+      value: 6400
+    txin_pol:
+      address: 0x23
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR TxIn Output Polarity Control'
+      readwrite: rw
+      value: 4412
+    txin_en:
+      address: 0x24
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR TxIn Input Enable. Data from ASIC to FPGA. Keep off unless receving data or registersfrom ASIC'
+      readwrite: rw
+      value: 0
+    rxout_en:
+      address: 0x25
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR RxOut Output Enable. Data from FPGA to ASIC. Keep on unless busy_locked is high.'
+      readwrite: rw
+      value: 65535
+    amp_pwrdn_n:
+      address: 0x26
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR AMP PowerDown_n'
+      readwrite: rw
+      value: 0
+    # txin_logic:  # TODO: New register, verify address and value
+    #   address: 0x26
+    #   bitposition: 0
+    #   bitwidth: 16
+    #   description: ''
+    #   readwrite: rw
+    #   value: 0
+    v2v5_pwr_good:  # TODO: New register, verify address and value
+      address: 0x46
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: r
+      value: 0
+    v1v2_pwr_good:  # TODO: New register, verify address and value
+      address: 0x46
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: r
+      value: 0
+    dac_r_update:
+      address: 0x27
+      bitposition: 15
+      bitwidth: 1
+      description: 'HIPeR SPI DAC Right Side Update Toggle'
+      readwrite: rw
+      value: 0
+    dac_r_cmd:
+      address: 0x27
+      bitposition: 8
+      bitwidth: 4
+      description: 'HIPeR DAC Right Side SPI Command'
+      readwrite: rw
+      value: 3
+    dac_r_addr:
+      address: 0x27
+      bitposition: 4
+      bitwidth: 4
+      description: 'HIPeR DAC Right Side SPI Address'
+      readwrite: rw
+      value: 15
+    dac_r_asic:
+      address: 0x27
+      bitposition: 0
+      bitwidth: 4
+      description: 'HIPeR DAC Right Side ASIC Address'
+      readwrite: rw
+      value: 0
+    dac_r_value:
+      address: 0x28
+      bitposition: 0
+      bitwidth: 12
+      description: 'HIPeR DAC Right Side 12 bit Value'
+      readwrite: rw
+      value: 0
+    dac_l_update:
+      address: 0x29
+      bitposition: 15
+      bitwidth: 1
+      description: 'HIPeR SPI DAC Left Side Update Toggle'
+      readwrite: rw
+      value: 0
+    dac_l_cmd:
+      address: 0x29
+      bitposition: 8
+      bitwidth: 4
+      description: 'HIPeR DAC Left Side SPI Command'
+      readwrite: rw
+      value: 3
+    dac_l_addr:
+      address: 0x29
+      bitposition: 4
+      bitwidth: 4
+      description: 'HIPeR DAC Left Side SPI Address'
+      readwrite: rw
+      value: 15
+    dac_l_asic:
+      address: 0x29
+      bitposition: 0
+      bitwidth: 4
+      description: 'HIPeR DAC Left Side ASIC Address'
+      readwrite: rw
+      value: 0
+    dac_l_value:
+      address: 0x2A
+      bitposition: 0
+      bitwidth: 12
+      description: 'HIPeR DAC Left Side 12 bit Value'
+      readwrite: rw
+      value: 0
+    exttrig_en:
+      address: 0x2B
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR External Trigger Mask, set to one per chip'
+      readwrite: rw
+      value: 0
+    max_trig_count:
+      address: 0x2C
+      bitposition: 0
+      bitwidth: 16
+      description: 'Maximum triggers before masking ext trig inputs'
+      readwrite: rw
+      value: 0
+    trig_count_reset:
+      address: 0x2D
+      bitposition: 0
+      bitwidth: 1
+      description: 'Toggle to reset trig_count, if left at 1, triggers are disabled'
+      readwrite: rw
+      value: 0
+    idle_det:
+      address: 0x5D
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR TxIn Idle Detect Status'
+      readwrite: r
+      value: 0
+    busy_locked:
+      address: 0x5C
+      bitposition: 0
+      bitwidth: 16
+      description: 'HIPeR RxOut Busy_Locked Status'
+      readwrite: r
+      value: 0
+    chip_sysrst:
+      address: 0x32
+      bitposition: 0
+      bitwidth: 14
+      description: 'Individual AARDVARC chip sysrst bitN=chipN'
+      readwrite: rw
+      value: 0
+    chip_regclr:
+      address: 0x33
+      bitposition: 0
+      bitwidth: 14
+      description: 'Individual AARDVARC chip regclr bitN=chipN'
+      readwrite: rw
+      value: 0
+  i2c_registers:
+    i2c_en:
+      address: 0x0F
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    i2c_send:
+      address: 0x0F
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_addr:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_words:
+      address: 0x0F
+      bitposition: 8
+      bitwidth: 3
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data0:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data1:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data2:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data3:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    response0:
+      address: 0x48
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response1:
+      address: 0x49
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response2:
+      address: 0x4A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response3:
+      address: 0x4B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0

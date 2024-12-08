@@ -1,0 +1,865 @@
+model: upac32
+features:
+  adc2mv: false
+  dac_sweep: false
+  ext_dac: true
+  pedestals: true
+  threshold_scan: false
+  tia_dac: false
+  timing_calibration: false
+  naludaq_rs: false
+params:
+  chanmask: 511
+  channels: 32
+  chanshift: 3
+  connections:
+    - serial
+    - d2xx
+  default_baud:
+    115200: 432
+  default_baudrate: 115200
+  default_clock: 200000000.0
+  default_divider: 432
+  ext_dac:
+    max_mv: 1200
+    max_counts: 65535
+    channels:
+      0,8,16,24: 30000
+    register_mapping:
+      0: dac_vbias00_07_out
+      8: dac_vbias08_15_out
+      16: dac_vbias16_23_out
+      24: dac_vbias24_31_out
+  trigger:
+    wbias: 750
+    triggers_available: 8
+    max_val: 2047
+    min_val: 0
+    default: false
+    default_trigger_value: 0
+  num_trigger_channels: 8
+  headers: 0
+  last_window_fix_amount: 47
+  lastbits: 0
+  numregs: 32
+  pedestals_blocks: 8
+  peripherals:
+    current:
+      chan: 0
+      addr: 0xD0
+      bits: 16
+      gain: 8
+    vadjn:
+      chan: 0
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp:
+      chan: 1
+      addr: 0xD8
+      bits: 16
+      gain: 1
+  possible_bauds:
+    115200: 432
+    460800: 108
+    # 2000000: 25
+    # 3000000: 17
+  resolution: 11
+  samples: 132
+  samplingrate: 9.2
+  stop_word: !!binary |
+    +s4=
+  wait: AE000001
+  windmask: 7
+  windows: 8
+registers:
+  control_registers:
+    avdd_en:
+      address: 0x28
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    baud_rate_divisor:
+      address: 0x03
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 108
+    cdce62002_power_down_n:
+      address: 0x13
+      bitposition: 15
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1
+    cdce62002_read_register_0_lsw:
+      address: 0x92
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 21976
+    cdce62002_read_register_0_msw:
+      address: 0x91
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1104
+    cdce62002_read_register_1_lsw:
+      address: 0x94
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 903
+    cdce62002_read_register_1_msw:
+      address: 0x93
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 57376
+    cdce62002_read_register_2_lsw:
+      address: 0x96
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 24832
+    cdce62002_read_register_2_msw:
+      address: 0x95
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 14850
+    cdce62002_register_0_lsw_out:
+      address: 0x0C
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1104  # same
+    cdce62002_register_0_msw_out:
+      address: 0x0D
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0x5550  # 21976
+    cdce62002_register_1_lsw_out:
+      address: 0x0E
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0xa091  # 57377
+    cdce62002_register_1_msw_out:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0x838d  # 33671
+    cdce62002_write_strobe:
+      address: 0x13
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    conversion_wait_count_value:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    dac_rovcp_1_out:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 256
+    dac_rovcp_2_out:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 256
+    dac_vbias00_07_out:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 27306
+    dac_vbias08_15_out:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 27306
+    dac_vbias16_23_out:
+      address: 0x0A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 27306
+    dac_vbias24_31_out:
+      address: 0x0B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 27306
+    dac_vreset1_2_out:
+      address: 0x06
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 11264
+    dac_vreset3_4_out:
+      address: 0x07
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 11264
+    dac_write_strobe:
+      address: 0x13
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    diagnostic_read_data:
+      address: 0x10
+      bitposition: 4
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 0
+    # dll_start:
+    #   address: 0x13
+    #   bitposition: 7
+    #   bitwidth: 1
+    #   description: ''
+    #   readwrite: rw
+    #   value: 0
+    ftdi_cts:
+      address: 0x29
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    ftdi_rts_bit_0:
+      address: 0x88
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    gpio_pd:
+      address: 0x28
+      bitposition: 2
+      bitwidth: 5
+      description: ''
+      readwrite: rw
+      value: 0
+    gpio_input_header_5:
+      address: 0x85
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 255
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 57005
+    # mclk_clock_monitor:
+    #   address: 0x28
+    #   bitposition: 10
+    #   bitwidth: 1
+    #   description: ''
+    #   readwrite: rw
+    #   value: 0
+    optical_trigger_en:
+      address: 0x29
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    optical_trigger_input_bit_0:
+      address: 0x8A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    pd_bias_en:
+      address: 0x29
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    # pll_clock_monitor:
+    #   address: 0x28
+    #   bitposition: 9
+    #   bitwidth: 1
+    #   description: ''
+    #   readwrite: rw
+    #   value: 1
+    # pll_clockout:
+    #   address: 0x28
+    #   bitposition: 11
+    #   bitwidth: 1
+    #   description: ''
+    #   readwrite: rw
+    #   value: 0
+    pll_lock_bit_0:
+      address: 0x86
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1
+    psec4a_a_ro_feedback_calculated_value:
+      address: 0xA8
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 247
+    psec4a_a_ro_monitor_clock_count_lsw:
+      address: 0x99
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_a_ro_monitor_clock_count_msw:
+      address: 0x98
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_a_vcdl_monitor_clock_count_lsw:
+      address: 0xA1
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_a_vcdl_monitor_clock_count_msw:
+      address: 0xA0
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_b_ro_feedback_calculated_value:
+      address: 0xA9
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 269
+    psec4a_b_ro_monitor_clock_count_lsw:
+      address: 0x9B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_b_ro_monitor_clock_count_msw:
+      address: 0x9A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_b_vcdl_monitor_clock_count_lsw:
+      address: 0xA3
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_b_vcdl_monitor_clock_count_msw:
+      address: 0xA2
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_biascomp_out:
+      address: 0x1A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 512
+    psec4a_biasdllfirst_out:
+      address: 0x1C
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 256
+    psec4a_biasdlllast_out:
+      address: 0x1B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 256
+    psec4a_biasdlln_out:
+      address: 0x1E
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 592
+    psec4a_biasdllp_out:
+      address: 0x1D
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 416
+    psec4a_biasrampbuf_out:
+      address: 0x19
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 432
+    psec4a_biasrampslope_out:
+      address: 0x27
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_biastrign_out:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0x0200  # 0
+    psec4a_biasxfer_out:
+      address: 0x18
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 512
+    psec4a_mclk_source_clock_count_lsw:
+      address: 0x8F
+      bitposition: 0
+      bitwidth: 16
+      description: 'Read-only Debug clock, should be the same as VCDL when read out'
+      readwrite: r
+      value: 0
+    psec4a_mclk_source_clock_count_msw:
+      address: 0x8E
+      bitposition: 0
+      bitwidth: 16
+      description: 'Read-only Debug clock, should be the same as VCDL when read out'
+      readwrite: r
+      value: 0
+    psec4a_c_ro_feedback_calculated_value:
+      address: 0xAA
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 326
+    psec4a_c_ro_monitor_clock_count_lsw:
+      address: 0x9D
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_c_ro_monitor_clock_count_msw:
+      address: 0x9C
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_c_vcdl_monitor_clock_count_lsw:
+      address: 0xA5
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_c_vcdl_monitor_clock_count_msw:
+      address: 0xA4
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_d_ro_feedback_calculated_value:
+      address: 0xAB
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 246
+    psec4a_d_ro_monitor_clock_count_lsw:
+      address: 0x9F
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_d_ro_monitor_clock_count_msw:
+      address: 0x9E
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_d_vcdl_monitor_clock_count_lsw:
+      address: 0xA7
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_d_vcdl_monitor_clock_count_msw:
+      address: 0xA6
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    # psec4a_mode:
+    #   address: 0x13
+    #   bitposition: 5
+    #   bitwidth: 2
+    #   description: ''
+    #   readwrite: rw
+    #   value: 0
+    xref_address_mode:
+      address: 0x13
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    psec4a_rovcp:
+      address: 0x16
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 300
+    psec4a_status:
+      address: 0x84
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 4852
+    psec4a_trigthresh0_out:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh1_out:
+      address: 0x20
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh2_out:
+      address: 0x21
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh3_out:
+      address: 0x22
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh4_out:
+      address: 0x23
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh5_out:
+      address: 0x24
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh6_out:
+      address: 0x25
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    psec4a_trigthresh7_out:
+      address: 0x26
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0  # 0
+    reread_data:
+      address: 0x10
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    ring_oscillator_feedback_target_value_lsw:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 29529
+    ring_oscillator_feedback_target_value_msw:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 7
+    ro_feedback_enable:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 1
+    ro_monitor_reset:
+      address: 0x29
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    self_trigger_or_enable:
+      address: 0x13
+      bitposition: 6
+      bitwidth: 1
+      description: 'Enable Self Trigger OR function in PSEC4A'
+      readwrite: rw
+      value: 1
+    serial_data_select:
+      address: 0x28
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 0
+    serial_write_strobe:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    software_trigger:
+      address: 0x13
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    speed_select:
+      address: 0x13
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 1
+    # system_clock_monitor:
+    #   address: 0x28
+    #   bitposition: 8
+    #   bitwidth: 1
+    #   description: ''
+    #   readwrite: rw
+    #   value: 1
+    trig_out1:
+      address: 0x90
+      bitposition: 0
+      bitwidth: 4
+      description: 'DCBA chiporder'
+      readwrite: rw
+      value: 0
+    trigger_mask_enable:
+      address: 0x29
+      bitposition: 8
+      bitwidth: 8
+      description: 'Trigger mask where each bit is a corresponding chip'
+      readwrite: rw
+      value: 255  # '11111111'
+    trigger_mode:
+      address: 0x29
+      bitposition: 5
+      bitwidth: 2
+      description: '<html><head/><body><p>Set the triggermode:<br/>
+        00: Software Trigger, the default.<br/>
+        01: Auto Trigger, 2Hz auto trigger rate.<br/>
+        10: External Trigger, trigger on trig in.<br/>
+        11: Self Trigger, trigger on signal levels.
+        </p></body></html>'
+      readwrite: rw
+      value: 0
+    trigger_reset:
+      address: 0x13
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    # trigger_scaler:
+    #   address: 0x97
+    #   bitposition: 0
+    #   bitwidth: 8
+    #   description: ''
+    #   readwrite: rw
+    #   value: 0
+    trigger_sign:
+      address: 0x13
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    uart_status:
+      address: 0x81
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 84
+    uart_handshake_en_out:
+      address: 0x10
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    version_number:
+      address: 0x80
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 4101
+    wave_fifo_reset:
+      address: 0x10
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    xfer_reset:
+      address: 0x13
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 1
+    ltc2992_p1_in_23_to_16:
+      address: 0xAC
+      bitposition: 0
+      bitwidth: 16
+      description: 'Top bits for PDBIAS Power readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_p1_in_15_to_0:
+      address: 0xAD
+      bitposition: 0
+      bitwidth: 16
+      description: 'Bottom bits for PDBIAS Power readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_i1_in:
+      address: 0xAE
+      bitposition: 0
+      bitwidth: 16
+      description: 'PDBIAS current readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_s1_in:
+      address: 0xAF
+      bitposition: 0
+      bitwidth: 16
+      description: 'PDBIAS Voltage readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_g1_in:
+      address: 0xB0
+      bitposition: 0
+      bitwidth: 16
+      description: 'Bottom bits for LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_p2_in_23_to_16:
+      address: 0xB1
+      bitposition: 0
+      bitwidth: 16
+      description: 'Top bits for 1.2V rail power readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_p2_in_15_to_0:
+      address: 0xB2
+      bitposition: 0
+      bitwidth: 16
+      description: 'Top bits for 1.2V rail power readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_i2_in:
+      address: 0xB3
+      bitposition: 0
+      bitwidth: 16
+      description: '1.2V rail current readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0
+    ltc2992_s2_in:
+      address: 0xB4
+      bitposition: 0
+      bitwidth: 16
+      description: '1.2V rail voltage readout from the LTC2992 sensor chip'
+      readwrite: r
+      value: 0

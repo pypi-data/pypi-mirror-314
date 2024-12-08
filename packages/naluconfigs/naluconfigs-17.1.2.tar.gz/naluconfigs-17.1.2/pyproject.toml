@@ -1,0 +1,59 @@
+[project]
+name = "naluconfigs"
+authors = [
+  # Current authors
+  { name="Marcus Luck", email="marcus@naluscientific.com" },
+  { name="Mitchell Matsumori-Kelly", email="mitchell@naluscientific.com" },
+  { name="Alvin Yang", email="alvin@naluscientific.com" },
+  { name="Kenneth Lauritzen", email="kenneth@naluscientific.com" },
+  { name="Ben Rotter", email="ben@naluscientific.com" },
+
+  # Past authors
+  { name="Thomas Yang" },
+  { name="Emily Lum" },
+]
+description = "Home for board configs"
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.9"
+dependencies = [
+  "pyyaml>=5.1.1",
+  "numpy",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-mock",
+  "pytest-xdist",
+  "pytest-sugar"
+]
+
+[build-system]
+requires = ["setuptools>=67.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "naluconfigs._version.__version__"}
+
+[tool.setuptools.package-data]
+naluconfigs = [
+  "data/chips/*.yml",
+  "data/clocks/*.txt",
+  "data/registers/*.yml",
+]
