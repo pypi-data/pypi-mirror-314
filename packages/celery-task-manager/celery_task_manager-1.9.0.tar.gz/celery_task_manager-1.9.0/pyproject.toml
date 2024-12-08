@@ -1,0 +1,107 @@
+[build-system]
+requires = ["hatchling>=1.26.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "celery-task-manager"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.11"
+license = "LGPL-3.0-or-later"
+keywords = []
+authors = [{ name = "jefer94", email = "jdefreitaspinto@gmail.com" }]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+  "Topic :: Software Development :: Libraries",
+]
+dependencies = ["celery"]
+
+[project.urls]
+Documentation = "https://breatheco-de.github.io/celery-task-manager-django-plugin/"
+Issues = "https://github.com/breatheco-de/celery-task-manager-django-plugin/issues"
+Source = "https://github.com/breatheco-de/celery-task-manager-django-plugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/task_manager"]
+
+[tool.hatch.version]
+path = "src/task_manager/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+  "pytest-django",
+  "celery",
+  "circuitbreaker",
+  "mkdocs",
+  "mkdocs-material",
+  "faker",
+  "django",
+  "pytest-celery",
+  "celery[pytest]",
+  "pytest-asyncio",
+  "asgiref",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests} --nomigrations --durations=1"
+test-cov = "coverage run -m pytest {args:tests} --nomigrations --durations=1"
+cov-report = ["- coverage combine", "coverage report"]
+cov = ["test-cov", "cov-report"]
+docs = "mkdocs serve --livereload"
+generate_docs = "mkdocs build"
+docs_deploy = "mkdocs gh-deploy -c"
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = ["mypy>=1.0.0"]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/task_manager tests}"
+
+[tool.coverage.run]
+source_pkgs = ["task_manager", "tests"]
+branch = true
+parallel = true
+omit = ["src/task_manager/__about__.py"]
+
+[tool.coverage.paths]
+task_manager = ["src/task_manager", "*/task-manager/src/task_manager"]
+tests = ["tests", "*/task-manager/tests"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[project.optional-dependencies]
+django = ["django"]
+circuitbreaker = ["circuitbreaker"]
+
+[tool.black]
+line-length = 120
+
+[tool.pytest.ini_options]
+django_debug_mode = true
+addopts = ["-p", "no:legacypath", "--tb=short"]
+DJANGO_SETTINGS_MODULE = "task_manager.settings"
+# python_files = ["breathecode/**/*.tests.py", "breathecode/**/*.tests_*.py"]
+
+# [tool.pytest]
+# env =
+#     ENV=test
+
+filterwarnings = [
+  # faker is passing a naive datetime to django
+  "ignore::RuntimeWarning:django.db.models.fields.*",
+  "ignore::DeprecationWarning:pkg_resources.*",
+]
