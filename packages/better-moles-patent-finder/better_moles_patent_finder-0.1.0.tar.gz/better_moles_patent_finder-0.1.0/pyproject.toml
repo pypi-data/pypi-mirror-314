@@ -1,0 +1,42 @@
+[project]
+name = "better-moles-patent-finder"
+dynamic = ["version"]  # This relies on git tags for versioning
+authors = [
+    { name = "Fabio Bove", email = "fabio.bove.dr@gmail.com" }
+]
+description = "A tool designed to enhance patent discovery by leveraging MongoDB for efficient storage, querying, and analysis of patent data. This repository includes features to streamline patent searches, improve retrieval accuracy, and support advanced filtering and indexing capabilities."
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["molecules", "bioinformatics", "patent-finder", "molecules-evaluation", "mongo_db"]
+
+# Specify the required dependencies with correct versions
+dependencies = [
+    "numpy>=1.0.0,<2.0.0",
+    "pandas==2.2.3",
+    "pymongo==4.9",
+    "rdkit==2024.3.6",
+    "tqdm==4.67.1",
+]
+
+# Define optional dependencies like testing
+[project.optional-dependencies]
+test = [
+    "pytest==7.2.1",
+    "pytest-cov==5.0.0",
+    "pytest-mock==3.14.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/fabiobove-dr/better-moles-patent-finder"
+Issues = "https://github.com/fabiobove-dr/better-moles-patent-finder/issues"
+
+# Setuptools git versioning configuration
+[tool.setuptools-git-versioning]
+enabled = true
+
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-git-versioning>=2.0,<3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+better-moles-patent-finder = "mol_patents_find:main"
