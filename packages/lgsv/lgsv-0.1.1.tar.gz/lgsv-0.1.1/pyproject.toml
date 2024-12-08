@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "lgsv"
+version = "0.1.1"
+description = "爬取洛谷题目并用 markdown 格式保存"
+readme = "README.md"
+authors = ["Sving1024 <sving1024@outlook.com>"]
+license = "MIT"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.27.2"
+pypandoc = "^1.13"
+tomli = "^2.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.17.4"
+isort = "^5.12.0"
+pytest = "^7.3.1"
+tox = "^4.5.2"
+mkdocs = "^1.4.3"
+mkdocs-material = "^8.5.11"
+pytest-pylint = "^0.19.0"
+pre-commit = "^3.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+[tool.pytest.ini_options]
+testpaths = "tests"
+python_files = "tests.py test_*.py *_tests.py"
+
+[tool.pylint.design]
+max-line-length = 120
+
+[tool.poetry.plugins.console_scripts]
+lgsv = "lgsv.cli:run"
