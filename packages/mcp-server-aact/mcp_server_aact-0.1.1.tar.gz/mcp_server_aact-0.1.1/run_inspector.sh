@@ -1,0 +1,1 @@
+ npx @modelcontextprotocol/inspector uv --directory /Users/jonas/servers/src/CTGOV-AACT run mcp-server-aact
