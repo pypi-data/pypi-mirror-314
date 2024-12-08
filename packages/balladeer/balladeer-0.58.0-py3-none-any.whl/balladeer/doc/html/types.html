@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Basics &#8212; Balladeer 0.51.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=be3822b2" />
+    <link rel="stylesheet" type="text/css" href="_static/balladeer_doc_style.css?v=88dc6569" />
+    <link rel="stylesheet" href="_static/balladeer_doc_style.css" type="text/css" />
+    <script src="_static/documentation_options.js?v=b8ab9f72"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Entities" href="entity.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+    <meta name="referrer" content="strict-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Balladeer</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity.html">Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="speech.html">Speech</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drama.html">Drama</a></li>
+<li class="toctree-l1"><a class="reference internal" href="story.html">Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene.html">Scenes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interaction.html">Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Themes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="screenshots.html">Screenshots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Change Log</a></li>
+</ul>
+<p>
+<br>
+<a class="github-button" href="https://github.com/tundish/balladeer/issues"
+data-color-scheme="no-preference: light; light: light; dark: dark;"
+data-size="large" aria-label="View Balladeer issues on GitHub">GitHub Issues</a>
+</p>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="intro.html" title="Previous document">Introduction</a>
+        </li>
+        <li>
+          <a href="entity.html" title="Next document">Entities</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="basics">
+<h1>Basics<a class="headerlink" href="#basics" title="Link to this heading">¶</a></h1>
+<p>Python is a language with very powerful data types.
+Once you <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html">know them</a> you can achieve a great deal in only a few lines of code.</p>
+<p>Balladeer is a domain-specific framework which will help you structure your code in
+order to best tell your story. It’s a simple object-oriented library with about a dozen classes in total.</p>
+<p>Here are two which are fundamental to the Balladeer
+philosophy. We will see them in use soon. So let’s get some
+detail on them before we proceed further.</p>
+<section id="states">
+<h2>States<a class="headerlink" href="#states" title="Link to this heading">¶</a></h2>
+<p>Whatever the genre of your narrative, it’s a safe bet that
+the characters you create will undergo change.</p>
+<p>They may advance in their profession, lose weight, take up sewing, get drenched in a rainstorm, or disappear never to be seen again.</p>
+<p>In Balladeer, you can model all these by defining and allocating <a class="reference internal" href="#balladeer.lite.types.State" title="balladeer.lite.types.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="balladeer.lite.types.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">balladeer.lite.types.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#balladeer.lite.types.State" title="Link to this definition">¶</a></dt>
+<dd><p>A mix-in for Python’s standard
+<a class="reference external" href="https://docs.python.org/3/library/enum.html#module-enum">enum.Enum</a>.</p>
+<p>Adds some convenient properties to help
+formatting state values as strings.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="balladeer.lite.types.State.label">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#balladeer.lite.types.State.label" title="Link to this definition">¶</a></dt>
+<dd><p>Gives a consistent string to be used as a label
+even when the class defines multiple synonyms
+for each state value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p id="state-example">By way of example, here’s how you might create a state
+for political affiliation in the UK.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="k">class</span> <span class="nc">Politics</span><span class="p">(</span><span class="n">State</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="n">con</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Conservative&quot;</span><span class="p">,</span> <span class="s2">&quot;Tory&quot;</span><span class="p">]</span>
+        <span class="n">dem</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Liberal Democrat&quot;</span><span class="p">,</span> <span class="s2">&quot;LibDem&quot;</span><span class="p">]</span>
+        <span class="n">grn</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Green Party&quot;</span><span class="p">,</span> <span class="s2">&quot;Green&quot;</span><span class="p">]</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Independent&quot;</span><span class="p">]</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Labour&quot;</span><span class="p">,</span> <span class="s2">&quot;New Labour&quot;</span><span class="p">]</span>
+        <span class="n">lib</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Liberal&quot;</span><span class="p">]</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Reform Party&quot;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Residents&#39; Party&quot;</span><span class="p">]</span>
+        <span class="n">ukp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UKIP&quot;</span><span class="p">,</span> <span class="s2">&quot;UK Independence Party&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note how this class captures synonyms for the various parties. The <cite>label</cite> property gives you a preferred term for
+each one:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Politics</span><span class="o">.</span><span class="n">ukp</span><span class="o">.</span><span class="n">label</span>
+<span class="go">&#39;UKIP&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="grouping">
+<h2>Grouping<a class="headerlink" href="#grouping" title="Link to this heading">¶</a></h2>
+<p>Whether you are modelling a forest glade, a castle dungeon, or an alien space fleet,
+you will need to create objects for that model.</p>
+<p>The next challenge is to organize those objects, sorting and
+filtering them so that you can isolate the ones you need
+to operate on (ie: modify their <a class="reference internal" href="#states">states</a>).</p>
+<p>This is what <a class="reference internal" href="#balladeer.lite.types.Grouping" title="balladeer.lite.types.Grouping"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grouping</span></code></a>
+is for.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="balladeer.lite.types.Grouping">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">balladeer.lite.types.</span></span><span class="sig-name descname"><span class="pre">Grouping</span></span><a class="headerlink" href="#balladeer.lite.types.Grouping" title="Link to this definition">¶</a></dt>
+<dd><p>A subclass of Python’s standard
+<a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.defaultdict">defaultdict</a>.</p>
+<p>This data structure is used to return objects
+filtered, sorted, and grouped in a particular
+fashion, eg: by state or type.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="balladeer.lite.types.Grouping.typewise">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">typewise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">defaultdict</span></span></span><a class="headerlink" href="#balladeer.lite.types.Grouping.typewise" title="Link to this definition">¶</a></dt>
+<dd><p>Create a Grouping of <em>items</em> according to their type.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">Grouping</span><span class="o">.</span><span class="n">typewise</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">]))</span>
+<span class="go">Grouping(</span>
+<span class="go">    &lt;class &#39;list&#39;&gt;,</span>
+<span class="go">    {</span>
+<span class="go">        &lt;class &#39;bool&#39;&gt;: [True, False],</span>
+<span class="go">        &lt;class &#39;float&#39;&gt;: [0.0, 1.0],</span>
+<span class="go">        &lt;class &#39;int&#39;&gt;: [0, 1],</span>
+<span class="go">        &lt;class &#39;NoneType&#39;&gt;: [None]</span>
+<span class="go">    }</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>Objects will be grouped against their class, as
+well as by any <em>declared type</em> (attributes <cite>type</cite> and <cite>types</cite>).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">Grouping</span><span class="o">.</span><span class="n">typewise</span><span class="p">([</span><span class="n">namespace</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Cat&#39;</span><span class="p">),</span> <span class="n">namespace</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Feline&#39;</span><span class="p">,</span> <span class="s1">&#39;Leopard&#39;</span><span class="p">])))</span>
+<span class="go">Grouping(</span>
+<span class="go">    &lt;class &#39;list&#39;&gt;,</span>
+<span class="go">    {</span>
+<span class="go">        &#39;Cat&#39;: [namespace(type=&#39;Cat&#39;)],</span>
+<span class="go">        &#39;Feline&#39;: [namespace(types=[&#39;Feline&#39;, &#39;Leopard&#39;])],</span>
+<span class="go">        &#39;Leopard&#39;: [namespace(types=[&#39;Feline&#39;, &#39;Leopard&#39;])],</span>
+<span class="go">         &lt;class &#39;types.SimpleNamespace&#39;&gt;: [</span>
+<span class="go">            namespace(type=&#39;Cat&#39;),</span>
+<span class="go">            namespace(types=[&#39;Feline&#39;, &#39;Leopard&#39;])</span>
+<span class="go">         ]</span>
+<span class="go">    }</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="balladeer.lite.types.Grouping.all">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">all</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#balladeer.lite.types.Grouping.all" title="Link to this definition">¶</a></dt>
+<dd><p>Returns every entry in the grouping.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="balladeer.lite.types.Grouping.each">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">each</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#balladeer.lite.types.Grouping.each" title="Link to this definition">¶</a></dt>
+<dd><p>Returns one of each entry in the grouping.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="intro.html" title="Previous document">Introduction</a>
+        </li>
+        <li>
+          <a href="entity.html" title="Next document">Entities</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    
+    <div class="footer">
+      &copy;2023, D E Haynes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/types.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Interaction &#8212; Balladeer 0.51.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=be3822b2" />
+    <link rel="stylesheet" type="text/css" href="_static/balladeer_doc_style.css?v=88dc6569" />
+    <link rel="stylesheet" href="_static/balladeer_doc_style.css" type="text/css" />
+    <script src="_static/documentation_options.js?v=b8ab9f72"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Themes" href="themes.html" />
+    <link rel="prev" title="Scenes" href="scene.html" />
+    <meta name="referrer" content="strict-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Balladeer</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity.html">Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="speech.html">Speech</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drama.html">Drama</a></li>
+<li class="toctree-l1"><a class="reference internal" href="story.html">Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene.html">Scenes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Themes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="screenshots.html">Screenshots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Change Log</a></li>
+</ul>
+<p>
+<br>
+<a class="github-button" href="https://github.com/tundish/balladeer/issues"
+data-color-scheme="no-preference: light; light: light; dark: dark;"
+data-size="large" aria-label="View Balladeer issues on GitHub">GitHub Issues</a>
+</p>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="scene.html" title="Previous document">Scenes</a>
+        </li>
+        <li>
+          <a href="themes.html" title="Next document">Themes</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="interaction">
+<h1>Interaction<a class="headerlink" href="#interaction" title="Link to this heading">¶</a></h1>
+<p>Sometimes you need to create encounters between characters without there being too much stateful significance.
+You want the player to discover the game world, its lore and back story.
+You want to deliver a rich experience with a minimum of coding overhead.</p>
+<p>This can be achieved by creating <cite>dialogue trees</cite>; blocks of optional dialogue which lead the player to
+explore the environment and interact with it.</p>
+<p>Balladeer provides a mixin class called <code class="xref py py-class docutils literal notranslate"><span class="pre">SpeechTables</span></code> which gives
+your Drama the ability to generate dialogue that gives the player choices, and integrates with the parser
+to recognise the phrases and options which identify them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">balladeer</span> <span class="kn">import</span> <span class="n">Drama</span>
+<span class="kn">from</span> <span class="nn">balladeer</span> <span class="kn">import</span> <span class="n">SpeechTables</span>
+
+<span class="k">class</span> <span class="nc">Interaction</span><span class="p">(</span><span class="n">SpeechTables</span><span class="p">,</span> <span class="n">Drama</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p>The dialogue tree is attached to a single shot of SpeechMark, which acts as a parent.
+The markup in the shot has two responsibilities:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>To define a numbered list of dialogue options for the player to use.</p></li>
+<li><p>To include a <code class="docutils literal notranslate"><span class="pre">branching</span></code> directive which tells the <code class="xref py py-class docutils literal notranslate"><span class="pre">SpeechTables</span></code>
+class that it must inspect these options and add them to the parser’s collection of recognised options and
+phrases.</p></li>
+</ul>
+</div></blockquote>
+<p>The hierarchy of choices and consequences is defined as a TOML table beneath the parent dialogue. The outcome
+corresponding to option <code class="docutils literal notranslate"><span class="pre">1</span></code> is stored against that same key in the data.</p>
+<p>Dialogue can branch again wherever you wish, allowing for deeply nested trees.</p>
+<p>For as long as the interaction is in play, the <code class="docutils literal notranslate"><span class="pre">tree</span></code> attribute of your Drama class will evaluate <strong>True</strong>.</p>
+<p>You can control when to terminate the interaction by adding a directive to any of the dialogue blocks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A simple <code class="docutils literal notranslate"><span class="pre">returning</span></code> directive will end the interaction completely.
+The <code class="docutils literal notranslate"><span class="pre">tree</span></code> attribute of your Drama class will evaluate <strong>False</strong> once more.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">returning</span></code> directive which targets the Drama object eg: <code class="docutils literal notranslate"><span class="pre">returning&#64;INTERACTION</span></code> will
+hop back up to the previous branching node and stay in the dialogue tree.</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ALAN</span><span class="p">]</span>
+<span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;Narrator&quot;</span>
+
+<span class="p">[</span><span class="n">BETH</span><span class="p">]</span>
+<span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;CatOwner&quot;</span>
+
+<span class="p">[</span><span class="n">INTERACTION</span><span class="p">]</span>
+<span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;Interaction&quot;</span>
+
+<span class="p">[[</span><span class="n">_</span><span class="p">]]</span>
+<span class="k">if</span><span class="o">.</span><span class="n">INTERACTION</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">if</span><span class="o">.</span><span class="n">INTERACTION</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">false</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;ALAN&gt; What shall we do?</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[[</span><span class="n">_</span><span class="p">]]</span>
+<span class="k">if</span><span class="o">.</span><span class="n">INTERACTION</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">if</span><span class="o">.</span><span class="n">INTERACTION</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">false</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;ALAN&gt; Let&#39;s practise our conversation skills.</span>
+<span class="s1">&lt;ALAN.branching&gt; Maybe now&#39;s a good time to ask </span><span class="si">{BETH.name}</span><span class="s1"> a question.</span>
+<span class="s1">    1. Ask about the weather</span>
+<span class="s1">    2. Ask about pets</span>
+<span class="s1">    3. Ask about football</span>
+<span class="s1">&lt;ALAN&gt; I&#39;ll let you carry on for a bit.</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[</span><span class="n">_</span><span class="mf">.1</span><span class="p">]</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;BETH&gt; Well, you never know what&#39;s it&#39;s going to do next, do you?</span>
+<span class="s1">&lt;BETH.returning&gt; I&#39;ve never seen anything like it!</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[</span><span class="n">_</span><span class="mf">.2</span><span class="p">]</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;BETH.branching&gt; I&#39;ve got three lovely cats.</span>
+<span class="s1">    1. *Ask about Charlie*</span>
+<span class="s1">    2. `Ask about Doodles`</span>
+<span class="s1">    3. _Ask about Elektra_</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[</span><span class="n">_</span><span class="mf">.2.1</span><span class="p">]</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;BETH.returning@INTERACTION&gt; Charlie is the elder cat. He&#39;s a Marmalade. Very laid back.</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[</span><span class="n">_</span><span class="mf">.2.2</span><span class="p">]</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;BETH.returning@INTERACTION&gt; Oh my goodness, Doodles. Always up to mischief!</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[</span><span class="n">_</span><span class="mf">.2.3</span><span class="p">]</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;BETH.returning@INTERACTION&gt; The thing about Elektra is, she&#39;s always somewhere else.</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[</span><span class="n">_</span><span class="mf">.3</span><span class="p">]</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;BETH&gt; I don&#39;t know anything about football at all.</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="p">[[</span><span class="n">_</span><span class="p">]]</span>
+<span class="k">if</span><span class="o">.</span><span class="n">INTERACTION</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">if</span><span class="o">.</span><span class="n">INTERACTION</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">false</span>
+<span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;ALAN&gt; OK. Interaction over.</span>
+<span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="scene.html" title="Previous document">Scenes</a>
+        </li>
+        <li>
+          <a href="themes.html" title="Next document">Themes</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    
+    <div class="footer">
+      &copy;2023, D E Haynes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/interaction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  </body>
+</html>
