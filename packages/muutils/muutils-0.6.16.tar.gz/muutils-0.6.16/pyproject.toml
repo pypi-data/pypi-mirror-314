@@ -1,0 +1,114 @@
+# metadata
+# ==================================================
+[project]
+name = "muutils"
+version = "0.6.16"
+description = "miscellaneous python utilities"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "GPL-3.0-only" }
+authors = [
+    { name = "mivanit", email = "mivanits@umich.edu" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+
+dependencies = [] # no required deps!
+
+[project.urls]
+Repository = "https://github.com/mivanit/muutils"
+Documentation = "https://mivanit.github.io/muutils/"
+
+# dependencies
+# ==================================================
+
+[project.optional-dependencies]
+array_nb_zanj = [
+    "numpy>=1.24.4,<2",
+    "torch>=1.13.1",
+    "jaxtyping>=0.2.12",
+    "ipython>=8.0.0",
+    "zanj>=0.3.0",
+]
+
+array = [
+    "numpy>=1.24.4,<2",
+    "torch>=1.13.1",
+    "jaxtyping>=0.2.12",
+]
+
+# special group for CI, where we install cpu torch separately
+array_no_torch = [
+    "numpy>=1.24.4,<2",
+    "jaxtyping>=0.2.12",
+]
+
+notebook = [
+    "ipython>=8.0.0",
+]
+
+zanj = [
+    "zanj>=0.3.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    # formatting
+    "pycln>=2.1.3",
+    "ruff>=0.4.8",
+    # typing
+    "mypy>=1.0.1",
+    # tests & coverage
+    "pytest>=8.2.2",
+    "pytest-cov>=4.1.0",
+    "coverage-badge>=1.1.0",
+    # for testing plotting
+    "matplotlib>=3.0.0",
+    "plotly>=5.0.0",
+    # generating docs
+    "pdoc>=14.6.0",
+]
+
+# build system and tooling configuration
+# ==================================================
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
+    "ignore::muutils.nbutils.configure_notebook.PlotlyNotInstalledWarning", # don't show warning for missing plotly
+    "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
+]
+
+[tool.ruff]
+# Exclude the directories specified in the global excludes
+exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+
+[tool.pycln]
+all = true
+exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+
+[tool.mypy]
+exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+show_error_codes = true
+
+[tool.pdoc]
+warnings_ignore = [
+    "Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
+    "Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",
+    "Error parsing type annotation .* for muutils\\..*\\. Import of StatCounter failed:",
+    "Error parsing type annotation .* for muutils\\..*\\. Import of Union failed:"
+]
