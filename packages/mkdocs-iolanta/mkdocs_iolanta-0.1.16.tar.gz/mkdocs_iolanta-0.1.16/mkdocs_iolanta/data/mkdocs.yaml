@@ -1,0 +1,128 @@
+"@context":
+  "@import": https://json-ld.org/contexts/dollar-convenience.jsonld
+
+  xsd: http://www.w3.org/2001/XMLSchema#
+  vann: http://purl.org/vocab/vann/
+  foaf: http://xmlns.com/foaf/0.1/
+  owl: http://www.w3.org/2002/07/owl#
+  iolanta: https://iolanta.tech/
+  rdfs: "http://www.w3.org/2000/01/rdf-schema#"
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+
+  mkdocs: https://mkdocs.iolanta.tech/
+  mkdocs-material: https://mkdocs.iolanta.tech/material/
+  schema: https://schema.org/
+
+  mkdocs-material:icon:
+    "@type": "@id"
+    "@context":
+      "@base": https://github.com/squidfunk/mkdocs-material/blob/master/material/.icons/
+
+  title: https://mkdocs.iolanta.tech/title
+
+$included:
+  - $id: onProperty
+    domain: owl:Restriction
+
+  - $id: mkdocs:File
+    $type: rdfs:Class
+
+  - $id: mkdocs:Page
+    subClassOf:
+      - $id: schema:WebPage
+      - $id: mkdocs:File
+
+  - $id: mkdocs:title
+    label: Title
+    rdfs:subPropertyOf:
+      - $id: schema:name
+      - $id: rdfs:label
+
+  - $id: mkdocs:url
+    mkdocs:symbol: 🔗
+    rdfs:label: URL
+    rdfs:comment: Web-accessible URL path (usually relative, without the hostname) the page will have when the site is built.
+    rdfs:subPropertyOf:
+      $id: schema:url
+
+  - $id: mkdocs:subjectOf
+    label: Link from a Thing to the Page which describes it.
+    subPropertyOf: schema:subjectOf
+    domain: mkdocs:PageSubject
+
+  - $id: mkdocs:position
+    label: Position of the page in lists and directories.
+    subPropertyOf: schema:position
+
+  - $id: mkdocs:about
+    label: Link from a Page to the Thing this page describes.
+    subPropertyOf: schema:about
+    inverseOf: mkdocs:subjectOf
+
+  - $id: mkdocs-material:template
+    domain: mkdocs:HasTemplate
+    range: rdfs:Literal
+    label: HTML/Jinja2 template
+    comment: Path to an MkDocs template file used to render particular page, relative to the `templates` directory.
+
+  - $id: mkdocs:isParentOf
+  - $id: mkdocs:isChildOf
+    inverseOf: mkdocs:isParentOf
+
+  - $id: mkdocs:IndexPage
+    ⊂: mkdocs:Page
+    ≡:
+      onProperty: mkdocs:fileName
+      hasValue: "index.md"
+
+  - $id: https://octadocs.io/
+    $type: iolanta:Environment
+
+  - $id: mkdocs:PageFacet
+    ⊂: iolanta:Facet
+    label: Class of Iolanta facets which, instead of pointing to a piece of executable code, direct us to a template using `mkdocs-material:template` property. Those are used to render MkDocs pages.
+    ≡:
+      - $type: owl:Restriction
+        onProperty: iolanta:supports
+        hasValue:
+          $id: "mkdocs:"
+      - ∩:
+          - iolanta:Facet
+          - mkdocs:hasTemplate
+
+  - $id: mkdocs:link
+    subClassOf: iolanta:html
+    label: If a facet supports this environment, it must render an HTML link (<a> tag) pointing to the object that the facet is rendering.
+    iolanta:hasDefaultFacet:
+      $id: python://mkdocs_iolanta.facets.Default
+
+  - $id: iolanta:facet
+    range: iolanta:Facet
+
+  # Facet that defines which template to use for an MkDocs page.
+  - $id: mkdocs:PageFacet
+    ≡:
+      ∩:
+        - iolanta:Facet      # Should be a Facet of course
+        - mkdocs:HasTemplate   # And should have an mkdocs-material:template defined
+
+  # Each such facet by definition supports Octadocs as environment
+  - $id: mkdocs:PageFacet
+    ≡:
+      onProperty: iolanta:supports
+      hasValue:
+        $id: "mkdocs:"
+
+  - $id: xsd:boolean
+    iolanta:datatypeFacet:
+      $id: python://mkdocs_iolanta.facets.bool_literal.BoolLiteral
+      iolanta:supports:
+        $id: iolanta:html
+
+  - $id: owl:propertyChainAxiom
+    domain: owl:ObjectProperty
+
+  - $id: mkdocs:position
+    rdfs:label: Page position in navigation
+    rdfs:subPropertyOf:
+      $id: schema:position

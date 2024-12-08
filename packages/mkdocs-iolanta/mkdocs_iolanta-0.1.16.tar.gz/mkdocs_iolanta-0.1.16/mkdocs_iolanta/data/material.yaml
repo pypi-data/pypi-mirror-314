@@ -1,0 +1,33 @@
+"@context":
+  "@import": https://json-ld.org/contexts/dollar-convenience.jsonld
+
+  xsd: http://www.w3.org/2001/XMLSchema#
+  vann: http://purl.org/vocab/vann/
+  foaf: http://xmlns.com/foaf/0.1/
+  owl: http://www.w3.org/2002/07/owl#
+  iolanta: https://iolanta.tech/
+  rdfs: "http://www.w3.org/2000/01/rdf-schema#"
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+
+  mkdocs: https://mkdocs.iolanta.tech/
+  mkdocs-material: https://mkdocs.iolanta.tech/material/
+
+  mkdocs-material:icon:
+    "@type": "@id"
+    "@context":
+      "@base": https://github.com/squidfunk/mkdocs-material/blob/master/material/.icons/
+
+  title: mkdocs:title
+
+
+$included:
+  - $id: mkdocs-material:icon
+    rdfs:label: mkdocs-material icon
+    rdfs:subPropertyOf:
+      $id: iolanta:symbol
+    rdfs:range:
+      $id: mkdocs-material:Icon
+      iolanta:hasInstanceFacet:
+        $id: python://mkdocs_iolanta.facets.MkdocsMaterialIcon
+        iolanta:supports:
+          $id: iolanta:html
