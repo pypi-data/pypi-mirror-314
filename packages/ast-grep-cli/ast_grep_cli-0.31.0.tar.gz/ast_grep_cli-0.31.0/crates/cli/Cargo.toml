@@ -1,0 +1,55 @@
+[package]
+name = "ast-grep"
+description = "Search and Rewrite code at large scale using precise AST pattern"
+keywords = ["ast", "pattern", "codemod", "search", "rewrite"]
+categories = ["command-line-utilities", "development-tools", "parsing"]
+default-run = "sg"
+# use relative path because maturin does not recognize
+readme = "../../README.md"
+license-file = "../../LICENSE"
+
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+# license.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "sg"
+path = "src/main.rs"
+
+[[bin]]
+name = "ast-grep"
+path = "src/bin/ast-grep.rs"
+
+[dependencies]
+ast-grep-core.workspace = true
+ast-grep-config.workspace = true
+ast-grep-dynamic.workspace = true
+ast-grep-language.workspace = true
+ast-grep-lsp.workspace = true
+tree-sitter.workspace = true
+
+ansi_term = "0.12.1"
+anyhow.workspace = true
+atty = "0.2.14"
+clap = { version = "4.5.4", features = ["derive"] }
+codespan-reporting = "0.11.1"
+crossterm = "0.28.0"
+ignore.workspace = true
+regex.workspace = true
+inquire = "0.7.5"
+serde.workspace = true
+serde_json = "1.0.116"
+serde_yaml = "0.9.33"
+similar = { version = "2.5.0", features = ["inline"] }
+tokio = { version = "1.37.0", features = ["rt-multi-thread", "io-std"] }
+clap_complete = "4.5.2"
+
+[dev-dependencies]
+assert_cmd = "2.0.14"
+predicates = "3.1.0"
+tempfile = "3.10.1"
