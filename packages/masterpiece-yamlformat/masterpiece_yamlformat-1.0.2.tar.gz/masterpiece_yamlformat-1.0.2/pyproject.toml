@@ -1,0 +1,59 @@
+
+[build-system]
+requires = ["setuptools"] 
+build-backend = "setuptools.build_meta"  
+
+
+[project]
+name = "masterpiece_yamlformat"
+version = "1.0.2"
+description = "Yaml serialization format for `masterpiece` applications"
+readme = {file = "docs/source/README.rst", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {file = "docs/source/LICENSE.rst", content-type = "text/markdown"}
+keywords = ["yaml", "masterpiece", "format", "serialization"]
+authors = [
+  {name = "J Meskanen", email = "juham.api@gmail.com" }
+]
+maintainers = [
+  {name = "J. Meskanen", email = "juham.api@gmail.com" }
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.8",
+]
+
+dependencies = [
+  "masterpiece >= 0.1.4",
+  "pytz >= 2024.1",
+  "importlib-metadata",
+  "pyyaml >= 6.0" 
+]
+
+
+[project.optional-dependencies]
+dev = ["check-manifest"]
+
+
+[project.entry-points."masterpiece.plugins"]
+yaml_plugin = "masterpiece_yamlformat:YamlFormat"
+
+
+
+[project.urls]
+"Homepage" = "https://gitlab.com/juham/masterpiece_yamlformat"
+"Bug Reports" = "https://gitlab.com/juham/masterpiece"
+"Source" = "https://gitlab.com/juham/masterpiece_yamlformat"
+"Say Thanks!" = "http://meskanen.com"
+
+
+[tool.mypy]
+files = "masterpiece_yamlformat/"
+ignore_missing_imports = false
+
+[tool.pylint]
+jobs = "10"
