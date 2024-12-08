@@ -1,0 +1,1152 @@
+model: aardvarcv2
+features:
+  adc2mv: true
+  dac_sweep: false
+  pedestals: true
+  threshold_scan: true
+  tia_dac: false
+  timing_calibration: true
+params:
+  chanmask: 3072
+  channels: 4
+  chanshift: 10
+  clock_file: Si5341-RevD-AARDVARCv2_GCC781_DebugSE-Registers.txt
+  connections:
+    - serial
+    - d2xx
+  si5341_address: 0xE8
+  default_baud:
+    115200: 53
+  default_baudrate: 115200
+  default_clock: 100000000.0
+  default_divider: 53
+  ext_dac:
+    chip: ad5675
+    max_mv: 1200
+    max_counts: 65535
+    channels:
+      0..3: 30000
+    address_mapping:
+      0..3: 0xC
+    channel_mapping:
+      0: 0
+      1: 2
+      2: 4
+      3: 5
+  headers: 3
+  numregs: 64
+  pedestals_blocks: 1
+  peripherals:
+    current:
+      chan: 0
+      addr: 0xD0
+      bits: 16
+      gain: 8
+    vadjn:
+      chan: 0
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp:
+      chan: 1
+      addr: 0xD8
+      bits: 16
+      gain: 1
+  possible_bauds:
+    115200: 53
+    230400: 26
+    691200: 8
+    1041667: 5
+  resolution: 12
+  samples: 64
+  samplingrate: 10.0
+  stop_word: !!binary |
+    +s4=
+  strobe_values_correction: True  # Shift the strobe values on certain boards with swapped internal routing.  wait: AE000001
+  strobe_correction_keys:
+    - calstrb_le
+    - calstrb_te
+    - wrstrb1_le
+    - wrstrb1_te
+    - wrstrb2_le
+    - wrstrb2_te
+    - wrsync1_le
+    - wrsync1_te
+    - wrsync2_le
+    - wrsync2_te
+  trigger:
+    wbias: 
+      0..3: 848
+    default_trigger_value: 0
+    ext_trig_cycles: 3
+  windmask: 1022
+  windows: 16
+registers:
+  analog_registers:
+    cal:
+      address: 0x01
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    cal_buff:
+      address: 0x3B
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 3500
+    cal_isel:
+      address: 0x3A
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    calstrb_le:
+      address: 0x25
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    calstrb_te:
+      address: 0x26
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 30
+    inp0vcurrn:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1604
+    inp0vcurrp:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2218
+    inp0vgmn:
+      address: 0x0D
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2389
+    inp0vgmp:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1536
+    inp1vcurrn:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2218
+    inp1vcurrp:
+      address: 0x0B
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1604
+    inp1vgmn:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2389
+    inp1vgmp:
+      address: 0x07
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1536
+    inp2vcurrn:
+      address: 0x2A
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1604
+    inp2vcurrp:
+      address: 0x28
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2218
+    inp2vgmn:
+      address: 0x2E
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2389
+    inp2vgmp:
+      address: 0x2C
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1536
+    inp3vcurrn:
+      address: 0x32
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1604
+    inp3vcurrp:
+      address: 0x30
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2218
+    inp3vgmn:
+      address: 0x36
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2389
+    inp3vgmp:
+      address: 0x34
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1536
+    isel:
+      address: 0x15
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2730
+    mont1_on:
+      address: 0x00
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: false
+    mont1_select:
+      address: 0x00
+      bitposition: 4
+      bitwidth: 2
+      description: ''
+      readwrite: w
+      value: 0
+    mont2_on:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: false
+    mont2_select:
+      address: 0x00
+      bitposition: 1
+      bitwidth: 2
+      description: ''
+      readwrite: w
+      value: 0
+    qbias:
+      address: 0x18
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 2048
+    sc0_vbias:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1570
+    sc0_vstab:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1365
+    sc1_vbias:
+      address: 0x0A
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1570
+    sc1_vstab:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1365
+    sc2_vbias:
+      address: 0x29
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1570
+    sc2_vstab:
+      address: 0x2B
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1365
+    sc3_vbias:
+      address: 0x31
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1570
+    sc3_vstab:
+      address: 0x33
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1365
+    sgn:
+      address: 0x00
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: false
+    sspin:
+      address: 0x00
+      bitposition: 6
+      bitwidth: 2
+      description: ''
+      readwrite: w
+      value: 3
+    sstin_sel:
+      address: 0x00
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: true
+    sta_vcomp:
+      address: 0x02
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1000
+    trigger_threshold_00:
+      address: 0x0E
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    trigger_threshold_01:
+      address: 0x06
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    trigger_threshold_02:
+      address: 0x2D
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    trigger_threshold_03:
+      address: 0x35
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    vadjn:
+      address: 0x1C
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1696
+    vadjn_sw:
+      address: 0x00
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: true
+    vadjp:
+      address: 0x19
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    vlimn:
+      address: 0x1B
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    vlimp:
+      address: 0x1A
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 4095
+    vrmpvbias:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1570
+    vtune:
+      address: 0x16
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 1365
+    wbias_00:
+      address: 0x0C
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 350
+    wbias_01:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 350
+    wbias_02:
+      address: 0x2F
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 350
+    wbias_03:
+      address: 0x37
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 350
+    wrstrb1_le:
+      address: 0x1D
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 70
+    wrstrb1_te:
+      address: 0x1E
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 100
+    wrstrb2_le:
+      address: 0x21
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 6
+    wrstrb2_te:
+      address: 0x22
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 36
+    wrsync1_le:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 0
+    wrsync1_te:
+      address: 0x20
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 50
+    wrsync2_le:
+      address: 0x23
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 64
+    wrsync2_te:
+      address: 0x24
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: w
+      value: 114
+  control_registers:
+    1v2_en:
+      address: 0x17
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    2v5_en:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    3v3_i2c_en:
+      address: 0x17
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    8b10b_en:
+      address: 0x19
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    addr:
+      address: 0x16
+      bitposition: 0
+      bitwidth: 9
+      description: ''
+      readwrite: rw
+      value: 0
+    addr_user:
+      address: 0x16
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    chansel:
+      address: 0x06
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    clk1v8_en:
+      address: 0x17
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk2v5_en:
+      address: 0x17
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk_fdec:
+      address: 0x17
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_finc:
+      address: 0x17
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_i2c_sel:
+      address: 0x17
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    clk_oeb:
+      address: 0x17
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_reset:
+      address: 0x17
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    clk_sync:
+      address: 0x17
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    data:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    data_user:
+      address: 0x14
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    debug_data:
+      address: 0x15
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    debug_data_user:
+      address: 0x15
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    digrst:
+      address: 0x16
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    digser_rst:
+      address: 0x19
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    exttrig:
+      address: 0x04
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    gccclr:
+      address: 0x04
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 43714
+    iomode0:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    iomode1:
+      address: 0x04
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    leds:
+      address: 0x18
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    loadwait:
+      address: 0x07
+      bitposition: 8
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    nramp:
+      address: 0x04
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    nrw:
+      address: 0x04
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    numwinds:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 1
+    pclk:
+      address: 0x04
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    pclkwidth:
+      address: 0x07
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    ramplen:
+      address: 0x06
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 2000
+    regclr:
+      address: 0x04
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    runevs:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 1
+    rx_data0:
+      address: 0x1A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data1:
+      address: 0x1B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data2:
+      address: 0x1C
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data3:
+      address: 0x1D
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data4:
+      address: 0x1E
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data5:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_data6:
+      address: 0x20
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_en:
+      address: 0x19
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_num_words:
+      address: 0x19
+      bitposition: 2
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_oneshot:
+      address: 0x19
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_speed:
+      address: 0x19
+      bitposition: 8
+      bitwidth: 2
+      description: ''
+      readwrite: rw
+      value: 0
+    sel:
+      address: 0x04
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    selany:
+      address: 0x04
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    slow_sysclk:
+      address: 0x19
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    stopacq:
+      address: 0x04
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    syncloc:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    sysclk:
+      address: 0x04
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+    sysrst:
+      address: 0x04
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    tx_en:
+      address: 0x19
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    windsel:
+      address: 0x07
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    wrstrboff:
+      address: 0x04
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: false
+  digital_registers:
+    chipid:
+      address: 0x89
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 2730
+    convertresetwait:
+      address: 0x84
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 1
+    enabletestpatt:
+      address: 0x88
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    loadwait:
+      address: 0x8B
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    miscreg:
+      address: 0x8D
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    pclkwidth:
+      address: 0x8C
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    readoutchannels:
+      address: 0x87
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    readoutlookback:
+      address: 0x85
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 18
+    readoutwindows:
+      address: 0x86
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 10
+    regclr:
+      address: 0x8A
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    scal0:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    scal1:
+      address: 0x01
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    scal2:
+      address: 0x02
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    scal3:
+      address: 0x03
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    scalhigh:
+      address: 0x40
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    scalmon:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    testpatin:
+      address: 0x0A
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    wraddrjunk:
+      address: 0x82
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 127
+    wraddrstart:
+      address: 0x80
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    wraddrstop:
+      address: 0x81
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 7
+    writeaftertrig:
+      address: 0x83
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 5
+  i2c_registers:
+    i2c_en:
+      address: 0x0F
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: true
+    i2c_send:
+      address: 0x0F
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_addr:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 8
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_words:
+      address: 0x0F
+      bitposition: 8
+      bitwidth: 3
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data0:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data1:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data2:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    i2c_data3:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: rw
+      value: 0
+    response0:
+      address: 0x48
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response1:
+      address: 0x49
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response2:
+      address: 0x4A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response3:
+      address: 0x4B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0

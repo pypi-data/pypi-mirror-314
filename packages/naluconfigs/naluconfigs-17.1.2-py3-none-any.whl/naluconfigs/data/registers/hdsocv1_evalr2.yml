@@ -1,0 +1,693 @@
+model: hdsocv1_evalr2
+features:
+  adc2mv: true
+  dac_sweep: true
+  ext_dac: true
+  pedestals: true
+  threshold_scan: true
+  tia_dac: true
+  timing_calibration: false
+  naludaq_rs: true
+params:
+  chanmask: 0x3f
+  channels: 32
+  chanshift: 0x0
+  chips:
+    0:
+      !include_chip
+      from: hdsocv1::params
+  clock_file: Si5341-RevD-HDSoC_31_25SYSclk_15_625SSTclk_400GccClk_156_25TxClk_31_25TxDivClk-Registers.txt
+  connections:
+    - serial
+    - d2xx
+    - udp
+  si5341_address: 0xEE
+  default_baud:
+    115200: 826
+  default_baudrate: 115200
+  default_clock: 100000000.0
+  default_divider: 826
+  trigger:
+    max_vref: 2500
+    min_vref: 0
+    ref_bits: 4
+    val_bits: 8
+    min_counts: 0
+    max_counts: 255
+    wbias: 
+      0..3: 2000
+    default_trigger_value: 0
+    ext_trig_cycles: 3
+  threshold_scan:
+    low_ref: 0
+    high_ref: 15
+    start: 1
+    stop: 255
+    stepsize: 5
+    units: mv
+  ext_dac:
+    chip: dac7578
+    max_mv: 2500
+    max_counts: 4095
+    channels:
+      0..31: 1804
+    address_mapping:
+      0..7: 0x49
+      8..15: 0x4A
+      16..23: 0x48
+      24..31: 0x4B
+    channel_mapping:
+      0, 14, 17, 31: 1
+      1, 15, 16, 30: 0
+      2, 12, 19, 29: 3
+      3, 13, 18, 28: 2
+      4, 10, 21, 27: 5
+      5, 11, 20, 26: 4
+      6, 8, 23, 25: 7
+      7, 9, 22, 24: 6
+  headers: 4
+  i2c:
+    max_command_words: 4
+    max_response_words: 4
+  max_numwinds: 400000
+  minimum_firmware_version: 938
+  new_firmware: True
+  numregs: 64
+  pedestals_blocks: 16
+  peripherals:
+    fpga_voltage:
+      chan: 1
+      addr: 0x4C # 7-bit
+    chip_voltage:
+      chan: 4
+      addr: 0x4C # 7-bit
+    board_voltage:
+      chan: vcc
+      addr: 0x4C # 7-bit
+    vadjn_left:
+      chan: 1
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp_left:
+      chan: 0
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjn_right:
+      chan: 2
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp_right:
+      chan: 3
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    eeprom:
+      addr: 0x50 # 7-bit
+      capacity: 0x20000 # bytes
+      page_size: 256 # bytes
+      segments:
+        analog_registers:
+          begin: 0
+          length: 300
+        digital_registers:
+          begin: 300
+          length: 330
+        control_registers:
+          begin: 630
+          length: 70
+  possible_bauds:
+    115200: 868
+    2000000: 50
+    # 691200: 8
+    # 1041667: 5
+  resolution: 12
+  samples: 32
+  samplingrate: 1.0
+  stop_word: FA5A
+  register_stop_word: CAFE
+  tia_dac:
+    max_vref: 2500
+    min_vref: 0
+    ref_bits: 4
+    val_bits: 8
+  wait: AE000001
+  windmask: 1022
+  windows: 62
+registers:
+  analog_registers:
+    !include_registers
+      from: hdsocv1::registers::analog_registers
+  digital_registers:
+    !include_registers
+      from: hdsocv1::registers::digital_registers
+  control_registers:
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: '2-byte chip identifier'
+      readwrite: r
+      value: 19804
+    version:
+      address: 0x01
+      bitposition: 0
+      bitwidth: 16
+      description: 'Firmware version'
+      readwrite: r
+      value: 0
+    reg_data0:
+      address: 0x02
+      bitposition: 0
+      bitwidth: 4
+      description: 'Digital command register data bits 19 downto 16'
+      readwrite: r
+      value: 0
+    reg_data1:
+      address: 0x03
+      bitposition: 0
+      bitwidth: 16
+      description: 'Digital command register data bits 15 downto 0'
+      readwrite: r
+      value: 0
+    mode_sel:
+      address: 0x02
+      bitposition: 4
+      bitwidth: 8
+      description: 'Digital command mode data'
+      readwrite: r
+      value: 0
+    iomode0:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 1
+      description: 'analog and EN10b8b'
+      readwrite: rw
+      value: 1
+    regclr:
+      address: 0x04
+      bitposition: 1
+      bitwidth: 1
+      description: 'HDSoC INREGCLR pin; resets digital control module, wave fifos, and digital serial rx/tx en'
+      readwrite: rw
+      value: 0
+    pclk:
+      address: 0x04
+      bitposition: 2
+      bitwidth: 1
+      description: 'HDSoC DEBUG_PCLK pin (analog debug)'
+      readwrite: rw
+      value: 0
+    nramp:
+      address: 0x04
+      bitposition: 5
+      bitwidth: 1
+      description: 'HDSoC DEBUG_NRAMP pin (analog debug)'
+      readwrite: rw
+      value: 0
+    iomode1:
+      address: 0x04
+      bitposition: 6
+      bitwidth: 1
+      description: 'ASIC parallel (value = 0) or serial (value = 1) communication'
+      readwrite: rw
+      value: 0
+    sysrst:
+      address: 0x04
+      bitposition: 9
+      bitwidth: 1
+      description: 'HDSoC SYSRST pin; resets digital control module, wave fifos, and digital serial rx/tx en'
+      readwrite: rw
+      value: 1
+    exttrig:
+      address: 0x04
+      bitposition: 10
+      bitwidth: 1
+      description: 'HDSoC evtTrig_DEBUG_GCCClr pin; external trigger'
+      readwrite: rw
+      value: 0
+    nrw:
+      address: 0x04
+      bitposition: 11
+      bitwidth: 1
+      description: 'HDSoC R_NW_parllel_DEBUG_RNW pin when in analog debug mode'
+      readwrite: rw
+      value: 0
+    sel:
+      address: 0x04
+      bitposition: 12
+      bitwidth: 1
+      description: 'HDSoC SEL_parallel pin when in analog debug mode'
+      readwrite: rw
+      value: 0
+    stopacq:
+      address: 0x04
+      bitposition: 13
+      bitwidth: 1
+      description: 'Stops digital control module from writing packet into wave fifos'
+      readwrite: rw
+      value: 0
+    t_user:
+      address: 0x04
+      bitposition: 15
+      bitwidth: 1
+      description: 'HDSoC Data_IOT pin when in analog debug mode'
+      readwrite: rw
+      value: 0
+    write_address:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 5
+      description: 'HDSoC DEBUG_Write_Address bus'
+      readwrite: rw
+      value: 0
+    loadwait:
+      address: 0x07
+      bitposition: 8
+      bitwidth: 4
+      description: 'number of sys_clk_2x cycles to wait before monitoring DATA_VALID from ASIC'
+      readwrite: rw
+      value: 15
+    pclkwidth:
+      address: 0x07
+      bitposition: 12
+      bitwidth: 4
+      description: 'number of sys_clk_2x cycles per 12-bit data read/write operation'
+      readwrite: rw
+      value: 15
+    numwinds:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 16
+      description: 'manually-set number of packets to read from serial interface'
+      readwrite: rw
+      value: 1
+    debug_data:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 12
+      description: 'HDSoC Data when in analog debug mode'
+      readwrite: rw
+      value: 0
+    debug_addr:
+      address: 0x15
+      bitposition: 0
+      bitwidth: 10
+      description: 'HDSoC ADDR when in analog debug mode'
+      readwrite: rw
+      value: 0
+    idig_rst:
+      address: 0x16
+      bitposition: 9
+      bitwidth: 1
+      description: 'manual digital (control module) reset'
+      readwrite: rw
+      value: 0
+    wave_fifo_rst:
+      address: 0x16
+      bitposition: 10
+      bitwidth: 1
+      description: 'manual wave fifo reset'
+      readwrite: rw
+      value: 0
+    clk_sync:
+      address: 0x17
+      bitposition: 10
+      bitwidth: 1
+      description: 'SI5341A Sync'
+      readwrite: rw
+      value: 0
+    clk_reset:
+      address: 0x17
+      bitposition: 7
+      bitwidth: 1
+      description: 'SI5341A Reset'
+      readwrite: rw
+      value: 0
+    clk_oeb:
+      address: 0x17
+      bitposition: 6
+      bitwidth: 1
+      description: 'SI5341A OE_n'
+      readwrite: rw
+      value: 0
+    clk_i2c_sel:
+      address: 0x17
+      bitposition: 5
+      bitwidth: 1
+      description: 'currently unused, but NaluDaq throws an error'
+      readwrite: rw
+      value: true
+    clk1v8_en:
+      address: 0x17
+      bitposition: 4
+      bitwidth: 1
+      description: 'SI5341A 1.8V Enable'
+      readwrite: rw
+      value: False
+    clk2v5_en:
+      address: 0x17
+      bitposition: 3
+      bitwidth: 1
+      description: 'SI5341A 2.5V Enable'
+      readwrite: rw
+      value: False
+    3v3_i2c_en:
+      address: 0x17
+      bitposition: 2
+      bitwidth: 1
+      description: 'currently unused, but NaluDaq throws an error'
+      readwrite: rw
+      value: true
+    1v2_en:
+      address: 0x17
+      bitposition: 1
+      bitwidth: 1
+      description: 'currently unused, but NaluDaq throws an error'
+      readwrite: rw
+      value: False
+    2v5_en:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 1
+      description: 'HDSoC 2.5V Enable'
+      readwrite: rw
+      value: False
+    ser_rx_neg_pol:
+      address: 0x19
+      bitposition: 1
+      bitwidth: 1
+      description: 'digital serial receive negative polarity flag; currently unused'
+      readwrite: rw
+      value: 0
+    ser_rx_crc_en:
+      address: 0x19
+      bitposition: 2
+      bitwidth: 1
+      description: 'digital serial receive CRC enable'
+      readwrite: rw
+      value: 0
+    ser_rx_eof_en:
+      address: 0x19
+      bitposition: 3
+      bitwidth: 1
+      description: 'digital serial receive EOF enable'
+      readwrite: rw
+      value: 0
+    ser_rx_div:
+      address: 0x19
+      bitposition: 4
+      bitwidth: 4
+      description: 'digital serial receive divider value; currently unused'
+      readwrite: rw
+      value: 0
+    ser_tx_neg_pol:
+      address: 0x19
+      bitposition: 13
+      bitwidth: 1
+      description: 'digital serial transfer negative polarity flag; currently unused'
+      readwrite: rw
+      value: 0
+    pedram_addr:
+      address: 0x1D
+      bitposition: 0
+      bitwidth: 16
+      description: 'currently unused'
+      readwrite: rw
+      value: 0
+    pedram_data:
+      address: 0x1E
+      bitposition: 0
+      bitwidth: 12
+      description: 'currently unused'
+      readwrite: rw
+      value: 0
+    analog_debug_disable:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 1
+      description: 'manual disable of analog debug functions; analog debug mode enabled when iomode0 = iomode1 = 0'
+      readwrite: rw
+      value: 0
+    auto_numwinds_en:
+      address: 0x20
+      bitposition: 0
+      bitwidth: 1
+      description: 'enables automatic numwinds calculation based on digital commands and manual timeout value; currently unused'
+      readwrite: rw
+      value: 0
+    timeout15_0:
+      address: 0x21
+      bitposition: 0
+      bitwidth: 16
+      description: 'lower 16 bits of timeout value; currently unused'
+      readwrite: rw
+      value: 0
+    timeout31_16:
+      address: 0x22
+      bitposition: 0
+      bitwidth: 16
+      description: 'upper 16 bits of timeout value; currently unused'
+      readwrite: rw
+      value: 0
+    eth_addr_sel:
+      address: 0x28
+      bitposition: 0
+      bitwidth: 2
+      description: 'enables manually set destination (bit 0) and source (bit 1) IP addresses'
+      readwrite: rw
+      value: 0
+    eth_port_sel:
+      address: 0x28
+      bitposition: 2
+      bitwidth: 2
+      description: 'enables manually set destination (bit 0) and source (bit 1) UDP ports'
+      readwrite: rw
+      value: 0
+    tx_mode:
+      address: 0x28
+      bitposition: 4
+      bitwidth: 1
+      description: 'selects ethernet (value = 1) or UART (value = 0) transmission'
+      readwrite: rw
+      value: 0
+    eth_ar_en:
+      address: 0x28
+      bitposition: 5
+      bitwidth: 1
+      description: 'enables auto-response destination IP address; currently unused'
+      readwrite: rw
+      value: 0
+    eth_dhcp_en:
+      address: 0x28
+      bitposition: 6
+      bitwidth: 1
+      description: 'enables DHCP resolution of source IP address; currently unused'
+      readwrite: rw
+      value: 0
+    eth_dest_addr15_0:
+      address: 0x29
+      bitposition: 0
+      bitwidth: 16
+      description: 'lower 16 bits of ethernet destination IP address'
+      readwrite: rw
+      value: 0
+    eth_dest_addr31_16:
+      address: 0x2A
+      bitposition: 0
+      bitwidth: 16
+      description: 'upper 16 bits of ethernet destination IP address'
+      readwrite: rw
+      value: 0
+    eth_src_addr15_0:
+      address: 0x2B
+      bitposition: 0
+      bitwidth: 16
+      description: 'lower 16 bits of ethernet source IP address'
+      readwrite: rw
+      value: 0
+    eth_src_addr31_16:
+      address: 0x2C
+      bitposition: 0
+      bitwidth: 16
+      description: 'upper 16 bits of ethernet source IP address'
+      readwrite: rw
+      value: 0
+    eth_dest_port:
+      address: 0x2D
+      bitposition: 0
+      bitwidth: 16
+      description: 'UDP destination port'
+      readwrite: rw
+      value: 0
+    eth_src_port:
+      address: 0x2E
+      bitposition: 0
+      bitwidth: 16
+      description: 'UDP source port'
+      readwrite: rw
+      value: 0
+    pg_2v5:
+      address: 0x46
+      bitposition: 0
+      bitwidth: 1
+      description: 'PG HDSoC 2v5 input'
+      readwrite: r
+      value: 0
+    clk_intr_n:
+      address: 0x47
+      bitposition: 0
+      bitwidth: 1
+      description: 'SI5341A Intr_n input'
+      readwrite: r
+      value: 0
+    clk_lol_n:
+      address: 0x47
+      bitposition: 1
+      bitwidth: 1
+      description: 'SI5341A LOL_n input'
+      readwrite: r
+      value: 0
+    fpga_clk_locked:
+      address: 0x59
+      bitposition: 0
+      bitwidth: 1
+      description: 'fpga system clock locked flag'
+      readwrite: r
+      value: 0
+    asic_clk_locked:
+      address: 0x59
+      bitposition: 1
+      bitwidth: 1
+      description: 'SI5341A-generated ASIC clock locked flag'
+      readwrite: r
+      value: 0
+    ser_tx_clk_locked:
+      address: 0x59
+      bitposition: 2
+      bitwidth: 1
+      description: 'digital serial transfer clock locked flag'
+      readwrite: r
+      value: 0
+    rx_en:
+      address: 0x59
+      bitposition: 3
+      bitwidth: 1
+      description: 'digital serial receive enabled'
+      readwrite: r
+      value: 0
+    tx_en:
+      address: 0x59
+      bitposition: 4
+      bitwidth: 1
+      description: 'digital serial transfer enabled'
+      readwrite: r
+      value: 0
+    idly_cnt_val:
+      address: 0x59
+      bitposition: 8
+      bitwidth: 5
+      description: 'input delay count value; currently unused'
+      readwrite: r
+      value: 0
+    dhcp_addr15_0:
+      address: 0x5A
+      bitposition: 0
+      bitwidth: 16
+      description: 'DHCP resolved address bits 15 downto 0'
+      readwrite: r
+      value: 0
+    ch_en15_0:
+      address: 0x5C
+      bitposition: 0
+      bitwidth: 16
+      description: 'enabled channels vector bits 15 downto 0'
+      readwrite: r
+      value: 0
+    ch_en31_16:
+      address: 0x5D
+      bitposition: 0
+      bitwidth: 16
+      description: 'enabled channels vector bits 31 downto 16'
+      readwrite: r
+      value: 0
+  i2c_registers:
+    i2c_en:
+      address: 0x0F
+      bitposition: 14
+      bitwidth: 1
+      description: 'enables I2C output'
+      readwrite: rw
+      value: 1
+    i2c_addr:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 8
+      description: 'Address of device I2C data is being sent to'
+      readwrite: rw
+      value: 0
+    i2c_words:
+      address: 0x0F
+      bitposition: 8
+      bitwidth: 4
+      description: 'number of 8-bit data words to be sent over I2C'
+      readwrite: rw
+      value: 0
+    i2c_data0:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C data bits 63 downto 48; words read justified to LSB'
+      readwrite: rw
+      value: 0
+    i2c_data1:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C data bits 47 downto 32; words read justified to LSB'
+      readwrite: rw
+      value: 0
+    i2c_data2:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C data bits 31 downto 16; words read justified to LSB'
+      readwrite: rw
+      value: 0
+    i2c_data3:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C data bits 15 downto 0; words read justified to LSB'
+      readwrite: rw
+      value: 0
+    response0:
+      address: 0x48
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C response bits 63 downto 48; bits received justified to LSb'
+      readwrite: r
+      value: 0
+    response1:
+      address: 0x49
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C response bits 47 downto 32; bits received justified to LSb'
+      readwrite: r
+      value: 0
+    response2:
+      address: 0x4A
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C response bits 31 downto 16; bits received justified to LSb'
+      readwrite: r
+      value: 0
+    response3:
+      address: 0x4B
+      bitposition: 0
+      bitwidth: 16
+      description: 'I2C response bits 15 downto 0; bits received justified to LSb'
+      readwrite: r
+      value: 0

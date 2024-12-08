@@ -1,0 +1,555 @@
+model: udc16
+features:
+  adc2mv: false
+  conversion_ramp_optimizer: true
+  dac_sweep: true
+  ext_dac: true
+  pedestals: true
+  threshold_scan: false
+  tia_dac: false
+  timing_calibration: false
+  naludaq_rs: true
+params:
+  chanmask: 0xFF00
+  channels: 16
+  chanshift: 8
+  chips:
+    0:
+      !include_chip
+      from: udc16::params
+  clock_file: Si5341-RevD-UDC_78_125SlowClk_78_125IntermediateClk_312_5FastClk-Registers.txt
+  connections:
+    - serial
+    - d2xx
+    - udp
+  si5341_address: 0xEE
+  default_baud:
+    2000000: 50
+  default_baudrate: 2000000
+  default_clock: 200000000.0
+  default_divider: 50
+  default_trigger_value: 0
+  intamp_bias_mode_chan0_7: 'c'
+  intamp_bias_mode_chan8_15: 'c'
+  ext_dac:
+    chip: dac7578
+    max_mv: 1250
+    max_counts: 3930
+    min_counts: 0
+    channels:
+      0..15: 2000
+    address_mapping:
+      0..7: 0x4B
+      8..15: 0x48
+    channel_mapping:
+      0, 08: 0
+      1, 09: 1
+      2, 10: 2
+      3, 11: 3
+      4, 12: 4
+      5, 13: 5
+      6, 14: 6
+      7, 15: 7
+  trigger:
+    wbias: 
+      0: 750
+    max_val: 2047
+    min_val: 0
+    default: false
+    default_trigger_value: 0
+    ext_trig_cycles: 3
+  num_trigger_channels: 8
+  headers: 0
+  last_window_fix_amount: 47
+  lastbits: 0
+  numregs: 32
+  pedestals_blocks: 8
+  peripherals:
+    current:
+      chan: 0
+      addr: 0xD0
+      bits: 16
+      gain: 8
+    vadjn:
+      chan: 1
+      addr: 0xD8
+      bits: 16
+      gain: 1
+    vadjp:
+      chan: 0
+      addr: 0xD8
+      bits: 16
+      gain: 1
+  possible_bauds:
+    2000000: 50
+  resolution: 10
+  samples: 64
+  samplingrate: 9.2
+  stop_word: CAFE
+  register_stop_word: FACE
+  strobe_values_correction: True  # Shift the strobe values on certain boards with swapped internal routing.
+  strobe_correction_keys:
+    - digsync_le
+    - digsync_te
+    - wrstrb1_le
+    - wrstrb1_te
+    - wrstrb2_le
+    - wrstrb2_te
+    - wrsync1_le
+    - wrsync1_te
+    - wrsync2_le
+    - wrsync2_te
+  wait: AE000001
+
+  windmask: 0x00FF
+  windows: 64
+registers:
+  analog_registers:
+    !include_registers
+      from: udc16::registers::analog_registers
+  digital_registers:
+    !include_registers
+      from: udc16::registers::digital_registers
+  control_registers:
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: 'Unique board identifier'
+      readwrite: rw
+      value: 0x4D5C # 00DC for newer firmware
+    version:
+      address: 0x01
+      bitposition: 0
+      bitwidth: 16
+      description: 'Current firmware version'
+      readwrite: rw
+      value: 0
+    data_iot:
+      address: 0x04
+      bitposition: 15
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    stopacq:
+      address: 0x04
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    sel:
+      address: 0x04
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    nrw:
+      address: 0x04
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    exttrig:
+      address: 0x04
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    sysrst:
+      address: 0x04
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    iomode1:
+      address: 0x04
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 1
+    nramp:
+      address: 0x04
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    gccclr:
+      address: 0x04
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    selany:
+      address: 0x04
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    pclk:
+      address: 0x04
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    regclr:
+      address: 0x04
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    iomode0:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    pclkwidth:
+      address: 0x07
+      bitposition: 8
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    loadwait:
+      address: 0x07
+      bitposition: 12
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 15
+    udc_arm:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    reread_data:
+      address: 0x0C
+      bitposition: 0
+      bitwidth: 1
+      description: 'Ask the FPGA to send whatever event is in the output buffer'
+      readwrite: rw
+      value: 0
+    debug_data_to_write:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    debug_addr:
+      address: 0x15
+      bitposition: 0
+      bitwidth: 12
+      description: ''
+      readwrite: rw
+      value: 0
+    wave_fifo_reset:
+      address: 0x16
+      bitposition: 10
+      bitwidth: 1
+      description: 'Reset the waveform FIFO, effectively flushing any data in the output FIFO'
+      readwrite: rw
+      value: 0
+    digrst:
+      address: 0x16
+      bitposition: 9
+      bitwidth: 1
+      description: 'Toggle the digital reset pin, resets the ASIC.'
+      readwrite: rw
+      value: 0
+    2v5_en:
+      address: 0x17
+      bitposition: 0
+      bitwidth: 1
+      description: 'Enable the 2.5V rail'
+      readwrite: rw
+      value: 0
+    1v2_en:
+      address: 0x17
+      bitposition: 1
+      bitwidth: 1
+      description: 'Enable the 1.2V rail'
+      readwrite: rw
+      value: 0
+    clk2v5_en:
+      address: 0x17
+      bitposition: 3
+      bitwidth: 1
+      description: 'Enable the clock specific 2.5V rail.'
+      readwrite: rw
+      value: 0
+    clk1v8_en:
+      address: 0x17
+      bitposition: 4
+      bitwidth: 1
+      description: 'Enable the clock specific 1.8V rail.'
+      readwrite: rw
+      value: 0
+    clk_oeb:
+      address: 0x17
+      bitposition: 6
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    clk_reset:
+      address: 0x17
+      bitposition: 7
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    clk_sync:
+      address: 0x17
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    tx_packet_marker:
+      address: 0x18
+      bitposition: 0
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_enable:
+      address: 0x19
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_reg_polarity:
+      address: 0x19
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    rx_divider:
+      address: 0x19
+      bitposition: 4
+      bitwidth: 4
+      description: ''
+      readwrite: rw
+      value: 0
+    tx_enable:
+      address: 0x19
+      bitposition: 12
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    tx_reg_polarity:
+      address: 0x19
+      bitposition: 13
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    tx_10_bit_data:
+      address: 0x19
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    analog_debug_en:
+      address: 0x1F
+      bitposition: 0
+      bitwidth: 1
+      description: 'Enable analog debug mode, bypassing the digital side of the chip. Allows the user to communicate directly with the analog side.'
+      readwrite: rw
+      value: 0
+    v1v2_power_good:
+      address: 0x46
+      bitposition: 0
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    temperature_event:
+      address: 0x46
+      bitposition: 1
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_mon_in:
+      address: 0x47
+      bitposition: 0
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    i2c_dataout_genwr_3:
+      address: 0x48
+      bitposition: 0
+      bitwidth: 16
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    i2c_dataout_genwr_2:
+      address: 0x49
+      bitposition: 0
+      bitwidth: 16
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    i2c_dataout_genwr_1:
+      address: 0x4A
+      bitposition: 0
+      bitwidth: 16
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    i2c_dataout_genwr_0:
+      address: 0x4B
+      bitposition: 0
+      bitwidth: 16
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_triggerout_in:
+      address: 0x4C
+      bitposition: 2
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    si5341a_intr_n_in:
+      address: 0x4C
+      bitposition: 1
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    si5341a_lol_n_in:
+      address: 0x4C
+      bitposition: 0
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    system_clock_locked:
+      address: 0x59
+      bitposition: 0
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    sys_clock_locked:
+      address: 0x59
+      bitposition: 1
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    idigser_tx_idle_locked:
+      address: 0x59
+      bitposition: 2
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_busy_locked_in:
+      address: 0x59
+      bitposition: 3
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+  i2c_registers:
+    i2c_en:
+      address: 0x0F
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 1
+    i2c_words:
+      address: 0x0F
+      bitposition: 8
+      bitwidth: 4
+      description: 'number of words to send in the i2c command.'
+      readwrite: rw
+      value: 0
+    i2c_addr:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 8
+      description: 'i2c address for the commands in the string builder'
+      readwrite: rw
+      value: 0
+    i2c_data0:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 8
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    i2c_data1:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    i2c_data2:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    i2c_data3:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    response0:
+      address: 0x28
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response1:
+      address: 0x29
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response2:
+      address: 0x2A
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response3:
+      address: 0x2B
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0

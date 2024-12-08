@@ -1,0 +1,514 @@
+model: upac96
+features:
+  adc2mv: false
+  dac_sweep: true
+  ext_dac: true
+  conversion_ramp_optimizer: true
+  pedestals: true
+  threshold_scan: true
+  tia_dac: false
+  timing_calibration: false
+  naludaq_rs: true
+params:
+  num_chips: 6  # Number of chips, to be replaced with the actual chips
+  chanmask: 0xFF00
+  channels: 96
+  chanshift: 8
+  chips:
+    0..5:
+      !include_chip
+      from: udc16::params
+  clock_file: Si5341-RevD-UDC_78_125SlowClk_78_125IntermediateClk_312_5FastClk-Registers.txt
+  connections:
+    - serial
+    - d2xx
+    - d3xx
+  si5341_address: 0xEE
+  default_baud:
+    115200: 678
+  default_baudrate: 115200
+  default_clock: 50000000.0
+  default_divider: 434
+  ext_dac:
+    chip: dac7578
+    max_mv: 1024
+    max_counts: 4095
+    min_counts: 0 
+    channels:
+      0,16,32,48,64,80: 2400
+    address_mapping:
+      0,16,32,48,64,80: 0x48
+    channel_mapping:
+      0: 7
+      16: 2
+      32: 5
+      48: 0
+      64: 4
+      80: 6
+  trigger:
+    wbias: 
+      0..6: 750
+    max_val: 4095 
+    min_val: 0
+    default: false
+    default_trigger_value: 0
+    ext_trig_cycles: 3
+  num_trigger_channels: 8
+  headers: 0
+  last_window_fix_amount: 47
+  lastbits: 0
+  numregs: 32
+  pedestals_blocks: 64
+  peripherals:
+    readout_pcb_temp:
+      addr: 0b0011_000
+    power_pcb_temp:
+      addr: 0b0011_001
+    udc1_1v2:
+      addr: 0b1001_101
+      chan: 1
+    udc1_2v5:
+      addr: 0b1001_101
+      chan: 2
+    udc2_1v2:
+      addr: 0b1001_101
+      chan: 3
+    udc2_2v5:
+      addr: 0b1001_101
+      chan: 4
+    fpga_1v0:
+      addr: 0b1001_100
+      chan: 3
+    fpga_1v8:
+      addr: 0b1001_100
+      chan: 4
+    fpga_io_2v5:
+      addr: 0b1001_100
+      chan: 2
+    fpga_io_3v3:
+      addr: 0b1001_100
+      chan: 1
+  possible_bauds:
+    115200: 678
+    1000000: 78
+    2000000: 39
+  resolution: 10
+  usb:
+    tx_pause: 0.02
+    bundle_mode: false
+  samples: 64
+  samplingrate: 9.2
+  stop_word: FACECAFE
+  register_stop_word: FACE
+  timeout_overhead: 5.0  # Overhead time for the data capture
+  strobe_values_correction: True  # Shift the strobe values on certain boards with swapped internal routing.
+  strobe_correction_keys:
+    - digsync_le
+    - digsync_te
+    - wrstrb1_le
+    - wrstrb1_te
+    - wrstrb2_le
+    - wrstrb2_te
+    - wrsync1_le
+    - wrsync1_te
+    - wrsync2_le
+    - wrsync2_te
+  wait: AE000FFF
+  windmask: 0x00FF
+  windows: 64
+registers:
+  analog_registers:
+    !include_registers
+      from: udc16::registers::analog_registers
+      value_count: 6
+  digital_registers:
+    !include_registers
+      from: udc16::registers::digital_registers
+      value_count: 6
+      override:
+        loadwait:
+          bitwidth: 7
+        pclkwidth:
+          bitwidth: 7
+        chip_id:
+          value: [0, 1, 2, 3, 4, 5]
+  control_registers:
+    identifier:
+      address: 0x00
+      bitposition: 0
+      bitwidth: 16
+      description: 'Unique board identifier'
+      readwrite: rw
+      value: 0x03E8
+    version:
+      address: 0x01
+      bitposition: 0
+      bitwidth: 16
+      description: 'Current firmware version'
+      readwrite: rw
+      value: 0x0000
+    regclr:
+      address: 0x04
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    sysrst:
+      address: 0x04
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    eventtrig:
+      address: 0x04
+      bitposition: 2
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    arm:
+      address: 0x04
+      bitposition: 3
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    abort:
+      address: 0x04
+      bitposition: 4
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    continuousmode:
+      address: 0x04
+      bitposition: 5
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    reread_data: #udc reread
+      address: 0x04
+      bitposition: 6
+      bitwidth: 1
+      description: 'Ask the FPGA to send whatever event is in the output buffer'
+      readwrite: rw
+      value: 0
+    digrst:
+      address: 0x04
+      bitposition: 7
+      bitwidth: 1
+      description:
+      readwrite: rw
+      value: 0
+    pwr_udc1_en:
+      address: 0x04
+      bitposition: 8
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    pwr_udc2_en:
+      address: 0x04
+      bitposition: 9
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    usb_fifo_disable:
+      address: 0x04
+      bitposition: 10
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    uart_fifo_disable:
+      address: 0x04
+      bitposition: 11
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 0
+    trigger_select:
+      address: 0x04
+      bitposition: 12
+      bitwidth: 2
+      description: ''
+      readwrite: rw
+      value: 0
+    trigger_monitor_disable:
+      address: 0x04
+      bitposition: 14
+      bitwidth: 1
+      description: 'Disable the trigger monitor signal, needs to be disabled during pedestals capture.'
+      readwrite: rw
+      value: 0
+    coincidence_trigger_select:
+      address: 0x04
+      bitposition: 15
+      bitwidth: 1
+      description: Controls whether the coincidence trigger signal is routed through the debug_trigger_out pin
+      readwrite: rw
+      value: 0
+    udc_rxout_enable:
+      address: 0x05
+      bitposition: 0
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0x3F
+    udc_rx_negative_polarity:
+      address: 0x05
+      bitposition: 8
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0x37
+    udc_txin_enable:
+      address: 0x06
+      bitposition: 0
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0x3F
+    udc_tx_negative_polarity:
+      address: 0x06
+      bitposition: 8
+      bitwidth: 6
+      description: ''
+      readwrite: rw
+      value: 0x27
+    count_reset:
+      address: 0x07
+      bitposition: 0
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: 0
+    count_version:
+      address: 0x07
+      bitposition: 1
+      bitwidth: 1
+      description: ''
+      readwrite: w
+      value: 0
+    count_max_lsb:
+      address: 0x08
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: w
+      value: 0xFFFF
+    count_max_msb:
+      address: 0x09
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: w
+      value: 0
+    count_lsb:
+      address: 0x30
+      bitposition: 0
+      bitwidth: 16
+      description: 'Lower 16-bit of the trigger scaler.'
+      readwrite: r
+      value: 0
+    count_msb:
+      address: 0x31
+      bitposition: 0
+      bitwidth: 16
+      description: 'Upper 16-bit of the trigger scaler.'
+      readwrite: r
+      value: 0
+    udc_select:
+      address: 0x0D
+      bitposition: 0
+      bitwidth: 3
+      description: ''
+      readwrite: rw
+      value: 0
+    udc_trigger_mask:
+      address: 0x0D
+      bitposition: 8
+      bitwidth: 6
+      description: 'Select which chips are used for the trigger, 1 = use chip, 0 = ignore chip, bit 0 = chip 0, bit 5 = chip 5'
+      readwrite: rw
+      value: 0x3F
+    system_clock_locked:
+      address: 0x24
+      bitposition: 0
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    usb_clock_locked:
+      address: 0x24
+      bitposition: 1
+      bitwidth: 1
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_tx_idle_locked:
+      address: 0x25
+      bitposition: 0
+      bitwidth: 6
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_rxout_locked:
+      address: 0x26
+      bitposition: 0
+      bitwidth: 6
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_trigger_out:
+      address: 0x27
+      bitposition: 0
+      bitwidth: 6
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    sequencer_state_status:
+      address: 0x2d
+      bitposition: 0
+      bitwidth: 16
+      description: '1:Idle \n 2:Minimum_Acquizition_Time_Wait \n 3:Trigger_Low \n 4:Trigger_High \n 5:Wait_Digitize_Done \n 6:UDC_Read_Start \n 7:Wait_Packet_Start \n 8:Wait_Packet_Done \n 9:Wait_Fifo_Done \n A:UDC_Data_Done \n B:Next_UDC \n C:END_OF_TRIGGER_EVENT_MARKER \n D:Check_Continous_mode'
+      readwrite: r
+      value: 0
+    udc_tx_idle_latched:
+      address: 0x2E
+      bitposition: 0
+      bitwidth: 6
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_rxout_latched:
+      address: 0x2F
+      bitposition: 0
+      bitwidth: 6
+      description: 'Read-Only status register'
+      readwrite: r
+      value: 0
+    udc_latch_reset:
+      address: 0x20
+      bitposition: 2
+      bitwidth: 1
+      description: 'Reset the latched status registers'
+      readwrite: rw
+      value: 0
+    sdata_in_phase:
+      address: 0x0E
+      bitposition: 0
+      bitwidth: 6
+      description: 'Sets the phase relation of the FPGA SERDES input data to the SERDES clock: 0=>0 degrees: 1=>180 degrees'
+      readwrite: rw
+      value: 0x21
+    sdata_out_phase:
+      address: 0x0E
+      bitposition: 6
+      bitwidth: 6
+      description: 'Sets the phase relation of the FPGA SERDES output data to the SERDES clock: 0=>0 degrees: 1=>180 degrees'
+      readwrite: rw
+      value: 0x0
+    pd_bias_en:
+      address: 0x14
+      bitposition: 0
+      bitwidth: 1
+      description: 'High Voltage bias enable'
+      readwrite: rw
+      value: 0
+    trigger_monitor_select:
+      address: 0x14
+      bitposition: 1
+      bitwidth: 1
+      description: 'Trigger monitor signal select'
+      readwrite: rw
+      value: 0
+  i2c_registers:
+    i2c_speed:
+      address: 0x0A
+      bitposition: 0
+      bitwidth: 3
+      description: 'I2C speed, 0=200kHz, 7=25kHz'
+      readwrite: rw
+      value: 7
+    i2c_en:
+      address: 0x0F
+      bitposition: 14
+      bitwidth: 1
+      description: ''
+      readwrite: rw
+      value: 1
+    i2c_words:
+      address: 0x0F
+      bitposition: 8
+      bitwidth: 4
+      description: 'number of words to send in the i2c command.'
+      readwrite: rw
+      value: 0
+    i2c_addr:
+      address: 0x0F
+      bitposition: 0
+      bitwidth: 8
+      description: 'i2c address for the commands in the string builder'
+      readwrite: rw
+      value: 0
+    i2c_data0:
+      address: 0x10
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    i2c_data1:
+      address: 0x11
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    i2c_data2:
+      address: 0x12
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    i2c_data3:
+      address: 0x13
+      bitposition: 0
+      bitwidth: 16
+      description: 'Data storage used by the i2c string builder, for both rx and tx data'
+      readwrite: rw
+      value: 0
+    response0:
+      address: 0x20
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response1:
+      address: 0x21
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response2:
+      address: 0x22
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
+    response3:
+      address: 0x23
+      bitposition: 0
+      bitwidth: 16
+      description: ''
+      readwrite: r
+      value: 0
