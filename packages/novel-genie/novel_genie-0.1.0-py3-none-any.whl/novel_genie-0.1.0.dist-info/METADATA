@@ -1,0 +1,241 @@
+Metadata-Version: 2.1
+Name: novel-genie
+Version: 0.1.0
+Summary: A tool to generate novels via command line input or screenshots
+Home-page: https://github.com/mannaandpoem/NovelGenie
+Author: mannaandpoem
+Author-email: 1580466765@qq.com
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: openai~=0.28.0
+Requires-Dist: pyyaml~=6.0.2
+Requires-Dist: pydantic~=2.10.2
+Requires-Dist: loguru~=0.7.2
+Requires-Dist: easyocr~=1.7.2
+Requires-Dist: pyautogui~=0.9.54
+Requires-Dist: pynput~=1.7.7
+Requires-Dist: Pillow~=11.0.0
+
+# NovelGenie
+
+中文 | [English](README_EN.md)
+
+NovelGenie 是一款智能网文创作助手，能够基于用户提供的创意构思自动生成完整的多卷小说作品。它不仅支持断点续写和续作功能，还能让创作过程变得更加灵活自然，帮助作者轻松驾驭长篇故事创作。
+
+## 安装
+
+1. 克隆此仓库：
+    ```sh
+    git clone https://github.com/mannaandpoem/NovelGenie.git
+    cd NovelGenie
+    ```
+
+2. 创建并激活虚拟环境：
+    ```sh
+    conda create -n NovelGenie python=3.10 -y
+    conda activate NovelGenie
+    ```
+
+3. 安装依赖：
+    ```sh
+    pip install -r requirements.txt
+    或
+    pip install -e .
+    ```
+
+## 使用方法
+
+### 配置
+
+在使用之前，请先查看 `config.example.yaml` 并根据需要创建和配置 `config.yaml` 文件。
+
+1. 打开 `config.example.yaml` 文件，查看并理解各个配置项的含义。
+2. 创建一个新的 `config.yaml` 文件，并根据 `config.example.yaml` 中的示例进行配置。
+
+### 使用 Python 脚本生成小说
+#### 从头开始生成小说
+
+```python
+import asyncio
+
+from novel_genie.generate_novel import NovelGenie
+from novel_genie.logger import logger
+
+
+async def main():
+   novel_genie = NovelGenie()
+   user_input = "普通上班族意外获得系统，开始了自己的职场逆袭之路。"
+
+   novel = await novel_genie.generate_novel(user_input=user_input)
+   logger.info(f"Generated novel: \n{novel}")
+
+
+if __name__ == "__main__":
+   asyncio.run(main())
+```
+
+#### 从检查点恢复生成小说
+
+```python
+import asyncio
+
+from novel_genie.generate_novel import NovelGenie
+from novel_genie.logger import logger
+
+
+async def main():
+   novel_genie = NovelGenie()
+
+   novel = await novel_genie.generate_novel(user_input="", resume_novel_id="your_novel_id")
+   logger.info(f"Generated novel: \n{novel}")
+
+
+if __name__ == '__main__':
+   asyncio.run(main())
+```
+
+### 使用命令行生成小说
+
+以下是命令行的三种用法：
+
+#### 从截图生成小说
+
+```sh
+# 执行以下命令
+novel -s
+# 使用快捷键 Ctrl + Shift + S 截图生成小说
+````
+
+#### 从头开始生成小说
+
+```sh
+novel -i "普通上班族意外获得系统，开始了自己的职场逆袭之路。"
+```
+
+#### 从检查点恢复生成小说
+
+```sh
+novel -r "your_novel_id"
+```
+
+## 贡献
+
+欢迎贡献代码！请 fork 此仓库并提交 pull request。
+
+## 许可证
+
+此项目使用 MIT 许可证。有关更多信息，请参阅 `LICENSE` 文件。
+
+
+## English Version
+# NovelGenie
+
+[中文](README.md) | English
+
+NovelGenie is an AI-powered web novel creation assistant that generates multi-volume stories based on user-provided creative concepts. The system seamlessly supports checkpoint-based writing continuation and sequel generation, providing creators with a natural and flexible way to craft extensive narratives without interruption.
+
+## Installation
+
+1. Clone this repository:
+    ```sh
+    git clone https://github.com/mannaandpoem/NovelGenie.git
+    cd NovelGenie
+    ```
+
+2. Create and activate a virtual environment:
+    ```sh
+    conda create -n NovelGenie python=3.10 -y
+    conda activate NovelGenie
+    ```
+
+3. Install dependencies:
+    ```sh
+    pip install -r requirements.txt
+    or
+    pip install -e .
+    ```
+
+## Usage
+
+### Configuration
+
+Before using, please check `config.example.yaml` and create and configure your `config.yaml` file as needed.
+
+1. Open the `config.example.yaml` file to understand the meaning of each configuration item.
+2. Create a new `config.yaml` file and configure it according to the examples in `config.example.yaml`.
+
+### Generate a Novel Using Python Script
+#### Generate a Novel from Scratch
+
+```python
+import asyncio
+
+from novel_genie.generate_novel import NovelGenie
+from novel_genie.logger import logger
+
+
+async def main():
+   novel_genie = NovelGenie()
+   user_input = "An ordinary office worker accidentally obtains a system and begins their journey of workplace counterattack."
+
+   novel = await novel_genie.generate_novel(user_input=user_input)
+   logger.info(f"Generated novel: \n{novel}")
+
+
+if __name__ == "__main__":
+   asyncio.run(main())
+```
+
+#### Resume Novel Generation from Checkpoint
+
+```python
+import asyncio
+
+from novel_genie.generate_novel import NovelGenie
+from novel_genie.logger import logger
+
+
+async def main():
+   novel_genie = NovelGenie()
+
+   novel = await novel_genie.generate_novel(user_input="", resume_novel_id="your_novel_id")
+   logger.info(f"Generated novel: \n{novel}")
+
+
+if __name__ == '__main__':
+   asyncio.run(main())
+```
+
+### Generate a Novel Using Command Line
+
+Here are three ways to use the command line:
+
+#### Generate a Novel from Screenshot
+
+```sh
+# Execute the following command
+novel -s
+# Use the shortcut Ctrl + Shift + S to generate a novel from a screenshot
+```
+
+#### Generate a Novel from Scratch
+
+```sh
+novel -i "An ordinary office worker accidentally obtains a system and begins their journey of workplace counterattack."
+```
+
+#### Resume Novel Generation from Checkpoint
+
+```sh
+novel -r "your_novel_id"
+```
+
+## Contributing
+
+Contributions are welcome! Please fork this repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. For more information, please see the `LICENSE` file.
