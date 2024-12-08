@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "xhm_all"
+version = "0.0.2"
+description = "xhm python sdk"
+authors = ["邹慧刚 <952750120@qq.com>"]
+license = "MIT"
+readme = "README.md"
+
+
+# 定义要排除的目录或包
+exclude = [
+    "tests"
+]
+
+# 明确指定要包含的包
+packages = [
+    { include = "xhm_config" },
+    { include = "xhm_html2image" },
+    { include = "xhm_util" },
+    { include = "xhm_chat_memory" },
+    { include = "xhm_log" },
+    { include = "xhm_mq" },
+    { include = "xhm_redis" },
+    { include = "custom_decorator" },
+]
+
+# 指定需要包含的文件和目录
+include = [
+    { path = "xhm_config/sdk_settings.toml" },
+    { path = "xhm_config/sdk_secrets.toml" },
+    { path = "xhm_html2image/*.html" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+dspy-ai = "2.5.7"
+dynaconf = "^3.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
