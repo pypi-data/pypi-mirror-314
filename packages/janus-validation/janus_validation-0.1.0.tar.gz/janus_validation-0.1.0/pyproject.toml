@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "janus-validation"
+version = "0.1.0"
+description = "A Python library for robust data validation, serialization, and schema versioning."
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["PyYAML"]
+license = {text = "MIT"}
+authors = [
+  {name = "Altxria Inc.", email = "company@altxria.com"}
+]
+keywords = ["data validation", "schema versioning", "json", "yaml", "serialization"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/altxriainc/janus/issues"
+Documentation = "https://github.com/altxriainc/janus/wiki"
+"Source Code" = "https://github.com/altxriainc/janus"
+
+[tool.setuptools]
+packages = ["altxria.janus.core", "altxria.janus.utils"]
+package-dir = {"altxria.janus.core"= "src/core","altxria.janus.utils"= "src/utils"}
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+  "black>=23.0",
+  "flake8>=6.0",
+]
