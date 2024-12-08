@@ -1,0 +1,211 @@
+import argparse
+import logging
+import os
+import sys
+import textwrap
+import time
+
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+from prompt_templates import PromptTemplates
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+
+logger = logging.getLogger(__name__)
+
+
+class CodeCleaner:
+    DEFAULT_MODEL_NAME = "gpt-4o-mini"
+    DEFAULT_TEMPERATURE = 0.4
+    INPUT_LIMIT = 9999
+    GENERATED_FILE_EXTENSION = "llm"
+
+    def __init__(
+        self,
+        file_path: str,
+        openai_api_key: str = None,
+        model_name: str = None,
+        temperature: float = None,
+    ):
+        """
+        Initializes the CodeCleaner instance.
+
+        Args:
+            file_path (str): The path to the file that needs to be processed.
+            openai_api_key (str, optional): The OpenAI API key. Defaults to None.
+            model_name (str, optional): The name of the model to use. Defaults to None.
+            temperature (float, optional): The temperature for the model's output. Defaults to None.
+        """
+
+        self.file_path = file_path
+        self.llm = self._initialize_llm(openai_api_key, model_name, temperature)
+        self.generated_file_path = self._generate_output_file_path()
+
+    def _initialize_llm(
+        self, openai_api_key: str, model_name: str, temperature: float
+    ) -> ChatOpenAI:
+        """
+        Initializes the language model (LLM) with the provided parameters.
+
+        Args:
+            openai_api_key (str): The OpenAI API key.
+            model_name (str): The name of the model to use.
+            temperature (float): The temperature for the model's output.
+
+        Returns:
+            ChatOpenAI: An instance of the ChatOpenAI class configured with the specified parameters.
+        """
+
+        api_key = openai_api_key or os.getenv("OPEN_AI_API_KEY")
+        model = model_name or self.DEFAULT_MODEL_NAME
+        temp = temperature or self.DEFAULT_TEMPERATURE
+        return ChatOpenAI(
+            model_name=model, openai_api_key=api_key, temperature=float(temp)
+        )
+
+    def improve_code(self, action: str):
+        """
+        Improves the code based on the specified action.
+
+        Args:
+            action (str): The action to perform.
+            Can be 'clean', 'docstrings', 'tests', 'readme'.
+
+        Raises:
+            NotImplementedError: If the action is not recognized.
+        """
+
+        if action == "clean":
+            output_str = self._execute_chat_prompt(PromptTemplates.clean_code_prompt)
+
+        elif action == "docstrings":
+            output_str = self._execute_chat_prompt(PromptTemplates.docstrings_prompt)
+
+        elif action == "tests":
+            output_str = self._execute_chat_prompt(PromptTemplates.tests_prompt)
+
+        elif action == "readme":
+            output_str = self._execute_chat_prompt(PromptTemplates.readme_prompt)
+
+        else:
+            raise NotImplementedError(f"Action '{action}' is not implemented.")
+
+        if output_str:
+            self._write_response(self.generated_file_path, output_str)
+        else:
+            logger.error("Not getting response from LLM")
+
+    ############# PRIVATE METHODS ##############
+
+    def _generate_output_file_path(self) -> str:
+        """
+        Generates a file path for the output file based on the current file path and timestamp.
+
+        Returns:
+            str: The generated file path for the output file.
+        """
+
+        return (
+            f"{self.file_path}."
+            f"{CodeCleaner.GENERATED_FILE_EXTENSION}"
+            f"{int(time.time())}"
+        )
+
+    def _get_code(self) -> str:
+        """
+        Reads the content of the specified file.
+
+        Returns:
+            str: The content of the file as a string.
+        """
+
+        with open(self.file_path, 'r') as file:
+            code = file.read()
+
+        if len(code) < CodeCleaner.INPUT_LIMIT:
+            return code
+
+        raise RuntimeError(
+            f"File {self.file_path} is too big for processing. "
+            f"Limit is { CodeCleaner.INPUT_LIMIT} chars"
+        )
+
+    @staticmethod
+    def _write_response(output_file: str, output_str: str):
+        """
+        Writes the response string to the specified output file.
+
+        Args:
+            output_file (str): The path to the output file.
+            output_str (str): The response string to write to the file.
+        """
+
+        with open(output_file, 'w') as file:
+            file.write(output_str)
+
+    def _execute_chat_prompt(self, prompt_template: str) -> str:
+        """
+        Executes a chat prompt using the LLM and returns the output.
+
+        Args:
+            prompt_template (str): The template string for the prompt.
+
+        Returns:
+            str: The output string generated by the LLM.
+        """
+
+        code = self._get_code()
+        prompt_input = {"code": code}
+        prompt = ChatPromptTemplate.from_template(
+            self._preprocess_template_string(prompt_template)
+        )
+        chain = prompt | self.llm | StrOutputParser()
+        return chain.invoke(prompt_input)
+
+    @staticmethod
+    def _preprocess_template_string(template: str) -> str:
+        """
+        Preprocesses the template string by removing unnecessary indentation.
+
+        Args:
+            template (str): The template string to preprocess.
+
+        Returns:
+            str: The preprocessed template string.
+        """
+
+        return textwrap.dedent(template)
+
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parses command-line arguments for the Code Cleaner tool.
+
+    Returns:
+        argparse.Namespace: The parsed command-line arguments.
+    """
+
+    parser = argparse.ArgumentParser(description="Code Cleaner Tool using LLM")
+    parser.add_argument("--file", "-f", help="File to process", required=True)
+    parser.add_argument("--action", "-a", help="Action to perform", required=True)
+    return parser.parse_args()
+
+
+def main():
+    """
+    Main entry point for the Code Cleaner tool.
+    Parses arguments and executes the code improvement process.
+    """
+
+    args = parse_arguments()
+    code_cleaner = CodeCleaner(file_path=args.file)
+    code_cleaner.improve_code(action=args.action)
+
+
+if __name__ == "__main__":
+    main()
