@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: just-agents-core
+Version: 0.4.3
+Summary: Just Agents - Base Package
+License: MIT
+Keywords: python,llm,science,review,agents,AI
+Author: Alex Karmazin
+Author-email: karmazinalex@gmail.com
+Maintainer: Anton Kulaga
+Maintainer-email: antonkulaga@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: Deprecated (>=1.2.15)
+Requires-Dist: litellm (>=1.52.14)
+Requires-Dist: numpydoc
+Requires-Dist: pydantic (>=2.0.0,<3.0.0)
+Requires-Dist: requests
+Project-URL: Bug Tracker, https://github.com/longevity-genie/just-agents/issues
+Project-URL: Documentation, https://just-agents.readthedocs.io/
+Project-URL: Homepage, https://github.com/longevity-genie/just-agents
+Description-Content-Type: text/markdown
+
+# just-agents-core
+
+A lightweight, straightforward core library for LLM agents - no over-engineering, just simplicity!
+
+## 🎯 Core Features
+- 🪶 Lightweight base agent implementations
+- 📝 Simple string-based agent interactions
+- 🔧 YAML-based prompt templating
+- 🤖 LLM model integration through litellm
+- 🔄 Chain of Thought reasoning capabilities
+
+## 🏗️ Core Components
+
+### BaseAgent
+A thin wrapper around litellm for basic LLM interactions. Provides:
+- Simple prompt management
+- Direct LLM communication
+- Memory handling
+
+### ChatAgent
+The fundamental building block for agent interactions:
+```python
+from just_agents.simple.chat_agent import ChatAgent
+from just_agents.simple.llm_options import LLAMA3_2_VISION
+
+agent = ChatAgent(
+    llm_options=LLAMA3_2_VISION,
+    role="assistant",
+    goal="help the user",
+    task="answer questions"
+)
+```
+
+### ChainOfThoughtAgent
+Extended agent with reasoning capabilities and function calling:
+```python
+from just_agents.patterns.chain_of_throught import ChainOfThoughtAgent
+
+agent = ChainOfThoughtAgent(
+    tools=[your_function],
+    llm_options=LLAMA3_2_VISION
+)
+```
+
+## 📚 Usage
+This core package is typically used as a dependency by other just-agents packages. For full usage examples and documentation, please refer to the [main repository](https://github.com/longevity-genie/just-agents).
+
+## 🔧 Installation
+```bash
+pip install just-agents-core
+```
+
