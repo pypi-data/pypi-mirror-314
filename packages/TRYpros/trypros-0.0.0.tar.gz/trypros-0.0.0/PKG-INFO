@@ -1,0 +1,281 @@
+Metadata-Version: 2.1
+Name: TRYpros
+Version: 0.0.0
+Summary: A collection of possibly useful functions to process data from the TRY Plant Database, supporting a recommended data processing pipeline.
+Author-email: Gayathri Girish Nair <ggn1@tcd.ie>
+Maintainer-email: Gayathri Girish Nair <ggn1@tcd.ie>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: Cartopy
+Requires-Dist: global_land_mask
+Requires-Dist: pyproj
+
+# TRYpros - TRY Plant Database - Data Buddy
+This package comprises some functions that can support extraction of trait values, geo-location information (latitude, longitude) and measurement years associated with geo-referenced plant trait data in the TRY Plant Database (Kattge, J, Bönisch, G, Díaz, S, et al. TRY plant trait database – enhanced coverage and open access. Glob Change Biol. 2020; 26: 119– 188. https://doi.org/10.1111/gcb.14904).
+
+TRYpros was developed to support the Data Processing Pipeline as described in section 2. below. Section 1 provides a quick description of the intended purpose of all the functions provided by the TRYpros.
+
+To install this package, type: `pip install TRYpros`.
+
+## 1. TRYpros Functions
+Following is a list of function names with a brief description of their intended use. Details like their input parameters and outputs can be learned by examining the doc-strings corresponding to each function. This can be fetched by using the python command `help([function name])`. 
+* `load_trait_table`: Load the trait table .tsv file downloaded from TRY.
+* `search_trait_table`: Search trait names in the trait table and return trait ids with names containing words in the list of words to match.
+* `is_float`: Check whether or not a string is that of a floating point number.
+* `is_lat_lon_valid_terrestrial`: Check if a given latitude and longitude corresponds to a position on land.
+* `search_covariates`: Search all co-variate variable names to identify those with names containing words in the given word search list.
+* `load_big_data`: Load raw data as downloaded from TRY.
+* `get_form`: Get the general form of the data with some predefined symbol like "@" replacing all numbers in the value.
+* `standardize_data`: Clean and standardize data by perform a list of processing steps including data frame pre-processing, unit standardization, value standardization, and value transformation.
+* `get_data_trait`: Extract trait data related to specific TraitIDs and separate it into standardized and non-standardized trait data.
+* `display_units_forms`: Display units and value forms associated with each value in the dataset.
+* `get_vals_with_form`: Search dataset and return values with given form.
+* `get_data_latlon_ids`: Return all data IDs in co-variate data related to latitude and longitude data.
+* `get_data_latlon`: Return all data related to chosen latitude and longitude related DataIDs and separate it into standardized and non-standardized data.
+* `get_data_year_ids`: Return all data IDs in co-variate with date related information.
+* `get_data_year`: Return all data related to chosen date related DataIDs and separate them into standardized and non-standardized data.
+* `combine_date`: Combine trait data + latitude and longitude data + year data.
+* `extract_year`: Given a string containing either a single date or a date range, return the year, or mean year from it.
+* `save_data`: Save given data frame at specified location as a .csv file.
+* `wgs84_m_utm_to_decimal_degrees`: Given a UTM northing, easting, hemisphere and zone, return the decimal degree equivalent latitude and longitude.
+* `map_plot`: Plot data from the "latitude" and "longitude" columns that are assumed to be a part of the data frame on a world map.
+
+## 2. Data Processing Pipeline.
+The TRY Database integrates plant trait data from several hundreds of trait datasets. As there is constant acquisition of trait datasets, new versions of the TRY database are released on a regular basis. Currently, TRY version 6 is available, which is based on more than 700 contributed datasets and provides 15 million trait records for 305,000 plant taxa (mostly species) and 2661 traits, of which geo-referenced data is available for 2136 traits.
+
+Official Website of the TRY Project: https://www.try-db.org/TryWeb/Home.php
+
+Following subsections descibe suggested steps that can be followed to extract desired data alongside location and date related information from TRY in a semi-automated manner. 
+
+Broadly speaking, all steps involved in this proposed TRY data processing pipeline, are as follows.
+1. Feature Selection
+2. Get TraitIDs
+3. Request Data
+4. Process Data
+    1. Load Data
+    2. Process Trait Data
+        1. TraitID Prioritization & Data Extraction
+        2. Manual Investigation
+        3. Function Definition
+        4. Function Application
+    3. Extract Location
+        1. DataID Selection & Data Extraction
+        2. Manual Investigation
+        3. Function Definition
+        4. Function Application
+    4. Extract Years
+        1. DataID Selection & Data Extraction
+        2. Manual Investigation
+        3. Function Definition
+        4. Function Application
+    5. Combine Data
+    6. Save Processed Data.
+
+### 2.1. Select Features
+In TRY, for each plant feature, there may be multiple traits that record information related to it. For example, trait IDs 3115 as well as 125 are both record data related to the same feature, Specific Leaf Area. Thus, the first step, is to determine the features of interest, for which data is available in TRY.
+
+The trait table that can be found at https://www.try-db.org/de/TabDetails.php, contains the following information associated with each trait in the database. This table can be explored to determine desired features. If you already have a good idea of what feature(s) you're interested in, then this manual exploratory step can be skipped.
+* `ObsNum`: Number of observations.
+* `ObsGRNum`: Number of geo-referenced observations.
+* `PubNum`: Number of public observations.
+* `AccSpecNum`: Number of accepted species.
+
+Once you've downloaded the trait table and saved it as a .tsv file, it can be loaded in, using the `load_trait_table(...)` function.
+
+### 2.2 Get TraitIDs
+Once you're settled on what plant features you'd like data for, the next step is to identify what TraitIDs in TRY have data related to each feature. The `search_trait_table(...)` function can be used to do this.
+
+### 2.3. Request Data
+For each feature, a request may be made for all associated traits corresponding to all available species (or, specific species as listed in the species list, also available on the TRY website) through the TRY website. Each request gets assigned a unique request ID and upon review, a download link will be available.
+
+The downloaded table will contain both trait related data (identified using a `TraitID` in addition to a `DataID`) as well as covariate data (meta data related to trait data observations identified using a `DataID` only).
+
+Trait and covariate variable names as entered for TRY cataloging may be found in columns `TraitName` and `DataName`. Original name of the variable as in the source dataset may be found within the `OriglName` column. The name and ID of the source dataset may be found within the `Dataset` and `DatasetID` column respectively.
+
+All data associated with each row if present, can be found in one or more of the following columns.
+* `StdValue`: Standardized value available for standardized traits.
+* `StdValueStr`: Standardized entries for textual metadata.
+* `OrigValueStr`: Original (non-standardized) value as text string.
+
+The units for these values may be found in the columns below.
+* `UnitName`: Standard unit available for standardized traits.
+* `OrigUnitStr`: Original (non-standardized) unit as text string.
+
+Following are some general observations based on investigation of data associated to TraitID 38: Plant woodiness, as fetched on 27 nov 2024.
+* There are rows whereing both `StdValue` and `StdValueStr` values are present. In all these cases, it seems that values in both columns are equivalent.
+* A standasrdized value (at least one of `StdValue` or `StdValueStr`) is only available for a small portion of the raw dataset.
+* For a small portion of rows, there is no information at all (`StdValueStr` == `StdValue` == `OrigValueStr` == NaN). These rows are less uable and may be  dropped.
+* Every row has a `DataID`, but not every row has a `TraitID`.
+* Upon manual examination of rows with a `DataID` but no `TraitID`, it seems that while there are a few "plant trait" related data variables this appears to be a small proportion of the subset of rows and thus may be ignored without greatly reducing the no. of available usable data points. The effort needed to find and separate these rows and process them is likely not worth the amount of useful information this can yield.
+* Of all the data points in the dataset, the no. of rows with either a standardized or non-standardized value for a TraitID are only a small portion. Of these, only an even smaller portion has associated latitude and longitude and/or year information.
+
+### 2.4. Process Data
+Of all the TraitIDs in TRY, some are "standardized", meaning that their "StdValue" or "StdValueStr" columns are populated with standardized versions of values in their "OrigValueStr" column such that all these values are expressed using the same notation, and in the same standard unit as would be present in the "UnitName" column. Not every TraitID is standardized. Many, are not, and thus, would need to be standardized to match their standardized counterparts wherever possible, in order for the data to be consistent, unambiguous and therefore, at its most useful. Some of the data values, may also be the result of data entry error, or invalid. These must also be screened for and filtered. These are some of the activities that shall comprise data processing.
+
+#### 2.4.1. Load Data
+This step involves loading all (standardized and non-standardized, trait and co-variate data) data associated with each data request as downloaded from the TRY database. The `load_big_data(...)` function can be used to do this.
+
+#### 2.4.2. Process Trait Data
+This step involves cleaning and standardizing trait data values such that all values are expressed in the simplest, most useful, and unambiguous form in the same unit throughout the data frame.
+
+##### 2.4.2.1. TraitID Prioritization & Data Extraction
+It is possible that not all TraitIDs in the downloaded data is later deemed to be useful, in this case, it is important to keep and prioritize those TraitIDs whose values should be considered over others if more that one trait values turns out to be associated with the same data point (location, measurement year, and species combination). The `get_data_trait(...)` function can be used to load data related to specific prioritized TraitIDs.
+
+##### 2.4.2.2. Manual Investigation
+This stage involves manual examination of the data in order to determine the dataset-specific processing steps that shall be required.
+
+Following are some common questions that may be useful to find answers to, as part of this step. 
+*  Are values numeric/categorical? What forms are they in? - Examine column "value_form". The TRYpros function from called `manual_investigation` can be used to print a quick overview.
+*  What do raw values look like? - Examine columns "StdValue"/"StdValueStr" for standardized data (std) and "OrigValueStr" for non-standardized data (non_std).
+* Do columns "Comment", "UnitName" (std) / "OrigUnitStr" (non_std), "OriglName" provide useful context information?
+* What preprocessing steps, if any, are required?
+* Is unit form standardization required?
+* Is value form standardization required?
+* Is value conversion required?
+
+Throughout, it is advised that observations be noted down for future reference and decision review. Also, apart from aforementioned questions, other questions unique to each feature dataset may also need to be answered through data exploration in order to define suitable processing functions in the next step.
+
+##### 2.4.2.3. Function Definition
+At this stage, you may define functions that contribute towards the following 4 optional processing steps.
+* Preprocessing: Preprocessing steps to be applied to the dataset before next steps.
+* Unit standardization: A function that replaces invalid or ambiguous units.
+* Value form standardization: A function that replaces invalid or ambiguous value forms.
+* Value transformation: Ensuring that `StdValue` is populated with values, 
+                        such that all of them are expressed in the standard unit.
+
+##### 2.4.2.4. Function Application
+This step involves applying functions defined in the previous step. The `standardize_data(...)` function can be used to do this.
+
+#### 2.4.3. Extract Locations
+Latitude and longitude information is considered co-variate data and in TRY, there are many DataIDs associated with them. Location information is often very important for projects working with plant trait data. If you do not need to extract location data, you may simply stop at the previous step and save the resulting data after the previous standardization step.
+
+##### 2.4.3.1. DataID Selection & Data Extraction
+Not all latitude and longitude related DataIDs may be relevant to your project. Thus, it is important to determine which location related DataIDs in the downloaded data, you'd like to keep. Functions `get_data_ids_latlon(...)` and `get_data_latlon(...)` may be used to extract data related to desired DataIDs only.
+
+##### 2.4.3.2. Manual Investigation
+Some geo-location related DataIDs are standardized and presented in decimal degrees but for other DataIDs, they may be non-standardized and presented in multiple various units. This demands processing and standardization. Thus, manual investigation is required to investigate the latitude and longitude values and to determine what, if any, processing steps may need to be defined.
+
+##### 2.4.3.3. Function Definition
+Much like with trait data, this step involved defining any required preprocessing, unit standardization, value form standardization, and/or value transformation functions.
+
+##### 2.4.3.4. Function Application
+Once again, this stage is defined by applying all defined functions.
+
+#### 2.4.4. Extract Years
+Knowing the date on which data was collected (at least the year) can be very important for projects working with plant trait information as many related factors like climatic conditions, respiration rate, greenness, etc., can vary greatly between years. TRYpros provides an `extract_year(...)` function that can be used in the value transformation function to extract years from dates. This pipeline focuses on extracting the "year" only, from dates, however a similar approach may be followed with different functions informed by data exploration if you require extraction of dates at a finer scale.
+
+##### 2.4.4.1. DataID Selection & Data Extraction
+Date related information is available in TRY, also as co-variate data and once again, not all DataIDs may be important. Thus functions `get_data_ids_year(...)` and `get_data_year(...)` may be used to select and extract date (in this case, year) related data, that is most desirable.
+
+##### 2.4.4.2. Manual Investigation
+Much like with trait and geo-location data before, this step involves manually exploring the dataset to inform processing function definition.
+
+##### 2.4.4.3. Function Definition
+Yet again, this step encompasses definition of preprocessing, unit standardization, value form standardization, and/or value transformation functions.
+
+##### 2.4.4.4. Function Application
+Here, defined functions are applied to the data.
+
+#### 2.4.5. Combine Data
+This step involves combining treated trait, geo-location, and year related data obtained so far, to produce a single processed data data frame. The `combine_data(...)` function can be used to do this.
+
+#### 2.4.6. Save Processed Data
+Finally, processed data so obtained that shall contain columns like [year, latitude, longitude, species_id, feature_value] can be saved as a .csv file using the `save_data(...)` function.
+
+## 3. TRY - Complete Standard Reference
+Kattge, J., G. Bönisch, S. Díaz, S. Lavorel, I. C. Prentice, P. Leadley, S. Tautenhahn, G. D. A. Werner, T.
+Aakala, M. Abedi, A. T. R. Acosta, G. C. Adamidis, K. Adamson, M. Aiba, C. H. Albert, J. M. Alcántara, C.
+Alcázar C, I. Aleixo, H. Ali, B. Amiaud, C. Ammer, M. M. Amoroso, M. Anand, C. Anderson, N. Anten, J.
+Antos, D. M. G. Apgaua, T.-L. Ashman, D. H. Asmara, G. P. Asner, M. Aspinwall, O. Atkin, I. Aubin, L.
+Baastrup-Spohr, K. Bahalkeh, M. Bahn, T. Baker, W. J. Baker, J. P. Bakker, D. Baldocchi, J. Baltzer, A.
+Banerjee, A. Baranger, J. Barlow, D. R. Barneche, Z. Baruch, D. Bastianelli, J. Battles, W. Bauerle, M.
+Bauters, E. Bazzato, M. Beckmann, H. Beeckman, C. Beierkuhnlein, R. Bekker, G. Belfry, M. Belluau, M.
+Beloiu, R. Benavides, L. Benomar, M. L. Berdugo-Lattke, E. Berenguer, R. Bergamin, J. Bergmann, M.
+Bergmann Carlucci, L. Berner, M. Bernhardt-Römermann, C. Bigler, A. D. Bjorkman, C. Blackman, C.
+Blanco, B. Blonder, D. Blumenthal, K. T. Bocanegra-González, P. Boeckx, S. Bohlman, K. Böhning- Gaese,
+L. Boisvert-Marsh, W. Bond, B. Bond-Lamberty, A. Boom, C. C. F. Boonman, K. Bordin, E. H. Boughton,
+V. Boukili, D. M. J. S. Bowman, S. Bravo, M. R. Brendel, M. R. Broadley, K. A. Brown, H. Bruelheide, F.
+Brumnich, H. H. Bruun, D. Bruy, S. W. Buchanan, S. F. Bucher, N. Buchmann, R. Buitenwerf, D. E. Bunker,
+J. Bürger, S. Burrascano, D. F. R. P. Burslem, B. J. Butterfield, C. Byun, M. Marques, M. C. Scalon, M.
+Caccianiga, M. Cadotte, M. Cailleret, J. Camac, J. J. Camarero, C. Campany, G. Campetella, J. A. Campos,
+L. Cano-Arboleda, R. Canullo, M. Carbognani, F. Carvalho, F. Casanoves, B. Castagneyrol, J. A. Catford,
+J. Cavender-Bares, B. E. L. Cerabolini, M. Cervellini, E. Chacón-Madrigal, K. Chapin, F. S. Chapin, S. Chelli,
+S.-C. Chen, A. Chen, P. Cherubini, F. Chianucci, B. Choat, K.-S. Chung, M. Chytrý, D. Ciccarelli, L. Coll, C.
+G. Collins, L. Conti, D. Coomes, J. H. C. Cornelissen, W. K. Cornwell, P. Corona, M. Coyea, J. Craine, D.
+Craven, J. P. G. M. Cromsigt, A. Csecserits, K. Cufar, M. Cuntz, A. C. da Silva, K. M. Dahlin, M. Dainese, I.
+Dalke, M. Dalle Fratte, A. T. Dang-Le, J. Danihelka, M. Dannoura, S. Dawson, A. J. de Beer, A. De Frutos,
+J. R. De Long, B. Dechant, S. Delagrange, N. Delpierre, G. Derroire, A. S. Dias, M. H. Diaz-Toribio, P. G.
+Dimitrakopoulos, M. Dobrowolski, D. Doktor, P. Dřevojan, N. Dong, J. Dransfield, S. Dressler, L. Duarte,
+E. Ducouret, S. Dullinger, W. Durka, R. Duursma, O. Dymova, A. E- Vojtkó, R. L. Eckstein, H. Ejtehadi, J.
+Elser, T. Emilio, K. Engemann, M. B. Erfanian, A. Erfmeier, A. Esquivel-Muelbert, G. Esser, M. Estiarte, T.
+F. Domingues, W. F. Fagan, J. Fagúndez, D. S. Falster, Y. Fan, J. Fang, E. Farris, F. Fazlioglu, Y. Feng, F.
+Fernandez-Mendez, C. Ferrara, J. Ferreira, A. Fidelis, B. Finegan, J. Firn, T. J. Flowers, D. F. B. Flynn, V.
+Fontana, E. Forey, C. Forgiarini, L. François, M. Frangipani, D. Frank, C. Frenette-Dussault, G. T. Freschet,
+E. L. Fry, N. M. Fyllas, G. G. Mazzochini, S. Gachet, R. Gallagher, G. Ganade, F. Ganga, P. García-Palacios,
+V. Gargaglione, E. Garnier, J. L. Garrido, A. L. de Gasper, G. Gea-Izquierdo, D. Gibson, A. N. Gillison, A.
+Giroldo, M.-C. Glasenhardt, S. Gleason, M. Gliesch, E. Goldberg, B. Göldel, E. Gonzalez-Akre, J. L.
+Gonzalez-Andujar, A. González-Melo, A. González-Robles, B. J. Graae, E. Granda, S. Graves, W. A. Green,
+T. Gregor, N. Gross, G. R. Guerin, A. Günther, A. G. Gutiérrez, L. Haddock, A. Haines, J. Hall, A.
+Hambuckers, W. Han, S. P. Harrison, W. Hattingh, J. E. Hawes, T. He, P. He, J. M. Heberling, A. Helm, S.
+Hempel, J. Hentschel, B. Hérault, A.-M. Hereş, K. Herz, M. Heuertz, T. Hickler, P. Hietz, P. Higuchi, A. L.
+Hipp, A. Hirons, M. Hock, J. A. Hogan, K. Holl, O. Honnay, D. Hornstein, E. Hou, N. Hough-Snee, K. A.
+Hovstad, T. Ichie, B. Igić, E. Illa, M. Isaac, M. Ishihara, L. Ivanov, L. Ivanova, C. M. Iversen, J. Izquierdo, R.
+B. Jackson, B. Jackson, H. Jactel, A. M. Jagodzinski, U. Jandt, S. Jansen, T. Jenkins, A. Jentsch, J. R. P.
+Jespersen, G.-F. Jiang, J. L. Johansen, D. Johnson, E. J. Jokela, C. A. Joly, G. J. Jordan, G. S. Joseph, D.
+Junaedi, R. R. Junker, E. Justes, R. Kabzems, J. Kane, Z. Kaplan, T. Kattenborn, L. Kavelenova, E. Kearsley,
+A. Kempel, T. Kenzo, A. Kerkhoff, M. I. Khalil, N. L. Kinlock, W. D. Kissling, K. Kitajima, T. Kitzberger, R.
+Kjøller, T. Klein, M. Kleyer, J. Klimešová, J. Klipel, B. Kloeppel, S. Klotz, J. M. H. Knops, T. Kohyama, F.
+Koike, J. Kollmann, B. Komac, K. Komatsu, C. König, N. J. B. Kraft, K. Kramer, H. Kreft, I. Kühn, D.
+Kumarathunge, J. Kuppler, H. Kurokawa, Y. Kurosawa, S. Kuyah, J.-P. Laclau, B. Lafleur, E. Lallai, E. Lamb,
+A. Lamprecht, D. J. Larkin, D. Laughlin, Y. Le Bagousse-Pinguet, G. le Maire, P. C. le Roux, E. le Roux, T.
+Lee, F. Lens, S. L. Lewis, B. Lhotsky, Y. Li, X. Li, J. W. Lichstein, M. Liebergesell, J. Y. Lim, Y.-S. Lin, J. C.
+Linares, C. Liu, D. Liu, U. Liu, S. Livingstone, J. Llusià, M. Lohbeck, Á. López-García, G. Lopez-Gonzalez, Z.
+Lososová, F. Louault, B. A. Lukács, P. Lukeš, Y. Luo, M. Lussu, S. Ma, C. Maciel Rabelo Pereira, M. Mack,
+V. Maire, A. Mäkelä, H. Mäkinen, A. C. M. Malhado, A. Mallik, P. Manning, S. Manzoni, Z. Marchetti, L.
+Marchino, V. Marcilio-Silva, E. Marcon, M. Marignani, L. Markesteijn, A. Martin, C. Martínez-Garza, J.
+Martínez- Vilalta, T. Mašková, K. Mason, N. Mason, T. J. Massad, J. Masse, I. Mayrose, J. McCarthy, M.
+L. McCormack, K. McCulloh, I. R. McFadden, B. J. McGill, M. Y. McPartland, J. S. Medeiros, B. Medlyn, P.
+Meerts, Z. Mehrabi, P. Meir, F. P. L. Melo, M. Mencuccini, C. Meredieu, J. Messier, I. Mészáros, J.
+Metsaranta, S. T. Michaletz, C. Michelaki, S. Migalina, R. Milla, J. E. D. Miller, V. Minden, R. Ming, K.
+Mokany, A. T. Moles, A. Molnár V, J. Molofsky, M. Molz, R. A. Montgomery, A. Monty, L. Moravcová, A.
+Moreno-Martínez, M. Moretti, A. S. Mori, S. Mori, D. Morris, J. Morrison, L. Mucina, S. Mueller, C. D.
+Muir, S. C. Müller, F. Munoz, I. H. Myers-Smith, R. W. Myster, M. Nagano, S. Naidu, A. Narayanan, B.
+Natesan, L. Negoita, A. S. Nelson, E. L. Neuschulz, J. Ni, G. Niedrist, J. Nieto, Ü. Niinemets, R. Nolan, H.
+Nottebrock, Y. Nouvellon, A. Novakovskiy, The Nutrient Network, K. O. Nystuen, A. O Grady, K. O Hara,
+A. O Reilly-Nugent, S. Oakley, W. Oberhuber, T. Ohtsuka, R. Oliveira, K. Öllerer, M. E. Olson, V.
+Onipchenko, Y. Onoda, R. E. Onstein, J. C. Ordonez, N. Osada, I. Ostonen, G. Ottaviani, S. Otto, G. E.
+Overbeck, W. A. Ozinga, A. T. Pahl, C. E. T. Paine, R. J. Pakeman, A. C. Papageorgiou, E. Parfionova, M.
+Pärtel, M. Patacca, S. Paula, J. Paule, H. Pauli, J. G. Pausas, B. Peco, J. Penuelas, A. Perea, P. L. Peri, A. C.
+Petisco-Souza, A. Petraglia, A. M. Petritan, O. L. Phillips, S. Pierce, V. D. Pillar, J. Pisek, A. Pomogaybin,
+H. Poorter, A. Portsmuth, P. Poschlod, C. Potvin, D. Pounds, A. S. Powell, S. A. Power, A. Prinzing, G.
+Puglielli, P. Pyšek, V. Raevel, A. Rammig, J. Ransijn, C. A. Ray, P. B. Reich, M. Reichstein, D. E. B. Reid, M.
+Réjou-Méchain, V. R. de Dios, S. Ribeiro, S. Richardson, K. Riibak, M. C. Rillig, F. Riviera, E. M. R. Robert,
+S. Roberts, B. Robroek, A. Roddy, A. V. Rodrigues, A. Rogers, E. Rollinson, V. Rolo, C. Römermann, D.
+Ronzhina, C. Roscher, J. A. Rosell, M. F. Rosenfield, C. Rossi, D. B. Roy, S. Royer-Tardif, N. Rüger, R. Ruiz-
+Peinado, S. B. Rumpf, G. M. Rusch, M. Ryo, L. Sack, A. Saldaña, B. Salgado-Negret, R. Salguero-Gomez,
+I. Santa-Regina, A. C. Santacruz-García, J. Santos, J. Sardans, B. Schamp, M. Scherer- Lorenzen, M.
+Schleuning, B. Schmid, M. Schmidt, S. Schmitt, J. V. Schneider, S. D. Schowanek, J. Schrader, F. Schrodt,
+B. Schuldt, F. Schurr, G. Selaya Garvizu, M. Semchenko, C. Seymour, J. C. Sfair, J. M. Sharpe, C. S.
+Sheppard, S. Sheremetiev, S. Shiodera, B. Shipley, T. A. Shovon, A. Siebenkäs, C. Sierra, V. Silva, M. Silva,
+T. Sitzia, H. Sjöman, M. Slot, N. G. Smith, D. Sodhi, P. Soltis, D. Soltis, B. Somers, G. Sonnier, M. V.
+Sørensen, E. E. Sosinski Jr, N. A. Soudzilovskaia, A. F. Souza, M. Spasojevic, M. G. Sperandii, A. B. Stan,
+J. Stegen, K. Steinbauer, J. G. Stephan, F. Sterck, D. B. Stojanovic, T. Strydom, M. L. Suarez, J.-C. Svenning,
+I. Svitková, M. Svitok, M. Svoboda, E. Swaine, N. Swenson, M. Tabarelli, K. Takagi, U. Tappeiner, R. Tarifa,
+S. Tauugourdeau, C. Tavsanoglu, M. te Beest, L. Tedersoo, N. Thiffault, D. Thom, E. Thomas, K.
+Thompson, P. E. Thornton, W. Thuiller, L. Tichý, D. Tissue, M. G. Tjoelker, D. Y. P. Tng, J. Tobias, P. Török,
+T. Tarin, J. M. Torres-Ruiz, B. Tóthmérész, M. Treurnicht, V. Trivellone, F. Trolliet, V. Trotsiuk, J. L.
+Tsakalos, I. Tsiripidis, N. Tysklind, T. Umehara, V. Usoltsev, M. Vadeboncoeur, J. Vaezi, F. Valladares, J.
+Vamosi, P. M. van Bodegom, M. van Breugel, E. Van Cleemput, M. van de Weg, S. van der Merwe, F.
+van der Plas, M. T. van der Sande, M. van Kleunen, K. Van Meerbeek, M. Vanderwel, K. A. Vanselow, A.
+Vårhammar, L. Varone, M. Y. Vasquez Valderrama, K. Vassilev, M. Vellend, E. J. Veneklaas, H. Verbeeck,
+K. Verheyen, A. Vibrans, I. Vieira, J. Villacís, C. Violle, P. Vivek, K. Wagner, M. Waldram, A. Waldron, A.
+P. Walker, M. Waller, G. Walther, H. Wang, F. Wang, W. Wang, H. Watkins, J. Watkins, U. Weber, J. T.
+Weedon, L. Wei, P. Weigelt, E. Weiher, A. W. Wells, C. Wellstein, E. Wenk, M. Westoby, A. Westwood,
+P. J. White, M. Whitten, M. Williams, D. E. Winkler, K. Winter, C. Womack, I. J. Wright, S. J. Wright, J.
+Wright, B. X. Pinho, F. Ximenes, T. Yamada, K. Yamaji, R. Yanai, N. Yankov, B. Yguel, K. J. Zanini, A. E.
+Zanne, D. Zelený, Y.-P. Zhao, J. Zheng, J. Zheng, K. Ziemińska, C. R. Zirbel, G. Zizka, I. C. Zo-Bi, G. Zotz and
+C. Wirth (2020) TRY plant trait database – enhanced coverage and open access. Global Change Biology
+26: 119 – 188. https://doi.org/10.1111/gcb.14904
