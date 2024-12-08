@@ -1,0 +1,37 @@
+[project]
+name = "mypt"
+version = "1.1.0"
+authors = [
+  { name="Ayhem Bouabid", email="a.bouabid@innopolis.university" },
+]
+
+description = "A package to train, load and save fully Unsupervised model"
+
+requires-python = ">=3.10"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = ["mypt"]
+
+[project.urls]
+Homepage = "https://code.university.innopolis.ru/OGTC/%D0%A1%D0%B2%D0%B0%D1%80%D0%BA%D0%B0-%D0%93%D0%A1%D0%9F/_git/weldbook-qa-lib"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/*",
+]
+exclude = [
+  "tests",
+  "azure-pipelines",
+  ".gitignore",
+  ".git",
+  "demo",
+]
+[tool.hatch.build.targets.wheel]
+packages = ["src/mypt"]
