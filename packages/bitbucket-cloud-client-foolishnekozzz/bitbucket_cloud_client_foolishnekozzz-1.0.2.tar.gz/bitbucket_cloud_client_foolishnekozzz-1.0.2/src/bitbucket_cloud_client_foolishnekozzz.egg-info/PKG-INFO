@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: bitbucket_cloud_client_foolishnekozzz
+Version: 1.0.2
+Summary: SDK for Bitbucket Cloud
+Author-email: foolishnekozzz <foolishnekozzz@example.com>
+Project-URL: Homepage, https://github.com/foolishnekozzz/bitbucket-cloud-client
+Project-URL: Issues, https://github.com/foolishnekozzz/bitbucket-cloud-client/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# bitbucket-cloud-client
+python sdk for bitbucket cloud rest api
+
+
+#### Install me:  
+
+```bash
+pip install -i https://test.pypi.org/simple/ bitbucket-cloud-client-foolishnekozzz
+```
+
+#### Examples:  
+
+```bash
+export BITBUCKET_WORKSPACE="neko"
+export BITBUCKET_USERNAME="neko"
+export BITBUCKET_PASSWORD="neko"
+```
+
+```python
+#!/usr/bin/env python3
+
+from bitbucket_cloud_client_foolishnekozzz import BitbucketWorkspace, BitbucketGroup, Member
+
+from os import environ
+
+workspace = BitbucketWorkspace(name=environ.get("BITBUCKET_WORKSPACE"))
+workspace.get_groups()
+
+#docs:https://support.atlassian.com/user-management/docs/default-groups-and-permissions/
+default_group = BitbucketGroup(name="default", workspace=workspace)
+
+default_group.get_members()
+
+for i in default_group.members:
+    print(i)
+```
