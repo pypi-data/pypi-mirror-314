@@ -1,0 +1,128 @@
+Metadata-Version: 2.3
+Name: python-inbound
+Version: 1.0.1
+Summary: An Event Bus framework for event driven systems.
+Project-URL: repository, https://gitlab.com/emergentmethods/python-inbound
+Author-email: Tim Pogue <tim@emergentmethods.ai>
+License: MIT
+Requires-Python: <4.0,>=3.10
+Requires-Dist: cloudevents>=1.11.0
+Requires-Dist: msgpack>=1.0.8
+Requires-Dist: orjson>=3.10.12
+Requires-Dist: pydantic>=2.9.2
+Provides-Extra: amqp
+Requires-Dist: aio-pika>=9.5.0; extra == 'amqp'
+Provides-Extra: kafka
+Requires-Dist: aiokafka>=0.12.0; extra == 'kafka'
+Description-Content-Type: text/markdown
+
+# Inbound
+
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-inbound?style=flat-square)
+
+Inbound is an asyncio framework for building event-driven systems in Python. It provides a seamless interface for working with different Message Brokers, including In-memory, RabbitMQ, and Kafka.
+
+## Features
+
+- **Asynchronous Operations**: Build scalable and responsive systems with asyncio.
+- Multiple Broker Support: Easily switch between In-memory, RabbitMQ, and soon to be more.
+- **Elegant API**: Subscribe to channels, publish events, and listen to event streams with a simple and intuitive interface.
+- **Serialization Flexibility**: Choose between serializers like msgpack and json based on your requirements or bring your own.
+- **Streamlined Callbacks API**: Implement event-based systems quickly and effectively.
+
+## Quick Start
+
+### Installation
+
+```bash
+pip install python-inbound
+```
+
+### Basic Usage
+
+```python
+import asyncio
+from inbound import EventBus
+
+async def consume(bus: EventBus):
+    async with bus.subscribe("test-channel") as stream:
+        async for envelope in stream:
+            # Get the event from the envelope
+            event = envelope.event
+            print(event)
+            # After processing the event, acknowledge it
+            await envelope.ack()
+            # Unless you want to reject the event
+            # await envelope.nack()
+
+
+async def produce(bus: EventBus):
+    coros = [
+        bus.publish(
+            channel="test-channel",
+            type="test-event",
+            data={"message": f"Hello World {i}"},
+        )
+        for i in range(20)
+    ]
+    await asyncio.gather(*coros)
+
+async def main():
+    event_bus = EventBus()
+
+    tasks = [asyncio.create_task(consume(event_bus)), asyncio.create_task(produce(event_bus))]
+    async with event_bus:
+        await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Using Callbacks API
+
+```python
+import asyncio
+from inbound import CallbackGroup, Event, broker_from_url
+
+group = CallbackGroup()
+
+@group.callback("test-channel", "test-event")
+def callback(event: Event):
+    # Note: Envelopes are automatically acknowledged
+    # for callbacks
+    print(event)
+
+async def main():
+    event_bus = EventBus(broker=broker_from_url("memory://?serializer=msgpack"))
+    event_bus.add_group(group)
+
+    async with event_bus:
+        for i in range(3):
+            await event_bus.publish(
+                channel="test-channel",
+                type="test-event",
+                data={"message": f"Hello World {i}"},
+            )
+            await asyncio.sleep(0.01)
+        await event_bus.wait_until_finished()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+You can find more examples in the [examples](examples/) directory.
+
+## Documentation
+For comprehensive documentation, including advanced features and configurations, refer to Link to Documentation.
+
+## License
+This project is licensed under MIT License.
+
+## Support & Feedback
+If you encounter any issues or have feedback, please open an issue. We'd love to hear from you!
+
+Made with ❤️ by Emergent Methods
+
+
+
+
