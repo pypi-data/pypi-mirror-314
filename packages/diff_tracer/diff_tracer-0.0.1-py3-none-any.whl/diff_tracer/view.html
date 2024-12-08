@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diff Tracer Preview</title>
+    <style>
+        * {
+          box-sizing: border-box;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #dedede;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .general-info {
+            width: 270px;
+            min-width: 270px;
+            background-color: #282D3C;
+            padding: 44px;
+            overflow-y: auto;
+        }
+        .files-list {
+            width: 350px;
+            min-width: 350px;
+            background-color: #1E2330;
+            padding: 44px;
+            overflow-y: auto;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 44px;
+            overflow-y: auto;
+            background-color: #171B26;
+        }
+        .section-title {
+          margin: 0 0 25px;
+          padding: 0 0 30px;
+          border-bottom: 1px solid #2f3444;
+        }
+        .general-info-number {
+          font-size: 36px;
+          font-weight: bold;
+        }
+        .general-info-desc {
+          margin-bottom: 36px;
+          color: #A8AAB6;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .file-list li {
+            padding: 8px 0;
+        }
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+        .file-list a {
+            color: #0969da;
+            text-decoration: none;
+        }
+        .file-list a:hover {
+            text-decoration: underline;
+        }
+        .diff-view {
+            margin: 0 auto;
+            border-radius: 6px;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            font-size: 16px;
+            line-height: 24px;
+            white-space: pre-wrap;
+        }
+        .diff-content {
+            padding: 16px;
+        }
+        .diff-line-number {
+            color: rgba(27, 31, 36, 0.35);
+            padding-right: 10px;
+            text-align: right;
+            width: 40px;
+            user-select: none;
+        }
+        .file-item {
+            margin: 0 0 5px 0;
+            border-radius: 4px;
+
+        }
+        .file-item.selected {
+            padding-left: 12px;
+            background-color: #CFD966;
+        }
+        .file-item a {
+            color: #FFFFFF;
+        }
+        .file-item.selected a {
+            color: #171B26;
+        }
+        del {
+          color: red;
+        }
+        ins {
+          color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="general-info">
+            <h3 class="section-title">General info</h3>
+            <div class="general-info-number">{{total_requests}}</div>
+            <div class="general-info-desc">Total requests</div>
+            <div class="general-info-number">{{compared_requests}}</div>
+            <div class="general-info-desc">Compared requests</div>
+            <div class="general-info-number">{{different_results}}</div>
+            <div class="general-info-desc">Requests with different response</div>
+        </aside>
+        <aside class="files-list">
+            <h3 class="section-title">Different responses</h3>
+            <ul class="file-list">
+                {%- for result_file in result_files %}
+                    {% if filename == result_file %}
+                        <li class="file-item selected"><a href="/diff-tracer-view/{{token}}?filename={{result_file}}">{{result_file}}</a></li>
+                    {% else %}
+                        <li class="file-item"><a href="/diff-tracer-view/{{token}}?filename={{result_file}}">- {{result_file}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if not result_files %}
+                    <li>No file.</li>
+                {% endif %}
+            </ul>
+        </aside>
+        <main class="main-content">
+            {% if filename %}
+                <h3 class="section-title">{{filename}}</h3>
+            {% else %}
+                <h3 class="section-title">Select any file on the list</h3>
+            {% endif %}
+            <div class="diff-view">
+                <div class="diff-content">{{file_content | replace('\r', '<br>') | safe}}</div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
