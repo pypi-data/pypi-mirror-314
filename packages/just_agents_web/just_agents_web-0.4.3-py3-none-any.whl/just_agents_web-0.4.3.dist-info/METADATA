@@ -1,0 +1,63 @@
+Metadata-Version: 2.1
+Name: just_agents_web
+Version: 0.4.3
+Summary: Just Agents - Web. It allows runing openai API for the agent in the browser.
+License: MIT
+Keywords: python,llm,web,agents,AI
+Author: Alex Karmazin
+Author-email: karmazinalex@gmail.com
+Maintainer: Anton Kulaga
+Maintainer-email: antonkulaga@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: fastapi (>=0.115.5,<0.116.0)
+Requires-Dist: just-agents-core (>=0.4.3)
+Requires-Dist: loguru (>=0.7.2,<0.8.0)
+Requires-Dist: starlette (>=0.41.3,<0.42.0)
+Description-Content-Type: text/markdown
+
+# just-agents-web
+
+A web API wrapper for just-agents that provides OpenAI-compatible endpoints. This package allows you to expose just-agents functionality through a REST API that follows OpenAI's API conventions, making it easy to integrate with existing applications that use OpenAI's API format.
+
+## Installation
+
+```bash
+pip install just-agents-web
+```
+
+## Features
+
+- 🔄 OpenAI-compatible REST API endpoints
+- 🤖 Wrap any just-agents agent as an API service
+- 🔌 Drop-in replacement for OpenAI API clients
+- 🛠️ Built on just-agents-core
+
+## Dependencies
+
+- just-agents-core
+- FastAPI
+- pydantic
+
+## Quick Start
+
+```python
+from just_agents_web import create_app
+from just_agents.simple.chat_agent import ChatAgent
+
+agent = ChatAgent(...)
+app = create_app(agent)
+```
+
+For detailed documentation and examples, visit our [main repository](https://github.com/longevity-genie/just-agents).
+
