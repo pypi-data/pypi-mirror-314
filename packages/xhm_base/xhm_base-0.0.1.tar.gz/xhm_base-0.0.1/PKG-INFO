@@ -1,0 +1,164 @@
+Metadata-Version: 2.1
+Name: xhm_base
+Version: 0.0.1
+Summary: xhm base python sdk
+License: MIT
+Author: 邹慧刚
+Author-email: 952750120@qq.com
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: dynaconf (>=3.1.0,<4.0.0)
+Description-Content-Type: text/markdown
+
+# BOCHU SDK 使用说明
+
+# 封装sdk时请多考虑去解决一类问题、而不是一个问题
+
+## 使用教程
+
+### 一、pip方式
+
+添加私有源：
+
+    export PIP_TRUSTED_HOST="mirrors.aliyun.com nexus.fscut.com"
+    pip config set global.timeout 60
+    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+    pip config set global.extra-index-url http://nexus_user:nexus61259023@nexus.fscut.com/repository/pypi-group/simple/
+    pip config set install.trusted-host nexus.fscut.com
+    pip config set global.trusted-host nexus.fscut.com
+    
+    # 查看配置是否生效
+    pip config list --verbose
+
+dockerfile形式：
+
+    FROM soulpal-service:0.3.0
+    
+    WORKDIR /code
+    COPY . /code
+    
+    RUN pip install --upgrade --timeout 60 \
+        --index-url https://mirrors.cloud.tencent.com/pypi/simple/ \
+        --extra-index-url http://nexus_user:nexus61259023@nexus.fscut.com/repository/pypi-group/simple/ \
+        --trusted-host mirrors.cloud.tencent.com \
+        --trusted-host nexus.fscut.com \
+        -r requirements.txt
+    
+    ENV OPENAI_API_KEY ''
+    CMD ["/usr/local/bin/python3","main.py"]
+
+安装:
+
+    pip install xhm
+    or
+    pip install xhm -i https://nexus_user:nexus61259023@nexus.fscut.com/repository/pypi-group/simple/
+
+安装单个模块：
+
+    pip install xhm[xhm_log]
+
+安装所有：
+
+    pip install xhm[all]
+
+### 二、poetry
+
+添加私有源：
+
+    poetry config http-basic.trusted-hosts mirrors.aliyun.com nexus.fscut.com
+    poetry config repositories.my-repo http://nexus_user:nexus61259023@nexus.fscut.com/repository/pypi-group/simple/
+    poetry config repositories.aliyun https://mirrors.aliyun.com/pypi/simple/
+
+dockerfile形式只需要修改pyproject.toml文件：
+
+    xhm = "^0.4.6"
+
+    
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    
+    [[tool.poetry.source]]
+    name = "xhm"
+    url = "https://nexus_user:nexus61259023@nexus.fscut.com/repository/pypi-group/simple/"
+    
+    [[tool.poetry.source]]
+    name = "aliyun"
+    url = "https://mirrors.aliyun.com/pypi/simple/"
+
+安装：
+
+    poetry add xhm@0.1.7 --verbose
+
+### 在代码中使用BOCHU SDK
+
+    from xhm_log import log
+    
+    def test_case():
+        log.error('cc')
+
+## 开发包上传
+
+    # pip install setuptools==58.0.4
+     python setup.py sdist upload -r nexus
+
+### poetry 开发包
+
+    poetry config repositories.nexus http://nexus.fscut.com/repository/fs-pypi/
+    poetry config http-basic.nexus 用户名 密码
+ 
+    poetry build
+    poetry publish --repository nexus
+
+    # 官方
+    poetry config pypi-token.pypi pypi-AgEIcHlwaS5vcmcCJGYyM2E5ZjkxLWZhYTYtNGE2Mi1iOGZlLTczOGU2YjVhNzNkNAACKlszLCIwNzE3NWUwYy05YTA5LTQ3ZmMtOTYxNS0xZjExZjQyMmVhMDEiXQAABiCb__bveg49S186PbTgid0-FqFAz5GOxr0sB5dY23NuKg
+
+### 更新并安装
+
+    poetry add xhm==0.5.6
+
+### 升级记录
+
+| 版本     | 日期         | 更新记录                                    | 开发人员 |
+|--------|------------|-----------------------------------------|------|
+| 0.5.15 | 2024-11-27 | 拆分基础SDK和业务SDK                           | 邹慧刚  |
+| 0.5.6  | 2024-11-22 | 重新调整日志SDK，追加日志写入文件                      | 邹慧刚  |
+| 0.5.0  | 2024-11-11 | 增加xhm_chat_memory SDK                 | 邹慧刚  |
+| 0.4.9  | 2024-11-08 | 增加xhm_util处理url地址                     | 邹慧刚  |
+| 0.4.2  | 2024-08-21 | 更改日志写入文件                                | 邹慧刚  |
+| 0.3.6  | 2024-08-01 | 增加html/markdown转image sdk               | 邹慧刚  |
+| 0.3.5  | -          | 提取实体同时获取传统关键词                           | 邹慧刚  |
+| 0.3.2  | -          | 意图识别增加类型验证                              | 邹慧刚  |
+| 0.2.9  | -          | 问题提取增加实体对象的提取，没有则不回复                    | 邹慧刚  |
+| 0.2.8  | -          | 问题转结构化（Question->structure）并在关键词提取时增加意图 | 邹慧刚  |
+| 0.2.7  | -          | 修改关键词提取提取不相关词汇问题                        | 邹慧刚  |
+| 0.2.1  | -          | 修改关键词提取bug                              | 邹慧刚  |
+| 0.2.0  | -          | 关键词服务支持向量搜索，结巴分词                        | 邹慧刚  |
+| 0.1.8  | -          | 删除toml                                  | 代振兴  |
+| 0.1.7  | -          | 支持PEP 517标准                             | 邹慧刚  |
+| 0.1.6  | -          | 固定依赖版本                                  | 邹慧刚  |
+| 0.1.5  | -          | 更新dspy结果集model.json                     | 代振兴  |
+| 0.1.4  | -          | 分模块加载依赖                                 | 邹慧刚  |
+| 0.1.3  | -          | 增加dspy依赖                                | 代振兴  |
+| 0.1.2  | -          | 修改关键词sdk，增加dspy                         | 邹慧刚  |
+| 0.1.1  | -          | csp回答渲染方式支持多种                           | 代振兴  |
+| 0.1.0  | -          | 小版本封版                                   | 代振兴  |
+| 0.0.6  | -          | 增加关键词提取sdk                              | 代振兴  |
+| 0.0.5  | -          | 增加config sdk                            | 邹慧刚  |
+| 0.0.4  | -          | 增加scp sdk                               | 代振兴  |
+| 0.0.3  | -          | 增加redis sdk                             | 邹慧刚  |
+| 0.0.2  | -          | 增加mq sdk                                | 邹慧刚  |
+| 0.0.1  | -          | 增加log sdk                               | 邹慧刚  |
+
+
