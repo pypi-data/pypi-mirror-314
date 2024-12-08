@@ -1,0 +1,226 @@
+Metadata-Version: 2.1
+Name: txt2ebook
+Version: 0.1.117
+Summary: CLI tool to convert txt file to ebook format
+Home-page: https://github.com/kianmeng/txt2ebook
+License: AGPL-3.0-or-later
+Keywords: txt,ebook,epub,cjk
+Author: Kian-Meng Ang
+Author-email: kianmeng@cpan.org
+Requires-Python: >=3.9,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Natural Language :: Chinese (Traditional)
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Text Processing
+Classifier: Topic :: Text Processing :: Filters
+Classifier: Topic :: Text Processing :: General
+Classifier: Topic :: Text Processing :: Markup :: HTML
+Classifier: Topic :: Text Processing :: Markup :: Markdown
+Requires-Dist: CJKwrap (>=2.2,<3.0)
+Requires-Dist: EbookLib (>=0.17.1,<0.18.0)
+Requires-Dist: bs4 (>=0.0.1,<0.0.2)
+Requires-Dist: importlib-resources (>=6.1.1,<7.0.0)
+Requires-Dist: jieba (>=0.42.1,<0.43.0)
+Requires-Dist: langdetect (>=1.0.9,<2.0.0)
+Requires-Dist: lxml (>=5.2.2,<6.0.0)
+Requires-Dist: pylatex (>=1.4.2,<2.0.0)
+Requires-Dist: pypandoc (>=1.11,<2.0)
+Requires-Dist: regex (>=2021.11.10,<2022.0.0)
+Requires-Dist: reportlab (>=4.0.0,<5.0.0)
+Requires-Dist: typing-extensions (>=4.5.0,<5.0.0)
+Requires-Dist: typst (>=0.12.0,<0.13.0)
+Project-URL: Repository, https://github.com/kianmeng/txt2ebook
+Description-Content-Type: text/markdown
+
+# txt2ebook
+
+A console tool to convert txt file to different ebook formats.
+
+## Installation
+
+Stable version From PyPI:
+
+```console
+python3 -m pip install txt2ebook
+```
+
+Upgrade to latest stable version:
+
+```console
+python3 -m pip install txt2ebook --upgrade
+```
+
+Latest development version from GitHub:
+
+```console
+python3 -m pip install -e git+https://github.com/kianmeng/txt2ebook.git
+```
+
+## Usage
+
+Showing help message of command-line options:
+
+```console
+txt2ebook --help
+```
+
+<!--help !-->
+
+```console
+usage: txt2ebook [-of OUTPUT_FOLDER] [-p] [-f {epub,gmi,md,pdf,tex,txt,typ}]
+                 [-ik INDEX_KEYWORD] [-t TITLE] [-l LANGUAGE] [-a AUTHOR]
+                 [-tr TRANSLATOR] [-c IMAGE_FILENAME] [-w WIDTH]
+                 [-ff FILENAME_FORMAT] [-ps SEPARATOR] [-pz PAGE_SIZE]
+                 [-rd REGEX] [-rvc REGEX] [-rv REGEX] [-rc REGEX] [-rt REGEX]
+                 [-ra REGEX] [-rl REGEX] [-rr REGEX REGEX] [-ct]
+                 [-et {clean,condense,noindent}] [-vp] [-tp] [-sp] [-ss]
+                 [-toc] [-hn] [-fw] [-rw] [-ow] [-op] [-q] [-v] [-y] [-d]
+                 [--env] [-h] [-V]
+                 TXT_FILENAME [EBOOK_FILENAME]
+
+txt2ebook/tte is a cli tool to convert txt file to ebook format.
+
+  website: https://github.com/kianmeng/txt2ebook
+  changelog: https://github.com/kianmeng/txt2ebook/blob/master/CHANGELOG.md
+  issues: https://github.com/kianmeng/txt2ebook/issues
+
+positional arguments:
+  TXT_FILENAME
+      source text filename
+  EBOOK_FILENAME
+      converted ebook filename (default: 'TXT_FILENAME.epub')
+
+options:
+  -of OUTPUT_FOLDER, --output-folder OUTPUT_FOLDER
+      set default output folder (default: 'output')
+  -p, --purge
+      remove converted ebooks specified by --output-folder option (default: 'False')
+  -f {epub,gmi,md,pdf,tex,txt,typ}, --format {epub,gmi,md,pdf,tex,txt,typ}
+      ebook format (default: 'epub')
+  -ik INDEX_KEYWORD, --index-keyword INDEX_KEYWORD
+      keyword to index (default: '[]')
+  -t TITLE, --title TITLE
+      title of the ebook (default: 'None')
+  -l LANGUAGE, --language LANGUAGE
+      language of the ebook (default: 'None')
+  -a AUTHOR, --author AUTHOR
+      author of the ebook (default: '[]')
+  -tr TRANSLATOR, --translator TRANSLATOR
+      translator of the ebook (default: '[]')
+  -ff FILENAME_FORMAT, --filename-format FILENAME_FORMAT
+      the output filename format (default: TXT_FILENAME [EBOOK_FILENAME])
+      1 - title_authors.EBOOK_EXTENSION
+      2 - authors_title.EBOOK_EXTENSION
+  -ps SEPARATOR, --paragraph_separator SEPARATOR
+      paragraph separator (default: '\n\n')
+  -rd REGEX, --regex-delete REGEX
+      regex to delete word or phrase (default: '[]')
+  -rvc REGEX, --regex-volume-chapter REGEX
+      regex to parse volume and chapter header (default: by LANGUAGE)
+  -rv REGEX, --regex-volume REGEX
+      regex to parse volume header (default: by LANGUAGE)
+  -rc REGEX, --regex-chapter REGEX
+      regex to parse chapter header (default: by LANGUAGE)
+  -rt REGEX, --regex-title REGEX
+      regex to parse title of the book (default: by LANGUAGE)
+  -ra REGEX, --regex-author REGEX
+      regex to parse author of the book (default: by LANGUAGE)
+  -rl REGEX, --regex-delete-line REGEX
+      regex to delete whole line (default: '[]')
+  -rr REGEX REGEX, --regex-replace REGEX REGEX
+      regex to search and replace (default: '[]')
+  -tp, --test-parsing
+      test parsing for volume/chapter header
+  -ss, --sort-volume-and-chapter
+      short volume and chapter
+  -rw, --raise-on-warning
+      raise exception and stop parsing upon warning
+  -ow, --overwrite
+      overwrite massaged TXT_FILENAME
+  -op, --open
+      open the generated file using default program
+  -q, --quiet
+      suppress all logging
+  -v, --verbose
+      show verbosity of debugging log, use -vv, -vvv for more details
+  -y, --yes
+      yes to prompt
+  -d, --debug
+      show debugging log and stacktrace
+  --env
+      print environments information for bug reporting
+  -h, --help
+      show this help message and exit
+  -V, --version
+      show program's version number and exit
+
+--format epub:
+  -c IMAGE_FILENAME, --cover IMAGE_FILENAME
+      cover of the ebook
+  -et {clean,condense,noindent}, --epub-template {clean,condense,noindent}
+      CSS template for epub ebook (default: 'clean')
+  -vp, --volume-page
+      generate each volume as separate page
+
+--format pdf:
+  -pz PAGE_SIZE, --page-size PAGE_SIZE
+      page size of the ebook (default: 'a5')
+
+--format txt:
+  -w WIDTH, --width WIDTH
+      width for line wrapping
+  -sp, --split-volume-and-chapter
+      split volume or chapter into separate file and ignore the --overwrite option
+  -toc, --table-of-content
+      add table of content
+
+--format tex:
+  -ct, --clean-tex
+      purge artifacts generated by TeX (default: 'False')
+
+--language zh-cn / --language zh-tw:
+  -hn, --header-number
+      convert section header from words to numbers
+  -fw, --fullwidth
+      convert ASCII character from halfwidth to fullwidth
+```
+
+<!--help !-->
+
+Convert a txt file into epub:
+
+```console
+txt2ebook ebook.txt
+```
+
+## Copyright and License
+
+Copyright (c) 2021,2022,2023,2024 Kian-Meng Ang
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.
+
+The fish logo used in the documentation generated by Sphinx is a public domain
+drawing of Troschel's parrotfish (Chlorurus troschelii Var. A.) from
+<https://commons.wikimedia.org/entity/M18506436>.
+18506436>.
+
