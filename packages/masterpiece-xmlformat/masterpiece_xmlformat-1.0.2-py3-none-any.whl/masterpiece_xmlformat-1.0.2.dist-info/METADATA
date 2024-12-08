@@ -1,0 +1,93 @@
+Metadata-Version: 2.1
+Name: masterpiece_xmlformat
+Version: 1.0.2
+Summary: XML serialization format for the `masterpiece` framework
+Author-email: J Meskanen <juham.api@gmail.com>
+Maintainer-email: "J. Meskanen" <juham.api@gmail.com>
+License: MIT License
+        ===========
+        
+        Copyright (c) 2024, Juha Meskanen
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        
+        
+Project-URL: Homepage, https://gitlab.com/juham/masterpiece_xmlformat
+Project-URL: Bug Reports, https://gitlab.com/juham/masterpiece
+Project-URL: Source, https://gitlab.com/juham/masterpiece_xmlformat
+Project-URL: Say Thanks!, http://meskanen.com
+Keywords: object-oriented,plugin,framework
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.rst
+Requires-Dist: masterpiece>=0.1.4
+Requires-Dist: pytz>=2024.1
+Requires-Dist: importlib-metadata
+Provides-Extra: dev
+Requires-Dist: check-manifest; extra == "dev"
+
+XML Serialization Format
+========================
+
+This project implements the `masterpiece_xmlformat` Python package to add XML support to `masterpiece` 
+applications.
+
+Usage
+-----
+
+To install:
+
+.. code-block:: bash
+  
+  pip install masterpiece_xmlformat
+
+Once installed, you can pass the `--init` and `--application_serialization_format` 
+startup arguments to create a default set of configuration files. For example, to create 
+XML configuration files for the 'examples/myapp.py' application:
+
+.. code-block:: bash
+
+  mkdir -p ~/.myhome/config
+  python examples/myhome.py --init --application_serialization_format XMLFormat
+
+Upon successful execution, there should be a file located at `~/.myhome/config/MyHome.xml` 
+with the following content:
+
+.. code-block:: xml
+
+  <?xml version='1.0' encoding='utf-8'?>
+  <MyHome>
+    <solar>0.0</solar>
+    <color>yellow</color>
+  </MyHome>
+
+To use XML as the default format, add the following line of code to your application:
+
+.. code-block:: python
+
+  Application.serialization_format = "XMLFormat"
+
+License
+-------
+
+This project is licensed under the MIT License - see the `LICENSE` file for details.
