@@ -1,0 +1,53 @@
+[project]
+name = "punsctl"
+version = "0.2.4"
+description = "POSIX User's Namespace Control"
+readme = {file = "README.md", content-type = "text/markdown"}
+authors = [
+  {name = "Aleksandar Buza", email = "tech@aleksandarbuza.com"},
+]
+requires-python = ">=3.9"
+dependencies = []
+
+classifiers = [
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "Environment :: Console",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Homepage = "https://github.com/alekbuza/punsctl"
+Repository = "https://github.com/alekbuza/punsctl"
+Issues = "https://github.com/alekbuza/punsctl/issues"
+Changelog = "https://github.com/alekbuza/punsctl/blob/main/CHANGELOG.md"
+
+[project.scripts]
+punsctl = "punsctl.main:main"
+
+[tool.uv]
+package = true
+dev-dependencies = [
+    "flake8>=7.1.1",
+    "isort>=5.13.2",
+    "pygount>=1.8.0",
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.3",
+    "ruff>=0.7.3",
+    "black>=24.10.0",
+    "bandit>=1.8.0",
+]
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

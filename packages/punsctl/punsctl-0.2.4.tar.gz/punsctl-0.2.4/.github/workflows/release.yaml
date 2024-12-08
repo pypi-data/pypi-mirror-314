@@ -1,0 +1,20 @@
+---
+name: release
+on:
+  release:
+    types:
+      - created
+env:
+  PYTHON_VERSION: "3.13"
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv python install $PYTHON_VERSION
+      - run: uv sync
+      - run: uv build
+      - run: uv publish --token $PYPI_TOKEN
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
