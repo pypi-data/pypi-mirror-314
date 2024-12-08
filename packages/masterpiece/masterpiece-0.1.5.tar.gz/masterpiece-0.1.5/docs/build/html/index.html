@@ -1,0 +1,629 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Welcome to MasterPiece documentation! &#8212; masterpiece  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="_static/masterpiece.css?v=7a3aeb84" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MasterPiece Module" href="masterpiece/index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          masterpiece</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="masterpiece/index.html">MasterPiece Module</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Welcome to MasterPiece documentation!</a></li>
+<li><a class="reference internal" href="#masterpiece-development-status-1-planning">Masterpiece™  (<strong>Development Status 1 - Planning</strong> )</a><ul>
+<li><a class="reference internal" href="#try-to-be-nice">Try to be Nice</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#project-status-and-current-state">Project Status and Current State</a></li>
+<li><a class="reference internal" href="#multi-threading">Multi-threading</a></li>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#packages">Packages</a></li>
+<li><a class="reference internal" href="#example-usage">Example Usage</a><ul>
+<li><a class="reference internal" href="#step-1-install-masterpiece-and-run-the-example-application">Step 1: Install Masterpiece and run the example application</a></li>
+<li><a class="reference internal" href="#step-2-install-the-masterpiece-plugin">Step 2: Install the Masterpiece Plugin</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contributing">Contributing</a></li>
+<li><a class="reference internal" href="#about-the-project">About the Project</a></li>
+<li><a class="reference internal" href="#developer-documentation">Developer Documentation</a></li>
+<li><a class="reference internal" href="#special-thanks">Special Thanks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mit-license">MIT License</a></li>
+<li><a class="reference internal" href="#id1">Contributing</a><ul>
+<li><a class="reference internal" href="#thank-you">Thank You!</a></li>
+<li><a class="reference internal" href="#design-patterns">Design Patterns</a></li>
+<li><a class="reference internal" href="#code-formatting">Code Formatting</a></li>
+<li><a class="reference internal" href="#using-emacs-and-makefile">Using Emacs and Makefile</a></li>
+<li><a class="reference internal" href="#unit-tests">Unit tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">CHANGELOG</a><ul>
+<li><a class="reference internal" href="#current">[0.0.7] - (current)</a></li>
+<li><a class="reference internal" href="#id4">[0.0.6] - 26.10.2024</a></li>
+<li><a class="reference internal" href="#id5">[0.0.5] - 20.10.2024</a></li>
+<li><a class="reference internal" href="#october-18-2024">[0.0.4] - October 18, 2024</a></li>
+<li><a class="reference internal" href="#october-12-2024">[0.0.3] - October 12, 2024</a></li>
+<li><a class="reference internal" href="#october-10-2024">[0.0.2] - October 10, 2024</a></li>
+<li><a class="reference internal" href="#august-4-2024">-[0.0.1] - August 4, 2024</a></li>
+<li><a class="reference internal" href="#may-31-2024">[0.0.0] - May 31, 2024</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#todos-for-masterpiece">TODOs for MasterPiece</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#instances">Instances</a></li>
+<li><a class="reference internal" href="#instance-diagram">Instance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#index">Index</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="masterpiece/index.html" title="Next Chapter: MasterPiece Module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">MasterPiece Module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/index.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">Welcome to MasterPiece documentation!</a></li>
+<li><a class="reference internal" href="#masterpiece-development-status-1-planning">Masterpiece™  (<strong>Development Status 1 - Planning</strong> )</a><ul>
+<li><a class="reference internal" href="#try-to-be-nice">Try to be Nice</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#project-status-and-current-state">Project Status and Current State</a></li>
+<li><a class="reference internal" href="#multi-threading">Multi-threading</a></li>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#packages">Packages</a></li>
+<li><a class="reference internal" href="#example-usage">Example Usage</a><ul>
+<li><a class="reference internal" href="#step-1-install-masterpiece-and-run-the-example-application">Step 1: Install Masterpiece and run the example application</a></li>
+<li><a class="reference internal" href="#step-2-install-the-masterpiece-plugin">Step 2: Install the Masterpiece Plugin</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contributing">Contributing</a></li>
+<li><a class="reference internal" href="#about-the-project">About the Project</a></li>
+<li><a class="reference internal" href="#developer-documentation">Developer Documentation</a></li>
+<li><a class="reference internal" href="#special-thanks">Special Thanks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mit-license">MIT License</a></li>
+<li><a class="reference internal" href="#id1">Contributing</a><ul>
+<li><a class="reference internal" href="#thank-you">Thank You!</a></li>
+<li><a class="reference internal" href="#design-patterns">Design Patterns</a></li>
+<li><a class="reference internal" href="#code-formatting">Code Formatting</a></li>
+<li><a class="reference internal" href="#using-emacs-and-makefile">Using Emacs and Makefile</a></li>
+<li><a class="reference internal" href="#unit-tests">Unit tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">CHANGELOG</a><ul>
+<li><a class="reference internal" href="#current">[0.0.7] - (current)</a></li>
+<li><a class="reference internal" href="#id4">[0.0.6] - 26.10.2024</a></li>
+<li><a class="reference internal" href="#id5">[0.0.5] - 20.10.2024</a></li>
+<li><a class="reference internal" href="#october-18-2024">[0.0.4] - October 18, 2024</a></li>
+<li><a class="reference internal" href="#october-12-2024">[0.0.3] - October 12, 2024</a></li>
+<li><a class="reference internal" href="#october-10-2024">[0.0.2] - October 10, 2024</a></li>
+<li><a class="reference internal" href="#august-4-2024">-[0.0.1] - August 4, 2024</a></li>
+<li><a class="reference internal" href="#may-31-2024">[0.0.0] - May 31, 2024</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#todos-for-masterpiece">TODOs for MasterPiece</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#instances">Instances</a></li>
+<li><a class="reference internal" href="#instance-diagram">Instance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#index">Index</a></li>
+</ul>
+
+  <li>
+    <a href="masterpiece/index.html" title="Next Chapter: MasterPiece Module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">MasterPiece Module &raquo;</span>
+    </a>
+  </li>
+<div id="sourcelink">
+  <a href="_sources/index.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="welcome-to-masterpiece-documentation">
+<h1>Welcome to MasterPiece documentation!<a class="headerlink" href="#welcome-to-masterpiece-documentation" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="_images/masterpiece.png"><img alt="Masterpiece - A Piece of Work" src="_images/masterpiece.png" style="width: 400px; height: 300px;" /></a>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="masterpiece/index.html">MasterPiece Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="masterpiece/core/index.html">Core Module Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="masterpiece-development-status-1-planning">
+<h1>Masterpiece™  (<strong>Development Status 1 - Planning</strong> )<a class="headerlink" href="#masterpiece-development-status-1-planning" title="Link to this heading">¶</a></h1>
+<section id="try-to-be-nice">
+<h2>Try to be Nice<a class="headerlink" href="#try-to-be-nice" title="Link to this heading">¶</a></h2>
+<p>Welcome to the <strong>Masterpiece™</strong> - Quite a Piece of Work!</p>
+<p>For changes in this release, read <a class="reference external" href="CHANGELOG.rst">CHANGELOG</a> file, please.</p>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>Masterpiece™ is a <strong>Python framework</strong> designed for creating  modular, scalable, plugin-aware, multi-threaded, and object-oriented applications
+with a hierarchical structure. This hierarchical model is useful because in this universe the real world is inherently hierarchical;
+every object, from dishing machines to nuclear power plants, can be broken down into subparts.
+For other universes, you might find a framework that suits you better.</p>
+<p>If you appreciate these design concepts, look no further. You’ve come to the right place!</p>
+</section>
+<section id="project-status-and-current-state">
+<h2>Project Status and Current State<a class="headerlink" href="#project-status-and-current-state" title="Link to this heading">¶</a></h2>
+<p>Here’s what is currently available:</p>
+<ul class="simple">
+<li><p>Package Infrastructure: The basic Python package setup is in place, configured with ‘pyproject.toml’.</p></li>
+<li><p>Early Drafts: Initial, yet fully working, versions of the essential core classes implemented.</p></li>
+<li><p>Example application ‘examples/myhome.py’, which prints out its instance structure when run.</p></li>
+<li><p>A separate plugin project named ‘masterpiece_plugin’ plugs in a ‘Hello World’ greeting to ‘myhome.py’, demonstrating
+a minimal yet fully functional plugin.</p></li>
+<li><p>Absolutely bug-free (just kidding :)) — no known bugs remain, as far as I can tell.</p></li>
+</ul>
+<p>In its current state, you might call the project a “Mission™” rather than a “Masterpiece™”, but we’re on our way from ‘Mission™’ to ‘Masterpiece™’!</p>
+</section>
+<section id="multi-threading">
+<h2>Multi-threading<a class="headerlink" href="#multi-threading" title="Link to this heading">¶</a></h2>
+<p>Multi-threading Python’s might make some devs raise an eyebrow, but I trust the community will sort that Global Interpreter Lock (GIL) out.</p>
+</section>
+<section id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Link to this heading">¶</a></h2>
+<p>Have fun with learning the Python ecosystem! The ultimate enjoyment and a sprinkling of practicality will be achieved by cranking
+the Fun-O-Meter™ up to 11. Coding should feel like a rollercoaster ride—minus the screaming and the long lines.</p>
+<ul class="simple">
+<li><p>First-Time Excellence: We aim to build a framework that’s reliable, correct, and efficient from the start.
+And fun—because, what’s a framework without a little joy?</p></li>
+<li><p>Robustness: A minimal yet robust API providing developers with total control over everything.</p></li>
+<li><p>Productivity: Totally reusable code to get maximum functionality with a minimum amount of code (read: money).</p></li>
+</ul>
+</section>
+<section id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Link to this heading">¶</a></h2>
+<p>Masterpiece introduces two Python packages:</p>
+<ol class="arabic simple">
+<li><p><strong>Masterpiece (core framework)</strong>:
+This is the core framework for building plugin-aware, multi-threaded applications. It includes a simple example application to get you started.</p></li>
+<li><p><strong>Masterpiece Plugin (plugin example)</strong>:
+This is a basic plugin example that demonstrates how to create third-party plugins for applications built using Masterpiece.
+It’s as simple as saying <strong>“Hello, World!”</strong>, literally.</p></li>
+</ol>
+<p>Note: This project contains only the core framework. The plugin is provided as a separate project <a class="reference external" href="https://gitlab.com/juham/masterpiece_plugin">masterpiece_plugin</a>.</p>
+</section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
+<section id="step-1-install-masterpiece-and-run-the-example-application">
+<h3>Step 1: Install Masterpiece and run the example application<a class="headerlink" href="#step-1-install-masterpiece-and-run-the-example-application" title="Link to this heading">¶</a></h3>
+<p>To install the core framework:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>masterpiece
+</pre></div>
+</div>
+<p>Then, navigate to the example folder and run the application:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>examples/myapp.py
+</pre></div>
+</div>
+<p>The application will print out its instance hierarchy. This is a minimal starting point for developing your own multi-threaded, plugin-based,
+scalable applications.</p>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>home
+    ├─ grid
+    ├─ downstairs
+    │   └─ kitchen
+    │       ├─ oven
+    │       └─ fridge
+    └─ garage
+        └─ EV charger
+</pre></div>
+</div>
+</section>
+<section id="step-2-install-the-masterpiece-plugin">
+<h3>Step 2: Install the Masterpiece Plugin<a class="headerlink" href="#step-2-install-the-masterpiece-plugin" title="Link to this heading">¶</a></h3>
+<p>To extend the application with the <strong>masterpiece_plugin</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>masterpiece_plugin
+</pre></div>
+</div>
+<p>Run the application again:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>examples/myapp.py
+</pre></div>
+</div>
+<p>You’ll now see a new object in the instance hierarchy, along with a friendly “Hello, World!” object.</p>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>home
+    ├─ grid
+    ├─ downstairs
+    │   └─ kitchen
+    │       ├─ oven
+    │       └─ fridge
+    ├─ garage
+    │   └─ EV charger
+    └─ Hello World - A Plugin
+</pre></div>
+</div>
+<p>The application also demonstrates the usage of startup arguments.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>examples/myapp.py --init --solar 10
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--init</span></code> argument tells the application to create configuration files for all classes in the application.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--solar</span></code> argument creates an instance of a solar power plant with a specified peak power of 10 kW.</p></li>
+</ul>
+<p>By default, the configuration files are created in the <code class="docutils literal notranslate"><span class="pre">config</span></code> folder under your home directory. You can edit these files to modify
+the class attributes across the application.</p>
+<p>To load a different configuration, use the <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">[configname]</span></code> argument. For example, <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">simulation</span></code> will use
+the configuration files stored in the <code class="docutils literal notranslate"><span class="pre">~/.myapp/simulation/</span></code> folder.</p>
+<p>The <strong>HelloWorldPlugin</strong> class is a basic starting point for adding new features to your application.</p>
+</section>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<p>Contributions are welcome!</p>
+<p>Please check out the <a class="reference external" href="https://gitlab.com/juham/masterpiece/-/boards">Issue Board</a> for tracking progress and tasks.</p>
+</section>
+<section id="about-the-project">
+<h2>About the Project<a class="headerlink" href="#about-the-project" title="Link to this heading">¶</a></h2>
+<p>The framework allows any payload to be integrated into this hierarchy, supporting configuration, serialization, the factory method pattern,
+a plugin API, and many other features commonly required when developing applications. Generic tree traversal functionality allows any
+interaction to be applied to the tree, from serialization to any application specific functionality.</p>
+<p>Just like life on Earth, all components of this framework trace their lineage back to a single ancestor: the ‘masterpiece’ core. Evolution, but in code!</p>
+<p>The name ‘Masterpiece’ was chosen to reflect a commitment to fine-grained modular design, with a touch of humor.</p>
+</section>
+<section id="developer-documentation">
+<h2>Developer Documentation<a class="headerlink" href="#developer-documentation" title="Link to this heading">¶</a></h2>
+<p>As a C/C++ boomer, Doxygen was naturally my tool of choice. However, I ditched it in favor of Python’s native tool, Sphinx.
+The migration wasn’t exactly pure joy — developed severe mental illness - but it’s all good now. The documentation is improving,
+though it will still require a few more hours (okay, days) of effort to become truly usable.</p>
+<p>For full documentation and usage details, see the full documentation at <a class="reference external" href="docs/build/html/index.html">Documentation Index</a>.
+(the docs look like crap, sorry — I’m still unraveling Sphinx’s mysteries).</p>
+</section>
+<section id="special-thanks">
+<h2>Special Thanks<a class="headerlink" href="#special-thanks" title="Link to this heading">¶</a></h2>
+<p>Big thanks to the generous support of [Mahi.fi](<a class="reference external" href="https://mahi.fi">https://mahi.fi</a>) for helping bring this framework to life.</p>
+</section>
+</section>
+<section id="mit-license">
+<h1>MIT License<a class="headerlink" href="#mit-license" title="Link to this heading">¶</a></h1>
+<p>Copyright (c) 2024, Juha Meskanen</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</p>
+</section>
+<section id="id1">
+<h1>Contributing<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="thank-you">
+<h2>Thank You!<a class="headerlink" href="#thank-you" title="Link to this heading">¶</a></h2>
+<p>Thank you in advance for your forthcoming contributions, whether they are bug fixes,
+documentation improvements, entirely new features, or simply feedback. Your efforts
+will be highly appreciated and will help turn this project from its current mission
+state into an actual masterpiece.</p>
+</section>
+<section id="design-patterns">
+<h2>Design Patterns<a class="headerlink" href="#design-patterns" title="Link to this heading">¶</a></h2>
+<p>Please read the developer documentation and understand the few design patterns before contributing.
+This will help ensure that your contributions align with the project’s design and goals.
+.. todo:: (okay, the documentation is currently lacking many essential chapters, add.)</p>
+</section>
+<section id="code-formatting">
+<h2>Code Formatting<a class="headerlink" href="#code-formatting" title="Link to this heading">¶</a></h2>
+<p>To help maintain consistent code formatting across different developers, we use ‘black’ python formatter, by Microsoft.</p>
+<p>Strange, the formatter doesn’t seem to do that much, it doesn’t organize imports,
+doesn’t adjust docstring lenghts
+.. todo:: most likely I don’t know how to use it properly, read the docs.</p>
+</section>
+<section id="using-emacs-and-makefile">
+<h2>Using Emacs and Makefile<a class="headerlink" href="#using-emacs-and-makefile" title="Link to this heading">¶</a></h2>
+<p>Despite my attempts to fall in love with Eclipse, VSCode and other IDEs, I still find Emacs and Makefile the best
+tools for many of my workflows.
+So there is a Makefile in the root folder. For those old dogs who are like me</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">help</span>
+</pre></div>
+</div>
+</section>
+<section id="unit-tests">
+<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Link to this heading">¶</a></h2>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>write unit tests</p>
+</div>
+</section>
+</section>
+<section id="id3">
+<h1>CHANGELOG<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h1>
+<section id="current">
+<h2>[0.0.7] - (current)<a class="headerlink" href="#current" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Factory Method Pattern:</strong> instantiation methods unified into one.</p></li>
+<li><p><strong>Piece:</strong>  abstract base class, acting as the elementary class from which all the other classes
+are derived from.</p></li>
+<li><p><strong>YamlFormat:</strong>  new serialization format implemented, in addition to existing JsonFormat (a separate plugin project)</p></li>
+<li><p><strong>Logging improved:</strong> - to support both class and instance  methods. Foo.log_error(…) and foo.error(…)</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>[0.0.6] - 26.10.2024<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Code and Data Decoupling:</strong> Hardcoded <cite>print()</cite>  methods have been removed from core classes and re-implemented
+using the new <cite>do()</cite> method.</p></li>
+<li><p><strong>ArgMaestro:</strong> A class for fully automated class attribute initialization through startup arguments. Allows any public class
+attribute to be initialized using the <cite>–classname_attributename [value]</cite> convention. The name is admittedly ridiculous and will
+likely be changed.</p></li>
+<li><p><strong>Unit Test Coverage Improved:</strong> Unit tests have been enhanced to a level where they provide meaningful test coverage.</p></li>
+<li><p><strong>Logging Typos Fixed:</strong> All strings have been proofread and typos corrected.</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>[0.0.5] - 20.10.2024<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>New startup argument –init:</strong> If given, all classes in the application will create configuration
+files for their class attributes, if those files don’t already exist. These configuration files allow users to define
+custom values for all public class attributes.</p></li>
+<li><p><strong>Rotating Logs:</strong> The FileHandler has been replaced with TimedRotatingFileHandler, initialized with parameters when=’midnight’, interval=1, and
+backupCount=7 to rotate the log file daily and keep 7 backup files. This change resolves the issue of log files growing indefinitely, which
+could eventually lead to the system running out of disk space.</p></li>
+<li><p><strong>Documentation refactored:</strong> All .rst files have been moved from Sphinx’s docs/source directory to the project root folder for GitLab compatibility.</p></li>
+<li><p><strong>Time functions:</strong> The methods ‘epoc2utc()’, ‘timestamp()’, ‘epoc2utc()’ and a few others removed. These were not
+actually methods of the Masterpiece class since they did not require any instance attributes. More importantly, this
+change aims to keep the Masterpiece framework focused on its core functionality.</p></li>
+</ul>
+</section>
+<section id="october-18-2024">
+<h2>[0.0.4] - October 18, 2024<a class="headerlink" href="#october-18-2024" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>MasterPiece:</strong> undefined class attribute  ‘_class_id’, added.</p></li>
+<li><p><strong>MetaMasterPiece Refactored:</strong> Replaced with a more lightweight <cite>__init_subclass__()</cite> solution, with special
+thanks to Mahi for his contribution.</p></li>
+<li><p><strong>Plugin Class Abstracted:</strong> The plugin class is now subclassed from <cite>ABC</cite> to formally implement an abstract base class.</p></li>
+<li><p><strong>Pylint Warnings Resolved:</strong> Fixed issues such as long lines, which have been split for better readability.</p></li>
+<li><p><strong>Docstrings Improved:</strong> Added more comprehensive documentation with a professional tone for several methods.</p></li>
+</ul>
+</section>
+<section id="october-12-2024">
+<h2>[0.0.3] - October 12, 2024<a class="headerlink" href="#october-12-2024" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>From C++ boomer to Python professional:</strong>  Directory structure simplified:</p>
+<ul>
+<li><p>src folder removed</p></li>
+<li><p>masterpiece/base folder renamed to masterpiece/core</p></li>
+<li><p>plugins folder moved outside the project, will be implemented as a separate project (one project - one repository principle)</p></li>
+<li><p>Minor additions and improvements to Docstrings.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="october-10-2024">
+<h2>[0.0.2] - October 10, 2024<a class="headerlink" href="#october-10-2024" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>GitLab Ready:</strong>  Revised documentation tone slightly to reflect a more professional and serious nature. Removed excessive humor that may have detracted from the perceived professionalism of the toolkit.</p></li>
+</ul>
+</section>
+<section id="august-4-2024">
+<h2>-[0.0.1] - August 4, 2024<a class="headerlink" href="#august-4-2024" title="Link to this heading">¶</a></h2>
+<p>Pip release with Python pip package uploaded.</p>
+<p>New Features and Improvements</p>
+<ul class="simple">
+<li><p><strong>Trademark</strong> Cool (not?) slogan: Masterpiece - Quite a piece of work</p></li>
+<li><p><strong>Plugin API:</strong> Enhanced the plugin API with two classes: ‘Plugin’ and ‘PlugMaster’ with compatibility with Python
+versions 3.8 and later. The most recent version tested is 3.12.</p></li>
+<li><p><strong>Meta-Class Automation:</strong> Per-class bureaucracy automated using Python’s meta-class concept.</p></li>
+<li><p><strong>Folder Structure:</strong> Redesigned for future expansion. There is now separate root folders for core and plugin modules.</p></li>
+<li><p><strong>Base Class:</strong> Added new base class for MasterPiece applications in <cite>base/application.py</cite>.</p></li>
+<li><p><strong>Example Application:</strong> Added <cite>examples/myhome.py</cite> to demonstrate the general structure of MasterPiece aapplications.</p></li>
+<li><p><strong>Startup Argument Parsing:</strong> Added API for parsing startup arguments.</p></li>
+<li><p><strong>Serialization API:</strong> Fully featured serialization with backward compatibility support implemented.</p></li>
+<li><p><strong>Documentation:</strong> Added comprehensive docstrings to numerous classes, aiming for fully documented professional Python code.</p></li>
+<li><p><strong>Type Annotations:</strong> Added type annotations to numerous previously non-typed method arguments, moving towards a fully typed Python code.</p></li>
+<li><p><strong>Sphinx conf.py:</strong> Created default Sphinx ‘conf.py’ file in masterpiece/sphinx folder.</p></li>
+<li><p><strong>Bug fixes and improvements:</strong></p>
+<ul>
+<li><p>Added encoding=”utf-8” to <cite>open()</cite> calls</p></li>
+<li><p>Added exclude __pycache__ to MANIFEST.in, to avoid including the folders with the setup.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="may-31-2024">
+<h2>[0.0.0] - May 31, 2024<a class="headerlink" href="#may-31-2024" title="Link to this heading">¶</a></h2>
+<p>Initial, private release (minimal set of classes unified from the RTE and JUHAM Python applications)</p>
+<ul class="simple">
+<li><p><strong>Base Class Draft:</strong> Initial version of the <cite>MasterPiece</cite> and <cite>Composite</cite> classes.</p></li>
+<li><p><strong>Python Packaging:</strong> Python package infrastructure setup using <cite>pyproject.toml</cite>, installable via pip.</p></li>
+<li><p><strong>Documentation:</strong></p>
+<ul>
+<li><p>Added LICENSE, README, and other standard files in .rst format.</p></li>
+<li><p>Developer documentation autogenerated with Sphinx toolset. Support for Doxygen dropped.</p></li>
+</ul>
+</li>
+<li><p><strong>Project Name:</strong> Named the project ‘MasterPiece™’, with a note that ‘M’ currently stands for mission rather than masterpiece.</p></li>
+<li><p><strong>Miscellaneous:</strong> Some unconventional use of the Python programming language.</p></li>
+</ul>
+</section>
+</section>
+<section id="todos-for-masterpiece">
+<h1>TODOs for MasterPiece<a class="headerlink" href="#todos-for-masterpiece" title="Link to this heading">¶</a></h1>
+<p>This will be an exceptionally well structured priorized list of TODOs:</p>
+<ul class="simple">
+<li><p>Docstrings contain many TODO:s which Sphinx should pick up and include with this file. Does not, fix please.</p></li>
+<li><p>The docs/conf.py file contains both masterpiece framework-specific and plugin-specific
+information (e.g., copyright and author). Copying the entire conf.py to every project
+built on masterpiece is a bad habit. Implement a base configuration class from which
+plugin developers can derive their own conf.py files, containing only plugin-specific
+info (DRY principle).</p></li>
+</ul>
+<p>The following items have been extraced from the source code:</p>
+<div class="admonition-todo admonition">
+<p class="admonition-title">Todo</p>
+<p>write unit tests</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#id2"><em>original entry</em></a> is located in ../CONTRIBUTING.rst, line 44.)</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<div class="graphviz"><object data="_images/inheritance-2e340c743eb3d9226282783f25e0a9f8467c6549.svg" type="image/svg+xml" class="inheritance graphviz">
+<p class="warning">Inheritance diagram of masterpiece.masterpiece, masterpiece.composite.Composite, masterpiece.application.Application, masterpiece.plugin.Plugin, masterpiece.plugmaster.PlugMaster, masterpiece.argmaestro.ArgMaestro, masterpiece.log.Log, masterpiece.treevisualizer.TreeVisualizer</p></object></div>
+</section>
+<section id="instances">
+<h2>Instances<a class="headerlink" href="#instances" title="Link to this heading">¶</a></h2>
+<p>Instances of these classes can be grouped into hierarchical structure to model real world apparatuses.</p>
+</section>
+<section id="instance-diagram">
+<h2>Instance Diagram<a class="headerlink" href="#instance-diagram" title="Link to this heading">¶</a></h2>
+<p>(Just a test to play with mermaid)</p>
+<div class="mermaid">
+            classDiagram
+    class MainCompositeObject {
+        MasterPiece1: MasterPiece
+        SubCompositeObject: SubCompositeObject
+    }
+    class SubCompositeObject {
+        SubMasterPiece1: MasterPiece
+        SubMasterPiece2: MasterPiece
+    }
+    MainCompositeObject --&gt; MasterPiece1 : contains
+    MainCompositeObject --&gt; SubCompositeObject : contains
+    SubCompositeObject --&gt; SubMasterPiece1 : contains
+    SubCompositeObject --&gt; SubMasterPiece2 : contains
+        </div></section>
+</section>
+<section id="index">
+<h1>Index<a class="headerlink" href="#index" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

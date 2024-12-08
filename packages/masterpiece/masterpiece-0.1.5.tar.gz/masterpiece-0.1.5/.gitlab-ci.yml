@@ -1,0 +1,140 @@
+stages:
+  - build
+  - test
+  - docs
+  - deploy
+  - release
+  
+variables:
+  PACKAGE_NAME: "masterpiece"
+
+
+
+build-job:
+  stage: build
+  image: python:3.12
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install build pyyaml
+  script:
+    - echo "*** build-job begins ..."
+    - make clean
+    - python -m build
+    - echo "*** build-job done ***"
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+
+unit-test-job:
+  image: python:3.12
+  stage: test
+  dependencies:
+    - build-job
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install coverage pyyaml
+    - pip install dist/*.whl
+  script:
+    - echo "*** Running unit tests with coverage analysis..."
+    - coverage run -m unittest discover -s tests -p "test_*.py"
+    - coverage report -m
+    - coverage xml
+    - echo "*** coverage done ***"
+  artifacts:
+    paths:
+      - coverage.xml
+    expire_in: 1 week
+
+run-app-test-job:
+  image: python:3.12
+  stage: test
+  dependencies:
+    - build-job
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip pyyaml
+    - ls dist/
+    - pip install dist/*.whl
+  script:
+    - echo "*** Running test app... "
+    - python examples/myapp.py
+    - echo "*** Test app run complete. ***"
+
+build_docs:
+  stage: docs
+  image: python:3.12
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install sphinx sphinx_bootstrap_theme pyyaml
+    - pip install extension sphinx_autodoc_typehints sphinxcontrib.plantuml sphinxcontrib.mermaid
+    - pip install build
+  script:
+    - echo "*** building docs... "
+    - cd docs && make html
+    - echo "*** docs done ***"
+  artifacts:
+    paths:
+      - docs/build/html
+    expire_in: 1 week
+
+lint-test-job:
+  stage: test
+  image: python:3.12
+  before_script:
+    - apt-get update && apt-get install -y npm
+    - npm install -g pyright
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip colorama pyyaml
+  script:
+    - echo "*** Running Pyright..."
+    - pyright masterpiece tests examples > pyright-report.txt || true
+    - echo "*** Pyright done ***"
+  artifacts:
+    paths:
+      - pyright-report.txt
+    expire_in: 1 week
+
+deploy-job:
+  stage: deploy
+  environment: production
+  image: python:3.12
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip pyyaml
+    - pip install build
+  script:
+    - echo "*** Deploying ... "
+    - make clean
+    - python -m build
+    - make install
+    - echo "*** Deployment done ***"
+  artifacts:
+    paths:
+      - dist/
+
+# Automated PyPI release job
+upload-pypi-job:
+  stage: release
+  needs: ["build-job"]
+  image: python:3.12
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install twine
+  script:
+    - echo "*** Deploying stable release ..."
+    - twine upload dist/* -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD"
+    - echo "*** Deployment done ***"
+  only:
+    - stable.*$

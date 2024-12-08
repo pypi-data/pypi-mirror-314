@@ -1,0 +1,71 @@
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[project]
+name = "masterpiece"
+version = "0.1.5"
+description = "Masterpiece framework"
+readme = {file = "README.rst", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {file = "LICENSE.rst", content-type = "text/markdown"}
+keywords = ["object-oriented", "plugin", "framework"]
+authors = [
+  {name = "J Meskanen", email = "juham.api@gmail.com" }
+]
+maintainers = [
+  {name = "J. Meskanen", email = "juham.api@gmail.com" }
+]
+
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.8",
+]
+
+dependencies = [
+  "requests >= 2.31",
+  "pytz >= 2024.1",
+  "colorama >= 0.3",
+  "importlib-metadata >= 4.0",
+  "pyyaml >= 6.0",
+  "typing-extensions >= 4.5.0"
+]
+
+[project.optional-dependencies]
+dev = ["check-manifest",
+    "flake8", "mypy",
+    "sphinx",
+    "sphinx_bootstrap_theme",
+    "types-PyYAML>=6.0",
+    "coverage>=7.6",
+    "types-PyYAML>=6.0",
+
+]
+
+# for plugin awareness - plugins written for "masterpiece.plugins" will load
+# into all applications built on the framework. Derived applications may introduce
+# new entry-point identifiers
+[project.entry-points."masterpiece.plugins"]
+
+[tool.setuptools.package-data]
+"masterpiece" = ["py.typed"]
+
+[project.urls]
+"Homepage" = "https://gitlab.com/juham/masterpiece"
+"Bug Reports" = "https://gitlab.com/juham/masterpiece"
+"Source" = "https://gitlab.com/juham/masterpiece"
+"Say Thanks!" = "http://meskanen.com"
+
+
+[tool.mypy]
+files = "masterpiece, tests"
+ignore_missing_imports = true
+
+
