@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyqt-openai"
+version = "1.8.3"
+description = "Python multipurpose chatbot that user can use GPT, other AI models altogether (Release Name: VividNode)"
+authors = [{ name = "Jung Gyu Yoon", email = "yjg30737@gmail.com" }]
+license = { text = "MIT" }
+readme = "README.md"
+dependencies = [
+    "PySide6",
+    "pyperclip",
+    "jinja2",
+    "requests",
+    "pyaudio",
+    "pillow",
+    "psutil",
+    "filetype",
+
+    "openai",
+    "anthropic",
+    "google-generativeai",
+    "replicate",
+
+    "llama-index",
+    "docx2txt",
+    "openpyxl",
+
+    "g4f==0.3.3.4",
+    "curl_cffi",
+    "litellm",
+
+    "edge-tts"
+]
+keywords = ['openai', 'pyqt', 'pyqt5', 'pyqt6', 'pyside6', 'desktop', 'app', 'chatbot', 'gpt', 'replicate', 'gemini', 'claude', 'llama', 'llm', 'gpt4free', 'litellm']
+
+requires-python = "<3.13, >=3.10"
+# PySide6 is not available for Python 3.13 yet
+# Also below 3.10, Error occurs in Shiboken (which is part of PySide6)
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: User Interfaces"
+]
+
+[project.urls]
+homepage = "https://github.com/yjg30737/pyqt-openai.git"
+
+[tool.setuptools]
+packages = ["pyqt_openai"]
+
+[project.scripts]
+pyqt-openai = "pyqt_openai.main:main"
