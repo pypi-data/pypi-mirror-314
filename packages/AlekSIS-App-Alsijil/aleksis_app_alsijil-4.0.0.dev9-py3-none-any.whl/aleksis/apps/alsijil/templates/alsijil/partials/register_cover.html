@@ -1,0 +1,53 @@
+{% load static i18n %}
+
+<div class="center-align">
+  <h1>{% trans 'Class Register' %}</h1>
+  <h5>{{ group.school_term }}</h5>
+  <p>({{ group.school_term.date_start }}–{{ group.school_term.date_end }})</p>
+  {% static "img/aleksis-banner.svg" as aleksis_banner %}
+  <img src="{% firstof SITE_PREFERENCES.theme__logo.url aleksis_banner %}"
+       alt="{{ SITE_PREFERENCES.general__title }} – Logo" class="max-size-600 center">
+  <h4 id="group-desc">
+    {{ group.name }}
+  </h4>
+  <p id="group-owners" class="flow-text">
+    {% trans 'Owners' %}:
+    {{ group.owners.all|join:', ' }}
+  </p>
+  <p id="printed-info">
+    {% trans 'Printed on' %} {{ today }}
+  </p>
+</div>
+<div>
+  <hr/>
+</div>
+<div>
+  <p>
+    {% blocktrans %}
+      This printout is intended for archival purposes. The main copy of
+      the class register is stored in the AlekSIS School Information
+      System.
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% blocktrans %}
+      Copies of the class register, both digital and as printout, must
+      only be kept inside the school and/or on devices authorised by the
+      school.
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% blocktrans %}
+      The owner of the group and the headteacher confirm the above, as
+      well as the correctness of this printout.
+    {% endblocktrans %}
+  </p>
+  <div id="signatures">
+    <div class="signature">
+      {% trans 'Owners' %}
+    </div>
+    <div class="signature">
+      {% trans 'Headteacher' %}
+    </div>
+  </div>
+</div>

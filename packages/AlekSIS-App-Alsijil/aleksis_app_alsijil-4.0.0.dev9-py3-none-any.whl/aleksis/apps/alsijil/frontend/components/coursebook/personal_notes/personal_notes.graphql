@@ -1,0 +1,45 @@
+query personalNotes($orderBy: [String], $filters: JSONString) {
+  items: personalNotes(orderBy: $orderBy, filters: $filters) {
+    id
+    note
+    extraMark {
+      id
+    }
+    canEdit
+    canDelete
+  }
+}
+
+mutation createPersonalNotes($input: [BatchCreatePersonalNoteInput]!) {
+  createPersonalNotes(input: $input) {
+    items: personalNotes {
+      id
+      note
+      extraMark {
+        id
+      }
+      canEdit
+      canDelete
+    }
+  }
+}
+
+mutation deletePersonalNotes($ids: [ID]!) {
+  deletePersonalNotes(ids: $ids) {
+    deletionCount
+  }
+}
+
+mutation updatePersonalNotes($input: [BatchPatchPersonalNoteInput]!) {
+  updatePersonalNotes(input: $input) {
+    items: personalNotes {
+      id
+      note
+      extraMark {
+        id
+      }
+      canEdit
+      canDelete
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{% load i18n data_helpers %}
+
+<h4>{% blocktrans with group=group.name %}Persons in Group {{ group }}{% endblocktrans %}</h4>
+
+<table id="persons">
+  <thead>
+  <tr>
+    <th>{% trans 'No.' %}</th>
+    <th>{% trans 'Last name' %}</th>
+    <th>{% trans 'First name' %}</th>
+    <th>{% trans 'Sex' %}</th>
+    <th>{% trans 'Date of birth' %}</th>
+    <th>{% trans '(a)' %}</th>
+    {% for absence_reason in absence_reasons %}
+      <th style="color: {{ absence_reason.colour }};">
+        ({{ absence_reason.short_name }})
+      </th>
+    {% endfor %}
+    {% for absence_reason in absence_reasons_not_counted %}
+      <th style="color: {{ absence_reason.colour }};">
+        ({{ absence_reason.short_name }})
+      </th>
+    {% endfor %}
+    <th>{% trans '(b)' %}</th>
+    {% for extra_mark in extra_marks %}
+      <th>({{ extra_mark.short_name }})</th>
+    {% endfor %}
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for person in group.members_with_stats %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ person.last_name }}</td>
+      <td>{{ person.first_name }}</td>
+      <td>{{ person.get_sex_display }}</td>
+      <td>{{ person.date_of_birth|default_if_none:'' }}</td>
+      <td>{{ person.absence_count }}</td>
+      {% for absence_reason in absence_reasons %}
+        <td>{{ person|get_dict:absence_reason.count_label }}</td>
+      {% endfor %}
+      {% for absence_reason in absence_reasons_not_counted %}
+        <td>{{ person|get_dict:absence_reason.count_label }}</td>
+      {% endfor %}
+      <td>{{ person.tardiness_sum|default_if_none:0 }}'/{{ person.tardiness_count }}&times;</td>
+      {% for extra_mark in extra_marks %}
+        <td>{{ person|get_dict:extra_mark.count_label }}</td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

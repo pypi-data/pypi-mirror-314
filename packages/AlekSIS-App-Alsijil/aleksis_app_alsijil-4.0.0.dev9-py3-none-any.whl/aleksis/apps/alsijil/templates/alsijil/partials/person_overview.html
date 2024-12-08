@@ -1,0 +1,139 @@
+{% load static i18n data_helpers %}
+
+<h4>{% blocktrans with full_name=person.full_name %}Personal Overview: {{ full_name }}{% endblocktrans %}</h4>
+
+<h5>{% blocktrans %}Contact Details{% endblocktrans %}</h5>
+<table class="person-info">
+  <tr>
+    <td rowspan="6" class="person-img">
+      {% if person.photo %}
+        <img src="{{ person.photo.url }}" alt="{{ person.full_name }}"/>
+      {% else %}
+        <img src="{% static 'img/fallback.png' %}" alt="{{ person.full_name }}"/>
+      {% endif %}
+    </td>
+    <td><i class="material-icons iconify" data-icon="mdi:account-outline"></i></td>
+    <td colspan="2">{{ person.first_name }} {{ person.additional_name }} {{ person.last_name }}</td>
+  </tr>
+  <tr>
+    <td><i class="material-icons iconify" data-icon="mdi:human-non-binary"></i></td>
+    <td colspan="2">{{ person.get_sex_display }}</td>
+  </tr>
+  <tr>
+    <td><i class="material-icons iconify" data-icon="mdi:map-marker-outline"></i></td>
+    <td>{{ person.street }} {{ person.housenumber }}</td>
+    <td>{{ person.postal_code }} {{ person.place }}</td>
+  </tr>
+  <tr>
+    <td><i class="material-icons iconify" data-icon="mdi:phone-outline"></i></td>
+    <td>{{ person.phone_number }}</td>
+    <td>{{ person.mobile_number }}</td>
+  </tr>
+  <tr>
+    <td><i class="material-icons iconify" data-icon="mdi:email-outline"></i></td>
+    <td colspan="2">{{ person.email }}</td>
+  </tr>
+  <tr>
+    <td><i class="material-icons iconify" data-icon="mdi:cake"></i></td>
+    <td colspan="2">{{ person.date_of_birth|date }}</td>
+  </tr>
+</table>
+
+<div class="row">
+  <div class="col s6">
+    <h5>{% trans 'Absences and Tardiness' %}</h5>
+    <table>
+      <tr>
+        <th colspan="3">{% trans 'Absences' %}</th>
+        <td>{{ person.absence_count }}</td>
+      </tr>
+      {% for absence_reason in absence_reasons %}
+        <tr style="color: {{ absence_reason.colour }};">
+          <th>{{ absence_reason.name }}</th>
+          <td>{{ person|get_dict:absence_reason.count_label }}</td>
+        </tr>
+      {% endfor %}
+      {% for absence_reason in absence_reasons_not_counted %}
+        <tr style="color: {{ absence_reason.colour }};">
+          <th colspan="3">{{ absence_reason.name }}</th>
+          <td>{{ person|get_dict:absence_reason.count_label }}</td>
+        </tr>
+      {% endfor %}
+      <tr>
+        <th colspan="3">{% trans 'Tardiness' %}</th>
+        <td>{{ person.tardiness_sum|default_if_none:0 }}'/{{ person.tardiness_count }}&times;</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col s6">
+    {% if extra_marks %}
+      <h5>{% trans 'Extra Marks' %}</h5>
+      <table>
+        {% for extra_mark in extra_marks %}
+          <tr>
+            <th>{{ extra_mark.name }}</th>
+            <td>{{ person|get_dict:extra_mark.count_label }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+  </div>
+</div>
+
+<h5>{% trans 'Absences and Tardinesses' %}</h5>
+<table class="small-print">
+  <thead>
+  <tr>
+    <th>{% trans 'Date' %}</th>
+    <th>{% trans 'Subject' %}</th>
+    <th>{% trans 'Teachers' %}</th>
+    <th>{% trans 'Absent' %}</th>
+    <th>{% trans 'Tardiness' %}</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for participation in person.notable_participations %}
+    <tr>
+      <td>{{ participation.related_documentation.datetime_start }}</td>
+      <td>
+        {{ participation.related_documentation.subject.short_name }}
+      </td>
+      <td>{{ participation.related_documentation.get_teachers_short_names|join:', ' }}</td>
+      <td style="color: {{ absence_reason.colour }};">
+        {{ participation.absence_reason.short_name }}
+      </td>
+      <td>{{ participation.tardiness|default_if_none:"" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h5>{% trans 'Personal Notes' %}</h5>
+<table class="small-print">
+  <thead>
+  <tr>
+    <th>{% trans 'Date' %}</th>
+    <th>{% trans 'Subject' %}</th>
+    <th>{% trans 'Teacher' %}</th>
+    <th colspan="2">{% trans 'Remarks' %}</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for note in person.new_personal_notes.all %}
+    <tr>
+      <td>{{ note.documentation.datetime_start }}</td>
+      <td>
+        {{ note.documentation.subject.short_name }}
+      </td>
+      <td>{{ note.documentation.get_teachers_short_names|join:', ' }}</td>
+      {% if note.extra_mark %}
+        <td>{{ note.extra_mark.short_name }}</td>
+      {% endif %}
+      <td>{{ note.note }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

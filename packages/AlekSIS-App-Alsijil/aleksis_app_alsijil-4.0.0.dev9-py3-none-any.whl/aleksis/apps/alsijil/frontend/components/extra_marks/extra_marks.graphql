@@ -1,0 +1,48 @@
+query extraMarks($orderBy: [String], $filters: JSONString) {
+  items: extraMarks(orderBy: $orderBy, filters: $filters) {
+    id
+    shortName
+    name
+    colourFg
+    colourBg
+    showInCoursebook
+    canEdit
+    canDelete
+  }
+}
+
+mutation createExtraMarks($input: [BatchCreateExtraMarkInput]!) {
+  createExtraMarks(input: $input) {
+    items: extraMarks {
+      id
+      shortName
+      name
+      colourFg
+      colourBg
+      showInCoursebook
+      canEdit
+      canDelete
+    }
+  }
+}
+
+mutation deleteExtraMarks($ids: [ID]!) {
+  deleteExtraMarks(ids: $ids) {
+    deletionCount
+  }
+}
+
+mutation updateExtraMarks($input: [BatchPatchExtraMarkInput]!) {
+  updateExtraMarks(input: $input) {
+    items: extraMarks {
+      id
+      shortName
+      name
+      colourFg
+      colourBg
+      showInCoursebook
+      canEdit
+      canDelete
+    }
+  }
+}

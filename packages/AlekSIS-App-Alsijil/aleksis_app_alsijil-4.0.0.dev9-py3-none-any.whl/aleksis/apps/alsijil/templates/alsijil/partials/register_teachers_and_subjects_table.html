@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<table id="lessons">
+  <thead>
+  <tr>
+    {% if groups|length > 1 %}
+      <th>{% trans 'Group' %}</th>
+    {% endif %}
+    <th>{% trans 'Subject' %}</th>
+    <th>{% trans 'Teacher' %}</th>
+    <th>{% trans 'Per week' %}</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for group in groups %}
+    {% for course in group.courses.all %}
+      <tr>
+        {% if groups|length > 1 %}
+          <td>{{ group.name }}</td>
+        {% endif %}
+        <td>{{ course.subject.name }}</td>
+        <td>{{ course.teachers.all|join:', ' }}</td>
+        <td>{{ course.lesson_quota }}</td>
+      </tr>
+    {% endfor %}
+  {% endfor %}
+  </tbody>
+</table>
