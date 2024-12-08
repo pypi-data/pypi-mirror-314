@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["tivars*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.default.json", "*.xml"]
+
+
+[project]
+name = "tivars"
+version = "0.9.2"
+description = "A library for interacting with TI-(e)z80 (82/83/84 series) calculator files"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+
+[project.urls]
+Repository = "https://github.com/TI-Toolkit/tivars_lib_py"
+Documentation = "https://ti-toolkit.github.io/tivars_lib_py/"
+
+[project.optional-dependencies]
+images = ["pillow", "numpy"]
+arrays = ["numpy"]
+
+
+[tool.coverage.run]
+omit = ["tivars/tokens/*"]
+
+
+[tool.pydoctor]
+add-package = ["./tivars"]
+project-name = "tivars_lib_py"
+
+theme = "readthedocs"
+docformat = "restructuredtext"
+
+intersphinx = ["https://docs.python.org/3/objects.inv",
+               "https://pillow.readthedocs.io/en/stable/objects.inv"]
+
+privacy = ["PRIVATE:**.__class_getitem__", "PRIVATE:**.__get__", "PRIVATE:**.__init_subclass__", "PRIVATE:**.__set__", "PRIVATE:**.__set_name__",
+           "HIDDEN:**.__class__", "HIDDEN:**.__slots__",
+
+           "PRIVATE:tivars.data.Section.__*__",
+           "PUBLIC:tivars.data.Section.__init__", "PUBLIC:tivars.data.Section.__copy__",
+
+           "PRIVATE:tivars.data.View.__*__",
+           "PUBLIC:tivars.data.View.__init__", "PUBLIC:tivars.data.View.__copy__", "PUBLIC:tivars.data.View.__getitem__",
+
+           "PRIVATE:tivars.models.model.*",
+           "PUBLIC:tivars.models.model.TIFeature", "PUBLIC:tivars.models.model.TIModel",
+
+           "PRIVATE:tivars.numeric.*",
+           "PUBLIC:tivars.numeric.BCD", "PUBLIC:tivars.numeric.LeftNibbleBCD", "PUBLIC:tivars.numeric.RightNibbleBCD",
+           "PUBLIC:tivars.numeric.replacer", "PUBLIC:tivars.numeric.sign", "PUBLIC:tivars.numeric.squash",
+           "PUBLIC:tivars.numeric.pi"
+]
