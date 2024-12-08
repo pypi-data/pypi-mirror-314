@@ -1,0 +1,42 @@
+# import randomcontent
+# The code in randomcontent/__init__.py will run.
+# from randomcontent.generators import text_generator
+# First, the __init__.py file in the randomcontent/generators directory is executed.
+
+# You can define what’s imported when someone uses from <package> import * by setting the __all__ variable in __init__.py.
+# __all__ = ["generate_text", "generate_number", "generate_mock_data"]
+
+# Purpose of the tests Folder
+# Testing Code Quality, Automation, Error Prevention
+# Structure of tests Folder
+# testing a specific component of the application (like a module or function). For example:test_generators.py: Tests the generate_text
+# The assert statement is used to check if the expected condition holds true. If it doesn’t, the test will fail.
+# Running Tests
+# pytest
+
+# generate requirements.txt 
+# pip freeze > requirements.txt
+
+
+# What is setup.py?
+# The setup.py file is a Python script used for packaging and distributing your project as a Python package. It contains metadata about your project and allows tools like setuptools to create distributions of your project that can be installed via pip.
+
+# What is wheel?
+# The wheel format is a built distribution format that helps with faster installation compared to the traditional source distribution (.tar.gz or .zip).
+# Wheel is not required directly in your setup.py, but it's a common tool used for packaging Python libraries. 
+
+# When you're packaging a Python project, you need to create distribution files (such as .tar.gz and .whl) that others can install via pip. 
+# sdist stands for "source distribution". It creates a .tar.gz (or .zip) file containing your source code and your setup.py.
+# bdist_wheel stands for "binary distribution". It creates a .whl (Wheel) file, which is a precompiled distribution format for Python. Wheel files make installation faster.
+
+# python setup.py sdist bdist_wheel will create both a source distribution (.tar.gz) and a wheel distribution (.whl).
+
+# What is twine?
+# Twine is a tool used for securely uploading Python packages to the Python Package Index (PyPI)
+
+
+# How to upload your package 
+
+# 1.Build Your Distribution [python setup.py sdist bdist_wheel]
+# 2.Upload to PyPI with Twine [twine upload dist/*]
+
