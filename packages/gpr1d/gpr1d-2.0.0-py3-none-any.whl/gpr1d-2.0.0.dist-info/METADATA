@@ -1,0 +1,143 @@
+Metadata-Version: 2.1
+Name: gpr1d
+Version: 2.0.0
+Summary: Classes for Gaussian Process Regression fitting of 1D data with errorbars
+Author-email: Aaron Ho <aaronkho@mit.edu>
+License: MIT License
+        
+        Copyright (c) 2017 Aaron Ho
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://gitlab.com/aaronkho/GPR1D
+Project-URL: Bug Reports, https://gitlab.com/aaronkho/GPR1D/-/issues
+Project-URL: Source, https://gitlab.com/aaronkho/GPR1D
+Keywords: gaussian process regression,1D data fitting,regression analysis,kriging,noisy input,heteroscedastic error
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: <3.13,>=3.7
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: pip
+Requires-Dist: numpy>=1.13
+Requires-Dist: scipy>=0.17
+Requires-Dist: pandas
+Requires-Dist: ipython
+Provides-Extra: dev
+Requires-Dist: coverage; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Provides-Extra: build
+Requires-Dist: build; extra == "build"
+Requires-Dist: twine; extra == "build"
+Provides-Extra: demo
+Requires-Dist: matplotlib; extra == "demo"
+Provides-Extra: gui
+Requires-Dist: pyqt5; extra == "gui"
+Requires-Dist: matplotlib; extra == "gui"
+Provides-Extra: profile
+Requires-Dist: scikit-learn; extra == "profile"
+
+gpr1d
+=====
+
+Installing the gpr1d program
+----------------------------
+
+*Author: Aaron Ho (01/06/2018)*
+
+Installation is **mandatory** for this package!
+
+For first time users, it is strongly recommended to use the GUI
+developed for this Python package. To obtain the Python package
+dependencies needed to use this capability, install this package
+by using the following on the command line::
+
+    pip install [--user] gpr1d[guis]
+
+Use the :code:`--user` flag if you do not have root access on the system
+that you are working on. If you have already cloned the
+repository, enter the top level of the repository directory and
+use the following instead::
+
+    pip install [--user] -e .[guis]
+
+Removal of the :code:`[guis]` portion will no longer check for
+the GUI generation and plotting packages needed for this
+functionality. However, these packages are not crucial for the
+base classes and algorithms.
+
+
+Documentation
+=============
+
+Documentation of the equations used in the algorithm, along with
+the available kernels and optimizers, can be found in docs/.
+Documentation of the :code:`gpr1d` module can be found on
+`GitLab pages <https://aaronkho.gitlab.io/GPR1D>`_
+
+
+Using the gpr1d program
+-----------------------
+
+For those who wish to include the functionality of this package
+into their own Python scripts, a demo script is provided in
+:code:`src/gpr1d/scripts`. The basic syntax used to create kernels,
+select settings, and perform GP regression fits are outlined there.
+
+In addition, a simplified :code:`gpr1d` class is available for those
+wishing to distill the parameters into a subset of the most
+crucial ones.
+
+For any questions or to report bugs, please do so through the
+proper channels in the GitLab repository.
+
+
+*Important note for users!*
+
+The following runtime warnings are common within this routine,
+but they are filtered out by default::
+
+    RuntimeWarning: overflow encountered in double_scalars
+    RuntimeWarning: invalid value encountered in true_divide
+    RuntimeWarning: invalid value encountered in sqrt
+
+
+They normally occur when using the kernel restarts option (as
+in the demo) and do not necessarily mean that the resulting
+fit is poor.
+
+Plotting the resulting fit and errors is the recommended way to
+check its quality. The log-marginal-likelihood metric can also
+be used, but is only valuable when comparing different fits of
+the same data, ie. its absolute value is meaningless.
+
+From v1.1.1, the adjusted R\ :sup:`2` and pseudo R\ :sup:`2`
+metrics are now available. The adjusted R\ :sup:`2` metric provides
+a measure of how close the fit is to the input data points. The
+pseudo R\ :sup:`2` provides a measure of this closeness accounting
+for the input data uncertainties.
