@@ -1,0 +1,840 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>juham.mqtt &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="juham.shelly" href="../shelly/index.html" />
+    <link rel="prev" title="juham.database" href="../database/index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">juham.mqtt</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho"><code class="docutils literal notranslate"><span class="pre">JPaho</span></code></a><ul>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.classattrs_from_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.classattrs_from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.classattrs_to_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.classattrs_to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.connect_to_server"><code class="docutils literal notranslate"><span class="pre">JPaho.connect_to_server()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.connected_flag"><code class="docutils literal notranslate"><span class="pre">JPaho.connected_flag</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.copy"><code class="docutils literal notranslate"><span class="pre">JPaho.copy()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.debug"><code class="docutils literal notranslate"><span class="pre">JPaho.debug()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.disconnect"><code class="docutils literal notranslate"><span class="pre">JPaho.disconnect()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.do"><code class="docutils literal notranslate"><span class="pre">JPaho.do()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.error"><code class="docutils literal notranslate"><span class="pre">JPaho.error()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.factory"><code class="docutils literal notranslate"><span class="pre">JPaho.factory()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.find_class"><code class="docutils literal notranslate"><span class="pre">JPaho.find_class()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.from_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.get_class_id"><code class="docutils literal notranslate"><span class="pre">JPaho.get_class_id()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.has_class_method_directly"><code class="docutils literal notranslate"><span class="pre">JPaho.has_class_method_directly()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.host"><code class="docutils literal notranslate"><span class="pre">JPaho.host</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.info"><code class="docutils literal notranslate"><span class="pre">JPaho.info()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.init_class"><code class="docutils literal notranslate"><span class="pre">JPaho.init_class()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.instantiate"><code class="docutils literal notranslate"><span class="pre">JPaho.instantiate()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_debug"><code class="docutils literal notranslate"><span class="pre">JPaho.log_debug()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_error"><code class="docutils literal notranslate"><span class="pre">JPaho.log_error()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_info"><code class="docutils literal notranslate"><span class="pre">JPaho.log_info()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_warning"><code class="docutils literal notranslate"><span class="pre">JPaho.log_warning()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.loop_forever"><code class="docutils literal notranslate"><span class="pre">JPaho.loop_forever()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.loop_start"><code class="docutils literal notranslate"><span class="pre">JPaho.loop_start()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.loop_stop"><code class="docutils literal notranslate"><span class="pre">JPaho.loop_stop()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.make_url"><code class="docutils literal notranslate"><span class="pre">JPaho.make_url()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.on_connect"><code class="docutils literal notranslate"><span class="pre">JPaho.on_connect</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.on_disconnect"><code class="docutils literal notranslate"><span class="pre">JPaho.on_disconnect</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.on_message"><code class="docutils literal notranslate"><span class="pre">JPaho.on_message</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.paho_version"><code class="docutils literal notranslate"><span class="pre">JPaho.paho_version</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.parent"><code class="docutils literal notranslate"><span class="pre">JPaho.parent</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.publish"><code class="docutils literal notranslate"><span class="pre">JPaho.publish()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.register"><code class="docutils literal notranslate"><span class="pre">JPaho.register()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.resolve_url"><code class="docutils literal notranslate"><span class="pre">JPaho.resolve_url()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.root"><code class="docutils literal notranslate"><span class="pre">JPaho.root()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.run"><code class="docutils literal notranslate"><span class="pre">JPaho.run()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.run_forever"><code class="docutils literal notranslate"><span class="pre">JPaho.run_forever()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.set_log"><code class="docutils literal notranslate"><span class="pre">JPaho.set_log()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.shutdown"><code class="docutils literal notranslate"><span class="pre">JPaho.shutdown()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.subscribe"><code class="docutils literal notranslate"><span class="pre">JPaho.subscribe()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.to_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.warning"><code class="docutils literal notranslate"><span class="pre">JPaho.warning()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../database/index.html" title="Previous Chapter: juham.database"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; juham.database</span>
+    </a>
+  </li>
+  <li>
+    <a href="../shelly/index.html" title="Next Chapter: juham.shelly"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">juham.shelly &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../../_sources/juham/mqtt/index.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">juham.mqtt</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho"><code class="docutils literal notranslate"><span class="pre">JPaho</span></code></a><ul>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.classattrs_from_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.classattrs_from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.classattrs_to_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.classattrs_to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.connect_to_server"><code class="docutils literal notranslate"><span class="pre">JPaho.connect_to_server()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.connected_flag"><code class="docutils literal notranslate"><span class="pre">JPaho.connected_flag</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.copy"><code class="docutils literal notranslate"><span class="pre">JPaho.copy()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.debug"><code class="docutils literal notranslate"><span class="pre">JPaho.debug()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.disconnect"><code class="docutils literal notranslate"><span class="pre">JPaho.disconnect()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.do"><code class="docutils literal notranslate"><span class="pre">JPaho.do()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.error"><code class="docutils literal notranslate"><span class="pre">JPaho.error()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.factory"><code class="docutils literal notranslate"><span class="pre">JPaho.factory()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.find_class"><code class="docutils literal notranslate"><span class="pre">JPaho.find_class()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.from_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.get_class_id"><code class="docutils literal notranslate"><span class="pre">JPaho.get_class_id()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.has_class_method_directly"><code class="docutils literal notranslate"><span class="pre">JPaho.has_class_method_directly()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.host"><code class="docutils literal notranslate"><span class="pre">JPaho.host</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.info"><code class="docutils literal notranslate"><span class="pre">JPaho.info()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.init_class"><code class="docutils literal notranslate"><span class="pre">JPaho.init_class()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.instantiate"><code class="docutils literal notranslate"><span class="pre">JPaho.instantiate()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_debug"><code class="docutils literal notranslate"><span class="pre">JPaho.log_debug()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_error"><code class="docutils literal notranslate"><span class="pre">JPaho.log_error()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_info"><code class="docutils literal notranslate"><span class="pre">JPaho.log_info()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.log_warning"><code class="docutils literal notranslate"><span class="pre">JPaho.log_warning()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.loop_forever"><code class="docutils literal notranslate"><span class="pre">JPaho.loop_forever()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.loop_start"><code class="docutils literal notranslate"><span class="pre">JPaho.loop_start()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.loop_stop"><code class="docutils literal notranslate"><span class="pre">JPaho.loop_stop()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.make_url"><code class="docutils literal notranslate"><span class="pre">JPaho.make_url()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.on_connect"><code class="docutils literal notranslate"><span class="pre">JPaho.on_connect</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.on_disconnect"><code class="docutils literal notranslate"><span class="pre">JPaho.on_disconnect</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.on_message"><code class="docutils literal notranslate"><span class="pre">JPaho.on_message</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.paho_version"><code class="docutils literal notranslate"><span class="pre">JPaho.paho_version</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.parent"><code class="docutils literal notranslate"><span class="pre">JPaho.parent</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.publish"><code class="docutils literal notranslate"><span class="pre">JPaho.publish()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.register"><code class="docutils literal notranslate"><span class="pre">JPaho.register()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.resolve_url"><code class="docutils literal notranslate"><span class="pre">JPaho.resolve_url()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.root"><code class="docutils literal notranslate"><span class="pre">JPaho.root()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.run"><code class="docutils literal notranslate"><span class="pre">JPaho.run()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.run_forever"><code class="docutils literal notranslate"><span class="pre">JPaho.run_forever()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.set_log"><code class="docutils literal notranslate"><span class="pre">JPaho.set_log()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.shutdown"><code class="docutils literal notranslate"><span class="pre">JPaho.shutdown()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.subscribe"><code class="docutils literal notranslate"><span class="pre">JPaho.subscribe()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.to_dict"><code class="docutils literal notranslate"><span class="pre">JPaho.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#juham.mqtt.JPaho.warning"><code class="docutils literal notranslate"><span class="pre">JPaho.warning()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="../database/index.html" title="Previous Chapter: juham.database"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; juham.database</span>
+    </a>
+  </li>
+  <li>
+    <a href="../shelly/index.html" title="Next Chapter: juham.shelly"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">juham.shelly &raquo;</span>
+    </a>
+  </li>
+<div id="sourcelink">
+  <a href="../../_sources/juham/mqtt/index.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="module-juham.mqtt">
+<span id="juham-mqtt"></span><h1>juham.mqtt<a class="headerlink" href="#module-juham.mqtt" title="Link to this heading">¶</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>Classes implementing MQTT publish/subscriber network for Juham.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">juham.mqtt.</span></span><span class="sig-name descname"><span class="pre">JPaho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'paho'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#juham.base.JMqtt" title="juham.base.jmqtt.JMqtt"><code class="xref py py-class docutils literal notranslate"><span class="pre">JMqtt</span></code></a></p>
+<p>MQTT broker implementation based on paho.mqtt.</p>
+<p>Creates a paho mosquitto client running on localhost and port 1883.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.classattrs_from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classattrs_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.classattrs_from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Set only the class’s own attributes from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.classattrs_to_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classattrs_to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.classattrs_to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert the class’s own attributes to a dictionary, excluding inherited and private ones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.connect_to_server">
+<span class="sig-name descname"><span class="pre">connect_to_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'locahost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1883</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepalive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.connect_to_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.connect_to_server" title="Link to this definition">¶</a></dt>
+<dd><p>Connects the client to the mqtt broker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.connected_flag">
+<span class="sig-name descname"><span class="pre">connected_flag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#juham.mqtt.JPaho.connected_flag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Create and return a copy of the current object.</p>
+<p>This method serializes the current object to a dictionary using the <cite>to_dict</cite> method,
+creates a new instance of the object’s class, and populates it with the serialized data
+using the <cite>from_dict</cite> method.</p>
+<p>This method uses class identifier based instantiation (see factory method pattern) to
+create a new instance of the object, and ‘to_dict’ and ‘from_dict’  methods to initialize
+object’s state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">MasterPiece</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new instance of the object’s class with the same state as the original object.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clone_of_john</span> <span class="o">=</span> <span class="n">john</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.debug" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given debug message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The information message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reasoncode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.disconnect" title="Link to this definition">¶</a></dt>
+<dd><p>Disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reasoncode</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – MQTT 5 reason code for disconnection. Defaults to None.</p></li>
+<li><p><strong>properties</strong> (<em>Optional</em><em>[</em><em>Any</em><em>]</em>) – MQTT 5 properties for disconnection. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.do">
+<span class="sig-name descname"><span class="pre">do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.do" title="Link to this definition">¶</a></dt>
+<dd><p>Execute the given action to the object, by calling the provided <cite>action</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>action</strong> (<em>Callable</em><em>[</em><em>[</em><em>&quot;MasterPiece&quot;</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>]</em>) – A callable that takes</p></li>
+<li><p><strong>(</strong><strong>node</strong></p></li>
+<li><p><strong>boolean.</strong> (<em>context</em><em>) </em><em>and returns a</em>)</p></li>
+<li><p><strong>context</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Any context data that the action may use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The return value from the executed action.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.error" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given error message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.factory">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">factory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.factory" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the dictionary holding class names and associated classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>with class names and associated classes</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>factory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.find_class">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.find_class" title="Link to this definition">¶</a></dt>
+<dd><p>Create an instance of the class corresponding to the given class identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>class_id</strong> (<em>str</em>) – Identifier of the class to instantiate.</p></li>
+<li><p><strong>*args</strong> – Optional arguments to pass to the class constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class corresponding to the given class identifier.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MasterPiece</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.from_dict">
+<span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Update instance attributes from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.get_class_id">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_class_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.get_class_id" title="Link to this definition">¶</a></dt>
+<dd><p>Return the class id of the class. Each class has an unique
+name that can be used for instantiating the class via
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Object.instantiate()</span></code> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cls</strong> (<em>class</em>) – class</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>unique class identifier through which the class can be
+instantiated by factory method pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>id (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.has_class_method_directly">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_class_method_directly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.has_class_method_directly" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the method is defined directly in the class (not inherited).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.host">
+<span class="sig-name descname"><span class="pre">host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'localhost'</span></em><a class="headerlink" href="#juham.mqtt.JPaho.host" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.info" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given information message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The information message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.init_class">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clazz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.init_class" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize class.  Registers the class into the
+class factory .</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clazz</strong> (<em>class</em>) – class to be initialized</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.instantiate">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">instantiate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_id</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.instantiate" title="Link to this definition">¶</a></dt>
+<dd><p>Create an instance of the class corresponding to the given class identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>class_id</strong> (<em>str</em>) – Identifier of the class to instantiate.</p></li>
+<li><p><strong>*args</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span>) – Optional arguments to pass to the class constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class corresponding to the given class identifier.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MasterPiece</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.log_debug">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.log_debug" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given debug message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.log_error">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.log_error" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given  message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.log_info">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.log_info" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given  message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.log_warning">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.log_warning" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given debug message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.loop_forever">
+<span class="sig-name descname"><span class="pre">loop_forever</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.loop_forever"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.loop_forever" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.loop_start">
+<span class="sig-name descname"><span class="pre">loop_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.loop_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.loop_start" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.loop_stop">
+<span class="sig-name descname"><span class="pre">loop_stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.loop_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.loop_stop" title="Link to this definition">¶</a></dt>
+<dd><p>Stop the network loop.</p>
+<p>No further messages shall be dispatched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.make_url">
+<span class="sig-name descname"><span class="pre">make_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.make_url" title="Link to this definition">¶</a></dt>
+<dd><p>Generate the URL for the composite, including all children.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">URL</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.on_connect">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_connect</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#juham.mqtt.JPaho.on_connect" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.on_disconnect">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_disconnect</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#juham.mqtt.JPaho.on_disconnect" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.on_message">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MQTTMessage</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#juham.mqtt.JPaho.on_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.paho_version">
+<span class="sig-name descname"><span class="pre">paho_version</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#juham.mqtt.JPaho.paho_version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MasterPiece</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#juham.mqtt.JPaho.parent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.publish">
+<span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.publish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.publish" title="Link to this definition">¶</a></dt>
+<dd><p>Publishes an MQTT message.</p>
+<p>This method sends a message to the MQTT broker and publish it
+to the given topic.</p>
+<p>Parameters:
+msg (str): The topic the message is published to.
+msg (str): The message to be published.</p>
+<p>Raises:
+ValueError: If the message is not a string or is empty.
+ConnectionError: If there is a problem connecting to the MQTT broker.
+MQTTException: If there is an error during the publish operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.register">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.register" title="Link to this definition">¶</a></dt>
+<dd><p>Register the class.</p>
+<p>Called immediately upon class initialization, right before the class attributes
+are loaded from the class specific configuration files.</p>
+<p>Subclasses can extend this with custom register functionality:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyMasterPiece</span><span class="p">(</span><span class="n">MasterPiece</span><span class="p">):</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>  <span class="c1"># Don&#39;t forget</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_custom_field</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.resolve_url">
+<span class="sig-name descname"><span class="pre">resolve_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.resolve_url" title="Link to this definition">¶</a></dt>
+<dd><p>Find a MasterPiece in the hierarchy matching the URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">MasterPiece</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.root">
+<span class="sig-name descname"><span class="pre">root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.root" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the root object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>root object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>MasterPiece</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.run" title="Link to this definition">¶</a></dt>
+<dd><p>Run the masterpiece.  Dispatches the call to <cite>payload</cite> object and
+returns  the control to the caller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.run_forever">
+<span class="sig-name descname"><span class="pre">run_forever</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.run_forever" title="Link to this definition">¶</a></dt>
+<dd><p>Run the payload forever. This method will return only when violently
+terminated. If the object does not have playload object, or it is not
+instance of ‘MasterPiece’ class then returns immediately and this method has
+no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.set_log">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.set_log" title="Link to this definition">¶</a></dt>
+<dd><p>Set logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>l</strong> (<em>logger</em>) – logger object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.shutdown">
+<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.shutdown" title="Link to this definition">¶</a></dt>
+<dd><p>Shutdown the payload object. If the payload object is None, or is not instance of MasterPiece,
+then the call has no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.subscribe">
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/juham/mqtt/jpaho.html#JPaho.subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#juham.mqtt.JPaho.subscribe" title="Link to this definition">¶</a></dt>
+<dd><p>Subscribe to the given topic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert instance attributes to a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="juham.mqtt.JPaho.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#juham.mqtt.JPaho.warning" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given warning message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
