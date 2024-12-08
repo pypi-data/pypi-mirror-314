@@ -1,0 +1,106 @@
+[build-system]
+requires = [
+    "hatchling>=1.8.1",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "anasyspythontools"
+dynamic = [
+    "version",
+]
+description = "A suite of Python tools for use with Analysis Studio AFM-IR files."
+readme = "README.rst"
+license = "MIT"
+requires-python = ">=3.8"
+authors = [
+    { name = "Georg Ramer", email = "georg.ramer@tuwien.ac.at" },
+    { name = "Wouter Duverger", email = "wouter.duverger@kuleuven.be" },
+    { name = "Cody Schindler", email = "cschindler@anasysinstruments.com" },
+]
+keywords = [
+    ".axd",
+    ".axz",
+    "AFM",
+    "Anasys",
+    "Instruments",
+    "atomic",
+    "axd",
+    "axz",
+    "force",
+    "hyperspectral",
+    "infrared",
+    "microscope",
+    "AFM-IR",
+    "microscopy",
+    "s-snom",
+    "spectra",
+    "spectroscopy",
+    "spectrum",
+    "ssnom",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.6",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = ["scipy>=1.9.1",
+                "matplotlib>=3.5.3",
+                "matplotlib-scalebar>=0.8.1",
+                "numpy>=1.22",
+                "xarray>=2022.6.0",
+                "IPython>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/GeorgRamer/anasys-python-tools"
+
+[tool.hatch.version]
+path = "anasyspythontools/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "anasyspythontools/*.py",
+]
+
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.12", "3.11", "3.8"]
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["anasyspythontools"]
+
+[tool.hatch.envs.test]
+dependencies = ["coverage[toml]",
+                "pytest",
+                "pytest-cov"]
+
+[tool.hatch.envs.style]
+skip-install = true
+dependencies = [
+  "flake8",
+  "black",
+  "isort"
+  ]
+
+
+[tool.hatch.envs.style.scripts]
+
+syntax = "flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics"
+
+check = [
+  "flake8 .",
+  "black --check --diff .",
+  "isort --check-only --diff .",
+]
+fmt = [
+  "isort .",
+  "black .",
+  "check",
+]
+
+
+
