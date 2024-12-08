@@ -1,0 +1,58 @@
+[project]
+name = "lemma-from-wiki"
+version = "0.1.0"
+description = "Generates lemma files for vocabsieve"
+readme = "README.md"
+authors = [
+    { name = "Jonathan Fox", email = "32023524+jonathanfox5@users.noreply.github.com" }
+]
+# Niche package, only tested on 3.12. 3.13 is not currently compatible.
+requires-python = "<3.13,>=3.12"
+dependencies = [
+    # Direct dependencies. Make sure that we always stay on the current major version
+    "typer<1.0.0,>=0.13.1",
+    "lemon-tizer<1.0.0,>=0.0.7",
+    "pandas<3.0.0,>=2.2.3",
+    "datasets<4.0.0,>=3.1.0",
+
+    # Get the cuda version of spacy
+    "spacy[cuda12x]==3.7.5", # 3.8 has a Windows memory bug
+    
+    # Compatibility
+    "numpy<2", # Numpy 2 breaks spacy 3.7, not listed in their dependencies # Required for installing language models within the venv
+    "pip",
+    "regex>=2024.11.6",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+[project.scripts]
+lemmafromwiki = "lemma_from_wiki.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.mypy]
+disable_error_code = "import-untyped"
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint]
+extend-select = ["I"]
