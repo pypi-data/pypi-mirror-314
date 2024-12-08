@@ -1,0 +1,58 @@
+
+[build-system]
+requires = ["setuptools"] 
+build-backend = "setuptools.build_meta"  
+
+
+[project]
+name = "masterpiece_plugin"
+version = "0.0.6"
+description = "A simple demonstration plugin designed to extend `masterpiece` applications"
+readme = {file = "docs/source/README.rst", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {file = "docs/source/LICENSE.rst", content-type = "text/markdown"}
+keywords = ["object-oriented", "plugin", "framework"]
+authors = [
+  {name = "J Meskanen", email = "juham.api@gmail.com" }
+]
+maintainers = [
+  {name = "J. Meskanen", email = "juham.api@gmail.com" }
+]
+
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.8",
+]
+
+dependencies = [
+  "masterpiece >= 0.1.4",
+  "pytz >= 2024.1",
+  "importlib-metadata"
+]
+
+
+[project.optional-dependencies]
+dev = ["check-manifest"]
+
+
+[project.entry-points."masterpiece.plugins"]
+dummy_plugin = "masterpiece_plugin:HelloWorld"
+
+
+
+[project.urls]
+"Homepage" = "https://gitlab.com/juham/masterpiece_plugin"
+"Bug Reports" = "https://gitlab.com/juham/masterpiece"
+"Source" = "https://gitlab.com/juham/masterpiece_plugin"
+"Say Thanks!" = "http://meskanen.com"
+
+
+[tool.mypy]
+files = "masterpiece_plugin/"
+ignore_missing_imports = true
+
+[tool.pylint]
+jobs = "10"

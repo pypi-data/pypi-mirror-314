@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>masterpiece.masterpiece &#8212; masterpiece  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/masterpiece.css?v=7a3aeb84" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          masterpiece</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">masterpiece_plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LICENSE.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">TODOs for MasterPiece</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../masterpiece_plugin/index.html">Masterpiece Plugin</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for masterpiece.masterpiece</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The elementary base class of everything.</span>
+
+<span class="sd">Author: Juha Meskanen</span>
+<span class="sd">Date: 2024-10-26</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+
+
+<span class="k">class</span> <span class="nc">classproperty</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator addressing the deprecation of combining</span>
+<span class="sd">    @classmethod with @property in Python. Its purpose aligns with a fundamental</span>
+<span class="sd">    principle of object-oriented programming: any software is essentially composed</span>
+<span class="sd">    of code and data. Within object-oriented paradigm - attributes and methods,</span>
+<span class="sd">    which can be either class-specific or instance-specific. Given this, it is logical</span>
+<span class="sd">    to have @property for instance-specific attributes and @classproperty for</span>
+<span class="sd">    class-specific attributes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MasterPiece</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An object with a name. Base class of everything. Serves as the</span>
+<span class="sd">    foundational base class for any real-world object that can be a part of</span>
+<span class="sd">    a hierarchy.</span>
+
+<span class="sd">    Logging</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    MasterPiece classes and objects have logging methods e.g. info() and error() at their fingertips, for</span>
+<span class="sd">    centralized logging. Class methods are prefixed with &#39;log_&#39; e.g. cls.log_error(), whereas  instance methods</span>
+<span class="sd">    are named without &#39;log_&#39; prefix, e.g. self.error().</span>
+
+<span class="sd">    ::</span>
+
+<span class="sd">        cls.log_warning(f&quot;Some warning {foo}&quot;, details)</span>
+<span class="sd">        self.warning(&quot;f&quot;Some warning {foo}&quot;, details)</span>
+
+
+<span class="sd">    Factory Method Pattern</span>
+<span class="sd">    ----------------------</span>
+
+<span class="sd">    Instantiation via class identifiers (class name), adhering to the factory method pattern.</span>
+<span class="sd">    This allows for the dynamic creation of instances based on class identifiers,</span>
+<span class="sd">    promoting decoupled and extensible design required by plugin architecture.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        foo = MasterPiece.instantiate(&quot;Foo&quot;)</span>
+
+
+<span class="sd">    Serialization</span>
+<span class="sd">    -------------</span>
+
+<span class="sd">    Serialization of both class and instance attributes serves as a means of configuration.</span>
+
+<span class="sd">    Class attributes should follow a consistent naming convention where an underscore prefix</span>
+<span class="sd">    (&#39;_&#39; or &#39;__&#39;) implies the attribute is private and transient, meaning it is not serialized.</span>
+
+
+<span class="sd">    As Python does not have &#39;transient&#39; keyword to tag attributes that should be serialized, all</span>
+<span class="sd">    classes must explicitely describe information for the serialization. This is done with</span>
+<span class="sd">    `to_dict()` and `from_dict()` methods:</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        def to_dict(self):</span>
+<span class="sd">            data = super().to_dict()</span>
+<span class="sd">            data[&quot;_foo&quot;] = {</span>
+<span class="sd">                &quot;topic&quot;: self.topic,</span>
+<span class="sd">                &quot;temperature&quot;: self.temperature,</span>
+<span class="sd">            }</span>
+<span class="sd">            return data</span>
+
+<span class="sd">        def from_dict(self, data):</span>
+<span class="sd">            super().from_dict(data)</span>
+<span class="sd">            for key, value in data[&quot;_foo&quot;].items():</span>
+<span class="sd">                setattr(self, key, value)</span>
+
+
+
+<span class="sd">    Copying Objects</span>
+<span class="sd">    ---------------</span>
+
+<span class="sd">    Any object can be copied using the `copy()` method. This feature is based on serialization, so</span>
+<span class="sd">    typically, subclasses don&#39;t need to implement the `copy()` method; everything is taken care of</span>
+<span class="sd">    by the base class.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        foo2 = foo.copy()</span>
+
+
+<span class="sd">    Event processing</span>
+<span class="sd">    ---------------</span>
+
+<span class="sd">    All MasterPiece objects have been designed to actually do something and therefore</span>
+<span class="sd">    provided with &#39;run()&#39; method. By default the run() method just dispacthes the call</span>
+<span class="sd">    to its payload&#39; object, if provided. It is up to the sub classes to implement the</span>
+<span class="sd">    method. Typically the method spawns a thread to execute something, enter event or network</span>
+<span class="sd">    loop, etc. using the following methods:</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        foo.run();</span>
+<span class="sd">        foo.run_forwever();</span>
+<span class="sd">        foo.shutdown() #</span>
+
+
+<span class="sd">    Decoupling Data and Code</span>
+<span class="sd">    -------------------------</span>
+<span class="sd">    Instead of adding new methods (code) to MasterPiece class the MasterPiece implements</span>
+<span class="sd">    &#39;do()&#39; method through which any code can be executed.</span>
+<span class="sd">    ::</span>
+<span class="sd">        def someCoolProcedure(...):</span>
+<span class="sd">            ...</span>
+<span class="sd">        rc : bool = foo.do(someProcedure, someContext)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># non-serializable private class attributes</span>
+    <span class="n">_log</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_factory</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called when a new sub-class is created.</span>
+
+<span class="sd">        Automatically registers the sub class by calling its register()</span>
+<span class="sd">        method. For more information on this method consult Python</span>
+<span class="sd">        documentation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">classattrs_to_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert class attributes to a dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">attr</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;_&quot;</span><span class="p">))</span>
+        <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">classattrs_from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set class attributes from a dictionary.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># Skip attributes that are not in the class&#39;s own __dict__</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">has_class_method_directly</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the method is defined directly in the class (not inherited).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># Ensure that the method is callable and check its defining class</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+            <span class="c1"># Check if the method&#39;s class is the same as the one we are querying</span>
+            <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="vm">__qualname__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">factory</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">MasterPiece</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch the dictionary holding class names and associated classes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            factory: with class names and associated classes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register the class.</span>
+
+<span class="sd">        Called immediately upon class initialization, right before the class attributes</span>
+<span class="sd">        are loaded from the class specific configuration files.</span>
+
+<span class="sd">        Subclasses can extend this with custom register functionality:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            class MyMasterPiece(MasterPiece):</span>
+
+<span class="sd">                @classmethod</span>
+<span class="sd">                def register(cls):</span>
+<span class="sd">                    super().register()  # Don&#39;t forget</span>
+<span class="sd">                    cls._custom_field = True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">init_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">init_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">clazz</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize class.  Updates the class factory and sets up exit hook</span>
+<span class="sd">        to create class configuration file on program exit.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            clazz (class): class to be initialized</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">clazz</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">[</span><span class="n">clazz</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">clazz</span><span class="o">.</span><span class="n">is_abstract</span><span class="p">():</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">[</span><span class="n">clazz</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">clazz</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Class </span><span class="si">{</span><span class="n">clazz</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> initialized&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;abstract </span><span class="si">{</span><span class="n">clazz</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> initialized&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">is_abstract</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether the class is abstract or real. Override in the derived</span>
+<span class="sd">        sub-classes. The default is False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True (bool) if abstract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_log</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set logger.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            l (logger): logger object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">l</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_class_id</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the class id of the class. Each class has an unique</span>
+<span class="sd">        name that can be used for instantiating the class via</span>
+<span class="sd">        :meth:`Object.instantiate` method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cls (class): class</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            id (str): unique class identifier through which the class can be</span>
+<span class="sd">            instantiated by factory method pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;noname&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MasterPiece</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates object with the given name and  payload. The payload object</span>
+<span class="sd">        must be of type  `MasterPiece`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            ```python</span>
+<span class="sd">            obj = MasterPiece(&#39;foo&#39;, Foo(&quot;somename&quot;))</span>
+<span class="sd">            obj.info(&#39;Yippee, object created&#39;)</span>
+<span class="sd">            ```</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_debug</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given debug message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The  message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">details</span><span class="p">:</span>
+            <span class="n">full_message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">details</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_warning</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given debug message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The  message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">details</span><span class="p">:</span>
+            <span class="n">full_message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">details</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given  message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The  message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">details</span><span class="p">:</span>
+            <span class="n">full_message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">details</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_error</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given  message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The  message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">details</span><span class="p">:</span>
+            <span class="n">full_message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">details</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">full_message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given debug message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The information message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given information message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The information message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given warning message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given error message to the application log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert instance attributes to a dictionary.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;_class&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">(),</span>  <span class="c1"># the real class</span>
+            <span class="s2">&quot;_version:&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;_object&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update instance attributes from a dictionary.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">()</span> <span class="o">!=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Class mismatch, expected:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">()</span><span class="si">}</span><span class="s2">, actual:</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;_class&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_object&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;payload&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="n">MasterPiece</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MasterPiece</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return a copy of the current object.</span>
+
+<span class="sd">        This method serializes the current object to a dictionary using the `to_dict` method,</span>
+<span class="sd">        creates a new instance of the object&#39;s class, and populates it with the serialized data</span>
+<span class="sd">        using the `from_dict` method.</span>
+
+<span class="sd">        This method uses class identifier based instantiation (see factory method pattern) to</span>
+<span class="sd">        create a new instance of the object, and &#39;to_dict&#39; and &#39;from_dict&#39;  methods to initialize</span>
+<span class="sd">        object&#39;s state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new instance of the object&#39;s class with the same state as the original object.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            clone_of_john = john.copy()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">copy_of_self</span> <span class="o">=</span> <span class="n">MasterPiece</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">())</span>
+        <span class="n">copy_of_self</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">copy_of_self</span>
+
+    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">action</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;MasterPiece&quot;</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="nb">bool</span><span class="p">],</span>
+        <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the given action to the object, by calling the provided `action`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            action(Callable[[&quot;MasterPiece&quot;, Dict[str, Any]], bool]): A callable that takes</span>
+<span class="sd">            (node, context) and returns a boolean.</span>
+<span class="sd">            context (Dict[str, Any]): Any context data that the action may use.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The return value from the executed action.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the masterpiece.  Dispatches the call to `payload` object and</span>
+<span class="sd">        returns  the control to the caller.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">,</span> <span class="n">MasterPiece</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">run_forever</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the payload forever. This method will return only when violently</span>
+<span class="sd">        terminated. If the object does not have playload object, or it is not</span>
+<span class="sd">        instance of &#39;MasterPiece&#39; class then returns immediately and this method has</span>
+<span class="sd">        no effect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">,</span> <span class="n">MasterPiece</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Newtorking loop exit without exception&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Application interrupted by user.&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Specific error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shutdown the payload object. If the payload object is None, or is not instance of MasterPiece,</span>
+<span class="sd">        then the call has no effect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">,</span> <span class="n">MasterPiece</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">instantiate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">class_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MasterPiece</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of the class corresponding to the given class identifier.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            class_id (str): Identifier of the class to instantiate.</span>
+<span class="sd">            *args: Optional arguments to pass to the class constructor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            MasterPiece: An instance of the class corresponding to the given class identifier.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">class_id</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">[</span><span class="n">class_id</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attempting to instantiate unregistered class </span><span class="si">{</span><span class="n">class_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">find_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">class_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">MasterPiece</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of the class corresponding to the given class identifier.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            class_id (str): Identifier of the class to instantiate.</span>
+<span class="sd">            *args: Optional arguments to pass to the class constructor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            MasterPiece: An instance of the class corresponding to the given class identifier.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">class_id</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_factory</span><span class="p">[</span><span class="n">class_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1"># Register MasterPiece manually since __init_subclass__() won&#39;t be called on it.</span>
+<span class="n">MasterPiece</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

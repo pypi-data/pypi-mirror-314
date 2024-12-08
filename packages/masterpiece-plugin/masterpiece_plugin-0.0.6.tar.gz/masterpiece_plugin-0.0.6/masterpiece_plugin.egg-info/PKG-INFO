@@ -1,0 +1,143 @@
+Metadata-Version: 2.1
+Name: masterpiece_plugin
+Version: 0.0.6
+Summary: A simple demonstration plugin designed to extend `masterpiece` applications
+Author-email: J Meskanen <juham.api@gmail.com>
+Maintainer-email: "J. Meskanen" <juham.api@gmail.com>
+License: MIT License
+        ===========
+        
+        Copyright (c) 2024, Juha Meskanen
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        
+        
+Project-URL: Homepage, https://gitlab.com/juham/masterpiece_plugin
+Project-URL: Bug Reports, https://gitlab.com/juham/masterpiece
+Project-URL: Source, https://gitlab.com/juham/masterpiece_plugin
+Project-URL: Say Thanks!, http://meskanen.com
+Keywords: object-oriented,plugin,framework
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.rst
+Requires-Dist: masterpiece>=0.1.4
+Requires-Dist: pytz>=2024.1
+Requires-Dist: importlib-metadata
+Provides-Extra: dev
+Requires-Dist: check-manifest; extra == "dev"
+
+
+masterpiece_plugin
+==================
+
+`masterpiece_plugin` is a simple demonstration plugin designed to extend `masterpiece` applications by adding a
+basic "Hello, World!" greeting feature. While this plugin is straightforward in its functionality, it serves as an
+excellent starting point for developers looking to implement real plugins for `masterpiece`.
+
+Source code
+-----------
+
+.. code-block:: python
+
+    from masterpiece.base import Plugin, Composite
+
+    class Foo(Plugin):
+
+        def __init__(self, name: str = "noname", description: str = "foo") -> None:
+            super().__init__(name)
+            self.description = description
+
+        # @override
+        def install(self, app: Composite) -> None:
+            obj = Foo("Hello World - A Plugin")
+            app.add(obj)
+
+        # @override
+        def to_dict(self):
+            """Convert instance attributes to a dictionary."""
+            return {
+                "_class": self.get_class_id(),  # the real class
+                "_version:": 0,
+                "_foo": {
+                    "description": self.description,
+                },
+            }
+
+        # @override
+        def from_dict(self, data):
+            """Update instance attributes from a dictionary."""
+            for key, value in data["_foo"].items():
+                setattr(self, key, value)
+
+
+Features
+--------
+
+The plugin adds one Foo object named 'Hello World - A Plugin' into the masterpiece application. 
+
+The primary purpose of `masterpiece_plugin` is educational. It is intended to demonstrate the fundamental steps
+involved in creating and integrating plugins with `masterpiece`. Developers can use this as a reference or template
+when building more complex plugins for real-world applications.
+
+Installation
+------------
+
+To install:
+
+.. code-block:: python
+
+    pip install masterpiece
+    pip install masterpiece_plugin
+
+
+Usage
+-----
+
+Once installed, the plugin integrates into the 'masterpiece/examples/myapp.py' application:
+
+.. code-block:: python
+
+    cd masterpiece/examples
+    python myapp.py
+
+
+This will output the following diagram:
+
+.. code-block:: text
+
+    home
+    ├─ grid
+    ├─ downstairs
+    │   └─ kitchen
+    │       ├─ oven
+    │       └─ fridge
+    ├─ garage
+    │   └─ EV charger
+    └─ Hello World - A Plugin
+
+
+
+License
+-------
+
+This project is licensed under the MIT License - see the `LICENSE` file for details.

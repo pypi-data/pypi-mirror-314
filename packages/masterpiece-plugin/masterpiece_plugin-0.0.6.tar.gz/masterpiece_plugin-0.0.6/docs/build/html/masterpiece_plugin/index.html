@@ -1,0 +1,658 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Masterpiece Plugin &#8212; masterpiece  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../_static/masterpiece.css?v=7a3aeb84" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="TODOs for MasterPiece" href="../TODO.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          masterpiece</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">masterpiece_plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LICENSE.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">TODOs for MasterPiece</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Masterpiece Plugin</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Masterpiece Plugin</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld"><code class="docutils literal notranslate"><span class="pre">HelloWorld</span></code></a><ul>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.classattrs_from_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.classattrs_from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.classattrs_to_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.classattrs_to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.copy"><code class="docutils literal notranslate"><span class="pre">HelloWorld.copy()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.debug"><code class="docutils literal notranslate"><span class="pre">HelloWorld.debug()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.do"><code class="docutils literal notranslate"><span class="pre">HelloWorld.do()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.error"><code class="docutils literal notranslate"><span class="pre">HelloWorld.error()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.factory"><code class="docutils literal notranslate"><span class="pre">HelloWorld.factory()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.find_class"><code class="docutils literal notranslate"><span class="pre">HelloWorld.find_class()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.from_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.get_class_id"><code class="docutils literal notranslate"><span class="pre">HelloWorld.get_class_id()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.has_class_method_directly"><code class="docutils literal notranslate"><span class="pre">HelloWorld.has_class_method_directly()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.info"><code class="docutils literal notranslate"><span class="pre">HelloWorld.info()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.init_class"><code class="docutils literal notranslate"><span class="pre">HelloWorld.init_class()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.install"><code class="docutils literal notranslate"><span class="pre">HelloWorld.install()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.instantiate"><code class="docutils literal notranslate"><span class="pre">HelloWorld.instantiate()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.is_abstract"><code class="docutils literal notranslate"><span class="pre">HelloWorld.is_abstract()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_debug"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_debug()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_error"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_error()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_info"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_info()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_warning"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_warning()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.register"><code class="docutils literal notranslate"><span class="pre">HelloWorld.register()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.run"><code class="docutils literal notranslate"><span class="pre">HelloWorld.run()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.run_forever"><code class="docutils literal notranslate"><span class="pre">HelloWorld.run_forever()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.set_log"><code class="docutils literal notranslate"><span class="pre">HelloWorld.set_log()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.shutdown"><code class="docutils literal notranslate"><span class="pre">HelloWorld.shutdown()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.to_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.warning"><code class="docutils literal notranslate"><span class="pre">HelloWorld.warning()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../TODO.html" title="Previous Chapter: TODOs for MasterPiece"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; TODOs for MasterPiece</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/masterpiece_plugin/index.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">Masterpiece Plugin</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld"><code class="docutils literal notranslate"><span class="pre">HelloWorld</span></code></a><ul>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.classattrs_from_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.classattrs_from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.classattrs_to_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.classattrs_to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.copy"><code class="docutils literal notranslate"><span class="pre">HelloWorld.copy()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.debug"><code class="docutils literal notranslate"><span class="pre">HelloWorld.debug()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.do"><code class="docutils literal notranslate"><span class="pre">HelloWorld.do()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.error"><code class="docutils literal notranslate"><span class="pre">HelloWorld.error()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.factory"><code class="docutils literal notranslate"><span class="pre">HelloWorld.factory()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.find_class"><code class="docutils literal notranslate"><span class="pre">HelloWorld.find_class()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.from_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.get_class_id"><code class="docutils literal notranslate"><span class="pre">HelloWorld.get_class_id()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.has_class_method_directly"><code class="docutils literal notranslate"><span class="pre">HelloWorld.has_class_method_directly()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.info"><code class="docutils literal notranslate"><span class="pre">HelloWorld.info()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.init_class"><code class="docutils literal notranslate"><span class="pre">HelloWorld.init_class()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.install"><code class="docutils literal notranslate"><span class="pre">HelloWorld.install()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.instantiate"><code class="docutils literal notranslate"><span class="pre">HelloWorld.instantiate()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.is_abstract"><code class="docutils literal notranslate"><span class="pre">HelloWorld.is_abstract()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_debug"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_debug()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_error"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_error()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_info"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_info()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.log_warning"><code class="docutils literal notranslate"><span class="pre">HelloWorld.log_warning()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.register"><code class="docutils literal notranslate"><span class="pre">HelloWorld.register()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.run"><code class="docutils literal notranslate"><span class="pre">HelloWorld.run()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.run_forever"><code class="docutils literal notranslate"><span class="pre">HelloWorld.run_forever()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.set_log"><code class="docutils literal notranslate"><span class="pre">HelloWorld.set_log()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.shutdown"><code class="docutils literal notranslate"><span class="pre">HelloWorld.shutdown()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.to_dict"><code class="docutils literal notranslate"><span class="pre">HelloWorld.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#masterpiece_plugin.HelloWorld.warning"><code class="docutils literal notranslate"><span class="pre">HelloWorld.warning()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="../TODO.html" title="Previous Chapter: TODOs for MasterPiece"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; TODOs for MasterPiece</span>
+    </a>
+  </li>
+<div id="sourcelink">
+  <a href="../_sources/masterpiece_plugin/index.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="module-masterpiece_plugin">
+<span id="masterpiece-plugin"></span><h1>Masterpiece Plugin<a class="headerlink" href="#module-masterpiece_plugin" title="Link to this heading">¶</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>A simple demonstration plugin designed to extend <cite>masterpiece</cite> applications.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masterpiece_plugin.</span></span><span class="sig-name descname"><span class="pre">HelloWorld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'noname'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hello'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/masterpiece_plugin/hello_world.html#HelloWorld"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masterpiece_plugin.HelloWorld" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Plugin</span></code></p>
+<p>An object with a description.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.classattrs_from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classattrs_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.classattrs_from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Set class attributes from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.classattrs_to_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classattrs_to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.classattrs_to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert class attributes to a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Create and return a copy of the current object.</p>
+<p>This method serializes the current object to a dictionary using the <cite>to_dict</cite> method,
+creates a new instance of the object’s class, and populates it with the serialized data
+using the <cite>from_dict</cite> method.</p>
+<p>This method uses class identifier based instantiation (see factory method pattern) to
+create a new instance of the object, and ‘to_dict’ and ‘from_dict’  methods to initialize
+object’s state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">MasterPiece</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new instance of the object’s class with the same state as the original object.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clone_of_john</span> <span class="o">=</span> <span class="n">john</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.debug" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given debug message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The information message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.do">
+<span class="sig-name descname"><span class="pre">do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.do" title="Link to this definition">¶</a></dt>
+<dd><p>Execute the given action to the object, by calling the provided <cite>action</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>action</strong> (<em>Callable</em><em>[</em><em>[</em><em>&quot;MasterPiece&quot;</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>]</em>) – A callable that takes</p></li>
+<li><p><strong>(</strong><strong>node</strong></p></li>
+<li><p><strong>boolean.</strong> (<em>context</em><em>) </em><em>and returns a</em>)</p></li>
+<li><p><strong>context</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Any context data that the action may use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The return value from the executed action.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.error" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given error message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.factory">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">factory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.factory" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the dictionary holding class names and associated classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>with class names and associated classes</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>factory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.find_class">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.find_class" title="Link to this definition">¶</a></dt>
+<dd><p>Create an instance of the class corresponding to the given class identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>class_id</strong> (<em>str</em>) – Identifier of the class to instantiate.</p></li>
+<li><p><strong>*args</strong> – Optional arguments to pass to the class constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class corresponding to the given class identifier.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MasterPiece</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.from_dict">
+<span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/masterpiece_plugin/hello_world.html#HelloWorld.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masterpiece_plugin.HelloWorld.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Update instance attributes from a dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.get_class_id">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_class_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.get_class_id" title="Link to this definition">¶</a></dt>
+<dd><p>Return the class id of the class. Each class has an unique
+name that can be used for instantiating the class via
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Object.instantiate()</span></code> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cls</strong> (<em>class</em>) – class</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>unique class identifier through which the class can be
+instantiated by factory method pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>id (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.has_class_method_directly">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_class_method_directly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.has_class_method_directly" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the method is defined directly in the class (not inherited).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.info" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given information message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The information message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.init_class">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clazz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.init_class" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize class.  Updates the class factory and sets up exit hook
+to create class configuration file on program exit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clazz</strong> (<em>class</em>) – class to be initialized</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.install">
+<span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/masterpiece_plugin/hello_world.html#HelloWorld.install"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masterpiece_plugin.HelloWorld.install" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.instantiate">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">instantiate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_id</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.instantiate" title="Link to this definition">¶</a></dt>
+<dd><p>Create an instance of the class corresponding to the given class identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>class_id</strong> (<em>str</em>) – Identifier of the class to instantiate.</p></li>
+<li><p><strong>*args</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span>) – Optional arguments to pass to the class constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class corresponding to the given class identifier.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MasterPiece</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.is_abstract">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_abstract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.is_abstract" title="Link to this definition">¶</a></dt>
+<dd><p>Check whether the class is abstract or real. Override in the derived
+sub-classes. The default is False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True (bool) if abstract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.log_debug">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.log_debug" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given debug message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.log_error">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.log_error" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given  message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.log_info">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.log_info" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given  message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.log_warning">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.log_warning" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given debug message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The  message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.register">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.register" title="Link to this definition">¶</a></dt>
+<dd><p>Register the class.</p>
+<p>Called immediately upon class initialization, right before the class attributes
+are loaded from the class specific configuration files.</p>
+<p>Subclasses can extend this with custom register functionality:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyMasterPiece</span><span class="p">(</span><span class="n">MasterPiece</span><span class="p">):</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>  <span class="c1"># Don&#39;t forget</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_custom_field</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.run" title="Link to this definition">¶</a></dt>
+<dd><p>Run the masterpiece.  Dispatches the call to <cite>payload</cite> object and
+returns  the control to the caller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.run_forever">
+<span class="sig-name descname"><span class="pre">run_forever</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.run_forever" title="Link to this definition">¶</a></dt>
+<dd><p>Run the payload forever. This method will return only when violently
+terminated. If the object does not have playload object, or it is not
+instance of ‘MasterPiece’ class then returns immediately and this method has
+no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.set_log">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.set_log" title="Link to this definition">¶</a></dt>
+<dd><p>Set logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>l</strong> (<em>logger</em>) – logger object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.shutdown">
+<span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.shutdown" title="Link to this definition">¶</a></dt>
+<dd><p>Shutdown the payload object. If the payload object is None, or is not instance of MasterPiece,
+then the call has no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/masterpiece_plugin/hello_world.html#HelloWorld.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masterpiece_plugin.HelloWorld.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert instance attributes to a dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="masterpiece_plugin.HelloWorld.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#masterpiece_plugin.HelloWorld.warning" title="Link to this definition">¶</a></dt>
+<dd><p>Logs the given warning message to the application log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – The message to be logged.</p></li>
+<li><p><strong>details</strong> (<em>str</em>) – Additional detailed information for the message to be logged</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
