@@ -1,0 +1,1613 @@
+Metadata-Version: 2.1
+Name: spicelib
+Version: 1.3.2
+Summary: A set of tools to Automate Spice simulations
+Author-email: Nuno Brum <me@nunobrum.com>
+License:                     GNU GENERAL PUBLIC LICENSE
+                               Version 3, 29 June 2007
+        
+         Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+         Everyone is permitted to copy and distribute verbatim copies
+         of this license document, but changing it is not allowed.
+        
+                                    Preamble
+        
+          The GNU General Public License is a free, copyleft license for
+        software and other kinds of works.
+        
+          The licenses for most software and other practical works are designed
+        to take away your freedom to share and change the works.  By contrast,
+        the GNU General Public License is intended to guarantee your freedom to
+        share and change all versions of a program--to make sure it remains free
+        software for all its users.  We, the Free Software Foundation, use the
+        GNU General Public License for most of our software; it applies also to
+        any other work released this way by its authors.  You can apply it to
+        your programs, too.
+        
+          When we speak of free software, we are referring to freedom, not
+        price.  Our General Public Licenses are designed to make sure that you
+        have the freedom to distribute copies of free software (and charge for
+        them if you wish), that you receive source code or can get it if you
+        want it, that you can change the software or use pieces of it in new
+        free programs, and that you know you can do these things.
+        
+          To protect your rights, we need to prevent others from denying you
+        these rights or asking you to surrender the rights.  Therefore, you have
+        certain responsibilities if you distribute copies of the software, or if
+        you modify it: responsibilities to respect the freedom of others.
+        
+          For example, if you distribute copies of such a program, whether
+        gratis or for a fee, you must pass on to the recipients the same
+        freedoms that you received.  You must make sure that they, too, receive
+        or can get the source code.  And you must show them these terms so they
+        know their rights.
+        
+          Developers that use the GNU GPL protect your rights with two steps:
+        (1) assert copyright on the software, and (2) offer you this License
+        giving you legal permission to copy, distribute and/or modify it.
+        
+          For the developers' and authors' protection, the GPL clearly explains
+        that there is no warranty for this free software.  For both users' and
+        authors' sake, the GPL requires that modified versions be marked as
+        changed, so that their problems will not be attributed erroneously to
+        authors of previous versions.
+        
+          Some devices are designed to deny users access to install or run
+        modified versions of the software inside them, although the manufacturer
+        can do so.  This is fundamentally incompatible with the aim of
+        protecting users' freedom to change the software.  The systematic
+        pattern of such abuse occurs in the area of products for individuals to
+        use, which is precisely where it is most unacceptable.  Therefore, we
+        have designed this version of the GPL to prohibit the practice for those
+        products.  If such problems arise substantially in other domains, we
+        stand ready to extend this provision to those domains in future versions
+        of the GPL, as needed to protect the freedom of users.
+        
+          Finally, every program is threatened constantly by software patents.
+        States should not allow patents to restrict development and use of
+        software on general-purpose computers, but in those that do, we wish to
+        avoid the special danger that patents applied to a free program could
+        make it effectively proprietary.  To prevent this, the GPL assures that
+        patents cannot be used to render the program non-free.
+        
+          The precise terms and conditions for copying, distribution and
+        modification follow.
+        
+                               TERMS AND CONDITIONS
+        
+          0. Definitions.
+        
+          "This License" refers to version 3 of the GNU General Public License.
+        
+          "Copyright" also means copyright-like laws that apply to other kinds of
+        works, such as semiconductor masks.
+        
+          "The Program" refers to any copyrightable work licensed under this
+        License.  Each licensee is addressed as "you".  "Licensees" and
+        "recipients" may be individuals or organizations.
+        
+          To "modify" a work means to copy from or adapt all or part of the work
+        in a fashion requiring copyright permission, other than the making of an
+        exact copy.  The resulting work is called a "modified version" of the
+        earlier work or a work "based on" the earlier work.
+        
+          A "covered work" means either the unmodified Program or a work based
+        on the Program.
+        
+          To "propagate" a work means to do anything with it that, without
+        permission, would make you directly or secondarily liable for
+        infringement under applicable copyright law, except executing it on a
+        computer or modifying a private copy.  Propagation includes copying,
+        distribution (with or without modification), making available to the
+        public, and in some countries other activities as well.
+        
+          To "convey" a work means any kind of propagation that enables other
+        parties to make or receive copies.  Mere interaction with a user through
+        a computer network, with no transfer of a copy, is not conveying.
+        
+          An interactive user interface displays "Appropriate Legal Notices"
+        to the extent that it includes a convenient and prominently visible
+        feature that (1) displays an appropriate copyright notice, and (2)
+        tells the user that there is no warranty for the work (except to the
+        extent that warranties are provided), that licensees may convey the
+        work under this License, and how to view a copy of this License.  If
+        the interface presents a list of user commands or options, such as a
+        menu, a prominent item in the list meets this criterion.
+        
+          1. Source Code.
+        
+          The "source code" for a work means the preferred form of the work
+        for making modifications to it.  "Object code" means any non-source
+        form of a work.
+        
+          A "Standard Interface" means an interface that either is an official
+        standard defined by a recognized standards body, or, in the case of
+        interfaces specified for a particular programming language, one that
+        is widely used among developers working in that language.
+        
+          The "System Libraries" of an executable work include anything, other
+        than the work as a whole, that (a) is included in the normal form of
+        packaging a Major Component, but which is not part of that Major
+        Component, and (b) serves only to enable use of the work with that
+        Major Component, or to implement a Standard Interface for which an
+        implementation is available to the public in source code form.  A
+        "Major Component", in this context, means a major essential component
+        (kernel, window system, and so on) of the specific operating system
+        (if any) on which the executable work runs, or a compiler used to
+        produce the work, or an object code interpreter used to run it.
+        
+          The "Corresponding Source" for a work in object code form means all
+        the source code needed to generate, install, and (for an executable
+        work) run the object code and to modify the work, including scripts to
+        control those activities.  However, it does not include the work's
+        System Libraries, or general-purpose tools or generally available free
+        programs which are used unmodified in performing those activities but
+        which are not part of the work.  For example, Corresponding Source
+        includes interface definition files associated with source files for
+        the work, and the source code for shared libraries and dynamically
+        linked subprograms that the work is specifically designed to require,
+        such as by intimate data communication or control flow between those
+        subprograms and other parts of the work.
+        
+          The Corresponding Source need not include anything that users
+        can regenerate automatically from other parts of the Corresponding
+        Source.
+        
+          The Corresponding Source for a work in source code form is that
+        same work.
+        
+          2. Basic Permissions.
+        
+          All rights granted under this License are granted for the term of
+        copyright on the Program, and are irrevocable provided the stated
+        conditions are met.  This License explicitly affirms your unlimited
+        permission to run the unmodified Program.  The output from running a
+        covered work is covered by this License only if the output, given its
+        content, constitutes a covered work.  This License acknowledges your
+        rights of fair use or other equivalent, as provided by copyright law.
+        
+          You may make, run and propagate covered works that you do not
+        convey, without conditions so long as your license otherwise remains
+        in force.  You may convey covered works to others for the sole purpose
+        of having them make modifications exclusively for you, or provide you
+        with facilities for running those works, provided that you comply with
+        the terms of this License in conveying all material for which you do
+        not control copyright.  Those thus making or running the covered works
+        for you must do so exclusively on your behalf, under your direction
+        and control, on terms that prohibit them from making any copies of
+        your copyrighted material outside their relationship with you.
+        
+          Conveying under any other circumstances is permitted solely under
+        the conditions stated below.  Sublicensing is not allowed; section 10
+        makes it unnecessary.
+        
+          3. Protecting Users' Legal Rights From Anti-Circumvention Law.
+        
+          No covered work shall be deemed part of an effective technological
+        measure under any applicable law fulfilling obligations under article
+        11 of the WIPO copyright treaty adopted on 20 December 1996, or
+        similar laws prohibiting or restricting circumvention of such
+        measures.
+        
+          When you convey a covered work, you waive any legal power to forbid
+        circumvention of technological measures to the extent such circumvention
+        is effected by exercising rights under this License with respect to
+        the covered work, and you disclaim any intention to limit operation or
+        modification of the work as a means of enforcing, against the work's
+        users, your or third parties' legal rights to forbid circumvention of
+        technological measures.
+        
+          4. Conveying Verbatim Copies.
+        
+          You may convey verbatim copies of the Program's source code as you
+        receive it, in any medium, provided that you conspicuously and
+        appropriately publish on each copy an appropriate copyright notice;
+        keep intact all notices stating that this License and any
+        non-permissive terms added in accord with section 7 apply to the code;
+        keep intact all notices of the absence of any warranty; and give all
+        recipients a copy of this License along with the Program.
+        
+          You may charge any price or no price for each copy that you convey,
+        and you may offer support or warranty protection for a fee.
+        
+          5. Conveying Modified Source Versions.
+        
+          You may convey a work based on the Program, or the modifications to
+        produce it from the Program, in the form of source code under the
+        terms of section 4, provided that you also meet all of these conditions:
+        
+            a) The work must carry prominent notices stating that you modified
+            it, and giving a relevant date.
+        
+            b) The work must carry prominent notices stating that it is
+            released under this License and any conditions added under section
+            7.  This requirement modifies the requirement in section 4 to
+            "keep intact all notices".
+        
+            c) You must license the entire work, as a whole, under this
+            License to anyone who comes into possession of a copy.  This
+            License will therefore apply, along with any applicable section 7
+            additional terms, to the whole of the work, and all its parts,
+            regardless of how they are packaged.  This License gives no
+            permission to license the work in any other way, but it does not
+            invalidate such permission if you have separately received it.
+        
+            d) If the work has interactive user interfaces, each must display
+            Appropriate Legal Notices; however, if the Program has interactive
+            interfaces that do not display Appropriate Legal Notices, your
+            work need not make them do so.
+        
+          A compilation of a covered work with other separate and independent
+        works, which are not by their nature extensions of the covered work,
+        and which are not combined with it such as to form a larger program,
+        in or on a volume of a storage or distribution medium, is called an
+        "aggregate" if the compilation and its resulting copyright are not
+        used to limit the access or legal rights of the compilation's users
+        beyond what the individual works permit.  Inclusion of a covered work
+        in an aggregate does not cause this License to apply to the other
+        parts of the aggregate.
+        
+          6. Conveying Non-Source Forms.
+        
+          You may convey a covered work in object code form under the terms
+        of sections 4 and 5, provided that you also convey the
+        machine-readable Corresponding Source under the terms of this License,
+        in one of these ways:
+        
+            a) Convey the object code in, or embodied in, a physical product
+            (including a physical distribution medium), accompanied by the
+            Corresponding Source fixed on a durable physical medium
+            customarily used for software interchange.
+        
+            b) Convey the object code in, or embodied in, a physical product
+            (including a physical distribution medium), accompanied by a
+            written offer, valid for at least three years and valid for as
+            long as you offer spare parts or customer support for that product
+            model, to give anyone who possesses the object code either (1) a
+            copy of the Corresponding Source for all the software in the
+            product that is covered by this License, on a durable physical
+            medium customarily used for software interchange, for a price no
+            more than your reasonable cost of physically performing this
+            conveying of source, or (2) access to copy the
+            Corresponding Source from a network server at no charge.
+        
+            c) Convey individual copies of the object code with a copy of the
+            written offer to provide the Corresponding Source.  This
+            alternative is allowed only occasionally and noncommercially, and
+            only if you received the object code with such an offer, in accord
+            with subsection 6b.
+        
+            d) Convey the object code by offering access from a designated
+            place (gratis or for a charge), and offer equivalent access to the
+            Corresponding Source in the same way through the same place at no
+            further charge.  You need not require recipients to copy the
+            Corresponding Source along with the object code.  If the place to
+            copy the object code is a network server, the Corresponding Source
+            may be on a different server (operated by you or a third party)
+            that supports equivalent copying facilities, provided you maintain
+            clear directions next to the object code saying where to find the
+            Corresponding Source.  Regardless of what server hosts the
+            Corresponding Source, you remain obligated to ensure that it is
+            available for as long as needed to satisfy these requirements.
+        
+            e) Convey the object code using peer-to-peer transmission, provided
+            you inform other peers where the object code and Corresponding
+            Source of the work are being offered to the general public at no
+            charge under subsection 6d.
+        
+          A separable portion of the object code, whose source code is excluded
+        from the Corresponding Source as a System Library, need not be
+        included in conveying the object code work.
+        
+          A "User Product" is either (1) a "consumer product", which means any
+        tangible personal property which is normally used for personal, family,
+        or household purposes, or (2) anything designed or sold for incorporation
+        into a dwelling.  In determining whether a product is a consumer product,
+        doubtful cases shall be resolved in favor of coverage.  For a particular
+        product received by a particular user, "normally used" refers to a
+        typical or common use of that class of product, regardless of the status
+        of the particular user or of the way in which the particular user
+        actually uses, or expects or is expected to use, the product.  A product
+        is a consumer product regardless of whether the product has substantial
+        commercial, industrial or non-consumer uses, unless such uses represent
+        the only significant mode of use of the product.
+        
+          "Installation Information" for a User Product means any methods,
+        procedures, authorization keys, or other information required to install
+        and execute modified versions of a covered work in that User Product from
+        a modified version of its Corresponding Source.  The information must
+        suffice to ensure that the continued functioning of the modified object
+        code is in no case prevented or interfered with solely because
+        modification has been made.
+        
+          If you convey an object code work under this section in, or with, or
+        specifically for use in, a User Product, and the conveying occurs as
+        part of a transaction in which the right of possession and use of the
+        User Product is transferred to the recipient in perpetuity or for a
+        fixed term (regardless of how the transaction is characterized), the
+        Corresponding Source conveyed under this section must be accompanied
+        by the Installation Information.  But this requirement does not apply
+        if neither you nor any third party retains the ability to install
+        modified object code on the User Product (for example, the work has
+        been installed in ROM).
+        
+          The requirement to provide Installation Information does not include a
+        requirement to continue to provide support service, warranty, or updates
+        for a work that has been modified or installed by the recipient, or for
+        the User Product in which it has been modified or installed.  Access to a
+        network may be denied when the modification itself materially and
+        adversely affects the operation of the network or violates the rules and
+        protocols for communication across the network.
+        
+          Corresponding Source conveyed, and Installation Information provided,
+        in accord with this section must be in a format that is publicly
+        documented (and with an implementation available to the public in
+        source code form), and must require no special password or key for
+        unpacking, reading or copying.
+        
+          7. Additional Terms.
+        
+          "Additional permissions" are terms that supplement the terms of this
+        License by making exceptions from one or more of its conditions.
+        Additional permissions that are applicable to the entire Program shall
+        be treated as though they were included in this License, to the extent
+        that they are valid under applicable law.  If additional permissions
+        apply only to part of the Program, that part may be used separately
+        under those permissions, but the entire Program remains governed by
+        this License without regard to the additional permissions.
+        
+          When you convey a copy of a covered work, you may at your option
+        remove any additional permissions from that copy, or from any part of
+        it.  (Additional permissions may be written to require their own
+        removal in certain cases when you modify the work.)  You may place
+        additional permissions on material, added by you to a covered work,
+        for which you have or can give appropriate copyright permission.
+        
+          Notwithstanding any other provision of this License, for material you
+        add to a covered work, you may (if authorized by the copyright holders of
+        that material) supplement the terms of this License with terms:
+        
+            a) Disclaiming warranty or limiting liability differently from the
+            terms of sections 15 and 16 of this License; or
+        
+            b) Requiring preservation of specified reasonable legal notices or
+            author attributions in that material or in the Appropriate Legal
+            Notices displayed by works containing it; or
+        
+            c) Prohibiting misrepresentation of the origin of that material, or
+            requiring that modified versions of such material be marked in
+            reasonable ways as different from the original version; or
+        
+            d) Limiting the use for publicity purposes of names of licensors or
+            authors of the material; or
+        
+            e) Declining to grant rights under trademark law for use of some
+            trade names, trademarks, or service marks; or
+        
+            f) Requiring indemnification of licensors and authors of that
+            material by anyone who conveys the material (or modified versions of
+            it) with contractual assumptions of liability to the recipient, for
+            any liability that these contractual assumptions directly impose on
+            those licensors and authors.
+        
+          All other non-permissive additional terms are considered "further
+        restrictions" within the meaning of section 10.  If the Program as you
+        received it, or any part of it, contains a notice stating that it is
+        governed by this License along with a term that is a further
+        restriction, you may remove that term.  If a license document contains
+        a further restriction but permits relicensing or conveying under this
+        License, you may add to a covered work material governed by the terms
+        of that license document, provided that the further restriction does
+        not survive such relicensing or conveying.
+        
+          If you add terms to a covered work in accord with this section, you
+        must place, in the relevant source files, a statement of the
+        additional terms that apply to those files, or a notice indicating
+        where to find the applicable terms.
+        
+          Additional terms, permissive or non-permissive, may be stated in the
+        form of a separately written license, or stated as exceptions;
+        the above requirements apply either way.
+        
+          8. Termination.
+        
+          You may not propagate or modify a covered work except as expressly
+        provided under this License.  Any attempt otherwise to propagate or
+        modify it is void, and will automatically terminate your rights under
+        this License (including any patent licenses granted under the third
+        paragraph of section 11).
+        
+          However, if you cease all violation of this License, then your
+        license from a particular copyright holder is reinstated (a)
+        provisionally, unless and until the copyright holder explicitly and
+        finally terminates your license, and (b) permanently, if the copyright
+        holder fails to notify you of the violation by some reasonable means
+        prior to 60 days after the cessation.
+        
+          Moreover, your license from a particular copyright holder is
+        reinstated permanently if the copyright holder notifies you of the
+        violation by some reasonable means, this is the first time you have
+        received notice of violation of this License (for any work) from that
+        copyright holder, and you cure the violation prior to 30 days after
+        your receipt of the notice.
+        
+          Termination of your rights under this section does not terminate the
+        licenses of parties who have received copies or rights from you under
+        this License.  If your rights have been terminated and not permanently
+        reinstated, you do not qualify to receive new licenses for the same
+        material under section 10.
+        
+          9. Acceptance Not Required for Having Copies.
+        
+          You are not required to accept this License in order to receive or
+        run a copy of the Program.  Ancillary propagation of a covered work
+        occurring solely as a consequence of using peer-to-peer transmission
+        to receive a copy likewise does not require acceptance.  However,
+        nothing other than this License grants you permission to propagate or
+        modify any covered work.  These actions infringe copyright if you do
+        not accept this License.  Therefore, by modifying or propagating a
+        covered work, you indicate your acceptance of this License to do so.
+        
+          10. Automatic Licensing of Downstream Recipients.
+        
+          Each time you convey a covered work, the recipient automatically
+        receives a license from the original licensors, to run, modify and
+        propagate that work, subject to this License.  You are not responsible
+        for enforcing compliance by third parties with this License.
+        
+          An "entity transaction" is a transaction transferring control of an
+        organization, or substantially all assets of one, or subdividing an
+        organization, or merging organizations.  If propagation of a covered
+        work results from an entity transaction, each party to that
+        transaction who receives a copy of the work also receives whatever
+        licenses to the work the party's predecessor in interest had or could
+        give under the previous paragraph, plus a right to possession of the
+        Corresponding Source of the work from the predecessor in interest, if
+        the predecessor has it or can get it with reasonable efforts.
+        
+          You may not impose any further restrictions on the exercise of the
+        rights granted or affirmed under this License.  For example, you may
+        not impose a license fee, royalty, or other charge for exercise of
+        rights granted under this License, and you may not initiate litigation
+        (including a cross-claim or counterclaim in a lawsuit) alleging that
+        any patent claim is infringed by making, using, selling, offering for
+        sale, or importing the Program or any portion of it.
+        
+          11. Patents.
+        
+          A "contributor" is a copyright holder who authorizes use under this
+        License of the Program or a work on which the Program is based.  The
+        work thus licensed is called the contributor's "contributor version".
+        
+          A contributor's "essential patent claims" are all patent claims
+        owned or controlled by the contributor, whether already acquired or
+        hereafter acquired, that would be infringed by some manner, permitted
+        by this License, of making, using, or selling its contributor version,
+        but do not include claims that would be infringed only as a
+        consequence of further modification of the contributor version.  For
+        purposes of this definition, "control" includes the right to grant
+        patent sublicenses in a manner consistent with the requirements of
+        this License.
+        
+          Each contributor grants you a non-exclusive, worldwide, royalty-free
+        patent license under the contributor's essential patent claims, to
+        make, use, sell, offer for sale, import and otherwise run, modify and
+        propagate the contents of its contributor version.
+        
+          In the following three paragraphs, a "patent license" is any express
+        agreement or commitment, however denominated, not to enforce a patent
+        (such as an express permission to practice a patent or covenant not to
+        sue for patent infringement).  To "grant" such a patent license to a
+        party means to make such an agreement or commitment not to enforce a
+        patent against the party.
+        
+          If you convey a covered work, knowingly relying on a patent license,
+        and the Corresponding Source of the work is not available for anyone
+        to copy, free of charge and under the terms of this License, through a
+        publicly available network server or other readily accessible means,
+        then you must either (1) cause the Corresponding Source to be so
+        available, or (2) arrange to deprive yourself of the benefit of the
+        patent license for this particular work, or (3) arrange, in a manner
+        consistent with the requirements of this License, to extend the patent
+        license to downstream recipients.  "Knowingly relying" means you have
+        actual knowledge that, but for the patent license, your conveying the
+        covered work in a country, or your recipient's use of the covered work
+        in a country, would infringe one or more identifiable patents in that
+        country that you have reason to believe are valid.
+        
+          If, pursuant to or in connection with a single transaction or
+        arrangement, you convey, or propagate by procuring conveyance of, a
+        covered work, and grant a patent license to some of the parties
+        receiving the covered work authorizing them to use, propagate, modify
+        or convey a specific copy of the covered work, then the patent license
+        you grant is automatically extended to all recipients of the covered
+        work and works based on it.
+        
+          A patent license is "discriminatory" if it does not include within
+        the scope of its coverage, prohibits the exercise of, or is
+        conditioned on the non-exercise of one or more of the rights that are
+        specifically granted under this License.  You may not convey a covered
+        work if you are a party to an arrangement with a third party that is
+        in the business of distributing software, under which you make payment
+        to the third party based on the extent of your activity of conveying
+        the work, and under which the third party grants, to any of the
+        parties who would receive the covered work from you, a discriminatory
+        patent license (a) in connection with copies of the covered work
+        conveyed by you (or copies made from those copies), or (b) primarily
+        for and in connection with specific products or compilations that
+        contain the covered work, unless you entered into that arrangement,
+        or that patent license was granted, prior to 28 March 2007.
+        
+          Nothing in this License shall be construed as excluding or limiting
+        any implied license or other defenses to infringement that may
+        otherwise be available to you under applicable patent law.
+        
+          12. No Surrender of Others' Freedom.
+        
+          If conditions are imposed on you (whether by court order, agreement or
+        otherwise) that contradict the conditions of this License, they do not
+        excuse you from the conditions of this License.  If you cannot convey a
+        covered work so as to satisfy simultaneously your obligations under this
+        License and any other pertinent obligations, then as a consequence you may
+        not convey it at all.  For example, if you agree to terms that obligate you
+        to collect a royalty for further conveying from those to whom you convey
+        the Program, the only way you could satisfy both those terms and this
+        License would be to refrain entirely from conveying the Program.
+        
+          13. Use with the GNU Affero General Public License.
+        
+          Notwithstanding any other provision of this License, you have
+        permission to link or combine any covered work with a work licensed
+        under version 3 of the GNU Affero General Public License into a single
+        combined work, and to convey the resulting work.  The terms of this
+        License will continue to apply to the part which is the covered work,
+        but the special requirements of the GNU Affero General Public License,
+        section 13, concerning interaction through a network will apply to the
+        combination as such.
+        
+          14. Revised Versions of this License.
+        
+          The Free Software Foundation may publish revised and/or new versions of
+        the GNU General Public License from time to time.  Such new versions will
+        be similar in spirit to the present version, but may differ in detail to
+        address new problems or concerns.
+        
+          Each version is given a distinguishing version number.  If the
+        Program specifies that a certain numbered version of the GNU General
+        Public License "or any later version" applies to it, you have the
+        option of following the terms and conditions either of that numbered
+        version or of any later version published by the Free Software
+        Foundation.  If the Program does not specify a version number of the
+        GNU General Public License, you may choose any version ever published
+        by the Free Software Foundation.
+        
+          If the Program specifies that a proxy can decide which future
+        versions of the GNU General Public License can be used, that proxy's
+        public statement of acceptance of a version permanently authorizes you
+        to choose that version for the Program.
+        
+          Later license versions may give you additional or different
+        permissions.  However, no additional obligations are imposed on any
+        author or copyright holder as a result of your choosing to follow a
+        later version.
+        
+          15. Disclaimer of Warranty.
+        
+          THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+        APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+        HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+        OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+        THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+        PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+        IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+        ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+        
+          16. Limitation of Liability.
+        
+          IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+        WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+        THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+        GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+        USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+        DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+        PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+        EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+        SUCH DAMAGES.
+        
+          17. Interpretation of Sections 15 and 16.
+        
+          If the disclaimer of warranty and limitation of liability provided
+        above cannot be given local legal effect according to their terms,
+        reviewing courts shall apply local law that most closely approximates
+        an absolute waiver of all civil liability in connection with the
+        Program, unless a warranty or assumption of liability accompanies a
+        copy of the Program in return for a fee.
+        
+                             END OF TERMS AND CONDITIONS
+        
+                    How to Apply These Terms to Your New Programs
+        
+          If you develop a new program, and you want it to be of the greatest
+        possible use to the public, the best way to achieve this is to make it
+        free software which everyone can redistribute and change under these terms.
+        
+          To do so, attach the following notices to the program.  It is safest
+        to attach them to the start of each source file to most effectively
+        state the exclusion of warranty; and each file should have at least
+        the "copyright" line and a pointer to where the full notice is found.
+        
+            <one line to give the program's name and a brief idea of what it does.>
+            Copyright (C) <year>  <name of author>
+        
+            This program is free software: you can redistribute it and/or modify
+            it under the terms of the GNU General Public License as published by
+            the Free Software Foundation, either version 3 of the License, or
+            (at your option) any later version.
+        
+            This program is distributed in the hope that it will be useful,
+            but WITHOUT ANY WARRANTY; without even the implied warranty of
+            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+            GNU General Public License for more details.
+        
+            You should have received a copy of the GNU General Public License
+            along with this program.  If not, see <https://www.gnu.org/licenses/>.
+        
+        Also add information on how to contact you by electronic and paper mail.
+        
+          If the program does terminal interaction, make it output a short
+        notice like this when it starts in an interactive mode:
+        
+            <program>  Copyright (C) <year>  <name of author>
+            This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+            This is free software, and you are welcome to redistribute it
+            under certain conditions; type `show c' for details.
+        
+        The hypothetical commands `show w' and `show c' should show the appropriate
+        parts of the General Public License.  Of course, your program's commands
+        might be different; for a GUI interface, you would use an "about box".
+        
+          You should also get your employer (if you work as a programmer) or school,
+        if any, to sign a "copyright disclaimer" for the program, if necessary.
+        For more information on this, and how to apply and follow the GNU GPL, see
+        <https://www.gnu.org/licenses/>.
+        
+          The GNU General Public License does not permit incorporating your program
+        into proprietary programs.  If your program is a subroutine library, you
+        may consider it more useful to permit linking proprietary applications with
+        the library.  If this is what you want to do, use the GNU Lesser General
+        Public License instead of this License.  But first, please read
+        <https://www.gnu.org/licenses/why-not-lgpl.html>.
+        
+Project-URL: Homepage, https://github.com/nunobrum/spicelib
+Project-URL: Repository, https://github.com/nunobrum/spicelib.git
+Project-URL: Bug Tracker, https://github.com/nunobrum/spicelib/issues
+Project-URL: Author, https://www.nunobrum.com/
+Keywords: spice,ltspice,qspice,ngspice,electronic simulator,montecarlo,worst-case
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: psutil
+Requires-Dist: clipboard
+Requires-Dist: matplotlib
+Requires-Dist: keyboard
+
+# README <!-- omit in toc -->
+
+spicelib is a toolchain of python utilities design to interact with spice simulators, as for example:
+
+* LTspice
+* Ngspice
+* QSPICE
+* Xyce
+
+**Table of Contents**
+
+- [What is contained in this repository](#what-is-contained-in-this-repository)
+  - [Main Tools](#main-tools)
+  - [Main Classes](#main-classes)
+- [How to Install](#how-to-install)
+  - [Updating spicelib](#updating-spicelib)
+  - [Using GITHub](#using-github)
+- [How to use](#how-to-use)
+- [LICENSE](#license)
+- [Main modules](#main-modules)
+  - [RawRead](#rawread)
+  - [RawWrite](#rawwrite)
+  - [SpiceEditor, AscEditor, QschEditor and SimRunner](#spiceeditor-asceditor-qscheditor-and-simrunner)
+    - [Simulators and Windows, Linux and MacOS compatibility](#simulators-and-windows-linux-and-macos-compatibility)
+    - [Executable and Library paths](#executable-and-library-paths)
+    - [Runner log redirection](#runner-log-redirection)
+    - [Limitations and specifics of AscEditor](#limitations-and-specifics-of-asceditor)
+    - [Hierarchial circuits: reading and editing](#hierarchial-circuits-reading-and-editing)
+  - [Simulation Analysis Toolkit](#simulation-analysis-toolkit)
+  - [ltsteps](#ltsteps)
+- [Command Line Interface](#command-line-interface)
+  - [ltsteps.exe](#ltstepsexe)
+  - [histogram.exe](#histogramexe)
+  - [raw\_convert.exe](#raw_convertexe)
+  - [rawplot.exe](#rawplotexe)
+  - [run\_server.exe](#run_serverexe)
+  - [asc\_to\_qsch.exe](#asc_to_qschexe)
+- [Other functions](#other-functions)
+  - [log\\semi\_dev\_op\_reader.opLogReader](#logsemi_dev_op_readeroplogreader)
+- [Debug Logging](#debug-logging)
+  - [Single Module Logging](#single-module-logging)
+- [To whom do I talk?](#to-whom-do-i-talk)
+- [History](#history)
+
+
+## What is contained in this repository
+
+### Main Tools
+
+* __Analysis Toolkit__
+  A set of tools that prepare an LTspice netlist for a Montecarlo or Worst Case Analysis. The device tolerances are set by the user and the netlist is updated accordingly. The netlist can then be used with the SimRunner to run a batch of simulations or with the LTspice GUI.
+
+* __ltsteps.exe__
+  An utility that extracts from LTspice output files data, and formats it for import in a spreadsheet, such like Excel or Calc.
+
+* __histogram.exe__
+  A python script that uses numpy and matplotlib to create a histogram and calculate the sigma deviations. This is useful for Monte-Carlo analysis.
+
+(Note that the extension '.exe' is only available on Windows. On MacOS or Linux, the commands will have the same name, but without '.exe')
+
+### Main Classes
+
+* __AscEditor/QschEditor/SpiceEditor__
+  Classes for the manipulation of respectively:
+
+  * LTspice `.asc` files
+  * QSPICE `.qsch` files
+  * SPICE netlists (from no matter what simulator)
+  
+  without having to open the schematic in a GUI. The simulations can then be run in batch mode (see SimRunner). Examples of functions provided:
+
+```python
+from spicelib.editor import SpiceEditor
+netlist = SpiceEditor("example.net")
+netlist.set_element_model('D1', '1N4148')  # Replaces the Diode D1 with the model 1N4148
+netlist.set_component_value('R2', '33k')  # Replaces the value of R2 by 33k
+netlist['R2'].value = 33000  # Same as above
+netlist.set_component_value('V1', '5')  # Replaces the value of V1 by 5
+netlist['V1'].value = 5  # Same as above
+netlist.set_parameters(run=1, TEMP=80)  # Creates or updates the netlist to have .PARAM run=1 or .PARAM TEMP=80
+netlist.add_instructions(".STEP run -1 1023 1", ".dc V1 -5 5")
+netlist.remove_instruction(".STEP run -1 1023 1")   # Removes previously added instruction
+netlist.reset_netlist()  # Resets all edits done to the netlist.
+netlist.set_component_parameters('R1', temp=25, pwr=None)  # Sets or removes additional parameters
+netlist['R1'].set_params(temp=25, pwr=None)  # Same as above
+# The two equivalent instructions below manipulate X1 instance of a subcircuit.
+netlist.get_subcircuit('X1').set_component_parameters('R1', temp=25, pwr=None)  # Sets or removes on a component
+netlist['X1:R1'].params = dict(temp=25, pwr=None)  # Same as above
+# the  instructions below update a subcircuit, which will impact all its instances
+subc = netlist.get_subcircuit_named("MYSUBCKT")
+subc.set_component_parameters('R1', 'R1', temp=25, pwr=None)  # sets temp to 25 and removes pwr
+subc['R1'].params = dict(temp=25, pwr=None) # same as the above instruction
+# The next two equivalent instructions set the R1 value on .SUBCKT MYSUBCKT R1 to 1k 
+subc.set_component_value('R1', 1000)  
+subc['R1'].value = 1000  # Same as the above
+```
+
+* __SimRunner__
+  A class that can be used to run LTspice/QSPICE/Ngspice/Xyce simulations in batch mode without having to open the corresponding GUI.
+  This, in cooperation with the above mentioned xxxEditor classes, is useful because:
+
+  * It can overcome the limitation of only stepping 3 parameters
+  * Different types of simulations .TRAN .AC .NOISE can be run in a single batch
+  * The RAW Files are smaller and easier to handle
+  * When used with RawRead and ltsteps, validation of the circuit can be done automatically
+  * Different models can be simulated in a single batch
+
+* __RawRead__
+  A class that serves to read raw files into a python class.
+
+* __RawWrite__
+  A class to write RAW files that can be read by the LTspice Wave Application.
+
+## How to Install
+
+`pip install spicelib`
+
+### Updating spicelib
+
+`pip install --upgrade spicelib`
+
+### Using GITHub
+
+`git clone https://github.com/nunobrum/spicelib.git`
+
+If using this method it would be good to add the path where you cloned the site to python path.
+
+`import sys`  
+`sys.path.append(<path to spicelib>)`
+
+## How to use
+
+Here follows a quick outlook on how to use each of the tools.
+
+More comprehensive documentation can be found in <https://spicelib.readthedocs.io/en/latest/>
+
+## LICENSE
+
+GNU V3 License
+(refer to the LICENSE file)
+
+## Main modules
+
+### RawRead
+
+The example below reads the data from a Spice Simulation called
+"TRAN - STEP.raw" and displays all steps of the "I(R1)" trace in a matplotlib plot
+
+ ```python
+from spicelib import RawRead
+
+from matplotlib import pyplot as plt
+
+rawfile = RawRead("./testfiles/TRAN - STEP.raw")
+
+print(rawfile.get_trace_names())
+print(rawfile.get_raw_property())
+
+IR1 = rawfile.get_trace("I(R1)")
+x = rawfile.get_trace('time')  # Gets the time axis
+steps = rawfile.get_steps()
+for step in range(len(steps)):
+    # print(steps[step])
+    plt.plot(x.get_wave(step), IR1.get_wave(step), label=steps[step])
+
+plt.legend()  # order a legend
+plt.show()
+ ```
+
+-- in examples/raw_read_example.py
+
+### RawWrite
+
+The following example writes a RAW file with a 3 milliseconds transient simulation sine with a 10kHz and a cosine with
+9.997kHz
+
+ ```python
+import numpy as np
+from spicelib import Trace, RawWrite
+LW = RawWrite(fastacces=False)
+tx = Trace('time', np.arange(0.0, 3e-3, 997E-11))
+vy = Trace('N001', np.sin(2 * np.pi * tx.data * 10000))
+vz = Trace('N002', np.cos(2 * np.pi * tx.data * 9970))
+LW.add_trace(tx)
+LW.add_trace(vy)
+LW.add_trace(vz)
+LW.save("./testfiles/teste_snippet1.raw")
+ ```
+
+-- in examples/raw_write_example.py [Example 1]
+
+### SpiceEditor, AscEditor, QschEditor and SimRunner
+
+These modules are used to prepare and launch SPICE simulations.
+
+The editors can be used change component values, parameters or simulation commands. After the simulation is run, the results then can be processed with either the RawRead or with the LTSpiceLogReader module to read the log file which can contain .MEAS results.
+
+Here follows an example of operation.
+
+```python
+from spicelib import SimRunner
+from spicelib import SpiceEditor
+
+from spicelib.simulators.ltspice_simulator import LTspice
+
+# select spice model
+LTC = SimRunner(simulator=LTspice, output_folder='./temp')
+netlist = SpiceEditor('./testfiles/Batch_Test.net')
+# set default arguments
+netlist.set_parameters(res=0, cap=100e-6)
+netlist['R2'].value = '2k'  # Modifying the value of a resistor
+netlist.set_component_value('R1', '4k')  # Alternative way of modifying the value of a resistor.
+# Set component temperature, Tc 50ppm, remove power rating :
+netlist.set_component_parameters('R1', temp=100, tc=0.000050, pwr=None)
+netlist['R1'].set_params(temp=100, tc=0.000050, pwr=None)  # Alternative way of setting parameters. Same as the above.
+# Modifying the behavior of the voltage source
+netlist.set_element_model('V3', "SINE(0 1 3k 0 0 0)")
+netlist['V3'].model = "SINE(0 1 3k 0 0 0)"  # Alternative way of modifying the behaviour. Same as the above.
+netlist.set_component_value('XU1:C2', 20e-12)  # modifying a component in the subcircuit XU1 instance
+netlist.get_subcircuit_named('AD820')['C13'].value = '2p'  # This changes the value of C13 inside the subcircuit AD820.
+# Applies to all instances of the subcircuit
+netlist.add_instructions(
+    "; Simulation settings",
+    ";.param run = 0"
+)
+netlist.set_parameter('run', 0)
+alt_solver = True
+for opamp in ('AD712', 'AD820'):
+    netlist['XU1'].model = opamp
+    for supply_voltage in (5, 10, 15):
+        netlist['V1'].value = supply_voltage
+        netlist['V2'].value = -supply_voltage
+        print("simulating OpAmp", opamp, "Voltage", supply_voltage)
+
+        # small example on how to use options, here how to force the solver
+        opts = []
+        if alt_solver:
+            opts.append('-alt')
+        else:
+            opts.append('-norm')
+
+        LTC.run(netlist, switches=opts)
+
+for raw, log in LTC:
+    print("Raw file: %s, Log file: %s" % (raw, log))
+    # do something with the data
+    # raw_data = RawRead(raw)
+    # log_data = LTSpiceLogReader(log)
+    # ...
+
+netlist.reset_netlist()
+netlist.add_instructions(
+    "; Simulation settings",
+    ".ac dec 30 10 1Meg",
+    ".meas AC Gain MAX mag(V(out)) ; find the peak response and call it ""Gain""",
+    ".meas AC Fcut TRIG mag(V(out))=Gain/sqrt(2) FALL=last"
+)
+
+# Sim Statistics
+print('Successful/Total Simulations: ' + str(LTC.okSim) + '/' + str(LTC.runno))
+
+enter = input("Press enter to delete created files")
+if enter == '':
+    LTC.file_cleanup()
+```
+
+-- in examples/sim_runner_example.py
+
+The example above is using the SpiceEditor to modify a spice netlist, but it is also possible to use the AscEditor to directly modify a .asc file. The edited .asc file can be opened by the LTspice GUI and the simulation can be run from there. It is also possible to open a .asc file and to generate a spice netlist from it.
+
+#### Simulators and Windows, Linux and MacOS compatibility
+
+The **LTspice** class tries to detect the correct path of the LTspice installation depending on the platform. On Linux it expects LTspice to be installed under wine. On MacOS, it first looks for LTspice installed under wine, and when it cannot be found, it will look for native LTspice. The reason is that the command line interface of the native LTspice is severely limited.
+
+**Ngspice** runs natively under Windows, Linux and MacOS (via brew). This library works with Ngspice CLI, and tries to detect the correct executable path, no matter the platform. It cannot (yet) work with the shared library version of Ngspice that is delivered with for example Kicad, you will need to install the CLI version. You can however use Kicad as the schema editor and subsequently save the Ngspice netlist to use it with this library.
+
+For the other simulators, built-in Linux/MacOS support is coming, but you can always try to use it under Linux via setting of the executable paths.
+
+#### Executable and Library paths
+
+A large variety of standard paths are automatically detected. To see what paths are detected:
+
+```python
+from spicelib.sim.sim_runner import SimRunner
+from spicelib.simulators.ltspice_simulator import LTspice
+runner = SimRunner(output_folder='./tmp', simulator=LTspice)
+# Show the executable path
+print(runner.simulator.spice_exe)
+print(runner.simulator.process_name)
+# Show the default library paths of that simulator. This is deduced from `spice_exe`
+print(runner.simulator.get_default_library_paths())
+```
+
+If you want, you can set your own **executable paths**, via the two variables shown above:
+
+* `spice_exe`: a list of with the commands that invoke the sumulator. Do not include command line options to the simulator here.
+* `process_name`: the process name as visible to the OS.
+
+You can also use `simulator.create_from()`.
+
+The **library paths** are needed for the editors. However, the default library paths depend on the simulator used, its installation path, and if that simulator runs under wine or not. The function `editor.prepare_for_simulator()` allows you to tell the editor what simulator is used, and its library paths. This not always needed however:
+
+* `AscEditor` and `SpiceEditor` presume that LTspice is used.
+* `QschEditor` presumes that QSPICE is used.
+
+ This will of course not work out if you use the editors on other simulators (as can be the case with `SpiceEditor`), or if you have manually set the simulator's executable path. In those cases you will want to inform your editor of that change via `editor.prepare_for_simulator()`.
+
+If you want, you can also specify library and symbol search paths using `editor.set_custom_library_paths()`.
+
+**Example**:
+
+```python
+# ** Simulator executable paths
+from spicelib.simulators.ltspice_simulator import LTspice
+from spicelib.sim.sim_runner import SimRunner
+from spicelib.editor.asc_editor import AscEditor
+
+# OPTION 1: via subclassing
+class MySpiceInstallation(LTspice):
+    spice_exe = ['wine', '/custompath/LTspice.exe']
+    process_name = 'wine'
+
+runner = SimRunner(output_folder='./tmp', simulator=MySpiceInstallation)
+
+# OPTION 2: or via direct creation. If you do not specify the process_name,
+# it will be guessed via `simulator.guess_process_name()`.
+runner = SimRunner(output_folder='./tmp', 
+                   simulator=LTspice.create_from('wine /custompath/LTspice.exe')
+                  )
+
+# ** Editor library paths
+
+# In case of non standard paths, or a change of the default simulator, it is preferred to
+# inform your editor of it, so it can better guess the library paths. 
+AscEditor.prepare_for_simulator(MySpiceInstallation)
+
+# You can also add your own library paths to the search paths
+AscEditor.set_custom_library_paths("/mypath/lib/sub",
+                                   "/mypath/lib/sym",
+                                   "/mypath/lib/sym/OpAmps",
+                                   "/mypath/lib/cmp")
+
+```
+
+#### Runner log redirection
+
+When you use wine (on Linux or MacOS) or a simulator like NGspice, you may want to redirect the output of `run()`, as 
+it prints a lot of messages without much value. Real time redirecting to the logger is unfortunately not easy. You can 
+redirect the output for example with:
+
+```python
+# force command output to a separate file
+with open(processlogfile, "w") as outfile:
+    runner.run(netlist, timeout=None, stdout=outfile, stderr=subprocess.STDOUT)
+```
+
+#### Adding search paths for symbols and library files
+
+LTspice allows users to add Search Paths for symbol and libraries. This is very helpful when sharing non-native 
+libraries and symbols between different projects. The `spicelib` supports this feature by using the 
+set_custom_library_paths() class method as is exemplified in the code snippet below.
+
+```python
+from spicelib import AscEditor
+
+AscEditor.set_custom_library_paths(r"C:\work\MyLTspiceSymbols", r"C:\work\MyLTspiceLibraries")
+```
+The user can specify one or more search paths. Note that each call to this method will invalidate previously set search 
+paths. Also, note that this is a class method in all available editors, [SpiceEditor, AscEditor and QschEditor], this 
+means that updating one instantiation, will update all other instances of the same class.
+
+#### Limitations and specifics of AscEditor
+
+AscEditor has some limitations and differences in regard to SpiceEditor.
+
+* As is visible in the LTspice GUI, it groups all component properties/parameters in different 'attributes' like 'Value', 'Value2', 'SpiceLine', 'SpiceLine2'. Netlists do not have that concept, and place everything in one big list, that SpiceEditor subsequently separates in 'value' and 'parameters' for most components. To complicate things, LTspice distributes the parameters over all 4 attributes, with varying syntax. You must be aware of how LTspice handles the parameter placement if you use AscEditor.
+  
+  `AscEditor.get_component_parameters()` will show the native attributes, and tries to disect 'SpiceLine' and 'SpiceLine2', just like `SpiceEditor.get_component_parameters()` would do.
+  This means for example for a Voltage source of DC 2V, with small signal analysis AC amplitude of 1V and a series resistance of 3 ohm:
+  * `AscEditor.get_component_value()` and `SpiceEditor.get_component_value()` -> `'2 AC 1'`
+  * `AscEditor.get_component_parameters()` -> `{'Value': '2', 'Value2': 'AC 1', 'SpiceLine': 'Rser=3', 'Rser': 3}`
+  * `SpiceEditor.get_component_parameters()` -> `{'Rser': 3}`
+  * Please note that if you want to remove the small signal analysis AC amplitude, you MUST use
+    * `AscEditor.set_component_parameters(..,'Value2','')`, as `set_component_value()` will only affect 'Value'
+    * `SpiceEditor.set_component_value(..,'2')`
+  * with both editors, you can use `...set_component_parameters(.., Rser=5)`
+* When adressing components, SpiceEditor requires you to include the prefix in the component name, like `XU1` for an 
+  OpAmp. AscEditor will require `U1`.
+* AscEditor and SpiceEditor only work with the information in their respective schema/circuit files. The problem is that LTspice does not store any of the underlying symbol's default parameter values in the .asc files. SpiceEditor works on netlists, and netlists do contain all parameters.
+
+      This can affect the behaviour when using symbols like `OpAmps/UniversalOpAmp2`. Although the LTspice GUI shows the parameters like `Avol`, `GBW` and `Vos`, even when they have the default values, `AscEditor.get_component_parameters()` will not return these parameters unless they have been modified. `SpiceEditor.get_component_parameters()` on the contrary will show all parameters, regardless of if they were modified. It is however possible for AscEditor to set or modify the parameters with `AscEditor.set_component_parameters()`. Example:  `set_component_parameters("U1", Value2="Avol=2Meg GBW=10Meg Slew=10Meg")`.
+
+      Note here that you must know the correct attribute holding that parameter, and make sure that you know and set all the other parameters in that attribute. If the attribute is in 'SpiceLine' however (as with the majority of the simpler components), you may address the parameter individually (see the voltage source example above).
+
+Resumed, it is better to use SpiceEditor than AscEditor, as it is more straightforward. On MacOS, it is recommended to use LTspice under wine, or to export the netlist manually, as MacOS's LTspice does not support automated export of netlists.
+
+#### Hierarchial circuits: reading and editing
+
+* Circuits can refer to other circuits (subcircuits) and to components, be it from other circuit or netlist files, or from libraries.
+* Subcircuits can contain other subcircuits
+* Internal components in components/subcircuits that are loaded from libraries can be read, but not modified.
+
+Examples:
+
+Imagine a top circuit that refers to a subcircuit 'X1' that is not in a library,
+but in a separate '.asc' or '.net' file (depending on your editor).
+That subcircuit has a compoment 'L1'.
+
+The following is all possible:
+
+```python
+import spicelib
+# my_edt = spicelib.AscEditor("top_circuit.asc")
+my_edt = spicelib.SpiceEditor("top_circuit.net") # or from a netlist...
+
+print(my_edt.get_subcircuit("X1").get_components())  # prints ['C1', 'X2', 'L1']
+
+# The following are equivalent:
+v = my_edt.get_component_value("X1:L1")
+v = my_edt.get_subcircuit("X1").get_component_value("L1")
+v = my_edt["X1:L1"].value
+
+# Likewise, the following are equivalent:
+# Note that this will not work if the component X1 is from a library. An exception will occur in that case.
+my_edt.set_component_value("X1:L1", 2e-6)  # sets L1  in X1 instance to 2uH
+my_edt["X1:L1"].value = 2e-6  # Same as the instruction above
+
+# Likewise, for accessing parameters the following are equivalent:
+l = my_edt.get_subcircuit("X1").get_component_parameters('C1')
+l = my_edt["X1:C1"].params
+
+# Likewise, the following are equivalent:
+# Note that this will not work if the component X1 is from a library. An exception will occur in that case.
+my_edt.get_subcircuit("X1").set_component_parameters("C1", Rser=1)
+my_edt["X1:C1"].set_params(Rser=1) 
+my_edt["X1:C1"].params = dict(Rser=1)
+
+# The same goes for SpiceEditor, only that you should use 'XX1' instead of 'X1'
+```
+*NOTE 1: The code above sets only the instance of a subcircuit. A copy of it is done prior to making edits.
+To update all instances of a subcircuit, the subcircuit needs to be be manipulated directly, as is done below.*
+
+*NOTE 2: This implementation changes on the AscEditor and QschEditor.*
+
+```python
+import spicelib
+my_edt = spicelib.SpiceEditor("top_circuit.net")
+my_sub = my_edt.get_subcircuit_named("MYSUBCKT")
+
+print(my_sub.get_components())  # prints ['C1', 'X2', 'L1']
+
+# The following are equivalent:
+v = my_sub.get_component_value("L1")
+v = my_sub["L1"].value
+
+# Note that this will not work if the component X1 is from a library. An exception will occur in that case.
+my_sub.set_component_value("L1", 2e-6)  # sets L1  in X1 instance to 2uH
+my_sub["L1"].value = 2e-6  # Same as the instructionn above
+
+# Likewise, for accessing parameters the following are equivalent:
+l = my_sub.get_component_parameters('C1')
+l = my_sub["C1"].params
+
+# Likewise, the following are equivalent:
+# Note that this will not work if the component X1 is from a library. An exception will occur in that case.
+my_sub.set_component_parameters("C1", Rser=1)
+my_sub["C1"].set_params(Rser=1) 
+my_sub["C1"].params = dict(Rser=1)
+```
+
+
+### Simulation Analysis Toolkit
+
+The AscEditor can be used with the Simulation Analysis Toolkit to perform Monte Carlo or Wost Case simulations.
+These simulations can either be done on the LTSpice GUI or using the Runner Class described above.
+
+Let's consider the following circuit:
+
+![Sallen-Key Amplifier](./doc/modules/sallenkey.png "Sallen-Key Amplifier")
+
+When performing a Monte Carlo simulation on this circuit, we need to manually modify the value of each component,
+and then add the .step command for making several runs on the same circuit.
+To simplify this process, the AscEditor class can be used as exemplified below:
+
+```python
+from spicelib import AscEditor, SimRunner  # Imports the class that manipulates the asc file
+from spicelib.sim.tookit.montecarlo import Montecarlo  # Imports the Montecarlo toolkit class
+from spicelib.simulators.ltspice_simulator import LTspice
+
+sallenkey = AscEditor("./testfiles/sallenkey.asc")  # Reads the asc file into memory
+runner = SimRunner(simulator=LTspice, output_folder='./temp_mc',
+                   verbose=True)  # Instantiates the runner with a temp folder set
+mc = Montecarlo(sallenkey, runner)  # Instantiates the Montecarlo class, with the asc file already in memory
+
+# The following lines set the default tolerances for the components
+mc.set_tolerance('R', 0.01)  # 1% tolerance, default distribution is uniform
+mc.set_tolerance('C', 0.1, distribution='uniform')  # 10% tolerance, explicit uniform distribution
+mc.set_tolerance('V', 0.1, distribution='normal')  # 10% tolerance, but using a normal distribution
+
+# Some components can have a different tolerance
+mc.set_tolerance('R1', 0.05)  # 5% tolerance for R1 only. This only overrides the default tolerance for R1
+
+# Tolerances can be set for parameters as well
+mc.set_parameter_deviation('Vos', 3e-4, 5e-3, 'uniform')  # The keyword 'distribution' is optional
+mc.prepare_testbench(num_runs=1000)  # Prepares the testbench for 1000 simulations
+
+# Finally the netlist is saved to a file. This file contians all the instructions to run the simulation in LTspice
+mc.save_netlist('./testfiles/temp/sallenkey_mc.asc')
+```
+
+-- in examples/run_montecarlo.py [Example 1]
+
+When opening the created sallenkey_mc.net file, we can see that the following circuit.
+
+![Sallen-Key Amplifier with Montecarlo](./doc/modules/sallenkey_mc.png "Sallen-Key Amplifier with Montecarlo")
+
+The following updates were made to the circuit:
+
+* The value of each component was replaced by a function that generates a random value within the specified tolerance.
+* The .step param run command was added to the netlist. Starts at -1 which it's the nominal value simulation, and
+ finishes that the number of simulations specified in the prepare_testbench() method.
+* A default value for the run parameter was added. This is useful if the .step param run is commented out.
+* The R1 tolerance is different from the other resistors. This is because the tolerance was explicitly set for R1.
+* The Vos parameter was added to the .param list. This is because the parameter was explicitly set using the
+set_parameter_deviation method.
+* Functions utol, ntol and urng were added to the .func list. These functions are used to generate random values.
+Uniform distributions use the LTSpice built-in mc(x, tol) and flat(x) functions, while normal distributions use the gauss(x) function.
+
+Similarly, the worst case analysis can also be setup by using the class WorstCaseAnalysis, as exemplified below:
+
+```python
+import logging
+
+import spicelib
+from spicelib import AscEditor, SimRunner  # Imports the class that manipulates the asc file
+from spicelib.sim.tookit.worst_case import WorstCaseAnalysis
+from spicelib.simulators.ltspice_simulator import LTspice
+
+spicelib.set_log_level(logging.INFO)
+
+sallenkey = AscEditor("./testfiles/sallenkey.asc")  # Reads the asc file into memory
+runner = SimRunner(simulator=LTspice, output_folder='./temp_wca', verbose=True)  # Instantiates the runner with a temp folder set
+wca = WorstCaseAnalysis(sallenkey, runner)  # Instantiates the Worst Case Analysis class
+
+# The following lines set the default tolerances for the components
+wca.set_tolerance('R', 0.01)  # 1% tolerance
+wca.set_tolerance('C', 0.1)  # 10% tolerance
+# wca.set_tolerance('V', 0.1)  # 10% tolerance. For Worst Case analysis, the distribution is irrelevant
+wca.set_tolerance('I', 0.1)  # 10% tolerance. For Worst Case analysis, the distribution is irrelevant
+# Some components can have a different tolerance
+wca.set_tolerance('R1', 0.05)  # 5% tolerance for R1 only. This only overrides the default tolerance for R1
+wca.set_tolerance('R4', 0.0)  # 5% tolerance for R1 only. This only overrides the default tolerance for R1
+
+# Tolerances can be set for parameters as well.
+wca.set_parameter_deviation('Vos', 3e-4, 5e-3)
+
+# Finally the netlist is saved to a file
+wca.save_netlist('./testfiles/sallenkey_wc.asc')
+```
+
+-- in examples/run_worst_case.py [Example 1]
+
+When opening the created sallenkey_wc.net file, we can see that the following circuit.
+
+![Sallen-Key Amplifier with WCA](./doc/modules/sallenkey_wc.png "Sallen-Key Amplifier with WCA")
+
+The following updates were made to the circuit:
+
+* The value of each component was replaced by a function that generates a nominal, minimum and maximum value depending
+on the run parameter and is assigned a unique index number. (R1=0, Vos=1, R2=2, ... V2=7, VIN=8)
+The unique number corresponds to the bit position of the run parameter. Bit 0 corresponds to the minimum value and
+bit 1 corresponds to the maximum value. Calculating all possible permutations of maximum and minimum values for each
+component, we get 2**9 = 512 possible combinations. This maps into a 9 bit binary number, which is the run parameter.
+* The .step param run command was added to the netlist. It starts at -1 which it's the nominal value simulation, then 0
+which corresponds to the minimum value for each component, then it makes all combinations of minimum and maximum values until 511, which is the simulation with all maximum values.
+* A default value for the run parameter was added. This is useful if the .step param run is commented out.
+* The R1 tolerance is different from the other resistors. This is because the tolerance was explicitly set for R1.
+* The wc() function is added to the circuit. This function is used to calculate the worst case value for each component,
+given a tolerance value and its respective index.
+* The wc1() function is added to the circuit. This function is used to calculate the worst case value for each component,
+given a minimum and maximum value and its respective index.
+
+### ltsteps
+
+This module defines a class that can be used to parse LTSpice log files where the information about .STEP information is
+written. There are two possible usages of this module, either programmatically by importing the module and then
+accessing data through the class as exemplified here:
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+
+from spicelib.log.ltsteps import LTSpiceLogReader
+
+data = LTSpiceLogReader("./testfiles/Batch_Test_AD820_15.log")
+
+print("Number of steps  :", data.step_count)
+step_names = data.get_step_vars()
+meas_names = data.get_measure_names()
+
+# Printing Headers
+print(' '.join([f"{step:15s}" for step in step_names]), end='')  # Print steps names with no new line
+print(' '.join([f"{name:15s}" for name in meas_names]), end='\n')
+# Printing data
+for i in range(data.step_count):
+    print(' '.join([f"{data[step][i]:15}" for step in step_names]), end='')  # Print steps names with no new line
+    print(' '.join([f"{data[name][i]:15}" for name in meas_names]), end='\n')  # Print Header
+
+print("Total number of measures found :", data.measure_count)
+```
+
+-- in examples/ltsteps_example.py
+
+The second possibility is to use the module directly on the command line
+
+## Command Line Interface
+
+The following tools will be installed when you install the library via pip. The extension '.exe' is only available on Windows. On MacOS or Linux, the commands will have the same name, but without '.exe'. The executables are simple links to python scripts with the same name, of which the majority can be found in the package's 'scripts' directory.
+
+### ltsteps.exe
+
+```text
+Usage: ltsteps [filename]
+```
+
+The `filename` can be either be a log file (.log), a data export file (.txt) or a measurement output file (.meas)
+This will process all the data and export it automatically into a text file with the extension (tlog, tsv, tmeas)
+where the data read is formatted into a more convenient tab separated format. In case the `filename` is not provided, the
+script will scan the directory and process the newest log, txt or out file found.
+
+### histogram.exe
+
+This module uses the data inside on the filename to produce a histogram image.
+
+ ```text
+Usage: histogram [options] LOG_FILE TRACE
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -s SIGMA, --sigma=SIGMA
+                        Sigma to be used in the distribution fit. Default=3
+  -n NBINS, --nbins=NBINS
+                        Number of bins to be used in the histogram. Default=20
+  -c FILTERS, --condition=FILTERS
+                        Filter condition writen in python. More than one
+                        expression can be added but each expression should be
+                        preceded by -c. EXAMPLE: -c V(N001)>4 -c parameter==1
+                        -c  I(V1)<0.5
+  -f FORMAT, --format=FORMAT
+                        Format string for the X axis. Example: -f %3.4f
+  -t TITLE, --title=TITLE
+                        Title to appear on the top of the histogram.
+  -r RANGE, --range=RANGE
+                        Range of the X axis to use for the histogram in the
+                        form min:max. Example: -r -1:1
+  -C, --clipboard       If the data from the clipboard is to be used.
+  -i IMAGEFILE, --image=IMAGEFILE
+                        Name of the image File. extension 'png'    
+ ```
+
+### raw_convert.exe
+
+A tool to convert .raw files into csv or Excel files.
+
+```text
+Usage: raw_convert [options] <rawfile> <trace_list>
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -o FILE, --output=FILE
+                        Output file name. Use .csv for CSV output, .xlsx for
+                        Excel output
+  -c, --clipboard       Output to clipboard
+  -v, --verbose         Verbose output
+  -s SEPARATOR, --sep=SEPARATOR
+                        Value separator for CSV output. Default: "\t" <TAB>
+                        Example: -d ";"
+```
+
+### rawplot.exe
+
+Uses matplotlib to plot the data in the raw file.
+
+```text
+Usage: rawplot RAW_FILE TRACE_NAME
+```
+
+### run_server.exe
+
+This module is used to run a server that can be used to run simulations in a remote machine. The server will run in the
+background and will wait for a client to connect. The client will send a netlist to the server and the server will run
+the simulation and return the results to the client. The client on the remote machine is a script instancing the
+SimClient class. An example of its usage is shown below:
+
+```python
+import os
+import zipfile
+import logging
+
+# In order for this, to work, you need to have a server running. To start a server, run the following command:
+# python -m spicelib.run_server --port 9000 --parallel 4 --output ./temp
+
+_logger = logging.getLogger("spicelib.SimClient")
+_logger.setLevel(logging.DEBUG)
+
+from spicelib.client_server.sim_client import SimClient
+
+server = SimClient('http://localhost', 9000)
+print(server.session_id)
+runid = server.run("./testfiles/testfile.net")
+print("Got Job id", runid)
+for runid in server:  # Ma
+    zip_filename = server.get_runno_data(runid)
+    print(f"Received {zip_filename} from runid {runid}")
+    with zipfile.ZipFile(zip_filename, 'r') as zipf:  # Extract the contents of the zip file
+        print(zipf.namelist())  # Debug printing the contents of the zip file
+        zipf.extract(zipf.namelist()[0])  # Normally the raw file comes first
+    os.remove(zip_filename)  # Remove the zip file
+
+server.close_session()
+```
+
+-- in examples/sim_client_example.py [SimClient Example]
+
+```text
+usage: run_server [-h] [-p PORT] [-o OUTPUT] [-l PARALLEL] simulator
+
+Run the LTSpice Server. This is a command line interface to the SimServer class. The SimServer class is used to run
+simulations in parallel using a server-client architecture. The server is a machine that runs the SimServer class and
+the client is a machine that runs the SimClient class. The argument is the simulator to be used (LTSpice, Ngspice, XYCE, etc.)
+
+positional arguments:
+  simulator             Simulator to be used (LTSpice, Ngspice, XYCE, etc.)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PORT, --port PORT  Port to run the server. Default is 9000
+  -o OUTPUT, --output OUTPUT
+                        Output folder for the results. Default is the current folder
+  -l PARALLEL, --parallel PARALLEL
+                        Maximum number of parallel simulations. Default is 4
+```
+
+### asc_to_qsch.exe
+
+Converts LTspice schematics into QSPICE schematics.
+
+```text
+Usage: asc_to_qsch [options] ASC_FILE [QSCH_FILE]
+
+Options:
+  --version            show program's version number and exit
+  -h, --help           show this help message and exit
+  -a PATH, --add=PATH  Add a path for searching for symbols
+```
+
+## Other functions
+
+### log\semi_dev_op_reader.opLogReader
+
+This module is used to read from LTSpice log files Semiconductor Devices Operating Point Information. A more detailed
+documentation is directly included in the Python Modules documentation under "Semiconductor Operating Point Reader".
+
+## Debug Logging
+
+The library uses the standard `logging` module. Three convenience functions have been added for easily changing logging
+settings across the entire library. `spicelib.all_loggers()` returns a list of all the logger's
+names, `spicelib.set_log_level(logging.DEBUG)`
+would set the library's logging level to debug, and `spicelib.add_log_handler(my_handler)` would add `my_handler` as a
+handler for all loggers.
+
+### Single Module Logging
+
+It is also possible to set the logging settings for a single module by using its name acquired from
+the `spicelib.all_loggers()`
+function. For example:
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)  # Set up the root logger first
+
+import spicelib  # Import spicelib to set the logging levels
+
+spicelib.set_log_level(logging.DEBUG)  # Set spicelib's global log level
+logging.getLogger("spicelib.RawRead").level = logging.WARNING  # Set the log level for only RawRead to warning
+```
+
+Would set only `spicelib.RawRead` file's logging level to warning while the other modules would remain at debug level.
+_Make sure to initialize the root logger before importing the library to be able to see the logs._
+
+## To whom do I talk?
+For support and improvement requests please open an Issue in [GitHub spicelib issues](https://github.com/nunobrum/spicelib/issues)
+## History
+* Version 1.3.2
+  * Documenting the user library paths
+  * AscEditor: Adding support to DATAFLAG
+  * LTSteps: Supporting new LTspice data export format
+  * Fix Issue #116: PosixPath as no lower attribute
+  * Toolkit: 
+    * Correction on the WCA min max formula and adding the run < 0 condition
+    * run_testbench can be called without having to call first save_netlist
+* Version 1.3.1
+  * Adding possibility of manipulating parameters on sub-circuits
+  * Supporting subcircuit names with dots.
+  * Overall documentation improvements (thanks @hb020)
+  * Fix: Inclusion of encrypted libraries would crash
+* Version 1.3.0
+  * Major improvement in Documentation
+  * Introduced a read-only property that blocks libraries from being updated.
+  * Support for LTspice log files with the option : expanded netlist
+  * Supporting library symbols using BLOCK primitive
+  * Improved unittest on the .ASC hierarchical design
+  * SimRunner simulation iterator only returns successful simulations in order to simplify error management
+  * In QschEditor, the replacement of unique dot instructions (ex: .TRAN .AC .NOISE) is only done if the existing instruction is not commented.
+  * RunTask.get_results() now returns None if a callback function is provided and the simulation has failed.
+  * Bugfix: Prefix were case sensitive in SpiceEditor
+  * Bugfix: Parsing netlists with extensions other than .net didn't work properly
+* Version 1.2.1
+  * Fix on the generation of netlists from QSPICE Schematic files. 
+    * Floating pins are now correctly handled. (Issue #88)
+    * Support for all known QSpice components.
+    * Improving testbench for the QschEditor.
+* Version 1.2.0
+  * Implementing a new approach to the accessing component values and parameters. Instead of using the
+  get_component_value() and get_component_parameters() methods, the component values and parameters are now accessed
+  directly as attributes of the component object. This change was made to make the code more readable.
+  The old methods are still available for backward compatibility.
+  * Improvements on the documentation.
+  * Added testbench for the regular expressions used on the SpiceEditor. Improvements on the regular expressions.
+  * Improvements on the usage of spicelib in Linux and MacOS using wine.
+* Version 1.1.4
+  * Fix on line patterns on the AsyEditor (#PR 65)
+  * Fix on the X (.SUBCKT) components regex (#PR 66)
+* Version 1.1.3
+  * Implementing a set_component_parameters() and get_component_parameters() method on the Editor classes.
+    This method allows to set and get the parameters of a component.
+  * Bug Fixes:
+    * AscEditor was hanging in comments. Issue #43
+    * Supporting other text orientations on the AscEditor. Issue #44
+    * Allow other encodings in AscEditor. Issues #45 and #48
+  * Supporting lines, rectangles, circles and arcs in AscEditor.
+  * Improving the regex for the component values in the SpiceEditor.
+* Version 1.1.2
+  * Fixes on the readme_update.py script. Was not supporting spaces after the []
+  * Solving issue PyLTspice Issue #138. Hierarchical edits to ASC files are now supported.
+* Version 1.1.1
+  * Supporting hierarchical edits on both QSPICE and LTspice schematics
+  * Skipping the need of the rich library on examples
+  * Giving feedback on the search for symbols on the ASC to QSCH conversion
+  * Improvement on Documentation
+  * Adding examples and unittests on hiearchical edits
+  * Giving access to hidden properties (asc_file_path in AscEditor and qsch_file_path in QschEditor)
+  * Refactoring save_netlist() method in QschEditor class
+  * Supporting arcs and rectangles on AsyReader
+  * Adding file_search.py containing utility functions for searching files
+  * Adding windows_short_names.py containing a code to get the 8.3 Windows short names.
+* Version 1.1.0
+  * First usable version of a LTspice to QSPICE schematic converter.
+* Version 1.0.4
+  * Adding the missing the asc_to_qsch_data.xml to the package
+  * Adding a MANIFEST.in to the project
+  * Adding keywords to the project.toml
+* Version 1.0.3
+  * Correcting the generation of a .net from the QschEditor.
+* Version 1.0.2
+  * Correction on the log file data export. Each column is guaranteed to have its own title.
+  * Fixes on the generation of netlists from QSPICE Schematic files
+* Version 1.0.1
+  * Timeout always default to No timeout.
+  * Restructure the way netlists are read and written, so to be able to read and write netlists from different simulator
+    schematics.
+  * Added a method add_sources() to copy files from the client to the spice server.  
+  * Moving CLI scripts to their own directory
+  * Adding a script that allows to insert code into a README.md file
+  * Supporting capital "K" for kilo in the spice and schematic editors.
+* Vesion 0.9
+  * SimAnalysis supporting both QSPICE and LTSpice logfiles.
+  * FastWorstCaseAnalysis algorithm implemented
+  * Fix on the log reading of fourier data.
+  * Adding a parameter host to the SimServer class which then passed to the SimpleXMLRPCServer.
+* Version 0.8
+  * Important Bugfix on the LTComplex class.
+  * Fixes and enhancing the analysis toolkit.
+* Version 0.7
+  * Setting the default verbose to False.
+  * Implementing the Sensitivity Analysis.
+  * Improving the sim_analysis so to be able to analyse simulation results.
+  * Renamed editors .write_netlist() to .save_netlist(). The former is kept
+    for legacy purposes.
+  * Improving the get_measure_value() method to be able to return the value
+    of a measure in a specific step.
+* Version 0.6
+  * Implementing a conversion from QSPICE Schematics .qsch to spice files
+  * Improving the Analysis Toolkit to support adding instructions directly
+  to the WorstCase and Montecarlo classes.
+  * Using dataclasses to store the fourier information on LTSpiceLogReader.
+  * Exporting fourier data into a separate log file: `logfile`.fourier
+  * Making LTComplex a subclass of Python built-in complex class.
+* Version 0.5
+  * Reading QSPICE .AC and .OP simulation results from qraw files
+  * Parsing of QSPICE log and measure files
+  * Enabling the Histogram.py to read log files directly (only for LTSpice)
+  * Fixing a bug on the LTSpiceLogReader class that was not correctly exporting
+  the data when there fourier data was present.
+  * Enabling the creation of blank netlists (Thanks to @rliangcn)
+  * Correction on the Mac OSX process name for LTSpice (Thanks to Wynand M.)
+* Version 0.4
+  * Implementing the callback argument in the SimRunner class.
+  * Moved simulator classes into a separate package.
+* Version 0.3
+  * Cloning and renaming from PyLTSpice 4.1.2
+  * Starting at 0.3 to align with the spicelib in PyPi
