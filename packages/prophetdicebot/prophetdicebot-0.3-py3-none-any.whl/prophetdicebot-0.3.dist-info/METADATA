@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: prophetdicebot
+Version: 0.3
+Summary: ProphetDice Functions
+Home-page: https://prophetdice.com
+Author: Prophet Dice Bot
+Author-email: support@prophetdice.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: undetected-chromedriver
+Requires-Dist: asyncio
+Requires-Dist: tqdm
+Requires-Dist: pytesseract
+Requires-Dist: spacy
+Requires-Dist: pymupdf
+Requires-Dist: google-generativeai
+Requires-Dist: mistralai
+Requires-Dist: imblearn
+Requires-Dist: requests
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: pyautogui
+Requires-Dist: crewai
+Requires-Dist: pywebio
+Requires-Dist: pywebio-battery
+
+# ProphetDice
+
+ProphetDice is a Python package designed to provide various utilities for Prophet Dice Bot functionality. It includes features such as automated betting, model training, and prediction.
+
+## Features
+
+- Automated betting on PrimeDice
+- Model training and prediction using SGDClassifier
+- Online learning and model retraining
+- Confidence-based bet adjustment
+- Data handling and logging
+
+## Installation
+
+You can install ProphetDice with pip:
+
+```bash
+pip install prophetdicebot
+```
+## Configuration
+
+```bash
+[chrome]
+user_data_dir = C:/Users/your user here/AppData/Local/Google/Chrome/User Data/
+profile_directory = Profile 1
+
+[api]
+mistral_api = your mistral api here
+google_api = your google api here
+prophetdice_api = your prophetdice api here
+username = your username here
+maximum_bet = 0.1
+base_bet = 0.01
+```
+
+## Code Overview
+ProphetDice is designed to automate betting on the PrimeDice platform. Here are some of the key features and functionalities of the code:
+
+- **Automated Betting**: The code automates the betting process on PrimeDice by making predictions and placing bets based on those predictions. It uses a combination of random actions and model-based predictions to decide the bets.
+- **Model Training and Prediction**: The code includes functionality for training a machine learning model (SGDClassifier) to make predictions about the outcomes of dice rolls. It supports both initial training and online learning, where the model is updated with new data as it becomes available.
+- **Confidence-Based Bet Adjustment**: The betting strategy is adjusted based on the confidence of the model's predictions. This allows for more informed betting decisions and potentially better outcomes.
+- **Data Handling and Logging**: The code handles data efficiently, storing results and conditions in a CSV file. It also includes logging to keep track of important events and errors during the betting process.
+- **Browser Automation**: The code uses the undetected-chromedriver package to automate interactions with the PrimeDice website. It opens a browser, navigates to the betting page, and interacts with elements on the page to place bets.
+- **Configuration Management**: The code reads configuration settings from a `config.ini` file, allowing for easy customization of user data directory, profile directory, and API keys.
+- **Error Handling**: The code includes robust error handling to manage issues such as file not found errors, browser errors, and timeouts when waiting for elements on the page.
+
+Overall, the ProphetDice package provides a comprehensive and automated solution for betting on PrimeDice, leveraging machine learning for predictions and confidence-based adjustments to optimize betting strategies.
