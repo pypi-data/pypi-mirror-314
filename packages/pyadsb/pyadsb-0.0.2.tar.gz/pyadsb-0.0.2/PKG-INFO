@@ -1,0 +1,46 @@
+Metadata-Version: 2.1
+Name: pyadsb
+Version: 0.0.2
+Summary: Functionality for encoding/decoding ADSB messages written in pure Python 3
+Home-page: https://github.com/enok71/adsb
+Author: Oskar Enoksson
+Author-email: enok@lysator.liu.se
+License: UNKNOWN
+Project-URL: Homepage, https://github.com/enok71/adsb
+Project-URL: Issues, https://github.com/enok71/adsb/issues
+Project-URL: Documentation, https://github.com/enok71/adsb/wiki
+Description: # adsb
+        ADSB and Mode-S decoder/encoder
+        
+        The `Adsb` class provides `parse` and `encode` functions for creating `Adsb` objects from a bytes object, and encoding an object to bytes respectively.
+        
+        The `Tracker` class implements a simple aircraft tracker that detects vehicles and collects and updates information about them. The `Tracker` class is meant primarily as an example application.
+        
+        <b>Example</b>: decoding messages given either as `bytes` or `int`:
+        ```
+        from adsb import Adsb
+        
+        print(Adsb.parse(0x8D40621D58C382D690C8AC2863A7))
+        print(Adsb.parse(b'\x8D\x48\x40\xD6\x20\x2C\xC3\x71\xC3\x2C\xE0\x57\x60\x98')
+        ```
+        
+        <b>Example</b>: tracking aircrafts:
+        ```
+        from adsb import Tracker
+        
+        tracker = Tracker()
+        for msg in readline():
+            m = Adsb.parse(msg.strip().encode())
+            tracker.process(m)
+        ```
+        
+        
+Keywords: adsb, aircrafts
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
