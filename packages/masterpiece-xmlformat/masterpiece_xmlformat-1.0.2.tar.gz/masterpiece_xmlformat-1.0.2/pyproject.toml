@@ -1,0 +1,58 @@
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "masterpiece_xmlformat"
+version = "1.0.2"
+description = "XML serialization format for the `masterpiece` framework"
+readme = {file = "README.rst", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {file = "LICENSE.rst", content-type = "text/markdown"}
+keywords = ["object-oriented", "plugin", "framework"]
+authors = [
+  {name = "J Meskanen", email = "juham.api@gmail.com" }
+]
+maintainers = [
+  {name = "J. Meskanen", email = "juham.api@gmail.com" }
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.8",
+]
+
+dependencies = [
+  "masterpiece >= 0.1.4",
+  "pytz >= 2024.1",
+  "importlib-metadata"
+]
+
+
+[project.optional-dependencies]
+dev = ["check-manifest"]
+
+
+[project.entry-points."masterpiece.plugins"]
+xmlformat_plugin = "masterpiece_xmlformat:XMLFormat"
+
+
+
+[project.urls]
+"Homepage" = "https://gitlab.com/juham/masterpiece_xmlformat"
+"Bug Reports" = "https://gitlab.com/juham/masterpiece"
+"Source" = "https://gitlab.com/juham/masterpiece_xmlformat"
+"Say Thanks!" = "http://meskanen.com"
+
+
+[tool.mypy]
+files = "masterpiece_xmlformat/"
+ignore_missing_imports = false
+
+[tool.pylint]
+jobs = "10"
