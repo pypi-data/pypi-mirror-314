@@ -1,0 +1,83 @@
+{% macro decl_interface(i) %}
+      {{ i.ifname }}:
+        type: {{ 'svi' if i.type=='svi' else 'bond' if i.type=='lag' else 'swp' }}
+        link:
+{%  if i.mtu is defined %}
+          mtu: {{ i.mtu }}
+{%  endif %}
+          state:
+            up: {}
+{%  if i.name is defined %}
+        description: "{{ i.name }}{{ " ["+i.role+"]" if i.role is defined else "" }}"
+{%  elif i.type|default("") == "stub" %}
+        description: Stub interface
+{%  endif %}
+{%  if i.ipv4 is defined or i.ipv6 is defined %}
+        ip:
+{%    if i.ipv4 is defined or (i.ipv6 is string and i.ipv6|ipv6) %}
+          address:
+{%    endif %}
+{%    if i.ipv4 is defined %}
+{%      if i.ipv4 == True %}
+            {{ loopback.ipv4 }}: {}
+{%      else %}
+            {{ i.ipv4 }}: {}
+{%      endif %}
+{%    endif %}
+{%    if i.ipv6 is defined %}
+{%      if i.ipv6 is string and i.ipv6|ipv6 %}
+            {{ i.ipv6 }}: {}
+{%      endif %}
+          ipv6:
+            forward: on
+{%        if 'ipv6' not in i.dhcp.client|default({}) %}
+          neighbor-discovery:
+            enable: on
+            router-advertisement:
+              enable: on
+              interval: 5000
+{%        endif %}
+{%    else %}
+          ipv6:
+            enable: off
+{%    endif %}            
+{%  elif i.type=='lag' %}
+        bridge:
+          domain:
+            br_default: {}
+{%  endif %}
+{% endmacro %}
+
+- set:
+    system:
+      hostname: {{ inventory_hostname }}
+    interface:
+      eth0:
+        ip:
+          vrf: mgmt
+          address:
+            dhcp: {}
+        type: eth
+{% for l in interfaces|default([]) if l.type!='loopback' %}
+{{      decl_interface(l) }}
+{% endfor %}
+
+{% for lb in netlab_interfaces if lb.type=='loopback' and lb.vrf is not defined %}
+- set:
+    interface:
+      lo:
+        type: loopback
+        ip:
+          address:
+{%   if 'ipv4' in lb %}
+            {{ lb.ipv4 }}: {}
+{%   else %}
+            127.0.0.1/8: {}
+{%   endif %}
+{%   if 'ipv6' in lb %}
+            {{ lb.ipv6 }}: {}
+{%   else %}
+          ipv6:
+            enable: off
+{%   endif %}
+{% endfor %}

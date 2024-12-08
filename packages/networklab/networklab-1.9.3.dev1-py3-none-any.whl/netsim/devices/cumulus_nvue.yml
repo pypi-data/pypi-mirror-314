@@ -1,0 +1,57 @@
+description: Cumulus VX 5.x configured with NVUE
+interface_name: swp{ifindex}
+lag_interface_name: "bond{lag.ifindex}"
+#
+# Can assign multiple IPs to 'lo' interface, ifindex ignored by template
+loopback_interface_name: lo{ifindex if ifindex else ""}
+mgmt_if: eth0
+#
+# Set the same default MTU for all providers
+mtu: 1500
+libvirt:
+  #
+  # Latest as of November 2024, supports PVRST+ on single vlan-aware bridge
+  image: CumulusCommunity/cumulus-vx:5.10.0
+virtualbox:
+  image: CumulusCommunity/cumulus-vx:5.10.0
+group_vars:
+  ansible_user: cumulus
+  ansible_ssh_pass: GetLost1!
+  ansible_network_os: cumulus_nvue
+  ansible_connection: paramiko
+  ansible_python_interpreter: auto_silent
+features:
+  initial:
+    ipv4:
+      unnumbered: True
+    ipv6:
+      lla: True
+  bgp:
+    ipv6_lla: True
+    activate_af: True
+  lag:
+    passive: False
+  ospf:
+    unnumbered: True
+  stp:
+    supported_protocols: [ stp, rstp, pvrst ]  # PVRST requires release 5.6.0 or higher
+    enable_per_port: True
+  vlan:
+    model: switch
+    svi_interface_name: "vlan{vlan}"
+    subif_name: "{ifname}.{vlan.access_id}"
+  vrf:
+    ospfv2: True
+clab:
+  kmods:
+    initial: [ ebtables ]
+  node:
+    kind: cvx
+    runtime: docker
+  image: networkop/cx:5.3.0                    # Note: dated and known to have issues, unsupported
+  group_vars:
+    ansible_connection: docker
+    ansible_user: root
+external:
+  image: none
+graphite.icon: switch
