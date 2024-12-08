@@ -1,0 +1,24 @@
+---
+description: BIRD Internet Routing Daemon
+packages:
+  dnsmasq: dnsmasq
+daemon_config:
+  dnsmasq: /etc/dnsmasq.conf
+  dhcp: /etc/dhcp.ignore
+node:
+  module: [ dhcp ]
+clab:
+  group_vars:
+    docker_shell: bash -il
+  image: netlab/dnsmasq:latest
+  build: 'https://netlab.tools/netlab/clab/#netlab-clab-build'
+libvirt:                        # Not yet available on libvirt or virtualbox
+  image:
+virtualbox:
+  image:
+features:
+  dhcp:
+    server: true
+dhcp:
+  server: true
+module: [ dhcp ]
