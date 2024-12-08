@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <name>Create Inset</name>
+  <id>org.dairiki.bh.create-inset</id>
+  <param name="tab" type="notebook">
+    <page name="Options" gui-text="Options">
+      <param name="scale" type="float" min="0.1" max="10.0"
+             gui-text="Scale">0.5</param>
+      <param name="dpi" type="float" min="10" max="600"
+             gui-text="Output DPI">144</param>
+      <param name="background" type="color" appearance="colorbutton"
+             gui-text="Background color">0xffffffff</param>
+      <param name="optipng-level" type="int" min="-1" max="7"
+             gui-text="Optipng optimization level (-1 to disable)">2</param>
+    </page>
+    <page name="Help" gui-text="Help">
+      <label appearance="header">
+        Export “inset” image
+      </label>
+      <spacer />
+      <label>
+        A single element should be selected when this extension is
+        run.
+      </label>
+      <spacer />
+      <label>
+        If the selected element is an image created by this extension,
+        then that image will be updated, adjusting layer visibility so
+        that the same layers will be visible that were showing when
+        the image was originally created.
+      </label>
+      <spacer />
+      <label>
+        Otherwise the selected element defines the area that is
+        exported to a new PNG image. The resulting image is inserted
+        on top of the drawing, scaled by SCALE, and with resolution
+        set by DPI.  You will likely want to cut/paste it into a layer
+        of your choosing.
+      </label>
+    </page>
+  </param>
+  <param name="module" type="string" gui-hidden="true">create_inset</param>
+  <effect>
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu _name="Barn Hunt"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command location="inx" interpreter="python">run-module.py</command>
+  </script>
+</inkscape-extension>

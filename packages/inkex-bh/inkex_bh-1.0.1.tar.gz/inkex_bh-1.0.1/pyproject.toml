@@ -1,0 +1,247 @@
+[project]
+name = "inkex-bh"
+description = "Inkscape extensions for Barn Hunt"
+keywords = ["inkscape", "barn hunt", "barnhunt"]
+license = {text = "GNU GPLv3"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Plugins",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Other Audience",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Topic :: Artistic Software",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Editors",
+    "Topic :: Multimedia :: Graphics :: Editors :: Vector-Based",
+    "Typing :: Typed",
+]
+dynamic = ["version", "readme"]
+dependencies = [
+    # FIXME: not installable from PyPI?
+    # "inkex",
+    "lxml",
+]
+
+[project.urls]
+Homepage = "https://github.com/barnhunt/inkex-bh"
+
+[[project.authors]]
+name = "Jeff Dairiki"
+email = "dairiki@dairiki.org"
+
+[build-system]
+requires = [
+    "hatchling",
+    "hatch-vcs",
+    "hatch-zipped-directory",
+]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata.hooks.custom]
+# Custom hook to form readme from README.md and CHANGES.md in hatch_build.py
+[tool.hatch.version]
+source = "vcs"
+[tool.hatch.build.targets.sdist]
+include = [
+    "/inkex_bh",
+    "/tests",
+    "/CHANGES.md",
+    "/README.md",
+    "/tox.ini",
+]
+[tool.hatch.build.targets.wheel]
+packages = ["inkex_bh"]
+[tool.hatch.build.targets.zipped-directory]
+install-name = "org.dairiki.inkex_bh"
+include = [
+    "/inkex_bh",
+    "/CHANGES.md",
+    "/README.md",
+]
+exclude = [
+    "/inkex_bh/extensions",
+]
+force-include = {"inkex_bh/extensions" = "."}
+
+
+[tool.hatch.envs.default.env-vars]
+# Install inkex packages from python registry at https://gitlab.com/dairiki/inkex/
+PIP_EXTRA_INDEX_URL = "https://gitlab.com/api/v4/projects/40060814/packages/pypi/simple"
+[tool.hatch.envs.default]
+# General test/dev environment
+dependencies = [
+    "inkex",
+    "importlib_resources; python_version < '3.9'",
+    "pytest",
+    "pytest-cov",
+    "pyvirtualdisplay",
+    "coverage[toml]",
+]
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov=inkex_bh --cov-report=term-missing {args:tests}"
+no-cov = "pytest --no-cov {args:tests}"
+
+[tool.hatch.envs.dev]
+extra-dependencies = [
+    # Convenience/dev
+    "ruff==0.6.3",
+
+    # mypy
+    "mypy==1.11.2",
+    "types-lxml",
+    "hatchling",
+]
+
+################################################################
+#
+# pytest
+#
+[tool.pytest.ini_options]
+norecursedirs = ["venv", ".tox", ".git", "node_modules"]
+addopts = "--strict-markers"
+#markers = [
+#    "requiresinternet: marks tests requiring an internet connection",
+#]
+
+
+################################################################
+#
+# coverage
+#
+[tool.coverage.paths]
+paths = [
+    "inkex_bh",
+    ".tox/py*/*/inkex_bh",
+    "*/extensions/org.dairiki.inkex_bh/inkex_bh",
+    # Attempt to match source files on various GitHub Windows/macOS runners
+    '*:*\inkex-bh\inkex_bh',
+    '*/inkex-bh/inkex_bh',
+    "*/.tox/*/site-packages/inkex_bh",
+]
+
+[tool.coverage.run]
+# Generate unique names for .coverage.* file
+parallel = true
+source_pkgs = [
+    "inkex_bh",
+]
+omit = [
+    "*/run-module.py",  # not a module, to hard to check coverage
+]
+
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    'if __name__ == "__main__"',
+    '^\s*\.\.\.\s*$',
+]
+
+################################################################
+#
+# NOTE: flake8 configuration is in tox.ini
+#
+
+
+################################################################
+#
+# pylint
+#
+[tool.pylint.MASTER]
+ignore = [".git", "tests"]
+ignore-paths = [".*/tests/.*"]
+extension-pkg-allow-list = ["lxml"]
+
+[tool.pylint.FORMAT]
+#max-line-length = 91
+#max-module-lines = 2000
+
+[tool.pylint.DESIGN]
+max-attributes = 20
+max-locals = 30
+max-branches = 20
+max-nested-blocks = 8
+max-returns = 8
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+     "missing-docstring",
+     "invalid-name",
+     "fixme",
+]
+
+[tool.mypy]
+files = "$MYPY_CONFIG_FILE_DIR/inkex_bh"
+
+show_error_codes = true
+error_summary = true
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+strict = true
+#implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = [
+    "inkex.*",
+]
+ignore_missing_imports = true
+
+
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+]
+disallow_untyped_calls = false
+
+################################################################
+[tool.ruff]
+extend-exclude = [".pdm-build"]
+
+[tool.ruff.lint]
+explicit-preview-rules = true
+allowed-confusables = ["’", "–"]
+select = ["ALL"]
+ignore = [
+    "COM812",                   # missing-trailing-comma
+    "SLF001",                   # flake8-self (private-member-access)
+    "ISC001",                   # (conflicts with `ruff format`)
+    "PT004",                    # (pytest-missing-fixture-name-underscore)
+    "SIM102",                   # collapsible-if
+    "SIM108",                   # if-else-block-instead-of-if-exp
+    "SIM117",                   # multiple-with-statements
+
+    "PL",                       # pylint
+    "TCH",                      # flake8-type-checking
+    "EM",                       # flake8-errmsg
+    "TRY",                      # tryceratops (exception handling anti-patterns)
+
+    "D",                        # pydocstyle
+    "N",                        # pep8-naming
+    "ANN",                      # flake8-annotations
+    "S",                        # flake8-bandit
+    "BLE",                      # flake8-blind-except
+    "FBT",                      # flake8-boolean-trap
+    "A",                        # flake8-builtins
+    "DTZ",                      # flake8-datetimez
+    "FIX", "TD",                # flake8-fixme, flake8-todos
+    "G",                        # flake8-logging-format
+    "INP",                      # flake8-no-pep420
+    "T20",                      # flake8-print
+    "TID",                      # flake8-tidy-imports
+    "ARG",                      # flake8-unused-arguments
+    "PTH",                      # flake8-use-pathlib
+    "ERA",                      # eradicate (commented-out-code)
+]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+order-by-type = false
+known-local-folder = ["barnhunt"]
+
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true

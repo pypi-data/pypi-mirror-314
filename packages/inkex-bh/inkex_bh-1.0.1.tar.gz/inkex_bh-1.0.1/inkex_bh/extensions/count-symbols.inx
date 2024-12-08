@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <name>Count Symbols</name>
+  <id>org.dairiki.bh.count-symbols</id>
+  <param name="tab" type="notebook">
+    <page name="Options" gui-text="Options">
+      <param name="include-hidden"
+              type="bool"
+              gui-text="Include symbols on hidden layers in count"
+              >false</param>
+    </page>
+    <page name="Help" gui-text="Help">
+      <label appearance="header">
+        Count symbols (e.g. bales)
+      </label>
+      <spacer />
+      <label>
+        By default, this counts visible symbols (i.e. those not on hidden layers.)
+      </label>
+    </page>
+  </param>
+  <param name="module" type="string" gui-hidden="true">count_symbols</param>
+  <effect needs-live-preview="false">
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu name="Barn Hunt"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command location="inx" interpreter="python">run-module.py</command>
+  </script>
+</inkscape-extension>
