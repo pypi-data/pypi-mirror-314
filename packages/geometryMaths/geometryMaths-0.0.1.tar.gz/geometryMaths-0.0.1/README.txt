@@ -1,0 +1,1 @@
+This is a very simple library that adds some basic things that python lacks.
