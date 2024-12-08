@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "LogLevel": {
+      "enum": [
+        "info",
+        "debug"
+      ],
+      "title": "LogLevel",
+      "type": "string"
+    },
+    "Mode": {
+      "enum": [
+        "ue-editor",
+        "ue-standalone",
+        "low-fidelity"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "Network": {
+      "enum": [
+        "shared",
+        "host"
+      ],
+      "title": "Network",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "ros_domain_id": {
+      "default": 0,
+      "description": "ROS domain ID for the vessel. This only applies if 'simple_discovery' is true.",
+      "title": "Ros Domain Id",
+      "type": "integer"
+    },
+    "log_level": {
+      "$ref": "#/$defs/LogLevel",
+      "default": "info"
+    },
+    "mode": {
+      "$ref": "#/$defs/Mode",
+      "default": "low-fidelity"
+    },
+    "network": {
+      "$ref": "#/$defs/Network",
+      "default": "host"
+    },
+    "use_https": {
+      "default": false,
+      "title": "Use Https",
+      "type": "boolean"
+    },
+    "components": {
+      "title": "Components",
+      "type": "object"
+    },
+    "prod": {
+      "default": false,
+      "title": "Prod",
+      "type": "boolean"
+    },
+    "log_directory": {
+      "default": "~/greenroom/missim/logs",
+      "title": "Log Directory",
+      "type": "string"
+    },
+    "recording_directory": {
+      "default": "~/greenroom/missim/recordings",
+      "title": "Recording Directory",
+      "type": "string"
+    },
+    "charts_directory": {
+      "default": "~/greenroom/charts",
+      "title": "Charts Directory",
+      "type": "string"
+    },
+    "simple_discovery": {
+      "default": false,
+      "description": "Use simple discovery. This should NOT be used in production due to performance issues.",
+      "title": "Simple Discovery",
+      "type": "boolean"
+    },
+    "with_discovery_server": {
+      "default": true,
+      "description": "Run the discovery server. It will bind to 0.0.0.0:11811",
+      "title": "With Discovery Server",
+      "type": "boolean"
+    },
+    "discovery_server_ip": {
+      "default": "0.0.0.0",
+      "description": "IP/host/interface of the discovery server. Assumes port of 11811",
+      "title": "Discovery Server Ip",
+      "type": "string"
+    },
+    "own_ip": {
+      "default": "0.0.0.0",
+      "description": "IP/host/interface address of the primary network interface. This is where DDS traffic will route to.",
+      "title": "Own Ip",
+      "type": "string"
+    }
+  },
+  "title": "MissimConfig",
+  "type": "object"
+}
