@@ -1,0 +1,40 @@
+[DRAMA]
+type = "Adventure"
+state = "Spot.foyer"
+
+[GARMENT]
+type = "Clothing"
+
+[[_]]
+if.DRAMA.states.Detail = ["none", "hint"]
+s="""
+<>  This shell of a building is what's left of a hotel.
+<>  The room has been stripped of all it once contained.
+"""
+
+[[_]]
+if.DRAMA.states.Detail = ["here"]
+s="""
+<>  Right here would have been a foyer.
+    You can see the footprint of a grand reception desk running down one side
+    of the floor.
+
+"""
+
+[[_]]
+if.DRAMA.states.Detail = ["hint"]
+s="""
+<>  Try these commands:
+
+    + 'Look' to see more detail.
+    + 'Inventory' to learn what you are carrying.
+    + 'Go' to travel in a certain direction.
+
+"""
+
+[[_]]
+if.DRAMA.states.Detail = ["held"]
+if.GARMENT.states.Spot = ["inventory"]
+s="""
+<>  You are wearing a long cloak, which gathers around you.
+"""

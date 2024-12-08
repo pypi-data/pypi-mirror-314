@@ -1,0 +1,68 @@
+[project]
+name = "balladeer"
+version = "0.58.0"
+description = "Web-enabled interactive fiction framework."
+readme = "README.rst"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+keywords = ["speechmark", "story", "interactive fiction"]
+authors = [
+    {name = "Tundish", email = "tundish@gigeconomy.org.uk"}
+]
+maintainers = [
+    {name = "Tundish", email = "tundish@gigeconomy.org.uk"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "busker >= 0.15.0",
+    "hypercorn",
+    "python-multipart",
+    "speechmark >= 0.10.0",
+    "starlette>=0.26.1",
+    "tomli >= 2.0.0; python_version < '3.11'"
+]
+
+[project.optional-dependencies]
+classic = [
+    "aiohttp",
+    "docutils==0.18.1",
+    "turberfield-catchphrase==0.25.0",
+    "turberfield-dialogue==0.47.0",
+    "turberfield-utils==0.47.0",
+]
+docbuild = [
+    "sphinx <= 6.2.1",
+    "karma-sphinx-theme >= 0.0.8",
+]
+
+[project.scripts]
+
+[build-system]
+requires = [
+    "black >= 23.3.0",
+    "setuptools",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+    "balladeer",
+    "balladeer.lite",
+    "balladeer.lite.test",
+    "balladeer.classic",
+    "balladeer.classic.test",
+    "balladeer.utils",
+]
+
+[tool.setuptools.package-data]
+balladeer = ["examples", "doc"]
+
+[tool.black]
+line-length = 96
+target-version = ["py311"]
+

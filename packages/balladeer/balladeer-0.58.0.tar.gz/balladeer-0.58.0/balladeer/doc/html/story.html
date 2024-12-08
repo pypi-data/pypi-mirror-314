@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Story &#8212; Balladeer 0.51.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=be3822b2" />
+    <link rel="stylesheet" type="text/css" href="_static/balladeer_doc_style.css?v=88dc6569" />
+    <link rel="stylesheet" href="_static/balladeer_doc_style.css" type="text/css" />
+    <script src="_static/documentation_options.js?v=b8ab9f72"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Scenes" href="scene.html" />
+    <link rel="prev" title="Drama" href="drama.html" />
+    <meta name="referrer" content="strict-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Balladeer</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity.html">Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="speech.html">Speech</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drama.html">Drama</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene.html">Scenes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interaction.html">Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Themes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="screenshots.html">Screenshots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Change Log</a></li>
+</ul>
+<p>
+<br>
+<a class="github-button" href="https://github.com/tundish/balladeer/issues"
+data-color-scheme="no-preference: light; light: light; dark: dark;"
+data-size="large" aria-label="View Balladeer issues on GitHub">GitHub Issues</a>
+</p>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="drama.html" title="Previous document">Drama</a>
+        </li>
+        <li>
+          <a href="scene.html" title="Next document">Scenes</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="story">
+<span id="story-section"></span><h1>Story<a class="headerlink" href="#story" title="Link to this heading">¶</a></h1>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">StoryBuilder</span></code> class provides the top level object for your narrative.</p>
+<p>To create a new Story, override the <cite>build</cite> method of a subclass.
+It is a generator of <code class="xref py py-class docutils literal notranslate"><span class="pre">Drama</span></code>  objects.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Story</span><span class="p">(</span><span class="n">StoryBuilder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">Drama</span><span class="p">(</span><span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">Detail</span><span class="o">.</span><span class="n">none</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The public API is under development and not documented at this time.
+While this is the case, you should use the <code class="docutils literal notranslate"><span class="pre">quick_start</span></code> function to run your Story.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">quick_start(module:</span> <span class="pre">[str</span> <span class="pre">|</span> <span class="pre">ModuleType]</span> <span class="pre">=</span> <span class="pre">&quot;&quot;,</span> <span class="pre">resource=&quot;&quot;,</span> <span class="pre">builder=None,</span> <span class="pre">host=&quot;localhost&quot;,</span> <span class="pre">port=8080):</span></span></dt>
+<dd><p>Launch a Story to play over the Web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – A Python module, or else a string which identifies one.</p></li>
+<li><p><strong>resource</strong> – An optional path into a submodule. Web assets will be loaded from this location.</p></li>
+<li><p><strong>builder</strong> – A subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">StoryBuilder</span></code> or an instance object.</p></li>
+<li><p><strong>host</strong> – The host interface from which to serve the Story.</p></li>
+<li><p><strong>port</strong> – The network port from which to serve the Story.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>If you don’t supply all that information, <code class="docutils literal notranslate"><span class="pre">quick_start</span></code> is clever enough to guess anyway.
+Have a look at the <a class="reference external" href="https://github.com/tundish/balladeer/tree/master/balladeer/examples">examples</a> to see how simple it is to use.</p>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="drama.html" title="Previous document">Drama</a>
+        </li>
+        <li>
+          <a href="scene.html" title="Next document">Scenes</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    
+    <div class="footer">
+      &copy;2023, D E Haynes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/story.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Speech &#8212; Balladeer 0.51.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=be3822b2" />
+    <link rel="stylesheet" type="text/css" href="_static/balladeer_doc_style.css?v=88dc6569" />
+    <link rel="stylesheet" href="_static/balladeer_doc_style.css" type="text/css" />
+    <script src="_static/documentation_options.js?v=b8ab9f72"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Drama" href="drama.html" />
+    <link rel="prev" title="Map" href="map.html" />
+    <meta name="referrer" content="strict-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Balladeer</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity.html">Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Speech</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drama.html">Drama</a></li>
+<li class="toctree-l1"><a class="reference internal" href="story.html">Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene.html">Scenes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interaction.html">Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes.html">Themes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style.html">Styles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="screenshots.html">Screenshots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Change Log</a></li>
+</ul>
+<p>
+<br>
+<a class="github-button" href="https://github.com/tundish/balladeer/issues"
+data-color-scheme="no-preference: light; light: light; dark: dark;"
+data-size="large" aria-label="View Balladeer issues on GitHub">GitHub Issues</a>
+</p>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="map.html" title="Previous document">Map</a>
+        </li>
+        <li>
+          <a href="drama.html" title="Next document">Drama</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="speech">
+<h1>Speech<a class="headerlink" href="#speech" title="Link to this heading">¶</a></h1>
+<p>The role of most of our literature is, it seems, to destroy the world.</p>
+<p>– Jean Paul Gustave Ricoeur</p>
+<section id="writing">
+<h2>Writing<a class="headerlink" href="#writing" title="Link to this heading">¶</a></h2>
+<p>In the previous sections we saw how a few simple principles provide the potential for an extremely
+detailed object model.</p>
+<p>Imagine the possibilities. We could generate thousands of entities to populate our world.
+Perhaps we might automate the process in clever ways. Using Python, maybe ingest some real-world data
+sets and synthesize an analogue of our home town or city.</p>
+<p>Would that be a good approach? It’s tempting, but I tend to think not.
+None of that really helps you tell your story.</p>
+<p>If you forget to create an Entity for the knife which kills Caesar, what does it matter?
+During the scene of the murder, Brutus always comes up with one anyway.
+Whether it is mentioned in the script or not, that knife exists in the mind of the reader.
+It’s there when it needs to be, otherwise no dead Emperor.</p>
+<p>It’s true that text adventures have a tradition of progressing the story via the manipulation of objects.
+But there are other ways, and Balladeer encourages you to try them.</p>
+<p>Here are some suggestions for a good Entity:</p>
+<ul class="simple">
+<li><p>A newspaper which prints articles from a parallel reality.</p></li>
+<li><p>A kettle that whistles tunes.</p></li>
+<li><p>A statue which comes alive and murders people.</p></li>
+<li><p>A bulletproof car with the calm authority of an English butler.</p></li>
+</ul>
+<p>In other words; <em>characters</em>. And the primary medium for your characters is Speech.</p>
+</section>
+<section id="markup">
+<h2>Markup<a class="headerlink" href="#markup" title="Link to this heading">¶</a></h2>
+<p>So we need a way of defining Speech.
+It’s more than a string of words. We want to remember who says the words and why.
+We want the words to have an effect on the story.</p>
+<p>Enter SpeechMark.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Please read the <a class="reference external" href="https://github.com/tundish/speechmark">documentation for SpeechMark</a>.
+Take a few minutes to become familiar with its syntax.</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="balladeer.lite.speech.Speech">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">balladeer.lite.speech.</span></span><span class="sig-name descname"><span class="pre">Speech</span></span><a class="headerlink" href="#balladeer.lite.speech.Speech" title="Link to this definition">¶</a></dt>
+<dd><p>This is a lightweight class for objects which
+represent marked-up speech.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">speech</span> <span class="o">=</span> <span class="n">Speech</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;STAFF.proposing#3&gt; What will you have, sir? The special is fish today.</span>
+<span class="s1">    1. Order the Beef Wellington</span>
+<span class="s1">    2. Go for the Shepherd&#39;s Pie</span>
+<span class="s1">    3. Try the Dover Sole</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="balladeer.lite.speech.Speech.trim">
+<span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#balladeer.lite.speech.Speech.trim" title="Link to this definition">¶</a></dt>
+<dd><p>Eliminates indentation and other leading whitespace.
+This method is used internally, so you won’t need to call it explicitly.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="balladeer.lite.speech.Speech.tags">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#balladeer.lite.speech.Speech.tags" title="Link to this definition">¶</a></dt>
+<dd><p>Render the markup as HTML5.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">speech</span><span class="o">.</span><span class="n">tags</span>
+</pre></div>
+</div>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">blockquote</span> <span class="na">cite</span><span class="o">=</span><span class="s">&quot;&amp;lt;STAFF.proposing#3&amp;gt;&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">cite</span> <span class="na">data-role</span><span class="o">=</span><span class="s">&quot;STAFF&quot;</span> <span class="na">data-directives</span><span class="o">=</span><span class="s">&quot;.proposing&quot;</span> <span class="na">data-fragments</span><span class="o">=</span><span class="s">&quot;#3&quot;</span><span class="p">&gt;</span>STAFF<span class="p">&lt;/</span><span class="nt">cite</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+ What will you have, sir? The special is fish today.
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ol</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">li</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+Order the Beef Wellington
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">li</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;2&quot;</span><span class="p">&gt;&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+Go for the Shepherd&#39;s Pie
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">li</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="p">&gt;&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+Try the Dover Sole
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ol</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">blockquote</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="balladeer.lite.speech.Speech.lines">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lines</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#balladeer.lite.speech.Speech.lines" title="Link to this definition">¶</a></dt>
+<dd><p>Render the markup into lines of plain text.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">speech</span><span class="o">.</span><span class="n">lines</span>
+<span class="go">[&#39;STAFF&#39;, &#39;What will you have, sir? The special is fish today.&#39;, &#39;Order the Beef Wellington&#39;,</span>
+<span class="go">&quot;Go for the Shepherd&#39;s Pie&quot;, &#39;Try the Dover Sole&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="balladeer.lite.speech.Speech.words">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">words</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#balladeer.lite.speech.Speech.words" title="Link to this definition">¶</a></dt>
+<dd><p>Render the markup into constituent words.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">speech</span><span class="o">.</span><span class="n">words</span>
+<span class="go">[&#39;STAFF&#39;, &#39;What&#39;, &#39;will&#39;, &#39;you&#39;, &#39;have,&#39;, &#39;sir?&#39;, &#39;The&#39;, &#39;special&#39;, &#39;is&#39;, &#39;fish&#39;, &#39;today.&#39;,</span>
+<span class="go">&#39;Order&#39;, &#39;the&#39;, &#39;Beef&#39;, &#39;Wellington&#39;, &#39;Go&#39;, &#39;for&#39;, &#39;the&#39;, &quot;Shepherd&#39;s&quot;, &#39;Pie&#39;,</span>
+<span class="go">&#39;Try&#39;, &#39;the&#39;, &#39;Dover&#39;, &#39;Sole&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="map.html" title="Previous document">Map</a>
+        </li>
+        <li>
+          <a href="drama.html" title="Next document">Drama</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    
+    <div class="footer">
+      &copy;2023, D E Haynes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/speech.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,32 @@
+[DRAMA]
+type = "Adventure"
+state = "Spot.bar"
+
+[GARMENT]
+type = "Clothing"
+
+[PRIZE]
+type = "Marking"
+
+[[_]]
+if.PRIZE.state = 1
+s="""
+<>  The room is flooded with light. There's something special here.
+
+    {PRIZE.description}
+"""
+
+[[_]]
+if.DRAMA.states.Detail = ["here"]
+s="""
+<> This is the Bar.
+"""
+
+[[_]]
+if.GARMENT.states.Spot = ["inventory"]
+s="""
+<>  The hem of your cloak is catching against uneven wooden boards.
+    The smell of sawdust begins to reach your nostrils as you sweep
+    over the floor.
+
+"""
