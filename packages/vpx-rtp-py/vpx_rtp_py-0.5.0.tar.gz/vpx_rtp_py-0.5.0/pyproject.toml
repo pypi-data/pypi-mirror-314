@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "vpx-rtp-py"
+version = "0.5.0"
+description = "lightweight python interface for generating rtp streams using vpx codecs"
+authors = ["Josh Gruenstein <josh@tutorintelligence.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "vpx_rtp" }]
+include = [ # include cffi compiled files in wheel as otherwise gitignored
+    { path = "vpx_rtp", format = ["sdist", "wheel"] },
+    { path = "vpx_rtp/codecs/*.so", format = "wheel" },
+    { path = "vpx_rtp/codecs/*.o", format = "wheel" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+av = ">=12.1.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+cffi = "^1.16.0"
+matplotlib = "^3.9.0"
+numpy = "^1.26.4"
+opencv-python = "^4.9.0.80"
+types-cffi = "^1.16.0.20240331"
+flake8 = "^6.0.0"
+isort = "^5.10.1"
+mypy = "^1.7.0"
+pre-commit = "^2.19.0"
+
+[build-system]
+requires = ["poetry-core", "cffi"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+style = "poetry_scripts:style"
+
+[tool.semantic_release]
+version_variables = ["vpx_rtp/__init__.py:__version__"]
+version_toml = ["pyproject.toml:tool.poetry.version"]
+build_command = "pip install poetry cffi && poetry build"
+
+[tool.isort]
+profile = "black"
+
+[tool.poetry.build]
+generate-setup-file = false
+script = "build_cffi_bindings.py"
