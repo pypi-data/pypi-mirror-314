@@ -1,0 +1,62 @@
+Metadata-Version: 2.1
+Name: remarkable_update_fuse
+Version: 1.2.3
+Summary: Userspace filesystem for remarkable update files
+Author-email: Eeems <eeems@eeems.email>
+Project-URL: Homepage, https://github.com/Eeems-Org/remarkable-update-fuse
+Project-URL: Repository, https://github.com/Eeems-Org/remarkable-update-fuse.git
+Project-URL: Issues, https://github.com/Eeems-Org/remarkable-update-fuse/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: System :: Filesystems
+Classifier: Topic :: Utilities
+Requires-Python: <3.13,>=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fuse-python==1.0.9
+Requires-Dist: remarkable-update-image==1.1.4
+
+[![remarkable_update_fuse on PyPI](https://img.shields.io/pypi/v/remarkable_update_fuse)](https://pypi.org/project/remarkable_update_fuse)
+
+# reMarkable Update FUSE
+Mount remarkable update files using FUSE
+
+## Usage
+
+```bash
+pip install remarkable_update_fuse
+mkdir /mnt/signed /mnt/image
+rmufuse path/to/update_file.signed /mnt/signed
+```
+
+## Known Issues
+
+- Will report checksum errors for Directory inode, even though they are fine
+- Will report checksum errors for extent headers, even though they are fine
+
+## Building
+Dependencies:
+- curl
+- protoc
+- python
+- python-build
+- python-pip
+- python-pipx
+- python-venv
+- python-wheel
+
+```bash
+make # Build wheel and sdist packages in dist/
+make wheel # Build wheel package in dist/
+make sdist # Build sdist package in dist/
+make dev # Test mounting 2.15.1.1189 to .venv/mnt
+make test # Run automated tests
+make install # Build wheel and install it with pipx or pip install --user
+```
