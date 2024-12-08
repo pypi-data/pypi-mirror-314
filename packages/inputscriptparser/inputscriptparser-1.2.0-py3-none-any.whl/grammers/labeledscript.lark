@@ -1,0 +1,67 @@
+script : _NL* statement+
+
+statement : stmt substmt*
+
+stmt : line continued*
+
+substmt : subline continued*
+
+line : command _WS_INLINE arglist _WS_INLINE? _NL+
+     | command _WS_INLINE? _NL+
+
+subline : subcommand _WS_INLINE arglist _WS_INLINE? _NL+
+        | subcommand _WS_INLINE? _NL+
+
+continued : _WS_INLINE? arglist _WS_INLINE? _NL+
+
+command : CMDNAME
+
+CMDNAME : "*" UCASE_LETTER (UCASE_LETTER|DIGIT|"-")*
+
+subcommand : SUBCMDNAME
+
+SUBCMDNAME : "**" UCASE_LETTER (UCASE_LETTER|DIGIT|"-")*
+
+arglist : arg
+        | arglist _WS_INLINE arg
+
+arg : number
+    | string
+    | keyword
+    | boolean
+
+number : SIGNED_NUMBER
+
+string : ESCAPED_STRING
+
+keyword : KWORD
+
+KWORD : UCASE_LETTER (UCASE_LETTER|DIGIT)*
+
+boolean : true
+        | false
+
+true : "true"
+     | "yes"
+     | "on"
+
+false : "false"
+      | "no"
+      | "off"
+
+_WS_INLINE : WS_INLINE
+
+_NL : NEWLINE
+
+
+%import common.UCASE_LETTER
+%import common.DIGIT
+%import common.SIGNED_NUMBER
+%import common.ESCAPED_STRING
+%import common.NEWLINE
+%import common.WS_INLINE
+%import common.CPP_COMMENT
+
+COMMENT : WS_INLINE? CPP_COMMENT
+
+%ignore COMMENT
