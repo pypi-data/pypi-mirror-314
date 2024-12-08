@@ -1,0 +1,85 @@
+
+[build-system]
+requires = ["setuptools"] 
+build-backend = "setuptools.build_meta"  
+
+
+[project]
+name = "juham"
+version = "0.0.13"
+description = "Juha's Ultimate Home Automation Masterpiece"
+readme = {file = "README.rst", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {file = "LICENSE.rst", content-type = "text/markdown"}
+keywords = ["home", "automation", "juham"]
+authors = [
+  {name = "J Meskanen", email = "juham.api@gmail.com" }
+]
+maintainers = [
+  {name = "J. Meskanen", email = "juham.api@gmail.com" }
+]
+
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "License :: Public Domain",
+  "Programming Language :: Python :: 3.8",
+]
+
+dependencies = [
+  "masterpiece >= 0.1.4",
+  "paho-mqtt >= 1",
+  "influxdb3-python >= 0.3.0",
+  "requests >= 2.31",
+  "pytz >= 2024.1",
+  "importlib-metadata"
+]
+
+
+[project.optional-dependencies]
+dev = ["check-manifest"]
+
+
+[project.entry-points."juham.plugins"]
+forecast_plugin = "juham.ts:ForecastRecord"
+powerrecord_plugin = "juham.ts:PowerRecord"
+powerplan_plugin = "juham.ts:PowerPlanRecord"
+logrecord_plugin = "juham.ts:LogRecord"
+spothintafi_plugin = "juham.web:RSpotHintaFi"
+watermeter_plugin = "juham.web:HomeWizardWaterMeter"
+shellyplus1_plugin = "juham.shelly:ShellyPlus1"
+shellypro3em_plugin = "juham.shelly:ShellyPro3EM"
+shellymotion_plugin = "juham.shelly:ShellyMotion"
+rpowerplan_plugin = "juham.automation:RPowerPlan"
+rboiler_plugin = "juham.automation:RBoiler"
+rwatercirculator_plugin = "juham.automation:WaterCirculator"
+energycostcalculator_plugin = "juham.automation:EnergyCostCalculator"
+rtracker_plugin = "juham.simulation:RTracker"
+shelly1plus1simul_plugin = "juham.shelly:ShellyPlus1Simulator"
+shellymotionsimulation_plugin = "juham.shelly:ShellyMotionSimulator"
+energymetersimulator_plugin = "juham.simulation:EnergyMeterSimulator"
+
+
+
+[project.urls]
+"Homepage" = "https://meskanen.com"
+"Bug Reports" = "https://meskanen.com"
+"Funding" = "https://meskanen.com"
+"Say Thanks!" = "http://meskanen.com"
+"Source" = "https://meskanen.com"
+
+
+
+[tool.mypy]
+files = ["juham/*.py", "examples/*.py"]
+ignore_missing_imports = false
+
+
+[tool.setuptools]
+packages = ["juham"]
+
+[tool.setuptools.package-data]
+"juham" = ["py.typed"]
+
+

@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juham.automation.energycostcalculator &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../juham/index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for juham.automation.energycostcalculator</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">override</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">juham.base</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">MqttMsg</span>
+<span class="kn">from</span> <span class="nn">juham.base.time</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">elapsed_seconds_in_day</span><span class="p">,</span>
+    <span class="n">elapsed_seconds_in_hour</span><span class="p">,</span>
+    <span class="n">quantize</span><span class="p">,</span>
+    <span class="n">timestamp</span><span class="p">,</span>
+    <span class="n">timestampstr</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator">[docs]</a>
+<span class="k">class</span> <span class="nc">EnergyCostCalculator</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The EnergyCostCalculator class calculates the net energy balance between produced</span>
+<span class="sd">    and consumed energy for Time-Based Settlement (TBS). It performs the following functions:</span>
+
+<span class="sd">    * Subscribes to &#39;spot&#39; and &#39;power&#39; MQTT topics.</span>
+<span class="sd">    * Calculates the net energy and the rate of change of the net energy per hour and per day (24h)</span>
+<span class="sd">    * Publishes the calculated values to the MQTT net energy balance topic.</span>
+<span class="sd">    * Stores the data in a time series database.</span>
+
+<span class="sd">    This information helps other home automation components optimize energy usage and</span>
+<span class="sd">    minimize electricity bills.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">to_joule_coeff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1000.0</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span>
+    <span class="n">energy_balancing_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3600</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ecc&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span> <span class="o">=</span> <span class="n">elapsed_seconds_in_hour</span><span class="p">(</span><span class="n">timestamp</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_day</span> <span class="o">=</span> <span class="n">elapsed_seconds_in_day</span><span class="p">(</span><span class="n">timestamp</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spots</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_topics</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EnergyCostCalculator.init_topics">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.init_topics">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_spot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;spot&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_powerconsumption</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;powerconsumption&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_out_net_energy_balance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;net_energy_balance&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_out_energy_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;net_energy_cost&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.on_connect">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.on_connect">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_in_spot</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_in_powerconsumption</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.on_message">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.on_message">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">MqttMsg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ts_now</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">()</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_spot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_spot</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_powerconsumption</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_powerconsumption</span><span class="p">(</span><span class="n">ts_now</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown event </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.on_spot">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.on_spot">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_spot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spot</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stores the received per hour electricity prices to spots list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            spot (list): list of hourly spot prices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;PriceWithTax&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;PriceWithTax&quot;</span><span class="p">]}</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.map_prices_to_joules">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.map_prices_to_joules">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_prices_to_joules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the given electricity price in kWh to Watt seconds (J)</span>
+<span class="sd">        Args:</span>
+<span class="sd">            price (float): electricity price given as kWh</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Electricity price per watt second (J)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">price</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_joule_coeff</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.get_prices">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.get_prices">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts_prev</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ts_now</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch the electricity prices for the given two subsequent time</span>
+<span class="sd">        stamps.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts_prev (float): previous time</span>
+<span class="sd">            ts_now (float): current time</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Electricity prices for the given interval</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prev_price</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">current_price</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spots</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">r0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">r1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spots</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">ts0</span> <span class="o">=</span> <span class="n">r0</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span>
+            <span class="n">ts1</span> <span class="o">=</span> <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ts_prev</span> <span class="o">&gt;=</span> <span class="n">ts0</span> <span class="ow">and</span> <span class="n">ts_prev</span> <span class="o">&lt;=</span> <span class="n">ts1</span><span class="p">:</span>
+                <span class="n">prev_price</span> <span class="o">=</span> <span class="n">r0</span><span class="p">[</span><span class="s2">&quot;PriceWithTax&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ts_now</span> <span class="o">&gt;=</span> <span class="n">ts0</span> <span class="ow">and</span> <span class="n">ts_now</span> <span class="o">&lt;=</span> <span class="n">ts1</span><span class="p">:</span>
+                <span class="n">current_price</span> <span class="o">=</span> <span class="n">r0</span><span class="p">[</span><span class="s2">&quot;PriceWithTax&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">prev_price</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">current_price</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">prev_price</span><span class="p">,</span> <span class="n">current_price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;PANIC: run out of spot prices&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.calculate_net_energy_cost">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.calculate_net_energy_cost">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_net_energy_cost</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ts_prev</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ts_now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given time interval as start and stop Calculate the cost over the</span>
+<span class="sd">        given time period. Positive values indicate revenue, negative cost.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts_prev (timestamp): beginning time stamp of the interval</span>
+<span class="sd">            ts_now (timestamp): end of the interval</span>
+<span class="sd">            energy (float): energy consumed during the time interval</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Cost or revenue</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cost</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="n">ts_prev</span>
+        <span class="k">while</span> <span class="n">prev</span> <span class="o">&lt;</span> <span class="n">ts_now</span><span class="p">:</span>
+            <span class="n">elapsed_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">ts_now</span> <span class="o">-</span> <span class="n">prev</span>
+            <span class="k">if</span> <span class="n">elapsed_seconds</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span><span class="p">:</span>
+                <span class="n">elapsed_seconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">prev</span> <span class="o">+</span> <span class="n">elapsed_seconds</span>
+            <span class="n">start_per_kwh</span><span class="p">,</span> <span class="n">stop_per_kwh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_prices</span><span class="p">(</span><span class="n">prev</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+            <span class="n">start_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_prices_to_joules</span><span class="p">(</span><span class="n">start_per_kwh</span><span class="p">)</span>
+            <span class="n">stop_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_prices_to_joules</span><span class="p">(</span><span class="n">stop_per_kwh</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">stop_price</span> <span class="o">-</span> <span class="n">start_price</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-24</span><span class="p">:</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="n">cost</span> <span class="o">+</span> <span class="n">energy</span> <span class="o">*</span> <span class="n">elapsed_seconds</span> <span class="o">*</span> <span class="n">start_price</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Energy cost </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span><span class="si">}</span><span class="s2"> e = </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span><span class="si">}</span><span class="s2"> J x </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">start_price</span><span class="p">)</span><span class="si">}</span><span class="s2"> e/J x </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">elapsed_seconds</span><span class="p">)</span><span class="si">}</span><span class="s2"> s&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># interpolate cost over energy balancing interval boundary</span>
+                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">prev</span>
+                <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&lt;</span> <span class="mf">0.00001</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Cost over hour boundary </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span><span class="si">}</span><span class="s2"> but elapsed seconds is 0s&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span> <span class="mf">0.0</span>
+                <span class="n">ts_0</span> <span class="o">=</span> <span class="n">quantize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+                <span class="n">t1</span> <span class="o">=</span> <span class="p">(</span><span class="n">ts_0</span> <span class="o">-</span> <span class="n">prev</span><span class="p">)</span> <span class="o">/</span> <span class="n">elapsed</span>
+                <span class="n">t2</span> <span class="o">=</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">ts_0</span><span class="p">)</span> <span class="o">/</span> <span class="n">elapsed</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">cost</span>
+                    <span class="o">+</span> <span class="n">energy</span>
+                    <span class="o">*</span> <span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">*</span> <span class="n">start_price</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="n">stop_price</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">elapsed_seconds</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Cost over hour boundary </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span><span class="si">}</span><span class="s2"> e = </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span><span class="si">}</span><span class="s2"> J x </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">start_price</span><span class="p">)</span><span class="si">}</span><span class="s2"> e/J x </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span><span class="si">}</span><span class="s2"> s + </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">stop_price</span><span class="p">)</span><span class="si">}</span><span class="s2">e x </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span><span class="si">}</span><span class="s2"> s&quot;</span>
+                <span class="p">)</span>
+            <span class="n">prev</span> <span class="o">=</span> <span class="n">prev</span> <span class="o">+</span> <span class="n">elapsed_seconds</span>
+        <span class="k">return</span> <span class="n">cost</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.on_powerconsumption">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.on_powerconsumption">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_powerconsumption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts_now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate net energy cost and update the hourly consumption attribute</span>
+<span class="sd">        accordingly.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           ts_now (float): time stamp of the energy consumed</span>
+<span class="sd">           m (dict): Juham MQTT message holding energy reading</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">power</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;real_total&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spots</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Waiting for electricity prices...&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span> <span class="o">=</span> <span class="n">ts_now</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span> <span class="o">=</span> <span class="n">quantize</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span><span class="p">,</span> <span class="n">ts_now</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Energy cost calculator reset at </span><span class="si">{</span><span class="n">timestampstr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span><span class="p">)</span><span class="w"> </span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># calculate cost</span>
+            <span class="n">dp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_net_energy_cost</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span><span class="p">,</span> <span class="n">ts_now</span><span class="p">,</span> <span class="n">power</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span> <span class="o">+</span> <span class="n">dp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span> <span class="o">+</span> <span class="n">dp</span>
+
+            <span class="c1"># calculate and publish energy balance</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">ts_now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span>  <span class="c1"># time elapsed since previous call</span>
+            <span class="n">balance</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">power</span>  <span class="c1"># energy consumed/produced in this slot</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Net balance cost </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">}</span><span class="s2">, today </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">}</span><span class="s2"> cents&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish_net_energy_balance</span><span class="p">(</span><span class="n">ts_now</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">balance</span><span class="p">,</span> <span class="n">power</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish_energy_cost</span><span class="p">(</span>
+                <span class="n">ts_now</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Check if the current energy balancing interval has ended</span>
+            <span class="c1"># If so, reset the net_energy_balance attribute for the next interval</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">ts_now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span>
+                <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Energy balance interval </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span><span class="si">}</span><span class="s2"> ... </span><span class="si">{</span><span class="n">timestampstr</span><span class="p">(</span><span class="n">ts_now</span><span class="p">)</span><span class="si">}</span><span class="s2"> completed with cost </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span><span class="si">}</span><span class="s2"> e, resetting&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_hour</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span> <span class="o">=</span> <span class="n">ts_now</span>
+
+            <span class="k">if</span> <span class="n">ts_now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_day</span> <span class="o">&gt;</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Day </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_hour</span><span class="si">}</span><span class="s2"> ... </span><span class="si">{</span><span class="n">timestampstr</span><span class="p">(</span><span class="n">ts_now</span><span class="p">)</span><span class="si">}</span><span class="s2"> completed with cost </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span><span class="si">}</span><span class="s2"> e, resetting&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_cost_day</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_start_day</span> <span class="o">=</span> <span class="n">ts_now</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span> <span class="o">=</span> <span class="n">ts_now</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.publish_net_energy_balance">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.publish_net_energy_balance">[docs]</a>
+    <span class="k">def</span> <span class="nf">publish_net_energy_balance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ts_now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">site</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">power</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish the net energy balance for the current energy balancing interval, as well as</span>
+<span class="sd">        the real-time power at which energy is currently being produced or consumed (the</span>
+<span class="sd">        rate of change of net energy).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts_now (float): timestamp</span>
+<span class="sd">            site (str): site</span>
+<span class="sd">            energy (float): cost or revenue.</span>
+<span class="sd">            power (float) : momentary power (rage of change of energy)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="n">site</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="n">power</span><span class="p">,</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span> <span class="n">energy</span><span class="p">,</span> <span class="s2">&quot;ts&quot;</span><span class="p">:</span> <span class="n">ts_now</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_out_net_energy_balance</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyCostCalculator.publish_energy_cost">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.EnergyCostCalculator.publish_energy_cost">[docs]</a>
+    <span class="k">def</span> <span class="nf">publish_energy_cost</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ts_now</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">site</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cost_hour</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cost_day</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish daily and hourly energy cost/revenue</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts_now (float): timestamp</span>
+<span class="sd">            site (str): site</span>
+<span class="sd">            cost_hour (float): cost or revenue per hour.</span>
+<span class="sd">            cost_day (float) : cost or revenue per day</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="n">site</span><span class="p">,</span> <span class="s2">&quot;cost_hour&quot;</span><span class="p">:</span> <span class="n">cost_hour</span><span class="p">,</span> <span class="s2">&quot;cost_day&quot;</span><span class="p">:</span> <span class="n">cost_day</span><span class="p">,</span> <span class="s2">&quot;ts&quot;</span><span class="p">:</span> <span class="n">ts_now</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_out_energy_cost</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

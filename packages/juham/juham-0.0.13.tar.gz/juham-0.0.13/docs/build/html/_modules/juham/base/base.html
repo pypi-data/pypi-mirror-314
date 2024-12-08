@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juham.base.base &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../juham/index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for juham.base.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">override</span>
+<span class="kn">from</span> <span class="nn">influxdb_client_3</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">paho.mqtt.client</span> <span class="kn">import</span> <span class="n">MQTTMessage</span> <span class="k">as</span> <span class="n">MqttMsg</span>
+<span class="kn">from</span> <span class="nn">masterpiece</span> <span class="kn">import</span> <span class="n">MasterPiece</span><span class="p">,</span> <span class="n">URL</span>
+<span class="kn">from</span> <span class="nn">juham.base.time</span> <span class="kn">import</span> <span class="n">timestamp</span>
+<span class="kn">from</span> <span class="nn">juham.base.jdatabase</span> <span class="kn">import</span> <span class="n">JDatabase</span>
+<span class="kn">from</span> <span class="nn">juham.base.jmqtt</span> <span class="kn">import</span> <span class="n">JMqtt</span>
+
+
+<div class="viewcode-block" id="Base">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base">[docs]</a>
+<span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">MasterPiece</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An automation object with MQTT networking and time series data storage.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        obj = Base(&quot;foo&quot;)</span>
+<span class="sd">        obj.mqtt_host = &quot;myhost.com&quot;</span>
+<span class="sd">        obj.mqtt_port = 12345</span>
+<span class="sd">        obj.subscribe(&#39;foo/bar&#39;)</span>
+<span class="sd">        obj.run()</span>
+
+
+<span class="sd">    To configure Base class to use a specific MQTT and database set</span>
+<span class="sd">    the class attributes to refer to desired MQTT and database implementations.</span>
+<span class="sd">    When instantiated the object will instantiate the given MQTT and database objects with it.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">database_class_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;JInflux&quot;</span>
+    <span class="n">mqtt_class_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">write_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">mqtt_root_topic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mqtt_host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
+    <span class="n">mqtt_port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1883</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs new automation object with the given name, configured</span>
+<span class="sd">        time series recorder and MQTT network features.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): name of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JDatabase</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JMqtt</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_base</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_control</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_log</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_root_topic</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unconfigured MQTT topic </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Base.to_dict">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.to_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_base&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mqtt_host&quot;</span><span class="p">,</span> <span class="s2">&quot;mqtt_port&quot;</span><span class="p">,</span> <span class="s2">&quot;mqtt_root_topic&quot;</span><span class="p">,</span> <span class="s2">&quot;write_attempts&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">attr</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_base&quot;</span><span class="p">][</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_database&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;db_client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="Base.from_dict">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.from_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_base&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;db_client&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">Optional</span><span class="p">[</span><span class="n">JDatabase</span><span class="p">],</span> <span class="n">MasterPiece</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.initialize">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.initialize">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize time series database and mqtt networking  for use. This method must be called</span>
+<span class="sd">        after the object name has been  set .</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_database</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_mqtt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.init_database">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.init_database">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates the configured time series database object.</span>
+
+<span class="sd">        Issues a warning if the :attr:`~database_class_id` has not</span>
+<span class="sd">        been configured, in which case the object will not have the time series</span>
+<span class="sd">        recording feature.</span>
+
+<span class="sd">        This method is called internally and typically there is no need to call it</span>
+<span class="sd">        from the application code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">Base</span><span class="o">.</span><span class="n">database_class_id</span> <span class="o">!=</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">MasterPiece</span><span class="o">.</span><span class="n">find_class</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">database_class_id</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                <span class="n">Optional</span><span class="p">[</span><span class="n">JDatabase</span><span class="p">],</span> <span class="n">MasterPiece</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">database_class_id</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Suspicious configuration: no database_class_id set&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.init_topic_base">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.init_topic_base">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_topic_base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">url</span><span class="p">:</span> <span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_url</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_root_topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">()</span><span class="o">.</span><span class="n">make_url</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_base</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">get</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_control</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_root_topic</span> <span class="o">+</span> <span class="s2">&quot;/control&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_root_topic</span> <span class="o">+</span> <span class="s2">&quot;/log&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mqtt_topic_base is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_base</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mqtt_topic_control is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_control</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mqtt_topic_log is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_log</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.make_topic_name">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.make_topic_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make topic name for the object. The topic name</span>
+<span class="sd">        consists of the base name plus the given &#39;topic&#39;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic (str): topic name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: mqtt topic name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_root_topic</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="Base.init_mqtt">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.init_mqtt">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_mqtt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates the configured MQTT object for networking. Calls `init_topic()`</span>
+<span class="sd">        to construct topic base name for the object, and instantiates the mqtt</span>
+<span class="sd">        client.</span>
+
+<span class="sd">        This method is called internally and typically there is no need to call it</span>
+<span class="sd">        from the application code.</span>
+
+<span class="sd">        Issues a warning if the :attr:`mqtt_class_id` has not</span>
+<span class="sd">        been configured, even though objects without a capability to communicate</span>
+<span class="sd">        are rather crippled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_topic_base</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">Base</span><span class="o">.</span><span class="n">mqtt_class_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Suscpicious configuration: no mqtt_class_id set for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">Base</span><span class="o">.</span><span class="n">find_class</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">mqtt_class_id</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t create mqtt broker </span><span class="si">{</span><span class="n">Base</span><span class="o">.</span><span class="n">mqtt_class_id</span><span class="si">}</span><span class="s2">,  class not imported&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                <span class="n">Optional</span><span class="p">[</span><span class="n">JMqtt</span><span class="p">],</span> <span class="n">MasterPiece</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">Base</span><span class="o">.</span><span class="n">mqtt_class_id</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">on_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_message</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">on_connect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_connect</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">on_disconnect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_disconnect</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">connect_to_server</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_port</span><span class="p">)</span>
+                    <span class="o">!=</span> <span class="mi">0</span>
+                <span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t connect to the mqtt broker at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> with mqtt broker </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> connected to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t create mqtt broker </span><span class="si">{</span><span class="n">Base</span><span class="o">.</span><span class="n">mqtt_class_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.subscribe">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.subscribe">[docs]</a>
+    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Subscribe to the given MQTT topic.</span>
+
+<span class="sd">        This method sets up the subscription to the specified MQTT topic and registers</span>
+<span class="sd">        the :meth:`on_message` method as the callback for incoming messages.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic (str): The MQTT topic to subscribe to.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            # configure</span>
+<span class="sd">            obj.subscribe(&#39;foo/bar&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">connected_flag</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">  subscribed to </span><span class="si">{</span><span class="w"> </span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.on_message">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.on_message">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">MqttMsg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;MQTT message notification on arrived message.</span>
+
+<span class="sd">        Called whenever a new message is posted on one of the</span>
+<span class="sd">        topics the object has subscribed to via subscribe() method.</span>
+<span class="sd">        This method is the heart of automation: here, derived subclasses should</span>
+<span class="sd">        automate whatever they were designed to automate. For example, they could switch a</span>
+<span class="sd">        relay when a boiler temperature sensor signals that the temperature is too low for</span>
+<span class="sd">        a comforting shower for say one&#39;s lovely wife.</span>
+
+<span class="sd">        For more information on this method consult MQTT documentation available</span>
+<span class="sd">        in many public sources.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client (obj):  MQTT client</span>
+<span class="sd">            userdata (Any): application specific data</span>
+<span class="sd">            msg (object): The MQTT message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_control</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;shutdown&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">loop_stop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Base.on_connect">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.on_connect">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Notification on connect.</span>
+
+<span class="sd">        This method is called whenever the MQTT broker is connected.</span>
+<span class="sd">        For more information on this method consult MQTT documentation available</span>
+<span class="sd">        in many public sources.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client (obj):  MQTT client</span>
+<span class="sd">            userdata (Any): application specific data</span>
+<span class="sd">            flags (int): Consult MQTT</span>
+<span class="sd">            rc (int): See MQTT docs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_control</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; connected to the mqtt broker &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.on_disconnect">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.on_disconnect">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Notification on disconnect.</span>
+
+<span class="sd">        This method is called whenever the MQTT broker is disconnected.</span>
+<span class="sd">        For more information on this method consult MQTT documentation available</span>
+<span class="sd">        in many public sources.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client (obj):  MQTT client</span>
+<span class="sd">            userdata (Any): application specific data</span>
+<span class="sd">            rc (int): See MQTT docs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">  disconnected from the mqtt broker, </span><span class="si">{</span><span class="n">rc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.write">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.write">[docs]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">Point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the given measurement to the database. In case of an error,</span>
+<span class="sd">        it tries again until the maximum number of attempts is reached. If it</span>
+<span class="sd">        is still unsuccessful, it gives up and passes the first encountered</span>
+<span class="sd">        exception to the caller.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            point: a measurement describing a time stamp and related attributes for one measurement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Database client is not initialized.&quot;</span><span class="p">)</span>
+
+        <span class="n">first_exception</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_attempts</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">first_exception</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">first_exception</span> <span class="o">=</span> <span class="n">e</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing ts failed, attempt </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span>
+            <span class="s2">&quot;Error&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Writing failed after </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">write_attempts</span><span class="si">}</span><span class="s2"> attempts, giving up&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">format_exception_only</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">first_exception</span><span class="p">),</span> <span class="n">first_exception</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.write_point">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.write_point">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tags</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">ts</span> <span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the given measurement to the database. In case of an error,</span>
+<span class="sd">        it tries again until the maximum number of attempts is reached. If it</span>
+<span class="sd">        is still unsuccessful, it gives up and passes the first encountered</span>
+<span class="sd">        exception to the caller.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            point: a measurement describing a time stamp and related attributes for one measurement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Database client is not initialized.&quot;</span><span class="p">)</span>
+
+        <span class="n">first_exception</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_attempts</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="o">.</span><span class="n">write_point</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">first_exception</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">first_exception</span> <span class="o">=</span> <span class="n">e</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing ts failed, attempt </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span>
+            <span class="s2">&quot;Error&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Writing failed after </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">write_attempts</span><span class="si">}</span><span class="s2"> attempts, giving up&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">format_exception_only</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">first_exception</span><span class="p">),</span> <span class="n">first_exception</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.read">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.read">[docs]</a>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">Point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reads the given measurement from the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            point: point with initialized time stamp.</span>
+
+<span class="sd">        ... note: NOT IMPLEMENTED YET</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database_client</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">point</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.debug">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.debug">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given debug message to the database after logging it using</span>
+<span class="sd">        the BaseClass&#39;s info() method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The information message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;Debug&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.info">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.info">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given information message to the database after logging it</span>
+<span class="sd">        using the BaseClass&#39;s info() method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg : The information message to be logged.</span>
+<span class="sd">            details : Additional detailed information for the message to be logged</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            obj = new Base(&#39;test&#39;)</span>
+<span class="sd">            obj.info(&#39;Message arrived&#39;, str(msg))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;Info&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.warning">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.warning">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given warning message to the database after logging it</span>
+<span class="sd">        using the BaseClass&#39;s info() method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The information message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;Warn&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.error">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.error">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Logs the given error message to the database after logging it using</span>
+<span class="sd">        the BaseClass&#39;s info() method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): The information message to be logged.</span>
+<span class="sd">            details (str): Additional detailed information for the message to be logged</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.log_message">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.log_message">[docs]</a>
+    <span class="k">def</span> <span class="nf">log_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish the given log message to the MQTT &#39;log&#39; topic.</span>
+
+<span class="sd">        This method constructs a log message with a timestamp, class type, source name,</span>
+<span class="sd">        message, and optional details. It then publishes this message to the &#39;log&#39; topic</span>
+<span class="sd">        using the MQTT protocol.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            type : str</span>
+<span class="sd">                The classification or type of the log message (e.g., &#39;Error&#39;, &#39;Info&#39;).</span>
+<span class="sd">            msg : str</span>
+<span class="sd">                The main log message to be published.</span>
+<span class="sd">            details : str, optional</span>
+<span class="sd">                Additional details about the log message (default is an empty string).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception</span>
+<span class="sd">                If there is an issue with the MQTT client while publishing the message.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            # publish info message to the Juham&#39;s &#39;log&#39; topic</span>
+<span class="sd">            self.log_message(&quot;Info&quot;, f&quot;Some cool message {some_stuff}&quot;, str(dict))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">lmsg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">(),</span>
+                <span class="s2">&quot;Class&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span>
+                <span class="s2">&quot;Source&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;Msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
+                <span class="s2">&quot;Details&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">details</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_topic_log</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lmsg</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing log event failed </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.publish">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.publish">[docs]</a>
+    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qos</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">retain</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish the given message to the given MQTT topic.</span>
+<span class="sd">        For more information consult MQTT.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic (str): topic</span>
+<span class="sd">            msg (str): message to be published</span>
+<span class="sd">            qos (int, optional): quality of service. Defaults to 1.</span>
+<span class="sd">            retain (bool, optional): retain. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">qos</span><span class="p">,</span> <span class="n">retain</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Base.shutdown">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.shutdown">[docs]</a>
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shut down all services, free resources, stop threads, disconnect</span>
+<span class="sd">        from mqtt, in general, prepare for shutdown.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">loop_stop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Base.run">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.run">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start a new thread to runs the network loop in the background.</span>
+
+<span class="sd">        Allows the main program to continue executing while the MQTT</span>
+<span class="sd">        client handles incoming and outgoing messages in the background.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">loop_start</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Base.run_forever">
+<a class="viewcode-back" href="../../../juham/base/index.html#juham.base.Base.run_forever">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">run_forever</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the network loop and blocks the main thread, continuously</span>
+<span class="sd">        running the loop to process MQTT messages.</span>
+
+<span class="sd">        The loop will run indefinitely unless the connection is lost or</span>
+<span class="sd">        the program is terminated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has mqtt client, calling forever...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt_client</span><span class="o">.</span><span class="n">loop_forever</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> mqtt client run_forever returned&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> does NOT have mqtt client, cannot run_forever, giving up&quot;</span>
+            <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
