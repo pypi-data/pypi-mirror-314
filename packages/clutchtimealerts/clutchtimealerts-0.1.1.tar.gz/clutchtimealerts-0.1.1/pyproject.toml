@@ -1,0 +1,26 @@
+[project]
+name = "clutchtimealerts"
+version = "0.1.1"
+description = "Default template for PDM package"
+authors = [
+    {name = "Brian Walheim", email = "bri125521@gmail.com"},
+]
+dependencies = ["requests>=2.32.3", "slack-sdk>=3.33.3", "pyyaml>=6.0.2", "twilio>=9.3.8"]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[dependency-groups]
+lint = ["pre-commit>=4.0.1", "ruff>=0.7.2"]
+tests = [
+    "pytest>=8.3.4",
+]
+
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["F401", "E501"]
+[tool.pdm]
+distribution = true
+
