@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biomed-multi-view"
+description = "This repository contains the implementation of the Multi-view Molecular Embedding with Late Fusion (MMELON) architecture."
+authors = [
+{name = "Parthasarathy (Partha) Suryanarayanan", email = "psuryan@us.ibm.com"},
+{name = "Shreyans Sethi", email = "shreyans.sethi@ibm.com"},
+{name = "Tim Rumbell", email = "thrumbel@us.ibm.com"},
+]
+version = "1.0"
+readme = "README.md"
+# due to how PEP 440 defines version matching, prefer [incl, excl) definitions like below:
+requires-python = ">=3.10, <3.13"
+dependencies = [
+    "setuptools==69.5.1",
+    "torch==2.1.0",
+    "torchvision==0.16.0",
+    "fuse-med-ml==0.3.0",
+    "jsonargparse[signatures]",
+    "pandas==2.2.2",
+    "tqdm==4.66.5",
+    "rdkit-pypi==2022.9.5",
+    "regex==2024.9.11",
+    "biopython==1.84",
+    "datasets==2.12.0",
+    "pyarrow==12.0.0",
+    "openbabel-wheel==3.1.1.20",
+    "transformers==4.45.1",
+    "imageio==2.35.1",
+    "loralib==0.1.2",
+    "mplcursors==0.5.3",
+    "xgboost==2.0.3",
+    "joblib==1.3.2",
+    "x-transformers==1.27.19",
+    "lmdb==1.4.1",
+    "timm==0.9.16",
+    "litdata==0.2.6",
+    "torch_geometric==2.3.1",
+    "click==8.1.7",
+    "huggingface_hub==0.25.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyterlab==4.2.5",
+    "notebook==6.5.5",
+    "jupyter_nbextensions_configurator==0.6.4",
+    "nvitop==1.3.2",
+    "memory-profiler==0.61.0",
+    "seaborn==0.13.2",
+    "altair==5.4.1",
+    "umap-learn==0.5.6",
+    "exmol==3.0.3",
+    "nglview==3.0.8",
+    "pypdb==2.4",
+    "coverage==7.3.1",
+    "pytest==7.3.1",
+    "pytest-cov==4.1.0",
+]
+
+[project.urls]
+repository = "https://github.com/BiomedSciAI/biomed-multi-view"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.ruff]
+target-version = "py310"
+
+# Activate all the rules that are pyupgrade-related
+select = [
+  "UP",   # pyupgrade
+  "D",    # pydocstyle
+  "PT",   # pytest style checking
+  "C4",   # comprehensions style checking
+  "PD",   # pandas style checking
+  "F",    # pyflakes: is-literal
+  "W605", # pycodestyle: invalid-escape-sequence
+  "I",    # isort
+]
+# On top of the Google convention, disable `D417`, which requires
+# documentation for every function parameter.
+ignore = [
+  "PD901", # df is a bad variable name
+  "PT009", # Forces use of a regular `assert` instead of unittest-style
+  "D100",  # pydocstyle: Missing module docstring
+  "D101",  # pydocstyle: Missing module-level docstring
+  "D102",  # pydocstyle: Missing docstring in public module
+  "D103",  # pydocstyle: Missing class docstring
+  "D105",  # pydocstyle: Missing docstring in magic method
+  "D107",  # pydocstyle: Missing parameter descriptions in the docstring
+  "D203",  # pydocstyle: 1 blank line required before class docstring
+  "D205",  # pydocstyle: 1 blank line required between summary line and description
+  "D212",  # pydocstyle: Multi-line docstring summary should start at the first line
+  "D401",  # pydocstyle: First line should be in imperative mood
+  "D417",  # pydocstyle: Missing argument descriptions in the docstring
+  "PD011", # pandas do not use .values (false positives causing bugs in torch code)
+  "PD015", # Use .merge method instead of pd.merge function. They have equivalent functionality.
+]
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["I001"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "abc.abstractmethod", "@abstract"]
+
+[tool.coverage.run]
+branch = true
+source = ["bmfm_sm"]
+
+[project.scripts]
+run-download-moleculenet = "bmfm_sm.launch.download_molecule_net_data:main"
+run-finetune = "bmfm_sm.launch.run_finetune:main"
