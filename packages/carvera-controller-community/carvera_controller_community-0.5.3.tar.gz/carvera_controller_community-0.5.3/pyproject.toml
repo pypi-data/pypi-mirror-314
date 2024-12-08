@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "carvera-controller-community"
+description = "Community developed controller for the Carvera CNC"
+version = "0.5.3" # version is managed in git
+license = "GPL-2.0"
+readme = "README.md"
+packages = [{include = "carveracontroller"}, {include = "scripts"}]
+authors = ["Carvera-Community"]
+
+[tool.poetry.dependencies]
+python = "<3.14,>=3.8"
+Kivy = "^2.3.0"
+pyserial = "^3.5"
+pyquicklz = "^1.4.1"
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.11.0"
+pyinstaller-versionfile = "^2.1.1"
+appimage-builder = "^1.1.0"
+ruamel-yaml = "^0.18.6"
+poetry-dynamic-versioning = "^1.4.1"
+dunamai = "^1.22.0"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
