@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "CSVtoTableNameless"
+version = "v2.4.1"
+description = "Simple commandline utility to convert CSV files to searchable and sortable HTML table."
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "NanashiTheNameless", email = "NanashiTheNameless@NamelessNanashi.dev" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2.6",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3.3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">= 2.6"
+dependencies = [
+    "click >= 6.7",
+    "jinja2 >= 2.9.6",
+    "six >= 1.10.0",
+    "unicodecsv >= 0.14.1",
+]
+
+[project.scripts]
+csvtotable = "csvtotable.cli:cli"
+
+[project.urls]
+Download = "https://github.com/NanashiTheNameless/csvtotable/releases/latest"
+Homepage = "https://github.com/NanashiTheNameless/csvtotable"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/csvtotable",
+]
+
+[tool.hatch.build.targets.wheel]
+    packages = [
+    "/csvtotable",
+]
