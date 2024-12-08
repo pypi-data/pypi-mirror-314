@@ -1,0 +1,268 @@
+from copy import deepcopy
+import unittest
+
+from msdparser import MSDParameter, parse_msd
+
+from simfile.sm import *
+
+
+def testing_chart(extradata=()) -> MSDParameter:
+    extradata_infix = (":" + ":".join(extradata)) if extradata else ""
+
+    return next(
+        parse_msd(
+            string="#NOTES:\n"
+            "     dance-single:\n"
+            "     Brackets:\n"
+            "     Edit:\n"
+            "     12:\n"
+            "     0.793,1.205,0.500,0.298,0.961:\n"
+            "0000\n"
+            "0000\n"
+            "0000\n"
+            "0000\n" + extradata_infix + ";\n"
+        )
+    )
+
+
+def testing_charts():
+    variants = tuple(SMChart.from_msd_parameter(testing_chart()) for _ in range(7))
+    variants[1].stepstype = "dance-double"
+    variants[2].description = "Footswitches"
+    variants[3].difficulty = "Challenge"
+    variants[4].meter = "13"
+    variants[5].radarvalues = "1.000,1.000,1.000,1.000,1.000"
+    variants[6].notes = "1000\n0100\n0010\n0001"
+    return variants
+
+
+def testing_simfile():
+    sm = SMSimfile.blank()
+    sm.title = "My Cool Song"
+    sm.artist = "My Cool Alias"
+    sm.charts.extend(testing_charts())
+    return str(sm)
+
+
+class TestSMChart(unittest.TestCase):
+    def test_init_and_properties(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+
+        self.assertEqual("dance-single", unit.stepstype)
+        self.assertEqual("Brackets", unit.description)
+        self.assertEqual("Edit", unit.difficulty)
+        self.assertEqual("12", unit.meter)
+        self.assertEqual("0.793,1.205,0.500,0.298,0.961", unit.radarvalues)
+        self.assertEqual("0000\n0000\n0000\n0000", unit.notes)
+
+    def test_serialize(self):
+        chart_param = testing_chart()
+        unit = SMChart.from_msd_parameter(chart_param)
+
+        self.assertEqual(chart_param.stringify(exact=True), str(unit))
+
+    def test_serialize_with_escapes(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+        unit.description = "A;B//C\\D:E"
+        expected_substring = "A\\;B\\//C\\\\D\\:E:\n"
+
+        self.assertIn(expected_substring, str(unit))
+
+    def test_eq(self):
+        variants = testing_charts()
+        base = variants[0]
+        copy = deepcopy(base)
+
+        # Identity check
+        self.assertEqual(base, base)
+
+        # Equality check
+        self.assertEqual(base, copy)
+
+        # Inequality checks
+        self.assertNotEqual(base, variants[1])
+        self.assertNotEqual(base, variants[2])
+        self.assertNotEqual(base, variants[3])
+        self.assertNotEqual(base, variants[4])
+        self.assertNotEqual(base, variants[5])
+        self.assertNotEqual(base, variants[6])
+
+    def test_getitem(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+
+        self.assertEqual(unit["STEPSTYPE"], unit.stepstype)
+        self.assertRaises(KeyError, unit.__getitem__, "stepstype")
+
+    def test_repr(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+
+        self.assertEqual("<SMChart: dance-single Edit 12>", repr(unit))
+
+    def test_preserves_extra_data(self):
+        extradata = ["extra", "data"]
+        chart_with_extra_data = testing_chart(extradata=extradata)
+        unit = SMChart.from_msd_parameter(chart_with_extra_data)
+
+        self.assertEqual(extradata, unit.extradata)
+        self.assertTrue(str(unit).endswith(f":{':'.join(extradata)};\n"))
+    
+    def test_items(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+        items = unit.items()
+
+        self.assertEqual(len(items), 6)
+        self.assertIn(('STEPSTYPE', 'dance-single'), items)
+        self.assertIn(('DESCRIPTION', 'Brackets'), items)
+        self.assertIn(('DIFFICULTY', 'Edit'), items)
+        self.assertIn(('METER', '12'), items)
+        self.assertIn(('RADARVALUES', '0.793,1.205,0.500,0.298,0.961'), items)
+        self.assertIn(('NOTES', '0000\n0000\n0000\n0000'), items)
+    
+    def test_keys(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+        self.assertEqual(
+            set(unit.keys()),
+            set(('STEPSTYPE', 'DESCRIPTION', 'DIFFICULTY', 'METER', 'RADARVALUES', 'NOTES')),
+        )
+    
+    def test_values(self):
+        unit = SMChart.from_msd_parameter(testing_chart())
+        self.assertRaises(NotImplementedError, unit.values)
+
+
+class TestSMCharts(unittest.TestCase):
+    def test_init_and_list_methods(self):
+        sim = SMSimfile()
+        unit = SMCharts(simfile=sim, charts=testing_charts())
+
+        self.assertEqual(7, len(unit))
+        for chart in unit:
+            self.assertIsInstance(chart, SMChart)
+
+    def test_serialize(self):
+        sim = SMSimfile()
+        unit = SMCharts(simfile=sim, charts=testing_charts())
+
+        serialized = str(unit)
+        self.assertTrue(serialized.startswith(str(testing_charts()[0])))
+        self.assertTrue(serialized.endswith(str(testing_charts()[-1])))
+
+    def test_repr(self):
+        sim = SMSimfile()
+        chart = SMChart.from_msd_parameter(testing_chart())
+        unit = SMCharts(simfile=sim, charts=[chart])
+        repr_chart = repr(unit[0])
+
+        self.assertEqual(f"SMCharts([{repr_chart}])", repr(unit))
+
+        unit.append(chart)
+
+        self.assertEqual(f"SMCharts([{repr_chart}, {repr_chart}])", repr(unit))
+
+
+class TestSMSimfile(unittest.TestCase):
+    def test_init_and_properties(self):
+        unit = SMSimfile(string=testing_simfile())
+
+        self.assertEqual("My Cool Song", unit["TITLE"])
+        self.assertEqual("My Cool Song", unit.title)
+        self.assertEqual("My Cool Alias", unit["ARTIST"])
+        self.assertEqual("My Cool Alias", unit.artist)
+        self.assertNotIn("NONEXISTENT", unit)
+        self.assertEqual(7, len(unit.charts))
+
+    def test_init_handles_freezes_property(self):
+        with_stops = SMSimfile(string=testing_simfile())
+        with_freezes_data = testing_simfile().replace(
+            "#STOPS:",
+            "#FREEZES:",
+        )
+        with_freezes = SMSimfile(string=with_freezes_data)
+        self.assertEqual(with_stops.stops, with_freezes.stops)
+        self.assertNotIn("STOPS", with_freezes)
+        self.assertIn("FREEZES", with_freezes)
+
+    def test_init_handles_animations_property(self):
+        with_bgchanges = SMSimfile(string=testing_simfile())
+        with_animations_data = testing_simfile().replace(
+            "#BGCHANGES:",
+            "#ANIMATIONS:",
+        )
+        with_animations = SMSimfile(string=with_animations_data)
+        self.assertEqual(with_bgchanges.bgchanges, with_animations.bgchanges)
+        self.assertNotIn("BGCHANGES", with_animations)
+        self.assertIn("ANIMATIONS", with_animations)
+
+    def test_init_handles_multi_value_properties(self):
+        with_multi_value_properties = SMSimfile(
+            string="""
+            #TITLE:Colons should be preserved below: but not here;
+            #DISPLAYBPM:60:240;
+            #ATTACKS:TIME=1.000:LEN=0.500:MODS=*5 -2.5 reverse;
+        """
+        )
+        self.assertEqual(
+            "Colons should be preserved below", with_multi_value_properties.title
+        )
+        self.assertEqual("60:240", with_multi_value_properties.displaybpm)
+        self.assertEqual(
+            "TIME=1.000:LEN=0.500:MODS=*5 -2.5 reverse",
+            with_multi_value_properties.attacks,
+        )
+
+    def test_repr(self):
+        unit = SMSimfile(string=testing_simfile())
+
+        self.assertEqual("<SMSimfile: My Cool Song>", repr(unit))
+
+        unit["SUBTITLE"] = "(edited)"
+
+        self.assertEqual("<SMSimfile: My Cool Song (edited)>", repr(unit))
+
+    def test_eq(self):
+        variants = tuple(SMSimfile(string=testing_simfile()) for _ in range(3))
+        variants[1]["TITLE"] = "Cool Song 2"
+        variants[2].charts[0].description = "Footswitches"
+        base = variants[0]
+        copy = deepcopy(base)
+
+        # Identity check
+        self.assertEqual(base, base)
+
+        # Equality check
+        self.assertEqual(base, copy)
+
+        # Inequality checks
+        self.assertNotEqual(base, variants[1])
+        self.assertNotEqual(base, variants[2])
+
+    def test_charts(self):
+        unit = SMSimfile(string=testing_simfile())
+
+        self.assertIsInstance(unit.charts, SMCharts)
+        self.assertEqual(7, len(unit.charts))
+        self.assertIsInstance(unit.charts[0], SMChart)
+
+        unit.charts = unit.charts[:3]
+        self.assertEqual(3, len(unit.charts))
+
+        unit.charts = SMCharts(simfile=unit)
+        self.assertEqual(0, len(unit.charts))
+
+    def test_serialize_handles_multi_value_properties(self):
+        expected = SMSimfile(
+            string="""
+            #TITLE:Colons should be preserved below;
+            #DISPLAYBPM:60:240;
+            #ATTACKS:TIME=1.000:LEN=0.500:MODS=*5 -2.5 reverse;
+        """
+        )
+
+        # None of the colons should be escaped
+        serialized = str(expected)
+        self.assertNotIn("\\", serialized)
+
+        deserialized = SMSimfile(string=serialized)
+        self.assertEqual(expected.title, deserialized.title)
+        self.assertEqual(expected.displaybpm, deserialized.displaybpm)
+        self.assertEqual(expected.attacks, deserialized.attacks)
