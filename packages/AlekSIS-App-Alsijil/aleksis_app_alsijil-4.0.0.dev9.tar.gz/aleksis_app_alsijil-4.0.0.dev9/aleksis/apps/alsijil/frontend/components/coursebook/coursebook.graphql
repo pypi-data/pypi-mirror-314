@@ -1,0 +1,164 @@
+query groupsByPerson {
+  groups: groupsByPerson {
+    id
+    name
+  }
+}
+
+query coursesOfPerson {
+  courses: coursesOfPerson {
+    id
+    name
+  }
+}
+
+query documentationsForCoursebook(
+  $own: Boolean!
+  $objId: ID
+  $objType: String
+  $dateStart: Date!
+  $dateEnd: Date!
+  $incomplete: Boolean
+  $absencesExist: Boolean
+) {
+  items: documentationsForCoursebook(
+    own: $own
+    objId: $objId
+    objType: $objType
+    dateStart: $dateStart
+    dateEnd: $dateEnd
+    incomplete: $incomplete
+    absencesExist: $absencesExist
+  ) {
+    id
+    course {
+      id
+      name
+    }
+    amends {
+      id
+      title
+      slotNumberStart
+      slotNumberEnd
+      amends {
+        id
+        title
+        slotNumberStart
+        slotNumberEnd
+        teachers {
+          id
+          shortName
+          fullName
+          avatarContentUrl
+        }
+        subject {
+          id
+          name
+          shortName
+          colourFg
+          colourBg
+        }
+      }
+      cancelled
+    }
+    teachers {
+      id
+      shortName
+      fullName
+      avatarContentUrl
+    }
+    subject {
+      id
+      name
+      shortName
+      colourFg
+      colourBg
+    }
+    participations {
+      id
+      person {
+        id
+        firstName
+        fullName
+      }
+      absenceReason {
+        id
+        name
+        shortName
+        colour
+      }
+      notesWithExtraMark {
+        id
+        extraMark {
+          id
+          showInCoursebook
+        }
+      }
+      notesWithNote {
+        id
+        note
+      }
+      tardiness
+      isOptimistic
+    }
+    topic
+    homework
+    groupNote
+    datetimeStart
+    datetimeEnd
+    dateStart
+    dateEnd
+    oldId
+    canEdit
+    futureNotice
+    futureNoticeParticipationStatus
+    canEditParticipationStatus
+    canViewParticipationStatus
+  }
+}
+
+mutation createOrUpdateDocumentations($input: [DocumentationInputType]!) {
+  createOrUpdateDocumentations(input: $input) {
+    items: documentations {
+      id
+      topic
+      homework
+      groupNote
+      oldId
+      participations {
+        id
+        person {
+          id
+          firstName
+          fullName
+        }
+        absenceReason {
+          id
+          name
+          shortName
+          colour
+        }
+        notesWithExtraMark {
+          id
+          extraMark {
+            id
+            showInCoursebook
+          }
+        }
+        notesWithNote {
+          id
+          note
+        }
+        tardiness
+        isOptimistic
+      }
+      subject {
+        id
+        name
+        shortName
+        colourFg
+        colourBg
+      }
+    }
+  }
+}

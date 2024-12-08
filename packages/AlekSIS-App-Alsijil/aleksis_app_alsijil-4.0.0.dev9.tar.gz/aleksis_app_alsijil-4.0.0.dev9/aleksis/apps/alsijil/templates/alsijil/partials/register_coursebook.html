@@ -1,0 +1,95 @@
+{% load i18n %}
+
+<h4>{% trans 'Coursebook' %}</h4>
+
+<table class="small-print">
+  <thead>
+  <tr>
+    <th>{% trans 'Time' %}</th>
+    <th>{% trans 'Subj.' %}</th>
+    <th>{% trans 'Topic' %}</th>
+    <th>{% trans 'Homework' %}</th>
+    <th>{% trans 'Notes' %}</th>
+    <th>{% trans 'Te.' %}</th>
+  </tr>
+  </thead>
+  <tbody>
+    {% for doc in group.documentations %}
+      {% ifchanged doc.datetime_start.date %}
+        <tr><th colspan="6">{{ doc.datetime_start.date|date:"D d M Y" }}</th></tr>
+      {% endifchanged %}
+      <tr class="
+            {% if doc.amends %}
+              {% if doc.amends.cancelled %}
+                lesson-cancelled
+              {% endif %}
+              {% if doc.amends.amends %}
+                lesson-substituted
+              {% endif %}
+            {% endif %}
+            {% ifchanged doc.datetime_start.date %}
+              lessons-day-first
+            {% endifchanged %}
+            ">
+        <td class="lesson-pe">
+          {% if doc.amends %}
+            {% if doc.amends.slot_number_start == doc.amends.slot_number_end %}
+              {{ doc.amends.slot_number_start }}.
+            {% else %}
+              {{ doc.amends.slot_number_start }}.–{{ doc.amends.slot_number_end }}.
+            {% endif %}
+          {% else %}
+            {{ doc.datetime_start|time:"H:i" }}-{{ doc.datetime_end|time:"H:i" }}
+          {% endif %}
+        </td>
+        <td class="lesson-subj">
+          {% if doc.subject %}
+              {{ doc.subject.short_name|default:doc.subject.name }}
+          {% endif %}
+        </td>
+        <td class="lesson-topic">
+          {{ doc.topic }}
+        </td>
+        <td class="lesson-homework">{{ doc.homework }}</td>
+        <td class="lesson-notes">
+          {{ documentation.group_note }}
+          {% for participation in doc.notable_participations %}
+            {% if participation.absence_reason %}
+              <span class="lesson-note-absent">
+                {{ participation.person.full_name }}
+                <span style="color: {{ participation.absence_reason.colour }};">
+                  ({{ participation.absence_reason.short_name }})
+                </span>
+              </span>
+            {% endif %}
+            {% if participation.tardiness %}
+              <span class="lesson-note-late">
+                {{ participation.person.full_name }}
+                ({{ participation.tardiness }}′)
+              </span>
+            {% endif %}
+          {% endfor %}
+          {% for personal_note in doc.personal_notes.all %}
+            {% if personal_note.extra_mark %}
+                <span>
+                {{ personal_note.person.full_name }}
+                ({{ personal_note.extra_mark.short_name }})
+                </span>
+            {% endif %}
+            {% if personal_note.note %}
+                <span>
+                {{ personal_note.person.full_name }}
+                ({{ personal_note.note }})
+                </span>
+            {% endif %}
+          {% endfor %}
+        </td>
+        <td class="lesson-te">
+          {% if doc.topic %}
+            {{ doc.get_teachers_short_names|join:', ' }}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

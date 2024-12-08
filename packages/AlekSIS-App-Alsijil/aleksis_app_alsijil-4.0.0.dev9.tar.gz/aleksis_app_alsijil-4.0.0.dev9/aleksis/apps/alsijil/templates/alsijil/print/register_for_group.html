@@ -1,0 +1,54 @@
+{% extends "core/base_print.html" %}
+
+{% load static i18n %}
+
+{% block page_title %}
+  {% trans "Class Register" %}
+{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/alsijil/full_register.css' %}"/>
+{% endblock %}
+
+{% block content %}
+  {% for group in groups %}
+    {% if include_cover %}
+      {% include "alsijil/partials/register_cover.html" with group=group %}
+      <div class="page-break">&nbsp;</div>
+    {% endif %}
+
+    {% if include_abbreviations %}
+      {% include "alsijil/partials/register_abbreviations.html" with group=group %}
+      <div class="page-break">&nbsp;</div>
+    {% endif %}
+
+    {% if include_members_table %}
+      {% include "alsijil/partials/register_members_table.html" with group=group %}
+      <div class="page-break">&nbsp;</div>
+    {% endif %}
+
+    {% if include_teachers_and_subjects_table %}
+      {% if group.courses.all %}
+        <h4>{% trans 'Teachers and lessons in group' %} {{ group.name }}</h4>
+        {% include "alsijil/partials/register_teachers_and_subjects_table.html" with groups=group.as_list only %}
+        <div class="page-break">&nbsp;</div>
+      {% endif %}
+      {% if group.child_groups.all %}
+        <h4>{% trans 'Teachers and lessons in child groups' %}</h4>
+        {% include "alsijil/partials/register_teachers_and_subjects_table.html" with groups=group.child_groups.all only %}
+        <div class="page-break">&nbsp;</div>
+      {% endif %}
+    {% endif %}
+
+    {% if include_person_overviews %}
+      {% for person in group.members_with_stats %}
+        {% include "alsijil/partials/person_overview.html" with person=person group=group %}
+        <div class="page-break">&nbsp;</div>
+      {% endfor %}
+    {% endif %}
+
+    {% if include_coursebook %}
+      {% include "alsijil/partials/register_coursebook.html" with group=group %}
+    {% endif %}
+  {% endfor %}
+{% endblock %}

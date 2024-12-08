@@ -1,0 +1,44 @@
+{% load i18n %}
+
+<h4>{% trans "Abbreviations" %}</h4>
+
+<h5>{% trans "General" %}</h5>
+
+<!-- TODO: This implies AbsenceReasons can not have the shortNames a and b! -->
+<ul class="collection">
+  <li class="collection-item">
+    <strong>(a)</strong> {% trans "Absent" %}
+  </li>
+  <li class="collection-item">
+    <strong>(b)</strong> {% trans "Late" %}
+  </li>
+</ul>
+
+{% if absence_reasons %}
+  <h5>{% trans "Absence Reasons" %}</h5>
+
+  <ul class="collection">
+    {% for absence_reason in absence_reasons %}
+      <li class="collection-item" style="color: {{ absence_reason.colour }};">
+        <strong>({{ absence_reason.short_name }})</strong> {{ absence_reason.name }}
+      </li>
+    {% endfor %}
+    {% for absence_reason in absence_reasons_not_counted %}
+      <li class="collection-item" style="color: {{ absence_reason.colour }};">
+        <strong>({{ absence_reason.short_name }})</strong> {{ absence_reason.name }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if extra_marks %}
+  <h5>{% trans "Extra Marks" %}</h5>
+
+  <ul class="collection">
+    {% for extra_mark in extra_marks %}
+      <li class="collection-item">
+        <strong>({{ extra_mark.short_name }})</strong> {{ extra_mark.name }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
