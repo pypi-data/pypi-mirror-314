@@ -1,0 +1,44 @@
+[project]
+name = "cursedtodo"
+description = "Default template for PDM package"
+authors = [
+    { name = "François Lachèse", email = "francois.lachese@gmail.com" },
+]
+dependencies = [
+    "ics>=0.7.2",
+]
+dynamic = []
+version = "0.0.1rc2"
+
+[project.scripts]
+ctodo = "cursedtodo.cursedtodo:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.11.2",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+
+[dependency-groups.license]
+text = "MIT"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+editable-backend = "path"
+
+[tool.pdm.version]
+source = "scm"
+
+[tool.mypy]
+mypy_path = "src/"
+strict = true
+overrides = [
+    { module = "ics.*", ignore_missing_imports = true },
+]
