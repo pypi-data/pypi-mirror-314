@@ -1,0 +1,195 @@
+Metadata-Version: 2.1
+Name: rsr45_dual_autodiff
+Version: 0.0.post33
+Summary: A Python package for forward-mode automatic differentiation using dual numbers.
+Author-email: Raunaq Rai <rsr45@cam.ac.uk>
+License: MIT Licence
+        
+        Copyright (c) 2024 Raunaq Rai
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Documentation, https://your-readthedocs-url-here
+Project-URL: Source, https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/c1_coursework1/rsr45.git
+Project-URL: Issues, https://github.com/yourusername/dual_autodiff/issues
+Keywords: automatic differentiation,dual numbers,forward-mode
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENCE
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: pytest>=6.0
+Requires-Dist: argparse
+
+# dual_autodiff
+
+`dual_autodiff` is a Python package that provides automatic differentiation using dual numbers. It is designed to handle derivatives and mathematical operations efficiently. The package also includes `dual_autodiff_x`, a Cython-optimized version for enhanced performance.
+
+---
+
+## Features
+
+- Automatic differentiation using dual numbers.
+- Support for a wide range of mathematical funtions:
+- Cython-optimized version (`dual_autodiff_x`) for improved speed.
+
+---
+
+## Installation
+
+### Prerequisites
+- Python 3.9 or higher.
+- `pip` for package installation.
+- `conda` (optional) for managing virtual environments.
+
+### Installing `dual_autodiff`
+#### Using pip
+Clone the repository and install the package:
+
+```bash
+git clone 'https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/c1_coursework1/rsr45.git'
+cd dual_autodiff
+pip install e .
+```
+
+#### Using conda
+1. Create a virtual environment using the provided `environment.yaml` file:
+```bash
+conda env create -n dual_env -f environment.yaml
+```
+2. Activate the environment:
+```bash
+conda activate dual_env
+```
+3. Install the package within this environment:
+```bash
+pip install -e .
+```
+
+
+## Usage
+### Using `dual_autodiff`
+
+```python
+from dual_autodiff import Dual, sin, cos
+
+# Create a Dual object
+x = Dual(1.0, 1.0)  
+
+# Perform operations
+y = sin(x)
+print(f"Value: {y.real}, Derivative: {y.dual}")
+```
+
+## Available Functions
+
+### **Dual Class Methods**
+The following methods are available in the `Dual` class:
+
+#### **Arithmetic Operations**
+- `__add__`, `__radd__` - Addition
+- `__sub__`, `__rsub__` - Subtraction
+- `__mul__`, `__rmul__` - Multiplication
+- `__truediv__`, `__rtruediv__` - Division
+- `__pow__` - Power
+
+#### **Trigonometric Functions**
+- `sin()` - Sine
+- `cos()` - Cosine
+- `tan()` - Tangent
+- `asin()` - Arcsine
+- `acos()` - Arccosine
+- `atan()` - Arctangent
+
+#### **Exponential and Logarithmic Functions**
+- `exp()` - Exponential
+- `log()` - Natural Logarithm
+- `sqrt()` - Square Root
+
+#### **Hyperbolic Functions**
+- `sinh()` - Hyperbolic Sine
+- `cosh()` - Hyperbolic Cosine
+- `tanh()` - Hyperbolic Tangent
+
+---
+
+### **Global Functions in `functions.py`**
+These functions are global aliases for the corresponding `Dual` class methods, allowing them to be called directly with either `float` or `Dual` inputs:
+
+#### **Trigonometric Functions**
+- `sin`
+- `cos`
+- `tan`
+- `asin`
+- `acos`
+- `atan`
+
+#### **Exponential and Logarithmic Functions**
+- `exp`
+- `log`
+- `sqrt`
+
+#### **Hyperbolic Functions**
+- `sinh`
+- `cosh`
+- `tanh`
+
+---
+
+## How It Works
+
+### Dual Numbers
+Dual numbers are numbers of the form:
+
+\[
+a + b $\epsilon$
+\]
+
+Where:
+- a is the **real part**, representing the function value.
+- b is the **dual part**, representing the derivative.
+- $\epsilon$^2 = 0\, making \(\epsilon\) infinitesimally small.
+
+This structure allows for efficient computation of derivatives during operations.
+
+---
+### Cython Optimization
+
+The `dual_autodiff_x` package uses Cython to compile critical operations into C, providing a significant speed boost for computationally intensive tasks.
+
+### Installing `dual_autodiff_x`
+For the Cython-optimized version:
+
+```bash
+cd dual_autodiff_x
+pip install e .
+```
+
+
+
+See the README.md file in `dual_autodiff_x`.
+
+
+
+
