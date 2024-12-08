@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "plexsearch"
+version = "0.1.1"
+description = "A powerful Python tool for performing technical searches using the Perplexity API"
+authors = ["Tom Doerr"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "plexsearch"}]
+keywords = ["search", "perplexity", "ai", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+requests = ">=2.25.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[tool.poetry.scripts]
+plexsearch = "plexsearch.core:main"
+
+[tool.poetry.urls]
+"Homepage" = "https://github.com/tom-doerr/perplexity_search"
+"Bug Tracker" = "https://github.com/tom-doerr/perplexity_search/issues"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')"
+]
