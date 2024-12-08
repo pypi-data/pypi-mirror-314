@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools", "wheel", "setuptools_scm", "build"]  # Build requirements
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rsr45_dual_autodiff"
+dynamic = ["version"]  # Dynamically managed version
+description = "A Python package for forward-mode automatic differentiation using dual numbers."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENCE" }
+authors = [
+    { name = "Raunaq Rai", email = "rsr45@cam.ac.uk" }
+]
+keywords = ["automatic differentiation", "dual numbers", "forward-mode"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries"
+]
+
+dependencies = [  # Lists dependencies required for the project
+    "numpy>=1.20.0",  # Numerical computing library
+    "pytest>=6.0",  # Testing framework
+    "argparse"  # Command-line argument parser
+]
+
+[project.urls]
+"Documentation" = "https://your-readthedocs-url-here"
+"Source" = "https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/c1_coursework1/rsr45.git"
+"Issues" = "https://github.com/yourusername/dual_autodiff/issues"
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
+write_to = "dual_autodiff/version.py"  # Where to write the dynamic version
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[project.scripts]
+dual_autodiff = "dual_autodiff.cli:main"  # CLI entry point
+

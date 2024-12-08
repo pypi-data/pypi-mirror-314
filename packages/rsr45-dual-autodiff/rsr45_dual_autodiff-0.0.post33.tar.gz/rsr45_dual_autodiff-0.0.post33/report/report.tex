@@ -1,0 +1,160 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{amsmath}    % For math environments and symbols
+\usepackage{amssymb}    % For \mathbb and other math symbols
+\usepackage{amsfonts}   % Additional math fonts
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+
+\addbibresource{references.bib} % Add references.bib with the appropriate entries
+
+% Title format
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+
+% Title settings
+\title{
+    \includegraphics[scale=0.4]{Cam_logo_bw.png}\\
+    \vspace{0.5cm}
+    C1 Research Computing - Coursework Assignment
+}
+\author{Raunaq Rai (rsr45@cam.ac.uk)\\
+    Department of Physics, University of Cambridge
+}
+\date{18 December, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This report details the development and implementation of a Python package, \texttt{dual\_autodiff}, designed for automatic differentiation using dual numbers. The package computes derivatives efficiently while supporting mathematical operations such as trigonometric, logarithmic, and exponential functions.
+
+The approach builds on the concept of forward-mode automatic differentiation, which is essential in fields like optimization, computational physics, and machine learning. This technique traces its roots to the foundational work by Wengert~\cite{wengert1964automatic}, who introduced a systematic way to compute derivatives using intermediate variables. More recently, Baydin et al.~\cite{baydin2018automatic} surveyed the use of automatic differentiation in machine learning, emphasizing its importance in training deep neural networks.
+
+To enhance performance, a Cython-optimized version, \texttt{dual\_autodiff\_x}, was also developed. This document covers the structure of the project, the mathematical principles behind dual numbers, and the implementation details of the package.
+
+\section{Setting Up the Development Environment}
+
+Apple Silicon devices primarily use the ARM64 architecture, which can pose challenges when working with scientific computing tools built for x86\_64. To ensure compatibility with these tools, I configured the development environment to run in x86\_64 mode. This step was crucial for enabling seamless execution of packages and tools designed for x86\_64 systems.
+
+To achieve this:
+\begin{itemize}
+    \item \textbf{Rosetta Installation:} Rosetta, an emulation layer by Apple, was installed to facilitate running x86\_64 binaries on ARM-based devices. This was achieved using:
+    \begin{verbatim}
+    /usr/sbin/softwareupdate --install-rosetta
+    \end{verbatim}
+    \item \textbf{Configuring Terminal:} The Terminal application was set to run in Rosetta mode, ensuring compatibility with x86\_64 libraries and tools.
+    \item \textbf{Creating an x86\_64 Conda Environment:} A dedicated Conda environment was created with all required dependencies for developing and testing the package.
+\end{itemize}
+
+This setup allowed for consistent development and ensured the compatibility of tools and libraries required for this project.
+
+\section{Theoretical Background}
+
+\subsection{Dual Numbers}
+Dual numbers can be defined as truncated Taylor series of the form:
+\[
+x = v + \dot{v}\epsilon,
+\]
+where \(v, \dot{v} \in \mathbb{R}\), and \(\epsilon\) is a nilpotent number such that \(\epsilon^2 = 0\) and \(\epsilon \neq 0\). Here:
+\begin{itemize}
+    \item \(v\): Represents the \textit{primal value}.
+    \item \(\dot{v}\): Represents the \textit{derivative} or \textit{tangent value}.
+\end{itemize}
+
+As explained by Baydin et al.~\cite{baydin2018automatic}, arithmetic operations with dual numbers align naturally with symbolic differentiation principles:
+\[
+(x_1 + \dot{x}_1\epsilon) + (x_2 + \dot{x}_2\epsilon) = (x_1 + x_2) + (\dot{x}_1 + \dot{x}_2)\epsilon,
+\]
+\[
+(x_1 + \dot{x}_1\epsilon)(x_2 + \dot{x}_2\epsilon) = x_1x_2 + (x_1\dot{x}_2 + \dot{x}_1x_2)\epsilon.
+\]
+
+\subsection{Automatic Differentiation}
+Automatic differentiation (AD) leverages dual numbers to compute derivatives efficiently. For a function \(f(x)\), substituting \(x = v + \dot{v}\epsilon\) yields:
+\[
+f(x) = f(v + \dot{v}\epsilon) = f(v) + f'(v)\dot{v}\epsilon.
+\]
+The derivative \(f'(v)\) is embedded in the coefficient of \(\epsilon\), enabling simultaneous evaluation of function values and derivatives.
+
+This principle extends to composite functions via the chain rule:
+\[
+f(g(v + \dot{v}\epsilon)) = f(g(v)) + f'(g(v))g'(v)\dot{v}\epsilon.
+\]
+
+\section{Implementation of Dual Numbers and Operations}
+
+\subsection{Overview of the \texttt{Dual} Class}
+The \texttt{dual.py} file implements the \texttt{Dual} class, the core of the \texttt{dual\_autodiff} package. This class defines dual numbers and supports operations such as addition, subtraction, multiplication, and division.
+
+\subsubsection{Arithmetic Operations}
+The \texttt{Dual} class overrides arithmetic operators for seamless integration. For example:
+\begin{verbatim}
+x = Dual(2, 1)
+y = Dual(3, 2)
+print(x + y)  # Output: Dual(real=5, dual=3)
+\end{verbatim}
+
+\subsubsection{Mathematical Functions}
+The \texttt{Dual} class also implements key mathematical functions such as:
+\begin{itemize}
+    \item Trigonometric functions (\texttt{sin}, \texttt{cos}, \texttt{tan}).
+    \item Exponential and logarithmic functions (\texttt{exp}, \texttt{log}).
+    \item Hyperbolic functions (\texttt{sinh}, \texttt{cosh}, \texttt{tanh}).
+    \item Square root (\texttt{sqrt}).
+\end{itemize}
+For example:
+\begin{verbatim}
+x = Dual(2, 1)
+result = x.sin()
+print(result)  # Output: Dual(real=0.9092..., dual=-0.4161...)
+\end{verbatim}
+
+\subsection{Utility Functions}
+To enhance usability:
+\begin{itemize}
+    \item \texttt{functions.py} provides aliases for mathematical functions.
+    \item \texttt{base.py} includes helper functions like:
+    \begin{itemize}
+        \item \texttt{is\_dual\_instance(value)}: Checks if a value is a \texttt{Dual} instance.
+        \item \texttt{ensure\_dual(value)}: Wraps non-\texttt{Dual} values into a \texttt{Dual} object.
+    \end{itemize}
+\end{itemize}
+
+\section{Project Structure and Packaging}
+
+\subsection{Repository Organization}
+The repository follows good practices for Python projects:
+\begin{itemize}
+    \item \texttt{dual\_autodiff/}: Core implementation.
+    \item \texttt{tests/}: Unit tests.
+    \item \texttt{docs/}: Documentation.
+    \item \texttt{pyproject.toml}: Modern project configuration file.
+    \item \texttt{requirements.txt}: Lists Python dependencies.
+    \item \texttt{environment.yaml}: Defines the Conda environment.
+\end{itemize}
+
+\subsection{Building and Installing the Package}
+The \texttt{pyproject.toml} file specifies build metadata:
+\begin{itemize}
+    \item \texttt{[build-system]}: Declares build tools.
+    \item \texttt{[project]}: Contains metadata like name and dependencies.
+    \item \texttt{[tool.setuptools\_scm]}: Handles dynamic versioning.
+\end{itemize}
+
+To install the package, the following commands were used:
+\begin{verbatim}
+pip install build
+python -m build
+pip install -e .
+\end{verbatim}
+
+\section{Conclusion}
+By combining the theoretical principles of dual numbers with practical implementation strategies, the \texttt{dual\_autodiff} package provides an efficient solution for automatic differentiation. The structured approach to repository organization and environment setup ensures robustness and compatibility across platforms.
+
+\printbibliography
+
+
+\end{document}
