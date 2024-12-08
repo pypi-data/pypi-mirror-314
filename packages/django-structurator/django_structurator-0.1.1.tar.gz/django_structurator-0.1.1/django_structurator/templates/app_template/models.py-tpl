@@ -1,0 +1,70 @@
+"""
+class ExampleModel(models.Model):
+    
+    char_field = models.CharField(
+        max_length=255,  # Maximum length for the field
+        unique=True,  # Ensures uniqueness at the database level
+        null=False,  # Allows NULL in the database
+        blank=False,  # Allows empty values in forms
+        default="",  # Default value for the field
+        help_text="A short description for the field.",  # Provides additional information for forms
+        validators=[],
+        verbose_name="Character Field",  # Human-readable name for the field
+        error_messages= {
+           "unique":"Username is not available.",
+           "max_length":"Username is too long, Max - 30."
+        },
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text="Timestamp when this object was created.",
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        help_text="Timestamp when this object was last updated.",
+    )
+
+    related_model = models.ForeignKey(
+        "AnotherModel",  # Replace with the actual related model
+        on_delete=models.CASCADE,  # Action to take when the related object is deleted
+        related_name="examples",  # Name for reverse relation
+        null=True,
+        blank=True,
+        help_text="A foreign key to AnotherModel.",
+    )
+
+    image_field = models.ImageField(
+        upload_to="images/",  # Directory to store uploaded images or
+        # upload_to=function_name,  # function to get directory path
+        null=True,
+        blank=True,
+        help_text="An image file field.",
+    )
+
+    class Meta:
+        verbose_name = "Example Model"
+        verbose_name_plural = "Example Models"
+        ordering = ["-created_at"]  # Default ordering for querysets
+        unique_together = ["char_field", "integer_field"]  # Unique together constraint
+
+    def save(self, *args, **kwargs):
+        if self.char_field:
+            self.char_field = self.char_field.capitalize()
+
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+
+        if self.integer_field and self.integer_field % 2 != 0:
+            raise ValidationError({"integer_field": "Integer field must be an even number."})
+
+    def __str__(self):
+        return f"ExampleModel ({self.char_field})"
+
+"""
+from django.db import models
+from django.core.exceptions import ValidationError
+# Create your models here.
+
