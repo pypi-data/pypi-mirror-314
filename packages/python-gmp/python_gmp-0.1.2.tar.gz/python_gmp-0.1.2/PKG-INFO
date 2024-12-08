@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: python-gmp
+Version: 0.1.2
+Summary: Safe bindings to the GNU GMP library
+Author-email: Sergey B Kirpichev <skirpichev@gmail.com>
+Maintainer-email: Sergey B Kirpichev <skirpichev@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/diofant/python-gmp
+Project-URL: Source Code, https://github.com/diofant/python-gmp
+Project-URL: Bug Tracker, https://github.com/diofant/python-gmp/issues
+Project-URL: Documentation, https://python-gmp.readthedocs.io/
+Keywords: gmp,multiple-precision,arbitrary-precision,bignum
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: C
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: hypothesis; extra == "tests"
+Requires-Dist: gmpy2; platform_python_implementation != "PyPy" and extra == "tests"
+Provides-Extra: develop
+Requires-Dist: python-gmp[tests]; extra == "develop"
+Requires-Dist: ruff; extra == "develop"
+Provides-Extra: docs
+Requires-Dist: sphinx; extra == "docs"
+
+Python-GMP
+==========
+
+Python extension module providing safe bindings to the GNU GMP.  This module
+shouldn't crash the interpreter!
+
+Can be used as a gmpy2/python-flint replacement to provide CPython-compatible
+integer and rational types:
+
+* mpz — like builtin int type
+* mpq — like stdlib's Fraction type (not ready yet)
+
+Module includes also few functions:
+
+* gcd — greatest common division, just like math.gcd
+* isqrt — integer square root, just like math.isqrt
+* factorial — just like math.factorial (not ready yet)
