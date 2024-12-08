@@ -1,0 +1,92 @@
+/*
+* This file was automatically generated using Avlos.
+* https://github.com/tinymovr/avlos
+*
+* Any changes to this file will be overwritten when
+* content is regenerated.
+*/
+
+#pragma once
+
+#include <{{ helper_file | file_from_path }}>
+{%- for include in includes %}
+#include <{{ include }}>
+{%- endfor %}
+
+{%- if instance.remote_attributes %}
+    {%- for attr in instance.remote_attributes.values() %}
+        {%- if attr.remote_attributes %}
+#include <{{attr.name}}.hpp>
+        {%- endif %}
+    {%- endfor %}
+{%- endif %}
+
+static uint32_t avlos_proto_hash = {{ instance.hash_uint32 }};
+
+{%- for ep in instance | bitmask_eps %}
+
+enum {{ ep.full_name | replace(".", "_") }}_flags
+{
+    {%- set comma = joiner(", ") %}
+    {{ ep.full_name | replace(".", "_") | upper }}_NONE = 0,
+    {%- for flag in ep.bitmask %}{{ comma() }}
+    {{ ep.full_name | replace(".", "_") | upper }}_{{ flag.name }} = (1 << {{ loop.index0 }})
+    {%- endfor %}
+};
+{%- endfor %}
+
+{%- for ep in instance | enum_eps %}
+
+enum {{ ep.full_name | replace(".", "_") }}_options
+{
+    {%- set comma = joiner(", ") %}
+    {%- for option in ep.options %}{{ comma() }}
+    {{ ep.full_name | replace(".", "_") | upper }}_{{ option.name }} = {{ loop.index0 }}
+    {%- endfor %}
+};
+{%- endfor %}
+
+class {{ device_name | capitalize_first }} : Node
+{
+    public:
+
+        {{ device_name | capitalize_first }}(uint8_t _can_node_id, send_callback _send_cb, recv_callback _recv_cb, delay_us_callback _delay_us_cb, uint32_t _delay_us_value):
+            Node(_can_node_id, _send_cb, _recv_cb, _delay_us_cb, _delay_us_value) 
+{%- if instance.remote_attributes %}
+    {%- for attr in instance.remote_attributes.values() %}
+        {%- if attr.remote_attributes %}
+            , {{attr.name}}(_can_node_id, _send_cb, _recv_cb, _delay_us_cb, _delay_us_value)
+        {%- endif %}
+    {%- endfor %}
+{%- endif %} {};
+
+    {%- if instance.remote_attributes %}
+        {%- for attr in instance.remote_attributes.values() %}
+            {%- if attr.remote_attributes %}
+        {{attr.name | capitalize_first}}_ {{attr.name}};
+
+            {%- else %}
+                {%- if attr.getter_name %}
+                    {%- if attr.dtype.c_name == "char[]" %}
+        void get_{{attr.name}}(char out_value[]);
+                    {%- else %}
+        {{attr.dtype.c_name}} get_{{attr.name}}(void);
+                    {%- endif %}
+                {%- endif %}
+                {%- if attr.setter_name %}
+                    {%- if attr.dtype.c_name == "char[]" %}
+        void set_{{attr.name}}(char value[]);
+                    {%- else %}
+        void set_{{attr.name}}({{attr.dtype.c_name}} value);
+                    {%- endif %}
+                {%- endif %}
+                {%- if attr.caller_name %}
+                    {%- set comma = joiner(", ") %}
+        {{attr.dtype.c_name}} {{attr.name}}({%- for arg in attr.arguments %}{{ comma() }}{{arg.dtype.c_name}} {{ arg.name }} {%- endfor %});
+                {%- endif %}
+
+            {%- endif %}
+        {%- endfor %}
+    {%- endif %}
+
+};

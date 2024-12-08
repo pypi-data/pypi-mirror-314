@@ -1,0 +1,33 @@
+/*
+* This file was automatically generated using Avlos.
+* https://github.com/tinymovr/avlos
+*
+* Any changes to this file will be overwritten when
+* content is regenerated.
+*/
+
+#pragma once
+
+{%- for include in includes %}
+#include {{ include | as_include }}
+{%- endfor %}
+
+static const uint32_t avlos_proto_hash = {{ instance.hash_uint32 }};
+extern uint8_t (*avlos_endpoints[{{ instance | endpoints | length }}])(uint8_t * buffer, uint8_t * buffer_len, Avlos_Command cmd);
+extern uint32_t _avlos_get_proto_hash(void);
+
+{%- for attr in instance | endpoints %}
+
+/*
+* avlos_{{attr.full_name | replace(".", "_") }}
+*
+* {{ attr.summary }}
+*
+* Endpoint ID: {{attr.ep_id}}
+*
+* @param buffer
+* @param buffer_len
+*/
+uint8_t avlos_{{attr.full_name | replace(".", "_") }}(uint8_t * buffer, uint8_t * buffer_len, Avlos_Command cmd);
+
+{%- endfor %}

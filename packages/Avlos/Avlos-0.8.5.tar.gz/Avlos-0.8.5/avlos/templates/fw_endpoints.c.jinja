@@ -1,0 +1,103 @@
+/*
+* This file was automatically generated using Avlos.
+* https://github.com/tinymovr/avlos
+*
+* Any changes to this file will be overwritten when
+* content is regenerated.
+*/
+
+{%- macro getter_byval(attr) -%}
+    if (AVLOS_CMD_READ == cmd) {
+        {{attr.dtype.c_name}} v;
+        v = {{ attr.getter_name }}();
+        *buffer_len = sizeof(v);
+        memcpy(buffer, &v, sizeof(v));
+        return AVLOS_RET_READ;
+    }
+{%- endmacro %}
+
+{%- macro getter_char(attr) -%}
+    if (AVLOS_CMD_READ == cmd) {
+        *buffer_len = {{ attr.getter_name }}((char *)buffer); 
+        return AVLOS_RET_READ;
+    }
+{%- endmacro %}
+
+{%- macro setter_byval(attr) -%}
+    {% if attr.getter_name %}else {% endif %}if (AVLOS_CMD_WRITE == cmd) {
+        {{attr.dtype.c_name}} v;
+        memcpy(&v, buffer, sizeof(v));
+        {{ attr.setter_name }}(v);
+        return AVLOS_RET_WRITE;
+    }
+{%- endmacro %}
+
+{%- macro setter_char(attr) -%}
+    {% if attr.getter_name %}else {% endif %}if (AVLOS_CMD_WRITE == cmd) {
+        {{attr.dtype.c_name}} v;
+        memcpy(&v, buffer, sizeof(v));
+        {{ attr.setter_name }}(v);
+        return AVLOS_RET_WRITE;
+    }
+{%- endmacro %}
+
+{%- for include in includes %}
+#include {{ include | as_include }}
+{%- endfor %}
+
+{% set comma = joiner(", ") %}
+uint8_t (*avlos_endpoints[{{ instance | endpoints | length }}])(uint8_t * buffer, uint8_t * buffer_len, Avlos_Command cmd) = { {%- for attr in instance | endpoints %}{{ comma() }}&avlos_{{attr.full_name | replace(".", "_") }}{%- endfor %} };
+
+uint32_t _avlos_get_proto_hash(void)
+{
+    return avlos_proto_hash;
+}
+
+{%- for attr in instance | endpoints %}
+
+{% if attr.func_attr -%}{{attr.func_attr}} {% endif %}uint8_t avlos_{{attr.full_name | replace(".", "_") }}(uint8_t * buffer, uint8_t * buffer_len, Avlos_Command cmd)
+{
+    {%- if attr.getter_name %}
+
+        {%- if attr.dtype.c_name == "char[]" %}
+{{ getter_char(attr) }}
+        {%- else %}
+{{ getter_byval(attr) }}
+        {%- endif %}
+
+    {%- endif %}
+    {%- if attr.setter_name %}
+
+        {%- if attr.dtype.c_name == "char[]" %}
+{{ setter_char(attr) }}
+        {%- else %}
+{{ setter_byval(attr) }}
+        {%- endif %}
+
+    {%- endif %}
+    {%- if attr.caller_name %}
+        {%- if attr.arguments | length > 0 %}
+    uint8_t _offset = 0;
+        {%- endif %}
+    {%- for arg in attr.arguments %}
+    {{ arg.dtype.c_name }} {{arg.name}};
+    memcpy(&{{arg.name}}, buffer+_offset, sizeof({{arg.name}}));
+    _offset += sizeof({{arg.name}});
+    {%- endfor %}
+
+    {%- set comma = joiner(", ") %}
+    {%- if attr.dtype.c_name != "void" %}
+    {{attr.dtype.c_name}} ret_val = {{ attr.caller_name }}({%- for arg in attr.arguments %}{{ comma() }}{{ arg.name }} {%- endfor %});
+    memcpy(buffer, &ret_val, sizeof(ret_val));
+    *buffer_len = sizeof(ret_val);
+    {%- else %}
+    {{ attr.caller_name }}({%- for arg in attr.arguments %}{{ comma() }}{{ arg.name }} {%- endfor %});
+    {%- endif %}
+
+    return AVLOS_RET_CALL;
+    {%- else %}
+    return AVLOS_RET_NOACTION;
+    {%- endif %}
+}
+
+{%- endfor %}

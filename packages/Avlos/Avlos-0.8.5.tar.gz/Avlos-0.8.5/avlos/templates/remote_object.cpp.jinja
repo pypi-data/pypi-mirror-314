@@ -1,0 +1,105 @@
+/*
+* This file was automatically generated using Avlos.
+* https://github.com/tinymovr/avlos
+*
+* Any changes to this file will be overwritten when
+* content is regenerated.
+*/
+
+{%- macro getter_byval(attr) -%}
+{{attr.dtype.c_name}} {{ instance.name | capitalize_first }}_::get_{{attr.name}}(void)
+{
+    {{attr.dtype.c_name}} value = 0;
+    this->send({{attr.ep_id}}, this->_data, 0, true);
+    if (this->recv({{attr.ep_id}}, this->_data, &(this->_dlc), this->delay_us_value)) 
+    {
+        read_le(&value, this->_data);
+    }
+    return value;
+}
+{%- endmacro %}
+
+{%- macro getter_char(attr) -%}
+void {{ instance.name | capitalize_first }}_::get_{{attr.name}}(char out_value[])
+{
+    this->send({{attr.ep_id}}, this->_data, 0, true);
+    this->_dlc = 0;
+    if (this->recv({{attr.ep_id}}, this->_data, &(this->_dlc), this->delay_us_value)) 
+    {
+        memcpy(out_value, this->_data, this->_dlc);
+    }
+}
+{%- endmacro %}
+
+{%- macro setter_byval(attr) -%}
+void {{ instance.name | capitalize_first }}_::set_{{attr.name}}({{attr.dtype.c_name}} value)
+{
+    write_le(value, this->_data);
+    this->send({{attr.ep_id}}, this->_data, sizeof({{attr.dtype.c_name}}), false);
+}
+{%- endmacro %}
+
+{%- macro setter_char(attr) -%}
+void {{ instance.name | capitalize_first }}_::set_{{attr.name}}(char value[])
+{
+    memcpy(this->_data, value, sizeof(value));
+    this->send({{attr.ep_id}}, this->_data, sizeof(value), false);
+}
+{%- endmacro %}
+
+#include <{{ instance.name }}.hpp>
+{% if instance.remote_attributes %}
+    {%- for attr in instance.remote_attributes.values() %}
+        {%- if attr.remote_attributes %}
+        {%- else %}
+            {%- if attr.getter_name %}
+
+                {%- if attr.dtype.c_name == "char[]" %}
+{{ getter_char(attr) }}
+                {%- else %}
+{{ getter_byval(attr) }}
+{% endif %}
+
+            {%- endif %}
+            {%- if attr.setter_name %}
+
+                {%- if attr.dtype.c_name == "char[]" %}
+{{ setter_char(attr) }}
+                {%- else %}
+{{ setter_byval(attr) }}
+{% endif %}
+
+            {%- endif %}
+            {%- if attr.caller_name %}
+                {%- set comma = joiner(", ") %}
+
+{{attr.dtype.c_name}} {{ instance.name | capitalize_first }}_::{{attr.name}}({%- for arg in attr.arguments %}{{ comma() }}{{arg.dtype.c_name}} {{ arg.name }} {%- endfor %})
+{
+    {%- if attr.arguments|length == 0 %}
+    this->send({{attr.ep_id}}, this->_data, 0, true);
+    {%- else %}
+    uint8_t data_len = 0;
+        {%- for arg in attr.arguments %}
+    write_le({{ arg.name }}, this->_data + data_len);
+    data_len += sizeof({{ arg.name }});
+        {%- endfor %}
+
+    this->send({{attr.ep_id}}, this->_data, data_len, false);
+    {%- endif %}
+
+    {%- if attr.dtype.c_name != "void" %}
+    {{attr.dtype.c_name}} value = 0;
+    this->send(17, this->_data, 0, true);
+    if (this->recv(17, this->_data, &(this->_dlc), this->delay_us_value)) 
+    {
+        read_le(&value, this->_data);
+    }
+    return value;
+    {%- endif %}
+}
+            {%- endif %}
+        {%- endif %}
+    {%- endfor %}
+{%- endif %}
+
+

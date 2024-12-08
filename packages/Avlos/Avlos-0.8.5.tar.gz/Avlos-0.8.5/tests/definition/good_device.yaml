@@ -1,0 +1,94 @@
+
+name: tm
+remote_attributes:
+  - name: sn
+    dtype: uint32
+    getter_name: system_get_sn
+    summary: Retrieve the unique device serial number.
+  - name: nickname
+    dtype: string
+    getter_name: system_get_name
+    setter_name: system_set_name 
+    summary: Retrieve the device name
+  - name: errors
+    flags: [UNDERVOLTAGE]
+    meta: {dynamic: True}
+    getter_name: system_get_error
+    summary: Retrieve any device errors.
+    meta: {"lalala": "ok"}
+  - name: Vbus
+    dtype: float
+    unit: volt
+    meta: {dynamic: True}
+    getter_name: system_get_vbus
+    summary: Retrieve the bus voltage.
+  - name: reset
+    summary: Reset the device.
+    caller_name: system_reset
+    dtype: void
+    arguments: []
+    meta: {reload_data: True}
+  - name: move_to
+    summary: Move to
+    caller_name: move_to
+    dtype: void
+    func_attr: TM_RAMFUNC
+    arguments: 
+      - name: position
+        dtype: float
+        unit: tick
+  - name: controller
+    remote_attributes:
+      - name: set_pos_vel_setpoints
+        summary: Set position and velocity setpoints.
+        caller_name: set_position_velocity_setpoints
+        dtype: float
+        unit: ticks
+        arguments:
+          - name: pos_setpoint
+            dtype: float
+          - name: vel_setpoint
+            dtype: float
+      - name: mode
+        summary: Control mode
+        getter_name: controller_get_mode
+        setter_name: controller_set_mode
+        options: [IDLE, CLOSED_LOOP]
+  - name: motor
+    remote_attributes:
+      - name: R
+        dtype: float
+        unit: ohm
+        getter_name: motor_get_R
+        setter_name: motor_set_R
+        meta: {export: True}
+        summary: Access the motor Resistance value.
+      - name: L
+        dtype: float
+        unit: henry
+        getter_name: motor_get_L
+        setter_name: motor_set_L
+        meta: {export: True}
+        summary: Access the motor Inductance value.
+      - name: errors
+        flags: [R_OUT_OF_RANGE, L_OUT_OF_RANGE, INVALID_POLE_PAIRS]
+        getter_name: system_get_error
+        summary: Retrieve any motor errors.
+  - name: encoder
+    remote_attributes:
+      - name: position_estimate
+        dtype: float
+        unit: ticks
+        meta: {dynamic: True}
+        getter_name: encoder_get_pos_estimate
+        summary: Retrieve the encoder position estimate.
+        func_attr: TM_RAMFUNC
+      - name: bandwidth
+        dtype: float
+        unit: rad/s
+        meta: {export: True}
+        getter_name: encoder_get_bandwidth
+        setter_name: encoder_set_bandwidth
+        summary: Access the encoder observer bandwidth.
+        func_attr: TM_RAMFUNC
+
