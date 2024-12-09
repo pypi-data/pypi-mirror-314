@@ -1,0 +1,84 @@
+name: gama
+
+services:
+  gama_ui:
+    container_name: gama_ui
+    image: ghcr.io/greenroom-robotics/gama_ui:${GAMA_VERSION:-latest}
+    ports:
+      - "3000:3000"
+      - "3100:3100"
+    environment:
+      GAMA_VESSEL_HOST: ${GAMA_VESSEL_HOST:-}
+      GAMA_VARIANT: ${GAMA_VARIANT:-whiskey_bravo}
+      GAMA_NAMESPACE_VESSEL: ${GAMA_NAMESPACE_VESSEL:-vessel_1}
+      GAMA_NAMESPACE_GROUNDSTATION: ${GAMA_NAMESPACE_GROUNDSTATION:-vessel_1}
+      GAMA_UI_HOST: vessel
+    networks:
+      - vessel
+    stop_signal: SIGINT
+
+  gama_chart_tiler:
+    container_name: gama_chart_tiler
+    image: ghcr.io/greenroom-robotics/gr_chart_tiler:1.1.0
+    ports:
+      - 3001:8080
+    networks:
+      - vessel
+    volumes:
+      - ${GAMA_CHARTS_DIR:-/tmp}/styles:/app/data/styles
+      - ${GAMA_CHARTS_DIR:-/tmp}/tiles:/app/data/tiles
+      - ${GAMA_CHARTS_DIR:-/tmp}/config.json:/app/data/config.json
+    stop_signal: SIGINT
+
+  gama_chart_api:
+    container_name: gama_chart_api
+    image: ghcr.io/greenroom-robotics/gr_chart_api:1.1.2
+    volumes:
+      - ${GAMA_CHARTS_DIR:-/tmp}/styles:/app/data/styles
+      - ${GAMA_CHARTS_DIR:-/tmp}/tiles:/app/data/tiles
+      - ${GAMA_CHARTS_DIR:-/tmp}/config.json:/app/data/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 3002:3000
+    networks:
+      - vessel
+    stop_signal: SIGINT
+
+  gama_vessel:
+    container_name: gama_vessel
+    environment:
+      - DISPLAY
+      - ROS_DOMAIN_ID
+      - GAMA_VESSEL_CONFIG
+    ipc: host
+    volumes:
+      - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.config/greenroom:/home/ros/.config/greenroom
+      - ${GAMA_LOG_DIR:-/tmp}:/home/ros/.ros/log
+    privileged: true
+    command: ${GAMA_VESSEL_COMMAND:-tail -f /dev/null}
+    stop_signal: SIGINT
+
+  gama_greenstream:
+    container_name: gama_greenstream
+    image: ghcr.io/greenroom-robotics/gama_greenstream:${GAMA_VERSION:-latest}
+    ipc: host
+    volumes:
+      - /dev:/dev
+      - ~/.config/greenroom:/home/ros/.config/greenroom
+    privileged: true
+    environment:
+      - ROS_DOMAIN_ID
+      - GAMA_VESSEL_CONFIG
+    stop_signal: SIGINT
+
+  gama_docs:
+    container_name: gama_docs
+    image: ghcr.io/greenroom-robotics/gama_docs:${GAMA_VERSION:-latest}
+    ports:
+      - "3003:3000"
+    stop_signal: SIGINT
+
+networks:
+  vessel:
