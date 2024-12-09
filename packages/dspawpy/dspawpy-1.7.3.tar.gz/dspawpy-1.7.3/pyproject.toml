@@ -1,0 +1,92 @@
+[build-system]
+build-backend = "hatchling.build"
+
+requires = [
+  "hatchling",
+]
+
+[project]
+name = "dspawpy"
+description = "Tools for dspaw"
+readme = "README.md"
+keywords = [
+  "atom",
+  "band-structure",
+  "density-of-states",
+  "dft",
+  "ds-paw",
+  "hzw",
+  "pymatgen",
+  "quantum chemistry",
+  "structure",
+]
+
+license = { file = "LICENSE.txt" }
+maintainers = [
+  { name = "zzl", email = "ZhengZhilin@hzwtech.com" },
+]
+authors = [
+  { name = "zzl", email = "ZhengZhilin@hzwtech.com" },
+  { name = "txwang" },
+  { name = "ymxia" },
+  { name = "syyl" },
+  { name = "hql" },
+]
+requires-python = ">=3.8"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "build",
+  "h5glance",       # show structure of hdf5 file
+  "h5py",           # parse h5
+  "hatchling",
+  "loguru",         # log
+  "polars>=0.18",   # speed up pandas, write_csv starts from 0.18
+  "prompt-toolkit", # cli completer
+  "pymatgen",
+  "statsmodels",
+  "tables",         # dump all hdf5 data
+]
+optional-dependencies.dev = [
+  "better-exceptions", # diagnose
+  "pre-commit",
+  "pytest",
+  "pytest-cov",
+  "pytest-html",
+  "pytest-instafail",
+  "ruff",
+  "tox-conda",         # low version python compatiblity checker
+  "twine",
+]
+optional-dependencies.manual = [
+  "jieba",                    # search in Chinese
+  "sphinx",                   # this engine builds API
+  "sphinx-autodoc-typehints", # no more re-writing type annotation in docstring
+  "sphinx-copybutton",        # show copy-button for sphinx proj
+  "sphinx-multiversion",      # show various versions of doc
+  "sphinxcontrib-napoleon",   # parse docstring in numpy style for API
+]
+urls.homepage = "http://cloud.hzwtech.com/"
+scripts.dspawpy = "dspawpy.cli.entrypoint:main"
+
+[tool.hatch.build.targets.sdist]
+packages = [
+  "src/dspawpy",
+]
+
+[tool.hatch.version]
+
+path = "src/dspawpy/__init__.py"
+
+[tool.ruff]
+target-version = "py38"
