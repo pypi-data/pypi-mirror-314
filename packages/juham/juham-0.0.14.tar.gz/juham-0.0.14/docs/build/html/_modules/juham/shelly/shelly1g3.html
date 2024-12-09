@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juham.shelly.shelly1g3 &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../juham/index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for juham.shelly.shelly1g3</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">override</span>
+<span class="kn">from</span> <span class="nn">influxdb_client_3</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">juham.base</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">MqttMsg</span>
+<span class="kn">from</span> <span class="nn">juham.base.time</span> <span class="kn">import</span> <span class="n">epoc2utc</span><span class="p">,</span> <span class="n">timestamp</span>
+<span class="kn">from</span> <span class="nn">juham.shelly.jshelly</span> <span class="kn">import</span> <span class="n">JShelly</span>
+
+
+<div class="viewcode-block" id="Shelly1G3">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3">[docs]</a>
+<span class="k">class</span> <span class="nc">Shelly1G3</span><span class="p">(</span><span class="n">JShelly</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shelly Plus 1 smart relay time series record.</span>
+
+<span class="sd">    Listens MQTT messages from dht22 (am2302) temperature sensors attached to</span>
+<span class="sd">    Shelly 1 PM Add on module and writes them to time series database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">shelly_topic</span> <span class="o">=</span> <span class="s2">&quot;/events/rpc&quot;</span>  <span class="c1"># source topic</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;shelly1g3-humidity&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay_started</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature_topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;temperature/&quot;</span><span class="p">)</span>  <span class="c1"># target topic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">humidity_topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;humidity/&quot;</span><span class="p">)</span>  <span class="c1"># target topic</span>
+
+<div class="viewcode-block" id="Shelly1G3.on_connect">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3.on_connect">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mqtt_prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">shelly_topic</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Shelly1G3.on_message">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3.on_message">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">MqttMsg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># optimize out excessive notifications</span>
+        <span class="n">tsnow</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay_started</span> <span class="o">=</span> <span class="n">tsnow</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="n">mth</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">mth</span> <span class="o">==</span> <span class="s2">&quot;NotifyStatus&quot;</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_sensor</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unknown method &quot;</span> <span class="o">+</span> <span class="n">mth</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Shelly1G3.on_sensor">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3.on_sensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map Shelly Plus 1GM specific event to juham format and post it to</span>
+<span class="sd">        temperature topic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params (dict): message from Shelly Plus 1 wifi relay</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;on_sensor() event </span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;humidity:&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">on_value</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;humidity&quot;</span><span class="p">,</span> <span class="s2">&quot;rh&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;temperature:&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">on_value</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span> <span class="s2">&quot;tC&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Shelly1G3.on_value">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3.on_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_value</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sensor_id</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">humidity</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sensor&quot;</span><span class="p">:</span> <span class="n">sensor_id</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+            <span class="n">attr</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">humidity</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">humidity_topic</span> <span class="o">+</span> <span class="n">sensor_id</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Humidity reading </span><span class="si">{</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">humidity_topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sensor_id</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">humidity</span><span class="si">}</span><span class="s2"> published&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Point</span><span class="p">(</span><span class="s2">&quot;ylakerta_humidity&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">humidity</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">epoc2utc</span><span class="p">(</span><span class="n">ts</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing to influx failed </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Shelly1G3.to_dict">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3.to_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_shelly1g3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;shelly_topic&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">shelly_topic</span><span class="p">,</span>
+            <span class="s2">&quot;temperature_topic&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature_topic</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="Shelly1G3.from_dict">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.Shelly1G3.from_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;_shelly1g3&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_shelly1g3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

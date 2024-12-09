@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juham.shelly.shellypro3em &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../juham/index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for juham.shelly.shellypro3em</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">override</span>
+<span class="kn">from</span> <span class="nn">influxdb_client_3</span> <span class="kn">import</span> <span class="n">Point</span>
+
+<span class="kn">from</span> <span class="nn">juham.base</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">MqttMsg</span>
+<span class="kn">from</span> <span class="nn">juham.base.time</span> <span class="kn">import</span> <span class="n">epoc2utc</span>
+<span class="kn">from</span> <span class="nn">juham.shelly.jshelly</span> <span class="kn">import</span> <span class="n">JShelly</span>
+
+
+<div class="viewcode-block" id="ShellyPro3EM">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM">[docs]</a>
+<span class="k">class</span> <span class="nc">ShellyPro3EM</span><span class="p">(</span><span class="n">JShelly</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Shelly Pro3EM energy meter.</span>
+
+<span class="sd">    Publishes the active power (also called real power) to MQTT, as it</span>
+<span class="sd">    represents the part of the power that can be converted to useful</span>
+<span class="sd">    work. Full set of measurements e.g. reactive power, current, and</span>
+<span class="sd">    voltage, available  from the sensor, are written to a time series</span>
+<span class="sd">    database for inspection purposes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">shelly_topic</span> <span class="o">=</span> <span class="s2">&quot;shellypro3em-powermeter/events/rpc&quot;</span>  <span class="c1"># input topic</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;shellypro3em&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;powerconsumption&quot;</span><span class="p">)</span>  <span class="c1"># target topic</span>
+        
+<div class="viewcode-block" id="ShellyPro3EM.on_connect">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.on_connect">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">ShellyPro3EM</span><span class="o">.</span><span class="n">shelly_topic</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.on_message">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.on_message">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">MqttMsg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_message</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="n">mth</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">mth</span> <span class="o">==</span> <span class="s2">&quot;NotifyStatus&quot;</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;em:0&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">on_em_0</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;em:0&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="s2">&quot;emdata:0&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">on_emdata_0</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;emdata:0&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unknown powermeter id&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">mth</span> <span class="o">==</span> <span class="s2">&quot;NotifyEvent&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;UNKNOWN POWERMETER METHOD </span><span class="si">{mth}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.on_em_0">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.on_em_0">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_em_0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle the incoming Shelly message containing all power meter</span>
+<span class="sd">        readings. Publish the real power component, which is of interest to</span>
+<span class="sd">        Juham, and record all measurements to the time series database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (str): time stamp of the event</span>
+<span class="sd">            em (dict): message from the Shelly device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish_active_power</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">em</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_power</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">em</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.publish_active_power">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.publish_active_power">[docs]</a>
+    <span class="k">def</span> <span class="nf">publish_active_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish the active power, also known as real power. This is that</span>
+<span class="sd">        part of the  power that can be converted to useful work.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (str): time stamp of the event</span>
+<span class="sd">            em (dict): message from the Shelly device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+            <span class="s2">&quot;real_a&quot;</span><span class="p">:</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_act_power&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;real_b&quot;</span><span class="p">:</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_act_power&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;real_c&quot;</span><span class="p">:</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_act_power&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;real_total&quot;</span><span class="p">:</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;total_act_power&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.record_power">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.record_power">[docs]</a>
+    <span class="k">def</span> <span class="nf">record_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given current time in UTC and energy meter message update the time</span>
+<span class="sd">        series database accordingly.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (float): utc time</span>
+<span class="sd">            em (dict): energy meter message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Point</span><span class="p">(</span><span class="s2">&quot;powermeter&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="s2">&quot;em0&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;real_A&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_act_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;real_B&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_act_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;real_C&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_act_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_real_power&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;total_act_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_apparent_power&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;total_aprt_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;apparent_a&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_aprt_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;apparent_b&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_aprt_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;apparent_c&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_aprt_power&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;current_a&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_current&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;current_b&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_current&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;current_c&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_current&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;current_n&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;n_current&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;current_total&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;total_current&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;voltage_a&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_voltage&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;voltage_b&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_voltage&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;voltage_c&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_voltage&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;freq_a&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_freq&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;freq_b&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_freq&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;freq_c&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_freq&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">epoc2utc</span><span class="p">(</span><span class="n">ts</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing to influx failed </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.on_emdata_0">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.on_emdata_0">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_emdata_0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle energy meter sensor message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (str): utc time</span>
+<span class="sd">            em (dict): energy meter sensor specific message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Point</span><span class="p">(</span><span class="s2">&quot;powermeter&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="s2">&quot;emdata0&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_energy_A&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_total_act_energy&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_energy_B&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_total_act_energy&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_energy_C&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_total_act_energy&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_ret_energy_A&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;a_total_act_ret_energy&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_ret_energy_B&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;b_total_act_ret_energy&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_ret_energy_C&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;c_total_act_ret_energy&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;total_act&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;total_act_ret&quot;</span><span class="p">,</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;total_act_ret&quot;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">epoc2utc</span><span class="p">(</span><span class="n">ts</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Total energy consumed </span><span class="si">{</span><span class="n">em</span><span class="p">[</span><span class="s1">&#39;total_act&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, exported </span><span class="si">{</span><span class="n">em</span><span class="p">[</span><span class="s1">&#39;total_act_ret&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing to influx failed </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.to_dict">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.to_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_shellypro3em&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;shelly_topic&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">shelly_topic</span><span class="p">,</span>
+            <span class="s2">&quot;power_topic&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="ShellyPro3EM.from_dict">
+<a class="viewcode-back" href="../../../juham/shelly/index.html#juham.shelly.ShellyPro3EM.from_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;_shellypro3em&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_shellypro3em&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

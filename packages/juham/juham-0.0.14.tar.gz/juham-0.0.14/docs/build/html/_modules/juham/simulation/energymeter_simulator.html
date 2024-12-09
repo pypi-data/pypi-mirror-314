@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juham.simulation.energymeter_simulator &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../juham/index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for juham.simulation.energymeter_simulator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">override</span>
+
+
+<span class="kn">from</span> <span class="nn">juham.base</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">MqttMsg</span>
+<span class="kn">from</span> <span class="nn">juham.base.time</span> <span class="kn">import</span> <span class="n">timestamp</span>
+<span class="kn">from</span> <span class="nn">juham.web</span> <span class="kn">import</span> <span class="n">IWorkerThread</span><span class="p">,</span> <span class="n">RThread</span>
+
+
+<span class="k">class</span> <span class="nc">EnergyMeterSimulatorThread</span><span class="p">(</span><span class="n">IWorkerThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Thread simulating Energy Meter.&quot;&quot;&quot;</span>
+
+    <span class="n">_power</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1000.0</span>  <span class="c1"># W</span>
+    <span class="n">_power_topic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;power&quot;</span>
+    <span class="n">_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># 10 seconds</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a thread for publishing power data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic (str, optional): MQTT topic to post the sensor readings. Defaults to None.</span>
+<span class="sd">            interval (float, optional): Interval specifying how often the sensor is read. Defaults to 60 seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">power_topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">power</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize thread  class attributes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            power_topic (str): topic to publish the energy meter readings</span>
+<span class="sd">            power (float): power  to be simulated, the default is 1kW</span>
+<span class="sd">            interval (float): update interval, the default is 10s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_power</span> <span class="o">=</span> <span class="n">power</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_interval</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_power_topic</span> <span class="o">=</span> <span class="n">power_topic</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">update_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span>
+
+    <span class="k">def</span> <span class="nf">publish_active_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish the active power, also known as real power. This is that</span>
+<span class="sd">        part of the  power that can be converted to useful work.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (str): time stamp of the event</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">ts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_ts</span> <span class="o">=</span> <span class="n">ts</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+            <span class="s2">&quot;real_a&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span>
+            <span class="s2">&quot;real_b&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span>
+            <span class="s2">&quot;real_c&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span>
+            <span class="s2">&quot;real_total&quot;</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_power_topic</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish_active_power</span><span class="p">(</span><span class="n">timestamp</span><span class="p">())</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="EnergyMeterSimulator">
+<a class="viewcode-back" href="../../../juham/simulation/index.html#juham.simulation.EnergyMeterSimulator">[docs]</a>
+<span class="k">class</span> <span class="nc">EnergyMeterSimulator</span><span class="p">(</span><span class="n">RThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulator energy meter sensor. Spawns a thread</span>
+<span class="sd">    to simulate Shelly PM mqtt messages&quot;&quot;&quot;</span>
+
+    <span class="n">workerThreadId</span> <span class="o">=</span> <span class="n">EnergyMeterSimulatorThread</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">()</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">power</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1000.0</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;em&quot;</span><span class="p">,</span>
+        <span class="n">interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create energy meter simulator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str, optional): Name of the object. Defaults to &#39;em&#39;.</span>
+<span class="sd">            topic (str, optional): MQTT topic to publish the energy meter reports. Defaults to None.</span>
+<span class="sd">            interval (float, optional): interval between events, in seconds. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_interval</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;powerconsumption&quot;</span><span class="p">)</span>  <span class="c1"># target topic</span>
+
+<div class="viewcode-block" id="EnergyMeterSimulator.on_message">
+<a class="viewcode-back" href="../../../juham/simulation/index.html#juham.simulation.EnergyMeterSimulator.on_message">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">MqttMsg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span><span class="p">:</span>
+            <span class="n">em</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_sensor</span><span class="p">(</span><span class="n">em</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_message</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyMeterSimulator.on_sensor">
+<a class="viewcode-back" href="../../../juham/simulation/index.html#juham.simulation.EnergyMeterSimulator.on_sensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle data coming from the energy meter.</span>
+
+<span class="sd">        Simply log the event to indicate the presense of simulated device.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            em (dict): data from the sensor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulated power meter sensor </span><span class="si">{</span><span class="n">em</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnergyMeterSimulator.run">
+<a class="viewcode-back" href="../../../juham/simulation/index.html#juham.simulation.EnergyMeterSimulator.run">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">EnergyMeterSimulatorThread</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">power</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_interval</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+            <span class="n">EnergyMeterSimulatorThread</span><span class="p">,</span>
+            <span class="n">Base</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">EnergyMeterSimulatorThread</span><span class="o">.</span><span class="n">get_class_id</span><span class="p">()),</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EnergyMeterSimulator.to_dict">
+<a class="viewcode-back" href="../../../juham/simulation/index.html#juham.simulation.EnergyMeterSimulator.to_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_shellypm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;power_topic&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_topic</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="EnergyMeterSimulator.from_dict">
+<a class="viewcode-back" href="../../../juham/simulation/index.html#juham.simulation.EnergyMeterSimulator.from_dict">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;_shellypm&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;_shellypm&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
