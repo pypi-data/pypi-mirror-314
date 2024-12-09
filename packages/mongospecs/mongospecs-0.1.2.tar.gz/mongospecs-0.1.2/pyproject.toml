@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "mongospecs"
+version = "0.1.2"
+description = "simple mongo ODM with support for msgspec, pydantic, and attrs"
+authors = ["Jay <jay.github0@gmail.com>"]
+repository = "https://github.com/jaykv/mongospecs"
+readme = "README.md"
+packages = [{include = "mongospecs"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+msgspec = "^0.18.4"
+pymongo = "^4.5.0"
+methodtools = "^0.4.7"
+blinker = "^1.6.3"
+typing-extensions = "^4.8.0"
+
+[tool.poetry.group.pydantic.dependencies]
+pydantic = "^2.5.2"
+
+[tool.poetry.group.attrs.dependencies]
+attrs = "^23.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+ruff = "^0.3.0"
+mypy = "^1.3.0"
+mongomock = "^4.1.2"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.4.12"
+mkdocstrings = "^0.24.0"
+mkdocstrings-python = "^1.7.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["I"]
+ignore-init-module-imports = true
+ignore = ["F811"]
+
+[tool.mypy]
+#plugins = ["pydantic.mypy"]
+follow_imports = "silent"
+ignore_missing_imports = true
+show_error_codes = true
+enable_error_code = [
+    "truthy-bool", 
+    "truthy-iterable", 
+    "redundant-expr",
+    "unused-awaitable",
+    "possibly-undefined",
+    "redundant-self"
+]
+
+[[tool.mypy.overrides]]
+module = "yaml"
+ignore_missing_imports = true
