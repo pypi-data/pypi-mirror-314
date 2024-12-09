@@ -1,0 +1,640 @@
+<!-- ISO 19115-2 METADATA -->
+<!-- The following metadata file was constructed by beelzebub -->
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gss="http://www.isotc211.org/2005/gss" xmlns:gst="http://www.isotc211.org/2005/gst" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmi ftp://ftp.ncddc.noaa.gov/pub/Metadata/Online_ISO_Training/Intro_to_ISO/schemas/ISObio/schema.xsd">
+   <gmd:fileIdentifier>
+      <gco:CharacterString>{{ metadata.metadataInfo.metadataIdentifier.identifier }}</gco:CharacterString>
+   </gmd:fileIdentifier>
+   <gmd:language>
+      <gco:CharacterString>{{ metadata.metadataInfo.defaultMetadataLocale.language }}; {{ metadata.metadataInfo.defaultMetadataLocale.country }}</gco:CharacterString>
+      <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="{{ metadata.metadataInfo.defaultMetadataLocale.language }}">{{ metadata.metadataInfo.defaultMetadataLocale.language }}</gmd:LanguageCode>
+   </gmd:language>
+   <gmd:characterSet>
+      <gmd:MD_CharacterSetCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_CharacterSetCode" codeListValue="{{ metadata.metadataInfo.defaultMetadataLocale.characterSet }}" codeSpace="106">{{ metadata.metadataInfo.defaultMetadataLocale.characterSet }}</gmd:MD_CharacterSetCode>
+   </gmd:characterSet>
+   <gmd:parentIdentifier/>
+   {% for resourceType in metadata.resourceInfo.resourceType %}
+   <gmd:hierarchyLevel>
+      <gmd:MD_ScopeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_ScopeCode" codeListValue="{{ resourceType.type }}" codeSpace="005">{{ resourceType.type }}</gmd:MD_ScopeCode>
+   </gmd:hierarchyLevel>
+   <gmd:hierarchyLevelName>
+      <gco:CharacterString>{{ resourceType.type }}</gco:CharacterString>
+   </gmd:hierarchyLevelName>
+   {% endfor %}
+   {% for metadataContact in metadata.metadataInfo.metadataContact %}
+   {% for party in metadataContact.party %}
+   {% for lookup in contact %}
+   {% if lookup.contactId == party.contactId %}
+   <gmd:contact>
+      <gmd:CI_ResponsibleParty>
+         {% if lookup.isOrganization %}
+         <gmd:organisationName>
+            <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+         </gmd:organisationName>
+         {% elif not lookup.isOrganization %}
+         <gmd:individualName>
+            <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+         </gmd:individualName>
+         <gmd:positionName>
+            <gco:CharacterString>{{ lookup.positionName }}</gco:CharacterString>
+         </gmd:positionName>
+         {% endif %}
+         <gmd:contactInfo>
+            <gmd:CI_Contact>
+               <gmd:phone/>
+               {% for email in lookup.electronicMailAddress %}
+               <gmd:address>
+                  <gmd:CI_Address>
+                     <gmd:electronicMailAddress>
+                        <gco:CharacterString>{{ email }}</gco:CharacterString>
+                     </gmd:electronicMailAddress>
+                  </gmd:CI_Address>
+               </gmd:address>
+               {% endfor %}
+               <gmd:onlineResource/>
+               <gmd:hoursOfService/>
+               <gmd:contactInstructions/>
+            </gmd:CI_Contact>
+         </gmd:contactInfo>
+         <gmd:role>
+            <gmd:CI_RoleCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_RoleCode" codeListValue="{{ metadataContact.role }}" codeSpace="011">{{ metadataContact.role }}</gmd:CI_RoleCode>
+         </gmd:role>
+      </gmd:CI_ResponsibleParty>
+   </gmd:contact>
+   {% endif %}
+   {% endfor %}
+   {% endfor %}
+   {% endfor %}
+   {% if metadata.resourceInfo.citation.date %}
+   <gmd:dateStamp>
+      <gco:Date>{{ metadata.resourceInfo.citation.date[0].date }}</gco:Date>
+   </gmd:dateStamp>
+   {% endif %}
+   <gmd:metadataStandardName>
+      <gco:CharacterString>ISO 19139</gco:CharacterString>
+   </gmd:metadataStandardName>
+   <gmd:metadataStandardVersion>
+      <gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
+   </gmd:metadataStandardVersion>
+   <gmd:dataSetURI/>
+   <gmd:locale>
+      <gmd:PT_Locale>
+         <gmd:languageCode>
+            <gmd:LanguageCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#LanguageCode" codeListValue="{{ metadata.resourceInfo.defaultResourceLocale.language }}" codeSpace="123"/>
+         </gmd:languageCode>
+         <gmd:country>
+            <gmd:CountryCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CountryCode" codeListValue="{{ metadata.resourceInfo.defaultResourceLocale.country }}" codeSpace="826"/>
+         </gmd:country>
+         <gmd:characterEncoding>
+            <gmd:MD_CharacterSetCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_CharacterSetCode" codeListValue="{{ metadata.resourceInfo.defaultResourceLocale.characterSet }}" codeSpace="106"/>
+         </gmd:characterEncoding>
+      </gmd:PT_Locale>
+   </gmd:locale>
+   <gmd:spatialRepresentationInfo/>
+   {% for spatialReferenceSystem in metadata.resourceInfo.spatialReferenceSystem %}
+   <gmd:referenceSystemInfo>
+      <gmd:MD_ReferenceSystem>
+         <gmd:referenceSystemIdentifier>
+            <gmd:RS_Identifier>
+               <gmd:authority/>
+               <gmd:code>
+                  <gco:CharacterString>{{ spatialReferenceSystem.referenceSystemIdentifier.identifier }}</gco:CharacterString>
+               </gmd:code>
+               <gmd:codeSpace>
+                  <gco:CharacterString>{{ spatialReferenceSystem.referenceSystemIdentifier.namespace }}</gco:CharacterString>
+               </gmd:codeSpace>
+               <gmd:version/>
+            </gmd:RS_Identifier>
+         </gmd:referenceSystemIdentifier>
+      </gmd:MD_ReferenceSystem>
+   </gmd:referenceSystemInfo>
+   {% endfor %}
+   <gmd:metadataExtensionInfo/>
+   <gmd:identificationInfo>
+      <gmd:MD_DataIdentification>
+         <gmd:citation>
+            <gmd:CI_Citation>
+               <gmd:title>
+                  <gco:CharacterString>{{ metadata.resourceInfo.citation.title }}</gco:CharacterString>
+               </gmd:title>
+               <gmd:alternateTitle/>
+               {% for date in metadata.resourceInfo.citation.date %}
+               <gmd:date>
+                  <gmd:CI_Date>
+                     <gmd:date>
+                        <gco:Date>{{ date.date }}</gco:Date>
+                     </gmd:date>
+                     <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_DateTypeCode" codeListValue="{{ date.dateType }}" codeSpace="002">{{ date.dateType }}</gmd:CI_DateTypeCode>
+                     </gmd:dateType>
+                  </gmd:CI_Date>
+               </gmd:date>
+               {% endfor %}
+               <gmd:edition>
+                  <gco:CharacterString>{{ metadata.resourceInfo.citation.edition }}</gco:CharacterString>
+               </gmd:edition>
+               {% for identifier in metadata.resourceInfo.citation.identifier %}
+               <gmd:identifier>
+                  <gmd:MD_Identifier>
+                     <gmd:authority/>
+                     <gmd:code>
+                        <gco:CharacterString>{{ identifier.identifier }}</gco:CharacterString>
+                     </gmd:code>
+                  </gmd:MD_Identifier>
+               </gmd:identifier>
+               {% endfor %}
+               {% for responsibleParty in metadata.resourceInfo.citation.responsibleParty %}
+               {% for party in responsibleParty.party %}
+               {% for lookup in contact %}
+               {% if lookup.contactId == party.contactId %}
+               <gmd:citedResponsibleParty>
+                  <gmd:CI_ResponsibleParty>
+                     {% if lookup.isOrganization %}
+                     <gmd:organisationName>
+                        <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+                     </gmd:organisationName>
+                     {% elif not lookup.isOrganization %}
+                     <gmd:individualName>
+                        <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+                     </gmd:individualName>
+                     <gmd:positionName>
+                        <gco:CharacterString>{{ lookup.positionName }}</gco:CharacterString>
+                     </gmd:positionName>
+                     {% endif %}
+                     <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                           <gmd:phone/>
+                           {% for email in lookup.electronicMailAddress %}
+                           <gmd:address>
+                              <gmd:CI_Address>
+                                 <gmd:electronicMailAddress>
+                                    <gco:CharacterString>{{ email }}</gco:CharacterString>
+                                 </gmd:electronicMailAddress>
+                              </gmd:CI_Address>
+                           </gmd:address>
+                           {% endfor %}
+                           <gmd:onlineResource/>
+                           <gmd:hoursOfService/>
+                           <gmd:contactInstructions/>
+                        </gmd:CI_Contact>
+                     </gmd:contactInfo>
+                     <gmd:role>
+                        <gmd:CI_RoleCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_RoleCode" codeListValue="{{ responsibleParty.role }}" codeSpace="010">{{ responsibleParty.role }}</gmd:CI_RoleCode>
+                     </gmd:role>
+                  </gmd:CI_ResponsibleParty>
+               </gmd:citedResponsibleParty>
+               {% endif %}
+               {% endfor %}
+               {% endfor %}
+               {% endfor %}
+               {% for presentationForm in metadata.resourceInfo.citation.presentationForm %}
+               <gmd:presentationForm>
+                  <gmd:CI_PresentationFormCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_PresentationFormCode" codeListValue="{{ presentationForm }}" codeSpace="011"/>
+               </gmd:presentationForm>
+               {% endfor %}
+               <gmd:series/>
+               <gmd:otherCitationDetails/>
+               <gmd:ISBN/>
+               <gmd:ISSN/>
+            </gmd:CI_Citation>
+         </gmd:citation>
+         <gmd:abstract>
+            <gco:CharacterString>{{ metadata.resourceInfo.abstract }}</gco:CharacterString>
+         </gmd:abstract>
+         <gmd:purpose/>
+         <gmd:credit/>
+         {% for status in metadata.resourceInfo.status %}
+         <gmd:status>
+            <gmd:MD_ProgressCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_ProgressCode" codeListValue="{{ status }}" codeSpace="001"/>
+         </gmd:status>
+         {% endfor %}
+         {% for pointOfContact in metadata.resourceInfo.pointOfContact %}
+         {% for party in pointOfContact.party %}
+         {% for lookup in contact %}
+         {% if lookup.contactId == party.contactId %}
+         <gmd:pointOfContact>
+            <gmd:CI_ResponsibleParty>
+               {% if lookup.isOrganization %}
+               <gmd:organisationName>
+                  <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+               </gmd:organisationName>
+               {% elif not lookup.isOrganization %}
+               <gmd:individualName>
+                  <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+               </gmd:individualName>
+               <gmd:positionName>
+                  <gco:CharacterString>{{ lookup.positionName }}</gco:CharacterString>
+               </gmd:positionName>
+               {% endif %}
+               <gmd:contactInfo>
+                  <gmd:CI_Contact>
+                     <gmd:phone/>
+                     {% for email in lookup.electronicMailAddress %}
+                     <gmd:address>
+                        <gmd:CI_Address>
+                           <gmd:electronicMailAddress>
+                              <gco:CharacterString>{{ email }}</gco:CharacterString>
+                           </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                     </gmd:address>
+                     {% endfor %}
+                     <gmd:onlineResource/>
+                     <gmd:hoursOfService/>
+                     <gmd:contactInstructions/>
+                  </gmd:CI_Contact>
+               </gmd:contactInfo>
+               <gmd:role>
+                  <gmd:CI_RoleCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_RoleCode" codeListValue="{{ pointOfContact.role }}" codeSpace="007">{{ pointOfContact.role }}</gmd:CI_RoleCode>
+               </gmd:role>
+            </gmd:CI_ResponsibleParty>
+         </gmd:pointOfContact>
+         {% endif %}
+         {% endfor %}
+         {% endfor %}
+         {% endfor %}
+         <gmd:resourceMaintenance/>
+         <gmd:graphicOverview/>
+         <gmd:resourceFormat/>
+         {% for keywordSet in metadata.resourceInfo.keyword %}
+         <gmd:descriptiveKeywords>
+            <gmd:MD_Keywords>
+               {% for keyword in keywordSet.keyword %}
+               <gmd:keyword>
+                  <gco:CharacterString>{{ keyword.keyword }}</gco:CharacterString>
+               </gmd:keyword>
+               {% endfor %}
+               <gmd:type>
+                  <gmd:MD_KeywordTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_KeywordTypeCode" codeListValue="{{ keywordSet.keywordType }}" codeSpace="adiwg002"/>
+               </gmd:type>
+               <gmd:thesaurusName>
+                  <gmd:CI_Citation>
+                     <gmd:title>
+                        <gco:CharacterString>{{ keywordSet.thesaurus.title }}</gco:CharacterString>
+                     </gmd:title>
+                     <gmd:alternateTitle/>
+                     {% for date in keywordSet.thesaurus.date %}
+                     <gmd:date>
+                        <gmd:CI_Date>
+                           <gmd:date>
+                              <gco:Date>{{ date.date }}</gco:Date>
+                           </gmd:date>
+                           <gmd:dateType>
+                              <gmd:CI_DateTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_DateTypeCode" codeListValue="{{ date.dateType }}" codeSpace="003">{{ date.dateType }}</gmd:CI_DateTypeCode>
+                           </gmd:dateType>
+                        </gmd:CI_Date>
+                     </gmd:date>
+                     {% endfor %}
+                     <gmd:edition>
+                        <gco:CharacterString>{{ keywordSet.thesaurus.edition }}</gco:CharacterString>
+                     </gmd:edition>
+                     {% for identifier in keywordSet.thesaurus.identifier %}
+                     <gmd:identifier>
+                        <gmd:MD_Identifier>
+                           <gmd:authority/>
+                           <gmd:code>
+                              <gco:CharacterString>{{ identifier.identifier }}</gco:CharacterString>
+                           </gmd:code>
+                        </gmd:MD_Identifier>
+                     </gmd:identifier>
+                     {% endfor %}
+                     <gmd:citedResponsibleParty/>
+                     <gmd:presentationForm/>
+                     <gmd:series/>
+                     <gmd:otherCitationDetails/>
+                     <gmd:ISBN/>
+                     <gmd:ISSN/>
+                  </gmd:CI_Citation>
+               </gmd:thesaurusName>
+            </gmd:MD_Keywords>
+         </gmd:descriptiveKeywords>
+         {% endfor %}
+         <gmd:resourceSpecificUsage/>
+         {% for constraint in metadata.resourceInfo.constraint %}
+         {% if constraint.type == "use" %}
+         {% for useLimitation in constraint.useLimitation %}
+         <gmd:resourceConstraints>
+            <gmd:MD_Constraints>
+               <gmd:useLimitation>
+                  <gco:CharacterString>{{ useLimitation }}</gco:CharacterString>
+               </gmd:useLimitation>
+            </gmd:MD_Constraints>
+         </gmd:resourceConstraints>
+         {% endfor %}
+         {% endif %}
+         {% endfor %}
+         {% for associatedResource in metadata.associatedResource %}
+         <gmd:aggregationInfo>
+            <gmd:MD_AggregateInformation>
+               <gmd:aggregateDataSetName>
+                  <gmd:CI_Citation>
+                     <gmd:title>
+                        <gco:CharacterString>{{ associatedResource.resourceCitation.title }}</gco:CharacterString>
+                     </gmd:title>
+                     <gmd:alternateTitle/>
+                     {% for date in associatedResource.resourceCitation.date %}
+                     <gmd:date>
+                        <gmd:CI_Date>
+                           <gmd:date>
+                              <gco:Date>{{ date.date }}</gco:Date>
+                           </gmd:date>
+                           <gmd:dateType>
+                              <gmd:CI_DateTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_DateTypeCode" codeListValue="{{ date.dateType }}" codeSpace="002">{{ date.dateType }}</gmd:CI_DateTypeCode>
+                           </gmd:dateType>
+                        </gmd:CI_Date>
+                     </gmd:date>
+                     {% endfor %}
+                     <gmd:edition>
+                        <gco:CharacterString>{{ associatedResource.resourceCitation.edition }}</gco:CharacterString>
+                     </gmd:edition>
+                     {% for identifier in associatedResource.resourceCitation.identifier %}
+                     <gmd:identifier>
+                        <gmd:MD_Identifier>
+                           <gmd:authority/>
+                           <gmd:code>
+                              <gco:CharacterString>{{ identifier.identifier }}</gco:CharacterString>
+                           </gmd:code>
+                        </gmd:MD_Identifier>
+                     </gmd:identifier>
+                     {% endfor %}
+                     {% for responsibleParty in associatedResource.resourceCitation.responsibleParty %}
+                     {% for party in responsibleParty.party %}
+                     {% for lookup in contact %}
+                     {% if lookup.contactId == party.contactId %}
+                     <gmd:citedResponsibleParty>
+                        <gmd:CI_ResponsibleParty>
+                           {% if lookup.isOrganization %}
+                           <gmd:organisationName>
+                              <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+                           </gmd:organisationName>
+                           {% elif not lookup.isOrganization %}
+                           <gmd:individualName>
+                              <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+                           </gmd:individualName>
+                           <gmd:positionName>
+                              <gco:CharacterString>{{ lookup.positionName }}</gco:CharacterString>
+                           </gmd:positionName>
+                           {% endif %}
+                           <gmd:contactInfo>
+                              <gmd:CI_Contact>
+                                 <gmd:phone/>
+                                 {% for email in lookup.electronicMailAddress %}
+                                 <gmd:address>
+                                    <gmd:CI_Address>
+                                       <gmd:electronicMailAddress>
+                                          <gco:CharacterString>{{ email }}</gco:CharacterString>
+                                       </gmd:electronicMailAddress>
+                                    </gmd:CI_Address>
+                                 </gmd:address>
+                                 {% endfor %}
+                                 <gmd:onlineResource/>
+                                 <gmd:hoursOfService/>
+                                 <gmd:contactInstructions/>
+                              </gmd:CI_Contact>
+                           </gmd:contactInfo>
+                           <gmd:role>
+                              <gmd:CI_RoleCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_RoleCode" codeListValue="{{ responsibleParty.role }}" codeSpace="010">{{ responsibleParty.role }}</gmd:CI_RoleCode>
+                           </gmd:role>
+                        </gmd:CI_ResponsibleParty>
+                     </gmd:citedResponsibleParty>
+                     {% endif %}
+                     {% endfor %}
+                     {% endfor %}
+                     {% endfor %}
+                     {% for presentationForm in associatedResource.resourceCitation.presentationForm %}
+                     <gmd:presentationForm>
+                        <gmd:CI_PresentationFormCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_PresentationFormCode" codeListValue="{{ presentationForm }}" codeSpace="011"/>
+                     </gmd:presentationForm>
+                     {% endfor %}
+                     <gmd:series/>
+                     <gmd:otherCitationDetails/>
+                     <gmd:ISBN/>
+                     <gmd:ISSN/>
+                  </gmd:CI_Citation>
+               </gmd:aggregateDataSetName>
+               <gmd:associationType>
+                  <gmd:DS_AssociationTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#DS_AssociationTypeCode" codeListValue="{{ associatedResource.associationType }}" codeSpace="001"/>
+               </gmd:associationType>
+               <gmd:initiativeType>
+                  <gmd:DS_InitiativeTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#DS_InitiativeTypeCode" codeListValue="{{ associatedResource.initiativeType }}" codeSpace="005"/>
+               </gmd:initiativeType>
+            </gmd:MD_AggregateInformation>
+         </gmd:aggregationInfo>
+         {% endfor %}
+         <gmd:taxonomy/>
+         {% for spatialRepresentationType in metadata.resourceInfo.spatialRepresentationType %}
+         <gmd:spatialRepresentationType>
+            <gmd:MD_SpatialRepresentationTypeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_SpatialRepresentationTypeCode" codeListValue="{{ spatialRepresentationType }}" codeSpace="adiwg001"/>
+         </gmd:spatialRepresentationType>
+         {% endfor %}
+         <gmd:spatialResolution/>
+         <gmd:language>
+            <gco:CharacterString>{{ metadata.resourceInfo.defaultResourceLocale.language }}; {{ metadata.resourceInfo.defaultResourceLocale.country }}</gco:CharacterString>
+         </gmd:language>
+         <gmd:characterSet>
+            <gmd:MD_CharacterSetCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_CharacterSetCode" codeListValue="{{ metadata.resourceInfo.defaultResourceLocale.characterSet }}" codeSpace="106"/>
+         </gmd:characterSet>
+         {% for keywordSet in metadata.resourceInfo.keyword %}
+         {% if keywordSet.keywordType == "isoTopicCategory" %}
+         {% for keyword in keywordSet.keyword %}
+         <gmd:topicCategory>
+            <gmd:MD_TopicCategoryCode>{{ keyword.keyword }}</gmd:MD_TopicCategoryCode>
+         </gmd:topicCategory>
+         {% endfor %}
+         {% endif %}
+         {% endfor %}
+         <gmd:environmentDescription>
+            <gco:CharacterString>{{ metadata.resourceInfo.environmentDescription }}</gco:CharacterString>
+         </gmd:environmentDescription>
+         {% for extent in metadata.resourceInfo.extent %}
+         <gmd:extent>
+            {# <gmd:EX_Extent id="bounding"> #}
+            <gmd:EX_Extent>
+               <gmd:description>
+                  <gco:CharacterString>{{ extent.description }}</gco:CharacterString>
+               </gmd:description>
+               {% for geographicExtent in extent.geographicExtent %}
+               <gmd:geographicElement>
+                  <gmd:EX_GeographicBoundingBox>
+                     <gmd:extentTypeCode>
+                        <gco:Boolean>{{ geographicExtent.containsData }}</gco:Boolean>
+                     </gmd:extentTypeCode>
+                     <gmd:westBoundLongitude>
+                        <gco:Decimal>{{ geographicExtent.boundingBox.westLongitude }}</gco:Decimal>
+                     </gmd:westBoundLongitude>
+                     <gmd:eastBoundLongitude>
+                        <gco:Decimal>{{ geographicExtent.boundingBox.eastLongitude }}</gco:Decimal>
+                     </gmd:eastBoundLongitude>
+                     <gmd:southBoundLatitude>
+                        <gco:Decimal>{{ geographicExtent.boundingBox.southLatitude }}</gco:Decimal>
+                     </gmd:southBoundLatitude>
+                     <gmd:northBoundLatitude>
+                        <gco:Decimal>{{ geographicExtent.boundingBox.northLatitude }}</gco:Decimal>
+                     </gmd:northBoundLatitude>
+                  </gmd:EX_GeographicBoundingBox>
+               </gmd:geographicElement>
+               {% endfor %}
+               {% for temporalExtent in extent.temporalExtent %}
+               <gmd:temporalElement>
+                  <gmd:EX_TemporalExtent>
+                     <gmd:extent>
+                        <gml:TimePeriod gml:id="timePeriod_{{loop.index}}">
+                           <gml:description/>
+                           <gml:identifier codeSpace=""/>
+                           <gml:name/>
+                           <gml:beginPosition>{{ temporalExtent.startDateTime }}</gml:beginPosition>
+                           <gml:endPosition>{{ temporalExtent.endDateTime }}</gml:endPosition>
+                        </gml:TimePeriod>
+                     </gmd:extent>
+                  </gmd:EX_TemporalExtent>
+               </gmd:temporalElement>
+               {% endfor %}
+               {% for verticalExtent in extent.verticalExtent %}
+               <gmd:verticalElement>
+                  <gmd:EX_VerticalExtent>
+                     <gmd:minimumValue>
+                        <gco:Real>{{ verticalExtent.minValue }}</gco:Real>
+                     </gmd:minimumValue>
+                     <gmd:maximumValue>
+                        <gco:Real>{{ verticalExtent.maxValue }}</gco:Real>
+                     </gmd:maximumValue>
+                  </gmd:EX_VerticalExtent>
+               </gmd:verticalElement>
+               {% endfor %}
+            </gmd:EX_Extent>
+         </gmd:extent>
+         {% endfor %}
+         <gmd:supplementalInformation/>
+      </gmd:MD_DataIdentification>
+   </gmd:identificationInfo>
+   <gmd:contentInfo/>
+   {% for resourceDistribution in metadata.resourceDistribution %}
+   {% for distributor in resourceDistribution.distributor %}
+   <gmd:distributionInfo>
+      <gmd:MD_Distribution>
+         <gmd:distributor>
+            <gmd:MD_Distributor>
+               {% for party in distributor.contact.party %}
+               {% for lookup in contact %}
+               {% if lookup.contactId == party.contactId %}
+               <gmd:distributorContact>
+                  <gmd:CI_ResponsibleParty>
+                     {% if lookup.isOrganization %}
+                     <gmd:organisationName>
+                        <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+                     </gmd:organisationName>
+                     {% elif not lookup.isOrganization %}
+                     <gmd:individualName>
+                        <gco:CharacterString>{{ lookup.name }}</gco:CharacterString>
+                     </gmd:individualName>
+                     <gmd:positionName>
+                        <gco:CharacterString>{{ lookup.positionName }}</gco:CharacterString>
+                     </gmd:positionName>
+                     {% endif %}
+                     <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                           <gmd:phone/>
+                           {% for email in lookup.electronicMailAddress %}
+                           <gmd:address>
+                              <gmd:CI_Address>
+                                 <gmd:electronicMailAddress>
+                                    <gco:CharacterString>{{ email }}</gco:CharacterString>
+                                 </gmd:electronicMailAddress>
+                              </gmd:CI_Address>
+                           </gmd:address>
+                           {% endfor %}
+                           <gmd:onlineResource/>
+                           <gmd:hoursOfService/>
+                           <gmd:contactInstructions/>
+                        </gmd:CI_Contact>
+                     </gmd:contactInfo>
+                     <gmd:role>
+                        <gmd:CI_RoleCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_RoleCode" codeListValue="{{ distributor.contact.role }}" codeSpace="010">{{ distributor.contact.role }}</gmd:CI_RoleCode>
+                     </gmd:role>
+                  </gmd:CI_ResponsibleParty>
+               </gmd:distributorContact>
+               {% endif %}
+               {% endfor %}
+               {% endfor %}
+               <gmd:distributionOrderProcess/>
+               {% for transferOption in distributor.transferOption %}
+               {% for distributionFormat in transferOption.distributionFormat %}
+               <gmd:distributorFormat>
+                  <gmd:MD_Format>
+                     <gmd:name>
+                        <gco:CharacterString>{{ distributionFormat.formatSpecification.title }}</gco:CharacterString>
+                     </gmd:name>
+                     <gmd:version>
+                        <gco:CharacterString>{{ distributionFormat.formatSpecification.edition }}</gco:CharacterString>
+                     </gmd:version>
+                     <gmd:amendmentNumber/>
+                     <gmd:fileDecompressionTechnique/>
+                  </gmd:MD_Format>
+               </gmd:distributorFormat>
+               {% endfor %}
+               {% for onlineOption in transferOption.onlineOption %}
+               <gmd:distributorTransferOptions>
+                  <gmd:MD_DigitalTransferOptions>
+                     <gmd:unitsOfDistribution>
+                        <gco:CharacterString>{{ transferOption.unitsOfDistribution }}</gco:CharacterString>
+                     </gmd:unitsOfDistribution>
+                     <gmd:transferSize>
+                        <gco:Real>{{ transferOption.transferSize }}</gco:Real>
+                     </gmd:transferSize>
+                     <gmd:onLine>
+                        <gmd:CI_OnlineResource>
+                           <gmd:linkage>
+                              <gmd:URL>{{ onlineOption.uri }}</gmd:URL>
+                           </gmd:linkage>
+                           <gmd:protocol>
+                              <gco:CharacterString>{{ onlineOption.protocol }}</gco:CharacterString>
+                           </gmd:protocol>
+                           <gmd:applicationProfile/>
+                           <gmd:name>
+                              <gco:CharacterString>{{ onlineOption.name }}</gco:CharacterString>
+                           </gmd:name>
+                           <gmd:description/>
+                           <gmd:function>
+                              <gmd:CI_OnLineFunctionCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#CI_OnLineFunctionCode" codeListValue="{{ onlineOption.function }}" codeSpace="adiwg004"/>
+                           </gmd:function>
+                        </gmd:CI_OnlineResource>
+                     </gmd:onLine>
+                     <gmd:offLine/>
+                  </gmd:MD_DigitalTransferOptions>
+               </gmd:distributorTransferOptions>
+               {% endfor %}
+               {% endfor %}
+            </gmd:MD_Distributor>
+         </gmd:distributor>
+      </gmd:MD_Distribution>
+   </gmd:distributionInfo>
+   {% endfor %}
+   {% endfor %}
+   {% for resourceLineage in metadata.resourceLineage %}
+   <gmd:dataQualityInfo>
+      <gmd:DQ_DataQuality>
+         <gmd:scope>
+            <gmd:DQ_Scope>
+               <gmd:level>
+                  {% if metadata.resourceInfo.resourceType %}
+                  <gmd:MD_ScopeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_ScopeCode" codeListValue="{{ metadata.resourceInfo.resourceType[0].type }}" codeSpace="adiwg011">{{ metadata.resourceInfo.resourceType[0].type }}</gmd:MD_ScopeCode>
+                  {% else %}
+                  <gmd:MD_ScopeCode codeList="http://mdtranslator.adiwg.org/api/codelists?format=xml#MD_ScopeCode" codeListValue="dataset" codeSpace="adiwg011">dataset</gmd:MD_ScopeCode>
+                  {% endif %}
+               </gmd:level>
+               <gmd:extent/>
+               <gmd:levelDescription/>
+            </gmd:DQ_Scope>
+         </gmd:scope>
+         <gmd:lineage>
+            <gmd:LI_Lineage>
+               <gmd:statement>
+                  <gco:CharacterString>{{ resourceLineage.statement }}</gco:CharacterString>
+               </gmd:statement>
+               <gmd:processStep/>
+               <gmd:source/>
+            </gmd:LI_Lineage>
+         </gmd:lineage>
+      </gmd:DQ_DataQuality>
+   </gmd:dataQualityInfo>
+   {% endfor %}
+   <gmd:metadataMaintenance/>
+</gmi:MI_Metadata>
