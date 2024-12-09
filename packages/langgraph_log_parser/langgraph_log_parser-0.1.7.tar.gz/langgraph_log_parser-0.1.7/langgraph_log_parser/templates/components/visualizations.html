@@ -1,0 +1,18 @@
+<div id="visualizations" class="tab-content">
+    <div class="grid grid-cols-2 gap-4">
+        {% for infra, images in images_data.items() %}
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-bold mb-4">{{ infra }}</h2>
+            {% for img_name, img_data in images.items() %}
+            <div class="mb-4">
+                <h3 class="text-lg mb-2">{{ img_name }}</h3>
+                <img src="data:image/png;base64,{{ img_data }}"
+                     alt="{{ img_name }}"
+                     class="max-w-full cursor-pointer hover:opacity-80"
+                     onclick="showImage('{{ img_data }}', '{{ img_name }}')">
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
