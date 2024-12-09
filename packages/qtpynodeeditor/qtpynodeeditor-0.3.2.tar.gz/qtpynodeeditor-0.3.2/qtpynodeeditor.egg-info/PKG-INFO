@@ -1,0 +1,127 @@
+Metadata-Version: 2.1
+Name: qtpynodeeditor
+Version: 0.3.2
+Summary: Python Qt node editor
+Author: Ken Lauer
+License: Copyright (c) 2019, Ken Lauer
+        All rights reserved.
+        
+        qtpynodeeditor is a derivative work of NodeEditor by Dmitry Pinaev. It follows
+        in the footsteps of the original and is licensed by the BSD 3-clause license.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are
+        met:
+        
+            * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+            * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following disclaimer
+        in the documentation and/or other materials provided with the
+        distribution.
+            * Neither the name of copyright holder, nor the names of its
+        contributors may be used to endorse or promote products derived from
+        this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+        "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+        LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+        A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+        OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+        SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+        DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+        THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: versioneer
+Requires-Dist: qtpy
+Requires-Dist: PyQt5
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-qt; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: sphinxcontrib-jquery; extra == "test"
+Provides-Extra: doc
+Requires-Dist: sphinx; extra == "doc"
+Requires-Dist: ipython; extra == "doc"
+Requires-Dist: matplotlib; extra == "doc"
+Requires-Dist: numpydoc; extra == "doc"
+Requires-Dist: sphinx-copybutton; extra == "doc"
+Requires-Dist: sphinx_rtd_theme; extra == "doc"
+
+.. image:: https://img.shields.io/travis/klauer/qtpynodeeditor.svg
+        :target: https://travis-ci.org/klauer/qtpynodeeditor
+
+.. image:: https://img.shields.io/pypi/v/qtpynodeeditor.svg
+        :target: https://pypi.python.org/pypi/qtpynodeeditor
+
+===============================
+qtpynodeeditor
+===============================
+
+Python Qt node editor
+
+Pure Python port of `NodeEditor <https://github.com/paceholder/nodeeditor>`_,
+supporting PyQt5 and PySide through `qtpy <https://github.com/spyder-ide/qtpy>`_.
+
+Requirements
+------------
+
+* Python 3.6+
+* qtpy
+* PyQt5 / PySide
+
+
+Documentation
+-------------
+
+`Sphinx-generated documentation <https://klauer.github.io/qtpynodeeditor/>`_
+
+
+Screenshots
+-----------
+
+`Style example <https://github.com/klauer/qtpynodeeditor/blob/master/qtpynodeeditor/examples/style.py>`_
+
+.. image:: https://raw.githubusercontent.com/klauer/qtpynodeeditor/assets/screenshots/style.png
+
+`Calculator example <https://github.com/klauer/qtpynodeeditor/blob/master/qtpynodeeditor/examples/calculator.py>`_
+
+.. image:: https://raw.githubusercontent.com/klauer/qtpynodeeditor/assets/screenshots/calculator.png
+
+
+Installation
+------------
+
+We recommend using conda to install qtpynodeeditor.
+
+::
+
+   $ conda create -n my_new_environment -c conda-forge python=3.7 qtpynodeeditor
+   $ conda activate my_new_environment
+
+qtpynodeeditor may also be installed using pip from PyPI.
+
+::
+
+    $ python -m pip install qtpynodeeditor pyqt5
+
+
+Running the Tests
+-----------------
+
+Tests must be run with pytest and pytest-qt.
+
+::
+
+   $ pip install -r dev-requirements.txt
+   $ pytest -v qtpynodeeditor/tests

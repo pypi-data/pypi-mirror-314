@@ -1,0 +1,38 @@
+{% set package_name = "qtpynodeeditor" %}
+{% set import_name = "qtpynodeeditor" %}
+{% set version = load_file_regex(load_file=os.path.join(import_name, "_version.py"), regex_pattern=".*version = '(\S+)'").group(1) %}
+
+package:
+  name: {{ package_name }}
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+
+requirements:
+  build:
+  - python >=3.6
+  - setuptools_scm
+  - pip
+  run:
+  - python >=3.6
+  - pyqt >=5
+  - qtpy
+
+test:
+  imports:
+  - qtpynodeeditor
+  requires:
+  - pytest
+  - pytest-qt
+  - pytest-cov
+
+about:
+  home: https://github.com/klauer/qtpynodeeditor
+  license: BSD 3-clause
+  summary: Python Qt node editor
