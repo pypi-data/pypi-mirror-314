@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: CC0-1.0
+
+---
+device_defaults:
+  loggers:
+    - log_file
+
+outputs:
+  log_file:
+    type: file
+    format: json
+    queue_size: 100
+    file_config:
+      dir: "./logs"
+      filename: "{{hostname}}-{{timestamp:%Y-%m-%d}}.json"
+
+devices:
+  - hostname: 192.168.0.1
+    username: logger
+    password: secure_password
+    outputs:
+      - log_file
+
+  - hostname: 1.2.3.4
+    username: admin
+    password: secure_password
+    ssl: yes
+    outputs:
+      - log_file
