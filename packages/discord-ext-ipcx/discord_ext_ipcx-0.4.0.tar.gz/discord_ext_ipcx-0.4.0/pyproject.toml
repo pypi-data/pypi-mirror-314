@@ -1,0 +1,175 @@
+[project]
+name = "discord-ext-ipcx"
+description = "Maintained and updated version of discord-ext-ipc for discord.py v2"
+version = "0.4.0"
+authors = [
+    { name="No767", email="73260931+No767@users.noreply.github.com"}
+]
+maintainers = [
+    { name="No767", email="73260931+No767@users.noreply.github.com"}
+]
+readme = "README.md"
+dynamic = ["dependencies"]
+requires-python = ">=3.9,<4"
+keywords = [
+    "discord.py", 
+    "asyncio", 
+    "networking",
+    "discord-ext-ipcx", 
+    "discord-ext-ipc"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed"
+]
+
+[project.urls]
+Homepage = "https://github.com/No767/discord-ext-ipcx"
+Documentation = "https://discord-ext-ipcx.readthedocs.io/en/stable/"
+Repository = "https://github.com/No767/discord-ext-ipcx"
+Issues = "https://github.com/No767/discord-ext-ipcx/issues"
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=8.1.3,<9",
+    "sphinx-autobuild>=2024.10.3,<2025",
+    "furo>=2024.8.6,<2025",
+    "sphinx-copybutton>=0.5.2,<1"
+]
+
+dev = [
+    "lefthook>=1.8.1,<2",
+    "pyright>=1.1.386,<2",
+    "ruff>=0.7.1,<1",
+    "tox>=4.23.2,<5",
+    "towncrier>=24.8.0,<25"
+]
+
+examples = [
+    "quart>=0.19.8,<1",
+    "fastapi[standard]>=0.115.6,<1"
+]
+
+build = [
+    "build>=1.2.2.post1,<2"
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools]
+packages = [
+    "discord.ext.ipcx"
+]
+
+[tool.towncrier]
+directory = "changelog.d"
+filename = "changelog.md"
+start_string = "<!-- towncrier release notes start -->\n"
+underlines = ["", "", ""]
+title_format = "## discord-ext-ipcx [{version}](https://github.com/No767/discord-ext-ipcx/tree/{version}) - {project_date}"
+issue_format = "[#{issue}](https://github.com/No767/discord-ext-ipcx/issues/{issue})"
+package = "ipcx"
+package_dir = "discord/ext"
+
+  [[tool.towncrier.section]]
+    path = ""
+
+  [[tool.towncrier.type]]
+    directory = "bugfix"
+    name = "Bug fixes"
+    showcontent = true
+
+  [[tool.towncrier.type]]
+    directory = "feature"
+    name = "Features"
+    showcontent = true
+
+  [[tool.towncrier.type]]
+    directory = "deprecation"
+    name = "Deprecations (removal in next major release)"
+    showcontent = true
+
+  [[tool.towncrier.type]]
+    directory = "breaking"
+    name = "Removals and backward incompatible breaking changes"
+    showcontent = true
+
+  [[tool.towncrier.type]]
+    directory = "doc"
+    name = "Improved documentation"
+    showcontent = true
+
+  [[tool.towncrier.type]]
+    # Changes that are hard to assign to any of the above categories.
+    directory = "misc"
+    name = "Miscellaneous internal changes"
+    showcontent = true
+
+[tool.pyright]
+include = ["discord/ext/ipcx/**"]
+exclude = [
+    "**/__pycache__", 
+    "**/.mypy_cache", 
+    "**/.dmpypy.json", 
+    "docs",
+]
+reportMissingImports = true
+typeCheckingMode = "basic"
+reportUnnecessaryTypeIgnoreComment = "warning"
+
+[tool.ruff]
+line-length = 88
+include = ["discord/ext/ipcx/**", "examples/**"]
+
+[tool.ruff.lint]
+ignore = [
+    "E501", 
+    "N999", 
+    "E402", 
+    "S311",
+    "S101",
+    
+    # These are recommended by Ruff if the formatter is to be used: https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "D206",
+    "D300",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "COM812",
+    "COM819",
+    "ISC001",
+    "ISC002"
+    ]
+select = ["E", "F", "N", "ASYNC", "S", "ERA", "I"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
