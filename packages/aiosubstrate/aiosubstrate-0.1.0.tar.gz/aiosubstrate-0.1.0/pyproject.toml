@@ -1,0 +1,100 @@
+[project]
+name = "aiosubstrate"
+version = "0.1.0"
+description = "A library for interacting with Substrate node (py-substrate-interface fork)"
+
+authors = [
+    { name = "Stichting Polkascan (Polkascan Foundation)", email = "info@polkascan.org" }
+]
+maintainers = [
+    { name = "Lev Gorodetskii", email = "github@drsr.io" }
+]
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: Apache Software License',
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
+]
+keywords = ["interface", "polkascan", "polkadot", "substrate", "blockchain", "rpc", "kusama"]
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+
+dependencies = [
+    "aiohttp>=3.11.6",
+    "scalecodec>=1.2.11",
+    "xxhash>=3.5.0",
+    "websocket-client>=1.8.0",
+    "orjson>=3.10.12",
+]
+
+[project.optional-dependencies]
+full = [
+    "base58>=2.1.1",
+    "certifi>=2024.8.30",
+    "ecdsa>=0.19.0",
+    "eth-keys>=0.6.0",
+    "eth-utils>=5.1.0",
+    "idna>=3.10",
+    "py-bip39-bindings>=0.1.12",
+    "py-ed25519-zebra-bindings>=1.1.0",
+    "py-sr25519-bindings>=0.2.1",
+    "pycryptodome>=3.21.0",
+    "pynacl>=1.5.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/dipdup-io/aiosubstrate"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.13.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest>=8.3.3",
+    "ruff>=0.7.4",
+    "pytest-coverage>=0.0",
+]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-autorefs>=1.2.0",
+    "mkdocs-material>=9.5.45",
+    "mkdocstrings[python]>=0.27.0",
+
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+# [tool.ruff.lint]
+# extend-select = ["B", "C4", "FA", "G", "I", "PTH", "Q", "RET", "RUF", "TCH", "UP"]
+# extend-select = ["I", "Q"]
+# flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
+# isort = { force-single-line = true, known-first-party = ["aiosubstrate"] }
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.mypy]
+strict = false
+
+[tool.pytest.ini_options]
+addopts="--cov-report=term-missing --cov=aiosubstrate --cov-report=xml -s -v"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+log_cli_level = "WARNING"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# FIXME: https://github.com/astral-sh/uv/issues/9513
+[tool.setuptools]
+license-files = []
