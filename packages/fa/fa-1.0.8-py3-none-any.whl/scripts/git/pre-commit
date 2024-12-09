@@ -1,0 +1,103 @@
+#!/usr/bin/python3
+import json
+import os
+import re
+import sys
+from collections import OrderedDict
+
+sys.path.append('.')  # noqa: E402
+
+from fa.fainterp import FaInterp
+
+COMMANDS_ROOT = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), '..', '..', 'fa', 'commands')
+
+COMMANDS_MD = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), '..', '..', 'commands.md')
+
+SUBLIME_COMP = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    '..', '..', 'ide-completions', 'sublime', 'sig.sublime-completions')
+
+
+def main():
+    command_usage = OrderedDict()
+    command_usage['label'] = 'label'
+
+    command_help = OrderedDict()
+    command_help['label'] = 'builtin interpreter command. mark a label\n'
+
+    commands = os.listdir(COMMANDS_ROOT)
+    commands.sort()
+
+    sublime_completions = {
+        'scope': 'source.hjson meta.structure.dictionary.hjson '
+                 'meta.structure.key-value.hjson meta.structure.array.hjson',
+        'completions': []
+    }
+
+    for filename in commands:
+        if filename.endswith('.py') and \
+                filename not in ('__init__.py',):
+            command = os.path.splitext(filename)[0]
+            command = FaInterp.get_command(command)
+
+            p = command.get_parser()
+            command_help[p.prog] = p.format_help()
+
+            snippet = p.format_usage().split('usage: ', 1)[1]\
+                .replace('\n', '').strip().replace(' [-h]', '')\
+                .replace('[', '').replace(']', '')
+
+            def replacer(m):
+                buf = ''
+                global index
+                for g in m.groups():
+                    if g.startswith('--'):
+                        buf += g
+                    else:
+                        buf += '${%d:%s}' % (index, g)
+                        index += 1
+                return buf
+
+            args = ''
+            cmd = snippet
+
+            if ' ' in snippet:
+                cmd, args = snippet.split(' ', 1)
+                globals()['index'] = 1
+                args = re.sub('([\-\w]+)', replacer, args)
+
+            sublime_completions['completions'].append({
+                'trigger': p.prog,
+                'kind': 'snippet',
+                'contents': cmd + ' ' + args,
+            })
+
+    commands_md_buf = ''
+    commands_md_buf += '# FA Command List\n'
+    commands_md_buf += 'Below is the list of available commands:\n'
+
+    for command in command_help.keys():
+        commands_md_buf += '- [{command}](#{command})\n'\
+            .format(command=command)
+
+    for command, help in command_help.items():
+        commands_md_buf += '## {}\n```\n{}```\n'.format(command, help)
+
+    with open(COMMANDS_MD, 'rt') as f:
+        current_buf = f.read()
+
+    with open(COMMANDS_MD, 'wt') as f:
+        f.write(commands_md_buf)
+
+    with open(SUBLIME_COMP, 'wt') as f:
+        f.write(json.dumps(sublime_completions, indent=4))
+
+    if current_buf != commands_md_buf:
+        print('commands.md and / or ide-completions/ has been changed. Please review and then commit again.')
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()
