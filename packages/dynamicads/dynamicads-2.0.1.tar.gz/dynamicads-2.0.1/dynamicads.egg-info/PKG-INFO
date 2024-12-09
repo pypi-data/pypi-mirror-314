@@ -1,0 +1,209 @@
+Metadata-Version: 2.1
+Name: dynamicads
+Version: 2.0.1
+Summary: Official Python SDK for DynamicAds API
+Home-page: https://github.com/dynamicads/python-sdk
+Author: DynamicAds
+Author-email: support@dynamicads.dev
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.25.0
+Requires-Dist: dataclasses>=0.6; python_version < "3.7"
+
+# DynamicAds Python SDK
+
+Official Python SDK for the DynamicAds API.
+
+## Installation
+
+```bash
+pip install dynamicads
+```
+
+## Quick Start
+
+```python
+from dynamicads import DynamicAdsClient
+
+# Initialize the client
+client = DynamicAdsClient('your-api-key')
+
+# Generate a new ad
+ad = client.generate(
+    prompt='Create a dynamic product showcase',
+    media_type='video',
+    dimensions={'width': 672, 'height': 384}
+)
+
+# Wait for completion
+completed_ad = client.wait_for_completion(ad.id)
+print(f"Ad generated: {completed_ad.media_url}")
+```
+
+## Features
+
+- Generate video and image ads
+- Track generation status
+- List all your ads
+- Monitor API usage
+- Type hints for better IDE support
+- Comprehensive error handling
+
+## Examples
+
+### Generate an Ad
+
+```python
+# Start generation
+ad = client.generate(
+    prompt='Create a dynamic product showcase',
+    media_type='video',
+    dimensions={'width': 672, 'height': 384}
+)
+
+# Wait for completion with custom timeout
+try:
+    completed_ad = client.wait_for_completion(
+        ad.id,
+        timeout=600,  # 10 minutes
+        interval=5    # Check every 5 seconds
+    )
+    print(f"Media URL: {completed_ad.media_url}")
+    print(f"Voice URL: {completed_ad.voice_url}")
+    print(f"Component Code: {completed_ad.component_code}")
+except DynamicAdsTimeoutError:
+    print("Generation timed out")
+```
+
+### List All Ads
+
+```python
+# Get all ads
+ads = client.list_ads()
+for ad in ads:
+    print(f"Ad {ad.id}: {ad.status}")
+    if ad.is_complete:
+        print(f"  Media URL: {ad.media_url}")
+```
+
+### Check Usage
+
+```python
+# Get usage info
+usage = client.get_usage()
+print(f"Used {usage.current_usage} out of {usage.limit} credits")
+```
+
+### Error Handling
+
+```python
+from dynamicads.exceptions import (
+    DynamicAdsError,
+    DynamicAdsTimeoutError,
+    DynamicAdsAuthError,
+    DynamicAdsRateLimitError,
+    DynamicAdsValidationError
+)
+
+try:
+    ad = client.generate(prompt='Create an ad')
+except DynamicAdsAuthError:
+    print("Invalid API key")
+except DynamicAdsRateLimitError:
+    print("Rate limit exceeded")
+except DynamicAdsValidationError:
+    print("Invalid request parameters")
+except DynamicAdsTimeoutError:
+    print("Operation timed out")
+except DynamicAdsError as e:
+    print(f"Other error: {e}")
+```
+
+## API Reference
+
+### Configuration
+
+```python
+client = DynamicAdsClient(
+    api_key='your-api-key',  # Required
+    base_url='https://api.dynamicads.dev/api',  # Optional
+    debug=False  # Optional
+)
+```
+
+### Methods
+
+#### generate(prompt, media_type='video', dimensions=None)
+Generate a new ad with the given options.
+- prompt: Description of the ad
+- media_type: 'video' or 'image'
+- dimensions: Dict with 'width' and 'height'
+
+#### get_ad(id)
+Get details of a specific ad.
+
+#### list_ads()
+List all ads associated with your API key.
+
+#### get_usage()
+Get current usage information.
+
+#### wait_for_completion(id, timeout=300, interval=2)
+Wait for an ad to complete generation.
+- timeout: Max time to wait in seconds
+- interval: Check interval in seconds
+
+### Response Types
+
+#### Ad Object
+```python
+@dataclass
+class Ad:
+    id: str
+    status: str  # 'processing', 'complete', or 'error'
+    media_url: Optional[str]
+    voice_url: Optional[str]
+    component_code: Optional[str]
+    voice_script: Optional[str]
+    prompt: str
+    dimensions: AdDimensions
+    media_type: str
+    error: Optional[str]
+    created_at: Optional[str]
+```
+
+#### Usage Object
+```python
+@dataclass
+class Usage:
+    current_usage: int
+    limit: int
+```
+
+## Development
+
+To contribute to the SDK:
+
+1. Clone the repository
+2. Install development dependencies:
+   ```bash
+   pip install -e ".[dev]"
+   ```
+3. Run tests:
+   ```bash
+   pytest
+   ```
+
+## License
+
+MIT
