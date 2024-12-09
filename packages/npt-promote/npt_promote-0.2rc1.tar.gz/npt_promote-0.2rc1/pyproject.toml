@@ -1,0 +1,37 @@
+[project]
+name = "npt-promote"
+version = "0.2rc1"
+description = "Mypy plugin to add type promotions between NumPy and builtin data types."
+dependencies = [
+  "mypy", "numpy>=1.21"
+]
+requires-python = '>=3.8'
+keywords = ["mypy", "typing", "numpy"]
+license = {text = 'MIT'}
+readme = "README.md"
+classifiers = [
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Information Analysis',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX',
+    'Operating System :: MacOS',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+]
+
+[project.urls]
+Homepage = "https://github.com/pyvista/npt-promote"
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-mypy-plugins", "pre-commit"]
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = '--mypy-only-local-stub'
