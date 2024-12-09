@@ -1,0 +1,104 @@
+Metadata-Version: 2.1
+Name: p_eo
+Version: 1.1.1
+Summary: Python Selenium 的二次封装
+Home-page: https://gitee.com/Joker_JH/p_eo
+Author: 御风
+Author-email: eternallyyf@163.com
+License: Apache License 2.0
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: selenium>=4
+Requires-Dist: webdrivermanager_cn>=2.1.0
+
+# P_EO -- 个人使用的基于selenium二次封装
+
+## 项目介绍
+
+受 [poium](https://github.com/SeldomQA/poium)、[nopo](https://gitee.com/DingJunyao/nopo) 启发，对selenium实现二次封装。
+
+本项目的核心是，基于PageObject模式，将定位元素封装成一个对象，方便调用。
+
+即Page-Element-Object，简称P-EO（暂时这么起名吧，后续后更好的名字再改。。。）
+
+## 安装
+
+安装：`pip install -U p_eo`
+
+## 快速开始
+
+### 快速使用元素定义
+
+```python
+from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from P_EO import WebDriverManager  # 这个模块是P_EO集成好的，可以方便下载ChromeDriver
+from P_EO import Element, Elements
+
+# 先创建一个Chrome实例，用来打开浏览器
+s = Service(WebDriverManager().chrome)
+driver = Chrome(service=s)
+driver.get('https://www.baidu.com/')
+
+# 再调用P_EO的方法，实现元素的定位
+element1 = Element(locator='kw', describe='百度搜索框', selector=By.ID, driver=driver)
+element2 = Element(locator='su', describe='百度搜索按钮', selector=By.ID, driver=driver)
+# 定义好元素，就可以对这个元素做操作了
+element1.send_keys('selenium')
+element2.click()
+
+# 或者不用绑定变量，直接操作
+Element(locator='kw', describe='百度搜索框', selector=By.ID, driver=driver).send_keys('selenium')
+Element(locator='su', describe='百度搜索按钮', selector=By.ID, driver=driver).click()
+
+# 对于搜索结果，可以使用Elements对象，返回多个Element对象
+element3 = Elements(locator="//div[@id='content_left']/div//a[.//em]", describe='百度搜索结果', driver=driver)
+for ele in element3.eles:
+    print(ele.text)
+```
+
+### 元素的操作方法
+
+#### 所有的元素的操作，都在action.py中，这里仅列出部分常用方法：
+
+```python
+from P_EO import Element
+
+ele = Element()
+
+ele.click()  # 点击
+ele.send_keys('')  # 输入
+ele.clear()  # 清空
+ele.get_attribute('')  # 获取属性
+text = ele.text  # 获取文本
+is_display = ele.displayed  # 判断元素是否可见
+is_selected = ele.selected  # 判断元素是否被选中
+ele.scrolled_into_view()  # 滚动元素，如果元素不在当前窗口内，可以将元素滚动到可见区域
+ele.wait()  # 等待元素加载完成
+ele.wait_exists()  # 等待元素存在
+ele.wait_disappear()  # 等待元素消失
+```
+
+#### 当前定义的元素，支持链式调用，这是受到selenium中的Actions的启发，可以方便操作，这里简单举例，其他操作可以查看源码
+
+```python
+from P_EO import Element
+
+ele = Element()
+
+# 如果元素正在加载，可以先等待出现，再点击
+ele.wait(timeout=5).click()
+
+# 如果输入框有内容，可以先清空，再输入
+ele.clear().send_keys()
+
+# 如果元素不在当前窗口内，可以先滚动到可见区域，再点击
+ele.scrolled_into_view().double_click()
+```
+
+#### 更多案例，可以参考示例文档
+
+> 后续会慢慢补充各种示例文档
+[示例文档](./docs/index.md)
