@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "dismo"
+version = "1.0.55"
+description = "A subpackage of modelbase that enables investigation of PDE models"
+authors = ["Marvin van Aalst <marvin.vanaalst@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "dismo", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+pyarrow = "*"
+numpy = "^1.26"
+pandas = "^2.1"
+matplotlib = "^3.8"
+typing-extensions = "^4.9.0"
+scipy = "^1.12.0"
+
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.3"
+black = "^23.10"
+isort = "^5.12"
+flake8 = "^6.1"
+mypy = "^1.6"
+pytest = "^7.4"
+pytest-cov = "^4.1"
+gitchangelog = "^3.0"
+pre-commit = "^3.6.2"
+ruff = "^0.2.2"
+
+[build-system]
+requires = ["poetry-core>=1.1.0a6", "setuptools"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 90
+target-version = ['py311']
+
+[tool.bandit]
+skips = ["B101", "B301", "B403", "B404", "B603", "B607"]
+
+[tool.isort]
+honor_noqa = true
+import_heading_firstparty = ""
+import_heading_framework = ""
+import_heading_localfolder = ""
+import_heading_stdlib = ""
+import_heading_thirdparty = ""
+profile = "black"
+
+[tool.mypy]
+disallow_untyped_defs = true
+exclude = "tests/*.py"
+ignore_missing_imports = true
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_lines = [
+    "pragma: no cover",
+    "def __str__",
+    "def __repr__",
+    "if self\\.debug",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "\\.\\.\\.",
+]
