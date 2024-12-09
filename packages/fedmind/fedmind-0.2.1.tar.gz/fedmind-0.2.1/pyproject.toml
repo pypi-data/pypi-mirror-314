@@ -1,0 +1,60 @@
+[project]
+name = "fedmind"
+version = "0.2.1"
+description = "Federated Learning research framework in your mind"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.1.2",
+    "torch>=2.4.1",
+    "wandb>=0.18.5",
+]
+authors = [
+    { name = "Xiao Chenguang", email = "xiaochenguang0719@qq.com" },
+]
+license = { file = "LICENSE" }
+keywords = ["federated-learning", "research", "framework"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.scripts]
+new = "fedmind:main"
+
+[project.urls]
+Homepage = "https://github.com/Xiao-Chenguang/FedMind"
+Releases = "https://github.com/Xiao-Chenguang/FedMind/releases"
+Issues = "https://github.com/Xiao-Chenguang/FedMind/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pyright]
+reportPrivateImportUsage = "none"
+
+[tool.ruff.lint.isort]
+known-third-party = ["wandb"]
+
+[tool.uv]
+dev-dependencies = [
+    "datasets>=3.1.0",
+    "ipykernel>=6.29.5",
+    "pytest>=8.3.3",
+    "torchvision>=0.19.1",
+]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu121", marker = "platform_system != 'Darwin'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
