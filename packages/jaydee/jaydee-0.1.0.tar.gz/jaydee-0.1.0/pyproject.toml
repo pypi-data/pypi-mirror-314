@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "jaydee"
+version = "0.1.0"
+description = "Scrape websites with a given schema."
+authors = ["Anttoni Koivu"]
+license = "None"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+beautifulsoup4 = "4.12.3"
+aiohttp = "^3.11.9"
+
+[tool.poetry.scripts]
+scraper = "examples.scraper:start"
+crawler = "examples.crawler:start"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+coverage = "^7.6.8"
+pytest-asyncio = "^0.24.0"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:tool.poetry.version"]
+branch = "main"
+changelog_file = "CHANGELOG.md"
+build_command = "pip install poetry && poetry build"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# pyproject.toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-v"]
+testpaths = ["tests"]
+pythonpath = "src/jaydee"
