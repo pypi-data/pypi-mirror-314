@@ -1,0 +1,138 @@
+{% extends 'blog/blog_base.html' %}
+{% load post_extras %}
+{% load solo_tags %}
+{% comment %} 标题 {% endcomment %}
+{% block title %}<title>{{ object.title }}</title>{% endblock %}
+
+
+{% block top_toolbar %}
+{% endblock %}
+
+
+
+{% block top_header %} 
+{% endblock %}
+
+
+
+
+
+{% block top_nav %}
+{% endblock %}
+
+
+
+{% block head %}
+{% endblock %}
+
+
+
+{% block text_header %}
+{% endblock %}
+
+ 
+ {% block main %}
+
+<section class="w-full flex flex-col px-3">
+<div class="bg-white flex flex-col justify-start p-6">
+
+ 
+
+ <h1>任务：{{ object.title }}
+   
+</h1>
+
+ 
+ <!-- <p>描述：{{ object.description }}</p> -->
+
+
+
+
+
+ <a target="_blank" href="{% url 'detail_view' post.pk %}" 
+    class="text-gray-800 hover:text-black text-sm"> {{ post.title }}
+    </a>
+    <a target="_blank" href=" {% url 'admin:tbase_post_post_change' post.id %}" 
+    class="text-gray-800 hover:text-black text-sm"> 编辑文章
+    </a>
+
+    <a target="_blank" href=" {% url 'admin:tbase_post_prompttask_change' object.id %}" 
+    class="text-gray-800 hover:text-black text-sm"> 修改提示词
+    </a>
+
+
+ 
+ <h2>提示词</h2>
+ 
+ {% if object.prompts.all %}
+    <div id="prompts_list" class="w-full prompts_items border-solid border-2 p-8">
+ 
+        {% for prompt in object.prompts.all %}
+
+        <div id="prompts_list" class="w-full prompts_item border-solid border-2 p-12">
+        <h3 class="pb-3 h3">{{ prompt.title }}
+            
+            <a target="_blank" href=" {% url 'admin:tbase_post_prompt_change' prompt.id %}" 
+            class="text-gray-800 hover:text-black text-sm"> 修改
+            </a>
+        </h3>
+
+        <div class="w-full pb-2 text-sm">
+        说明：{{ prompt.description }}
+
+        </div>
+        <div class="w-full pb-2 text-sm">
+           提示词： 
+           <textarea class="resize-y rounded-md w-full border-solid border-2 min-h-32 text-sm p-5">
+
+            {{ prompt.prompt_text }}
+        </textarea>
+
+            </div>
+
+        <div class="w-full pb-2 text-sm">
+            模板： {{ prompt.templ }}
+                </div>
+        <!-- 渲染提示词 -->
+
+        <textarea class="resize-y rounded-md w-full border-solid border-2 min-h-64 text-sm p-5">
+
+            {% render_html prompt.templ post=post prompt=prompt  %}
+        </textarea>
+
+    </div>
+        {% endfor %}
+ 
+     
+    </div>
+ 
+ 
+ 
+     
+ {% else %}
+ 
+ 
+ <p>没有关联的提示</p>
+ {% endif %}
+ 
+     
+
+
+
+
+
+
+
+
+</div>
+</section>
+{% endblock %}
+ 
+
+
+
+
+
+{% block footer %}
+
+{% endblock %}

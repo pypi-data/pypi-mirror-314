@@ -1,0 +1,57 @@
+
+<!---使用示例:
+# 加载标签
+load post_extras
+
+使用示例：
+last_update 5
+
+-->
+{% load cache %}
+{% cache 600 seo_top_links_block pk %}
+
+<div class="seo_top_links">
+  <h2 class="text-gray-800 text-lg font-medium mb-2">{{title}}</h2>
+  <div class="list-disc" >
+
+
+    {%for item in page_obj%}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <!-- <li class="mb-2"> -->
+    
+    
+    
+    
+          <div class="seo-link-item">
+         
+  
+                <a  href="{{ item.url }}"  >
+         {{item.title|truncatechars:32}} 
+                </a>
+          
+        </div>
+        
+    
+    
+    
+    
+    
+    
+    
+            <!-- <a href="{% url 'detail_view' item.pk %}" class="">{{item|truncatechars:32}}</a> -->
+        <!-- </li> -->
+    {%endfor%}
+      <!-- </ul> -->
+    
+    </div>
+</div>
+
+{% endcache %}

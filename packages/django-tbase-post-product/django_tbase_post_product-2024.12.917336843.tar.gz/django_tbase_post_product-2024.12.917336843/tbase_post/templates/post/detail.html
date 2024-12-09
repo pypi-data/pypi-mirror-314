@@ -1,0 +1,458 @@
+{% extends 'blog/post.html' %}
+{% comment %} 加载区 {% endcomment %}
+{% load static %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% load martortags %}
+{% load post_extras %}
+{% load solo_tags %}
+{% load cache %}
+
+
+ 
+
+{% comment %} 加载区 结束 {% endcomment %}
+{% block tailwind_script %}
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.css" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://storage.maomihezi.com/file/2024-01-02/jquery.postcsrf.js"></script>
+
+<!-- js模板引擎 start-->
+ 
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/art-template/4.13.2/lib/template-web.min.js" integrity="sha512-t9Bw4Go+FLuEum5fw7RTupBfw3OKOE6aMsiNbmBGSB1p31MqtI9flkeu51pbvD2JdqNI5BcxDHCHSnjLvI2upw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  
+  <!-- js模板引擎 end -->
+  {% load hitcount_tags %}
+  {% get_hit_count_js_variables for detail as hitcount %}
+  <script type="text/javascript">
+//     function get_cookie(n) {
+//     if (!document.cookie || document.cookie !== '')
+//       return null;
+    
+//     let cookies = document.cookie.split(';');
+//     for (let i = 0; i < cookies.length; i++) {
+//       let cookie = cookies[i].trim();
+      
+//       if (cookie.substring(0, name.length + 1) === (name + '='))
+//        return decodeURIComponent(cookie.substring(name.length + 1));
+     
+//    }
+// }
+
+// let csrfToken = getCookie('csrftoken');
+
+
+
+  jQuery(document).ready(function($) {
+    // use the template tags in our JavaScript call
+    $.postCSRF("{{ hitcount.ajax_url }}", 
+    { hitcountPK : "{{ hitcount.pk }}", 'csrfmiddlewaretoken': "{{ csrf_token }}" })
+      .done(function(data){
+        $('<i />').text(data.hit_counted).attr('id','hit-counted-value').appendTo('#hit-counted');
+        $('#hit-response').text(data.hit_message);
+    }).fail(function(data){
+        console.log('POST failed');
+        console.log(data);
+    });
+  });
+  </script>
+
+
+
+ 
+  {% endblock %}
+
+
+
+
+ {% block tailwind_css %}
+<style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+
+
+    pre {
+width: 100%;
+    overflow: auto;
+    margin: 20px 0;
+    border: 1px solid #d7dfe7;
+    padding: 20px;
+    background: #f5eded;
+}
+h1 {
+    font-size: 1.8em;
+    padding: 20px 0;
+}
+h2 {
+    font-size: 1.6em;
+    padding: 20px 0;
+}
+h3 {
+    font-size: 1.4em;
+    padding: 20px 0;
+}
+p {
+    margin: 5px 0;
+}
+#article-warp li {
+    padding-left: 20px;
+}
+
+  </style>
+{% endblock %}
+
+{% block title %}<title>{{detail.title}} : {{title}}</title>{% endblock %}
+
+
+{% block head %}
+{% tag_names object.tags 4 as tag%}
+<meta name="description" content="{{detail.description|truncatechars:128}}">
+<meta name="keywords" content="{{detail.product_name}},{{ detail.meta_keywords}}">
+{% if meta.noindex %} 
+<meta name="robots" content="noindex">
+{% endif %} 
+<!-- <meta name="author" content="Terry"> -->
+
+
+
+
+
+
+
+
+
+<!-- js模板体系  start-->
+
+<script id="banner-amazon-tpl" type="text/html">
+    <!--亚马逊推广链接-->   
+{% get_solo 'tbase_post.AmazonSettings' as amazon %}
+<a rel="nofollow" href="{% amazon_base_link object.product_id detail.product_name amazon.store_id %}" class="m-6 p-6  flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+<img class="object-cover w-full rounded-t-lg h-48 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="{{detail.article_img}}" alt="">
+<div class="flex flex-col justify-between p-4 leading-normal">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{detail.product_name}}</h5>
+
+    <div class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+         <div>
+            <button class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                Buy on Amazon
+                </button>
+         </div>
+    
+    </div>
+
+
+        
+</div>
+</a>
+
+<!--亚马逊推广链接结束-->
+
+</script>
+
+
+
+<script id="banner-img-tpl" type="text/html">
+    <div class="w-full  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <a  rel="nofollow" href="{% amazon_base_link object.product_id detail.product_name amazon.store_id %}">
+            <img class="p-8 rounded-t-lg mx-auto  h-40 " src="{{detail.article_img}}" alt="product {{detail.product_name}}" />
+        </a>
+        <div class="px-5 pb-5">
+                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white  text-center">{{detail.product_name}}</h5>
+            <div class="flex items-center mt-2.5 mb-5">
+             
+    </div> 
+            <div class="flex items-center justify-between">
+                <span class="text-3xl font-bold text-gray-900 dark:text-white"></span>
+                <a  rel="nofollow" href="{% amazon_base_link object.product_id detail.product_name amazon.store_id %}"
+                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> Buy on Amazon</a>
+            </div>
+        </div>
+    
+    
+    </div>
+</script>
+
+
+<script id="banner-amazon-footer-tpl" type="text/html">
+
+    <div class="fixed bottom-0 left-0 w-full bg-gray-800 text-white py-4 px-6">
+        <!-- 这里放置固定顶端内容 -->
+         <div class="container mx-auto flex flex-wrap py-1 px-3 ">
+              
+             <div class="w-full md:w-2/3 flex flex-row px-2">
+                 <div class="w-auto px-3">
+                     <img alt="{{detail.product_name}}" class="max-h-10" src="{{detail.article_img}}">
+                 </div>
+                 <div class="amz-banner">
+<!--亚马逊推广链接-->
+{% get_solo 'tbase_post.AmazonSettings' as amazon %}
+{% amazon_link object.product_id detail.product_name amazon.store_id %}
+<!--亚马逊推广链接结束-->
+
+                 </div>
+             </div>
+             <div class="w-full md:w-1/3 flex flex-col items-center px-3">
+
+
+             </div>
+
+         </div>
+ 
+   </div>
+   
+</script>
+
+
+
+
+
+
+
+
+
+
+    
+
+<!-- js模板体系  end-->
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block top_toolbar %}
+    {% comment %} top_toolbar start {% endcomment %}
+
+     <nav class="w-full py-2 bg-zinc-800 shadow">
+        <div class="w-full container mx-auto flex flex-wrap items-center justify-between">
+
+            <nav>
+                <ul class="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
+                    <li><a class="hover:text-gray-200 hover:underline px-4" href="{% url 'home'%}">
+                        
+                        {% get_solo 'tbase_config.General' as site_config %}{{site_config.site_title}}
+
+                    </a></li>
+                    <li><a class="hover:text-gray-200 hover:underline px-4"  rel="nofollow" href="{% url  'last_index' %}">Update</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center text-lg no-underline text-white pr-6">
+                <!-- <a class="" href="#">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-linkedin"></i>
+                </a> -->
+            </div>
+        </div>
+
+    </nav>
+    {% comment %} top_toolbar end {% endcomment %}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{% block top_header %} {% endblock %}
+
+{% block top_nav %}
+
+{% endblock %}
+
+{% block body_class_expand %}detail{% endblock %}
+
+{% block text_header %}
+{% endblock %}
+
+{% block article_img %}
+{%if detail.article_img%}
+ 
+{% get_solo 'tbase_post.AmazonSettings' as amazon %}
+
+<div id="banner-img"></div>
+
+{%endif%}
+{% endblock %}
+<!-- block article_img end -->
+
+
+{% block article %}
+ 
+<h1 class="text-3xl font-bold pb-3">{{detail.title}}</h1>
+<p class="text-sm pb-8">Published on {{detail.created_on}}</p>
+
+<!-- youtube播放 -->
+{% youtube_player object.youtube_id %}
+<!-- youtube播放 结束-->
+
+
+<div class="pb-3">
+
+<!--主体正文-->
+{{ detail.content|safe_markdown }}
+<!--主体正文结束-->
+
+<div id="banner-amazon"></div>
+
+<!-- 广告代码 ads_content1 -->
+{% autoescape off %}
+{% get_solo 'tbase_post.AmazonSettings' as amz %}
+{% if amz.ads_content1 %}
+{{amz.ads_content1}}
+
+{% endif %}
+{% endautoescape %}
+<!-- 广告代码结束 -->
+<div id="banner-amazon-footer"></div>
+
+
+
+
+
+<script type="text/javascript">
+data={}
+var htmlStr = template('banner-amazon-tpl', data)
+$('#banner-amazon').html(htmlStr)
+
+data={}
+var htmlStr = template('banner-img-tpl', data)
+$('#banner-img').html(htmlStr)
+data={}
+var htmlStr = template('banner-amazon-footer-tpl', data)
+$('#banner-amazon-footer').html(htmlStr)
+
+</script>
+
+ 
+<!--标签-->
+{% tags object.tags 5 object.pk %}
+ <!--标签end-->
+
+<div class="pt-6  columns-1 md:columns-2">
+<div class=" bg-white text-left ">
+    {% hitcount_top_post 20 detail.pk %}
+</div>
+<div class="  bg-white text-left">
+    {% hitcount_lowest_post 20 detail.pk %}
+    </div>
+</div>
+
+
+</div>
+
+<!--相关内容-->
+<div class="pt-6  columns-1 md:columns-2">
+<div class=" bg-white text-left ">
+
+ 
+{% related_post_by_tags object.tags 10 object.pk %}
+ 
+
+</div>
+<div class="  bg-white text-left">
+ 
+    {% last_update 10 %}
+ 
+
+    </div>
+</div>
+<!--相关内容结束-->
+
+{% endblock %}
+
+
+<!--上一页下一页链接区域-->
+
+{% block article_previous_next %}
+
+{% if detail.get_previous_by_created_on  %}
+<!-- <a href="{% url 'detail_view' detail.get_previous_by_created_on.pk %}" class="w-1/2 bg-white shadow hover:shadow-md text-left p-6">
+<p class="text-lg text-blue-800 font-bold flex items-center">
+    <i class="fas fa-arrow-left pr-1"></i> {{detail.get_previous_by_created_on.title}}
+</p>
+ 
+</a> -->
+
+{% get_previous_next_by_pk "previous" object.pk 5 %}
+ 
+
+
+{%endif%}
+{% if detail.get_next_by_created_on  %}
+<!-- <a href="{% url 'detail_view' detail.get_next_by_created_on.pk %}" class="w-1/2 bg-white shadow hover:shadow-md text-right p-6">
+<p class="text-lg text-blue-800 font-bold flex items-center justify-end">
+    {{detail.get_next_by_created_on.title}} <i class="fas fa-arrow-right pl-1"></i>
+</p>
+ 
+</a> -->
+
+{% get_previous_next_by_pk "next" object.pk 5 %}
+
+{%endif%}
+{% endblock %}
+<!--上一页下一页链接区域 结束-->
+
+
+
+<!--作者信息-->
+{% block article_author %}
+
+{% endblock %}
+<!--作者信息 结束-->
+
+
+  
+
+{% block sidebar_section %}
+<!-- sidebar_section -->
+ 
+<div class="w-full bg-white shadow flex flex-col my-4 p-6">
+        {% seo_top_links 50 %}
+</div>
+
+<!-- 广告代码  ads_sidebar-->
+{% autoescape off %}
+ 
+    <!--亚马逊推广链接-->
+    {% get_solo 'tbase_post.AmazonSettings' as amazon %}
+    {% amazon_ads object.product_id detail.product_name amazon.store_id %}
+    <!--亚马逊推广链接结束-->
+
+    
+    {% get_solo 'tbase_post.AmazonSettings' as amz %} 
+
+
+    {% if amz.ads_sidebar %}
+    {{amz.ads_sidebar}}
+
+    {% endif %}
+
+{% endautoescape %}
+<!-- 广告代码结束 -->
+
+    <!-- sidebar_section endblock -->
+   {% endblock %}

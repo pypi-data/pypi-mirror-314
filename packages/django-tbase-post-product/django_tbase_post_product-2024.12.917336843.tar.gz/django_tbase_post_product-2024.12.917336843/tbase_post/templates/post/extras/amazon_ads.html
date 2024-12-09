@@ -1,0 +1,44 @@
+
+<!---使用示例:
+# 加载标签
+load post_extras
+
+使用示例：
+tags object.tags.all
+13
+-->
+{% load cache %}
+ 
+
+<div class="amazon_ads">
+{%if product_id and store_id %}
+ 
+
+
+
+     
+{% autoescape off %}
+<script type="text/javascript">
+amzn_assoc_tracking_id = "{{store_id}}";
+amzn_assoc_ad_mode = "manual";
+amzn_assoc_ad_type = "smart";
+amzn_assoc_marketplace = "amazon";
+amzn_assoc_region = "US";
+amzn_assoc_design = "enhanced_links";
+amzn_assoc_asins = "{{product_id}}";
+amzn_assoc_placement = "adunit";
+amzn_assoc_linkid = "59dfba03400bf11002ebdd9235916c19";
+</script>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US"></script>
+{% endautoescape %}
+<!-- 广告代码结束 -->
+
+{%endif%}
+
+
+
+
+
+
+    </div>
+ 

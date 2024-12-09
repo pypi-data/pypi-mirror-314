@@ -1,0 +1,37 @@
+ 
+<div class="related_post_by_tags">
+      <h2 class="text-gray-800 text-lg font-medium mb-2">{{title}}</h2>
+        <!-- <ul class="list-disc pl-4"> -->
+
+          <div class="list-disc" >
+
+
+{%for item in page_obj%}
+ 
+
+    <!-- <li class="mb-2"> -->
+
+
+
+
+      <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-2">
+        <a  rel="nofollow" href="{% url 'detail_view' item.pk %}" >
+            <img class="h-60 mx-auto" src="{{ item.article_img}}" alt="{{item }}" />
+        </a>
+        <div class="p-5">
+            <a  href="{% url 'detail_view' item.pk %}"  >
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{item|truncatechars:32}}</h5>
+            </a>
+   
+        </div>
+    </div>
+     
+
+        <!-- <a href="{% url 'detail_view' item.pk %}" class="">{{item|truncatechars:32}}</a> -->
+    <!-- </li> -->
+{%endfor%}
+  <!-- </ul> -->
+
+</div>
+</div>
+ 
