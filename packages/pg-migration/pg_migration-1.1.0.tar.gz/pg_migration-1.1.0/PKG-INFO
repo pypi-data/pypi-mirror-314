@@ -1,0 +1,59 @@
+Metadata-Version: 2.1
+Name: pg-migration
+Version: 1.1.0
+Summary: postgres ci/cd automation
+Home-page: https://github.com/comagic/pg_migration
+Author: Andrey Chernyakov
+Author-email: a.chernyakov@comagic.dev
+License: BSD
+Project-URL: Documentation, https://github.com/comagic/pg_migration/blob/master/README.md
+Project-URL: Bug Tracker, https://github.com/comagic/pg_migration/issues
+Keywords: postgresql,git,ci/cd
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: AUTHORS
+Requires-Dist: asyncpg<0.31.0,>=0.27.0
+Requires-Dist: GitPython==3.1.42
+Requires-Dist: urllib3==1.26.6
+Requires-Dist: python-gitlab==4.4.0
+
+﻿## pg-migration - ci/cd automation
+
+Migration control system for postgres database
+
+## installation
+
+```
+pip install pg-migration
+```
+
+## usage
+
+```
+$ pg_migration --help
+usage: pg_migration [-h] {log,diff,upgrade,generate,plpgsql_check,auto_merge,init} ...
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+commands:
+  {log,diff,upgrade,generate,plpgsql_check,auto_merge,init}
+    log                 print chain of migrations between from_version:to_version (or tail:head)
+    diff                show difference between database and specified (or last) version
+    upgrade             upgrade database up to specified (or last) version
+    generate            generate migration file
+    plpgsql_check       check functions and triggers with plpgsql_check extension
+    auto_merge          creates merge-request when magic word "auto-commit" / "auto-deploy" is passed (uses in cd/cd)
+    init                build migration which will create scheme migration and table migration.release
+
+Report bugs: https://github.com/comagic/pg_migration/issues
+```
