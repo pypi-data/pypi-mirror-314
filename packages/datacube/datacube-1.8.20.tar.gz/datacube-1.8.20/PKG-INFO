@@ -1,0 +1,291 @@
+Metadata-Version: 2.1
+Name: datacube
+Version: 1.8.20
+Summary: An analysis environment for satellite and other earth observation data
+Home-page: https://github.com/opendatacube/datacube-core
+Author: Open Data Cube
+Maintainer: Open Data Cube
+Maintainer-email: 
+License: Apache License 2.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: POSIX :: BSD
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: GIS
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.9.0
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: affine
+Requires-Dist: attrs>=18.1
+Requires-Dist: pyproj>=2.5
+Requires-Dist: shapely>=2.0
+Requires-Dist: cachetools
+Requires-Dist: click>=5.0
+Requires-Dist: cloudpickle>=0.4
+Requires-Dist: dask[array]<2024.11.0
+Requires-Dist: distributed<2024.11.0
+Requires-Dist: jsonschema>=4.18
+Requires-Dist: netcdf4
+Requires-Dist: numpy
+Requires-Dist: psycopg2
+Requires-Dist: lark
+Requires-Dist: pandas
+Requires-Dist: python-dateutil
+Requires-Dist: pyyaml
+Requires-Dist: rasterio>=1.3.2
+Requires-Dist: ruamel.yaml
+Requires-Dist: sqlalchemy<2.0,>=1.4
+Requires-Dist: GeoAlchemy2
+Requires-Dist: toolz
+Requires-Dist: xarray>=0.9
+Requires-Dist: packaging
+Requires-Dist: deprecat
+Requires-Dist: importlib_metadata>3.5; python_version < "3.10"
+Provides-Extra: performance
+Requires-Dist: ciso8601; extra == "performance"
+Requires-Dist: bottleneck; extra == "performance"
+Provides-Extra: distributed
+Requires-Dist: distributed; extra == "distributed"
+Requires-Dist: dask[distributed]; extra == "distributed"
+Provides-Extra: doc
+Requires-Dist: Sphinx; extra == "doc"
+Requires-Dist: sphinx_autodoc_typehints; extra == "doc"
+Requires-Dist: sphinx-click; extra == "doc"
+Requires-Dist: recommonmark; extra == "doc"
+Requires-Dist: autodocsumm; extra == "doc"
+Requires-Dist: beautifulsoup4; extra == "doc"
+Requires-Dist: nbsphinx; extra == "doc"
+Requires-Dist: pydata-sphinx-theme==0.9.0; extra == "doc"
+Provides-Extra: s3
+Requires-Dist: boto3; extra == "s3"
+Requires-Dist: botocore; extra == "s3"
+Provides-Extra: test
+Requires-Dist: hypothesis; extra == "test"
+Requires-Dist: pycodestyle; extra == "test"
+Requires-Dist: pylint; extra == "test"
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: pytest-timeout; extra == "test"
+Requires-Dist: pytest-httpserver; extra == "test"
+Requires-Dist: moto<5.0; extra == "test"
+Provides-Extra: cf
+Requires-Dist: compliance-checker>=4.0.0; extra == "cf"
+Provides-Extra: dev
+Requires-Dist: Sphinx; extra == "dev"
+Requires-Dist: autodocsumm; extra == "dev"
+Requires-Dist: beautifulsoup4; extra == "dev"
+Requires-Dist: boto3; extra == "dev"
+Requires-Dist: botocore; extra == "dev"
+Requires-Dist: bottleneck; extra == "dev"
+Requires-Dist: ciso8601; extra == "dev"
+Requires-Dist: dask[distributed]; extra == "dev"
+Requires-Dist: distributed; extra == "dev"
+Requires-Dist: hypothesis; extra == "dev"
+Requires-Dist: moto<5.0; extra == "dev"
+Requires-Dist: nbsphinx; extra == "dev"
+Requires-Dist: pycodestyle; extra == "dev"
+Requires-Dist: pydata-sphinx-theme==0.9.0; extra == "dev"
+Requires-Dist: pylint; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: pytest-httpserver; extra == "dev"
+Requires-Dist: pytest-timeout; extra == "dev"
+Requires-Dist: recommonmark; extra == "dev"
+Requires-Dist: sphinx-click; extra == "dev"
+Requires-Dist: sphinx_autodoc_typehints; extra == "dev"
+Provides-Extra: all
+Requires-Dist: Sphinx; extra == "all"
+Requires-Dist: autodocsumm; extra == "all"
+Requires-Dist: beautifulsoup4; extra == "all"
+Requires-Dist: boto3; extra == "all"
+Requires-Dist: botocore; extra == "all"
+Requires-Dist: bottleneck; extra == "all"
+Requires-Dist: ciso8601; extra == "all"
+Requires-Dist: compliance-checker>=4.0.0; extra == "all"
+Requires-Dist: dask[distributed]; extra == "all"
+Requires-Dist: distributed; extra == "all"
+Requires-Dist: hypothesis; extra == "all"
+Requires-Dist: moto<5.0; extra == "all"
+Requires-Dist: nbsphinx; extra == "all"
+Requires-Dist: pycodestyle; extra == "all"
+Requires-Dist: pydata-sphinx-theme==0.9.0; extra == "all"
+Requires-Dist: pylint; extra == "all"
+Requires-Dist: pytest; extra == "all"
+Requires-Dist: pytest-cov; extra == "all"
+Requires-Dist: pytest-httpserver; extra == "all"
+Requires-Dist: pytest-timeout; extra == "all"
+Requires-Dist: recommonmark; extra == "all"
+Requires-Dist: sphinx-click; extra == "all"
+Requires-Dist: sphinx_autodoc_typehints; extra == "all"
+
+Open Data Cube Core
+===================
+
+.. image:: https://github.com/opendatacube/datacube-core/workflows/build/badge.svg
+    :alt: Build Status
+    :target: https://github.com/opendatacube/datacube-core/actions
+
+.. image:: https://codecov.io/gh/opendatacube/datacube-core/branch/develop/graph/badge.svg
+    :alt: Coverage Status
+    :target: https://codecov.io/gh/opendatacube/datacube-core
+
+.. image:: https://readthedocs.org/projects/datacube-core/badge/?version=latest
+    :alt: Documentation Status
+    :target: http://datacube-core.readthedocs.org/en/latest/
+
+.. image:: https://img.shields.io/discord/1212501566326571070?label=Discord&logo=discord&logoColor=white&color=7289DA)](https://discord.gg/4hhBQVas5U
+    :alt: Discord
+    :target: https://discord.com/invite/4hhBQVas5U
+
+Overview
+========
+
+The Open Data Cube Core provides an integrated gridded data
+analysis environment for decades of analysis ready earth observation
+satellite and related data from multiple satellite and other acquisition
+systems.
+
+Documentation
+=============
+
+See the `user guide <http://datacube-core.readthedocs.io/en/latest/>`__ for
+installation and usage of the datacube, and for documentation of the API.
+
+`Join our Discord <https://discord.com/invite/4hhBQVas5U>`__ if you need help
+setting up or using the Open Data Cube.
+
+Please help us to keep the Open Data Cube community open and inclusive by
+reading and following our `Code of Conduct <code-of-conduct.md>`__.
+
+Requirements
+============
+
+System
+~~~~~~
+
+-  PostgreSQL 10+
+-  Python 3.9+
+
+Developer setup
+===============
+
+1. Clone:
+
+   -  ``git clone https://github.com/opendatacube/datacube-core.git``
+
+2. Create a Python environment for using the ODC.  We recommend `Mambaforge <https://mamba.readthedocs.io/en/latest/user_guide/mamba.html>`__ as the
+   easiest way to handle Python dependencies.
+
+::
+
+   mamba env create -f conda-environment.yml
+   conda activate cubeenv
+
+3. Install a develop version of datacube-core.
+
+::
+
+   cd datacube-core
+   pip install --upgrade -e .
+
+4. Install the `pre-commit <https://pre-commit.com>`__ hooks to help follow ODC coding
+   conventions when committing with git.
+
+::
+
+   pre-commit install
+
+5. Run unit tests + PyLint
+
+Install test dependencies using:
+
+   ``pip install --upgrade -e '.[test]'``
+
+If install for these fails, please lodge them as issues.
+
+Run unit tests with:
+
+   ``./check-code.sh``
+
+   (this script approximates what is run by GitHub Actions. You can
+   alternatively run ``pytest`` yourself).
+
+6. **(or)** Run all tests, including integration tests.
+
+   ``./check-code.sh integration_tests``
+
+   -  Assumes a password-less Postgres database running on localhost called
+
+   ``pgintegration``
+
+   -  Otherwise copy ``integration_tests/integration.conf`` to
+      ``~/.datacube_integration.conf`` and edit to customise.
+
+   - For instructions on setting up a password-less Postgres database, see
+      the `developer setup instructions <https://datacube-core.readthedocs.io/en/latest/installation/setup/ubuntu.html#postgres-database-configuration>`__.
+
+
+Alternatively one can use the ``opendatacube/datacube-tests`` docker image to run
+tests. This docker includes database server pre-configured for running
+integration tests. Add ``--with-docker`` command line option as a first argument
+to ``./check-code.sh`` script.
+
+::
+
+   ./check-code.sh --with-docker integration_tests
+
+
+To run individual tests in a docker container
+
+::
+
+    docker build --tag=opendatacube/datacube-tests-local --no-cache --progress plain -f docker/Dockerfile .
+
+    docker run -ti -v $(pwd):/code opendatacube/datacube-tests-local:latest pytest integration_tests/test_filename.py::test_function_name
+
+
+Developer setup on Ubuntu
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Building a Python virtual environment on Ubuntu suitable for development work.
+
+Install dependencies:
+
+::
+
+    sudo apt-get update
+    sudo apt-get install -y \
+        autoconf automake build-essential make cmake \
+        graphviz \
+        python3-venv \
+        python3-dev \
+        libpq-dev \
+        libyaml-dev \
+        libnetcdf-dev \
+        libudunits2-dev
+
+
+Build the python virtual environment:
+
+::
+
+    pyenv="${HOME}/.envs/odc"  # Change to suit your needs
+    mkdir -p "${pyenv}"
+    python3 -m venv "${pyenv}"
+    source "${pyenv}/bin/activate"
+    pip install -U pip wheel cython numpy
+    pip install -e '.[dev]'
+    pip install flake8 mypy pylint autoflake black
