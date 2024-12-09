@@ -1,0 +1,65 @@
+Metadata-Version: 2.1
+Name: tonie_sync
+Version: 0.1.0
+Summary: A package to sync Spotify playlists to creative tonies.
+License: MIT
+Author: Anonymous
+Author-email: anonymous@xyz.com
+Requires-Python: >=3.12,<3.14
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: click (>=8.1.7,<9.0.0)
+Requires-Dist: ffmpy (>=0.4.0,<0.5.0)
+Requires-Dist: music-tag (>=0.4.3,<0.5.0)
+Requires-Dist: pillow (>=10.4.0,<11.0.0)
+Requires-Dist: protobuf (==3.*)
+Requires-Dist: pydantic-settings (>=2.4.0,<3.0.0)
+Requires-Dist: pydantic[email] (>=2.8.2,<3.0.0)
+Requires-Dist: spotdl (>=4.2.10,<5.0.0)
+Requires-Dist: tonie-api (>=0.1.1,<0.2.0)
+Requires-Dist: tqdm (>=4.66.4,<5.0.0)
+Description-Content-Type: text/markdown
+
+# Tonie Sync
+
+A package to sync Spotify playlists to creative tonies.
+
+> This package is not affiliated with Spotify or Tonies. It uses the Spotify and
+> Tonie APIs to sync playlists to creative tonies. The package is intended for
+> personal use only. Use at your own risk.
+>
+> The package is heavily inspired by
+> [spoonie](https://github.com/Seji64/spoonie).
+
+## Installation
+
+```bash
+pip install tonie-sync
+```
+
+This package requires these additional dependencies:
+
+- ffmpeg
+
+## Usage
+
+```python
+from tonie_sync import SyncService
+
+sync_service = SyncService()  # Create a new SyncService instance with settings from environment variables
+sync_service.sync(query=query, creative_tonie_name=creative_tonie_name)  # Sync the Spotify playlists to the creative tonies
+```
+
+## Environment Variables
+
+| Environment Variable  | Description                      | Example Value                                         |
+| --------------------- | -------------------------------- | ----------------------------------------------------- |
+| SPOTIFY_CLIENT_ID     | Spotify account username         | 123456789                                             |
+| SPOTIFY_CLIENT_SECRET | Spotify account password         | this_is_very_secret                                   |
+| TONIE_USERNAME        | Tonie account email              | my_email@provider.com                                 |
+| TONIE_PASSWORD        | Tonie account password           | another_secret                                        |
+| TONIE_HOUSEHOLD       | Name of the Tonie household      | My Household                                          |
+| target_directory      | Path to the local data directory | ./.local                                              |
+
