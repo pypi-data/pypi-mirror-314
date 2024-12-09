@@ -1,0 +1,143 @@
+Metadata-Version: 2.1
+Name: miniflux
+Version: 1.1.2
+Summary: Client library for Miniflux
+Author-email: Frédéric Guillot <fred@miniflux.net>
+License: The MIT License (MIT)
+        
+        Copyright (c) 2018-2024 Frédéric Guillot
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/miniflux/python-client
+Project-URL: Bug Reports, https://github.com/miniflux/python-client/issues
+Project-URL: Source, https://github.com/miniflux/python-client
+Keywords: rss,atom,rdf,jsonfeed,feed,miniflux
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.7
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: requests
+
+Miniflux Python API Client
+==========================
+
+.. image:: https://badge.fury.io/py/miniflux.svg
+    :target: https://badge.fury.io/py/miniflux
+
+Python client library for Miniflux API.
+
+Requirements
+------------
+
+- Miniflux >= 2.0.49
+- Python >= 3.7
+- requests
+
+Installation
+------------
+
+.. code:: bash
+
+    python3 -m pip install miniflux
+
+Running Tests
+-------------
+
+.. code:: bash
+
+    python3 -m unittest -v
+
+Usage Example
+-------------
+
+.. code:: python
+
+    import miniflux
+
+    # Creating a client using username / password authentication
+    client = miniflux.Client("https://miniflux.example.org", username="my_username", password="my_secret_password")
+
+    # Use an API Key (preferred method)
+    client = miniflux.Client("https://miniflux.example.org", api_key="My secret API token")
+
+    # Get all feeds
+    feeds = client.get_feeds()
+
+    # Refresh a feed
+    client.refresh_feed(123)
+
+    # Discover subscriptions from a website
+    subscriptions = client.discover("https://example.org")
+
+    # Create a new feed, with a personalized user agent and with the crawler enabled
+    feed_id = client.create_feed("http://example.org/feed.xml", category_id=42, crawler=True, user_agent="GoogleBot")
+
+    # Fetch 10 starred entries
+    entries = client.get_entries(starred=True, limit=10)
+
+    # Fetch last 5 feed entries
+    feed_entries = client.get_feed_entries(123, direction='desc', order='published_at', limit=5)
+
+    # Fetch entries that belongs to a category with status unread and read
+    entries = client.get_entries(category_id=456, status=['read', 'unread'])
+
+    # Update entry title and content
+    client.update_entry(entry_id=1234, title="New title", content="New content")
+
+    # Update a feed category
+    client.update_feed(123, category_id=456)
+
+    # OPML Export
+    opml = client.export_feeds()
+
+    # OPML import
+    client.import_feeds(opml_data)
+
+    # Get application version
+    client.get_version()
+
+    # Flush history
+    client.flush_history()
+
+    # Get current user
+    myself = client.me()
+
+
+Look at `miniflux.py <https://github.com/miniflux/python-client/blob/main/miniflux.py>`_  to get the complete list of methods.
+
+Author
+------
+
+Frédéric Guillot
+
+License
+-------
+
+This library is distributed under MIT License.
