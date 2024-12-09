@@ -1,0 +1,54 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+name = "pywttr"
+description = "Wrapper for wttr.in weather API"
+readme = "README.md"
+keywords = ["forecast"]
+license = { text = "MIT" }
+authors = [{ name = "monosans", email = "hsyqixco@protonmail.com" }]
+requires-python = ">=3.9"
+classifiers = [
+  "Framework :: Pydantic",
+  "Framework :: Pydantic :: 2",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+dynamic = ["version"]
+dependencies = ["pywttr-models>=2,<3", "requests>=2.24", "typing-extensions>=4"]
+urls.documentation = "https://pywttr.readthedocs.io"
+urls.repository = "https://github.com/monosans/pywttr"
+
+[dependency-groups]
+dev = [
+  "covdefaults==2.3",
+  "mypy[faster-cache]==1.13",
+  "pytest==8.3.4",
+  "pytest-cov==6",
+  "ruff==0.8.2",
+  "types-requests==2.32.0.20241016",
+]
+docs = [
+  "black==24.10",
+  "mkdocs-material==9.5.47",
+  "mkdocs-minify-html-plugin==0.2.3",
+  "mkdocstrings==0.27",
+  "mkdocstrings-python==1.12.2",
+]
+
+[tool.hatch.build.targets.sdist]
+include = ["pywttr"]
+
+[tool.hatch.version]
+path = "pywttr/__init__.py"
