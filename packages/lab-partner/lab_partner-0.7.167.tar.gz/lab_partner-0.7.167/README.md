@@ -1,0 +1,14 @@
+# Lab Partner
+
+## to expose low ports 
+
+```bash
+echo "net.ipv4.ip_unprivileged_port_start=0" >> /etc/sysctl.conf
+sysctl --system
+```
+
+
+
+aps@money-maker:~/Developer/workspace/lab-partner$ docker container ls --format "{{json .}}" | jq .Labels | jq 
+
+"devcontainer.config_file=/home/aps/Developer/workspace/lab-partner/.devcontainer/devcontainer.json,devcontainer.local_folder=/home/aps/Developer/workspace/lab-partner,devcontainer.metadata={\"onCreateCommand\":\".devcontainer/install-devcontainer-deps.sh\",\"postStartCommand\":\".devcontainer/install-editable-package.sh\",\"customizations\":{\"vscode\":{\"settings\":{},\"extensions\":[\"ms-azuretools.vscode-docker\",\"ms-python.python\",\"mhutchie.git-graph\",\"donjayamanne.githistory\",\"github.vscode-github-actions\",\"tamasfe.even-better-toml\",\"njpwerner.autodocstring\"]}},\"mounts\":[\"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind\"],\"containerEnv\":{\"PYTHONPATH\":\"/workspaces/lab-partner/src\",\"LAB_WORKSPACE\":\"${localEnv:LAB_WORKSPACE}\",\"XDG_RUNTIME_DIR\":\"${localEnv:XDG_RUNTIME_DIR}\",\"USER\":\"${localEnv:USER}\",\"HOME\":\"${localEnv:HOME}\"}}"

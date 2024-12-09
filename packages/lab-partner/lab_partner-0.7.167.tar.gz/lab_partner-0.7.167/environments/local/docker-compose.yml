@@ -1,0 +1,149 @@
+version: "3.7"
+services:
+  proxy:
+    image: traefik:v2.4.9
+    container_name: proxy
+    hostname: proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxy.rule=Host(`proxy`)"
+      - "traefik.http.services.proxy.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=http"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: >
+      --log.level=INFO
+      --api
+      --api.dashboard
+      --api.insecure
+      --providers.docker
+      --providers.docker.exposedbydefault=false
+      --entrypoints.web.address=:80
+    networks:
+      - ${NETWORK_NAME}
+  jupyter:
+    image: enclarify/lab-partner-jupyter:${LAB_VERSION}
+    container_name: jupyter
+    hostname: jupyter
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jupyter.rule=Host(`jupyter`)"
+      - "traefik.http.services.jupyter.loadbalancer.server.port=8888"
+    environment:
+      - DISPLAY=${DISPLAY}
+      - LAB_WORKSPACE=${LAB_WORKSPACE}
+      - LAB_WORKSPACE_DATA=${LAB_WORKSPACE_DATA}
+      - LAB_NETWORK_NAME=${LAB_NETWORK_NAME}
+      - TRACING_HOST=jaeger-agent
+      - TRACING_PORT=6831
+    ports:
+      - 8888:8888
+    volumes:
+      - ${WORKSPACE}:${WORKSPACE}
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - ${NETWORK_NAME}
+  data-prepper:
+    image: enclarify/data-prepper:1.0.0
+    container_name: data-prepper
+    hostname: data-prepper
+    restart: unless-stopped
+    ports:
+      - "21890:21890"
+    depends_on:
+      - opensearch
+    networks:
+      - ${NETWORK_NAME}
+  tracing:
+    image: jaegertracing/all-in-one:1.31
+    container_name: tracing
+    hostname: tracing
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tracing.rule=Host(`tracing`)"
+      - "traefik.http.services.tracing.loadbalancer.server.port=16686"
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
+    networks:
+      - ${NETWORK_NAME}
+#  otel-collector:
+#    image: enclarify/opentelemetry-collector:0.31.0
+#    container_name: otel-collector
+#    hostname: otel-collector
+#    command: ["--config=/etc/otel-collector-config.yml"]
+#    ports:
+#      - "14250:14250"
+#    depends_on:
+#      - data-prepper
+#    networks:
+#      - ${NETWORK_NAME}
+#  jaeger-agent:
+#    container_name: jaeger-agent
+#    image: jaegertracing/jaeger-agent:1.25.0
+#    command: ["--reporter.grpc.host-port=otel-collector:14250"]
+#    ports:
+#      - "5775:5775/udp"
+#      - "6831:6831/udp"
+#      - "6832:6832/udp"
+#      - "5778:5778/tcp"
+#    networks:
+#      - ${NETWORK_NAME}
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:1.0.0
+    container_name: opensearch-dashboards
+    hostname: opensearch-dashboards
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.opensearch.rule=Host(`opensearch`)"
+      - "traefik.http.services.opensearch.loadbalancer.server.port=5601"
+    environment:
+      - OPENSEARCH_URL=https://node-0.example.com:9200
+      - OPENSEARCH_HOSTS=https://node-0.example.com:9200
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    networks:
+      - ${NETWORK_NAME}
+  opensearch:
+    image: opensearchproject/opensearch:1.0.0
+    container_name: opensearch
+    hostname: node-0.example.com
+    ports:
+      - '9200:9200'
+      - '9600:9600'
+    environment:
+      - discovery.type=single-node
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms12g -Xmx12g" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - ${OPENSEARCH_DATA}:/usr/share/opensearch/data
+      - ${OPENSEARCH_LOGS}:/usr/share/opensearch/logs
+    networks:
+      - ${NETWORK_NAME}
+
+networks:
+  lab:
+    name: ${NETWORK_NAME}
