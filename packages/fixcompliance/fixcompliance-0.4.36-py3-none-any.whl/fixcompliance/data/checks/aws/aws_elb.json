@@ -1,0 +1,109 @@
+{
+    "provider": "aws",
+    "service": "elb",
+    "checks": [
+        {
+            "name": "elb_has_no_listeners",
+            "title": "Ensure Elastic Load Balancers Have Listeners",
+            "result_kinds": [
+                "aws_elb"
+            ],
+            "categories": [
+                "unused"
+            ],
+            "risk": "Without listeners, Elastic Load Balancers cannot receive traffic from clients and cannot route requests to registered targets.",
+            "severity": "medium",
+            "detect": {
+                "fix": "search is(aws_elb) and listener in [null, []]"
+            },
+            "remediation": {
+                "text": "Add listeners to Elastic Load Balancers to allow them to receive and route traffic.",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Elastic Load Balancers Zuhörer haben.",
+                    "risk": "Ohne Zuhörer können Elastic Load Balancers keinen Datenverkehr von Clients empfangen und Anfragen nicht an registrierte Ziele weiterleiten.",
+                    "remediation": "Fügen Sie Elastic Load Balancers Zuhörer hinzu, um ihnen den Empfang und die Weiterleitung von Datenverkehr zu ermöglichen."
+                }
+            }
+        },
+        {
+            "name": "logging_enabled",
+            "title": "Ensure That Logging Is Enabled for Application Load Balancers",
+            "result_kinds": [
+                "aws_elb"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "Without enabling logging for Application load balancers, there is a risk of limited visibility into security risks, reduced threat detection, and inability to measure performance metrics.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_elb) and elb_attributes.access_log.enabled==false"
+            },
+            "remediation": {
+                "text": "To enable logging for Application load balancers, go to the Attributes tab, find the Access logs section, click the Edit button, enable access logs, provide the necessary information such as the S3 bucket and prefix, and save the changes.",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html",
+                "complexity": "low"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Protokollierung für Application Load Balancers aktiviert ist",
+                    "risk": "Ohne die Aktivierung der Protokollierung für Application Load Balancers besteht die Gefahr einer begrenzten Sichtbarkeit von Sicherheitsrisiken, einer verringerten Bedrohungserkennung und der Unfähigkeit, Leistungsmetriken zu messen.",
+                    "remediation": "Um die Protokollierung für Application Load Balancers zu aktivieren, gehen Sie zum Abschnitt 'Attribute', suchen Sie den Bereich 'Zugriffsprotokolle' und klicken Sie auf die Schaltfläche 'Bearbeiten'. Aktivieren Sie die Zugriffsprotokolle und geben Sie die erforderlichen Informationen wie den S3-Bucket und den Präfix ein und speichern Sie die Änderungen."
+                }
+            }
+        },
+        {
+            "name": "uses_ssl_certificate",
+            "title": "Ensure Load Balancer Uses SSL Certificate for Port 443",
+            "result_kinds": ["aws_elb"],
+            "categories": ["security", "compliance"],
+            "risk": "Not having a valid SSL certificate for an open port 443 can result in security risks such as exposure of sensitive information, vulnerability to multiple attacks, and loss of customer trust.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_elb) and elb_listener_descriptions[*].{listener.protocol in [HTTPS, SSL] and listener.ssl_certificate_id==null}"
+            },
+            "remediation": {
+                "text": "To fix the issue, go to the load balancer settings, click on 'View/edit rules' for port 443, and associate a valid SSL certificate.",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-update-certificates.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-update-certificates.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Lastenausgleicher ein SSL-Zertifikat für den Port 443 verwendet",
+                    "risk": "Das Fehlen eines gültigen SSL-Zertifikats für einen offenen Port 443 kann zu Sicherheitsrisiken führen, wie z. B. der Offenlegung sensibler Informationen, der Anfälligkeit für verschiedene Angriffe und dem Verlust des Vertrauens der Kunden.",
+                    "remediation": "Um das Problem zu beheben, gehen Sie zu den Einstellungen des Lastenausgleichers, klicken Sie auf 'Regeln anzeigen/bearbeiten' für Port 443 und verknüpfen Sie ein gültiges SSL-Zertifikat."
+                }
+            }
+        },
+        {
+            "name": "insecure_ssl_ciphers",
+            "title": "Ensure Elastic Load Balancers Do Not Use Insecure SSL Ciphers",
+            "result_kinds": ["aws_elb"],
+            "categories": ["security", "compliance"],
+            "risk": "Using outdated or weak SSL/TLS ciphers exposes transmitted data to increased risk of decryption and unauthorized access. Ensuring robust encryption practices are in place is essential to protect sensitive information from potential security breaches.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_elb) and elb_listener_descriptions[*].{listener.protocol==HTTPS and policy_names[] !=\"ELBSecurityPolicy-TLS-1-2-2017-01\"}"
+            },
+            "remediation": {
+                "text": "Update the SSL/TLS policies of your Elastic Load Balancers to include only secure cipher suites.",
+                "cli": "aws elb set-load-balancer-policies-of-listener --load-balancer-name <lb_name> --load-balancer-port 443 --policy-names ELBSecurityPolicy-TLS-1-2-2017-01",
+                "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies",
+                "complexity": "medium"
+            },
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Elastic Load Balancer keine unsicheren TLS-Chiffren verwenden",
+                    "risk": "Die Verwendung veralteter oder schwacher TLS-Chiffren erhöht das Risiko, dass übertragene Daten entschlüsselt und unbefugt zugegriffen werden können. Es ist wesentlich, robuste Verschlüsselungspraktiken zu implementieren, um sensible Informationen vor potenziellen Sicherheitsverletzungen zu schützen.",
+                    "remediation": "Aktualisieren Sie die SSL/TLS-Richtlinien Ihrer Elastic Load Balancer, um nur sichere Chiffrensuiten einzuschließen."
+                }
+            }
+        }
+    ]
+}

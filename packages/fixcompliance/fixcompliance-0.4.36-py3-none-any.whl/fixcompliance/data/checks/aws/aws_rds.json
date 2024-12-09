@@ -1,0 +1,251 @@
+{
+    "provider": "aws",
+    "service": "rds",
+    "checks": [
+        {
+            "name": "storage_encrypted",
+            "title": "Ensure That RDS Instances Storage Is Encrypted",
+            "result_kinds": [
+                "aws_rds_instance"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "If storage encryption is not enabled, sensitive data stored at rest is unprotected. This poses a serious security risk as unauthorized parties may access or compromise your data.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_rds_instance) and volume_encrypted==false"
+            },
+            "remediation": {
+                "text": "You should enable storage encryption for the RDS instances. This provides enhancement to your data security by preventing unauthorized access to the underlying storage. Use industry standard AES-256 encryption algorithm and ensure all logs, backups, and snapshots are included in the encryption.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encrypting.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass der Speicher von RDS-Instanzen verschlüsselt ist.",
+                    "risk": "Wenn die Speicherverschlüsselung nicht aktiviert ist, sind gespeicherte sensible Daten ungeschützt. Dies stellt ein ernsthaftes Sicherheitsrisiko dar, da unbefugte Personen auf Ihre Daten zugreifen oder diese kompromittieren können.",
+                    "remediation": "Sie sollten die Speicherverschlüsselung für die RDS-Instanzen aktivieren. Dies verbessert die Datensicherheit, indem unbefugter Zugriff auf den zugrunde liegenden Speicher verhindert wird. Verwenden Sie den branchenüblichen AES-256-Verschlüsselungsalgorithmus und stellen Sie sicher, dass alle Protokolle, Backups und Snapshots in die Verschlüsselung einbezogen werden."
+                }
+            }
+        },
+        {
+            "name": "auto_minor_version_upgrade",
+            "title": "Ensure Minor Version Upgrade Is Enabled for RDS Instances",
+            "result_kinds": [
+                "aws_rds_instance"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "Disabling Auto Minor Version Upgrade feature exposes the AWS database to potential threats including security vulnerabilities and bugs. Regular updates ensure optimal performance of your system and protects against such threats.",
+            "severity": "low",
+            "detect": {
+                "fix": "is(aws_rds_instance) and rds_auto_minor_version_upgrade==false"
+            },
+            "remediation": {
+                "text": "To mitigate the risk, activate Auto Minor Version Upgrade feature for all databases and environments. This will ensure that your AWS database system is up-to-date.",
+                "url": "https://aws.amazon.com/blogs/database/best-practices-for-upgrading-amazon-rds-to-major-and-minor-versions-of-postgresql",
+                "complexity": "low"
+            },
+            "url": "https://aws.amazon.com/blogs/database/best-practices-for-upgrading-amazon-rds-to-major-and-minor-versions-of-postgresql",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die Aktualisierung der Nebenversion für RDS-Instanzen aktiviert ist",
+                    "risk": "Das Deaktivieren der Funktion zur automatischen Aktualisierung der Nebenversion birgt potenzielle Risiken für die AWS-Datenbank, einschließlich Sicherheitslücken und Fehler. Regelmäßige Updates gewährleisten eine optimale Leistung Ihres Systems und schützen vor solchen Bedrohungen.",
+                    "remediation": "Um das Risiko zu mindern, aktivieren Sie die Funktion zur automatischen Aktualisierung der Nebenversion für alle Datenbanken und Umgebungen. Dadurch wird sichergestellt, dass Ihr AWS-Datenbanksystem auf dem neuesten Stand ist."
+                }
+            }
+        },
+        {
+            "name": "db_instance_cloudwatch_logs_enabled",
+            "title": "Ensure That AWS RDS Instances Have CloudWatch Logs Exports Enabled",
+            "result_kinds": [
+                "aws_rds_instance"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "The absence of CloudWatch Logs exports for RDS instances limits visibility into crucial performance or security metrics, possibly concealing operational issues or threats. It also makes the task of diagnosing problems significantly harder.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_rds_instance) and rds_enabled_cloudwatch_logs_exports==[]"
+            },
+            "remediation": {
+                "text": "Navigate to the RDS instance configuration and click 'Modify'. Enable 'Enable CloudWatch Logs exports.' and specify the CloudWatch Logs group for the RDS Instance. Save the changes to implement the new settings.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.Concepts.html#USER_LogAccess.Procedural.Enabling",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_RDS_Configuring.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass AWS RDS-Instanzen CloudWatch-Protokolle aktiviert haben",
+                    "risk": "Das Fehlen von CloudWatch-Protokollen für RDS-Instanzen begrenzt die Sichtbarkeit wichtiger Leistungs- oder Sicherheitsmetriken, was potenziell betriebliche Probleme oder Bedrohungen verbirgt. Es erschwert auch die Aufgabe der Problembehandlung erheblich.",
+                    "remediation": "Navigieren Sie zur Konfiguration der RDS-Instanz und klicken Sie auf 'Ändern'. Aktivieren Sie 'CloudWatch-Protokollierungen exportieren' und geben Sie die CloudWatch-Protokollgruppe für die RDS-Instanz an. Speichern Sie die Änderungen, um die neuen Einstellungen zu implementieren."
+                }
+            }
+        },
+        {
+            "name": "no_public_access",
+            "title": "Ensure That All Amazon RDS Instances Are Secured from Public Access",
+            "result_kinds": [
+                "aws_rds_instance"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "Granting public access to databases exposes sensitive information, making the system vulnerable to malicious attacks and data breaches.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_rds_instance) and db_publicly_accessible==true"
+            },
+            "remediation": {
+                "text": "Ensure that each Amazon RDS instance is properly configured to disallow public access. Use options group and DB parameter group settings to enforce this configuration.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_RDS_Configuring.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_RDS_Security.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass alle Amazon RDS-Instanzen vor öffentlichem Zugriff geschützt sind.",
+                    "risk": "Das Gewähren öffentlichen Zugriffs auf Datenbanken stellt sensible Informationen bloß und macht das System anfällig für bösartige Angriffe und Datenverstöße.",
+                    "remediation": "Stellen Sie sicher, dass jede Amazon RDS-Instanz ordnungsgemäß konfiguriert ist, um öffentlichen Zugriff zu verhindern. Verwenden Sie Optionsgruppen- und DB-Parametergruppeneinstellungen, um diese Konfiguration durchzusetzen."
+                }
+            }
+        },
+        {
+            "name": "snapshot_not_public",
+            "title": "Ensure That Amazon RDS Snapshots Are Not Publicly Available",
+            "result_kinds": [
+                "aws_rds_cluster_snapshot",
+                "aws_rds_snapshot"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "If RDS snapshots are publicly available, sensitive data may be exposed, increasing the risk of data breach and non-compliance with data privacy regulations.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_rds_cluster_snapshot, aws_rds_snapshot) and rds_attributes.restore[*]==\"all\""
+            },
+            "remediation": {
+                "text": "To remediate, disable public availability for all RDS snapshots. Ensure that only necessary and authorized AWS accounts have snapshot sharing permissions.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ShareSnapshot.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ShareSnapshot.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass Amazon RDS-Snapshots nicht öffentlich verfügbar sind",
+                    "risk": "Wenn RDS-Snapshots öffentlich verfügbar sind, können sensible Daten offengelegt werden, was das Risiko eines Datenlecks und Verstöße gegen Datenschutzbestimmungen erhöht.",
+                    "remediation": "Um das Problem zu beheben, deaktivieren Sie die öffentliche Verfügbarkeit für alle RDS-Snapshots. Stellen Sie sicher, dass nur notwendige und autorisierte AWS-Konten Berechtigungen zum Freigeben von Snapshots haben."
+                }
+            }
+        },
+        {
+            "name": "deletion_protection_enabled",
+            "title": "Ensure DB Clusters and Instances Have Deletion Protection Enabled",
+            "result_kinds": [ "aws_rds_instance", "aws_rds_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Allowing Amazon Aurora DB clusters and instances to operate without deletion protection can lead to accidental or malicious deletions, resulting in significant data loss and potential service disruptions. Deletion protection is crucial to prevent unauthorized or inadvertent database drops, which could severely impact business operations and data integrity.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_rds_instance, aws_rds_cluster) and rds_deletion_protection=false"
+            },
+            "remediation": {
+                "text": "Enable deletion protection on all Aurora DB clusters and instances. This can be done during the database creation phase through the AWS Management Console or modified on existing instances via the AWS CLI using the modify-db-instance command with the --deletion-protection parameter set to true.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Modifying.html",
+                "complexity": "low"
+            },
+            "url": "https://aws.amazon.com/about-aws/whats-new/2018/09/amazon-rds-now-provides-database-deletion-protection/",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass bei Aurora DB Cluster und Instanzen der Löschschutz aktiviert ist",
+                    "risk": "Wenn Amazon Aurora DB Cluster und Instanzen ohne Löschschutz betrieben werden, kann dies zu unbeabsichtigten oder böswilligen Löschungen führen, was zu erheblichem Datenverlust und potenziellen Dienstunterbrechungen führen kann. Der Löschschutz ist entscheidend, um die unbefugte oder versehentliche Löschung von Datenbanken zu verhindern, was schwerwiegende Auswirkungen auf den Geschäftsbetrieb und die Datenintegrität haben könnte.",
+                    "remediation": "Aktivieren Sie den Löschschutz bei allen Aurora DB Clustern und Instanzen. Dies kann während der Erstellungsphase der Datenbank über die AWS Management Console erfolgen oder bei bestehenden Instanzen über die AWS CLI mit dem Befehl modify-db-instance und dem Parameter --deletion-protection auf true gesetzt werden."
+                }
+            }
+        },
+        {
+            "name": "backup_enabled",
+            "title": "Ensure AWS RDS Clusters and Instances Have Backup Enabled",
+            "result_kinds": [ "aws_rds_instance", "aws_rds_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Operating AWS RDS instances without enabled backups poses significant risks of data loss in cases of system failures, data corruption, or human errors. Without regular backups, restoring data to a previous state becomes impossible, potentially leading to severe business disruptions and loss of critical data.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_rds_instance, aws_rds_cluster) and (rds_backup_retention_period==null or rds_backup_retention_period<{{rds_backup_minimum_retention_days}})"
+            },
+            "default_values": {
+                "rds_backup_minimum_retention_days": 7
+            },
+            "remediation": {
+                "text": "Enable automatic backups for all AWS RDS instances to ensure data durability and recoverability. This can be configured via the AWS Management Console or the AWS CLI. Set a suitable backup retention period and define a backup window that minimizes impact on system performance.",
+                "url": "https://asecure.cloud/a/cfgrule_db-instance-backup-enabled",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass Backups für AWS RDS-Instanzen aktiviert sind",
+                    "risk": "Der Betrieb von AWS RDS-Instanzen ohne aktivierte Backups birgt erhebliche Risiken eines Datenverlusts bei Systemausfällen, Datenkorruption oder Bedienfehlern. Ohne regelmäßige Backups ist eine Wiederherstellung der Daten auf einen früheren Zeitpunkt unmöglich, was zu schwerwiegenden Unterbrechungen des Geschäftsbetriebs und zum Verlust kritischer Daten führen kann.",
+                    "remediation": "Aktivieren Sie automatische Backups für alle AWS RDS-Instanzen, um die Datenbeständigkeit und Wiederherstellbarkeit zu gewährleisten. Dies kann über die AWS Management Console oder die AWS CLI konfiguriert werden. Legen Sie eine geeignete Aufbewahrungsfrist für Backups fest und definieren Sie ein Backup-Fenster, das die Auswirkungen auf die Systemleistung minimiert."
+                }
+            }
+        },
+        {
+            "name": "multi_az_enabled",
+            "title": "Ensure All Amazon RDS Instances and Clusters Have Multi-AZ Deployments Enabled",
+            "result_kinds": [ "aws_rds_instance", "aws_rds_cluster" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Not enabling Multi-AZ deployments for Amazon RDS instances and clusters exposes applications to higher risk of downtime and data loss in the event of an AZ failure. Single-AZ deployments do not provide the high availability needed for critical systems, resulting in potential service interruptions and operational disruptions that could affect business continuity.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_rds_instance, aws_rds_cluster) and rds_multi_az=false"
+            },
+            "remediation": {
+                "text": "To minimize the risk of downtime and ensure data redundancy, enable Multi-AZ deployments for all existing and new Amazon RDS instances and clusters. For RDS instances, modify the instance settings to enable Multi-AZ deployments. For Amazon Aurora, ensure that clusters are designed with multiple instances across different AZs.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass alle Amazon RDS-Instanzen und -Cluster Multi-AZ-Bereitstellungen aktiviert haben",
+                    "risk": "Das Nichtaktivieren von Multi-AZ-Bereitstellungen für Amazon RDS-Instanzen und -Cluster setzt Anwendungen einem höheren Risiko von Ausfallzeiten und Datenverlust im Falle eines AZ-Ausfalls aus. Einzelne AZ-Bereitstellungen bieten nicht die hohe Verfügbarkeit, die für kritische Systeme benötigt wird, was zu potenziellen Serviceunterbrechungen und betrieblichen Störungen führen kann, die die Geschäftskontinuität beeinträchtigen.",
+                    "remediation": "Um das Risiko von Ausfallzeiten zu minimieren und Datenredundanz sicherzustellen, aktivieren Sie Multi-AZ-Bereitstellungen für alle bestehenden und neuen Amazon RDS-Instanzen und -Cluster. Für RDS-Instanzen ändern Sie die Einstellungen der Instanz, um Multi-AZ-Bereitstellungen zu ermöglichen. Für Amazon Aurora stellen Sie sicher, dass Cluster mit mehreren Instanzen in verschiedenen AZs konzipiert sind."
+                }
+            }
+        },
+        {
+            "name": "snapshot_encrypted",
+            "title": "Ensure All AWS RDS Cluster and Instance Snapshots Are Encrypted",
+            "result_kinds": [ "aws_rds_snapshot", "aws_rds_cluster_snapshot" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Unencrypted RDS snapshots pose a significant security risk as they contain complete copies of database contents which can include sensitive or regulated data. If these snapshots are intercepted or accessed by unauthorized parties, it can lead to data breaches, financial loss, and damage to an organization’s reputation.",
+            "severity": "critical",
+            "detect": {
+                "fix": "(is(aws_rds_snapshot) and rds_encrypted=false) or (is(aws_rds_cluster_snapshot) and rds_storage_encrypted=false)"
+            },
+            "remediation": {
+                "text": "To mitigate these risks, encrypt all existing and future RDS snapshots using AWS Key Management Service (KMS) keys. For existing unencrypted snapshots, create a new snapshot with encryption enabled.",
+                "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateSnapshot.html",
+                "complexity": "medium"
+            },
+            "url": "https://aws.amazon.com/blogs/aws/amazon-rds-update-share-encrypted-snapshots-encrypt-existing-instances/",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass alle AWS RDS Cluster- und Instanz-Snapshots verschlüsselt sind",
+                    "risk": "Unverschlüsselte RDS-Snapshots stellen ein erhebliches Sicherheitsrisiko dar, da sie vollständige Kopien des Datenbankinhalts enthalten, die sensible oder regulierte Daten umfassen können. Wenn diese Snapshots von unbefugten Parteien abgefangen oder zugegriffen werden, kann dies zu Datenverlusten, finanziellen Verlusten und Schäden am Ruf einer Organisation führen.",
+                    "remediation": "Um diese Risiken zu mindern, verschlüsseln Sie alle bestehenden und zukünftigen RDS-Snapshots mit AWS Key Management Service (KMS) Keys. Für bestehende unverschlüsselte Snapshots erstellen Sie einen neuen Snapshot mit aktivierter Verschlüsselung."
+                }
+            }
+        }
+    ]
+}
