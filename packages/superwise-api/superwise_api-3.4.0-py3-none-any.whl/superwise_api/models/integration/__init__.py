@@ -1,0 +1,2 @@
+from superwise_api.models.integration.integration import Integration
+from superwise_api.models.integration.integration import IntegrationType
