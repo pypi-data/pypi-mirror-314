@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling>1"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "alphacodings"
+version = "0.1.0"
+description = "base26 ([A-Z]) and base52 ([A-Za-z]) encodings"
+readme = "README.md"
+authors = [{name = "Federico Minutoli", email = "fede97.minutoli@gmail.com"}]
+license = {file = "LICENSE"}
+keywords = ["chunking", "encodings", "GMP", "NLP", "tokenization"]
+requires-python = ">3.9"
+dependencies = ["gmpy2>1"]
+
+
+[dependency-groups]
+contrib = ["matplotlib>3", "memory-profiler>0", "pre-commit>4", "tqdm>4"]
+testing = ["pytest>8"]
+
+
+[tool.uv]
+default-groups = ["contrib", "testing"]
+
+
+[tool.ruff]
+src = ["src"]
+exclude = [
+    ".git-rewrite",
+    ".git",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "build",
+    "dist",
+    "site-packages",
+    "venv",
+]
+line-length = 88
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint]
+extend-select = [
+  "ARG",
+  "B",
+  "C4",
+  "EM",
+  "EXE",
+  "G",
+  "I",
+  "ICN",
+  "NPY",
+  "PD",
+  "PGH",
+  "PIE",
+  "PL",
+  "PT",
+  "PTH",
+  "RET",
+  "RUF",
+  "SIM",
+  "T20",
+  "UP",
+  "YTT",
+]
+ignore = [
+  "PLR09",
+  "PLR2004",  # magic comparison
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["alphacodings"]
+lines-after-imports = 2

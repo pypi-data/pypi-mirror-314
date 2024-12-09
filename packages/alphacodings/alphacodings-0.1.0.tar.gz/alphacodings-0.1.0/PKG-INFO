@@ -1,0 +1,104 @@
+Metadata-Version: 2.3
+Name: alphacodings
+Version: 0.1.0
+Summary: base26 ([A-Z]) and base52 ([A-Za-z]) encodings
+Author-email: Federico Minutoli <fede97.minutoli@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Federico Minutoli
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Keywords: GMP,NLP,chunking,encodings,tokenization
+Requires-Python: >3.9
+Requires-Dist: gmpy2>1
+Description-Content-Type: text/markdown
+
+<div align="center">
+
+# alphacodings
+
+<img src="resources/alphacodings.png" width="256" height="256">
+
+base26 ([A-Z]) and base52 ([A-Za-z]) encodings
+</div>
+
+## 🌟 overview
+
+transform any string to alphabetic-only with base26 ([A-Z]) and base52 ([A-Za-z]) lossless encodings; useful for transmitting textual data over restrictive channels or for training AI models and tokenizers on simpler vocabularies.
+
+**alphacodings** is a fast and lightweight library using [GMP arithmetic](https://gmplib.org).
+
+## ⚙️ installation
+
+```python
+python -m pip install alphacodings
+```
+
+## 🚀 usage
+
+```python
+from alphacodings import base26_encode, base26_decode, base52_encode, base52_decode
+
+
+string = """\
+<!DOCTYPE html>
+<html>
+<head>
+    <title>sample page</title>
+</head>
+<body>
+    <h1>welcome!</h1>
+    <p>you are reading a sample HTML string.</p>
+</body>
+</html>
+"""
+
+
+if __name__ == "__main__":
+    encoding_base26 = base26_encode(string)
+    print(encoding_base26)
+    # >>> YBPNLKVNQWZQCMDHMLNDTVQCCRKQLNCFGMQPNGQCIXHUUPHFUNKUFEPDLKIGARFOKTDEZKQHXGCPYHDZKKVIUDNFOAYYAUOQFBJFFGSTKAXNWGDPVUJNBARPNXBASHZBXIBSSEFTAIQRPEADSOVVNXUMQXVDWTAIVCIVWQZAHAGYAVZYKGMETJOOUQNOEXMSOOGSKVMFBYZIBZDAITICYVXMJTTCCHPMSCABLYUMFDUNLVSLNKHSBPKCGASXJSFYDHZFAOEQTUACEBIFKQGYC
+
+    encoding_base52 = base52_encode(string)
+    print(encoding_base52)
+    # >>> EgcgYRPxckylMQWRLDADNZxPJiJcHaVwYHLnicahBgaotGGANZuvsvcpSSOJFLXvKPjRlNQCJqqdviiIdtnwJyDOnWojsrpkWSTZFHbMIREvREjpsODtSxoLlLjQZOoehsGFzawGQecyuomgpZQNyFnZQLWPiDhzClwxBFCCwdqduGJoshrwFdwHWMtJpSTmjxzaYmNvzOIOwLkJvyQHCaFtrODPhbhBpPBmC
+
+    assert base26_decode(encoding_base26) == string
+    assert base52_decode(encoding_base52) == string
+```
+
+## 🧠 motivation
+
+The library is inspired by [R. Heaton](https://github.com/robert)'s base26 implementation and his story of manipulating data transmission in restrictive network channels on long-distance flights using alphabetic-only encodings and tokenization.
+
+have a look at the original [repository](https://github.com/robert/pyskywifi) and [blog post](https://robertheaton.com/pyskywifi) and show him some love!
+
+## 📊 benchmarking
+
+TBC <!-- HTML string of almost 2.5M characters -->
+
+## 🤝 contributing
+
+contributions to **alphacodings** are welcome!
+
+feel free to submit pull requests or open issues on our repository.
+
+## 📄 license
+
+see the [LICENSE](LICENSE) file for more details.
