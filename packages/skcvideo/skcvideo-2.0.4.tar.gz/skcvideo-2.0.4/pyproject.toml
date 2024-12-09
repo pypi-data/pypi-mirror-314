@@ -1,0 +1,62 @@
+[project]
+name = "skcvideo"
+version = "2.0.4"
+description = "video utils"
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.9,<3.12"
+dependencies = [
+  "click>=8.1.7",
+  "ffmphisdp==2.4.1",
+  "imageio>=2.30.0",
+  "imageio-ffmpeg>=0.5.1",
+  "numpy>=1.18.5,<2",
+  "opencv-python>=4.4.0.46"
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.poe.tasks.lock]
+help = "Lock file"
+shell = "uv lock"
+
+[tool.poe.tasks.lock_upgrade]
+help = "Lock file"
+shell = "uv lock --upgrade"
+
+[[tool.poe.tasks.test]]
+help = "Run tests"
+shell = 'uv run pytest tests'
+
+[tool.ruff]
+fix = true
+line-length = 120
+lint.select = ["B", "E", "F", "I001", "Q", "SIM", "UP", "W"]
+lint.ignore = ["Q000", "Q003", "SIM108"]
+target-version = "py39"
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["typer.Argument", "typer.Option"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-wrap-aliases = true
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"
+
+[tool.uv]
+dev-dependencies = [
+  "coverage>=7.6.1",
+  "mock>=5.1.0",
+  "poethepoet>=0.27.0",
+  "pre-commit>=3.5.0",
+  "pytest>=8.3.2",
+  "pytest-mock>=3.10.0",
+  "ruff>=0.6.8",
+]
+package = true
