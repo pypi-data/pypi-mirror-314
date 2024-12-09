@@ -1,0 +1,30 @@
+# NOTE(@andreynering): The linters listed here are additions on top of
+# those enabled by default:
+#
+# https://golangci-lint.run/usage/linters/#enabled-by-default
+
+linters:
+  enable:
+    - depguard
+    - goimports
+    - gofmt
+    - gofumpt
+    - misspell
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - "$all"
+          - "!$test"
+          - "!**/errors/*.go"
+        deny:
+          - pkg: "errors"
+            desc: "Use github.com/go-task/task/v3/errors instead"
+  goimports:
+    local-prefixes: github.com/go-task
+  gofmt:
+    rewrite-rules:
+      - pattern: 'interface{}'
+        replacement: 'any'

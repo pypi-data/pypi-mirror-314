@@ -1,0 +1,52 @@
+version: '3'
+
+vars:
+  BAZ:
+    sh: echo baz
+
+env:
+  FOO: foo
+  BAR: bar
+  BAZ: "{{.BAZ}}"
+  QUX: from_taskfile
+
+tasks:
+  default:
+    cmds:
+      - task: local
+      - task: global
+      - task: not-overridden
+      - task: multiple_type
+
+  local:
+    vars:
+      AMD64: amd64
+    env:
+      GOOS: linux
+      GOARCH: "{{.AMD64}}"
+      CGO_ENABLED:
+        sh: echo '0'
+    cmds:
+      - echo "GOOS='$GOOS' GOARCH='$GOARCH' CGO_ENABLED='$CGO_ENABLED'" > local.txt
+
+  global:
+    env:
+      BAR: overridden
+    cmds:
+      - echo "FOO='$FOO' BAR='$BAR' BAZ='$BAZ'" > global.txt
+
+  multiple_type:
+    env:
+      FOO: 1
+      BAR: true
+      BAZ: 1.1
+    cmds:
+      - echo "FOO='$FOO' BAR='$BAR' BAZ='$BAZ'" > multiple_type.txt
+
+  not-overridden:
+    cmds:
+      - echo "QUX='$QUX'" > not-overridden.txt
+
+  overridden:
+    cmds:
+      - echo "QUX='$QUX'" > overridden.txt
