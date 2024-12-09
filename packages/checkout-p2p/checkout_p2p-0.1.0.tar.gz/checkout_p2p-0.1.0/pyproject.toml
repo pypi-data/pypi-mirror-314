@@ -1,0 +1,113 @@
+[tool.poetry]
+name = "checkout-p2p"
+version = "0.1.0"
+description = "Python library for PlaceToPay Checkout integration."
+authors = ["Iván Andrés López Gómez <andresgom11012@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/andrextor/python-checkout"
+packages = [{include = "checkout"}]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+annotated-types = "0.7.0"
+certifi = "2024.8.30"
+charset-normalizer = "3.4.0"
+idna = "3.10"
+iniconfig = "2.0.0"
+packaging = "24.2"
+pluggy = "1.5.0"
+pydantic = "2.10.0"
+pydantic-core = "2.27.0"
+python-dotenv = "1.0.1"
+requests = "2.32.3"
+setuptools = "75.6.0"
+typing-extensions = "4.12.2"
+urllib3 = "2.2.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.3.3"
+flake8 = "7.1.1"
+black = "24.10.0"
+pytest-cov = "6.0.0"
+mypy = "1.13.0"
+isort = "5.13.2"
+types-requests = "^2.32.0.20241016"
+
+[tool.poetry.urls]
+homepage = "https://github.com/andrextor/python-checkout/wiki"
+repository = "https://github.com/andrextor/python-checkout"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.13"
+disallow_untyped_defs = true
+ignore_missing_imports = true
+follow_imports = "silent"
+strict_optional = true
+show_error_codes = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = "checkout.tests.*"
+disallow_untyped_defs = false
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["checkout"]
+known_third_party = ["pytest", "requests", "flask"]
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "FIRSTPARTY",
+    "LOCALFOLDER"
+]
+default_section = "THIRDPARTY"
+force_sort_within_sections = true
+
+[tool.black]
+line-length = 120
+target-version = ["py38", "py39", "py310"]
+
+[tool.autopep8]
+max-line-length = 120
+ignore = ["E402", "W503"]
+
+[tool.coverage.run]
+branch = true
+source = ["checkout"]
+include = ["checkout/*"]
+omit = [
+    "checkout/*/__init__.py",
+    "*/__pycache__/*"
+]
+
+[tool.coverage.report]
+omit = [
+    "checkout/*/__init__.py",
+    "*/__pycache__/*"
+]
+fail_under = 98
+show_missing = true
+show_covered = true
+
+[tool.coverage.html]
+title = "Test Coverage Report"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+filterwarnings = [
+    "ignore:SOCKS support in urllib3 requires the installation of optional dependencies:urllib3.exceptions.DependencyWarning"
+]
+
+[tool.env]
+PYTHONPATH = "checkout"
+
+[virtualenvs]
+create = true
