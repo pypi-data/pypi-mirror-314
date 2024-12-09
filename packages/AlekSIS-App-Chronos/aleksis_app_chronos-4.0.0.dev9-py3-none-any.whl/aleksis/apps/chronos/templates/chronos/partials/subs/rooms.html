@@ -1,0 +1,11 @@
+{% if el.cancelled and el.amends.rooms.all %}
+  {% include "chronos/partials/rooms.html" with rooms=el.amends.rooms.all %}
+{% elif el.rooms.all and el.amends.rooms.all %}
+  <s>{% include "chronos/partials/rooms.html" with rooms=el.amends.rooms.all %}</s>
+  &nbsp;→&nbsp;
+  <strong>{% include "chronos/partials/rooms.html" with rooms=el.rooms.all %}</strong>
+{% elif el.rooms.all and not el.amends.rooms.all %}
+  {% include "chronos/partials/rooms.html" with rooms=el.rooms.all %}
+{% elif el.amends.rooms.all %}
+  {% include "chronos/partials/rooms.html" with rooms=el.amends.rooms.all %}
+{% endif %}

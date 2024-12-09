@@ -1,0 +1,11 @@
+{% if el.cancelled and el.amends.groups.all %}
+  {% include "chronos/partials/groups.html" with groups=el.amends.groups.all %}
+{% elif el.groups.all and el.amends.groups.all %}
+  <s>{% include "chronos/partials/groups.html" with groups=el.amends.groups.all %}</s>
+  &nbsp;→&nbsp;
+  <strong>{% include "chronos/partials/groups.html" with groups=el.groups.all %}</strong>
+{% elif el.groups.all and not el.amends.groups.all %}
+  {% include "chronos/partials/groups.html" with groups=el.groups.all %}
+{% elif el.amends.groups.all %}
+  {% include "chronos/partials/groups.html" with groups=el.amends.groups.all %}
+{% endif %}

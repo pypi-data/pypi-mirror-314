@@ -1,0 +1,15 @@
+{% if el.cancelled and el.amends.teachers.all %}
+  {% include "chronos/partials/teachers.html" with teachers=el.amends.teachers.all %}
+{% elif el.teachers.all and el.amends.teachers.all %}
+  <s>
+    {% include "chronos/partials/teachers.html" with teachers=el.amends.teachers.all %}
+  </s>
+  →
+  <strong>
+    {% include "chronos/partials/teachers.html" with teachers=el.teachers.all %}
+  </strong>
+{% elif el.teachers.all and not el.amends.teachers.all %}
+  {% include "chronos/partials/teachers.html" with teachers=el.teachers.all %}
+{% elif el.amends.teachers.all %}
+  {% include "chronos/partials/teachers.html" with teachers=el.amends.teachers.all %}
+{% endif %}

@@ -1,0 +1,20 @@
+{% load i18n %}
+{% if el.name == "supervision" %}
+  {% trans "Supervision" %}
+{% elif not el.amends.subject and not el.subject %}
+  {% if el.amends.title %}
+    {{ el.amends.title }}
+  {% elif el.title %}
+    {{ el.title }}
+  {% endif %}
+{% elif el.cancelled %}
+  <s>{% include "chronos/partials/subject.html" with subject=el.amends.subject %}</s>
+{% elif el.subject and el.amends.subject %}
+  <s>{% include "chronos/partials/subject.html" with subject=el.amends.subject %}</s>
+  &nbsp;→&nbsp;
+  <strong>{% include "chronos/partials/subject.html" with subject=el.subject %}</strong>
+{% elif el.subject and not el.amends.subject %}
+  {% include "chronos/partials/subject.html" with subject=el.subject %}
+{% else %}
+  {% include "chronos/partials/subject.html" with subject=el.amends.subject %}
+{% endif %}

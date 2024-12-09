@@ -1,0 +1,285 @@
+query gqlSubjects {
+  amendableSubjects: subjects {
+    id
+    name
+    colourFg
+    colourBg
+  }
+}
+
+query gqlPersons {
+  amendableTeachers: persons {
+    id
+    fullName
+  }
+}
+
+query gqlTeachers {
+  amendableTeachers: teachers {
+    id
+    fullName
+    shortName
+    subjectsAsTeacher {
+      id
+      name
+      shortName
+      colourFg
+      colourBg
+    }
+  }
+}
+
+query gqlRooms {
+  amendableRooms: rooms {
+    id
+    name
+    shortName
+  }
+}
+
+query gqlGroups {
+  groups: timetableGroups {
+    id
+    name
+  }
+}
+
+mutation createAmendLessons($input: [BatchCreateLessonEventInput]!) {
+  createAmendLessons(input: $input) {
+    items: lessonEvents {
+      id
+      amends {
+        id
+      }
+      datetimeStart
+      datetimeEnd
+      subject {
+        id
+      }
+      teachers {
+        id
+      }
+      groups {
+        id
+      }
+      rooms {
+        id
+      }
+      cancelled
+      comment
+    }
+  }
+}
+
+mutation patchAmendLessons($input: [BatchPatchLessonEventInput]!) {
+  patchAmendLessons(input: $input) {
+    items: lessonEvents {
+      id
+      subject {
+        id
+      }
+      teachers {
+        id
+      }
+      groups {
+        id
+      }
+      rooms {
+        id
+      }
+      cancelled
+      comment
+    }
+  }
+}
+
+mutation createOrUpdateSubstitutions($input: [SubstitutionInputType]!) {
+  createOrUpdateSubstitutions(input: $input) {
+    items: substitutions {
+      id
+      oldId
+      subject {
+        id
+        shortName
+        name
+        colourFg
+        colourBg
+        teachers {
+          id
+          shortName
+          fullName
+        }
+      }
+      teachers {
+        id
+        shortName
+        fullName
+      }
+      groups {
+        id
+      }
+      rooms {
+        id
+        shortName
+        name
+      }
+      course {
+        id
+        subject {
+          id
+          shortName
+          name
+          colourFg
+          colourBg
+          teachers {
+            id
+            shortName
+            fullName
+          }
+        }
+      }
+      amends {
+        id
+        teachers {
+          id
+          shortName
+          fullName
+        }
+        subject {
+          id
+          shortName
+          name
+          colourFg
+          colourBg
+          teachers {
+            id
+            shortName
+            fullName
+          }
+        }
+        groups {
+          id
+          shortName
+        }
+        rooms {
+          id
+          shortName
+          name
+        }
+        course {
+          id
+          name
+        }
+      }
+      datetimeStart
+      datetimeEnd
+      cancelled
+      comment
+    }
+  }
+}
+
+mutation deleteAmendLessons($ids: [ID]!) {
+  deleteAmendLessons(ids: $ids) {
+    deletionCount
+  }
+}
+
+query amendedLessonsFromAbsences(
+  $objId: ID
+  $dateStart: Date!
+  $dateEnd: Date!
+  $incomplete: Boolean
+  $teacher: ID
+) {
+  items: amendedLessonsFromAbsences(
+    objId: $objId
+    dateStart: $dateStart
+    dateEnd: $dateEnd
+    incomplete: $incomplete
+    teacher: $teacher
+  ) {
+    id
+    oldId
+    subject {
+      id
+      shortName
+      name
+      colourFg
+      colourBg
+      teachers {
+        id
+        shortName
+        fullName
+      }
+    }
+    teachers {
+      id
+      shortName
+      fullName
+    }
+    groups {
+      id
+    }
+    course {
+      id
+      subject {
+        id
+        shortName
+        name
+        colourFg
+        colourBg
+        teachers {
+          id
+          shortName
+          fullName
+        }
+      }
+      name
+    }
+    rooms {
+      id
+      shortName
+      name
+    }
+    amends {
+      id
+      teachers {
+        id
+        shortName
+        fullName
+      }
+      subject {
+        id
+        shortName
+        name
+        colourFg
+        colourBg
+        teachers {
+          id
+          shortName
+          fullName
+        }
+      }
+      groups {
+        id
+        shortName
+      }
+      course {
+        id
+        name
+      }
+      rooms {
+        id
+        shortName
+        name
+      }
+      cancelled
+      comment
+    }
+    datetimeStart
+    datetimeEnd
+    cancelled
+    comment
+  }
+}
