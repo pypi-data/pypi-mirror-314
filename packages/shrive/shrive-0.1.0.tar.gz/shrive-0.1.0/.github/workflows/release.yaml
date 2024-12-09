@@ -1,0 +1,59 @@
+name: Build and Publish Python Package
+
+on:
+  push:
+    tags:
+      - 'v*'  # Run on version tags, e.g., v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: "clippy"
+
+      - name: Install maturin
+        run: pip install maturin
+
+      - name: Build Python package
+        run: maturin build
+
+      - name: Test Python package locally
+        run: pip install target/wheels/*.whl && python -c "import shrive; print(shrive)"
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install maturin
+        run: pip install maturin
+
+      - name: Publish to PyPI
+        env:
+          MATURIN_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: maturin publish
