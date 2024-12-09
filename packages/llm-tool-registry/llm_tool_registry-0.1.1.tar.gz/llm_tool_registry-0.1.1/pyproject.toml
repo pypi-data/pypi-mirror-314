@@ -1,0 +1,25 @@
+[project]
+name = "llm_tool_registry"
+version = "0.1.1"
+description = "Implements a tool registry to make tool calling easier when using LLMs"
+readme = "README.md"
+authors = [
+    { name = "Robert Heyer", email = "bobby.heyer@gmail.com" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "docstring-parser>=0.16",
+]
+
+[project.scripts]
+llm-functional-caller = "llm_functional_caller:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = []
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src"]
