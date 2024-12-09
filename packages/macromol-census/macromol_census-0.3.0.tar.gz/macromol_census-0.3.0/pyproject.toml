@@ -1,0 +1,101 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "macromol_census"
+authors = [
+  {name = "Kale Kundert", email = "kale@thekunderts.net"},
+]
+readme = 'README.rst'
+dynamic = ["version", "description"]
+requires-python = "~=3.10"
+classifiers = [
+  'Programming Language :: Python :: 3',
+]
+dependencies = [
+  'biopython',
+  'docopt',
+
+  # The `pick_assemblies` script is affected by duckdb/duckdb#10413, which is 
+  # fixed in version 0.10.0.
+  'duckdb>=0.10.0',
+  'gemmi',
+  'more_itertools',
+  'networkx',
+  'numpy',
+  'polars',
+  'pyarrow',
+  'scipy',
+  'tidyexc',
+  'tqdm',
+]
+
+[project.optional-dependencies]
+test = [
+  'pytest',
+  'parametrize_from_file',
+  'pytest_unordered',
+]
+doc = [
+  'sphinx',
+  'sphinx_rtd_theme',
+  'autoclasstoc',
+]
+[project.scripts]
+mmc_init = "macromol_census.init:main"
+mmc_ingest_structures = "macromol_census.ingest_structures:main"
+mmc_ingest_chemicals = "macromol_census.ingest_chemicals:main"
+mmc_ingest_validation = "macromol_census.ingest_validation:main"
+mmc_ingest_blacklist = "macromol_census.ingest_blacklist:main"
+mmc_ingest_entity_clusters = "macromol_census.ingest_entity_clusters:main"
+mmc_ingest_nonspecific_ligands = "macromol_census.ingest_nonspecific_ligands:main"
+mmc_rank_structures = "macromol_census.rank_structures:main"
+mmc_rank_assemblies = "macromol_census.rank_assemblies:main"
+mmc_find_identical_ligands = "macromol_census.find_identical_ligands:main"
+mmc_find_identical_branched_entities = "macromol_census.find_identical_branched_entities:main"
+mmc_pick_assemblies = "macromol_census.pick_assemblies:main"
+mmc_extract_fasta = "macromol_census.extract_fasta:main"
+mmc_extract_nonredundant_assemblies = "macromol_census.extract_nonredundant_assemblies:main"
+
+[project.urls]
+'Documentation' = 'https://macromol-census.readthedocs.io/en/latest/'
+'Version Control' = 'https://github.com/kalekundert/macromol_census'
+'Bug Tracker' = 'https://github.com/kalekundert/macromol_census/issues'
+'Continuous Integration' = 'https://github.com/kalekundert/macromol_census/actions'
+'Test Coverage' = 'https://coveralls.io/github/kalekundert/macromol_census'
+
+[tool.ruff.lint]
+select = ["F"]
+ignore = [
+    "F405",
+    "F403",
+
+    # This is the "local variable unused" error.  It generates a lot of false 
+    # positives in this code base, because of the way duckdb parses variable 
+    # names from strings.
+    "F841",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F821"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --doctest-glob='*.rst'"
+doctest_optionflags = 'NORMALIZE_WHITESPACE'
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ['macromol_census']
+
+[tool.coverage.report]
+exclude_lines = [
+    "^\\s*raise AssertionError\\b",
+    "^\\s*raise NotImplementedError\\b",
+]
+
+[tool.semantic_release]
+version_variables = ['macromol_census/__init__.py:__version__']
+build_command = 'python -m pip install build && python -m build'
+major_on_zero = false
