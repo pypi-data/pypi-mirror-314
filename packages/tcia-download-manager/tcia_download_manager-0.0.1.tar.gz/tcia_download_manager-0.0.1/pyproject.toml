@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tcia-download-manager"
+version = "0.0.1"
+description = "A tool for downloading TCIA data."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Apache Software License"}
+authors = [
+    {name = "Justin Kirby", email = "justin.kirby@nih.gov"}
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pandas",
+    "requests",
+    "PyQt5"
+]
+
+[project.urls]
+Homepage = "https://github.com/kirbyju/tcia_download_manager"
+
+[project.scripts]
+tcia-download-manager = "tcia_download_manager.downloader:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
