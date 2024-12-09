@@ -1,0 +1,71 @@
+<script>
+    let currentScale = 1;
+
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabName).classList.add('active');
+    }
+
+    function calculateZoomLevel(img) {
+        const imgWidth = img.naturalWidth;
+        const imgHeight = img.naturalHeight;
+        const aspectRatio = imgWidth / imgHeight;
+
+        if (aspectRatio > 5) {
+            return Math.min(8, Math.max(4, aspectRatio / 2));
+        }
+        return 2;
+    }
+
+    function showImage(imgData, imgName) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.classList.add('show');
+        modalImg.src = 'data:image/png;base64,' + imgData;
+        modalImg.alt = imgName;
+
+        resetZoom();
+
+        modalImg.onload = function() {
+            currentScale = calculateZoomLevel(modalImg);
+        };
+    }
+
+    function hideModal() {
+        document.getElementById('imageModal').classList.remove('show');
+        resetZoom();
+    }
+
+    function resetZoom() {
+        const modalImg = document.getElementById('modalImage');
+        modalImg.style.transform = 'scale(1)';
+        modalImg.classList.remove('zoomed');
+    }
+
+    function toggleZoom(event) {
+        const modalImg = document.getElementById('modalImage');
+        const modalContent = document.querySelector('.modal-content');
+
+        if (modalImg.classList.contains('zoomed')) {
+            modalImg.style.transform = 'scale(1)';
+            modalImg.classList.remove('zoomed');
+        } else {
+            modalImg.style.transform = `scale(${currentScale})`;
+            modalImg.classList.add('zoomed');
+
+            modalContent.scrollLeft = 0;
+            modalContent.scrollTop = 0;
+        }
+        event.stopPropagation();
+    }
+
+    function handleModalClick(event) {
+        if (event.target.classList.contains('modal')) {
+            hideModal();
+        }
+    }
+
+    document.getElementById('modalImage').addEventListener('click', toggleZoom);
+</script>

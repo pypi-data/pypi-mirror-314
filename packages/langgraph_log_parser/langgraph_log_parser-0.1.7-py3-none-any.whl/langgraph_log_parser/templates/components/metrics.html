@@ -1,0 +1,43 @@
+<div id="metrics" class="tab-content active">
+    <div class="bg-white rounded-lg shadow overflow-x-auto">
+        <table class="w-full metrics-table">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 text-left border-b">Metric</th>
+                    {% for infra in infrastructures_data.keys() %}
+                    <th class="px-4 py-2 text-left border-b">{{ infra }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for metric, values in metrics_comparison.items() %}
+                <tr class="metrics-row hover:bg-gray-50">
+                    <td class="px-4 py-2 border-b font-medium">{{ metric }}</td>
+                    {% for value in values %}
+                    <td class="px-4 py-2 border-b metrics-cell">
+                        {% if value is mapping %}
+                            {% for k, v in value.items() %}
+                            <div class="mb-2">
+                                <strong>{{ k }}:</strong>
+                                {% if v is mapping %}
+                                    <div class="pl-4">
+                                        {% for sub_k, sub_v in v.items() %}
+                                        <div><em>{{ sub_k }}:</em> {{ sub_v }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ v }}
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
