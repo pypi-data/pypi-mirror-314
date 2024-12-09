@@ -1,0 +1,140 @@
+# Gatecraft
+
+Gatecraft is a semantic Role-Based Access Control (RBAC) system with Retrieval-Augmented Generation (RAG) capabilities. It provides a flexible way to manage access control based on semantic similarity and content understanding.
+
+## Features
+
+- Semantic-based access control
+- Integration with OpenAI embeddings
+- Pinecone vector store support
+- Flexible RBAC system
+- RAG capabilities
+
+## Installation
+
+```bash
+
+
+pip install gatecraft
+
+
+```
+
+## Quick Start
+
+```python
+
+
+from gatecraft.core.user import User
+
+
+from gatecraft.core.role import Role
+
+
+from gatecraft.core.permission import Permission
+
+
+from gatecraft.utils.semantic_condition import SemanticCondition
+
+
+from gatecraft.core.entity import Entity
+
+
+from gatecraft.core.policy import AccessControlPolicy
+
+
+from gatecraft.db.semantic_database import SemanticDatabase
+
+
+from gatecraft.db.pinecone_vector_store import PineconeVectorStore
+
+
+
+
+
+# Initialize vector store
+
+
+vector_store = PineconeVectorStore(
+
+
+**    **api_key="your-pinecone-api-key",
+
+
+**    **environment="your-environment",
+
+
+**    **index_name="your-index-name"
+
+
+)
+
+
+
+
+
+# Create semantic database
+
+
+semantic_db = SemanticDatabase(vector_store)
+
+
+
+
+
+# Create policy
+
+
+policy = AccessControlPolicy(database=semantic_db)
+
+
+
+
+
+# Create users and roles
+
+
+user = User(user_id=1, name="Alice")
+
+
+role = Role(role_id=1, name="Cat Lover")
+
+
+permission = Permission(permission_id=1, name="Access Cat Content")
+
+
+
+
+
+# Add semantic condition
+
+
+condition = SemanticCondition(term="cat", threshold=0.8)
+
+
+permission.add_condition(condition)
+
+
+
+
+
+# Set up relationships
+
+
+role.add_permission(permission)
+
+
+user.add_role(role)
+
+
+
+
+
+# Check access
+
+
+entity = Entity(entity_id=1, data="A cute kitten playing with yarn")
+
+
+has_access = policy.is_access_allowed(user, entity)
+```
