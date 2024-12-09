@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "goat_monitor"
+authors = [{ name = "Brendan Haines", email = "brendan.haines@gmail.com" }]
+description = "Remote monitoring of anything"
+readme = "README.md"
+requires-python = ">=3"
+# keywords = ["one", "two"]
+license = { text = "MIT License" }
+classifiers = ["Programming Language :: Python :: 3"]
+dependencies = ["numpy", "toml", "click", "gotify"]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://git.brendanhaines.com/brendanhaines/goat_monitor"
+
+[project.scripts]
+goat_monitor = "goat_monitor.goat_monitor:main"
+
+[tool.setuptools_scm]
+version_file = "goat_monitor/_version.py"
+
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.vscode
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
