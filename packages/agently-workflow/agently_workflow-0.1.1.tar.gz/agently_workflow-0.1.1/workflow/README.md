@@ -1,0 +1,1 @@
+A standalone workflow spun off from [Agently](https://github.com/Maplemx/Agently), featuring minimal third-party dependencies (e.g., json5).
