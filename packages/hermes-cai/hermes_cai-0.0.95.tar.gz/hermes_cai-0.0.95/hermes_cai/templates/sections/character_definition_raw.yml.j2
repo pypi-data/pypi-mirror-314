@@ -1,0 +1,10 @@
+{% set character_definition_messages = get_character_priming(character, username) %}
+{% if character_definition_messages %}
+  {% for message_dict in character_definition_messages %}
+    {% set message = canonicalize_user_name(message_dict.get("src", "")) + ": " + message_dict.get("text", "") %}
+- name: "character_definition_message_{{ loop.index }}"
+  content: |
+    {{ settings.start_token }}{{ maybe_inject_narrator(escape_special_characters(message)) }}{{ settings.eom }}
+    {% set settings.start_token = settings.bom %}
+  {% endfor %}
+{% endif %}
