@@ -1,0 +1,221 @@
+
+# **TPTK: Text Preprocessing Toolkit**
+
+**TPTK** (Text Preprocessing Toolkit) is a Python library designed for text preprocessing in Natural Language Processing (NLP). It offers a comprehensive set of tools to clean, tokenize, lemmatize, and preprocess text efficiently. The library allows users to use specific preprocessing steps or execute a pipeline for end-to-end text preprocessing.
+
+---
+
+## **Features**
+
+- **Text Cleaning**: Remove punctuation, special characters, URLs, and HTML tags.
+- **Tokenization**: Convert text into individual tokens.
+- **Lemmatization**: Reduce words to their base forms using WordNet.
+- **Spell Correction**: Detect and correct misspelled words.
+- **Stopword Removal**: Filter out common stopwords.
+- **Customizable Pipelines**: Define the sequence of preprocessing steps.
+- **Text Statistics**: Summarize text with the `head` function.
+- Modular and user-friendly design.
+
+---
+
+## **Installation**
+
+Install the package and its dependencies:
+
+```bash
+pip install tptk
+```
+
+---
+
+## **Getting Started**
+
+### **Importing the Library**
+
+```python
+from TextPreprocessingToolkit.tptk import TextPreprocessor
+```
+
+---
+
+### **Usage Guide**
+
+#### **1. Initialize the Preprocessor**
+
+```python
+# Initialize the TextPreprocessor
+tp = TextPreprocessor(custom_stopwords=["custom", "words"])
+```
+
+You can provide additional stopwords using the `custom_stopwords` parameter.
+
+---
+
+#### **2. Core Functions**
+
+Each function targets a specific aspect of preprocessing:
+
+##### **Tokenization**
+Break text into individual tokens (words).
+
+```python
+text = "This is an example sentence."
+tokens = tp.tokenize(text)
+print(tokens)
+# Output: ['This', 'is', 'an', 'example', 'sentence', '.']
+```
+
+##### **Remove Punctuation**
+Strip punctuation marks.
+
+```python
+text = "Hello, world! How's it going?"
+cleaned_text = tp.remove_punctuation(text)
+print(cleaned_text)
+# Output: "Hello world Hows it going"
+```
+
+##### **Stopword Removal**
+Remove common stopwords from tokenized text.
+
+```python
+tokens = ['This', 'is', 'an', 'example']
+filtered_tokens = tp.remove_stopwords(tokens)
+print(filtered_tokens)
+# Output: ['example']
+```
+
+##### **Lemmatization**
+Reduce words to their base form.
+
+```python
+text = "running faster"
+lemmatized_text = tp.lemmatize_text(text)
+print(lemmatized_text)
+# Output: "run fast"
+```
+
+##### **Spell Correction**
+Correct misspelled words.
+
+```python
+text = "Ths is an exampel."
+corrected_text = tp.correct_spellings(text)
+print(corrected_text)
+# Output: "This is an example."
+```
+
+##### **Lowercase Conversion**
+Standardize text to lowercase.
+
+```python
+text = "THIS IS A TEST."
+lowercase_text = tp.lowercase(text)
+print(lowercase_text)
+# Output: "this is a test."
+```
+
+##### **Remove URLs**
+Eliminate URLs from the text.
+
+```python
+text = "Check this link: https://example.com"
+url_removed = tp.remove_url(text)
+print(url_removed)
+# Output: "Check this link"
+```
+
+##### **Remove HTML Tags**
+Clean out HTML tags.
+
+```python
+text = "<div>Hello World!</div>"
+cleaned_text = tp.remove_html_tags(text)
+print(cleaned_text)
+# Output: "Hello World!"
+```
+
+---
+
+#### **3. Using the Preprocessing Pipeline**
+
+Apply multiple preprocessing steps sequentially.
+
+```python
+text = "Ths is an <b>example</b> of text preprocessing! Visit https://example.com"
+
+# Apply a preprocessing pipeline
+processed_text = tp.preprocess(
+    text, steps=[
+        "lowercase",
+        "remove_url",
+        "remove_html_tags",
+        "remove_punctuation",
+        "correct_spellings",
+        "lemmatize_text"
+    ]
+)
+print(processed_text)
+# Output: "this example text preprocess"
+```
+
+By default, the pipeline includes:
+- Lowercase conversion
+- URL removal
+- HTML tag removal
+- Punctuation removal
+- Special character removal
+- Spell correction
+- Lemmatization
+
+---
+
+#### **4. Analyze Text Using `head`**
+
+Summarize multiple text entries with `head`. It displays the original text, preprocessed text, word count, and character count.
+
+```python
+texts = [
+    "Ths is the frst example.",
+    "Preprocessing is <b>important</b>!",
+    "Visit https://example.com for details."
+]
+
+tp.head(texts, n=3)
+```
+
+**Output Table** (Rendered in Jupyter Notebook or IPython):
+| Original Text                   | Processed Text          | Word Count | Character Count |
+|---------------------------------|-------------------------|------------|-----------------|
+| Ths is the frst example.        | this first example      | 3          | 19              |
+| Preprocessing is <b>important</b>! | preprocess important    | 2          | 19              |
+| Visit https://example.com for details. | visit details          | 2          | 13              |
+
+---
+
+## **Custom Stopwords**
+
+Add specific stopwords to the default list:
+
+```python
+tp = TextPreprocessor(custom_stopwords=["specific", "stopwords"])
+```
+
+---
+
+## **Why Use TPTK?**
+Modular Design: Use only the components you need.
+Customizable Pipelines: Tailor preprocessing steps to your project's needs.
+Scalable: Built for small-scale prototypes to production-grade systems.
+Easy Integration: Compatible with common Python-based NLP workflows.
+
+## **Author and Credits**
+
+This package was developed by **Gaurav Jaiswal** with a focus on user-friendly text preprocessing solutions for NLP tasks. Contributions, feedback, and suggestions are welcome.
+
+---
+
+## **License**
+
+This project is licensed under the [MIT License](LICENSE).
+
