@@ -1,0 +1,13 @@
+"""BCM Connection library for executing BCM commands and managing server configurations.
+
+This library provides:
+- execute_bcm_command: Function to execute BCM commands on servers
+- BCMServer: Class for managing BCM server configurations
+"""
+
+from .bcm import execute_bcm_command
+from .models import BCMServer
+
+__version__ = "0.0.1"
+
+__all__ = ["execute_bcm_command", "BCMServer"]
