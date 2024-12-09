@@ -1,0 +1,32 @@
+export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\][lab-cli]\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+export PROMPT_COMMAND='history -a'
+export HISTFILE=${LAB_WORKSPACE_DATA}/cli/state/bash_history
+export HISTSIZE=50000000
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignoredups
+export HISTIGNORE="ls*:pwd:exit:date:* --help:history"
+
+mkdir -p ${LAB_WORKSPACE_DATA}/cli/state
+
+shopt -s nocaseglob
+shopt -s histappend
+shopt -s cdspell
+shopt -s autocd
+shopt -s globstar
+
+pushd() {
+  command pushd "$@" >/dev/null
+}
+
+popd() {
+  command popd "$@" >/dev/null
+}
+
+. /etc/bash_completion
+eval "$(_LAB_COMPLETE=bash_source lab)"
+
+# this shouldn't be HOST_DOCKER_SOCKET, maybe just see if the default works now in the cli 
+# TODO replace the hardcoded path with LAB_CICD_ARTIFACT_STORAGE when everything else is working
+alias act="act -b --container-daemon-socket=${HOST_DOCKER_SOCKET} --artifact-server-path /opt/lab/cicd/artifacts/github-actions-upload-artifact"
+
+lab --help
