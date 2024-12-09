@@ -1,0 +1,6 @@
+
+class CONFIG:
+    REPORTSDIRNAME = 'TestLiteReports'
+    DELETEREPORTSDIR = True
+    REPORTSSAVETYPE = 'BINARY'
+    TESTLITEURL = 'http://127.0.0.1:8000'
