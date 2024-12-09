@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=8.0.4"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lab-partner-utils"
+description = "Utilities used to embed Lab Partner into python projects"
+version = "1.0.0"
+dynamic = ["readme"]
+authors = [
+    {name = "Anthony Schexnaildre", email = "aps@enclarify.com"},
+]
+maintainers = [
+    {name = "Anthony Schexnaildre", email = "aps@enclarify.com"},
+]
+requires-python = ">=3.8"
+keywords = ["developer", "tools", "docker"]
+license = {file = "LICENSE.md"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development"
+]
+dependencies = [
+    "pytz==2024.1",
+    "click==8.1.7",
+    "docker==7.0.0",
+    "importlib-metadata==6.0.0",
+    "ipykernel==6.29.3",
+    "docstring-parser==0.16",
+    "python-dotenv==1.0.1",
+    'tomli >= 1.1.0 ; python_version < "3.11"',
+    "GitPython==3.1.42"
+]
+
+[project.optional-dependencies]
+#dev = [""]
+test = ["pytest==8.1.1"]
+
+[project.urls]
+homepage = "https://github.com/enclarify/lab-partner"
+# documentation = "https://github.com/enclarify/lab-partner"
+# changelog = "https://github.com/enclarify/lab-partner"
+
+# [tool.setuptools_scm]
+# version_scheme = "no-guess-dev"
+# local_scheme = "no-local-version"
+# search_parent_directories = "true"
+
+[tool.setuptools.dynamic]
+# version = { attr = "setuptools_scm.get_version" }
+readme = {file = ["README.md"]}
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+lab = "lab_partner_utils.cli_command_factory:cli"
+launch-kernel = "lab_partner_utils.kernel_launcher:launch"
+
+[project.entry-points."lab_partner.cli_workspace_only_plugins"]
+lab-partner-utils = "workspace_commands:cmd"

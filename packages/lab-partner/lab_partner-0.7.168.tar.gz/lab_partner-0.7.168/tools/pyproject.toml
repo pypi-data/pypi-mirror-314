@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lab-partner-tools"
+version = "1.0.1"
+description = "Built-in Tools for Lab Partner"
+dynamic = ["readme"]
+#dynamic = ["version", "readme"]
+authors = [
+    {name = "Anthony Schexnaildre", email = "aps@enclarify.com"},
+]
+maintainers = [
+    {name = "Anthony Schexnaildre", email = "aps@enclarify.com"},
+]
+requires-python = ">=3.6"
+keywords = ["developer", "tools", "docker"]
+license = {file = "LICENSE.md"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+      #   3 - Alpha
+      #   4 - Beta
+      #   5 - Production/Stable
+    "Development Status :: 3 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Development and Build Tools"
+]
+dependencies = [
+    "click==8.1.3",
+    "twine==4.0.2",
+    "importlib-resources==5.12.0"
+]
+
+[project.optional-dependencies]
+#dev = [""]
+test = ["pytest==7.2.2"]
+
+[project.urls]
+homepage = "https://github.com/enclarify/lab-partner"
+# documentation = "https://github.com/enclarify/lab-partner"
+# changelog = "https://github.com/enclarify/lab-partner"
+
+[tool.setuptools.dynamic]
+#version = {attr = "pkg.VERSION"}
+readme = {file = ["README.md"]}
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# pyproject.toml
+#[tool.setuptools_scm]
+#write_to = "GEN_VERSION"
+
+[project.entry-points."lab_partner.cli_plugins"]
+#services = "lab_partner_tools.services:services"
+dist = "lab_partner_tools.dist:dist"
