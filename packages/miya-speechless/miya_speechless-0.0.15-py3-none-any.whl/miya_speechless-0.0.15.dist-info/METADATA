@@ -1,0 +1,101 @@
+Metadata-Version: 2.1
+Name: miya-speechless
+Version: 0.0.15
+Summary: Speechless repo for sales call analysis
+License: MIT
+Author: Michal Pleva (MIYA Consulting)
+Requires-Python: >=3.10,<3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Requires-Dist: llvmlite (==0.38.1)
+Requires-Dist: numba (>=0.55.0,<0.56.0)
+Requires-Dist: onnx (>=1.17.0,<2.0.0)
+Requires-Dist: onnxruntime (>=1.20.0,<2.0.0)
+Requires-Dist: openai (>=1.51.2,<2.0.0)
+Requires-Dist: pvfalcon (>=1.0.2,<2.0.0)
+Requires-Dist: pyannote-audio (>=3.3.2,<4.0.0)
+Requires-Dist: pydub (>=0.25.1,<0.26.0)
+Requires-Dist: python-dotenv (>=1.0.1,<2.0.0)
+Requires-Dist: pytubefix (>=7.4.0,<8.0.0)
+Requires-Dist: streamlit (>=1.39.0,<2.0.0)
+Requires-Dist: streamlit-audiorec (>=0.1.3,<0.2.0)
+Requires-Dist: twine (>=5.1.1,<6.0.0)
+Description-Content-Type: text/markdown
+
+
+# miya-speechless
+
+## Poetry Installation Instructions
+
+To install the dependencies and manage the project, we use Poetry. Follow the steps below to set up your environment with Poetry.
+
+### Step 1: Install Poetry
+
+You can install Poetry by running the official installation script:
+
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+Alternatively, you can install it via pip:
+
+```bash
+pip install poetry
+```
+
+### Step 2: Verify Poetry Installation
+
+After installing, verify that Poetry is available by running:
+
+```bash
+poetry --version
+```
+
+### Step 3: Install Dependencies
+
+Once Poetry is installed, you can install the project dependencies by running the following command in the project root:
+
+```bash
+poetry install
+```
+
+This will create a virtual environment and install all dependencies specified in the `pyproject.toml` file.
+
+### Step 4: Run the Project or Tests
+
+You can now run the project or the tests using the Poetry environment:
+
+To activate the Poetry environment:
+
+```bash
+poetry shell
+```
+
+To run the tests:
+
+```bash
+poetry run pytest
+```
+
+### Step 4: Convert the model to onnx format
+To convert the model to onnx format, run the following command:
+
+```bash
+poetry poetry run python export_to_onnx.py --checkpoint /path/to/checkpoint --onnx_model /path/to/onnx_model
+```
+
+### Step 5: Run the streamlit app
+Place the onnx model in the models directory.
+
+To start the streamlit app, run the following command:
+
+```bash
+ poetry run streamlit run app/app.py
+```
+
+In the application, you can set the following parameters:
+- overlap: Set the overlap between the transcript and the diaretization (default: 0.1)
+- onset_threshold: Set the onset threshold for speaker start (default: 0.1)
+- offset_threshold: Set the offset threshold for speaker stop (default: 0.1)
+
