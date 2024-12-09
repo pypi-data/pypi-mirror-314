@@ -1,0 +1,16 @@
+[Unit]
+Description=PostgreSQL Remote Control Agent %I
+After=network.target postgresql@%i.service
+AssertPathExists=/etc/temboard-agent/%I/temboard-agent.conf
+
+[Service]
+Type=simple
+User=postgres
+Group=postgres
+Environment="SYSTEMD=1"
+ExecStart=/usr/bin/temboard-agent -c /etc/temboard-agent/%I/temboard-agent.conf serve
+# Increase OOM Score to ensure agent is killed before Postgres.
+OOMScoreAdjust=15
+
+[Install]
+WantedBy=multi-user.target
