@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
+from natsort import natsorted
+import imp
+import numpy as np
+from vre import VRE
+from vre.utils import FFmpegVideo, FakeVideo, image_read, abs_path
+from vre.representations import build_representations_from_cfg, add_external_representations
+from vre.logger import vre_logger as logger
+from omegaconf import OmegaConf
+
+def _get_raw_data(video_path: Path) -> dict[str, np.ndarray | list[str]]:
+    all_files = natsorted([f for f in video_path.iterdir() if f.is_file()], key=lambda p: p.name)
+    suffixes = set(p.suffix for p in all_files)
+    assert len(suffixes) == 1, f"Expected a single type of files in '{video_path}' found {suffixes}"
+    frames = [int(x.stem) for x in all_files]
+    fn = {".png": image_read, ".npz": lambda p: np.load(p)["arr_0"], ".npy": np.load}[next(iter(suffixes))]
+    raw_data = [fn(f) for f in all_files]
+    assert all(x.shape == raw_data[0].shape for x in raw_data), f"Images shape differ in '{video_path}'"
+    logger.info(f"--video_path is a directory. Assuming a directory of images. Found {len(raw_data)} images.")
+    return {"data": np.array(raw_data, dtype=np.uint8), "frames": frames}
+
+def get_args() -> Namespace:
+    """cli args"""
+    parser = ArgumentParser()
+    parser.add_argument("video_path", help="Path to the scene video we are processing", type=abs_path)
+    parser.add_argument("--output_path", "-o", required=True, type=abs_path,
+                        help="Path to the output directory where representations are stored")
+    parser.add_argument("--config_path", required=True, help="Path to global YAML cfg file", type=abs_path)
+    parser.add_argument("--representations", nargs="+", help="Subset of representations to run VRE for")
+    # run parameters
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--frames", type=int, nargs="+", help="The list of frames to be exported from the video")
+    group.add_argument("--start_frame", type=int, help="The first frame index. If not set, defaults to 0.")
+    parser.add_argument("--end_frame", type=int, help="The end frame index. If not set, defaults to length of video")
+    parser.add_argument("--output_dir_exists_mode", choices=["overwrite", "skip_computed", "raise"], default="raise")
+    parser.add_argument("--exception_mode", type=str, choices=["skip_representation", "stop_execution"],
+                        default="stop_execution")
+    parser.add_argument("--n_threads_data_storer", type=int, default=0)
+    parser.add_argument("--external_representations", "-I", nargs="+", default=[],
+                        help="Path to external reprs. Format: /path/to/file.py:fn_name. fn -> {str: Representation}")
+    # collage parameters (calls vre_collage)
+    parser.add_argument("--make_video_collage", action="store_true", help="if set, calls vre_collage on the output")
+    parser.add_argument("--collage_fps", type=float, help="Required by --make_video_collage for the collage output")
+
+    args = parser.parse_args()
+    if args.make_video_collage:
+        assert args.collage_fps is not None and args.collage_fps > 0, args.collage_fps
+    return args
+
+def main(args: Namespace):
+    """Za main function"""
+    cfg = OmegaConf.to_container(OmegaConf.load(args.config_path), resolve=True)
+
+    if args.video_path.is_dir():
+        video = FakeVideo(**_get_raw_data(args.video_path), fps=1)
+    else:
+        video = FFmpegVideo(args.video_path)
+
+    frames = args.frames if args.start_frame is None else range(args.start_frame or 0, args.end_frame or len(video))
+
+    representations = build_representations_from_cfg(cfg=cfg)
+    if len(args.external_representations) > 0:
+        for external_path in args.external_representations:
+            representations = add_external_representations(representations, external_path, cfg)
+
+    if args.representations is not None:
+        logger.info(f"--representation is set from the CLI. Keeping only {args.representations}")
+        representations = {k: representations[k] for k in args.representations}
+
+    vre = VRE(video, representations)
+    vre_metadata = vre.run(args.output_path, frames=frames, output_dir_exists_mode=args.output_dir_exists_mode,
+                           n_threads_data_storer=args.n_threads_data_storer, exception_mode=args.exception_mode)
+    print(vre_metadata.pretty_format())
+
+    if args.make_video_collage:
+        vre_collage = imp.load_source("vre_collage", (Path(__file__).parent / "vre_collage").__str__())
+        vre_collage.main(Namespace(vre_export_dir=args.output_path, output_path=args.output_path / "collage",
+                                   video=True, fps=args.collage_fps, output_resolution=None))
+
+if __name__ == "__main__":
+    main(get_args())
