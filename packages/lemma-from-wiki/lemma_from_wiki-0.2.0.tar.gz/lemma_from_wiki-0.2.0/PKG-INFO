@@ -1,0 +1,71 @@
+Metadata-Version: 2.3
+Name: lemma-from-wiki
+Version: 0.2.0
+Summary: Generates lemma files for vocabsieve
+Author-email: Jonathan Fox <32023524+jonathanfox5@users.noreply.github.com>
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Education
+Classifier: Topic :: Text Processing :: Linguistic
+Requires-Python: <3.13,>=3.12
+Requires-Dist: datasets<4.0.0,>=3.1.0
+Requires-Dist: lemon-tizer<1.0.0,>=0.0.7
+Requires-Dist: numpy<2
+Requires-Dist: pandas<3.0.0,>=2.2.3
+Requires-Dist: pip
+Requires-Dist: regex>=2024.11.6
+Requires-Dist: simplemma<2.0.0,>=1.1.2
+Requires-Dist: spacy[cuda12x]==3.7.5
+Requires-Dist: typer<1.0.0,>=0.13.1
+Description-Content-Type: text/markdown
+
+## Overview
+
+Gets a wikipedia dump for a language and creates a lemma table from it for use in [vocabsieve](https://github.com/FreeLanguageTools/vocabsieve/). Uses `spacy` as the lemmatiser but also provides results from `simplemma` for comparison.
+
+Project is AGPL3+ licensed as it re-uses code from [gogadget](https://gogadget.jfox.io).
+
+Needs CUDA toolkit installed and an NVIDIA GPU available: <https://developer.nvidia.com/cuda-toolkit-archive>
+
+On Windows, you will need to install Visual Studio first. I also needed to manually add the following to my PATH: `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\bin\Hostx64\x64`
+
+## Running
+
+Installation instructions assume the use of [uv](https://docs.astral.sh/uv/) to automatically deal with package isolation but will work equally well with a pip venv (if you prefer).
+
+No need to download any extra files. The script will automatically grab the wikipedia articles for your chosen language.
+
+**Install from Pypi**
+
+```sh
+uv tool install lemma-from-wiki
+```
+
+**Standard analysis**
+
+```sh
+lemmafromwiki -l "language code" -n "number of articles to process"
+```
+
+**Return only differences from `simplemma`**
+
+```sh
+lemmafromwiki -l "language code" -n "number of articles to process" --diff
+```
+
+**Getting help**
+
+```sh
+lemmafromwiki --help
+```
+
+**Getting help (short version)**
+
+```sh
+lemmafromwiki
+```
