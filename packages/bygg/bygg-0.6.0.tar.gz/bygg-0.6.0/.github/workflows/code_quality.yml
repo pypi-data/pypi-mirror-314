@@ -1,0 +1,79 @@
+name: Code quality
+on:
+  push:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+jobs:
+  nox:
+    strategy:
+      matrix:
+        python_version: ["3.11.9", "3.12.8"]
+        nox_session: [tests, basics, examples]
+        os: [ubuntu-24.04, macos-14]
+        install_uv: [0, 1]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python interpreter
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nox
+          if [ ${{ matrix.install_uv }} -eq 1 ]; then
+            pip install uv
+          fi
+      - name: Test with nox
+        run: |
+          nox -P ${{ matrix.python_version }} --session ${{ matrix.nox_session }} -db ${{ matrix.install_uv == 1 && 'uv' || 'virtualenv' }}
+
+  pyright_and_ruff:
+    strategy:
+      matrix:
+        python_version: ["3.11.9", "3.12.3"]
+      fail-fast: false
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install dependencies
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r requirements.txt -r requirements-dev.txt
+      - name: Run Ruff
+        run: ".venv/bin/ruff check src/ tests/ examples/"
+      - name: Type check with Pyright
+        run: |
+          . .venv/bin/activate
+          pyright src/ tests/
+
+          # Some examples use Rich in their virtual environments, so install this for Pyright to stay
+          # calm. Errors with regards to use of this dependency will be detected by nox.
+          pip install rich
+          pyright examples/
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install
+        run: ./bootstrap.py
+      - uses: pypa/gh-action-pip-audit@v1.0.8
+        with:
+          virtual-environment: .venv/
+          inputs: requirements.txt requirements-dev.txt
+          require-hashes: true
