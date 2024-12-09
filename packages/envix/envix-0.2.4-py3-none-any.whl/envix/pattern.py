@@ -1,0 +1,2 @@
+ENVNAME_PATTERN = r"^[A-Z_]+$"
+DOLLAR_ENVNAME_PATTERN = r"^\$[A-Z_]+$"
