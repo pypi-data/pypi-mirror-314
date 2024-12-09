@@ -1,0 +1,34 @@
+[build-system]
+requires = [
+  "setuptools>=52",
+  "wheel",
+  "build",
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.isort]
+profile = "black"
+
+[tool.cibuildwheel]
+build-frontend = "build"
+environment = {MACOSX_DEPLOYMENT_TARGET = "13"}
+skip = "*-win32 *-manylinux_i686 pp* cp36-* cp37-* *-musllinux_*"
+manylinux-x86_64-image = "manylinux_2_28"
+# test-command = "pytest {package}/tests"
+# test-requires = "pytest"
+
+[tool.cibuildwheel.linux]
+before-all = [
+  "source {project}/scripts/docker_prepare.sh",
+  "rm {project}/build/CMakeCache.txt"
+]
+
+[tool.pytest.ini_options]
+norecursedirs = [
+  "external/*",
+]
+
+# [tool.cibuildwheel.windows]
+# before-build = "pip install delvewheel"
+# repair-wheel-command = "delvewheel repair -w {dest_dir} {wheel}"
