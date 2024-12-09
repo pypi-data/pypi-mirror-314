@@ -1,0 +1,141 @@
+Metadata-Version: 2.1
+Name: py_code_improver
+Version: 0.1.3
+Summary: utility to suggest code refactoring
+Home-page: https://github.com/polovinko1980/llm-code-cleaner
+License: MIT
+Author: Alex Polovinko
+Author-email: alex.polovinko@gmail.com
+Maintainer: Alex Polovinko
+Maintainer-email: alex.polovinko@gmail.com
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: langchain_core (>=0.3.15,<0.4.0)
+Requires-Dist: langchain_openai (>=0.2.2,<0.3.0)
+Requires-Dist: openai (>=1.55.3,<2.0.0)
+Project-URL: Repository, https://github.com/polovinko1980/llm-code-cleaner
+Description-Content-Type: text/markdown
+
+# Code Improver Tool
+
+## Overview
+
+The **Code Improver Tool** is a Python application that leverages OpenAI's language models to enhance code quality.
+
+It can perform various actions such as cleaning code, adding docstrings, generating tests, and creating README files based on the provided source code.
+This tool is designed for developers who want to automate the improvement of their codebases efficiently.
+
+## Features
+
+- **Code Cleaning**: Automatically refines the code for better readability and performance.
+- **Docstring Generation**: Adds meaningful docstrings to functions and classes for improved documentation.
+- **Test Generation**: Creates unit tests to ensure code reliability.
+- **README Generation**: Generates a README file to provide an overview of the project.
+
+## Requirements
+
+- Python 3.11 or higher
+- `langchain_core`
+- `langchain_openai`
+- Access to OpenAI API
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+
+2. Install the required packages:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+3. Set your OpenAI API key in your environment variables:
+   ```bash
+   export OPEN_AI_API_KEY='your_openai_api_key'
+   ```
+
+## Usage
+
+To use the Code Improver Tool, run the script from the command line with the required arguments:
+
+```bash
+python3 cli.py --file <path_to_your_code_file> --action <action_type>
+```
+
+### Arguments
+
+- `--file` or `-f`: The path to the code file that you want to process (required).
+- `--action` or `-a`: The action you want to perform. Options include:
+  - `clean`: Clean the code.
+  - `docstrings`: Add docstrings to the code.
+  - `tests`: Generate tests for the code.
+  - `readme`: Create a README file for the project.
+
+### Example
+
+To clean a Python file named `example.py`, you would run:
+
+```bash
+python3 cli.py --file example.py --action clean
+```
+
+### CLI
+
+It is possible to install:
+
+```bash
+pip3 install py_code_improver
+
+```
+
+and run as cli:
+
+```bash
+py_code_improver --file example.py --action docstrings
+
+poetry run py_code_improver --file example.py --action readme
+
+```
+
+
+
+## Output
+
+The tool generates a new file with the same name as the input file, appended with a timestamp and the extension `.llm`. For example, if you process `example.py`, the output file will be named `example.py.llm<timestamp>`.
+
+## Logging
+
+The application logs its activities to the console. You can adjust the logging level in the code if you want more or less verbosity.
+
+## Error Handling
+
+The tool includes error handling for the following scenarios:
+- If the specified file exceeds the character limit (9999 characters).
+- If an unrecognized action is provided.
+
+## Contributing
+
+Contributions are welcome! Feel free to submit a pull request or open an issue for any bugs or feature requests.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Contact
+
+For questions or feedback, please reach out to [alex.polovinko+git@gmail.com].
+
