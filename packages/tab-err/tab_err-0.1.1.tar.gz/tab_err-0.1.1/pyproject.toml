@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "tab_err"
+version = "0.1.1"
+description = "Fully-controllable error generation for tabular data."
+authors = [
+    "Philipp Jung <philippjung@posteo.de>",
+    "Sebastian Jäger <tab_err@sebastian-jaeger.me>",
+]
+license = "Apache License 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9,<3.13"
+pandas = "^2.2.3"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.1"
+pre-commit = "^4.0.1"
+mypy = "^1.13.0"
+jupyterlab = "^4.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.9"
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 160
+target-version = "py39"
+fix = true
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = [
+    "ALL", # Include all the rules, including new ones
+]
+ignore = [
+    "FIX",    # Temporary developer notes should not break actions
+    "COM812", # For compatibility with ruff-format
+    "ISC001", # For compatibility with ruff-format
+    "S311",   # We do not require cryptographically-sound randomness
+    "D100",   # Do not document public modules
+    "D104",   # Do not document public packages
+    "TD003",  # Allow TODOs without links
+    "ISC003", # Do not implicietly concatenate strings
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = [
+    "F401", # Unused imports in __init__ files can make sense
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
