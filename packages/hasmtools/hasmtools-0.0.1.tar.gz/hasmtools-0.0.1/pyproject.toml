@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hasmtools"
+authors = [
+    { name = "Florian Streibelt", email = "mail+github@yakshaving.de"},
+]
+description = "Visualize Home Assistant Finite State Machines"
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["HomeAssistant", "FSM"]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 4 - Beta",
+]
+
+dynamic = ["version", "dependencies"]
+
+[project.scripts]
+hasmtool = "hasmtools.cli:cli"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+version = {attr = "hasmtools.__version__"}  # any module attribute compatible with ast.literal_eval
+readme = {file = ["README.md", "USAGE.md"]}
+
+[project.urls]
+Documentation = "https://github.com/mutax/hasmtools"
+Source = "https://github.com/mutax/hasmtools"
+Changelog = "https://github.com/mutax/hasmtools/CHANGES"
+
