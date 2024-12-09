@@ -1,0 +1,130 @@
+import json
+from typing import TYPE_CHECKING, Union
+
+from gzspidertools.items import AyuItem
+from gzspidertools.redisclient import RedisDB
+from gzspidertools.spiders import AyuSpider
+from scrapy.crawler import CrawlerProcess
+from scrapy.http import Request
+from scrapy.utils.project import get_project_settings
+from scrapy_redis.spiders import RedisSpider
+from scrapy_redis.utils import bytes_to_str
+from sqlalchemy import text
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+
+
+class $classname(AyuSpider, RedisSpider):
+    name = "$name"
+    redis_key = "$name:start_urls"
+    custom_settings = {
+        # REDIS配置
+        "REDIS_START_URLS_BATCH_SIZE": 5,
+        "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+        "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+        "SCHEDULER_PERSIST": True,
+        "REDIS_URL": get_project_settings().get("REDIS_URL"),
+        "STATS_CLASS": "scrapy_redis.stats.RedisStatsCollector",
+
+        # cookies 只有当需要设置cookie中间件时 需要设置成False, 传递cookies设置False
+        "COOKIES_ENABLED": False,
+
+        # OTHER
+        # 'CONCURRENT_REQUESTS': 3,
+        'DOWNLOAD_DELAY': 5,
+        "LOG_LEVEL": "INFO",  # DEBUG INFO ERROR
+        "LOG_FILE": "",  # scrapy logger
+        "DATABASE_ENGINE_ENABLED": True,
+        "ITEM_PIPELINES": {
+            "gzspidertools.pipelines.AyuFtyMysqlPipeline": 300,
+            "gzspidertools.pipelines.AyuFtyMongoPipeline": 301,
+        },
+        "DOWNLOADER_MIDDLEWARES": {
+            "gzspidertools.middlewares.RandomRequestUaMiddleware": 400,
+        },
+    }
+
+    def __init__(self):
+        db = RedisDB(url=self.custom_settings['REDIS_URL'])
+        db.lpush(self.redis_key, [
+            json.dumps(
+                dict(url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
+                     headers={"referer": "https://blog.csdn.net/rank/list", },
+                     cb_kwargs={"curr_site": "csdn", },
+                     )
+            )
+        ])
+        self.logger.info("推送成功")
+
+    def make_request_from_data(self, data):
+        data = bytes_to_str(data)
+        if data and isinstance(data, str):
+            data = json.loads(data)
+            url = data.get('url')
+            headers = data.get('headers')
+            cb_kwargs = data.get('cb_kwargs')
+
+            yield Request(method="GET", url=url, callback=self.parse_first,
+                                      headers=headers, cb_kwargs=cb_kwargs, dont_filter=True)
+
+            # post请求
+            # yield Request(url=url, method="POST", headers=headers, body=ujson.dumps(payload),
+            #                       callback=self.parse_first, dont_filter=True, meta={"note_id": note_id})
+
+    def parse_first(self, response: "ScrapyResponse"):
+        _save_table = "_article_info_list"
+
+        data_list = json.loads(response.text)["data"]
+        for curr_data in data_list:
+            article_detail_url = curr_data.get("articleDetailUrl")
+            article_title = curr_data.get("articleTitle")
+            comment_count = curr_data.get("commentCount")
+            favor_count = curr_data.get("favorCount")
+            nick_name = curr_data.get("nickName")
+
+            article_item = AyuItem(
+                article_detail_url=article_detail_url,
+                article_title=article_title,
+                comment_count=comment_count,
+                favor_count=favor_count,
+                nick_name=nick_name,
+                _table=_save_table,
+                # 可选参数：这里表示 MongoDB 存储场景以 article_detail_url 为去重规则，若存在则更新，不存在则新增
+                _mongo_update_rule={"article_detail_url": article_detail_url},
+            )
+            self.slog.info(f"article_item: {article_item}")
+
+            # 注意：同时存储至 mysql 和 mongodb 时，不建议使用以下去重方法，会互相影响。
+            # 此时更适合：
+            #    1.mysql 添加唯一索引去重（结合 odku_enable 配置，本库会根据 on duplicate key update 更新），
+            #      mongoDB 场景下设置 _mongo_update_rule 参数即可；
+            #    2.或者添加爬取时间字段并每次新增的场景，即不去重，请根据使用场景自行选择。
+            # 这里只是为了介绍使用 mysql_engine_conn 来对 mysql 去重的方法。
+            if self.mysql_engine_conn:
+                try:
+                    _sql = text(
+                        f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
+                    )
+                    result = self.mysql_engine_conn.execute(_sql).fetchone()
+                    if not result:
+                        self.mysql_engine_conn.rollback()
+                        yield article_item
+                    else:
+                        self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
+                except Exception as e:
+                    self.mysql_engine_conn.rollback()
+                    yield article_item
+            else:
+                yield article_item
+
+
+if __name__ == '__main__':
+    process = CrawlerProcess(get_project_settings())
+    process.crawl($classname.name)
+    process.start()
