@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ super() }}/ Maintenance{% endblock %}
+
+{% block content %}
+
+{% include "maintenance/breadcrumb.html" %}
+<div id="app">
+  <maintenanceindex
+    api-url="/proxy/{{ instance.agent_address }}/{{ instance.agent_port }}/maintenance"
+    :instance="{
+      'agentAddress': '{{instance.agent_address}}',
+      'agentPort': '{{instance.agent_port}}'
+    }"
+  />
+</div>
+
+<script type="module" src="{{ vitejs.url_for('maintenance.js') }}"></script>
+{% endblock %}

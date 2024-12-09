@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ super() }}/ About{% endblock %}
+
+{% block content %}
+<div id="app">
+  <instance-about
+    instance_name='{{instance_name}}'
+    pg_version_summary='{{pg_version_summary}}'
+    pg_data='{{pg_data}}'
+    environment='{{ environment }}'
+    :discover='{{discover | tojson}}'
+    >
+  </instance-about>
+</div>
+<script type="module" src="{{ vitejs.url_for('instance.about.js') }}"></script>
+{% endblock %}

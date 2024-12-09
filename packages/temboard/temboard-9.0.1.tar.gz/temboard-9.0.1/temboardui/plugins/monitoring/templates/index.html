@@ -1,0 +1,22 @@
+{% extends ../../../templates/base.html %}
+
+{% block title %}temBoard / {{instance}} / Monitoring{% end %}
+
+{% block head %}
+<link href="/css/dygraph.css" rel="stylesheet" />
+{% end %}
+
+{% block content %}
+
+<div id="app">
+  <monitoring />
+</div>
+
+<script src="/js/dygraph.min.js"></script>
+<script type="module" src="{{ vitejs.url_for('monitoring.js') }}"></script>
+<script>
+var apiUrl = "/server/{{instance.agent_address}}/{{instance.agent_port}}/monitoring/data";
+var unavailabilityUrl = "/server/{{instance.agent_address}}/{{instance.agent_port}}/monitoring/unavailability";
+</script>
+
+{% end %}

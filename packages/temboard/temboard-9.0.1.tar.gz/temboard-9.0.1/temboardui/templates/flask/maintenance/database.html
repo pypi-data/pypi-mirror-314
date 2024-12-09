@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ super() }}/ Maintenance / {{database}}{% endblock %}
+
+{% block content %}
+
+{% include "maintenance/breadcrumb.html" %}
+
+
+<div id="app">
+  <maintenancedatabase
+    api-url="/proxy/{{ instance.agent_address }}/{{ instance.agent_port }}/maintenance/{{ database }}"
+    :instance="{
+      'agentAddress': '{{instance.agent_address}}',
+      'agentPort': '{{instance.agent_port}}'
+    }"
+    maintenance-base-url="/proxy/{{ instance.agent_address }}/{{ instance.agent_port }}/maintenance"
+    database="{{ database }}"
+  />
+</div>
+
+<script type="module" src="{{ vitejs.url_for('maintenance.database.js') }}"></script>
+{% endblock %}

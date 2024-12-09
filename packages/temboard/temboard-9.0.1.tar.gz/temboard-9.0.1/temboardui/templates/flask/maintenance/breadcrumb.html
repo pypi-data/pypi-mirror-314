@@ -1,0 +1,46 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    {% set active = 'active' if database is not defined else '' %}
+    <li class="breadcrumb-item {{ active }}">
+      {% if not active %}
+      <a href="/server/{{instance.agent_address}}/{{instance.agent_port}}/maintenance">
+      {% endif %}
+        All Databases
+      {% if not active %}
+      </a>
+      {% endif %}
+    </li>
+    {% set active = 'active' if schema is not defined else '' %}
+    {% if database is defined %}
+    <li class="breadcrumb-item {{ active }}">
+      <em class="text-body-secondary small">Database:</em>
+      {% if not active %}
+      <a href="/server/{{instance.agent_address}}/{{instance.agent_port}}/maintenance/{{ database }}">
+      {% endif %}
+        {{ database }}
+      {% if not active %}
+      </a>
+      {% endif %}
+    </li>
+    {% endif %}
+    {% set active = 'active' if table is not defined else '' %}
+    {% if schema is defined %}
+    <li class="breadcrumb-item {{ active }}">
+      <em class="text-body-secondary small">Schema:</em>
+      {% if not active %}
+      <a href="/server/{{instance.agent_address}}/{{instance.agent_port}}/maintenance/{{ database }}/schema/{{ schema }}">
+      {% endif %}
+        {{ schema }}
+      {% if not active %}
+      </a>
+      {% endif %}
+    </li>
+    {% endif %}
+    {% if table is defined %}
+    <li class="breadcrumb-item active">
+      <em class="text-body-secondary small">Table:</em>
+      {{ table }}
+    </li>
+    {% endif %}
+  </ol>
+</nav>
