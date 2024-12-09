@@ -1,0 +1,64 @@
+{
+    "define_macros": [],
+    "extra_compile_args": {
+        "cxx": [
+            "-O3",
+            "-w",
+            "-DPADDLE_WITH_CUSTOM_KERNEL"
+        ],
+        "nvcc": [
+            "-O3",
+            "-gencode",
+            "arch=compute_70,code=sm_70",
+            "-U__CUDA_NO_HALF_OPERATORS__",
+            "-U__CUDA_NO_HALF_CONVERSIONS__",
+            "-U__CUDA_NO_BFLOAT16_OPERATORS__",
+            "-U__CUDA_NO_BFLOAT16_CONVERSIONS__",
+            "-U__CUDA_NO_BFLOAT162_OPERATORS__",
+            "-U__CUDA_NO_BFLOAT162_CONVERSIONS__",
+            "-DPADDLE_VERSION=261",
+            "--expt-relaxed-constexpr",
+            "--expt-extended-lambda",
+            "--use_fast_math",
+            "--threads",
+            "1",
+            "-gencode",
+            "arch=compute_80,code=sm_80",
+            "-gencode",
+            "arch=compute_90,code=sm_90",
+            "-w",
+            "-DPADDLE_WITH_CUSTOM_KERNEL"
+        ]
+    },
+    "extra_link_args": [
+        "-l:libpaddle.so",
+        "-lcudart"
+    ],
+    "include_dirs": [
+        "/TransformerEngine/transformer_engine/paddle/common_headers",
+        "/TransformerEngine/transformer_engine/paddle/common_headers/common",
+        "/TransformerEngine/transformer_engine/paddle/common_headers/common/include",
+        "/TransformerEngine/transformer_engine/paddle/csrc",
+        "/opt/python/cp311-cp311/lib/python3.11/site-packages/paddle/include",
+        "/opt/python/cp311-cp311/lib/python3.11/site-packages/paddle/include/third_party",
+        "/usr/local/cuda/include",
+        "/opt/python/cp311-cp311/include/python3.11"
+    ],
+    "library_dirs": [
+        "/opt/python/cp311-cp311/lib/python3.11/site-packages/paddle/libs",
+        "/usr/local/cuda/lib64",
+        "/opt/python/cp311-cp311/lib/python3.11/site-packages/paddle/base"
+    ],
+    "runtime_library_dirs": [
+        "/opt/python/cp311-cp311/lib/python3.11/site-packages/paddle/libs",
+        "/usr/local/cuda/lib64",
+        "/opt/python/cp311-cp311/lib/python3.11/site-packages/paddle/base"
+    ],
+    "sources": [
+        "csrc/extensions.cpp",
+        "csrc/common.cpp",
+        "csrc/custom_ops.cu"
+    ],
+    "transformer_engine_paddle_pd_.so": "3025d4b7d47d21f678e10ff30046d34d",
+    "undef_macros": []
+}
