@@ -1,0 +1,69 @@
+#!/bin/env python3
+
+"""
+This script displays the Cyprian equivalent of a given Gregorian date.
+"""
+
+# Standard imports.
+import argparse
+from datetime import datetime
+from sys import exit
+
+# Bespoke imports.
+from cyprian_datetime import CyprianDateTime
+
+####################
+# HELPER FUNCTIONS #
+####################
+
+def make_parser() -> argparse.ArgumentParser:
+    """ Make the object which handles the command-line interface. """
+    result = argparse.ArgumentParser()
+    result.add_argument(
+        "--date-string",
+        default="",
+        dest="date_str",
+        help="The date to be converted in ISO format"
+    )
+    result.add_argument(
+        "--as-json",
+        action="store_true",
+        default=True,
+        dest="as_json",
+        help="Get the output in JSON format"
+    )
+    return result
+
+def convert_date_str(date_str: str|None) -> CyprianDateTime|None:
+    """ Get the Cyprian equivalent to a Gregorian date, in string form. """
+    try:
+        if date_str:
+            result = CyprianDateTime.fromisoformat(date_str)
+        else:
+            result = CyprianDateTime.now()
+    except:
+        print(f"Something's not quite right with that date string: {date_str}")
+        print("Is it in ISO format?")
+        return None
+    return result
+
+###################
+# RUN AND WRAP UP #
+###################
+
+def run():
+    """ Run this script. """
+    parser_obj = make_parser()
+    args_obj = parser_obj.parse_args()
+    date_str = args_obj.date_str
+    converted = convert_date_str(date_str)
+    if converted:
+        if args_obj.as_json:
+            print(converted.to_json())
+        else:
+            print(converted)
+    else:
+        exit(1)
+
+if __name__ == "__main__":
+    run()
