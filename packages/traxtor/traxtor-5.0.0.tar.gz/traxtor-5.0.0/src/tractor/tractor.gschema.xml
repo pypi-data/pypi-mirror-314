@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.tractor" path="/org/tractor/">
+    <key type="b" name="auto-set">
+      <default>false</default>
+      <summary>Auto set proxy</summary>
+      <description>Automatically set proxy on system after successful connection</description>
+    </key>
+    <key type="s" name="exit-node">
+      <default>"ww"</default>
+      <summary>Exit Node</summary>
+      <description>The country you want to connect from</description>
+    </key>
+    <key type="i" name="socks-port">
+      <range min="1" max="65535"/>
+      <default>9052</default>
+      <summary>Socks Port</summary>
+      <description>Local port on which Tractor would be listen</description>
+    </key>
+    <key type="i" name="dns-port">
+      <range min="1" max="65535"/>
+      <default>9053</default>
+      <summary>DNS Port</summary>
+      <description>Local port on which you would have an anonymous name server</description>
+    </key>
+    <key type="i" name="http-port">
+      <range min="1" max="65535"/>
+      <default>9080</default>
+      <summary>HTTP Port</summary>
+      <description>Local port on which Tractor HTTP tunnel would be listen</description>
+    </key>
+    <key type="i" name="pid">
+      <range min="0"/>
+      <default>0</default>
+      <summary>Proccess ID</summary>
+      <description>PID of the running Tractor proccess for user</description>
+    </key>
+    <key type="s" name="bridge-type">
+      <default>"none"</default>
+      <summary>Bridge Type</summary>
+      <description>Type of the tor bridge to use from</description>
+      <choices>
+        <choice value="none"/>
+        <choice value="vanilla"/>
+        <choice value="obfs4"/>
+        <choice value="snowflake"/>
+        <choice value="conjure"/>
+      </choices>
+    </key>
+    <key type="b" name="accept-connection">
+      <default>false</default>
+      <summary>Accept Connection</summary>
+      <description>Whether or not allowing external devices to use this network</description>
+    </key>
+    <key type="b" name="fascist-firewall">
+      <default>false</default>
+      <summary>Fascist Firewall</summary>
+      <description>Allow to run Tor as a client behind a firewall with restrictive policies</description>
+    </key>
+    <key type="(sssss)" name="pluggable-transport">
+      <default>("", "", "/usr/bin/obfs4proxy", "/usr/bin/snowflake-client", "/usr/bin/conjure-client")</default>
+      <summary>Pluggable Transport Files</summary>
+      <description>Path of executables for (none, vanilla, obfs, snowflake, conjure)</description>
+    </key>
+    <key type="(ssi)" name="upstream-proxy">
+      <default>("none", "", 0)</default>
+      <summary>Upstream proxy</summary>
+      <description>Mode, host and port of the upstream proxy</description>
+    </key>
+  </schema>
+</schemalist>

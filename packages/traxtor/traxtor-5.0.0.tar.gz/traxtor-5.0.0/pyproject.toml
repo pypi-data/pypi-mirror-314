@@ -1,0 +1,53 @@
+[project]
+name = "traxtor"
+version = "5.0.0"
+authors = [
+    {name = "Danial Behzadi", email = "dani.behzi@ubuntu.com"},
+]
+description = "Setup an onion routing proxy"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "PyGObject",
+    "fire",
+    "pysocks",
+    "stem",
+]
+keywords = [
+    "Tor",
+    "onion",
+    "stem",
+]
+
+[project.license]
+file = "LICENSE"
+
+[project.scripts]
+tractor = "tractor.tractor:main"
+
+[project.urls]
+"Homepage" = "https://tractor.frama.io/tractor"
+"Bug Tracker" = "https://framagit.org/tractor/tractor/-/issues"
+"Documentation" = "https://framagit.org/tractor/tractor/-/blob/main/tractor/man/tractor.1"
+"Source Code" = "https://framagit.org/tractor/tractor"
+
+[tool.pylint]
+disable = [
+    "E1101",  # no-member
+]
+
+[tool.flit.module]
+name = "tractor"
+
+[tool.tox]
+envlist = [
+    "py311",
+    "py312",
+    "py313",
+]
+commands = "python -m unittest discover tests"
