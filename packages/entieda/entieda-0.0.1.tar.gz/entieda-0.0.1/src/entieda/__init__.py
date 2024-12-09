@@ -1,0 +1,1 @@
+from entieda.entieda import haha
