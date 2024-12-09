@@ -1,0 +1,32 @@
+services:
+  lab-shell:
+    labels:
+      - ${LAB_ROLE_LABEL}=${LAB_SHELL_ROLE}
+    image: enclarify/lab-partner-cli:${LAB_VERSION}
+    stdin_open: true
+    tty: true
+    working_dir: ${LAB_WORKSPACE}
+    environment:
+      - LAB_VERSION=${LAB_VERSION}
+      - LAB_WORKSPACE=${LAB_WORKSPACE}
+      - LAB_WORKSPACE_DATA=${LAB_WORKSPACE_DATA}
+      - LAB_CICD_ARTIFACT_STORAGE=${LAB_CICD_ARTIFACT_STORAGE}
+    volumes:
+      - type: bind
+        source: ${LAB_WORKSPACE}
+        target: ${LAB_WORKSPACE}
+      - type: bind
+        source: ${LAB_CICD_ARTIFACT_STORAGE}
+        target: ${LAB_CICD_ARTIFACT_STORAGE}
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: /var/run/docker-host.sock
+        target: /var/run/docker-host.sock
+    networks:
+      - lab
+networks:
+  lab:
+    name: lab
+    external: true
