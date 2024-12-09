@@ -1,0 +1,150 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyepggrab"
+description = 'Drop in replacement/extension to xmltv grabbers'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = [
+  "XMLTV",
+  "epg",
+  "tv",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  'backports.zoneinfo; python_version<"3.9"',
+  "beautifulsoup4",
+  "dnspython",
+  "extruct",
+  "lxml",
+  "requests",
+  "roman",
+  'typing_extensions>=4.4; python_version<"3.12"',
+  "tzdata",
+  "urllib3",
+  "requests_ratelimiter",
+]
+
+dynamic = ["version"]
+
+[project.optional-dependencies]
+develop = [
+  "black",
+  "hatch",
+  "mypy",
+  "ruff",
+]
+
+[project.urls]
+Documentation = "https://github.com/pyepggrab/pyepggrab#readme"
+Issues = "https://github.com/pyepggrab/pyepggrab/issues"
+Source = "https://github.com/pyepggrab/pyepggrab"
+
+[project.scripts]
+tv_grab_pyepg_hu_porthu = "pyepggrab.grabbers.hu_porthu.hu_porthu:run"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pyepggrab"]
+exclude = ["*.md"]
+
+[tool.hatch.version]
+path = "pyepggrab/__about__.py"
+
+[tool.hatch.publish.index]
+disable = true
+
+[tool.hatch.envs.test.scripts]
+type = "test"
+unittest = "python -m unittest discover -b {args}"
+
+[tool.hatch.envs.matrixtest]
+template = "test"
+
+[[tool.hatch.envs.matrixtest.matrix]]
+python = ["38", "39", "310", "311", "312"]
+
+[tool.hatch.envs.style]
+detached = true
+dependencies = [
+  "black",
+  "mypy",
+  "ruff",
+]
+[tool.hatch.envs.style.scripts]
+check = [
+  "ruff check pyepggrab tests tests_live",
+  "mypy --install-types --non-interactive pyepggrab tests tests_live",
+  "black --check --diff pyepggrab tests tests_live",
+]
+fmt = [
+  "ruff --select I001 pyepggrab tests tests_live --fix",
+  "black pyepggrab tests tests_live",
+]
+
+[tool.ruff.lint]
+select = [
+  # Pyflakes
+  "F",
+  # Pycodestyle
+  "E",
+  "W",
+  # isort
+  "I001",
+  # pep8-naming
+  "N",
+  # pydocstyle
+  "D",
+  # pyupgrade
+  "UP",
+  # flake8-annotations
+  "ANN",
+  # flake8-bugbear
+  "B",
+  # flake8-builtins
+  "A",
+  # flake8-commas
+  "COM",
+  # flake8-comprehensions
+  "C4",
+  # flake8-datetimez
+  "DTZ",
+  # flake8-errmsg
+  "EM",
+  # flake8-implicit-str-concat
+  "ISC",
+  # flake8-logging-format
+  "G",
+  # flake8-pie
+  "PIE",
+  # flake8-return
+  "RET",
+  # flake8-simplify
+  "SIM",
+  # Pylint
+  "PL",
+  # tryceratops
+  "TRY",
+  # Ruff-specific rules
+  "RUF"
+]
+ignore = [
+  "D203", # incompat (D211)
+  "D213", # incompat (D212)
+  "ANN002",
+  "ANN003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107"]
+"tests_live/*" = ["D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107"]
