@@ -1,0 +1,196 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reader"
+authors = [{name = "lemon24"}]
+description = "A Python feed reader library."
+readme = "README.rst"
+license = {text = "BSD-3-Clause"}
+keywords = [
+    "atom", "cdf", "feed", "rdf", "rss", "json feed",
+    "web feed", "podcast", "feed reader", "feed aggregator",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Internet",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "typing-extensions>=4",
+    "feedparser>=6",
+    "requests>=2.18",
+    # for _http_utils
+    "werkzeug>2",
+    # for JSON Feed date parsing
+    "iso8601>=1",
+    # search
+    "beautifulsoup4>=4.5",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://reader.readthedocs.io/"
+Changes = "https://reader.readthedocs.io/en/latest/changelog.html"
+"Source Code" = "https://github.com/lemon24/reader"
+"Issue tracker" = "https://github.com/lemon24/reader/issues"
+
+[project.optional-dependencies]
+
+# STABLE
+
+search = []  # empty since 2.4, kept to avoid breaking dependents
+readtime = []  # empty since 3.1, kept to avoid breaking dependents
+
+# UNSTABLE
+
+cli = [
+    "click>=7",
+    # for config
+    "PyYAML",
+]
+app = [
+    "flask>=0.10",
+    # https://github.com/python-humanize/humanize/issues/122
+    "humanize>=4,!=4.7.*",
+    # for config
+    "PyYAML",
+]
+
+# UNSTABLE PLUGINS
+
+# mushed together for convenience
+unstable-plugins = [
+    # enclosure-tags
+    "requests",
+    "mutagen",
+    # preview-feed-list
+    "requests",
+    "beautifulsoup4",
+    "blinker>=1.4",
+    # sqlite-releases
+    "beautifulsoup4",
+    # timer
+    "tabulate",
+]
+
+# DEVELOPMENT
+
+# run tests under one interpreter
+tests = [
+    "pytest>=4",
+    "pytest-randomly",
+    "pytest-subtests",
+    "pytest-rerunfailures",
+    "coverage",
+    "pytest-cov",
+    "requests-mock",
+    # mechanicalsoup hard-depends on lxml (see below)
+    'mechanicalsoup; (implementation_name != "pypy" and python_version <= "3.12")',
+    "requests-wsgi-adapter",
+    # we want to test search with all known bs4 parsers.
+    # lxml usually does not have recent PyPy wheels.
+    # lxml usually does not have pre-relase CPython wheels.
+    'lxml; (implementation_name != "pypy" and python_version <= "3.12")',
+    "html5lib",
+    # for bench.py
+    'numpy; (implementation_name != "pypy" and os_name == "posix" and python_version <= "3.12")',
+    # mypy does not work on pypy (yet).
+    'mypy; implementation_name != "pypy"',
+    "types-requests",
+    "types-beautifulsoup4",
+]
+
+# build docs
+docs = [
+    "sphinx",
+    # listing 1.3.0rc1 explicitly until 1.3 is released
+    # https://github.com/readthedocs/sphinx_rtd_theme/pull/1464#issuecomment-1664799982
+    "sphinx-rtd-theme>=1.3.0rc1",
+    "click>=7",
+    "sphinx-click",
+    "sphinx-hoverxref",
+    "sphinxcontrib-log-cabinet",
+    # for read_configuration used in conf.py
+    "setuptools",
+]
+
+# things needed to develop / test locally / make releases
+dev = [
+    "reader[cli,app,unstable-plugins,tests,docs]",
+    "tox",
+    "pre-commit",
+    "build",
+    "twine",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "reader.__version__"}
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers"
+markers = [
+    "slow: mark a test as slow.",
+    "requires_lxml: mark a test to only run in places where we have lxml.",
+    "apptest: mark a test as a web app test (skipped sometimes).",
+    "noautoclose: skip 'autoclose' autouse fixture for a test."
+]
+filterwarnings = [
+    "ignore:No parser was explicitly specified::reader._storage._html_utils",
+]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["reader", "tests"]
+omit = [
+    "src/reader/_vendor/*",
+]
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[[tool.mypy.overrides]]
+module = [
+    "reader.__main__",
+    "reader._cli",
+    "reader._config",
+    "reader._app",
+    "reader._app.*",
+    "reader._plugins.*",
+    "reader.plugins.*",
+    "reader._vendor.feedparser.*",
+]
+ignore_errors = true
+
+[tool.isort]
+profile = "black"
+py_version = 310
+src_paths = ["src", "tests"]
+extend_skip = ["examples", "src/reader/_vendor"]
+skip_gitignore = true
+filter_files = true
+force_single_line = true
+order_by_type = false
+lines_after_imports = 2
