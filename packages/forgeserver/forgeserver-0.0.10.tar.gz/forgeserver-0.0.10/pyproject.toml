@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling", "versioningit"]
+build-backend = 'hatchling.build'
+
+[project]
+name = "forgeserver"
+description = "An awesome package is coming soon! 🎉"
+dynamic = ["version"]
+readme = "README.md"
+authors = [{ name = "Marcelo Trylesinski", email = "marcelotryle@gmail.com" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+license = "MIT"
+requires-python = ">=3.8"
+dependencies = [
+    "click>=7.0",
+    "h11>=0.8",
+    "typing_extensions>=4.0; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+standard = [
+    "colorama>=0.4;sys_platform == 'win32'",
+    "httptools>=0.6.3",
+    "python-dotenv>=0.13",
+    "PyYAML>=5.1",
+    "uvloop>=0.14.0,!=0.15.0,!=0.15.1; sys_platform != 'win32' and (sys_platform != 'cygwin' and platform_python_implementation != 'PyPy')",
+    "watchfiles>=0.13",
+    "websockets>=10.4",
+]
+
+[project.scripts]
+fs = "forgeserver.main:main"
+
+[project.urls]
+Homepage = "https://github.com/Kludex/siteforge"
+Source = "https://github.com/Kludex/siteforge"
+Twitter = "https://twitter.com/marcelotryle"
+Funding = "https://github.com/sponsors/Kludex"
+
+[tool.hatch.version]
+source = "versioningit"
+
+[tool.versioningit.format]
+distance = "{base_version}.post{distance}"
+dirty = "{base_version}"
+distance-dirty = "{base_version}.post{distance}"
+
+[tool.hatch.build.targets.sdist]
+include = ["/README.md", "../../LICENSE", "/forgeserver"]
