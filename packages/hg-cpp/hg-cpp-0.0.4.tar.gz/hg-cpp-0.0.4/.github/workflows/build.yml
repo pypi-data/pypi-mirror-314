@@ -1,0 +1,102 @@
+name: Build and Test
+
+on:
+  push:
+#    tags:
+#      - 'v_*'
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # If you want to test multiple Python versions or compilers, you can also add them to the matrix.
+        python-version: [3.12]
+        # C++ standards, etc. can also be included, but here we keep it simple.
+    runs-on: ${{ matrix.os }}
+    env:
+      # Common environment variables for all platforms.
+      PYTHON_VERSION: "3.12"
+      CMAKE_ARGS: "-DNB_USE_STABLE_ABI=ON -DCMAKE_CXX_STANDARD=20"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-suffix: "optional-suffix"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv tool install conan
+          uv tool install pytest
+          uv pip install scikit-build-core numpy
+
+      - name: Configure Conan Profile
+        shell: bash
+        run: |
+          uv tool run conan profile detect
+
+      - name: Conan Install
+        run: |
+          uv tool run conan install . --build=missing -s build_type=Release -pr default -s compiler.cppstd=20
+
+      - name: Build Python Wheel with scikit-build-core
+        shell: bash
+        run: |
+          uv pip install build scikit-build-core
+          # On Windows, use 'set' instead of 'export' for environment variables.
+          # Use conditional logic for environment variable handling:
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            set CMAKE_ARGS=%CMAKE_ARGS%
+            uv build --wheel
+          else
+            export CMAKE_ARGS=$CMAKE_ARGS
+            uv build --wheel
+          fi
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+            uv tool install auditwheel
+            uv tool run auditwheel repair dist/*.whl --plat manylinux_2_35_x86_64 -w wheelhouse
+            rm dist/*.whl
+            mv wheelhouse/*.whl dist/
+            uv build --sdist
+            ls -R dist/*
+          fi
+
+      - name: Test wheel
+        shell: bash
+        run: |
+          uv pip install dist/*.whl
+          # Run your tests here, for example:
+          # pytest tests
+
+      - name: Upload Wheels as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}
+          path: dist/*
+
+  publish:
+    # Only run if build job succeeded for all OSes
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    permissions:
+      # For PyPI's trusted publishing.
+      id-token: write
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: "Install uv"
+        uses: astral-sh/setup-uv@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: wheels
+          merge-multiple: true
+      - name: Publish to PyPi
+        run: uv publish -v wheels/*
