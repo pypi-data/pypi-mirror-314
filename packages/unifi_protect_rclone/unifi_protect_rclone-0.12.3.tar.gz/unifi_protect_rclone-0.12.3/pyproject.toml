@@ -1,0 +1,72 @@
+[tool]
+[tool.poetry]
+name = "unifi_protect_rclone"
+version = "0.12.3"
+homepage = "https://github.com/Calimerorulez/unifi-protect-rclone"
+description = "Python tool to backup unifi event clips in realtime."
+authors = ["Pat <calimerorulez@gmail.com>"]
+readme = "README.md"
+license =  "MIT"
+classifiers=[
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Information Technology',
+    'License :: OSI Approved :: MIT License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+]
+packages = [
+    { include = "unifi_protect_rclone" },
+    { include = "tests", format = "sdist" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0,<4.0"
+click = "8.0.1"
+aiorun = "^2023.7.2"
+aiosqlite = "^0.17.0"
+python-dateutil = "^2.8.2"
+apprise = "^1.5.0"
+expiring-dict = "^1.1.0"
+async-lru = "^2.0.4"
+aiolimiter = "^1.1.0"
+uiprotect = "^6.7.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.11.1"
+types-pytz = "^2021.3.5"
+types-cryptography = "^3.3.18"
+types-python-dateutil = "^2.8.19.10"
+bump2version = "^1.0.1"
+pre-commit = "^2.12.0"
+ruff = "^0.5.7"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest  = "^6.2.4"
+pytest-cov  = "^2.12.0"
+tox  = "^3.20.1"
+tox-asdf = "^0.1.0"
+
+[tool.poetry.scripts]
+unifi-protect-rclone = 'unifi_protect_rclone.cli:main'
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+
+[tool.ruff.format]
+
+[tool.mypy]
+allow_redefinition=true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
