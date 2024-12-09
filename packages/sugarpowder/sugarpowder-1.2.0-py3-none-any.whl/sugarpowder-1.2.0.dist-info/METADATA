@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: sugarpowder
+Version: 1.2.0
+Summary: Package of Python syntactic sugars inspired by Elixir, Go, Rust, Julia, and other languages
+Author-email: Geunseong Jung <dreamwayjgs@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2023 Geunseong Jung (정근성)
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/dreamwayjgs/sugarpowder
+Project-URL: Bug Tracker, https://github.com/dreamwayjgs/sugarpowder/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pyarrow
+Requires-Dist: blosc
+
+# sugarpowder
+Package of Python syntactic sugars and utils inspired by Elixir, Go, Rust, Julia, and other languages
+
+## Install
+```
+pip install sugarpowder
+```
+
+## Test
+```
+tox
+```
+
+## Serialization: Compressed Pickle, Parquet, etc.
+
+blose_pickle, blose_unpickle: Convert any Python objects to pickle that compressed with blosc
+
+df_to_parquetstream, parquetstream_to_df: Convert pandas Dataframe <--> parquetfile bytes stream
+
+## Utils
+
+deduplist
+
+## WithErr
+Go lang Style error handling
+
+```
+@witherr
+def div1(x: float, y: float) -> float:
+    """
+    test function - divide
+    """
+    return x / y
+
+
+val, err = div1(1, 1)
+# val == 1, err is None
+
+val, err = div1(1, 0)
+# val is None, err == ZeroDivisionError
+
+```
+
+
+## Pipe
+Forked from [Pipe Package](https://github.com/JulienPalard/Pipe)
+
+It works on '|' and '>>' both.
