@@ -1,0 +1,17 @@
+[package]
+name = "signal_rs"
+description = "A signal analysis libary written in Rust"
+version = "0.2.11"
+edition = "2021"
+
+[dependencies]
+pyo3 = { version = "0.18", features = ["extension-module"] }
+
+[lib]
+name = "signal_rs"
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = "z"  # Optimize for size
+lto = true       # Enable Link-Time Optimization
+codegen-units = 1  # Reduce parallel codegen units for smaller binaries
