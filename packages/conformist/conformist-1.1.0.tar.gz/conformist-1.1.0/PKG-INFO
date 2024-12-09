@@ -1,0 +1,116 @@
+Metadata-Version: 2.1
+Name: conformist
+Version: 1.1.0
+Summary: Conformal prediction for machine learning classifiers
+Author-email: Mariya Lysenkova Wiklander <mariya.lysenkova@medsci.uu.se>
+License: MIT License
+        
+        Copyright (c) 2024 Mariya Lysenkova Wiklander
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/Molmed/conformist
+Keywords: machinelearning,statistics
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.24.4
+Requires-Dist: pandas>=2.0.3
+Requires-Dist: UpSetPlot>=0.9.0
+Requires-Dist: seaborn>=0.13.2
+Requires-Dist: scipy>=1.10.1
+Provides-Extra: dev
+Requires-Dist: black; extra == "dev"
+Requires-Dist: bumpver; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: pip-tools; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+
+<!-- Link to Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Script&display=swap" rel="stylesheet">
+<link href="readme.css" rel="stylesheet">
+
+
+[![Python package](https://github.com/Molmed/conformist/actions/workflows/python-package.yml/badge.svg)](https://github.com/Molmed/conformist/actions/workflows/python-package.yml)
+[![Upload Python Package](https://github.com/Molmed/conformist/actions/workflows/python-publish.yml/badge.svg)](https://github.com/Molmed/conformist/actions/workflows/python-publish.yml)
+
+
+<h1 class="custom-font miami-neon-text">Conformist</h1>
+
+Conformist v1.1.0 is an implementation of conformal prediction, specifically conformal risk control. It was written using Python 3.8.
+
+*BaseCoP* contains utility functions common to all conformal predictors, such as splitting data into calibration and validation sets, and setting up runs. It is extended by *FNRCoP* that implements conformal risk control.
+
+The *ValidationRun* class contains the data from a single run, which entails shuffling the data randomly, splitting it into calibration and validation datasets, calibrating the conformal predictor on the calibration data and creating prediction sets for the validation data.
+
+The *ValidationTrial* class contains a list of runs and calculates statistics across these runs.
+
+## Installation
+`pip install conformist`
+
+## Input file format
+
+The input to Conformist is a CSV file with the following columns:
+`id, known_class, predicted_class, [proba_columns]`
+
+The proba_columns should contain class-specific probability scores and correspond to the names used in the `known_class` and `predicted_class` columns.
+
+Example:
+| id      | known_class | predicted_class | ClassA | ClassB | ClassC |
+| --------| ----------- | --------------- | ------ | ------ | ------ |
+| Sample1 | ClassB      | ClassA          | 0.70   | 0.25   | 0.05   |
+| Sample2 | ClassA      | ClassA          | 0.98   | 0.02   | 0.0    |
+| Sample3 | ClassC      | ClassC          | 0.01   | 0.01   | 0.98   |
+
+## Example implementation
+```
+from conformist import FNRCoP, PredictionDataset, ValidationTrial
+
+CALIB_DATA_CSV = 'path/to/calib.csv'
+TEST_DATA_CSV = 'path/to/test.csv'
+OUTPUT_DIR = 'path/to/output'
+ALPHA = 0.05 # Select a reasonable False Negative Rate
+
+# Read in formatted predictions
+calpd = PredictionDataset(predictions_csv=CALIB_DATA_CSV,
+                          dataset_name='my_cal_data')
+testpd = PredictionDataset(predictions_csv=TEST_DATA_CSV,
+                           dataset_name='my_test_data')
+
+# Get class counts and prediction heatmap
+calpd.run_reports(OUTPUT_DIR)
+
+# Validation trial and reports
+mcp = FNRCoP(calpd, alpha=ALPHA)
+trial = mcp.do_validation_trial(n_runs=10000)
+trial.run_reports(OUTPUT_DIR)
+
+# Recalibrate conformal predictor
+mcp = FNRCoP(calpd, alpha=ALPHA)
+mcp.calibrate()
+
+# Predict
+formatted_predictions = mcp.predict(testpd,
+                                    OUTPUT_DIR)
+```
