@@ -1,0 +1,63 @@
+[build-system]
+requires = [
+    "setuptools>=61.0",
+    "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-suspense"
+dynamic = ["version"]
+authors = [
+  { name="Pavel Kutsenko", email="zebartcoc@gmail.com" },
+]
+description = "Display a fallback in templates until its children have finished loading."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/paqstd-dev/django-suspense"
+"Bug Tracker" = "https://github.com/paqstd-dev/django-suspense/issues"
+
+[tool.setuptools_scm]
+
+[tool.coverage.run]
+omit = [
+    "manage.py",
+    "setup.py",
+    "tests/*"
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = "\\.pyi?$"
+skip-string-normalization=true
+
+[tool.isort]
+profile = "django"
+combine_as_imports = true
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+known_first_party = ["config"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.tests"
+asyncio_default_fixture_loop_scope = "function"
