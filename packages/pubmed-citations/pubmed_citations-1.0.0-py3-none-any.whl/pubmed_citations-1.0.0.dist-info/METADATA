@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: pubmed-citations
+Version: 1.0.0
+Summary: Generate citations for PubMed articles
+Home-page: https://github.com/suqingdong/pubmed_citations
+Author: suqingdong
+Author-email: suqingdong1114@gmail.com
+License: MIT License
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries
+Description-Content-Type: text/markdown
+Requires-Dist: click
+Requires-Dist: loguru
+Requires-Dist: openpyxl
+Requires-Dist: python-docx
+Requires-Dist: webrequests
+
+# Generate citations for PubMed articles
+
+## Installation
+
+```bash
+python3 -m pip install pubmed-citations
+```
+
+## Usage
+
+### Use in Python
+
+```python
+from pubmed_citations.core import PubmedCitations
+
+pmids = [12345678, 87654321]
+citations = PubmedCitations(*pmids)
+
+# get data
+print(citations.data)
+print(citations.orig_data)
+
+# save to file
+citations.to_docx("output.docx")
+citations.to_excel("output.xlsx")
+citations.to_json("output.json")
+citations.to_jsonlines("output.jl")
+citations.to_csv("output.csv")
+citations.to_csv("output.tsv", sep="\t")
+```
+
+### Use in CMD
+
+```bash
+pubmed_citations --help
+
+pubmed_citations 1 2 3
+pubmed_citations pmid.list
+
+pubmed_citations 1 2 3 -f apa -o output.xlsx
+pubmed_citations 1 2 3 -f apa -o output.docx
+pubmed_citations 1 2 3 -f apa -o output.csv
+pubmed_citations 1 2 3 -f apa -o output.json
+pubmed_citations 1 2 3 -f apa -o output.jl
+pubmed_citations 1 2 3 -f apa -o output.tsv
+```
+
+
