@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "charon_vna"
+authors = [{ name = "Brendan Haines", email = "brendan.haines@gmail.com" }]
+description = "RF Network Analyzer based on the Pluto SDR"
+readme = "README.md"
+requires-python = ">=3"
+# keywords = ["one", "two"]
+license = { text = "MIT License" }
+classifiers = ["Programming Language :: Python :: 3"]
+dependencies = [
+  "numpy",
+  "scipy",
+  "scikit-rf",
+  "xarray",
+  "zarr",
+  "pylibiio",
+  "pyadi-iio",
+  "click",
+  "matplotlib",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://git.brendanhaines.com/brendanhaines/charon"
+
+[project.scripts]
+# charon = "charon.charon:main"
+
+[tool.setuptools_scm]
+version_file = "charon_vna/_version.py"
+
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.vscode
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
