@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "housekeeper"
+version = "4.13.10"
+description =  "File data orchestrator"
+authors = ["henrikstranneheim <henrik.stranneheim@scilifelab.se>"]
+license = "MIT"
+readme = "README.md"
+include = [
+  "README.md",
+  "housekeeper/**/*",
+  "tests/**/*"
+]
+
+
+[tool.poetry.dependencies]
+PyMySQL = "*"
+PyYAML = "*"
+SQLAlchemy = "*"
+click = "*"
+coloredlogs = "*"
+cryptography = "*"
+marshmallow = "*"
+python = "^3.12"
+rich = "*"
+setuptools = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+coveralls =  "^3"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+housekeeper = "housekeeper.cli.core:base"
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+include_trailing_comma = "true"
+line_length=100
+multi_line_output=3
+ensure_newline_before_comments = "true"
+
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = ["alembic"]
+ignore = ["E501"]
