@@ -1,0 +1,76 @@
+[ReadGen]
+title = "ReadGen (tbi-readgen)"
+content = "A simple yet powerful Python project README.md generator."
+
+[Features]
+content = """
+1. Read project information from pyproject.toml
+2. Read custom content from readgen.toml
+3. Scan the project directory structure
+4. Extract docstrings from `__init__.py` files in each folder
+5. Generate a standardized README.md
+"""
+
+
+[Installation]
+content = """
+```bash
+$ pip install tbi-readgen
+
+# Recommendation, as it can be used globally.
+$ pipx install tbi-readgen
+```
+"""
+
+[Usage]
+content = """
+
+## CLI
+```bash
+$ readgen
+
+# Overwrite README.md.
+$ readgen --f
+```
+
+## Project Configuration File
+Create a `readgen.toml` file in the project root:
+```toml
+[Title]
+title = "Method to overwrite [Title], with support for spaces."
+content = "Content of the Title Block"
+
+[Markdown]
+content = \"\"\"
+## This is a markdown block
+
+1. Read project information from pyproject.toml
+2. Read custom content from readgen.toml
+3. Scan the project directory structure
+4. Extract docstrings from `__init__.py` files in each folder
+5. Generate a standardized README.md
+
+```bash
+$ pipx install tbi-readgen
+```
+\"\"\"
+[settings]
+# The `settings` is a built-in method and will not be listed.
+
+# Exclude directories from scanning.
+exclude_dirs = [".git", "venv", "__pycache__", ".venv", "env", "build", "dist"]
+
+# List the depth of directories, list all by default.
+"src/readgen" = 0  # directory = depth
+"utils" = 1  # directory = depth
+```
+"""
+
+[Compatibility]
+content = """
+Supports Python 3.12 and above
+Compatible with Windows, macOS, and Linux
+"""
+
+[settings]
+exclude_dirs = [".git", "venv", "__pycache__", ".venv", "env", "build", "dist"]
