@@ -1,0 +1,71 @@
+Metadata-Version: 2.1
+Name: pubmed_cited_by
+Version: 1.0.0
+Summary: Get cited by information from Pubmed
+Home-page: https://github.com/suqingdong/pubmed_cited_by
+Author: suqingdong
+Author-email: suqingdong1114@gmail.com
+License: MIT License
+Description: # Get cited by information from Pubmed.
+        
+        ## Installation
+        
+        ```bash
+        python3 -m pip install pubmed-cited-by
+        ```
+        
+        ## Usage
+        
+        > set API_KEY in environment variable [***recommend***]
+        
+        > see more: https://account.ncbi.nlm.nih.gov/settings/#api-key
+        
+        ```bash
+        echo NCBI_API_KEY=<your_api_key> >> ~/.bashrc
+        ```
+        
+        ### Use in Python
+        
+        ```python
+        from pubmed_cited_by.core import PubmedCitedBy
+        
+        pcb = PubmedCitedBy()
+        
+        result = pcb.get_cited_by_data(1)
+        print(result)
+        
+        pmids = [1, 2, 3]
+        data = pcb.get_cited_by(pmids)
+        for item in data:
+            print(item)
+        ```
+        
+        ### Use in CMD
+        
+        ```bash
+        
+        pubmed_cited_by --help
+        
+        pubmed_cited_by  1 2 3
+        pubmed_cited_by  pmid.list
+        
+        pubmed_cited_by  1 2 3 -o output.xlsx
+        pubmed_cited_by  1 2 3 -o output.csv
+        pubmed_cited_by  1 2 3 -o output.tsv
+        pubmed_cited_by  1 2 3 -o output.json
+        pubmed_cited_by  1 2 3 -o output.jl
+        ```
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries
+Description-Content-Type: text/markdown
