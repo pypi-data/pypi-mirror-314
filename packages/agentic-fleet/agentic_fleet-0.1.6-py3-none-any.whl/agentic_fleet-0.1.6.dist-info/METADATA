@@ -1,0 +1,119 @@
+Metadata-Version: 2.1
+Name: agentic-fleet
+Version: 0.1.6
+Summary: Multi-agent reasoning system with specialized thinker and grader components
+Author-Email: Your Name <your.email@example.com>
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/agentic-fleet
+Project-URL: Documentation, https://agentic-fleet.readthedocs.io/
+Project-URL: Repository, https://github.com/yourusername/agentic-fleet.git
+Project-URL: Changelog, https://github.com/yourusername/agentic-fleet/blob/main/CHANGELOG.md
+Requires-Python: >=3.9
+Requires-Dist: openai>=1.3.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: graphviz>=0.20.1
+Requires-Dist: matplotlib>=3.7.0
+Requires-Dist: networkx>=3.1
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: fastapi>=0.104.0
+Requires-Dist: uvicorn>=0.24.0
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: azure-identity>=1.15.0
+Requires-Dist: azure-core>=1.29.5
+Requires-Dist: azure-keyvault-secrets>=4.7.0
+Requires-Dist: redis>=5.0.1
+Requires-Dist: kafka-python>=2.0.2
+Requires-Dist: plotly>=5.18.0
+Requires-Dist: dash>=2.14.1
+Requires-Dist: streamlit>=1.29.0
+Requires-Dist: httpx>=0.25.2
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pytest-asyncio>=0.23.2
+Requires-Dist: composio-core>=0.1.2
+Requires-Dist: composio-langchain>=0.1.2
+Requires-Dist: composio-openai>=0.1.2
+Requires-Dist: azure-search-documents>=11.4.0
+Requires-Dist: tavily>=0.1.2
+Description-Content-Type: text/markdown
+
+# Agentic Fleet
+
+A powerful fleet of AI agents for complex reasoning and task execution, combining Tree of Thoughts reasoning with advanced agent orchestration capabilities.
+
+## Features
+
+- **Tree of Thoughts Reasoning**: Multi-agent reasoning system with beam search
+- **CaptainAgent**: Advanced agent orchestration based on the paper "CaptainAgent: Building Reliable Autonomous Agents through Iterative Prompting"
+- **Agent Fleet**: Extensible collection of specialized agents for different tasks
+- **Tool Integration**: Rich set of tools and capabilities for agents
+- **Modern Development**: Built with modern Python tools (uv, PDM)
+
+## Installation
+
+```bash
+pip install agentic-fleet
+```
+
+## Quick Start
+
+```python
+from agentic_fleet import CaptainAgent, ReasoningAgent
+from agentic_fleet.tools import CodeAnalysisTool, DataProcessingTool
+
+# Initialize CaptainAgent with specialized tools
+captain = CaptainAgent(
+    name="project_captain",
+    tools=[CodeAnalysisTool(), DataProcessingTool()],
+    max_iterations=5
+)
+
+# Execute a complex task
+result = captain.execute_task(
+    "Analyze this codebase and suggest improvements",
+    context={"repo_path": "./my_project"}
+)
+
+# Use reasoning agent for complex problem-solving
+reasoner = ReasoningAgent(
+    name="math_reasoner",
+    beam_size=3,
+    max_depth=5
+)
+
+solution = reasoner.solve("What is the optimal strategy for...")
+```
+
+## Architecture
+
+The package consists of several key components:
+
+1. **CaptainAgent**: Orchestrates complex tasks through iterative prompting
+2. **ReasoningAgent**: Implements Tree of Thoughts for complex reasoning
+3. **SpecialistAgents**: Task-specific agents (Coder, Analyst, etc.)
+4. **Tools**: Extensible set of capabilities for agents
+5. **Prompts**: Carefully crafted prompts for different scenarios
+
+## Development
+
+```bash
+# Install development dependencies
+uv venv
+source .venv/bin/activate
+uv pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run linting
+ruff check .
+black .
+mypy .
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
