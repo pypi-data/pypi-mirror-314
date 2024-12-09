@@ -1,0 +1,48 @@
+{# code: language=jinja-html #}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{gallery_name}}</title>
+    <link rel="stylesheet" href="static/photoswipe.css">
+    <link rel="stylesheet" href="static/page.css">
+    <link rel="stylesheet" href="static/font-awesome.min.css">
+    <meta charset="UTF-8" />
+    <script type="module" src="static/page.js"></script>
+    <style>
+      .pswp-gallery img.thumbnail {
+        height: {{thumbnail_height}}px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="pswp-gallery" id="my-gallery">
+      {% for mi in media_items %}
+      <a
+        class="image-container"
+        href="{{mi.image.path}}"
+        data-pswp-width="{{mi.image.width}}"
+        data-pswp-height="{{mi.image.height}}"
+        target="_blank"
+        tile="{{mi.title}}"
+      >
+        {% if mi.type == data_types.MediaType.VIDEO %}
+        <div class="movie" title="Video">
+          <i class="fa fa-video-camera" aria-hidden="true"></i>
+        </div>
+        {% endif %}
+        <img
+          class="thumbnail"
+          src="{{mi.thumbnail.path}}"
+          tile="{{mi.title}}"
+          alt="{{mi.title}}"
+        />
+        <div class="caption" title="{{ mi.title }}">
+          {{mi.title}}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <button id="open-1">Open Image 1</button>
+  </body>
+</html>
