@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: langchain-hana-prototype
+Version: 0.1.0
+Summary: 
+Author: yberber-sap
+Author-email: yusuf.berber@sap.com
+Requires-Python: >=3.9,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: hdbcli (>=2.22.32,<3.0.0)
+Requires-Dist: langchain-core (>=0.3.21,<0.4.0)
+Requires-Dist: numpy (>1.5.0)
+Description-Content-Type: text/markdown
+
+# langchain-chroma
+
+This package contains the LangChain integration with HanaDB.
+
+## Installation
+
+```bash
+pip install -U langchain-hana-prototype
+```
+
+## Usage
+
+The `HanaDB` class exposes the connection to the HanaDB vector store. The integration enables seamless utilization of SAP HANA's advanced vector processing capabilities for efficient storage and retrieval
+
+```python
+from langchain_hana_prototype import HanaDB
+
+embeddings = ... # use a LangChain Embeddings class
+
+connection = ...
+
+vectorstore = HanaDB(embeddings=embeddings, connection=connection)
+```
