@@ -1,0 +1,237 @@
+/*###########################################################*/
+/*QMainWindow: TitleBar, CentralWidget, StatusBar*/
+QMainWindow {
+    margin:0px;
+    padding:0px;
+    background-color: CSTATUSBAR;
+}
+/*###########################################################*/
+/*CentralWidget: Search, MainBoard*/
+CentralWidget{
+    margin:0px 0px 0px 0px;
+    background:CWORKSPACE;
+}
+
+/*SideBar->Setting*/
+QToolButton {
+    border:none;
+    color:CFONT;
+}
+QToolButton::menu-indicator {
+    image: None;
+}
+/*###########################################################*/
+/*###########################################################*/
+/*general*/
+/*###########################################################*/
+QMenu {
+    /*background-color:  #ABABAB;  default to parent widget's background */
+    padding:0px;
+    margin:0px;
+    border: 1px solid black;
+}
+
+QMenu::item {
+    /* sets background of menu item(default to parent's background).
+    set this to something non-transparent if you want menu color 
+    and menu item color to be different */
+    background-color: transparent;
+    color:CFONT;
+}
+QMenu::item:enabled {
+    background-color: transparent;
+    border-left: 5px solid gray;
+    color:CFONT;
+}
+QMenu::item:!enabled {
+    background-color: transparent;
+    color:CFONT;
+}
+QMenu::item:selected { /* when user selects item using mouse or keyboard */
+    background-color: rgba(188,128,148,0.6);
+}
+QMenu::item:selected:!enabled {
+    background-color: transparent;
+    color:CFONT;
+}
+QMenu::separator {
+    height: 2px;
+    background: lightblue;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+/*************************************************************/
+QMessageBox {
+	background-color: #F2F2F2;
+}
+QMessageBox QLabel {
+    color:CFONT;
+}
+QMessageBox QPushButton {
+	border: 1px solid lightblue;
+	border-radius: 3px;
+	color: CFONT;
+}
+QMessageBox QPushButton:hover {
+    border: 1px solid #298DFF;
+	border-radius: 3px;
+}
+QMessageBox QPushButton:pressed {
+	background-color: #257FE6;
+}
+/*************************************************************/
+
+QStatusBar {
+    border-top: 0px solid gray;
+    background-color:CBOTTOMBAR;
+    border-radius: 0px;
+}
+QStatusBar::item {
+    border: 0px solid gray;
+    padding: 0px;
+    border-radius: 1px;
+}
+QStatusBar QPushButton{
+    border: 0px solid white;
+    background:transparent;
+    font-weight:bold;
+}
+QStatusBar QPushButton:hover{
+    background:gray;
+    font-weight:bold;
+}
+QStatusBar QPushButton:pressed{
+    background:transparent;
+    font-weight:bold;
+}
+QStatusBar QPushButton:checked{
+    background:transparent;
+    font-weight:bold;
+}
+/*************************************************************/
+QToolTip {
+    color:CFONT;
+    background: CWORKSPACE;
+    border: 1px solid lightblue;
+    padding: 0px;
+    border-radius: 0px;
+}
+/*************************************************************/
+QAbstractScrollArea::corner {
+    background-color: CSCROLLADD;
+    image: url(:/icon/icon/leo.png)
+}
+QScrollBar QMenu {
+    background-color:  CWORKSPACE; /* default to parent widget's background */
+    padding:0px;
+    margin:0px;
+    border: 1px solid black;
+}
+QScrollBar:horizontal {
+    border: 0px solid grey;
+    background-color: transparent;
+    height: 18px;
+    margin: 0px 18px 0 18px;
+}
+QScrollBar::handle:horizontal {
+    background-color: CSCROLLHAND;
+    min-width: 20px;
+}
+QScrollBar::handle:horizontal:hover {
+    background-color: CSCROLLHOVER;
+}
+QScrollBar::add-line:horizontal {
+    border: 0px solid grey;
+    image: url(:/icon/icon/PREURLchevron-right.png);
+    background-color: CSCROLLADD;
+    width: 18px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:horizontal {
+    border: 0px solid grey;
+    image: url(:/icon/icon/PREURLchevron-left.png);
+    background-color: CSCROLLADD;
+    width: 18px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    border: 0px solid grey;
+    width: 3px;
+    height: 3px;
+    background-color: white;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QScrollBar:vertical {
+     border: 0px solid grey;
+     background-color: transparent;
+     width: 18px;
+     margin: 18px 0 18px 0;
+ }
+ QScrollBar::handle:vertical {
+     background-color: CSCROLLHAND;
+     min-height: 20px;
+ }
+ QScrollBar::handle:vertical:hover {
+    background-color: CSCROLLHOVER;
+}
+ QScrollBar::add-line:vertical {
+     border: 0px solid grey;
+     image: url(:/icon/icon/PREURLchevron-down.png);
+     background-color: CSCROLLADD;
+     height: 18px;
+     subcontrol-position: bottom;
+     subcontrol-origin: margin;
+ }
+ QScrollBar::sub-line:vertical {
+     border: 0px solid grey;
+     image: url(:/icon/icon/PREURLchevron-up.png);
+     background-color: CSCROLLADD;
+     height: 18px;
+     subcontrol-position: top;
+     subcontrol-origin: margin;
+ }
+  QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+     border: 0px solid grey;
+     width: 3px;
+     height: 3px;
+     background-color: white;
+ }
+ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+     background: none;
+ }
+/*************************************************************/
+QHeaderView::section {
+    background-color: CHEADERVIEW;
+    color: CFONT;
+    /*font-weight:bold; */
+    /*border-style: none; file tree header cannot be aligned center*/
+    text-align:center;
+}
+QHeaderView::section:horizontal{
+    border-right: 1px solid CFONT;
+}
+QHeaderView::section:vertical{
+    border-bottom: 1px solid CFONT;
+}
+QHeaderView::section:hover {
+    background-color: CHEADERVIEW;
+    color:rgba(9,71,113,1);
+    font-weight:bold;
+}
+/* style the sort indicator 
+This causes the header content bug which cannot be shown fully 
+QHeaderView::down-arrow {
+    image: url(:/icon/icon/PREURLchevron-down.png);
+}
+QHeaderView::up-arrow {
+    image: url(:/icon/icon/PREURLchevron-up.png);
+}*/
+/*************************************************************/
+/*************************************************************/
+/*************************************************************/
+
