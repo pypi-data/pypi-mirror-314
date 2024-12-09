@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools", "wheel", "setuptools-git-versioning>=2.0,<3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true
+
+[project]
+name = "ideolog"
+description = "Ideolog (pre-alpha)"
+readme = "README.md"
+requires-python = ">=3.12"
+dynamic = ["version"]
+#license = {file = "LICENSE"}
+authors = [
+  { name="Sam Griesemer", email="samgriesemer+git@gmail.com" },
+]
+keywords = ["database", "disk"]
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+]
+dependencies = [
+    "co3",
+    "execlib",
+    "sqlalchemy",
+]
+
+[project.optional-dependencies]
+tests = ["pytest"]
+docs = [
+    "sphinx",
+    "sphinx-togglebutton",
+    "sphinx-autodoc-typehints",
+    "furo",
+    "myst-parser",
+]
+
+[project.urls]
+Homepage = "https://doc.olog.io/ideolog"
+Documentation = "https://doc.olog.io/ideolog"
+Repository = "https://git.olog.io/olog/ideolog"
+Issues = "https://git.olog.io/olog/ideolog/issues"
+
+
+[tool.setuptools.packages.find]
+include = ["ideolog*"] # pattern to match package names 
