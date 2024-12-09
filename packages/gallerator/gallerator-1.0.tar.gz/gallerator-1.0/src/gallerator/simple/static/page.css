@@ -1,0 +1,62 @@
+.pswp-gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Make sure that the last row doesn't stretch the (fewer) elements. */
+.pswp-gallery::after {
+  content: '';
+  flex-grow: 1000000000;
+}
+
+.pswp-gallery .image-container {
+  flex-grow: 1;
+  margin: 2px;
+  position: relative;
+}
+
+.pswp-gallery img.thumbnail {
+  width: 100%;
+  /* This value is explicity set in page.html since this is a static file */
+  /* height: auto; */
+  /* One could also have used "contain" here */
+  object-fit: cover; 
+  /* Avoid 2px height in layout */
+  display: block;
+}
+
+.pswp-gallery .image-container .caption {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+}
+
+.pswp-gallery .image-container .movie {
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  font-size: 20px;
+}
+
+.pswp__custom-caption {
+  font-size: 16px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  font-size: 25px;
+}
+
+.pswp__custom-caption a {
+  text-decoration: underline;
+}
+
+.pswp__custom-caption, .pswp-gallery .image-container .caption {
+  color: white;
+  text-shadow: 1px 1px 2px black, 0 0 25px #888, 0 0 5px black;
+  overflow-wrap: anywhere;
+}

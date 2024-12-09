@@ -1,0 +1,45 @@
+{# code: language=jinja-html #}
+{% extends "bootstrap-gallery.html" %}
+
+{% block gallery_head %}
+    <link rel="stylesheet" href="{{gallery_root_url}}/static/photoswipe.css">
+    <link rel="stylesheet" href="{{gallery_root_url}}/static/page.css">
+    <link rel="stylesheet" href="{{gallery_root_url}}/static/font-awesome/css/font-awesome.min.css">
+    <meta charset="UTF-8" />
+    <script type="module" src="{{gallery_root_url}}/static/page.js"></script>
+{% endblock %}
+
+
+{% block gallery_body %}
+    <div class="pswp-gallery {{layout}}" id="my-gallery">
+      {% for mi in media_items %}
+      <a
+        class="image-container"
+        href="{{relative_url(mi.image.path)}}"
+        data-pswp-width="{{mi.image.width}}"
+        data-pswp-height="{{mi.image.height}}"
+        data-file-name="{{mi.source.name}}"
+        {% if mi.video is not none %}
+        data-video="{{relative_url(mi.video)}}"
+        {% endif %}
+        target="_blank"
+        tile="{{mi.title}}"
+      >
+        {% if mi.type == data_types.MediaType.VIDEO %}
+        <div class="movie" title="Video">
+          <i class="fa fa-video-camera" aria-hidden="true"></i>
+        </div>
+        {% endif %}
+        <img
+          class="thumbnail"
+          src="{{relative_url(mi.thumbnail.path)}}"
+          tile="{{mi.title}}"
+          alt="{{mi.title}}"
+        />
+        <div class="caption" title="{{ mi.title }}">
+          {{mi.title}}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+{% endblock %}

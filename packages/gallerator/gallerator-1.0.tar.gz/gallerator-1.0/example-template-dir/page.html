@@ -1,0 +1,17 @@
+<html>
+<head>
+{% include "head.html" %}
+</head>
+<body>
+  <h1>Simple Gallery</h1>
+  <ul>
+  {% if parent %}
+    <li><a href="{{ parent.url }}">{{ "Home" if parent.name is none else parent.name }}</a> </li>
+  {% endif%}
+  {% for subdir in subdirectories %}
+    <li><a href="{{ subdir.url }}">{{ subdir.name }}</a> </li>
+  {% endfor %}
+  </ul>
+  <div id="nanogallery2"></div>
+</body>
+</html>

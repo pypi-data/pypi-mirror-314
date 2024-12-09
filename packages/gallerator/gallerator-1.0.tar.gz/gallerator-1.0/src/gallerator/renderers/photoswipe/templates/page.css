@@ -1,0 +1,141 @@
+{# code: language=jinja-css #}
+
+.pswp-gallery.grid {
+  display: grid;
+  {% if grid and grid.type == "fixed-columns" %}
+  /* This makes a fixed number of columns */
+  grid-template-columns: repeat({{ grid.x }}, 1fr);
+  {% else %}
+  {# Actually, elif grid and grid.type == "auto" #}
+  /* This makes any number of columns depending on screen width */
+  grid-template-columns: repeat(auto-fill, minmax({{thumbnail_width}}px, 1fr) );
+  {% endif %}
+}
+
+.pswp-gallery.grid .image-container {
+  width: {{thumbnail_width}}px;
+  height: {{thumbnail_height}}px;
+  text-align: center;
+  margin: 5px;
+  justify-self: center;
+  {# The only reason for the border is to not make the captions look out
+  of place. it is much cleaner-looking without the border. #}
+  {% if filename_captions %}
+  border: 1px solid #c1c1c188;
+  {% endif %}
+}
+
+.pswp-gallery.grid .image-container .movie {
+  color: black;
+  background: #ffffff94;
+  z-index: 100;
+  padding: 3px;
+}
+
+.pswp-gallery.grid .image-container .caption {
+  color: black;
+  overflow-wrap: anywhere;
+  background: #ffffff94;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pswp-gallery.grid img.thumbnail {
+  margin: auto;
+  height: inherit;
+  max-height: 100%;
+  max-width: 100%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  object-fit: contain;
+}
+
+.pswp-gallery.justified {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Make sure that the last row doesn't stretch the (fewer) elements. */
+.pswp-gallery.justified::after {
+  content: '';
+  flex-grow: 1000000000;
+}
+
+.pswp-gallery.justified .image-container {
+  flex-grow: 1;
+  margin: 2px;
+}
+
+.pswp-gallery.justified img.thumbnail {
+  width: 100%;
+  border: 2px solid #777777;
+  border-radius: 3px;
+}
+
+.pswp-gallery.justified .image-container .caption {
+  left: 10px;
+}
+
+.pswp-gallery.justified .image-container .movie {
+  color: white;
+}
+
+.pswp-gallery.justified img.thumbnail {
+  /* One could also have used "contain" here */
+  object-fit: cover;
+}
+
+
+.pswp-gallery .image-container {
+  position: relative;
+}
+
+
+.pswp-gallery img.thumbnail {
+  /* Avoid 2px height in layout */
+  display: block;
+  height: {{thumbnail_height}}px;
+}
+
+.pswp-gallery .image-container .caption {
+  position: absolute;
+  bottom: 0;
+  {% if not filename_captions %}
+  display: none;
+  {% endif%}
+}
+
+.pswp-gallery .image-container .movie {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 20px;
+}
+
+.pswp__custom-caption {
+  font-size: 16px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  font-size: 25px;
+}
+
+.pswp__custom-caption a {
+  text-decoration: underline;
+}
+
+.pswp__custom-caption, .pswp-gallery.justified .image-container .caption {
+  color: white;
+  text-shadow: 1px 1px 2px black, 0 0 25px #888, 0 0 5px black;
+  overflow-wrap: anywhere;
+}
+
+.pswp__button--video-button a {
+  color: white;
+  font-size: 24px;
+}

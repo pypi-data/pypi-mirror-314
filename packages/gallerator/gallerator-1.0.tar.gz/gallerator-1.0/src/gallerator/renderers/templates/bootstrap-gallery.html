@@ -1,0 +1,110 @@
+{# code: language=jinja-html #}
+<html>
+<head>
+  <link href="{{gallery_root_url}}/static/bootstrap.min.css" rel="stylesheet">
+  <link href="{{gallery_root_url}}/static/bootstrap-gallery.css" rel="stylesheet">
+  <script src="{{gallery_root_url}}/static/bootstrap.bundle.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="{{gallery_root_url}}/static/favicon.ico">
+  <title>
+    {% for breadcrumb in breadcrumbs %}
+    {{ breadcrumb.name }}
+      {% if not loop.last %}
+        /
+      {% endif %}
+    {% endfor %}
+    gallery
+  </title>
+  {% block gallery_head %}
+  {% endblock %}
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- The "header" -->
+    <nav class="gallery-header navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ breadcrumbs[0].url }}">
+          <img src="{{gallery_root_url}}/static/gallery-32.png" alt="Logo" width="32" height="32"
+            class="d-inline-block align-text-top">
+          {{ gallery_name }} gallery
+        </a>
+      </div>
+    </nav>
+
+    <!-- Path breadcrumbs -->
+    {# If there is only one directory, don't create a path #}
+    {% if breadcrumbs | length != 1 or subdirectories | length > 0 %}
+    <div class="gallery-breadcrumbs navigation-element">
+      <nav class="breadcrumb-nav" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+              <li class="breadcrumb-item disabled" aria-disabled="true" aria-current="page">
+                <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                {{ breadcrumb.name }}
+              </li>
+            {% else %}
+              <li class="breadcrumb-item">
+                <a href="{{ path_segments_to_url(breadcrumb.path_segments) }}">
+                  <i class="fa fa-folder-o" aria-hidden="true"></i>
+                  {{ breadcrumb.name }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
+    {% endif %}
+
+    <!-- Navigation -->
+    {% if parent or subdirectories | length > 0 %}
+    <nav class="gallery-directories nav navigation-element">
+      {% if parent %}
+        <a class="nav-link" href="{{ path_segments_to_url(parent.path_segments) }}">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+          {{ gallery_name if parent.name == "" else parent.name }}
+        </a>
+      {% endif %}
+      {% for subdir in subdirectories %}
+      <a class="nav-link" href="{{ path_segments_to_url(subdir.path_segments) }}">
+        <i class="fa fa-folder-o" aria-hidden="true"></i>
+        {{ subdir.name }}
+      </a>
+      {% endfor %}
+    </nav>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <nav aria-label="...">
+      <ul class="pagination">
+        {% for page in pagination %}
+        {% if page.enabled %}
+        <li class="page-item"><a class="page-link" href="{{page.url}}">{{page.name}}</a></li>
+        {% elif page.current_page %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="#">{{page.name}}</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link">
+          {% if page.name == ".." %}
+          {# For some reason I don't understand the .page-item doesn't have
+             the correct height without the &nbsp;-s #}
+          &nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
+          {% else %}
+          {{page.name}}
+          {% endif %}
+          </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+
+  {% block gallery_body %}
+  {% endblock %}
+  </div>
+</body>
+</html>
