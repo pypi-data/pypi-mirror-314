@@ -1,0 +1,96 @@
+Metadata-Version: 2.1
+Name: pathkit
+Version: 0.1.0
+Summary: Easy way to handle File
+Author: Bigollo
+Description-Content-Type: text/markdown
+Requires-Dist: portalocker
+Requires-Dist: cryptography
+
+# pathkit文件操作
+
+## 简介
+
+pathkit 是一个用于文件操作的 Python 包，提供一个易于使用的接口来操作文件。
+
+## 依赖性
+
+##### 基础依赖（安装pathkit时将自动安装）：
+
+- portalocker
+- cryptography
+
+##### 操作具体文件系统需要额外依赖（根据需求手动安装）：
+
+| 文件系统 | 依赖  |
+| -------- | ----- |
+| HDFS     | hdfs  |
+| MinIO    | minio |
+
+## 安装
+
+```shell
+# 通过 pip 安装：
+pip install pathkit
+```
+
+## 初始化连接配置
+
+1. #### 配置文件的写入
+
+```python
+from pathkit.config import EnvConfig
+
+# 示例：
+# 配置名为 'hdfs' 的连接信息
+EnvConfig.write("hdfs", url=url)
+# 配置名为 'minio' 的连接信息
+EnvConfig.write("minio", endpoint=endpoint, access_key=access_key, secret_key=secret_key,
+                bucket_name=bucket_name, secure=secure)
+# 配置名为 'ftp' 的连接信息
+EnvConfig.write("ftp", host=host, user=user, passwd=passwd, pasv=pasv)
+```
+
+## 文件操作
+
+```python
+from pathkit import MinIOPath
+
+
+p = MinIOPath("/xxx/yyy")
+
+# 判断是否存在
+p.exists
+
+# 判断是否为目录
+p.is_dir()
+
+# 读取文件内容
+p.read()
+
+# 写入文件
+p.write(b'xxx')
+
+# 上传文件
+p.upload("/xxx/zzz")
+
+# 删除文件
+p.delete()
+
+# 创建目录
+p.mkdir()
+
+# 遍历目录
+p.glob()
+
+# 文件修改时间
+p.mtime
+
+# 递归遍历目录
+p.rglob()
+```
+
+## 功能
+
+- 支持多种文件系统（如 HDFS、MinIO、FTP、Local）
+- 简洁的 API
