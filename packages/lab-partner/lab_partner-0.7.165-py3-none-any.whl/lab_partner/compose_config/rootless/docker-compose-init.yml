@@ -1,0 +1,17 @@
+services:
+  lab-rootless-init:
+    labels:
+      - managed-by=lab-partner
+    image: enclarify/lab-partner-dind-rootless:0.7.165
+    container_name: lab-rootless-init
+    hostname: lab-rootless-init
+    volumes:
+      - type: volume
+        source: lab-cicd-artifact-storage
+        target: /data
+    entrypoint: ""
+    user: "0:0"
+    command: ["/bin/sh", "-c", "chown -R rootless:rootless /data"]
+        
+volumes:
+  lab-cicd-artifact-storage:
