@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "pozalabs-miditoolkit"
+packages = [{ include = "miditoolkit"}]
+version = "1.2.0"
+description = "A python package for working with MIDI data files. (POZAlabs forked)"
+authors = ["pozalabs <contact@pozalabs.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = [
+    "midi",
+    "mir",
+    "music",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Multimedia :: Sound/Audio :: MIDI",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+mido = "^1.1.16"
+numpy = "^1.19"
+matplotlib = "^3.5"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+pytest = "^8.1.1"
+
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "N", "I", "W", "UP"]
+ignore = []
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
