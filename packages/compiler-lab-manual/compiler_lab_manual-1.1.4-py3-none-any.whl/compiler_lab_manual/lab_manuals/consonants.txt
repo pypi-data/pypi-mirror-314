@@ -1,0 +1,24 @@
+lex
+
+%{
+#include <stdio.h>
+int vowels = 0, consonants = 0;
+%}
+
+%option noyywrap
+
+%%
+
+[aAeEiIoOuU]    { vowels++; }
+[a-zA-Z]         { consonants++; }
+[ \t\n]
+
+%%
+
+int main() {
+    printf("Enter a string: ");
+    yylex();
+    printf("Total Vowels: %d\n", vowels);
+    printf("Total Consonants: %d\n", consonants);
+    return 0;
+}

@@ -1,0 +1,56 @@
+lex
+
+
+%{
+  #include"4.tab.c"
+%}
+
+%%
+[a-zA-Z][a-zA-Z0-9]* {return letter;}
+[0-9] {return digit;}
+. {return yytext[0];}
+\n {return 0;}
+%%
+
+int yywrap(){
+  return 1;
+}
+
+yacc
+
+%{
+#include <stdio.h>
+int valid = 1;
+%}
+
+%token letter
+%token digit
+
+%%
+
+start: letter S
+    ;
+
+S: letter S
+  | digit S
+  |
+  ;
+
+%% 
+
+int yyerror() {
+    printf("\nIt's not an identifier\n");
+    valid = 0;
+    return 0;
+}
+
+int main() {
+    printf("Enter a name: ");
+    yyparse();
+
+    if (valid) {
+        printf("\nIt's an identifier!\n");
+    }
+
+    return 0;
+}

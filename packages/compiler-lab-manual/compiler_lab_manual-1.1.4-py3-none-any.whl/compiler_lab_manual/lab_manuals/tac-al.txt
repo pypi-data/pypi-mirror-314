@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <string.h>
+
+// Function to convert Three Address Code (TAC) into Assembly
+void convertToAssembly(char tac[][50], int n) {
+    char result[10], op1[10], op2[10], operator[5];
+    
+    for (int i = 0; i < n; i++) {
+        sscanf(tac[i], "%s = %s %s %s", result, op1, operator, op2); // Parse TAC
+        
+        if (strcmp(operator, "+") == 0) {
+            printf("MOV %s, %s\n", result, op1);
+            printf("ADD %s, %s\n", result, op2);
+        } else if (strcmp(operator, "-") == 0) {
+            printf("MOV %s, %s\n", result, op1);
+            printf("SUB %s, %s\n", result, op2);
+        } else if (strcmp(operator, "*") == 0) {
+            printf("MOV %s, %s\n", result, op1);
+            printf("MUL %s, %s\n", result, op2);
+        } else if (strcmp(operator, "/") == 0) {
+            printf("MOV %s, %s\n", result, op1);
+            printf("DIV %s, %s\n", result, op2);
+        } else if (strcmp(operator, "") == 0) {
+            printf("MOV %s, %s\n", result, op1);
+        }
+    }
+}
+
+int main() {
+    int n;
+    
+    // Input number of TAC instructions
+    printf("Enter the number of Three Address Code instructions: ");
+    scanf("%d", &n);
+    getchar(); // Clear the newline character from the buffer
+    
+    char tac[n][50]; // Array to store TAC instructions
+    
+    // Input TAC instructions
+    printf("Enter the Three Address Code instructions (format: t1 = a + b):\n");
+    for (int i = 0; i < n; i++) {
+        fgets(tac[i], 50, stdin);
+        tac[i][strcspn(tac[i], "\n")] = '\0'; // Remove newline character
+    }
+    
+    // Convert TAC to Assembly
+    printf("\nEquivalent Assembly Language Code:\n");
+    convertToAssembly(tac, n);
+    
+    return 0;
+}
