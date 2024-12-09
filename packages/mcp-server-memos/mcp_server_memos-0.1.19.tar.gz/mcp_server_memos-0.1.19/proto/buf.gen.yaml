@@ -1,0 +1,14 @@
+version: v2
+managed:
+  enabled: true
+  disable:
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+plugins:
+  # Google's official protoc-gen-python is rubbish. Use betterproto instead.
+  # Only V2 support proto3 optional fields. Need install with `pip install --pre`.
+  # https://github.com/danielgtaylor/python-betterproto/issues/574
+  - local: protoc-gen-python_betterproto
+    # https://github.com/danielgtaylor/python-betterproto
+    out: ../src/mcp_server_memos/proto_gen
+    strategy: directory
