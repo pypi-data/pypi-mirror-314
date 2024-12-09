@@ -1,0 +1,164 @@
+Metadata-Version: 2.1
+Name: pyscabbard
+Version: 0.0.15
+Summary: Suite of Hydrodynamic, topographic analysis, Landscape Evolution model and visualisation tools
+Home-page: https://github.com/bgailleton/scabbard
+Author: Boris Gailleton
+Author-email: boris.gailleton@univ-rennes.fr
+License: MIT license
+Keywords: scabbard
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: Click>=7.0
+Requires-Dist: numpy>=2
+Requires-Dist: numba>=0.60
+Requires-Dist: daggerpy>=0.0.14
+Requires-Dist: matplotlib
+Requires-Dist: taichi
+Requires-Dist: rasterio
+Requires-Dist: scipy
+Requires-Dist: cmcrameri
+Requires-Dist: h5py
+Requires-Dist: topotoolbox
+
+# Scabbard
+
+<!-- 
+.. image:: https://img.shields.io/pypi/v/scabbard.svg
+        :target: https://pypi.python.org/pypi/scabbard
+
+.. image:: https://readthedocs.org/projects/scabbard/badge/?version=latest
+        :target: https://scabbard.readthedocs.io/en/latest/?version=latest
+        :alt: Documentation Status -->
+
+
+
+Python package to design, use or visualise topographic analysis, landscape evolution models and hydro/morphodynamics simulations. Among other, home of [GraphFlood](https://egusphere.copernicus.org/preprints/2024/egusphere-2024-1239/) (`CPU` and `GPU`) and [`CHONK`](https://gmd.copernicus.org/articles/17/71/2024/). This framework is also building a `GPU` backend for general purpose landscape modeling.
+
+
+### Built on the shoulder of giants
+
+`scabbard` started as a personal codebase and evolved toward a fully-fledge numerical Framework. It uses the robust and battle-tested scientific `python` stack (e.g. `numpy, scipy, numba, ...`) and geospatial `python` (e.g. `rasterio`, `geopandas`, `libgdal`, ...). It also relies on multiple domain-specific libraries to built a future-proof and community-compatible backend: [`libtopotoolbox` and `pytopotoolbox`](https://github.com/TopoToolbox), [`fastscapelib`](https://fastscapelib.readthedocs.io/en/latest/), [`LSDTopoTool`](https://lsdtopotools.github.io/) as well as my own collection of `c++` and `numba` routines. All the GPU backends use [`taichi`](https://docs.taichi-lang.org/) to ensure cross-platform/hardware compatibility and user-friendly code.
+
+
+* Free software: MIT license
+<!-- * Documentation: https://scabbard.readthedocs.io. -->
+
+## How to install
+
+
+`pip install pyscabbard`
+
+As simple as that. Thanks to github actions allowing smooth CI, you do not have to compile anything yourself.
+
+**NOTE**: `pytopotoolbox` official installation procedure is still WIP. I provide binary wheels within this project ([./wheels/pytopotoolbox](https://github.com/bgailleton/scabbard/tree/main/wheels/pytopotoolbox) ). At first import, `scabbard` will provide instruction (i.e. a single command line to run).
+
+
+## Features
+
+* General geomorphic routines
+
+* `Graphflood`: Efficient hydrodynamic modelling, tailored for large scale. CPU and GPU version.
+
+* `CHONK/trackscape/popscape`: Long term Landscape Evolution Models.
+
+
+## Usage
+
+Documentation is WIP and will be online soon
+
+
+## Credits
+
+
+This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+
+=======
+History
+=======
+
+0.0.15 (2024-12-08)
+-----------------------
+* Fixing the new import system for legacy graphflood
+* Renamed graphflood.py to legacy_graphflood.py
+
+0.0.14 (2024-11-20)
+-----------------------
+* Small fixes on the boundary condition helpers
+
+0.0.13 (2024-11-20)
+-----------------------
+* Adding an option for changing the exponent in Riverdale friction equation (e.g. migrating from manning to chezy)
+
+0.0.12 (2024-11-20)
+-----------------------
+
+* Adapting the install process to pip topotoolbox
+* Migrating to new ttb
+* Minor fixes and additions
+* Adding the start of a multi-backend unified graphflood interface
+
+
+0.0.11 (2024-11-05)
+-----------------------
+
+* Loads of minor fixes in the install process
+* Adding an hdf5 io/helper
+* Refactor part of the ray tracing 3D plotter
+* Adding orthographic projection
+
+0.0.9 (2024-10-25)
+--------------------------
+
+* More fixes on the setup process
+* Added a simple GPU ray tracing engine for 3D plots
+* Started a unified interface for graphflood 
+
+0.0.8 (2024-10-15)
+--------------------------
+
+* Cleaning the install process
+* Removing problematic legacy imports
+* Trimming requirements
+* Deprecating older tools relying on packages I do not use anymore
+
+0.0.5 - 0.0.7 (2024-10-15)
+--------------------------
+
+* Total refactoring. As Simple as that.
+* `scabbard` is the main tool now, it uses multiple backends `DAGGER`, `pytopotoolbox`, `fastscapelib`, `numba` and `taichi`
+
+
+0.0.3 - 0.0.4 (2023-10-23)
+--------------------------
+
+* Fixing couple of bugs on the grid
+* Experimental support for DAGGER's experimental stuff
+* Adding environment object (WIP, future main structure)
+
+0.0.2 (2023-07-31)
+------------------
+
+* Adding drainage divide quick extraction tools
+* Fixing sea_level/Z0 stuff 
+
+0.0.1 (2023-07-25)
+------------------
+
+* First release on PyPI.
+* Adding tools for quick river extraction
+* Started a big behind-the-scene refactoring and standardisation (invisible at top level)
+* Maintenance and bug fixes
