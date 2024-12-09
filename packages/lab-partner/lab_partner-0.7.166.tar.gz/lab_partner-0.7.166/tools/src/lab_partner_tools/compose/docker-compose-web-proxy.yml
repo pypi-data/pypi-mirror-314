@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  proxy:
+    image: traefik:v2.9.6
+    container_name: proxy
+    hostname: proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.proxy.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.proxy.service=dashboard@internal"
+      - "traefik.http.routers.proxy.entrypoints=web"
+      - "traefik.http.services.proxy.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=http"
+    ports:
+      - "${TRAEFIK_LISTEN_PORT}:${TRAEFIK_LISTEN_PORT}"
+      - "8531:8080"
+    env_file:
+      - ${CLI_ROOT}/environments/local
+    volumes:
+      - ${HOST_DOCKER_SOCKET}:/var/run/docker.sock:ro
+    command: >
+      --log.level=INFO
+      --api
+      --api.dashboard
+      --api.insecure
+      --providers.docker
+      --providers.docker.exposedbydefault=false
+      --entryPoints.web.forwardedHeaders.insecure
+      --entrypoints.web.address=:${TRAEFIK_LISTEN_PORT}
+
+networks:
+  default:
+    name: ${CLI_NETWORK_NAME}

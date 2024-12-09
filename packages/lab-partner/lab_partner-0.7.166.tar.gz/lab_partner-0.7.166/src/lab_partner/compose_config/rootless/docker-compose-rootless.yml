@@ -1,0 +1,49 @@
+services:
+  lab-rootless-dockerd:
+    labels:
+      - ${LAB_ROLE_LABEL}=${LAB_CONTAINER_RUNTIME_ROLE}
+    image: enclarify/lab-partner-dind-rootless:${LAB_VERSION}
+    container_name: lab-rootless-dockerd
+    hostname: lab-rootless-dockerd
+    privileged: true
+    ipc: host
+    environment:
+      - DOCKERD_ROOTLESS_ROOTLESSKIT_DEBUG=${DOCKERD_ROOTLESS_ROOTLESSKIT_DEBUG:-false}
+      - BYPASS4NETNS_DEBUG=${BYPASS4NETNS_DEBUG:-false}
+      # - DOCKERD_ROOTLESS_ROOTLESSKIT_MTU=1300
+    #   - ROOTLESS_UID=${UID}
+    ports:
+      - "80:80"
+    volumes:
+      - type: volume
+        source: lab-rootless-storage
+        target: /var/lib/docker
+      - type: volume
+        source: lab-rootless-user-storage
+        target: /home/rootless/.local/share/docker
+      - type: volume
+        source: lab-cicd-artifact-storage
+        target: ${LAB_CICD_ARTIFACT_STORAGE}
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker-host.sock
+      - type: bind
+        source: ${HOME}
+        target: ${HOME}
+      - type: bind
+        source: ${LAB_WORKSPACE}
+        target: ${LAB_WORKSPACE}
+      - type: bind
+        source: ${XDG_RUNTIME_DIR}
+        target: ${XDG_RUNTIME_DIR}
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /tmp
+        target: /tmp
+        
+volumes:
+  lab-rootless-storage:
+  lab-rootless-user-storage:
+  lab-cicd-artifact-storage:
