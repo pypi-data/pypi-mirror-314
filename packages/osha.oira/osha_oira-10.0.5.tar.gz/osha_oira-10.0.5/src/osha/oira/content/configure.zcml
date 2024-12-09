@@ -1,0 +1,48 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:plone="http://namespaces.plone.org/plone"
+  xmlns:browser="http://namespaces.zope.org/browser">
+
+    <include package=".browser" />
+
+    <plone:behavior
+        name="osha.country.extrafields"
+        title="OSHA extra Country fields"
+        provides=".country.IOSHACountry"
+        />
+
+    <plone:behavior
+        title="OSHA extra Survey fields"
+        description="Provide additional OSHA fields"
+        provides=".survey.IOSHASurvey"
+        factory=".survey.OSHASurvey"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <adapter
+        for=".survey.IOSHASurveyMarker zope.schema.interfaces.IField"
+        factory="z3c.form.datamanager.AttributeField"
+        />
+
+  <browser:page
+      name="site-controlpanel"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".controlpanel.SiteControlPanel"
+      permission="cmf.ManagePortal"
+      layer="osha.oira.interfaces.IOSHAContentSkinLayer"
+      />
+
+
+  <!-- override some classes, but re-use the template from NuPlone -->
+  <configure package="plonetheme.nuplone.skin">
+    <browser:page
+        name="sitemenu"
+        for="*"
+        class="osha.oira.content.sitemenu.Sitemenu"
+        layer="osha.oira.interfaces.IOSHAContentSkinLayer"
+        permission="zope2.Public"
+        template="templates/sitemenu.pt"
+        />
+  </configure>
+
+</configure>

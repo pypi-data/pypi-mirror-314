@@ -1,0 +1,20 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:resourceDirectory
+        name="oira.media"
+        directory="templates/media"
+    />
+
+    <include package=".browser" />
+
+    <adapter
+        factory=".client.ClientPublishTraverser"
+        provides="zope.publisher.interfaces.IPublishTraverse"
+        />
+    <adapter
+        factory=".indexers.managerRolesAndUsers"
+        name="managerRolesAndUsers"
+        />
+
+</configure>
