@@ -1,0 +1,62 @@
+Metadata-Version: 2.1
+Name: encapsulation
+Version: 0.2.0
+Summary: Encapsulation and decorators made easy.
+Home-page: https://github.com/JungeWerther/From
+Author: Seb Wiechers
+Author-email: 
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+# The encapsulation library
+
+Introducing: the `From` class.
+For maintainable data pipelines.
+
+Adds new syntactic sugar to python!
+
+## Installation
+
+`pip install -e encapsulation`
+
+## Getting started
+
+Get started by
+
+```python
+from encapsulation.base import Maybe
+
+Maybe("a") + "b" # outputs <Maybe val=(ab)>
+Maybe(None) * 2 # outputs <Nothing val=(None)>
+```
+
+_Easy to use_ decorators that elevate functions to return wrapped values instead:
+
+```python
+from encapsulation.base import Maybe, to
+
+def add1(n: int):
+    return n + 1
+
+@to(Maybe)
+def (s: int):
+    return s
+
+test(1).bind(add1).effect(print) # prints '[2]'
+```
+
+You can chain computations using compose(). For example
+
+```python
+from encapsulation.base import Just, compose
+
+@to(Just[int])
+def add2(s: int):
+    return s
+
+compose(Just(1), add2, add2) # equals Just(5)
+```
