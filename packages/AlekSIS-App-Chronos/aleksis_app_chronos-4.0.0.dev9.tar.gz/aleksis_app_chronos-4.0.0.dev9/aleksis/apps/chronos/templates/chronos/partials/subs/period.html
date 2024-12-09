@@ -1,0 +1,14 @@
+{% load i18n %}
+<strong>
+  {% if el.REFERENCE_OBJECT.slot_number_start and el.REFERENCE_OBJECT.slot_number_end %}
+    {% if el.REFERENCE_OBJECT.slot_number_start == el.REFERENCE_OBJECT.slot_number_end %}
+      {{ el.REFERENCE_OBJECT.slot_number_start }}.
+    {% else %}
+      {{ el.REFERENCE_OBJECT.slot_number_start }}.–{{ el.REFERENCE_OBJECT.slot_number_end }}.
+    {% endif %}
+  {% elif el.DTSTART.dt.time %}
+    {{ el.DTSTART.dt.time }}–{{ el.DTEND.dt.time }}
+  {% else %}
+    {% trans "all day" %}
+  {% endif %}
+</strong>

@@ -1,0 +1,80 @@
+{# -*- engine:django -*- #}
+
+{% extends 'core/base_print.html' %}
+
+{% load i18n static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/chronos/timetable.css' %}">
+{% endblock %}
+
+{% block browser_title %}{% blocktrans %}Print: Substitutions{% endblocktrans %}{% endblock %}
+{% block page_title %}{% blocktrans %}Substitutions{% endblocktrans %}{% endblock %}
+
+
+{% block content %}
+  {% for day, c in days.items %}
+    <h4>{{ c.day|date:"l" }} {{ c.day|date:"SHORT_DATE_FORMAT" }}</h4>
+
+    {% include "core/partials/announcements.html" with announcements=c.announcements show_recipients=1 %}
+
+    {% include "chronos/partials/headerbox.html" with absent_teachers=c.absent_teachers absent_groups=c.absent_groups affected_teachers=c.affected_teachers affected_groups=c.affected_groups %}
+
+    <table class="substitutions">
+      <thead>
+      <tr>
+        <th>{% blocktrans %}Groups{% endblocktrans %}</th>
+        <th>{% blocktrans %}Time{% endblocktrans %}</th>
+        <th>{% blocktrans %}Teachers{% endblocktrans %}</th>
+        <th>{% blocktrans %}Subject{% endblocktrans %}</th>
+        <th>{% blocktrans %}Room{% endblocktrans %}</th>
+        <th>{% blocktrans %}Notes{% endblocktrans %}</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      {% if not c.substitutions %}
+        <tbody>
+        <tr class="striped">
+          <td colspan="7">
+            <p class="flow-text center">
+              {% blocktrans %}No substitutions available.{% endblocktrans %}
+            </p>
+          </td>
+        </tr>
+        </tbody>
+      {% endif %}
+
+      <tbody>
+      {% for item in c.substitutions %}
+        {% ifchanged item.el.REFERENCE_OBJECT.group_names %}
+          </tbody>
+          <tbody class="{% cycle "striped" "not-striped" %}">
+        {% endifchanged %}
+
+        <tr class="{% include "chronos/partials/subs/colour.html" with el=item.el.REFERENCE_OBJECT %}">
+          <td>
+            {% include "chronos/partials/subs/groups.html" with el=item.el.REFERENCE_OBJECT %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/period.html" with el=item.el %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/teachers.html" with el=item.el.REFERENCE_OBJECT %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/subject.html" with  el=item.el.REFERENCE_OBJECT %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/rooms.html" with  el=item.el.REFERENCE_OBJECT %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/badge.html" with el=item.el.REFERENCE_OBJECT %}
+            {% include "chronos/partials/subs/comment.html" with el=item.el.REFERENCE_OBJECT %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+{% endblock %}

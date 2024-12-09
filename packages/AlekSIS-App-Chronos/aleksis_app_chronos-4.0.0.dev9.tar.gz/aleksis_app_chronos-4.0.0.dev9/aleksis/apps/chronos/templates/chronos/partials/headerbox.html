@@ -1,0 +1,57 @@
+{% load i18n %}
+
+{% if affected_teachers or affected_groups or absent_teachers or absent_groups %}
+  <div>
+    <div>
+      {% if absent_teachers %}
+        <div class="row no-margin">
+          <div class="col">
+            <strong class="truncate">
+              {% trans "Absent teachers" %}
+            </strong>
+          </div>
+          <div class="col">
+            {% include "chronos/partials/teachers.html" with teachers=absent_teachers %}
+          </div>
+        </div>
+      {% endif %}
+      {% if absent_groups %}
+        <div class="row no-margin">
+          <div class="col">
+            <strong class="truncate">
+              {% trans "Absent groups" %}
+            </strong>
+          </div>
+          <div class="col">
+            {% include "chronos/partials/groups.html" with groups=absent_groups no_collapsible=True %}
+          </div>
+        </div>
+      {% endif %}
+      {% if affected_teachers %}
+        <div class="row no-margin">
+          <div class="col">
+            <strong class="truncate">
+              {% trans "Affected teachers" %}
+            </strong>
+          </div>
+          <div class="col">
+            {% include "chronos/partials/teachers.html" with teachers=affected_teachers %}
+          </div>
+        </div>
+      {% endif %}
+      {% if affected_groups %}
+        <div class="row no-margin">
+          <div class="col">
+            <strong class="truncate">
+              {% trans "Affected groups" %}
+            </strong>
+          </div>
+          <div class="col">
+            {% include "chronos/partials/groups.html" with groups=affected_groups %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  {% if print %}<br/>{% endif %}
+{% endif %}

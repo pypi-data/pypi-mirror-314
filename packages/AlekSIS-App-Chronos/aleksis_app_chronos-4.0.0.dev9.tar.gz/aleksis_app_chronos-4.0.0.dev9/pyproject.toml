@@ -1,0 +1,107 @@
+[tool.poetry]
+name = "AlekSIS-App-Chronos"
+version = "4.0.0.dev9"
+packages = [
+    { include = "aleksis" }
+]
+readme = "README.rst"
+include = [
+    { path = "aleksis/**/*.mo", format = ["sdist", "wheel"] },
+    { path = "*.rst", format = "sdist" },
+    { path = "docs/*", format = "sdist" },
+    { path = "docs/**/*", format = "sdist" },
+    { path = "conftest.py", format = "sdist" },
+    { path = "tox.ini", format = "sdist" }
+]
+
+description = "AlekSIS (School Information System) — App Χρόνος (digital timetables)"
+authors = [
+    "Dominik George <dominik.george@teckids.org>",
+    "Julian Leucker <leuckeju@katharineum.de>",
+    "Frank Poetzsch-Heffter <p-h@katharineum.de>",
+    "Tom Teichler <tom.teichler@teckids.org>",
+    "Jonathan Weth <wethjo@katharineum.de>",
+    "Hangzhi Yu <yuha@katharineum.de>",
+    "Lloyd Meins <meinsll@katharineum.de>"
+]
+maintainers = ["Jonathan Weth <dev@jonathanweth.de>", "Dominik George <dominik.george@teckids.org>"]
+license = "EUPL-1.2-or-later"
+homepage = "https://aleksis.org"
+repository = "https://edugit.org/AlekSIS/official/AlekSIS-App-Chronos"
+documentation = "https://aleksis.org/AlekSIS/docs/html/"
+keywords = ["SIS", "education", "school", "timetable", "plans"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django :: 3.0",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Typing :: Typed",
+]
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://edugit.org/api/v4/projects/461/packages/pypi/simple"
+priority = "supplemental"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+calendarweek = "^0.5.0"
+aleksis-core = "^4.0.0.dev13"
+aleksis-app-resint = "^4.0.0.dev1"
+aleksis-app-cursus = "^0.1.0.dev4"
+aleksis-app-kolego = "^0.1.0.dev0"
+
+
+[tool.poetry.plugins."aleksis.app"]
+chronos = "aleksis.apps.chronos.apps:ChronosConfig"
+
+
+[tool.poetry.group.dev.dependencies]
+django-stubs = "^4.2"
+safety = "^2.3.5"
+
+ruff = "^0.1.5"
+
+curlylint = "^0.13.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2"
+pytest-django = "^4.1"
+pytest-django-testing-postgresql = "^0.2"
+pytest-cov = "^4.0.0"
+pytest-sugar = "^0.9.2"
+selenium = "<4.10.0"
+freezegun = "^1.1.0"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.0"
+sphinxcontrib-django = "^2.3.0"
+sphinxcontrib-svg2pdfconverter = "^1.1.1"
+sphinx-autodoc-typehints = "^1.7"
+sphinx_material = "^0.0.35"
+
+[tool.ruff]
+exclude = ["migrations", "tests"]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "UP", "B", "SIM", "I", "DJ", "A", "S"]
+ignore = ["UP034", "UP015", "B028"]
+
+[tool.ruff.isort]
+known-first-party = ["aleksis"]
+section-order = ["future", "standard-library", "django", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.isort.sections]
+django = ["django"]
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
