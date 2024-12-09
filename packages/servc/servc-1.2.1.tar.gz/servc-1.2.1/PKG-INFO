@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: servc
+Version: 1.2.1
+Summary: Server implmentation of services for python
+Author-email: Yusuf Ali <ali@yusuf.email>
+Project-URL: Homepage, https://github.com/serv-c/servc-python
+Project-URL: Bug Tracker, https://github.com/serv-c/servc-python/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# servc-python
+
+Serv-C implmentation for Python. Documentation can be found https://docs.servc.io
+
+[![PyPI version](https://badge.fury.io/py/servc.svg)](https://badge.fury.io/py/servc)
+![Serv-C](https://git.yusufali.ca/serv-c/servc-python/actions/workflows/servc.yml/badge.svg)
+
+## Example
+
+Here is the most simple example of use, starting a server to handle requests at the route `my-route`;
+
+```python
+from servc.server import start_server
+
+def inputProcessor(messageId, bus, cache, payload, components, emitEvent):
+  pass
+
+# the method 'methodA' will be resolved by inputProcessor
+start_server(
+  resolver={
+    "methodA": inputProcessor
+  }
+)
+```
