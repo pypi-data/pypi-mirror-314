@@ -1,0 +1,46 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "dry-webview"
+requires-python = ">=3.11"
+description = "Use your web dev skills to design UIs for your Python apps with this simple, Rust-powered webview library."
+authors = [{ name = "Otávio Barradas" }]
+readme = "README.md"
+license = { text = "MIT" }
+keywords = ["webview", "gui", "rust", "ui", "web", "python"]
+urls = { "Homepage" = "https://github.com/barradasotavio/dry", "Repository" = "https://github.com/barradasotavio/dry.git" }
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Rust",
+    "Operating System :: Microsoft :: Windows",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 3 - Alpha",
+]
+dynamic = ["version"]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+
+[tool.uv]
+dev-dependencies = ["maturin>=1.7.8", "ruff>=0.8.2", "taskipy>=1.14.1"]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+extend-select = ["I001"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.taskipy.tasks]
+pre_format = "uv run ruff check --fix"
+format = "uv run ruff format"
+pre_dev = "uv run maturin develop --uv"
+dev = "uv run"
+pre_release = "cargo clean"
+release = "uv run maturin build --strip --release"
+preview = "uv run task release && uv run"
