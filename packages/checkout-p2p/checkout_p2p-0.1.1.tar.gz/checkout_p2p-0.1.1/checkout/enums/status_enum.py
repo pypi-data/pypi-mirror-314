@@ -1,0 +1,14 @@
+from enum import Enum
+
+
+class StatusEnum(str, Enum):
+    OK = "OK"
+    FAILED = "FAILED"
+    APPROVED = "APPROVED"
+    APPROVED_PARTIAL = "APPROVED_PARTIAL"
+    REJECTED = "REJECTED"
+    PENDING = "PENDING"
+    PENDING_VALIDATION = "PENDING_VALIDATION"
+    REFUNDED = "REFUNDED"
+    ERROR = "ERROR"
+    UNKNOWN = "UNKNOWN"
