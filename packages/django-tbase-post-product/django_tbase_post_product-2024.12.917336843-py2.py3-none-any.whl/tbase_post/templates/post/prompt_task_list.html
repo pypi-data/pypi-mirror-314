@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>任务列表</h1>
+
+<ul>
+{% for prompt_task in all_tasks %}
+    <li>
+        <h2>{{ detail.title }}</h2>
+        <p>{{ detail.description }}</p>
+
+        <a href="{% url 'prompt_task_detail' detail.pk %}" 
+        class="uppercase text-gray-800 hover:text-black">
+            
+            {{ detail.title }}
+      </a>
+  
+
+        
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

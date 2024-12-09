@@ -1,0 +1,128 @@
+{% extends 'blog/blog.html' %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+
+{% load post_extras %}
+{% load solo_tags %}
+{% comment %} 标题 {% endcomment %}
+{% block title %}<title>{% get_solo 'tbase_config.General' as site_config %}{{site_config.site_title}}</title>{% endblock %}
+
+
+{% block top_nav %}
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+
+
+{% block top_toolbar %}
+    {% comment %} top_toolbar start {% endcomment %}
+
+     <nav class="w-full py-2 bg-zinc-800 shadow">
+        <div class="w-full container mx-auto flex flex-wrap items-center justify-between">
+
+            <nav>
+                <ul class="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
+                    <li><a class="hover:text-gray-200 hover:underline px-4" href="{% url 'home'%}">Home</a></li>
+                    <li><a class="hover:text-gray-200 hover:underline px-4"  rel="nofollow" href="{% url  'last_index' %}">Update</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center text-lg no-underline text-white pr-6">
+          
+            </div>
+        </div>
+
+    </nav>
+    {% comment %} top_toolbar end {% endcomment %}
+{% endblock %}
+
+
+ 
+{% comment %} article_list start {% endcomment %}
+ {% block article_list %}
+    <!--object_list start-->
+    {% for detail in object_list %}
+                <article class="w-full flex flex-col shadow my-4">
+                    <!-- Article Image -->
+              
+                    {%if detail.article_img%}
+                    <div class="flex items-center justify-center bg-gray-100">
+                     <p class="hover:opacity-75">
+                         <img alt="{{detail.product_name}}" title="{{detail.title}}"  src="{{detail.article_img}}">
+                     </p>
+                    </div>
+                    {%endif%}
+              
+
+                    <div class="bg-white flex flex-col justify-start p-6">
+                        <a href="{% url 'detail_view' detail.pk %}" class="text-xl font-bold hover:text-gray-700 pb-4">{{detail.title|truncatechars:48}}</a>
+                        <p  class="text-sm pb-3">
+                            {% comment %} By <a href="#" class="font-semibold hover:text-gray-800">David Grzyb</a>,  {% endcomment %}
+                            Published on {{detail.created_on}}
+                        </p>
+
+                        <p class="pb-6">
+                            {% comment %} 限制文本长度 {% endcomment %}
+                            {{detail.content|truncatechars:128}}
+                            <!-- <a href="{% url 'detail_view' detail.pk %}" class="uppercase text-gray-800 hover:text-black">Continue Reading {{detail.product_name}}<i class="fas fa-arrow-right"></i></a>
+   -->
+                        </p>
+
+          
+
+  {% tags detail.tags 5 detail.pk %}
+
+  <!-- 相关链接 开始 -->
+  <p class="related-post-by-tags-block pb-6">
+    {% related_post_by_tags_mini detail.tags 5 detail.pk %}
+</p>
+    </div>
+    </article>
+    {% endfor %}
+     <!--object_list end-->
+
+{% endblock %}
+{% comment %} article_list end {% endcomment %}
+
+ 
+
+
+
+
+
+
+
+
+{% block sidebar_section %}
+<!-- sidebar_section -->
+ 
+<div class="w-full bg-white shadow flex flex-col my-4 p-6">
+        {% seo_top_links 50 %}
+</div>
+
+
+
+<!-- 广告代码  ads_sidebar-->
+{% autoescape off %}
+ 
+    <!--亚马逊推广链接-->
+    {% get_solo 'tbase_post.AmazonSettings' as amazon %}
+    {% amazon_ads object.product_id detail.product_name amazon.store_id %}
+    <!--亚马逊推广链接结束-->
+
+    
+    {% get_solo 'tbase_post.AmazonSettings' as amz %} 
+
+
+    {% if amz.ads_sidebar %}
+    {{amz.ads_sidebar}}
+
+    {% endif %}
+
+{% endautoescape %}
+<!-- 广告代码结束 -->
+
+    <!-- sidebar_section endblock -->
+   {% endblock %}

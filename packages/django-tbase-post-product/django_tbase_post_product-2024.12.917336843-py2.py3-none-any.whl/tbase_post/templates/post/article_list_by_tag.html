@@ -1,0 +1,189 @@
+{% extends 'blog/blog.html' %}
+{% load static %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% load cache %}
+{% load post_extras %}
+{% block title %}<title>{{title}}</title>{% endblock %}
+{% load solo_tags %}
+
+{% block top_nav %}
+
+{% endblock %}
+
+
+{% block head %}
+{% if meta.noindex %} 
+<meta name="robots" content="noindex">
+{% endif %} 
+
+{% endblock %}
+
+
+{% block body_class_expand %}tag{% endblock %}
+
+
+
+
+
+{% block top_toolbar %}
+    {% comment %} top_toolbar start {% endcomment %}
+
+     <nav class="w-full py-2 bg-zinc-800 shadow">
+        <div class="w-full container mx-auto flex flex-wrap items-center justify-between">
+
+            <nav>
+                <ul class="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
+                    <li><a class="hover:text-gray-200 hover:underline px-4" href="{% url 'home'%}">Home</a></li>
+                    <li><a class="hover:text-gray-200 hover:underline px-4"  rel="nofollow" href="{% url  'last_index' %}">Update</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center text-lg no-underline text-white pr-6">
+                <!-- <a class="" href="#">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-linkedin"></i>
+                </a> -->
+            </div>
+        </div>
+
+    </nav>
+    {% comment %} top_toolbar end {% endcomment %}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+ {% block article_list %}
+
+
+<!-- 广告代码  ads_list1-->
+{% autoescape off %}
+{% get_solo 'tbase_post.AmazonSettings' as amz %}{{amz.ads_list1}}
+{% endautoescape %}
+<!-- 广告代码结束 -->
+
+ {% for detail in object_list %}
+            <article class="w-full flex flex-col shadow my-4">
+                <!-- Article Image -->
+                {%if detail.article_img%}
+                <div class="flex items-center justify-center bg-gray-100">
+                 <p class="hover:opacity-75">
+                     <img alt="{{detail.product_name}}" title="{{detail.title}}" src="{{detail.article_img}}">
+                 </p>
+                </div>
+                {%endif%}
+                <div class="bg-white flex flex-col justify-start p-6">
+                    <a href="{% url 'detail_view' detail.pk %}" class="text-xl font-bold hover:text-gray-700 pb-4">{{detail.title}}</a>
+                    <p  class="text-sm pb-3">
+                       Published on {{detail.created_on}}
+                    </p>
+
+                    <p class="pb-6">
+          
+                        {{detail.content|truncatechars:128}}
+               
+                    </p>
+
+ 
+{% tags detail.tags 5 detail.pk %}
+    <!-- 相关链接 开始 -->
+    <p class="related-post-by-tags-block pb-6">
+        {% related_post_by_tags_mini detail.tags 5 detail.pk %}
+    </p>
+                
+                </div>
+            </article>
+
+ {% endfor %}
+
+ 
+
+
+
+
+
+{% comment %}
+
+<div class="pagination flex items-center py-8">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a class="h-10 w-10 bg-blue-800 hover:bg-blue-600 font-semibold text-white text-sm flex items-center justify-center" href="?page=1">&laquo; first</a>
+            <a class="h-10 w-10 font-semibold text-gray-800 hover:bg-blue-600 hover:text-white text-sm flex items-center justify-center" href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a class="h-10 w-10 font-semibold text-gray-800 hover:text-gray-900 text-sm flex items-center justify-center ml-3" href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+
+
+</div> {% endcomment %}
+
+
+{% endblock %}
+
+
+
+
+
+
+{% block sidebar_section %}
+<!-- sidebar_section -->
+ {% block about_us %}
+    <!-- about_us -->
+    <div class="w-full bg-white shadow flex flex-col my-4 p-6">
+        <!-- <p class="text-xl font-semibold pb-5">About Us</p>
+        <p class="pb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas mattis est eu odio sagittis tristique. Vestibulum ut finibus leo. In hac habitasse platea dictumst.</p>
+        <a href="#" class="w-full bg-blue-800 text-white font-bold text-sm uppercase rounded hover:bg-blue-700 flex items-center justify-center px-2 py-3 mt-4">
+            Get to know us
+        </a> -->
+    
+
+ 
+    {% last_update 10 %}
+ 
+    </div>
+
+    <div class="w-full bg-white shadow flex flex-col my-4 p-6">
+    {% seo_top_links 10 %}
+</div>
+
+   {% endblock %}
+    <div class="w-full bg-white shadow flex flex-col my-4 p-6">
+
+    </div>
+
+<!-- 广告代码  ads_sidebar-->
+{% autoescape off %}
+{% get_solo 'tbase_post.AmazonSettings' as amz %}
+
+
+{% if amz.ads_sidebar %}
+{{amz.ads_sidebar}}
+
+{% endif %}
+
+{% endautoescape %}
+<!-- 广告代码结束 -->
+
+    <!-- sidebar_section endblock -->
+   {% endblock %}
