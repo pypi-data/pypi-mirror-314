@@ -1,0 +1,35 @@
+name: Run Unit Tests
+
+# This workflow will run on pushes and pull requests to the main branch or any other branch you specify
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # The environment where the job runs
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3  # Checkout the code so that it can be used in the workflow
+
+      - name: Set up Python
+        uses: actions/setup-python@v4  # Setup the Python environment
+        with:
+          python-version: '3.11'  # You can change this to the version you're using
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip  # Upgrade pip
+          pip install -r tests/requirements.txt  # Install the dependencies (make sure you have a requirements.txt)
+          pip install pytest  # Install pytest
+
+      - name: Run unit tests with pytest
+        run: |
+          pytest --maxfail=9 --disable-warnings -q  # Run tests (add your options here like verbose, maxfail, etc.)
