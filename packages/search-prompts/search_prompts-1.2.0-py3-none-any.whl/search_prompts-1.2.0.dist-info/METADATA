@@ -1,0 +1,65 @@
+Metadata-Version: 2.1
+Name: search-prompts
+Version: 1.2.0
+Summary: A library for efficient text-based prompt search with resource monitoring.
+Author: Kozlovskiy Sergei
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: psutil
+Requires-Dist: memory-profiler
+Requires-Dist: datasets
+
+# Search Prompts
+search-prompts is a library for efficient text search in Hugging Face datasets with resource monitoring (CPU, memory, network).
+
+# Installation
+You can install the library via pip:
+pip install search-prompts
+
+# Example Usage
+from search_prompts import search_prompts_with_monitoring
+
+## Search parameters
+query = "You are an AI assistant"
+dataset_name = "rombodawg/Everything_Instruct"
+config_name = "default"
+
+## Perform search with resource monitoring
+matching_prompts, resource_usage = search_prompts_with_monitoring(
+    query=query,
+    dataset_name=dataset_name,
+    config_name=config_name,
+    batch_size=1000,
+    max_results=5,
+    chunk_size=5000,
+    monitor_interval=1,
+)
+
+## Perform search without resource monitoring
+matching_prompts = search_prompts_direct(
+    query=query,
+    dataset_name=dataset_name,
+    config_name=config_name,
+    batch_size=1000,
+    max_results=5,
+    chunk_size=5000,
+)
+
+## Display search results
+print("\nSearch Results:")
+if matching_prompts:
+    for instruction in matching_prompts:
+        print(f"- {instruction}")
+else:
+    print("No matches found.")
+
+## Display resource usage
+print("\nResource Usage During Execution:")
+print(f"Average CPU Usage: {resource_usage['avg_cpu_usage']:.2f}%")
+print(f"Peak Memory Usage: {resource_usage['peak_memory_usage']:.2f} MB")
+print(f"Network Data Sent: {resource_usage['network_sent_mb']:.2f} MB")
+print(f"Network Data Received: {resource_usage['network_recv_mb']:.2f} MB")
+print(f"Total Execution Time: {resource_usage['total_execution_time']:.2f} seconds")
