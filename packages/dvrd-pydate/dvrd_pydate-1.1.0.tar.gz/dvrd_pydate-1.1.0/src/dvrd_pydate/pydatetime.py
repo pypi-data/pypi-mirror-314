@@ -1,0 +1,222 @@
+from datetime import datetime, timedelta, date
+from typing import Self, Generator
+
+from dvrd_pydate.enums import DatePart, TimePart
+from dvrd_pydate.pydate import PyDate, CommonArg
+
+hours_in_day = 24
+minutes_in_hour = 60
+seconds_in_minute = 60
+microseconds_in_second = 1000
+
+
+class PyDateTime(datetime, PyDate):
+    def __new__(cls, *args, **kwargs):
+        if len(args) == 1 and isinstance(args[0], str):
+            return PyDateTime.fromisoformat(args[0])
+        if not args and not kwargs:
+            now = datetime.now()
+            return datetime.__new__(cls, now.year, now.month, now.day, now.hour, now.minute, now.second,
+                                    now.microsecond, now.tzinfo, fold=now.fold)
+        return datetime.__new__(cls, *args, **kwargs)
+
+    @staticmethod
+    def from_value(value: datetime | str = None):
+        if isinstance(value, str):
+            value = datetime.fromisoformat(value)
+        elif value is None:
+            value = datetime.now()
+        return PyDateTime(value.year, value.month, value.day, value.hour, value.minute, value.second,
+                          value.microsecond, value.tzinfo, fold=value.fold)
+
+    @staticmethod
+    def iter(*, start: date | str = None, end: date | str | None = None,
+             step: DatePart | TimePart | tuple[int, DatePart | TimePart] = DatePart.DAY, max_steps: int = None) -> \
+            Generator["PyDateTime", None, None]:
+        if max_steps == 0:
+            # Raises StopIteration
+            return
+        if start is None:
+            start = datetime.now()
+        current = PyDateTime.from_value(start)
+        end_value = None if end is None else PyDateTime.from_value(end)
+        if isinstance(step, tuple):
+            step_value = step[0]
+            step_key = step[1]
+        else:
+            step_value = 1
+            step_key = step
+        current_step = 0
+        while end_value is None or current < end_value:
+            yield current
+            current_step += 1
+            if max_steps is not None and current_step == max_steps:
+                break
+            current = current.add(step_value, step_key)
+
+    def set(self, value_or_key: CommonArg, key_or_value: CommonArg) -> Self:
+        key, value = _determine_key_and_value(value_or_key, key_or_value)
+        if isinstance(key, DatePart):
+            return super().set(value, key)
+        match key:
+            case TimePart.HOURS | TimePart.HOUR:
+                return self.set_hour(value)
+            case TimePart.MINUTES | TimePart.MINUTE:
+                return self.set_minute(value)
+            case TimePart.SECONDS | TimePart.SECOND:
+                return self.set_second(value)
+            case TimePart.MICROSECONDS | TimePart.MICROSECOND:
+                return self.set_microsecond(value)
+
+    def add(self, value_or_key: CommonArg, key_or_value: CommonArg) -> Self:
+        key, value = _determine_key_and_value(value_or_key, key_or_value)
+        match key:
+            case key if isinstance(key, DatePart):
+                return super().add(value, key)
+            case TimePart.HOURS | TimePart.HOUR:
+                return self.add_hours(value)
+            case TimePart.MINUTES | TimePart.MINUTE:
+                return self.add_minutes(value)
+            case TimePart.SECONDS | TimePart.SECOND:
+                return self.add_seconds(value)
+            case TimePart.MICROSECONDS | TimePart.MICROSECOND:
+                return self.add_microseconds(value)
+
+    def subtract(self, value_or_key: CommonArg, key_or_value: CommonArg) -> Self:
+        key, value = _determine_key_and_value(value_or_key, key_or_value)
+        match key:
+            case key if isinstance(key, DatePart):
+                return super().subtract(value, key)
+            case TimePart.HOURS | TimePart.HOUR:
+                return self.subtract_hours(value)
+            case TimePart.MINUTES | TimePart.MINUTE:
+                return self.subtract_minutes(value)
+            case TimePart.SECONDS | TimePart.SECOND:
+                return self.subtract_seconds(value)
+            case TimePart.MICROSECONDS | TimePart.MICROSECOND:
+                return self.subtract_microseconds(value)
+
+    def set_hour(self, value: int) -> Self:
+        return self.replace(hour=value)
+
+    set_hours = set_hour
+
+    def add_hours(self, value: int) -> Self:
+        return self + timedelta(hours=value)
+
+    def add_hour(self) -> Self:
+        return self.add_hours(1)
+
+    def subtract_hours(self, value: int) -> Self:
+        return self - timedelta(hours=value)
+
+    def subtract_hour(self) -> Self:
+        return self.subtract_hours(1)
+
+    def set_minute(self, value: int) -> Self:
+        return self.replace(minute=value)
+
+    set_minutes = set_minute
+
+    def add_minutes(self, value: int) -> Self:
+        return self + timedelta(minutes=value)
+
+    def add_minute(self) -> Self:
+        return self.add_minutes(1)
+
+    def subtract_minutes(self, value: int) -> Self:
+        return self - timedelta(minutes=value)
+
+    def subtract_minute(self) -> Self:
+        return self.subtract_minutes(1)
+
+    def set_second(self, value: int) -> Self:
+        return self.replace(second=value)
+
+    set_seconds = set_second
+
+    def add_seconds(self, value: int) -> Self:
+        return self + timedelta(seconds=value)
+
+    def add_second(self) -> Self:
+        return self.add_seconds(1)
+
+    def subtract_seconds(self, value: int) -> Self:
+        return self - timedelta(seconds=value)
+
+    def subtract_second(self) -> Self:
+        return self.subtract_seconds(1)
+
+    def set_microsecond(self, value: int) -> Self:
+        return self.replace(microsecond=value)
+
+    set_microseconds = set_microsecond
+
+    def add_microseconds(self, value: int) -> Self:
+        return self + timedelta(microseconds=value)
+
+    def add_microsecond(self) -> Self:
+        return self.add_microseconds(1)
+
+    def subtract_microseconds(self, value: int) -> Self:
+        return self - timedelta(microseconds=value)
+
+    def subtract_microsecond(self) -> Self:
+        return self.subtract_microseconds(1)
+
+    def start_of(self, part: DatePart | TimePart) -> Self:
+        if isinstance(part, DatePart):
+            if part in [DatePart.DAY, DatePart.DAYS]:
+                return self.replace(hour=0, minute=0, second=0, microsecond=0)
+            return super().start_of(part)
+        elif part in [TimePart.HOUR, TimePart.HOURS]:
+            return self.replace(minute=0, second=0, microsecond=0)
+        elif part in [TimePart.MINUTE, TimePart.MINUTES]:
+            return self.replace(second=0, microsecond=0)
+        elif part in [TimePart.SECOND, TimePart.SECONDS]:
+            return self.replace(microsecond=0)
+        elif part in [TimePart.MICROSECOND, TimePart.MICROSECONDS]:
+            return self
+        else:
+            raise KeyError(f'Unsupported start_of part {part}')
+
+    def end_of(self, part: DatePart | TimePart) -> Self:
+        if isinstance(part, DatePart):
+            if part in [DatePart.DAY, DatePart.DAYS]:
+                return self.replace(hour=23, minute=59, second=59, microsecond=999)
+            return super().end_of(part)
+        elif part in [TimePart.HOUR, TimePart.HOURS]:
+            return self.replace(minute=59, second=59, microsecond=999)
+        elif part in [TimePart.MINUTE, TimePart.MINUTES]:
+            return self.replace(second=59, microsecond=999)
+        elif part in [TimePart.SECOND, TimePart.SECONDS]:
+            return self.replace(microsecond=999)
+        elif part in [TimePart.MICROSECOND, TimePart.MICROSECONDS]:
+            return self
+        else:
+            raise KeyError(f'Unsupported end_of part {part}')
+
+
+def _determine_key_and_value(arg1: CommonArg, arg2: CommonArg) -> tuple[DatePart | TimePart, int]:
+    arg1 = _int_or_date_time_part(arg1)
+    arg2 = _int_or_date_time_part(arg2)
+    key = value = None
+    if isinstance(arg1, int):
+        value = arg1
+    elif isinstance(arg1, (DatePart, TimePart)):
+        key = arg1
+
+    if isinstance(arg2, int):
+        value = arg2
+    elif isinstance(arg2, (DatePart, TimePart)):
+        key = arg2
+
+    if key is None or value is None:
+        raise ValueError('Key and/or value cannot be None')
+    return key, value
+
+
+def _int_or_date_time_part(arg: CommonArg) -> int | DatePart | TimePart:
+    if isinstance(arg, str):
+        return DatePart.get_item(arg) or TimePart.get_item(arg)
+    return arg
