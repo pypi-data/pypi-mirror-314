@@ -1,0 +1,136 @@
+Metadata-Version: 2.1
+Name: esma
+Version: 0.0.501
+Summary: Quantum Espresso automation tool
+Author-email: Susy Exists <susy@selectron.me>
+Project-URL: Homepage, https://github.com/susyexstsi/espresso-machine
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: annotated-types==0.6.0
+Requires-Dist: ase==3.22.1
+Requires-Dist: asttokens==2.4.1
+Requires-Dist: blinker==1.7.0
+Requires-Dist: certifi==2024.2.2
+Requires-Dist: charset-normalizer==3.3.2
+Requires-Dist: click==8.1.7
+Requires-Dist: comm==0.2.2
+Requires-Dist: contourpy==1.2.0
+Requires-Dist: cycler==0.12.1
+Requires-Dist: debugpy==1.8.1
+Requires-Dist: decorator==5.1.1
+Requires-Dist: defusedxml==0.7.1
+Requires-Dist: exceptiongroup==1.2.0
+Requires-Dist: executing==2.0.1
+Requires-Dist: Flask==3.0.2
+Requires-Dist: fonttools==4.50.0
+Requires-Dist: future==1.0.0
+Requires-Dist: idna==3.6
+Requires-Dist: ipykernel==6.29.3
+Requires-Dist: ipython==8.22.2
+Requires-Dist: itsdangerous==2.1.2
+Requires-Dist: jedi==0.19.1
+Requires-Dist: Jinja2==3.1.3
+Requires-Dist: joblib==1.3.2
+Requires-Dist: jupyter_client==8.6.1
+Requires-Dist: jupyter_core==5.7.2
+Requires-Dist: kiwisolver==1.4.5
+Requires-Dist: latexcodec==3.0.0
+Requires-Dist: MarkupSafe==2.1.5
+Requires-Dist: matplotlib==3.8.3
+Requires-Dist: matplotlib-inline==0.1.6
+Requires-Dist: monty==2024.2.26
+Requires-Dist: mpmath==1.3.0
+Requires-Dist: nest-asyncio==1.6.0
+Requires-Dist: networkx==3.2.1
+Requires-Dist: numpy==1.26.4
+Requires-Dist: packaging==24.0
+Requires-Dist: palettable==3.3.3
+Requires-Dist: pandas==2.2.1
+Requires-Dist: parso==0.8.3
+Requires-Dist: pexpect==4.9.0
+Requires-Dist: pillow==10.2.0
+Requires-Dist: Pint==0.23
+Requires-Dist: platformdirs==4.2.0
+Requires-Dist: plotly==5.20.0
+Requires-Dist: prompt-toolkit==3.0.43
+Requires-Dist: psutil==5.9.8
+Requires-Dist: ptyprocess==0.7.0
+Requires-Dist: pure-eval==0.2.2
+Requires-Dist: pybtex==0.24.0
+Requires-Dist: pydantic==2.6.4
+Requires-Dist: pydantic_core==2.16.3
+Requires-Dist: Pygments==2.17.2
+Requires-Dist: pymatgen==2024.3.1
+Requires-Dist: pyparsing==3.1.2
+Requires-Dist: python-dateutil==2.9.0.post0
+Requires-Dist: pytz==2024.1
+Requires-Dist: PyYAML==6.0.1
+Requires-Dist: pyzmq==25.1.2
+Requires-Dist: qcelemental==0.27.1
+Requires-Dist: qe-tools==2.2.0
+Requires-Dist: requests==2.31.0
+Requires-Dist: ruamel.yaml==0.18.6
+Requires-Dist: ruamel.yaml.clib==0.2.8
+Requires-Dist: scipy==1.12.0
+Requires-Dist: seekpath==2.1.0
+Requires-Dist: six==1.16.0
+Requires-Dist: spglib==2.3.1
+Requires-Dist: stack-data==0.6.3
+Requires-Dist: sympy==1.12
+Requires-Dist: tabulate==0.9.0
+Requires-Dist: tenacity==8.2.3
+Requires-Dist: tools-barebone==1.3.0
+Requires-Dist: tornado==6.4
+Requires-Dist: tqdm==4.66.2
+Requires-Dist: traitlets==5.14.2
+Requires-Dist: typing_extensions==4.10.0
+Requires-Dist: tzdata==2024.1
+Requires-Dist: uncertainties==3.1.7
+Requires-Dist: untangle==1.2.1
+Requires-Dist: urllib3==2.2.1
+Requires-Dist: wcwidth==0.2.13
+Requires-Dist: Werkzeug==3.0.1
+
+# Espresso Machine
+Automation library for Quantum Espresso via python
+
+Start discovering by checking out the Tutorials section for different calculations
+It is suggested to use a virtual environment to avaoid any compatibility issues.
+## Automated Calculation
+Any kind of choosen calculation type will be initialized after automatically generating the input files
+## Parameter Adjustment
+DFT parameters can be adjusted using the functional approach to keep the bugs away
+## Utility Tools
+Various kind of utility tools added to make the workflow smooth
+
+### How to use
+#### 1. Prepare the python environment for avoiding compatibility issues
+  > python -m venv .venv
+
+  > source .venv/bin/activate 
+
+  > pip install esma
+#### 2. Create work script
+- Initialize model and define paths
+  > model = esma.project(project_id="Si") #Define project
+  > model.set_cores(4) #Define number of processing cores
+  > model.get_structure(format='poscar',path='./Structures/Si.poscar') 
+- Pseudopotential names should be as same as the the. For example for Si atom it should be named as Si.UPF.
+  > model.set_pseudo(path="./Pseudopotentials") 
+- Adjust system specific parameters
+  > model.ecutwfc(80) #Set wavefunction cutoff
+  > model.k_points([4,4,4]) #Set number of k points
+- Start calculations 
+  > model.calculate('vc-relax')
+  > model.calculate('scf')
+- Define band path and calculate band structure 
+  > path = ['L','GAMMA','X','K','GAMMA']
+  > num_points = 100 
+  > model.band_points(path,num_points) 
+  > model.calculate('bands') 
+- Plot band structure
+  > model.plot('electron',ylim=[-13,12]) #plot electron bands
