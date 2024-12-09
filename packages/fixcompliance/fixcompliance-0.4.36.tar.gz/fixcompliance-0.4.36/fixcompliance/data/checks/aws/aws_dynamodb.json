@@ -1,0 +1,59 @@
+{
+    "provider": "aws",
+    "service": "dynamodb",
+    "checks": [
+        {
+            "name": "table_kms_encryption_enabled",
+            "title": "Ensure DynamoDB Table is Configured with KMS CMK Encryption",
+            "result_kinds": [
+                "aws_dynamodb_table"
+            ],
+            "categories": [
+                "security",
+                "compliance"
+            ],
+            "risk": "Without encryption at rest using KMS CMK, your sensitive user data stored in DynamoDB is at risk. This failure to protect data complexity and operational burden can result in breaches or loss of confidential data.",
+            "severity": "medium",
+            "detect": {
+                "fix": "is(aws_dynamodb_table) and dynamodb_sse_description.sse_type!=KMS"
+            },
+            "remediation": {
+                "text": "To fix this issue, create a new table specifying a KMS CMK encryption key, or, for an existing table, update the configuration to include a KMS CMK encryption key using the AWS Management Console.",
+                "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/encryption.tutorial.html",
+                "complexity": "medium"
+            },
+            "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EncryptionAtRest.html",
+            "localizations": {
+                "de": {
+                    "title": "Stellen Sie sicher, dass die DynamoDB-Tabelle mit der KMS CMK-Verschlüsselung konfiguriert ist",
+                    "risk": "Ohne die Verschlüsselung von Daten mit KMS CMK sind Ihre sensiblen Benutzerdaten, die in DynamoDB gespeichert sind, gefährdet. Diese mangelnde Schutzkomplexität und Betriebslast kann zu Sicherheitsverletzungen oder Verlust vertraulicher Daten führen.",
+                    "remediation": "Um dieses Problem zu beheben, erstellen Sie eine neue Tabelle und geben Sie einen KMS CMK-Verschlüsselungsschlüssel an. Für eine bestehende Tabelle aktualisieren Sie die Konfiguration, um einen KMS CMK-Verschlüsselungsschlüssel mit der AWS Management Console einzuschließen."
+                }
+            }
+        },
+        {
+            "name": "continuous_backup_enabled",
+            "title": "Ensure AWS DynamoDB Instances Have Continuous Backup Enabled",
+            "result_kinds": [ "aws_dynamodb_table" ],
+            "categories": [ "security", "compliance" ],
+            "risk": "Not having continuous backups enabled for AWS DynamoDB instances increases the risk of data loss in the event of operational failures or other disruptions. Continuous backups are essential for maintaining data durability and availability, ensuring that data is consistently backed up and can be restored to a recent state, independent of point-in-time recovery capabilities.",
+            "severity": "critical",
+            "detect": {
+                "fix": "is(aws_dynamodb_table) and dynamodb_continuous_backup.status!=ENABLED"
+            },
+            "remediation": {
+                "text": "To mitigate the risk of data loss, enable continuous backups for all DynamoDB tables. This feature can be managed through the AWS Management Console or programmatically via the AWS CLI. ",
+                "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/BackupRestore.html",
+                "complexity": "low"
+            },
+            "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/BackupRestore.html",
+            "localizations": {
+                "de": {
+                    "title": "Sicherstellen, dass bei AWS DynamoDB-Instanzen kontinuierliche Backups aktiviert sind",
+                    "risk": "Das Fehlen kontinuierlicher Backups bei AWS DynamoDB-Instanzen erhöht das Risiko eines Datenverlusts bei Betriebsstörungen oder anderen Unterbrechungen. Kontinuierliche Backups sind wesentlich für die Aufrechterhaltung der Datendauerhaftigkeit und -verfügbarkeit. Sie gewährleisten, dass Daten regelmäßig gesichert werden und auf einen aktuellen Zustand wiederhergestellt werden können, unabhängig von der Verfügbarkeit der Wiederherstellung zu einem bestimmten Zeitpunkt.",
+                    "remediation": "Um das Risiko eines Datenverlusts zu minimieren, aktivieren Sie kontinuierliche Backups für alle DynamoDB-Tabellen. Diese Funktion kann über die AWS Management Console oder programmatisch über die AWS CLI verwaltet werden."
+                }
+            }
+        }
+    ]
+}
