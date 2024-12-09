@@ -1,0 +1,63 @@
+[project]
+name = "configbuddy"
+version = "0.1.0"
+description = "Configuration file management tool"
+authors = [
+    { name = "Harim Kang", email = "harimkang4422@gmail.com" }
+]
+dependencies = [
+    "pyyaml>=6.0.1",
+    "jsonschema>=4.20.0",
+    "rich>=13.7.0",
+    "rich-argparse>=1.4.0",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.scripts]
+configbuddy = "configbuddy.cli:main"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.3.1",
+    "pytest-cov>=4.1.0",
+]
+docs = [
+    "sphinx>=8.1.3",
+    "sphinx-rtd-theme>=3.0.2",
+    "sphinx-autodoc-typehints>=2.5.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
