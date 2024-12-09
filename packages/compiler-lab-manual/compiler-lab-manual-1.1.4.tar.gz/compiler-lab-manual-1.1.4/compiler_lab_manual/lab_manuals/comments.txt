@@ -1,0 +1,29 @@
+lex
+
+%{
+#include<stdio.h>
+%}
+
+%option noyywrap
+
+%%
+
+"//".*                {printf("Comment: %s\n", yytext);}
+
+"/"([^]|[\r\n]|""[^/])"*/" {printf("Comment: %s\n", yytext);}
+
+
+int|float|char|double|if|else|for|while|return {printf("Keyword: %s\n", yytext);}
+
+
+[+\-*/=%]              {printf("Operator: %s\n", yytext);}
+
+
+[ \t\n]+               {/* Ignore whitespace */}
+.                      {/* Ignore everything else */}
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
