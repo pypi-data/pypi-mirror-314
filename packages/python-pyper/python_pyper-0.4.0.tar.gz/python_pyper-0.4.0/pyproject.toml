@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[project]
+name = "python-pyper"
+dynamic = ["version"]
+description = "Concurrent Python made simple"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "Richard Zhu", email = "richard.zhu2@gmail.com" },
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Framework :: AsyncIO",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+dependencies = [
+    # Typing support dependency only for Python versions < 3.10
+    "typing_extensions; python_version<'3.10'"
+]
+
+[project.urls]
+Documentation = "https://pyper-dev.github.io/pyper/"
+Repository = "https://github.com/pyper-dev/pyper"
+Issues = "https://github.com/pyper-dev/pyper/issues"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
