@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>juham.automation.rpowerplan &#8212; juham  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/juham.css?v=7a3aeb84" />
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          juham</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../juham/index.html">Project Overview</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for juham.automation.rpowerplan</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">override</span>
+
+<span class="kn">from</span> <span class="nn">juham.base</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">MqttMsg</span>
+<span class="kn">from</span> <span class="nn">juham.base.time</span> <span class="kn">import</span> <span class="n">quantize</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">timestamp_hour</span><span class="p">,</span> <span class="n">timestampstr</span>
+
+<span class="c1"># TODO: rewrite and implement heat sensors to publish boiler temperatures</span>
+<span class="c1"># in device independent format and more</span>
+
+
+<div class="viewcode-block" id="RPowerPlan">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan">[docs]</a>
+<span class="k">class</span> <span class="nc">RPowerPlan</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Automation class for optimized control of home energy consumers e.g hot</span>
+<span class="sd">    water boilers. Reads spot prices, boiler water temperatures and controls</span>
+<span class="sd">    heating radiators.</span>
+
+<span class="sd">    .. todo:: rewrite to meet the architecture and design patterns.</span>
+<span class="sd">    .. todo:: introduce general algorithm for managing any number of any consumers.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># hourly energy balance energy for time based settlement</span>
+    <span class="n">uoi_limit</span> <span class="o">=</span> <span class="mf">0.75</span>
+    <span class="n">maximum_boiler_temperature</span> <span class="o">=</span> <span class="mi">70</span>
+    <span class="n">minimum_boiler_temperature</span> <span class="o">=</span> <span class="mi">43</span>
+    <span class="n">energy_balancing_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3600</span>
+    <span class="n">radiator_power</span> <span class="o">=</span> <span class="mi">3000</span>  <span class="c1"># 3 kW</span>
+    <span class="n">operation_threshold</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span>
+    <span class="n">spot_limit</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># euros, use electricity if below this price</span>
+    <span class="n">heating_hours_per_day</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># use the four cheapest hours per day</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rpowerplan&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pre_boiler_temperature</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_heating_plan</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranked_spot_prices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranked_solarpower</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay_started_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_power</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_power</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_rc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_mode</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_spot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;spot&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_forecast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;forecast&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;temperature/102&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_powerplan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;powerplan&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_power</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_powerconsumption</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;powerconsumption&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_net_energy_balance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_topic_name</span><span class="p">(</span><span class="s2">&quot;net_energy_balance&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RPowerPlan.on_connect">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.on_connect">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_spot</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_forecast</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_temperature</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_in_powerconsumption</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_in_net_energy_balance</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.sort_by_rank">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.sort_by_rank">[docs]</a>
+    <span class="k">def</span> <span class="nf">sort_by_rank</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">hours</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">ts_utc_now</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sort the given electricity prices by their rank value. Given a list</span>
+<span class="sd">        of electricity prices, return a sorted list from the cheapest to the</span>
+<span class="sd">        most expensive hours. Entries that represent electricity prices in the</span>
+<span class="sd">        past are excluded.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hours (list): list of hourly electricity prices</span>
+<span class="sd">            ts_utc_now (float): current time</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: sorted list of electricity prices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hours</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;Rank&quot;</span><span class="p">])</span>
+        <span class="n">ranked_hours</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">sh</span><span class="p">:</span>
+            <span class="n">utc_ts</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">utc_ts</span> <span class="o">&gt;</span> <span class="n">ts_utc_now</span><span class="p">:</span>
+                <span class="n">ranked_hours</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ranked_hours</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.sort_by_power">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.sort_by_power">[docs]</a>
+    <span class="k">def</span> <span class="nf">sort_by_power</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">solarpower</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">ts_utc_now</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sort forecast of solarpower to decreasing order.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            solarpower (list): list of entries describing hourly solar energy forecast</span>
+<span class="sd">            ts_utc_now (float): curren time, for exluding entries that are in the past</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list from the highest solarenergy to lowest.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ts_utc_quantized</span> <span class="o">=</span> <span class="n">quantize</span><span class="p">(</span><span class="mi">3600</span><span class="p">,</span> <span class="n">ts_utc_now</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Sorting </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solarpower</span><span class="p">)</span><span class="si">}</span><span class="s2"> days of forecast starting at </span><span class="si">{</span><span class="n">timestampstr</span><span class="p">(</span><span class="n">ts_utc_quantized</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># if all items have solarenergy key then</span>
+        <span class="c1"># sh = sorted(solarpower, key=lambda x: x[&quot;solarenergy&quot;], reverse=True)</span>
+        <span class="c1"># else skip items that don&#39;t have solarenergy key</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">solarpower</span> <span class="k">if</span> <span class="s2">&quot;solarenergy&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">],</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;solarenergy&quot;</span><span class="p">],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sorted </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span><span class="si">}</span><span class="s2"> days of forecast&quot;</span><span class="p">)</span>
+        <span class="n">ranked_hours</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">sh</span><span class="p">:</span>
+            <span class="n">utc_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">utc_ts</span> <span class="o">&gt;=</span> <span class="n">ts_utc_quantized</span><span class="p">:</span>
+                <span class="n">ranked_hours</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forecast sorted for the next </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ranked_hours</span><span class="p">))</span><span class="si">}</span><span class="s2"> days&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ranked_hours</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.on_message">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.on_message">[docs]</a>
+    <span class="nd">@override</span>
+    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">userdata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">MqttMsg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">ts_utc_now</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_spot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ranked_spot_prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_by_rank</span><span class="p">(</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">()),</span> <span class="n">ts_utc_now</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Spot prices received and ranked for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranked_spot_prices</span><span class="p">)</span><span class="si">}</span><span class="s2"> hours&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># reset power plan, it depends on spot prices</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_forecast</span><span class="p">:</span>
+            <span class="n">forecast</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+            <span class="c1"># reject messages that don&#39;t have  solarenergy forecast</span>
+            <span class="n">found_solarenergy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">forecast</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;solarenergy&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reject forecast </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">, no solarenergy&quot;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">elif</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;solarenergy&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">found_solarenergy</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">found_solarenergy</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ranked_solarpower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_by_power</span><span class="p">(</span><span class="n">forecast</span><span class="p">,</span> <span class="n">ts_utc_now</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Solar energy forecast received and ranked for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranked_solarpower</span><span class="p">)</span><span class="si">}</span><span class="s2"> hours&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># reset power plan, it depends on forecast</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_temperature</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Boiler temperature reading </span><span class="si">{</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span><span class="si">}</span><span class="s2">C received&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_net_energy_balance</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_power</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Net energy </span><span class="si">{</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance</span><span class="si">}</span><span class="s2">J, power </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">net_energy_power</span><span class="si">}</span><span class="s2">W&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">msg</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_in_powerconsumption</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_power</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;real_total&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current power </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_power</span><span class="o">/</span><span class="mf">1000.0</span><span class="si">}</span><span class="s2"> kW&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_message</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_powerplan</span><span class="p">(</span><span class="n">ts_utc_now</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.on_powerplan">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.on_powerplan">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_powerplan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts_utc_now</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply power plan.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts_utc_now (float): utc time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranked_spot_prices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Waiting  spot prices...&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_power_plan</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Power plan of length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">)</span><span class="si">}</span><span class="s2"> created&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to create a power plan&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Suspiciously short </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">)</span><span class="si">}</span><span class="s2">  power plan, wait more data ..&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranked_solarpower</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranked_solarpower</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No forecast, optimization compromised..&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_heating_plan</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Heating plan of length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span><span class="p">)</span><span class="si">}</span><span class="s2"> created&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to create heating plan&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ditch remaining short heating plan ..&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">ts_utc_now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">relay_started_ts</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay_started_ts</span> <span class="o">=</span> <span class="n">ts_utc_now</span>
+        <span class="n">tsstr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">timestampstr</span><span class="p">(</span><span class="n">ts_utc_now</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Considering heating </span><span class="si">{</span><span class="n">tsstr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">relay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consider_heating</span><span class="p">(</span><span class="n">ts_utc_now</span><span class="p">)</span>
+        <span class="n">heat</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Unit&quot;</span><span class="p">:</span> <span class="s2">&quot;main_boiler&quot;</span><span class="p">,</span> <span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">ts_utc_now</span><span class="p">,</span> <span class="s2">&quot;State&quot;</span><span class="p">:</span> <span class="n">relay</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_power</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">heat</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Heating state published with relay state </span><span class="si">{</span><span class="n">relay</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.consider_net_energy_balance">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.consider_net_energy_balance">[docs]</a>
+    <span class="k">def</span> <span class="nf">consider_net_energy_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check when there is enough energy available for the radiators heat</span>
+<span class="sd">        the water the remaining time within the  balancing interval,</span>
+<span class="sd">        and switch the balancing mode on. If the remaining time in the</span>
+<span class="sd">        current balancing slot is less than the threshold then</span>
+<span class="sd">        optimize out.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (float): current time</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: true if production exceeds the consumption</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># elapsed and remaining time within the current balancing slot</span>
+        <span class="n">elapsed_ts</span> <span class="o">=</span> <span class="n">ts</span> <span class="o">-</span> <span class="n">quantize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+        <span class="n">remaining_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span> <span class="o">-</span> <span class="n">elapsed_ts</span>
+
+        <span class="c1"># don&#39;t bother to switch the relay on for small intervals, to avoid</span>
+        <span class="c1"># wearing contactors out</span>
+        <span class="k">if</span> <span class="n">remaining_ts</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation_threshold</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># check if the balance is sufficient for heating the next half of the energy balancing interval</span>
+        <span class="c1"># if yes then switch heating on for the next half an hour</span>
+        <span class="n">needed_energy</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">radiator_power</span> <span class="o">*</span> <span class="n">remaining_ts</span>
+        <span class="n">elapsed_interval</span> <span class="o">=</span> <span class="n">ts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_ts</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance</span> <span class="o">&gt;</span> <span class="n">needed_energy</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_rc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance_ts</span> <span class="o">=</span> <span class="n">ts</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_rc</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># heat</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Enough to supply the radiator, enable&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_mode</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># balancing mode indicator on</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># check if we have reach the end of the interval, or consumed all the energy</span>
+            <span class="c1"># of the current slot. If so switch the energy balancer mode off</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">elapsed_interval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span> <span class="o">/</span> <span class="mf">2.0</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balance</span> <span class="o">&lt;</span> <span class="mi">0</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_rc</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># heating off</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;All the balance used , or the end of the interval reached, disable&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_rc</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.consider_heating">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.consider_heating">[docs]</a>
+    <span class="k">def</span> <span class="nf">consider_heating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Consider whether the target boiler needs heating.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts (float): current UTC time</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: 1 if heating is needed, 0 if not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check if we have energy to consume, if so return 1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consider_net_energy_balance</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Net energy balance says YES, but disabled for now&quot;</span><span class="p">)</span>
+            <span class="c1"># return 1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_mode</span><span class="p">:</span>
+            <span class="n">balancing_slot_start_ts</span> <span class="o">=</span> <span class="n">quantize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+            <span class="n">elapsed_b</span> <span class="o">=</span> <span class="n">ts</span> <span class="o">-</span> <span class="n">balancing_slot_start_ts</span>
+            <span class="k">if</span> <span class="n">elapsed_b</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_balancing_interval</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_energy_balancing_mode</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Exit net energy balancing mode because elapsed </span><span class="si">{elapsed_b}</span><span class="s2">s is less than balancing interval </span><span class="si">{self.energy_balancing_interval}</span><span class="s2">s&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Waiting remaining energy balancing interval </span><span class="si">{</span><span class="n">elapsed_b</span><span class="si">}</span><span class="s2">s end&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;but net energy balance disabled, continue instead of return 0&quot;</span>
+                <span class="p">)</span>
+                <span class="c1"># return 0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimum_boiler_temperature</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Low temp, force heating because </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span><span class="si">}</span><span class="s2">C is less than </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">minimum_boiler_temperature</span><span class="si">}</span><span class="s2">C&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_boiler_temperature</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Temperature beyond maximum already </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">main_boiler_temperature</span><span class="si">}</span><span class="s2">C&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">hour</span> <span class="o">=</span> <span class="n">timestamp_hour</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_plan</span><span class="p">:</span>
+            <span class="n">ppts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">pp</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span>
+            <span class="n">h</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">timestamp_hour</span><span class="p">(</span><span class="n">ppts</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">h</span> <span class="o">==</span> <span class="n">hour</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Heatingplan entry found for hour </span><span class="si">{</span><span class="n">hour</span><span class="si">}</span><span class="s2"> with spot </span><span class="si">{</span><span class="n">pp</span><span class="p">[</span><span class="s1">&#39;Spot&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> e/kWh&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">pp</span><span class="p">[</span><span class="s2">&quot;State&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find heating plan for hour </span><span class="si">{</span><span class="n">hour</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+
+    <span class="c1"># compute figure of merit (FOM) for each hour</span>
+    <span class="c1"># the higher the solarenergy and the lower the spot the higher the FOM</span>
+
+    <span class="c1"># compute fom</span>
+<div class="viewcode-block" id="RPowerPlan.compute_fom">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.compute_fom">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_fom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solpower</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">spot</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute UOI - utilization optimization index.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            solpower (float): current solar power forecast</span>
+<span class="sd">            spot (float): spot price</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: utilization optimization index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># total solar power is 6kW and max pow consumption about twice as much</span>
+        <span class="c1"># so when sun is shining with full power nearly half of the energy comes for free</span>
+
+        <span class="k">if</span> <span class="n">spot</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span>  <span class="c1"># use</span>
+        <span class="k">elif</span> <span class="n">spot</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>  <span class="c1"># try not to use</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fom</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.101</span> <span class="o">-</span> <span class="n">spot</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.1</span>
+            <span class="k">return</span> <span class="n">fom</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.create_power_plan">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.create_power_plan">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_power_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create power plan.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of utilization entries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ts_now</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Creating new powerplan from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranked_spot_prices</span><span class="p">)</span><span class="si">}</span><span class="s2">  hourly spot prices&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># syncronize spot and solarenergy by timestamp</span>
+        <span class="n">spots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranked_spot_prices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ts_now</span><span class="p">:</span>
+                <span class="n">spots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;PriceWithTax&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;PriceWithTax&quot;</span><span class="p">]}</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Have spot prices for the next </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span><span class="si">}</span><span class="s2"> hours&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">powers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranked_solarpower</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ts_now</span><span class="p">:</span>
+                <span class="n">powers</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">],</span> <span class="s2">&quot;Solarenergy&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">&quot;solarenergy&quot;</span><span class="p">]})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipped past solar forecast hour </span><span class="si">{</span><span class="n">timestampstr</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Have solar forecast  for the next </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">powers</span><span class="p">)</span><span class="si">}</span><span class="s2"> hours&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">hplan</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">powers</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">spot</span><span class="p">,</span> <span class="n">solar</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spots</span><span class="p">,</span> <span class="n">powers</span><span class="p">):</span>
+                <span class="c1"># maximum FOM is if spot is negative</span>
+                <span class="n">solarenergy</span> <span class="o">=</span> <span class="n">solar</span><span class="p">[</span><span class="s2">&quot;Solarenergy&quot;</span><span class="p">]</span>
+                <span class="n">spotprice</span> <span class="o">=</span> <span class="n">spot</span><span class="p">[</span><span class="s2">&quot;PriceWithTax&quot;</span><span class="p">]</span>
+                <span class="n">fom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_fom</span><span class="p">(</span><span class="n">solarenergy</span><span class="p">,</span> <span class="n">spotprice</span><span class="p">)</span>
+                <span class="n">plan</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">spot</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">fom</span><span class="p">,</span> <span class="s2">&quot;Spot&quot;</span><span class="p">:</span> <span class="n">spotprice</span><span class="p">}</span>
+                <span class="n">hplan</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">spot</span> <span class="ow">in</span> <span class="n">spots</span><span class="p">:</span>
+                <span class="c1"># maximum FOM is if spot is negative</span>
+                <span class="n">solarenergy</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">spotprice</span> <span class="o">=</span> <span class="n">spot</span><span class="p">[</span><span class="s2">&quot;PriceWithTax&quot;</span><span class="p">]</span>
+                <span class="n">fom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_fom</span><span class="p">(</span><span class="n">solarenergy</span><span class="p">,</span> <span class="n">spotprice</span><span class="p">)</span>
+                <span class="n">plan</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">spot</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">fom</span><span class="p">,</span> <span class="s2">&quot;Spot&quot;</span><span class="p">:</span> <span class="n">spotprice</span><span class="p">}</span>
+                <span class="n">hplan</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+
+        <span class="n">shplan</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hplan</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;FOM&quot;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Powerplan of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">shplan</span><span class="p">)</span><span class="si">}</span><span class="s2"> hours created&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">shplan</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">shplan</span></div>
+
+
+<div class="viewcode-block" id="RPowerPlan.create_heating_plan">
+<a class="viewcode-back" href="../../../juham/automation/index.html#juham.automation.RPowerPlan.create_heating_plan">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_heating_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create heating plan.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: list of heating entries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating heating plan&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">heating_plan</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_plan</span><span class="p">:</span>
+            <span class="n">fom</span> <span class="o">=</span> <span class="n">hp</span><span class="p">[</span><span class="s2">&quot;FOM&quot;</span><span class="p">]</span>
+            <span class="n">spot</span> <span class="o">=</span> <span class="n">hp</span><span class="p">[</span><span class="s2">&quot;Spot&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">float</span><span class="p">(</span><span class="n">fom</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uoi_limit</span> <span class="ow">or</span> <span class="nb">float</span><span class="p">(</span><span class="n">spot</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">spot_limit</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_hours_per_day</span><span class="p">:</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">hp</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span>
+            <span class="n">heat</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;Unit&quot;</span><span class="p">:</span> <span class="s2">&quot;main_boiler&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Timestamp&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+                <span class="s2">&quot;State&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span>
+                <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">fom</span><span class="p">,</span>
+                <span class="s2">&quot;UOI&quot;</span><span class="p">:</span> <span class="n">fom</span><span class="p">,</span>
+                <span class="s2">&quot;Spot&quot;</span><span class="p">:</span> <span class="n">spot</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Heating entry </span><span class="si">{</span><span class="n">timestampstr</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="si">}</span><span class="s2"> with spot </span><span class="si">{</span><span class="n">spot</span><span class="si">}</span><span class="s2"> and state </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_powerplan</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">heat</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">heating_plan</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">heat</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">heating_plan</span></div>
+</div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, juha meskanen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
