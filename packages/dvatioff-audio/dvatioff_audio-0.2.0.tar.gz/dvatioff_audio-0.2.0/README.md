@@ -1,0 +1,1 @@
+A general-purpose function library for audio tool development. It includes wrappers for PySide6 and WAAPI interfaces, along with system-level utilities for tasks like JSON file handling and file management (copy, delete, etc.).
