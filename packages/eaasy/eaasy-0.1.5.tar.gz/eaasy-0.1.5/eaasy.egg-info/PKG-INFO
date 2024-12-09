@@ -1,0 +1,140 @@
+Metadata-Version: 2.1
+Name: eaasy
+Version: 0.1.5
+Summary: Build your e-commerce ea(a)sily
+Home-page: https://github.com/ciulene/eaasy
+Author: Giuliano Errico
+Author-email: errgioul2@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: alembic==1.14.0
+Requires-Dist: aniso8601==9.0.1
+Requires-Dist: attrs==24.2.0
+Requires-Dist: blinker==1.9.0
+Requires-Dist: click==8.1.7
+Requires-Dist: Flask==3.1.0
+Requires-Dist: Flask-Cors==5.0.0
+Requires-Dist: flask-restx==1.3.0
+Requires-Dist: greenlet==3.1.1
+Requires-Dist: gunicorn==23.0.0
+Requires-Dist: importlib_resources==6.4.5
+Requires-Dist: itsdangerous==2.2.0
+Requires-Dist: Jinja2==3.1.4
+Requires-Dist: jsonschema==4.23.0
+Requires-Dist: jsonschema-specifications==2024.10.1
+Requires-Dist: Mako==1.3.8
+Requires-Dist: MarkupSafe==3.0.2
+Requires-Dist: packaging==24.2
+Requires-Dist: psycopg2-binary==2.9.10
+Requires-Dist: pytz==2024.2
+Requires-Dist: referencing==0.35.1
+Requires-Dist: rpds-py==0.22.3
+Requires-Dist: setuptools==75.6.0
+Requires-Dist: SQLAlchemy==2.0.36
+Requires-Dist: typing_extensions==4.12.2
+Requires-Dist: Werkzeug==3.1.3
+Requires-Dist: wheel==0.45.1
+
+# Environemnt As A Software
+
+Build an environment with a database and a REST API.
+
+## Requirements
+
+- Python 3.12
+- PostgreSQL 13.4
+- Redis 6.2.6 (optional but recommended)
+
+
+## Initial Setup
+
+Create a database in PostgreSQL:
+
+```sql
+create database database_name;
+```
+
+Create a virtual environment and install the dependencies:
+
+```sh
+python -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Set the environment variables.
+```
+POSTGRES_URI=<SQL_DATABASE_URI>
+
+# macOS only
+OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+```
+
+Initialize alembic:
+
+
+```python
+# alembic_init.py
+from eaasy.extensions.migration import init
+from argparse import ArgumentParser, Namespace as ArgumentNamespace
+
+def get_arguments() -> ArgumentNamespace:
+    parser = ArgumentParser(description='Alembic migration helper')
+    parser.add_argument('sql_url', metavar='sql_url', type=str, help='SQLAlchemy URL')
+    parser.add_argument('--path', '-p', metavar='path', type=str, help='Alembic path', default='src/alembic')
+    parser.add_argument('--tables-folder', '-t', metavar='tables_folder', type=str, help='Tables folder', default='src/tables')
+
+    args = parser.parse_args()
+
+    if not args.sql_url:
+        raise Exception('SQLAlchemy URL is required')
+
+    return args
+
+if __name__ == '__main__':
+    args = get_arguments()
+    init(args.sql_url, args.path, args.tables_folder)
+```
+
+Launch the script to build the alembic folder:
+
+```sh
+python alembic_init.py <SQL_DATABASE_URI> # --path src/alembic (optional)
+```
+
+Add a table like this:
+
+```python
+# src/tables/user.py
+from eaasy import PrimaryKey, Audit
+from sqlalchemy import Column, String
+
+class UserProperties:
+    firstName = Column(String, nullable=False)
+    lastName = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+
+
+class User(PrimaryKey, UserProperties, Audit):
+    __tablename__ = 'users'
+```
+
+And add it to the `src/tables/__init__.py` file:
+
+```python
+# src/tables/__init__.py
+from .user import User
+
+__all__ = ['User']
+```
+
+Run the migration:
+
+```sh
+alembic revision --autogenerate -m "Create users table"
+alembic upgrade head
+```
