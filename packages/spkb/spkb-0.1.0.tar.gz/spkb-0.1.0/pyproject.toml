@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "spkb"
+version = "0.1.0"
+description = "A SolidPython-based library for building custom keyboards with Python and OpenSCAD."
+authors = ["David H. Bronke <whitelynx@gmail.com>"]
+license = "BSD-3-Clause"
+readme = "README.md"
+homepage = "https://github.com/whitelynx/spkb"
+repository = "https://github.com/whitelynx/spkb"
+documentation = "https://spkb.readthedocs.io"
+keywords = ["keyboard", "OpenSCAD"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/whitelynx/spkb/issues"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+solidpython2 = "^2.1.0"
+typing-extensions = "^4.12.2"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.1"
+pyright = "^1.1.390"
+
+[tool.poetry.group.docs.dependencies]
+pdoc = "^15.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools.package-data]
+"pkgname" = ["py.typed"]
+
+[tool.pyright]
+include = ["spkb"]
+exclude = [
+	"**/node_modules",
+	"**/__pycache__",
+]
