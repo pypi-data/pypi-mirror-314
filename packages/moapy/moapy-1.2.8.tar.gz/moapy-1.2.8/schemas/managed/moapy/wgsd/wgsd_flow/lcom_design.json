@@ -1,0 +1,1962 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "moapy",
+    "description": "Schema for moapy",
+    "version": "1.2.5"
+  },
+  "servers": [
+    {
+      "url": "https://moa.midasit.com/backend/python-executor/"
+    }
+  ],
+  "paths": {
+    "/execute?functionId=moapy-wgsd-wgsd_flow-lcom_design": {
+      "post": {
+        "summary": "lcom design",
+        "description": "lcom design",
+        "operationId": "lcom design",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "uls": {
+                    "properties": {
+                      "lcoms": {
+                        "items": {
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "title": "Name",
+                              "description": "load combination name",
+                              "default": "lcom"
+                            },
+                            "f": {
+                              "properties": {
+                                "Fz": {
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "title": "Value",
+                                      "description": "Force"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "enum": [
+                                        "N",
+                                        "kN",
+                                        "MN",
+                                        "lbf",
+                                        "kip"
+                                      ],
+                                      "title": "enUnitForce"
+                                    }
+                                  },
+                                  "type": "object",
+                                  "title": "Fz",
+                                  "description": "Axial force",
+                                  "dataclassname": "moapy.data_pre.Force"
+                                },
+                                "Mx": {
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "title": "Value",
+                                      "description": "Moment"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "enum": [
+                                        "kN.m",
+                                        "kip.in",
+                                        "kip.ft",
+                                        "N.mm",
+                                        "N.m"
+                                      ],
+                                      "title": "enUnitMoment"
+                                    }
+                                  },
+                                  "type": "object",
+                                  "title": "Mx",
+                                  "description": "Moment about x-axis",
+                                  "dataclassname": "moapy.data_pre.Moment"
+                                },
+                                "My": {
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "title": "Value",
+                                      "description": "Moment"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "enum": [
+                                        "kN.m",
+                                        "kip.in",
+                                        "kip.ft",
+                                        "N.mm",
+                                        "N.m"
+                                      ],
+                                      "title": "enUnitMoment"
+                                    }
+                                  },
+                                  "type": "object",
+                                  "title": "My",
+                                  "description": "Moment about y-axis",
+                                  "dataclassname": "moapy.data_pre.Moment"
+                                },
+                                "Vx": {
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "title": "Value",
+                                      "description": "Force"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "enum": [
+                                        "N",
+                                        "kN",
+                                        "MN",
+                                        "lbf",
+                                        "kip"
+                                      ],
+                                      "title": "enUnitForce"
+                                    }
+                                  },
+                                  "type": "object",
+                                  "title": "Vx",
+                                  "description": "Shear about x-axis",
+                                  "dataclassname": "moapy.data_pre.Force"
+                                },
+                                "Vy": {
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "title": "Value",
+                                      "description": "Force"
+                                    },
+                                    "unit": {
+                                      "type": "string",
+                                      "enum": [
+                                        "N",
+                                        "kN",
+                                        "MN",
+                                        "lbf",
+                                        "kip"
+                                      ],
+                                      "title": "enUnitForce"
+                                    }
+                                  },
+                                  "type": "object",
+                                  "title": "Vy",
+                                  "description": "Shear about y-axis",
+                                  "dataclassname": "moapy.data_pre.Force"
+                                }
+                              },
+                              "type": "object",
+                              "title": "force",
+                              "description": "load combination force",
+                              "dataclassname": "moapy.data_pre.SectionForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Lcom Result",
+                          "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+                          "dataclassname": "moapy.data_pre.Lcom"
+                        },
+                        "type": "array",
+                        "title": "Lcoms",
+                        "description": "load combination result",
+                        "default": [
+                          {
+                            "name": "uls1",
+                            "f": {
+                              "Fz": {
+                                "unit": "kN",
+                                "value": 100.0
+                              },
+                              "Mx": {
+                                "unit": "kN.m",
+                                "value": 10.0
+                              },
+                              "My": {
+                                "unit": "kN.m",
+                                "value": 50.0
+                              },
+                              "Vx": {
+                                "unit": "kN",
+                                "value": 0.0
+                              },
+                              "Vy": {
+                                "unit": "kN",
+                                "value": 0.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "type": "object",
+                    "title": "Strength Result",
+                    "description": "Lcoms class\n\nArgs:\n    lcoms (list[Lcom]): load combination result",
+                    "dataclassname": "moapy.data_pre.Lcoms"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "uls"
+                ],
+                "title": "lcom design"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "uls": {
+                      "properties": {
+                        "lcoms": {
+                          "items": {
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "title": "Name",
+                                "description": "load combination name",
+                                "default": "lcom"
+                              },
+                              "f": {
+                                "properties": {
+                                  "Fz": {
+                                    "properties": {
+                                      "value": {
+                                        "type": "number",
+                                        "title": "Value",
+                                        "description": "Force"
+                                      },
+                                      "unit": {
+                                        "type": "string",
+                                        "enum": [
+                                          "N",
+                                          "kN",
+                                          "MN",
+                                          "lbf",
+                                          "kip"
+                                        ],
+                                        "title": "enUnitForce"
+                                      }
+                                    },
+                                    "type": "object",
+                                    "title": "Fz",
+                                    "description": "Axial force",
+                                    "dataclassname": "moapy.data_pre.Force"
+                                  },
+                                  "Mx": {
+                                    "properties": {
+                                      "value": {
+                                        "type": "number",
+                                        "title": "Value",
+                                        "description": "Moment"
+                                      },
+                                      "unit": {
+                                        "type": "string",
+                                        "enum": [
+                                          "kN.m",
+                                          "kip.in",
+                                          "kip.ft",
+                                          "N.mm",
+                                          "N.m"
+                                        ],
+                                        "title": "enUnitMoment"
+                                      }
+                                    },
+                                    "type": "object",
+                                    "title": "Mx",
+                                    "description": "Moment about x-axis",
+                                    "dataclassname": "moapy.data_pre.Moment"
+                                  },
+                                  "My": {
+                                    "properties": {
+                                      "value": {
+                                        "type": "number",
+                                        "title": "Value",
+                                        "description": "Moment"
+                                      },
+                                      "unit": {
+                                        "type": "string",
+                                        "enum": [
+                                          "kN.m",
+                                          "kip.in",
+                                          "kip.ft",
+                                          "N.mm",
+                                          "N.m"
+                                        ],
+                                        "title": "enUnitMoment"
+                                      }
+                                    },
+                                    "type": "object",
+                                    "title": "My",
+                                    "description": "Moment about y-axis",
+                                    "dataclassname": "moapy.data_pre.Moment"
+                                  },
+                                  "Vx": {
+                                    "properties": {
+                                      "value": {
+                                        "type": "number",
+                                        "title": "Value",
+                                        "description": "Force"
+                                      },
+                                      "unit": {
+                                        "type": "string",
+                                        "enum": [
+                                          "N",
+                                          "kN",
+                                          "MN",
+                                          "lbf",
+                                          "kip"
+                                        ],
+                                        "title": "enUnitForce"
+                                      }
+                                    },
+                                    "type": "object",
+                                    "title": "Vx",
+                                    "description": "Shear about x-axis",
+                                    "dataclassname": "moapy.data_pre.Force"
+                                  },
+                                  "Vy": {
+                                    "properties": {
+                                      "value": {
+                                        "type": "number",
+                                        "title": "Value",
+                                        "description": "Force"
+                                      },
+                                      "unit": {
+                                        "type": "string",
+                                        "enum": [
+                                          "N",
+                                          "kN",
+                                          "MN",
+                                          "lbf",
+                                          "kip"
+                                        ],
+                                        "title": "enUnitForce"
+                                      }
+                                    },
+                                    "type": "object",
+                                    "title": "Vy",
+                                    "description": "Shear about y-axis",
+                                    "dataclassname": "moapy.data_pre.Force"
+                                  }
+                                },
+                                "type": "object",
+                                "title": "force",
+                                "description": "load combination force",
+                                "dataclassname": "moapy.data_pre.SectionForce"
+                              }
+                            },
+                            "type": "object",
+                            "title": "Lcom Result",
+                            "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+                            "dataclassname": "moapy.data_pre.Lcom"
+                          },
+                          "type": "array",
+                          "title": "Lcoms",
+                          "description": "load combination result",
+                          "default": [
+                            {
+                              "name": "uls1",
+                              "f": {
+                                "Fz": {
+                                  "unit": "kN",
+                                  "value": 100.0
+                                },
+                                "Mx": {
+                                  "unit": "kN.m",
+                                  "value": 10.0
+                                },
+                                "My": {
+                                  "unit": "kN.m",
+                                  "value": 50.0
+                                },
+                                "Vx": {
+                                  "unit": "kN",
+                                  "value": 0.0
+                                },
+                                "Vy": {
+                                  "unit": "kN",
+                                  "value": 0.0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "type": "object",
+                      "title": "Strength Result",
+                      "description": "uls load combination",
+                      "dataclassname": "moapy.data_pre.Lcoms",
+                      "default": {
+                        "lcoms": [
+                          {
+                            "f": {
+                              "Fz": {
+                                "unit": "kN",
+                                "value": 100.0
+                              },
+                              "Mx": {
+                                "unit": "kN.m",
+                                "value": 10.0
+                              },
+                              "My": {
+                                "unit": "kN.m",
+                                "value": 50.0
+                              },
+                              "Vx": {
+                                "unit": "kN",
+                                "value": 0.0
+                              },
+                              "Vy": {
+                                "unit": "kN",
+                                "value": 0.0
+                              }
+                            },
+                            "name": "uls1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "title": "Load Combination",
+                  "description": "GSD load combination class\n\nArgs:\n    uls (Lcoms): uls load combination",
+                  "dataclassname": "moapy.data_pre.Lcb"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "type": "array",
+                            "title": "Location"
+                          },
+                          "msg": {
+                            "type": "string",
+                            "title": "Message"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "Error Type"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError"
+                      },
+                      "type": "array",
+                      "title": "Detail"
+                    }
+                  },
+                  "type": "object",
+                  "title": "HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Force": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Force"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "N",
+              "kN",
+              "MN",
+              "lbf",
+              "kip"
+            ],
+            "title": "enUnitForce"
+          }
+        },
+        "type": "object",
+        "title": "Force",
+        "description": "Force",
+        "dataclassname": "moapy.data_pre.Force"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "properties": {
+                "loc": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  },
+                  "type": "array",
+                  "title": "Location"
+                },
+                "msg": {
+                  "type": "string",
+                  "title": "Message"
+                },
+                "type": {
+                  "type": "string",
+                  "title": "Error Type"
+                }
+              },
+              "type": "object",
+              "required": [
+                "loc",
+                "msg",
+                "type"
+              ],
+              "title": "ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Lcb": {
+        "properties": {
+          "uls": {
+            "properties": {
+              "lcoms": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "title": "Name",
+                      "description": "load combination name",
+                      "default": "lcom"
+                    },
+                    "f": {
+                      "properties": {
+                        "Fz": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Force"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "N",
+                                "kN",
+                                "MN",
+                                "lbf",
+                                "kip"
+                              ],
+                              "title": "enUnitForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Fz",
+                          "description": "Axial force",
+                          "dataclassname": "moapy.data_pre.Force"
+                        },
+                        "Mx": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Moment"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "kN.m",
+                                "kip.in",
+                                "kip.ft",
+                                "N.mm",
+                                "N.m"
+                              ],
+                              "title": "enUnitMoment"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Mx",
+                          "description": "Moment about x-axis",
+                          "dataclassname": "moapy.data_pre.Moment"
+                        },
+                        "My": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Moment"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "kN.m",
+                                "kip.in",
+                                "kip.ft",
+                                "N.mm",
+                                "N.m"
+                              ],
+                              "title": "enUnitMoment"
+                            }
+                          },
+                          "type": "object",
+                          "title": "My",
+                          "description": "Moment about y-axis",
+                          "dataclassname": "moapy.data_pre.Moment"
+                        },
+                        "Vx": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Force"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "N",
+                                "kN",
+                                "MN",
+                                "lbf",
+                                "kip"
+                              ],
+                              "title": "enUnitForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Vx",
+                          "description": "Shear about x-axis",
+                          "dataclassname": "moapy.data_pre.Force"
+                        },
+                        "Vy": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Force"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "N",
+                                "kN",
+                                "MN",
+                                "lbf",
+                                "kip"
+                              ],
+                              "title": "enUnitForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Vy",
+                          "description": "Shear about y-axis",
+                          "dataclassname": "moapy.data_pre.Force"
+                        }
+                      },
+                      "type": "object",
+                      "title": "force",
+                      "description": "load combination force",
+                      "dataclassname": "moapy.data_pre.SectionForce"
+                    }
+                  },
+                  "type": "object",
+                  "title": "Lcom Result",
+                  "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+                  "dataclassname": "moapy.data_pre.Lcom"
+                },
+                "type": "array",
+                "title": "Lcoms",
+                "description": "load combination result",
+                "default": [
+                  {
+                    "name": "uls1",
+                    "f": {
+                      "Fz": {
+                        "unit": "kN",
+                        "value": 100.0
+                      },
+                      "Mx": {
+                        "unit": "kN.m",
+                        "value": 10.0
+                      },
+                      "My": {
+                        "unit": "kN.m",
+                        "value": 50.0
+                      },
+                      "Vx": {
+                        "unit": "kN",
+                        "value": 0.0
+                      },
+                      "Vy": {
+                        "unit": "kN",
+                        "value": 0.0
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "type": "object",
+            "title": "Strength Result",
+            "description": "uls load combination",
+            "dataclassname": "moapy.data_pre.Lcoms",
+            "default": {
+              "lcoms": [
+                {
+                  "f": {
+                    "Fz": {
+                      "unit": "kN",
+                      "value": 100.0
+                    },
+                    "Mx": {
+                      "unit": "kN.m",
+                      "value": 10.0
+                    },
+                    "My": {
+                      "unit": "kN.m",
+                      "value": 50.0
+                    },
+                    "Vx": {
+                      "unit": "kN",
+                      "value": 0.0
+                    },
+                    "Vy": {
+                      "unit": "kN",
+                      "value": 0.0
+                    }
+                  },
+                  "name": "uls1"
+                }
+              ]
+            }
+          }
+        },
+        "type": "object",
+        "title": "Load Combination",
+        "description": "GSD load combination class\n\nArgs:\n    uls (Lcoms): uls load combination",
+        "dataclassname": "moapy.data_pre.Lcb"
+      },
+      "Lcom-Input": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "load combination name",
+            "default": "lcom"
+          },
+          "f": {
+            "properties": {
+              "Fz": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Force"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "N",
+                      "kN",
+                      "MN",
+                      "lbf",
+                      "kip"
+                    ],
+                    "title": "enUnitForce"
+                  }
+                },
+                "type": "object",
+                "title": "Fz",
+                "description": "Axial force",
+                "dataclassname": "moapy.data_pre.Force"
+              },
+              "Mx": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Moment"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "kN.m",
+                      "kip.in",
+                      "kip.ft",
+                      "N.mm",
+                      "N.m"
+                    ],
+                    "title": "enUnitMoment"
+                  }
+                },
+                "type": "object",
+                "title": "Mx",
+                "description": "Moment about x-axis",
+                "dataclassname": "moapy.data_pre.Moment"
+              },
+              "My": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Moment"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "kN.m",
+                      "kip.in",
+                      "kip.ft",
+                      "N.mm",
+                      "N.m"
+                    ],
+                    "title": "enUnitMoment"
+                  }
+                },
+                "type": "object",
+                "title": "My",
+                "description": "Moment about y-axis",
+                "dataclassname": "moapy.data_pre.Moment"
+              },
+              "Vx": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Force"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "N",
+                      "kN",
+                      "MN",
+                      "lbf",
+                      "kip"
+                    ],
+                    "title": "enUnitForce"
+                  }
+                },
+                "type": "object",
+                "title": "Vx",
+                "description": "Shear about x-axis",
+                "dataclassname": "moapy.data_pre.Force"
+              },
+              "Vy": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Force"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "N",
+                      "kN",
+                      "MN",
+                      "lbf",
+                      "kip"
+                    ],
+                    "title": "enUnitForce"
+                  }
+                },
+                "type": "object",
+                "title": "Vy",
+                "description": "Shear about y-axis",
+                "dataclassname": "moapy.data_pre.Force"
+              }
+            },
+            "type": "object",
+            "title": "force",
+            "description": "load combination force",
+            "dataclassname": "moapy.data_pre.SectionForce"
+          }
+        },
+        "type": "object",
+        "title": "Lcom Result",
+        "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+        "dataclassname": "moapy.data_pre.Lcom"
+      },
+      "Lcom-Output": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "load combination name",
+            "default": "lcom"
+          },
+          "f": {
+            "properties": {
+              "Fz": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Force"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "N",
+                      "kN",
+                      "MN",
+                      "lbf",
+                      "kip"
+                    ],
+                    "title": "enUnitForce"
+                  }
+                },
+                "type": "object",
+                "title": "Fz",
+                "description": "Axial force",
+                "dataclassname": "moapy.data_pre.Force"
+              },
+              "Mx": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Moment"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "kN.m",
+                      "kip.in",
+                      "kip.ft",
+                      "N.mm",
+                      "N.m"
+                    ],
+                    "title": "enUnitMoment"
+                  }
+                },
+                "type": "object",
+                "title": "Mx",
+                "description": "Moment about x-axis",
+                "dataclassname": "moapy.data_pre.Moment"
+              },
+              "My": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Moment"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "kN.m",
+                      "kip.in",
+                      "kip.ft",
+                      "N.mm",
+                      "N.m"
+                    ],
+                    "title": "enUnitMoment"
+                  }
+                },
+                "type": "object",
+                "title": "My",
+                "description": "Moment about y-axis",
+                "dataclassname": "moapy.data_pre.Moment"
+              },
+              "Vx": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Force"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "N",
+                      "kN",
+                      "MN",
+                      "lbf",
+                      "kip"
+                    ],
+                    "title": "enUnitForce"
+                  }
+                },
+                "type": "object",
+                "title": "Vx",
+                "description": "Shear about x-axis",
+                "dataclassname": "moapy.data_pre.Force"
+              },
+              "Vy": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "title": "Value",
+                    "description": "Force"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "N",
+                      "kN",
+                      "MN",
+                      "lbf",
+                      "kip"
+                    ],
+                    "title": "enUnitForce"
+                  }
+                },
+                "type": "object",
+                "title": "Vy",
+                "description": "Shear about y-axis",
+                "dataclassname": "moapy.data_pre.Force"
+              }
+            },
+            "type": "object",
+            "title": "force",
+            "description": "load combination force",
+            "dataclassname": "moapy.data_pre.SectionForce"
+          }
+        },
+        "type": "object",
+        "title": "Lcom Result",
+        "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+        "dataclassname": "moapy.data_pre.Lcom"
+      },
+      "Lcoms-Input": {
+        "properties": {
+          "lcoms": {
+            "items": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "load combination name",
+                  "default": "lcom"
+                },
+                "f": {
+                  "properties": {
+                    "Fz": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Force"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "N",
+                            "kN",
+                            "MN",
+                            "lbf",
+                            "kip"
+                          ],
+                          "title": "enUnitForce"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Fz",
+                      "description": "Axial force",
+                      "dataclassname": "moapy.data_pre.Force"
+                    },
+                    "Mx": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Moment"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "kN.m",
+                            "kip.in",
+                            "kip.ft",
+                            "N.mm",
+                            "N.m"
+                          ],
+                          "title": "enUnitMoment"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Mx",
+                      "description": "Moment about x-axis",
+                      "dataclassname": "moapy.data_pre.Moment"
+                    },
+                    "My": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Moment"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "kN.m",
+                            "kip.in",
+                            "kip.ft",
+                            "N.mm",
+                            "N.m"
+                          ],
+                          "title": "enUnitMoment"
+                        }
+                      },
+                      "type": "object",
+                      "title": "My",
+                      "description": "Moment about y-axis",
+                      "dataclassname": "moapy.data_pre.Moment"
+                    },
+                    "Vx": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Force"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "N",
+                            "kN",
+                            "MN",
+                            "lbf",
+                            "kip"
+                          ],
+                          "title": "enUnitForce"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Vx",
+                      "description": "Shear about x-axis",
+                      "dataclassname": "moapy.data_pre.Force"
+                    },
+                    "Vy": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Force"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "N",
+                            "kN",
+                            "MN",
+                            "lbf",
+                            "kip"
+                          ],
+                          "title": "enUnitForce"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Vy",
+                      "description": "Shear about y-axis",
+                      "dataclassname": "moapy.data_pre.Force"
+                    }
+                  },
+                  "type": "object",
+                  "title": "force",
+                  "description": "load combination force",
+                  "dataclassname": "moapy.data_pre.SectionForce"
+                }
+              },
+              "type": "object",
+              "title": "Lcom Result",
+              "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+              "dataclassname": "moapy.data_pre.Lcom"
+            },
+            "type": "array",
+            "title": "Lcoms",
+            "description": "load combination result",
+            "default": [
+              {
+                "name": "uls1",
+                "f": {
+                  "Fz": {
+                    "unit": "kN",
+                    "value": 100.0
+                  },
+                  "Mx": {
+                    "unit": "kN.m",
+                    "value": 10.0
+                  },
+                  "My": {
+                    "unit": "kN.m",
+                    "value": 50.0
+                  },
+                  "Vx": {
+                    "unit": "kN",
+                    "value": 0.0
+                  },
+                  "Vy": {
+                    "unit": "kN",
+                    "value": 0.0
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "Strength Result",
+        "description": "Lcoms class\n\nArgs:\n    lcoms (list[Lcom]): load combination result",
+        "dataclassname": "moapy.data_pre.Lcoms"
+      },
+      "Lcoms-Output": {
+        "properties": {
+          "lcoms": {
+            "items": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "load combination name",
+                  "default": "lcom"
+                },
+                "f": {
+                  "properties": {
+                    "Fz": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Force"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "N",
+                            "kN",
+                            "MN",
+                            "lbf",
+                            "kip"
+                          ],
+                          "title": "enUnitForce"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Fz",
+                      "description": "Axial force",
+                      "dataclassname": "moapy.data_pre.Force"
+                    },
+                    "Mx": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Moment"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "kN.m",
+                            "kip.in",
+                            "kip.ft",
+                            "N.mm",
+                            "N.m"
+                          ],
+                          "title": "enUnitMoment"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Mx",
+                      "description": "Moment about x-axis",
+                      "dataclassname": "moapy.data_pre.Moment"
+                    },
+                    "My": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Moment"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "kN.m",
+                            "kip.in",
+                            "kip.ft",
+                            "N.mm",
+                            "N.m"
+                          ],
+                          "title": "enUnitMoment"
+                        }
+                      },
+                      "type": "object",
+                      "title": "My",
+                      "description": "Moment about y-axis",
+                      "dataclassname": "moapy.data_pre.Moment"
+                    },
+                    "Vx": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Force"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "N",
+                            "kN",
+                            "MN",
+                            "lbf",
+                            "kip"
+                          ],
+                          "title": "enUnitForce"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Vx",
+                      "description": "Shear about x-axis",
+                      "dataclassname": "moapy.data_pre.Force"
+                    },
+                    "Vy": {
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "title": "Value",
+                          "description": "Force"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "N",
+                            "kN",
+                            "MN",
+                            "lbf",
+                            "kip"
+                          ],
+                          "title": "enUnitForce"
+                        }
+                      },
+                      "type": "object",
+                      "title": "Vy",
+                      "description": "Shear about y-axis",
+                      "dataclassname": "moapy.data_pre.Force"
+                    }
+                  },
+                  "type": "object",
+                  "title": "force",
+                  "description": "load combination force",
+                  "dataclassname": "moapy.data_pre.SectionForce"
+                }
+              },
+              "type": "object",
+              "title": "Lcom Result",
+              "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+              "dataclassname": "moapy.data_pre.Lcom"
+            },
+            "type": "array",
+            "title": "Lcoms",
+            "description": "load combination result",
+            "default": [
+              {
+                "name": "uls1",
+                "f": {
+                  "Fz": {
+                    "unit": "kN",
+                    "value": 100.0
+                  },
+                  "Mx": {
+                    "unit": "kN.m",
+                    "value": 10.0
+                  },
+                  "My": {
+                    "unit": "kN.m",
+                    "value": 50.0
+                  },
+                  "Vx": {
+                    "unit": "kN",
+                    "value": 0.0
+                  },
+                  "Vy": {
+                    "unit": "kN",
+                    "value": 0.0
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "Strength Result",
+        "description": "Lcoms class\n\nArgs:\n    lcoms (list[Lcom]): load combination result",
+        "dataclassname": "moapy.data_pre.Lcoms"
+      },
+      "Moment": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Moment"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "kN.m",
+              "kip.in",
+              "kip.ft",
+              "N.mm",
+              "N.m"
+            ],
+            "title": "enUnitMoment"
+          }
+        },
+        "type": "object",
+        "title": "Moment",
+        "description": "Moment",
+        "dataclassname": "moapy.data_pre.Moment"
+      },
+      "SectionForce-Input": {
+        "properties": {
+          "Fz": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Force"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "N",
+                  "kN",
+                  "MN",
+                  "lbf",
+                  "kip"
+                ],
+                "title": "enUnitForce"
+              }
+            },
+            "type": "object",
+            "title": "Fz",
+            "description": "Axial force",
+            "dataclassname": "moapy.data_pre.Force"
+          },
+          "Mx": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Moment"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "kN.m",
+                  "kip.in",
+                  "kip.ft",
+                  "N.mm",
+                  "N.m"
+                ],
+                "title": "enUnitMoment"
+              }
+            },
+            "type": "object",
+            "title": "Mx",
+            "description": "Moment about x-axis",
+            "dataclassname": "moapy.data_pre.Moment"
+          },
+          "My": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Moment"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "kN.m",
+                  "kip.in",
+                  "kip.ft",
+                  "N.mm",
+                  "N.m"
+                ],
+                "title": "enUnitMoment"
+              }
+            },
+            "type": "object",
+            "title": "My",
+            "description": "Moment about y-axis",
+            "dataclassname": "moapy.data_pre.Moment"
+          },
+          "Vx": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Force"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "N",
+                  "kN",
+                  "MN",
+                  "lbf",
+                  "kip"
+                ],
+                "title": "enUnitForce"
+              }
+            },
+            "type": "object",
+            "title": "Vx",
+            "description": "Shear about x-axis",
+            "dataclassname": "moapy.data_pre.Force"
+          },
+          "Vy": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Force"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "N",
+                  "kN",
+                  "MN",
+                  "lbf",
+                  "kip"
+                ],
+                "title": "enUnitForce"
+              }
+            },
+            "type": "object",
+            "title": "Vy",
+            "description": "Shear about y-axis",
+            "dataclassname": "moapy.data_pre.Force"
+          }
+        },
+        "type": "object",
+        "title": "Member Force",
+        "description": "Force class\n\nArgs:\n    Fz (Length): Axial force\n    Mx (Length): Moment about x-axis\n    My (Length): Moment about y-axis\n    Vx (Length): Shear about x-axis\n    Vy (Length): Shear about y-axis",
+        "dataclassname": "moapy.data_pre.SectionForce"
+      },
+      "SectionForce-Output": {
+        "properties": {
+          "Fz": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Force"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "N",
+                  "kN",
+                  "MN",
+                  "lbf",
+                  "kip"
+                ],
+                "title": "enUnitForce"
+              }
+            },
+            "type": "object",
+            "title": "Fz",
+            "description": "Axial force",
+            "dataclassname": "moapy.data_pre.Force"
+          },
+          "Mx": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Moment"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "kN.m",
+                  "kip.in",
+                  "kip.ft",
+                  "N.mm",
+                  "N.m"
+                ],
+                "title": "enUnitMoment"
+              }
+            },
+            "type": "object",
+            "title": "Mx",
+            "description": "Moment about x-axis",
+            "dataclassname": "moapy.data_pre.Moment"
+          },
+          "My": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Moment"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "kN.m",
+                  "kip.in",
+                  "kip.ft",
+                  "N.mm",
+                  "N.m"
+                ],
+                "title": "enUnitMoment"
+              }
+            },
+            "type": "object",
+            "title": "My",
+            "description": "Moment about y-axis",
+            "dataclassname": "moapy.data_pre.Moment"
+          },
+          "Vx": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Force"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "N",
+                  "kN",
+                  "MN",
+                  "lbf",
+                  "kip"
+                ],
+                "title": "enUnitForce"
+              }
+            },
+            "type": "object",
+            "title": "Vx",
+            "description": "Shear about x-axis",
+            "dataclassname": "moapy.data_pre.Force"
+          },
+          "Vy": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Value",
+                "description": "Force"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "N",
+                  "kN",
+                  "MN",
+                  "lbf",
+                  "kip"
+                ],
+                "title": "enUnitForce"
+              }
+            },
+            "type": "object",
+            "title": "Vy",
+            "description": "Shear about y-axis",
+            "dataclassname": "moapy.data_pre.Force"
+          }
+        },
+        "type": "object",
+        "title": "Member Force",
+        "description": "Force class\n\nArgs:\n    Fz (Length): Axial force\n    Mx (Length): Moment about x-axis\n    My (Length): Moment about y-axis\n    Vx (Length): Shear about x-axis\n    Vy (Length): Shear about y-axis",
+        "dataclassname": "moapy.data_pre.SectionForce"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "enUnitForce": {
+        "type": "string",
+        "enum": [
+          "N",
+          "kN",
+          "MN",
+          "lbf",
+          "kip"
+        ],
+        "title": "enUnitForce"
+      },
+      "enUnitMoment": {
+        "type": "string",
+        "enum": [
+          "kN.m",
+          "kip.in",
+          "kip.ft",
+          "N.mm",
+          "N.m"
+        ],
+        "title": "enUnitMoment"
+      },
+      "lcom_design": {
+        "properties": {
+          "uls": {
+            "properties": {
+              "lcoms": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "title": "Name",
+                      "description": "load combination name",
+                      "default": "lcom"
+                    },
+                    "f": {
+                      "properties": {
+                        "Fz": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Force"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "N",
+                                "kN",
+                                "MN",
+                                "lbf",
+                                "kip"
+                              ],
+                              "title": "enUnitForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Fz",
+                          "description": "Axial force",
+                          "dataclassname": "moapy.data_pre.Force"
+                        },
+                        "Mx": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Moment"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "kN.m",
+                                "kip.in",
+                                "kip.ft",
+                                "N.mm",
+                                "N.m"
+                              ],
+                              "title": "enUnitMoment"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Mx",
+                          "description": "Moment about x-axis",
+                          "dataclassname": "moapy.data_pre.Moment"
+                        },
+                        "My": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Moment"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "kN.m",
+                                "kip.in",
+                                "kip.ft",
+                                "N.mm",
+                                "N.m"
+                              ],
+                              "title": "enUnitMoment"
+                            }
+                          },
+                          "type": "object",
+                          "title": "My",
+                          "description": "Moment about y-axis",
+                          "dataclassname": "moapy.data_pre.Moment"
+                        },
+                        "Vx": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Force"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "N",
+                                "kN",
+                                "MN",
+                                "lbf",
+                                "kip"
+                              ],
+                              "title": "enUnitForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Vx",
+                          "description": "Shear about x-axis",
+                          "dataclassname": "moapy.data_pre.Force"
+                        },
+                        "Vy": {
+                          "properties": {
+                            "value": {
+                              "type": "number",
+                              "title": "Value",
+                              "description": "Force"
+                            },
+                            "unit": {
+                              "type": "string",
+                              "enum": [
+                                "N",
+                                "kN",
+                                "MN",
+                                "lbf",
+                                "kip"
+                              ],
+                              "title": "enUnitForce"
+                            }
+                          },
+                          "type": "object",
+                          "title": "Vy",
+                          "description": "Shear about y-axis",
+                          "dataclassname": "moapy.data_pre.Force"
+                        }
+                      },
+                      "type": "object",
+                      "title": "force",
+                      "description": "load combination force",
+                      "dataclassname": "moapy.data_pre.SectionForce"
+                    }
+                  },
+                  "type": "object",
+                  "title": "Lcom Result",
+                  "description": "Lcom class\n\nArgs:\n    name (str): load combination name\n    f (Force): load combination force",
+                  "dataclassname": "moapy.data_pre.Lcom"
+                },
+                "type": "array",
+                "title": "Lcoms",
+                "description": "load combination result",
+                "default": [
+                  {
+                    "name": "uls1",
+                    "f": {
+                      "Fz": {
+                        "unit": "kN",
+                        "value": 100.0
+                      },
+                      "Mx": {
+                        "unit": "kN.m",
+                        "value": 10.0
+                      },
+                      "My": {
+                        "unit": "kN.m",
+                        "value": 50.0
+                      },
+                      "Vx": {
+                        "unit": "kN",
+                        "value": 0.0
+                      },
+                      "Vy": {
+                        "unit": "kN",
+                        "value": 0.0
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "type": "object",
+            "title": "Strength Result",
+            "description": "Lcoms class\n\nArgs:\n    lcoms (list[Lcom]): load combination result",
+            "dataclassname": "moapy.data_pre.Lcoms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uls"
+        ],
+        "title": "lcom design"
+      }
+    }
+  }
+}
