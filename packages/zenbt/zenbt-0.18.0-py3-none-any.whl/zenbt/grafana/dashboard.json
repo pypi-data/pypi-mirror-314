@@ -1,0 +1,176 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 2,
+    "links": [],
+    "panels": [
+        {
+            "datasource": {
+                "type": "grafana-clickhouse-datasource",
+                "uid": "PDEE91DDB90597936"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 18,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 3,
+            "options": {
+                "baidu": {
+                    "callback": "bmapReady",
+                    "key": ""
+                },
+                "editor": {
+                    "format": "auto"
+                },
+                "editorMode": "code",
+                "gaode": {
+                    "key": "",
+                    "plugin": "AMap.Scale,AMap.ToolBar"
+                },
+                "getOption": "const raw_data = context.panel.data.series[0].fields;\nconst position_data = context.panel.data.series[1].fields;\n\nlet date = []\nlet open;\nlet high;\nlet low;\nlet close;\nlet volume;\nlet indicators = {}\nlet rsi;\nlet atr;\n\n\nfor (let j = 0; j < raw_data.length; j++) {\n  if (raw_data[j].name === \"time\") {\n    raw_data[j].values.map((entry, index) => {\n      date.add(new Date(entry).toLocaleString(\"en-US\", {\n        year: \"numeric\",\n        month: \"2-digit\",\n        day: \"2-digit\",\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n        second: \"2-digit\",\n      }) + \" (\" + index + \")\")\n\n    })\n  } else if (raw_data[j].name === \"open\") {\n    open = raw_data[j].values;\n  } else if (raw_data[j].name === \"high\") {\n    high = raw_data[j].values;\n  } else if (raw_data[j].name === \"low\") {\n    low = raw_data[j].values;\n  } else if (raw_data[j].name === \"close\") {\n    close = raw_data[j].values;\n  } else if (raw_data[j].name === \"volume\") {\n    volume = raw_data[j].values;\n  } else if (raw_data[j].name === \"rsi\") {\n    rsi = raw_data[j].values;\n  } else if (raw_data[j].name === \"atr\") {\n    atr = raw_data[j].values;\n  } else {\n    indicators[raw_data[j].name] = raw_data[j].values;\n  }\n}\n\nlet ohlc = [];\nfor (let i = 0; i < date.length; i++) {\n  const openValue = open[i];\n  const closeValue = close[i];\n  const lowValue = low[i];\n  const highValue = high[i];\n\n  let itemStyle = {\n    color: \"transparent\",   // Default color for bullish (rising) candlesticks\n    color0: \"transparent\",  // Default color for bearish (falling) candlesticks\n    borderColor: \"gray\",    // Default border color for candlesticks\n    borderColor0: \"gray\"    // Default border color for candlesticks\n  };\n\n  if (openValue > closeValue) {\n    // If the open price is higher than the close price (bearish candlestick)\n    itemStyle = {\n      color: \"rgba(255, 0, 0, 0.5)\",      // Red for bearish\n      color0: \"rgba(255, 0, 0, 0.5)\",     // Red for bearish\n      borderColor: \"rgba(255, 0, 0, 0.5)\", // Red border for bearish\n      borderColor0: \"rgba(255, 0, 0, 0.5)\" // Red border for bearish\n    };\n  } else {\n    // If the open price is lower or equal to the close price (bullish candlestick)\n    itemStyle = {\n      color: \"rgba(0, 128, 128, 0.5)\",      // Teal for bullish\n      color0: \"rgba(0, 128, 128, 0.5)\",     // Teal for bullish\n      borderColor: \"rgba(0, 128, 128, 0.5)\", // Teal border for bullish\n      borderColor0: \"rgba(0, 128, 128, 0.5)\" // Teal border for bullish\n    };\n  }\n\n  ohlc.push({\n    value: [\n      closeValue,  // close\n      openValue,   // open\n      lowValue,    // low\n      highValue    // high\n    ],\n    itemStyle\n  });\n}\n\n\n\n\nreturn {\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: {\n      type: 'cross'\n    },\n    borderWidth: 1,\n    borderColor: '#ccc',\n    padding: 10,\n    textStyle: {\n      color: '#000'\n    },\n    // extraCssText: 'width: 170px'\n  },\n      axisPointer: {\n        link: [\n          {\n            xAxisIndex: 'all'\n          }\n        ],\n        label: {\n          backgroundColor: '#777'\n        }\n      },\n  grid: [\n      {\n        left: \"1%\",\n        right: \"5%\",\n        top: 20,\n        bottom: 240,\n        borderColor: \"#4c4c4c\",\n        borderWidth: 1,\n        show: true,\n      },\n      {\n        left: \"1%\",\n        right: \"5%\",\n        height: 80,\n        bottom: 150,\n        // height: 150,\n        // bottom: 60,\n        borderColor: \"#4c4c4c\",\n        borderWidth: 1,\n        show: true,\n      },\n      {\n        left: \"1%\",\n        right: \"5%\",\n        height: 80,\n        bottom: 60,\n        borderColor: \"#4c4c4c\",\n        borderWidth: 1,\n        show: true,\n      },\n  ],\n  xAxis:  [\n      {\n        type: \"category\",\n        boundaryGap: false,\n        data: date,\n        show: false,\n        axisLine: { onZero: false },\n        splitLine: { show: false },\n        min: \"dataMin\",\n        max: \"dataMax\",\n      },\n      {\n        type: \"category\",\n        show: false,\n        gridIndex: 1,\n        boundaryGap: false,\n        data: date,\n        axisLine: { onZero: false },\n        splitLine: { show: false },\n        min: \"dataMin\",\n        max: \"dataMax\",\n      },\n      {\n        type: \"category\",\n        gridIndex: 2,\n        boundaryGap: false,\n        show: false,\n        data: date,\n        axisLine: { onZero: false },\n        splitLine: { show: false },\n        min: \"dataMin\",\n        max: \"dataMax\",\n      },\n\n  ],\n  yAxis: [\n      {\n        position: \"right\",\n        scale: true,\n        axisLine: { lineStyle: { color: '#ffffff' } },\n        splitArea: { show: false },\n        splitLine: { show: false }\n      },\n      {\n        position: \"right\",\n        scale: true,\n        gridIndex: 1,\n        splitNumber: 1,\n        axisLine: { lineStyle: { color: '#ffffff' } },\n        splitArea: { show: false },\n        splitLine: { show: false }\n      },\n      {\n        position: \"right\",\n        scale: true,\n        gridIndex: 2,\n        splitNumber: 2,\n        axisLine: { lineStyle: { color: '#ffffff' } },\n        splitArea: { show: false },\n        splitLine: { show: false }\n      },\n  ],\n\n  dataZoom: [\n    {\n      type: \"inside\",\n      xAxisIndex: [0, 1, 2],\n      start: 50,\n      end: 100,\n    },\n    {\n      show: true,\n      xAxisIndex: [0, 1, 2],\n      type: \"slider\",\n      bottom: 10,\n      start: 10,\n      end: 100,\n    },\n  ],\n  series: [\n    {\n      name: 'OHLC',\n      type: 'candlestick',\n      data: ohlc,\n    },\n    {\n      name: 'RSI',\n      type: 'line',\n      data: rsi,\n      xAxisIndex: 1,\n      yAxisIndex: 1,\n    },\n    {\n      name: 'ATR',\n      type: 'line',\n      data: atr,\n      xAxisIndex: 2,\n      yAxisIndex: 2,\n    }\n  ]\n};\n",
+                "google": {
+                    "callback": "gmapReady",
+                    "key": ""
+                },
+                "map": "none",
+                "renderer": "canvas",
+                "themeEditor": {
+                    "config": "{}",
+                    "name": "default"
+                },
+                "visualEditor": {
+                    "code": "return {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
+                    "dataset": [],
+                    "series": []
+                }
+            },
+            "pluginVersion": "6.5.0",
+            "targets": [
+                {
+                    "builderOptions": {
+                        "aggregates": [],
+                        "columns": [
+                            {
+                                "alias": "*",
+                                "custom": false,
+                                "name": "*",
+                                "type": "String"
+                            }
+                        ],
+                        "database": "default",
+                        "filters": [
+                            {
+                                "condition": "AND",
+                                "filterType": "custom",
+                                "key": "time",
+                                "label": "time",
+                                "operator": "WITH IN DASHBOARD TIME RANGE",
+                                "type": "DateTime64(3)",
+                                "value": "TODAY"
+                            }
+                        ],
+                        "groupBy": [],
+                        "limit": 0,
+                        "meta": {},
+                        "mode": "list",
+                        "orderBy": [],
+                        "queryType": "table",
+                        "table": "ohlc"
+                    },
+                    "datasource": {
+                        "type": "grafana-clickhouse-datasource",
+                        "uid": "PDEE91DDB90597936"
+                    },
+                    "editorType": "builder",
+                    "format": 1,
+                    "pluginVersion": "4.5.0",
+                    "rawSql": "SELECT * FROM \"default\".\"ohlc\" WHERE ( time >= $__fromTime AND time <= $__toTime )",
+                    "refId": "A"
+                },
+                {
+                    "builderOptions": {
+                        "aggregates": [],
+                        "columns": [
+                            {
+                                "alias": "*",
+                                "custom": false,
+                                "name": "*",
+                                "type": "String"
+                            }
+                        ],
+                        "database": "default",
+                        "filters": [
+                            {
+                                "condition": "AND",
+                                "filterType": "custom",
+                                "key": "time",
+                                "label": "time",
+                                "operator": "WITH IN DASHBOARD TIME RANGE",
+                                "type": "DateTime64(3)",
+                                "value": "TODAY"
+                            }
+                        ],
+                        "groupBy": [],
+                        "limit": 0,
+                        "meta": {},
+                        "mode": "list",
+                        "orderBy": [],
+                        "queryType": "table",
+                        "table": "ohlc"
+                    },
+                    "datasource": {
+                        "type": "grafana-clickhouse-datasource",
+                        "uid": "PDEE91DDB90597936"
+                    },
+                    "editorType": "builder",
+                    "format": 1,
+                    "hide": false,
+                    "pluginVersion": "4.5.0",
+                    "rawSql": "SELECT * FROM \"default\".\"ohlc\" WHERE ( time >= $__fromTime AND time <= $__toTime )",
+                    "refId": "B"
+                }
+            ],
+            "title": "Candle Data",
+            "type": "volkovlabs-echarts-panel"
+        }
+    ],
+    "preload": false,
+    "schemaVersion": 40,
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "2023-08-21T18:33:00.000Z",
+        "to": "2023-08-21T20:12:00.000Z"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Backtest Dashboard",
+    "uid": "ee2jm2oj9o45cc",
+    "version": 62,
+    "weekStart": ""
+}
