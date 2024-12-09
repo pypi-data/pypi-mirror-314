@@ -1,0 +1,120 @@
+# sjcli package
+This package provdie various uitlity functions the details of commands are listed below
+
+## Install
+
+`pip install sjcli`
+
+## Usage
+
+```
+Usage: sjcli [OPTIONS] COMMAND [ARGS]...
+
+  The CLI utility
+
+  Author: Saurabh Jain <jpr.saurabh@gmail.com>
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  clarity  Clarity CLI commands
+  create   Create a new note.
+  search   Searches the specific pattern/string into the files/directory.
+  utils    Collections of utility functionsl like -> view_csv,view_json...
+```
+
+### utils
+The utils command provide two commands i.e. csv and json which can be used to view csv and json files on the terminal
+
+- utils csv {#utils-csv}
+- utils json
+
+    #### utils csv
+
+    ``` 
+    sjcli utils csv --help
+    Usage: sjcli utils csv [OPTIONS] FILE_NAME
+
+    Use FILE_NAME to specify path to CSV file to preview
+
+    Options:
+        -n, --numlines INTEGER RANGE    Number of lines to display. Omit to view the entire file  [x>=1]
+        --has-header  Specify this flag is CSV file has header
+        -f, --format [fancy_grid|fancy_outline|github|grid|html|jira|latex|latex_booktabs|latex_longtable|latex_raw|mediawiki|moinmoin|orgtbl|pipe|plain|presto|pretty|psql|rst|simple|textile|tsv|unsafehtml|youtrack] 
+    
+        The formatting style
+
+        --help                          Show this message and exit.
+    ```
+
+    **Example**
+    
+    - `sjcli utils csv 'CSV_FILE_PATH' --has-header -n 10`
+    - `sjcli utils csv 'CSV_FILE_PATH' --has-header -n 10 -f github`
+
+    #### utils json
+
+    ```
+    sjcli utils json --help
+    Usage: sjcli utils json [OPTIONS] FILE_NAME
+
+    Use FILE_NAME to specify path to JSON file to preview
+
+    Options:
+        -n, --numlines INTEGER RANGE  Number of lines to display. Omit to view the entire file  [x>=1]
+        -i, --indent INTEGER RANGE    Specifies the indentation level to view JSON object  [x>=0]
+        --help Show this message and exit.
+    ```
+
+     **Example**
+    
+    - `sjcli utils json 'JSON_FILE_PATH' -n 10 -i 4`
+    - `sjcli utils json 'CSV_FILE_PATH' -i 0`
+
+----
+### clarity
+The clarity command provide two commands i.e. parse-app and session which can be used to parse app-access files and get session details.
+
+```
+sjcli clarity --help
+
+Usage: sjcli clarity [OPTIONS] COMMAND [ARGS]...
+
+Clarity CLI commands
+
+    Options:
+        --help  Show this message and exit.
+
+    Commands:
+        parse-app  Parse the app-access file/ files into csv.
+        sessions   Get session details from csv file parsed by access
+```
+
+#### clarity parse-app
+
+```
+sjcli clarity parse-app --help
+Usage: sjcli clarity parse-app [OPTIONS] FILENAME OUTPUT
+
+Parse the app-access file/ files into csv. It removes all the lines which
+are without any HTTP operations
+
+  filename: Path to app-access.*.log or directory containing app-access.*.log.
+  
+  output: Path to the output directory. prefix: File prefix to search in
+  directory. Example app-access ignore: The extension to ignore. Example .csv
+
+Options:
+  -p, --prefix TEXT  The file prefix to search if the filename is path to
+                     directory
+  -i, --ignore TEXT  The file extension to be ignore while searching directory
+                     matching criteria defined in 'prefix'
+  --help             Show this message and exit.
+```
+
+**Example**
+    
+- `sjcli clarity parse-app FILE_OR_DIRECTORY_PATH OUTPUT_DIR `
+- `sjcli utils json 'CSV_FILE_PATH' -i 0`
