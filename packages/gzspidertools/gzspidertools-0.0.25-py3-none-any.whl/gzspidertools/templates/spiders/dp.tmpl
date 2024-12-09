@@ -1,0 +1,125 @@
+from typing import TYPE_CHECKING, Union
+
+from DrissionPage import ChromiumPage
+from DrissionPage._configs.chromium_options import ChromiumOptions
+from gzspidertools import AyuSpider
+from gzspidertools.items import AyuItem
+from scrapy.crawler import CrawlerProcess
+from scrapy.http import Request
+from scrapy.utils.project import get_project_settings
+from sqlalchemy import text
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+
+
+class $classname(AyuSpider):
+    name = "$name"
+    # allowed_domains = ["$domain"]
+    start_urls = [
+        "https://www.maoyan.com/board/7",
+        "https://www.maoyan.com/board/4",
+    ]
+    custom_settings = {
+        "CONCURRENT_REQUESTS": 1,
+        "LOG_LEVEL": "DEBUG",  # DEBUG INFO ERROR
+        "DATABASE_ENGINE_ENABLED": True,
+        "ITEM_PIPELINES": {
+            "gzspidertools.pipelines.AyuFtyMysqlPipeline": 300,
+            "gzspidertools.pipelines.AyuFtyMongoPipeline": 301,
+        },
+        "DOWNLOADER_MIDDLEWARES": {
+            "gzspidertools.middlewares.DrissionPageMiddleware": 400,
+        },
+    }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        co = ChromiumOptions()
+        co.set_pref('credentials_enable_service', False)
+        co.set_argument('--hide-crash-restore-bubble')
+        # co.headless()  # 无头浏览器
+        co.auto_port()
+        self.page = ChromiumPage(co)  # 实例化浏览器
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield Request(
+                url=url,
+                callback=self.get_all_want_info,
+                cb_kwargs={
+                    "curr_site": url,
+                },
+            )
+
+    def get_all_want_info(self, response: "ScrapyResponse", curr_site: str):
+        """
+        获取所有的招聘信息
+        :return:
+        """
+        self.slog.info(f"当前采集的站点为: {curr_site}")
+        _save_table = "_maoyan_info_list"
+
+        while True:
+            for mov in self.edge.eles('t:dd'):
+                # 获取需要的信息
+                num = mov('t:i').text
+                score = mov('.score').text
+                title = mov('@data-act=boarditem-click').attr('title')
+                star = mov('.star').text
+                time = mov('.releasetime').text
+
+                _item = AyuItem(
+                    num=num,
+                    score=score,
+                    title=title,
+                    star=star,
+                    time=time,
+                    curr_site=curr_site,
+                    _table=_save_table,
+                    # 可选参数：这里表示 MongoDB 存储场景以 article_detail_url 为去重规则，若存在则更新，不存在则新增
+                    _mongo_update_rule={"title": title},
+                )
+                self.slog.info(f"title: {title}")
+
+                if self.mysql_engine_conn:
+                    try:
+                        _sql = text(
+                            f"""select `title` from `{_save_table}` where `title` = "{title}" limit 1"""
+                        )
+                        result = self.mysql_engine_conn.execute(_sql).fetchone()
+                        if not result:
+                            self.mysql_engine_conn.rollback()
+                            yield _item
+                        else:
+                            self.slog.debug(f'标题为 "{title}" 的数据已存在')
+                    except Exception as e:
+                        self.mysql_engine_conn.rollback()
+                        yield _item
+                else:
+                    yield _item
+
+            # 获取下一页按钮，有就点击
+            btn = self.edge('下一页', timeout=5)
+            if btn:
+                self.edge.wait(2)
+                btn.click()
+                self.edge.wait.load_start()
+            # 没有则退出程序
+            else:
+                self.edge.quit()
+                break
+
+    def parse(self, response, **kwargs):
+        pass
+
+
+if __name__ == '__main__':
+    process = CrawlerProcess(get_project_settings())
+    process.crawl($classname.name)
+    process.start()
