@@ -1,0 +1,203 @@
+{#% extends whatever %#}
+{% load static %}
+
+<html>
+    <head>
+        {% block head_extra %}
+        {# layouts are based on bootstrap so these links need to be somewhere #}
+        <link rel="stylesheet"
+href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <link rel="stylesheet"
+href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" type="text/css"
+href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
+        {% endblock head_extra %}
+        {% block title %} {# override or delete as required #}
+            <title>Django Diary</title>
+        {% endblock title %}
+
+        <style> {# some minimal styling for the page head #}
+
+.page-head {
+    background-color: #729fcf;
+    margin-top: 0;
+    padding: 20px, 20px, 20px, 40px;
+}
+
+.page-head h1,
+.page-head h1 a,
+.page-head h1 a:visited,
+.page-head h1 a:active {
+    color: white;
+    font-size: 36pt;
+    text-decoration: none;
+}
+.page-head h2 {
+    color: white;
+    font-size: 18pt;
+    text-decoration: none;
+}
+
+
+h1, h2, h3, h4, p.top-menu {
+    font-family: 'Lobster', cursive;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: white;
+    float: right;
+    font-size: 26pt;
+    margin-right: 20px;
+}
+
+p.top-menu,
+a.topmenu {
+    color: white;
+    background-color: #729fcf;
+}
+
+ul.nav {
+    color: white;
+    background-color: #729fcf;
+}
+
+.content {
+    margin-left: 40px;
+}
+
+        </style>
+    </head>
+
+    <body>
+        {% block nav_menu %} {# override or delete as required #}
+            <div class="page-head">
+                <!-- top menu functions depend on logged-in status -->
+                {% if user.is_authenticated %}
+                    <p class="top-menu">
+                        Hello {{ user.username }}
+
+
+                    </p>
+                    {% block links %}
+                        <a
+                            class="top-menu"
+                            href="{% url 'diary:multi_day_now' %}"
+                            >
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </a>
+                    {% endblock links %}
+                    <a
+                        class="top-menu"
+                        href="{% url 'password_reset' %}"
+                        >
+                        <span class="glyphicon glyphicon-lock"></span>
+                    </a>
+                    <a
+                        class="top-menu"
+                        {% if user.is_superuser %}
+                            href="{% url 'admin:index' %}"
+                        {% else %}
+href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'/' }}"
+                        {% endif %}
+                        >
+                        <span class="glyphicon glyphicon-user"></span>
+                    </a>
+                    <a
+                        class="top-menu"
+                        href="{% url 'logout' %}"
+                        >
+                        <span class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                {% else %}
+                    <a
+                        class="top-menu"
+                        href="{% url 'login' %}"
+                        >
+                        <span class="glyphicon glyphicon-log-in"></span>
+                    </a>
+                    <a
+                        class="top-menu"
+                        href="{% url "diary:customer_add" %}"
+                        >
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                {% endif %}
+
+                <h1><a href="">Diary Test App</a></h1>
+            </div>
+        {% endblock nav_menu %}
+
+        {# this is the base for bootstrap column layout #}
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10">
+
+
+{#==========================Diary Navigation==================================#}
+{# This section can be overridden to customise the diary navigation. #}
+{# The only requirement is that it defines links for the placeholders below. #}
+
+{# place-holders for overriding in children of diary_nav #}
+{#% url '' as diary_nav_up %#}
+{#% url '' as diary_nav_prev %#}
+{#% url '' as diary_nav_next %#}
+{% with diary_nav_up='' diary_nav_prev='' diary_nav_next='' %}
+
+{% block diary_nav %} {# override url definitions in children #}
+    <ul class="nav nav-btn nav-justified">
+        <li role="presentation">
+            <h1>
+                Diary
+                {% block diary_title %}
+                {% endblock diary_title %}
+            </h1>
+        <li role="presentation" class="active">
+            <a class="top-menu" href="{{ diary_nav_prev }}">
+                    <span class="glyphicon glyphicon-backward">
+                    </span>
+            </a>
+        </li>
+        <li role="presentation" class="active">
+            <a class="top-menu" href="{{ diary_nav_up }}">
+                    <span class="glyphicon glyphicon-eject">
+                    </span>
+            </a>
+        </li>
+        <li role="presentation" class="active">
+            <a class="top-menu" href="{{ diary_nav_next }}">
+                    <span class="glyphicon glyphicon-forward">
+                    </span>
+            </a>
+        </li>
+    </ul>
+{% endblock diary_nav %}
+{% endwith %}
+
+{# SAMPLE CHILD BLOCK for diary_nav #}
+{#{% block diary_nav %}#}
+{#    {% url 'diary:year_nav' year=next_year as diary_nav_next %}#}
+{#    {% url 'diary:year_nav' year=prev_year as diary_nav_prev %}#}
+{#    {% url 'diary:year_now' as diary_nav_up %}#}
+{#    {{ block.super }}#}
+{#{% endblock diary_nav %}#}
+
+{#======================End Diary Navigation==================================#}
+
+
+                        {# diary main content goes here #}
+                        {% block diary_content %}
+                        {% endblock diary_content %}
+                    </div>
+                    <div class="col-md-2">
+                        {# diary sidebar reminders go here #}
+                        {% block diary_sidebar %}
+                            {% include 'diary/reminders.html' %}
+                        {% endblock diary_sidebar %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

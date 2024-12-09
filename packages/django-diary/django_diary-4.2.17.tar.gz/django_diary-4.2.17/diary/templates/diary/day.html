@@ -1,0 +1,111 @@
+{% extends 'diary/day_base.html' %}
+{% load diary_tags %}
+
+
+{% block diary_nav %}
+    {% url 'diary:day_nav' slug=nav_slug change='next' as diary_nav_next %}
+    {% url 'diary:day_nav' slug=nav_slug change='prev' as diary_nav_prev %}
+    {% url 'diary:multi_day' slug=nav_slug as diary_nav_up %}
+    {{ block.super }}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    {{ date.day }} {{ month_name }} {{ date.year }}
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+    {{ block.super }}
+
+    <div class="container-fluid">
+        {% for label, datetime_slug, start_time, entries, current, trading, historic, advance, allow_dnd in time_slots %}
+            <div class="row">
+                <div class="col-md-2">
+                    <b>{{ label }}</b>
+                </div>
+                <div
+                    id="{{ datetime_slug }}"
+                    class=
+"row col-md-8 droptarget
+{% if current %} current{% endif %}
+{% if trading %}
+{% if historic %} historic{% elif advance%} advance{% else %} trading{% endif %}
+{% else %} admin{% endif %}"
+                    {% if request.user.is_staff or allow_dnd %}
+                        ondragenter="dragenter(event);"
+                        ondragleave="dragleave(event);"
+                        ondragover="dragover(event);"
+                        ondrop="drop(event);"
+                        ondragend="dragend(event);"
+                    {% endif %}
+                    >
+                {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
+                    <button
+                        class="btn btn-link new"
+                        type="button"
+onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
+                        >
+                        <span class="glyphicon glyphicon-plus">
+                        </span>
+                    </button>
+                    {% for entry in entries %} <!-- entries loop -->
+<!-- Filter out entries not to be displayed at all -->
+                    {% if not request.user.is_staff and entry.no_show %} <!-- no-shows -->
+                    {% elif not request.user.is_staff and request.user.username != entry.customer.username and entry.cancelled %} <!-- cancelled -->
+                    {% elif not request.user.is_staff and request.user.username != entry.customer.username and not entry.resource %} <!-- no resource -->
+                    {% else %}
+                        <div
+class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} no_show{% endif %}"
+                            id="{{ entry.pk }}"
+                            {% if request.user.is_staff %}
+                                draggable="true"
+                                ondragstart="drag(event);"
+                            {% elif allow_dnd %}
+                                {% if request.user.username == entry.customer.username %}
+                                    draggable="true"
+                                    ondragstart="drag(event);"
+                                {% else %}
+                                    draggable="false"
+                                {% endif %}
+                            {% else %}
+                                draggable="false"
+                            {% endif %}
+                            >
+                            {% with fg_color="black" bg_color="white" %}
+                            {% if entry.resource %}
+                                {% update_variable entry.resource.fg_color as fg_color %}
+                                {% update_variable entry.resource.bg_color as bg_color %}
+                            {% endif %}
+                            <div
+                                {% if request.user.is_staff or request.user.username == entry.customer.username and not entry.no_show %}
+                                    style="color:{{ fg_color }}; background-color:{{ bg_color }};"
+                                    data-href=
+                            "{% url 'diary:entry_modal' pk=entry.pk %}"
+                                    data-toggle="modal"
+                                    data-target="#ajaxModal"
+                                    >
+                                    <b>{{ entry.customer }}</b> -
+                                    {{ entry.short }}
+                                {% elif request.user.username == entry.customer.username and entry.no_show %}
+                                    disabled="False"
+                                    >
+                                    <b>{{ entry.customer }}</b> -
+                                    {{ entry.short }}
+                                {% else %}
+                                    style="background-color: {{ bg_color }}; color: {{ fg_color }};"
+                                    disabled="False"
+                                    >
+                                    <b>{{ entry.resource.name }} In Use</b>
+                                {% endif %}
+                            </div>
+                            {% endwith %}
+                        </div>
+                    {% endif %}
+                    {% endfor %} <!-- end entries loop -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock diary_content %}

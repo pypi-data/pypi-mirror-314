@@ -1,0 +1,69 @@
+{% extends 'diary/base.html' %}
+
+{% block diary_head_extra %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    {{ form.media }}
+{% endblock diary_head_extra %}
+
+{% block diary_content %}
+{# parameterise the button so we can override the name and type#}
+{% with button_type="submit" button_label="Save" %}
+
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                {% block diary_form_description %}
+                {% endblock diary_form_description %}
+            </div>
+            <div class="col-md-12">
+                {% block diary_form_content %}
+                    <form class="post-form" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form.non_field_errors }}
+                            </div>
+                        </div>
+                        {% for field in form.visible_fields %}
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ field.label_tag }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ field }}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if field.help_text %}
+                                        <p>{{ field.help_text }}</p>
+                                    {% endif %}
+                                    {% if field.errors %}
+                                        <p class="errorlist">
+                                            {{ field.errors }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button
+                        class="save btn btn-default diarybutton btn-primary"
+                        type="{{ button_type }}"
+                                    >
+                                    {{ button_label }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                {% endblock diary_form_content %}
+            </div>
+        </div>
+    </div>
+
+{% endwith %}
+{% endblock diary_content %}

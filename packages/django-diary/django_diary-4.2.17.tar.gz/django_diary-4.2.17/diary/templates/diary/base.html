@@ -1,0 +1,23 @@
+{% extends 'diary/main_base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+    {# inherit the head_extra block in case parents have already used it #}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'diary/base.css' %}" />
+
+    {# attachment point for js etc specific to certain diary pages. #}
+    {% block diary_head_extra %}
+    {% endblock diary_head_extra %}
+
+{% endblock head_extra %}
+
+{# this block is only used in the test app to give a home page nav link #}
+{# you can most likely ignore this block in your override :) #}
+{% block links %}
+    <a class="top-menu" href="{% url 'home' %}">
+        <span class="glyphicon glyphicon-home">
+        </span>
+    </a>
+{% endblock links %}

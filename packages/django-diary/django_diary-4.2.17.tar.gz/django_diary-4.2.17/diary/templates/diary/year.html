@@ -1,0 +1,42 @@
+{% extends 'diary/base.html' %}
+
+
+{% block diary_nav %}
+    {% url 'diary:year' year=next_year as diary_nav_next %}
+    {% url 'diary:year' year=prev_year as diary_nav_prev %}
+    {% url 'diary:year_now' as diary_nav_up %}
+    {{ block.super }}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    {{ year }}
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+    <div class="container-fluid">
+        {% for year, months in years %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>{{ year }}</h4>
+                </div>
+            </div>
+            <div class="row">
+                {% for month in months %}
+                    <div class="col-md-2{% if month.current %} current{% endif %}
+                        {% if month.entry %} hasentry{% endif %}">
+                        <a href="{% url 'diary:month' year=year month=month.n %}">
+                            {{ month.name }}
+                        </a>
+                    </div>
+                    {% if month.n == 6 or month.n == 12 %}
+            </div>
+            <div class="row">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock diary_content %}
+

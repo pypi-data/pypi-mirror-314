@@ -1,0 +1,21 @@
+{% extends 'diary/form_base.html' %}
+
+
+{% block diary_nav %}
+    {% with diary_nav_up=return_nav %}
+        {% with diary_nav_prev=return_nav_prev %}
+            {% with diary_nav_next=return_nav_next %}
+                {{ block.super }}
+            {% endwith %}
+        {% endwith %}
+    {% endwith %}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    {% if form.entry.pk %}
+        New
+    {% endif %}
+    Entry {{ date }}
+{% endblock diary_title %}
+
