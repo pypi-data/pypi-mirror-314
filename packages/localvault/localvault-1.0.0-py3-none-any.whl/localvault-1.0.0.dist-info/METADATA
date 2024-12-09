@@ -1,0 +1,145 @@
+Metadata-Version: 2.1
+Name: localvault
+Version: 1.0.0
+Summary: A command line utility to generate/store random passwords for the given username/key.
+Author-email: Mukul Taneja <mukultaneja91@gmail.com>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2024, mac
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://github.com/mukultaneja/crypter
+Keywords: encryption,password-generator,CLI utility
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click
+Requires-Dist: sqlalchemy
+Requires-Dist: cryptography
+Requires-Dist: prettytable
+
+# Crypter
+
+```Crypter``` - A command line utility to generate random **passwords** for the given **username/key**. It generates random passwords on the fly using **encryption algorithm** and store **locally** to access them later. In today's time where privacy is the major concern, **crypter** saves you with not only storing your **passwords** locally but also being hacked at the end. It allows you to be your own master and makes sure your secrets are completely secret to you.
+
+##### Requirements
+- Python 3.6
+
+## Installation
+Since the project is in the development mode, following steps can be followed to install the crypter utility.
+```
+git clone https://github.com/mukultaneja/crypter.git
+pip install -e .
+pip install -r requirements.txt
+```
+
+## Features
+```Crypter``` is in the **active development phase** currently and comes with the very basic set of commands to `add/delete/get/list` username/passwords in the system. Following the set of available commands can be used with crypter,
+
+```
+Usage: crypter [OPTIONS] COMMAND [ARGS]...
+
+  Crypter - A command line utility to generate random passwords for the given
+  username & key. It generates random passwords on the fly using pre-defined
+  encryption algorithm and store locally to access them later. It saves you
+  from not storing your username/passwords on the third party storage and
+  being hacked at the end. It allows to be your own master where your secrets
+  are completely secret to you.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  add     Add a new username/password tagged with the given key.
+  cloud   Option to configure cloud account to backup your secrets. [ Work in Progress ]
+  delete  Delete the username/password tagged with the given key if any.
+  get     Fetch the username/password tagged with the given key if any.
+  init    Perform the inital setup required to save your secrets.
+  list    List all the stored username/passwords.
+  
+```
+
+Any username/password record requires a key to be tagged with. The key can be any random string and will be used later to access the username/password record. Internally crypter manages its own database to store username/password.
+
+
+## Examples
+```
+crypter add key
+Please provide KeyName: google
+Please provide userName: testUser
+A new record has been added with the following details,
+[
+    {
+        "key": "google",
+        "name": "testUser",
+        "password": "zZ5]O4lN=l1=mD0!"
+    }
+]
+
+
+crypter get key
+Keyname: google
+Following record(s) have been found with the given key(s),
+[
+    {
+        "key": "google",
+        "name": "testUser",
+        "password": "zZ5]O4lN=l1=mD0!"
+    }
+]
+
+crypter list
+Following are the available record(s) in the system
+[
+  {
+    "key": "google",
+    "name": "testUser",
+    "password": "zZ5]O4lN=l1=mD0!"
+  }
+]
+
+
+crypter delete key
+Keyname: google
+Following record(s) have been deleted with the given key(s),
+[
+    {
+        "key": "google",
+        "name": "testUser",
+        "password": "zZ5]O4lN=l1=mD0!"
+    }
+]
+```
+
+## Contributing
+Every project requires continous feature requests and active developement around of it. We welcome contributions from the community. All contributions to this repository must be signed with username/email on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md]().
+
+## License
+`Crypter` utility is being released with `BSD 3-Clause License`.
