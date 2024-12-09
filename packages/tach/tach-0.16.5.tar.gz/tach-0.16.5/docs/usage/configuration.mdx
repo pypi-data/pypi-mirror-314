@@ -1,0 +1,341 @@
+---
+title: Configuration
+---
+
+Aside from running `tach mod` and `tach sync`, you can configure Tach by creating or modifying the configuration file as described below.
+
+## `tach.toml`
+
+This is the project-level configuration file which should be in the root of your project.
+
+`modules` defines the modules in your project - [see detais](#modules).
+
+`interfaces` defines the interfaces of modules in your project - [see details](#interfaces).
+
+`exclude` accepts a list of directory patterns to exclude from checking. These are treated as regex/glob paths (depending on `use_regex_matching`) which match from the beginning of a given file path. For example: when using glob matching `project/*.tests` would match any path beginning with `project/` and ending with `.tests`.
+
+<Note>
+  Tach uses forward slashes to match path separators, even on Windows.
+</Note>
+
+`ignore_type_checking_imports` is a boolean which, when enabled, silences `tach check` failures caused by imports under a `TYPE_CHECKING` conditional block.
+
+`exact` is a boolean which causes `tach check` to fail if any declared dependencies are found to be unused.
+
+`forbid_circular_dependencies` is a boolean which, when enabled, causes `tach check` to fail if any circular dependencies are detected.
+
+`root_module` takes a string enum value, and determines how Tach treats code which lives within the project but is not covered by an explicit module. This is described in detail [below](#the_root_module)
+
+`rules` allows precise configuration of the severity of certain types of issues. See [below](#rules) for more details.
+
+`use_regex_matching` is a boolean which, when enabled, uses regex (default) matching to exclude patterns else uses globs matching.
+
+```toml
+exclude = [
+    ".*__pycache__",
+    "build/",
+    "dist/",
+    "docs/",
+    "python/tests/",
+    "tach.egg-info/",
+    "venv/",
+]
+source_roots = ["python"]
+exact = true
+ignore_type_checking_imports = true
+forbid_circular_dependencies = true
+
+root_module = "allow"
+
+[[modules]]
+path = "tach"
+depends_on = []
+
+[[modules]]
+path = "tach.__main__"
+unchecked = true
+depends_on = [{ path = "tach.start" }]
+
+[[modules]]
+path = "tach.errors"
+depends_on = []
+utility = true
+
+[[modules]]
+path = "tach.parsing"
+depends_on = [{ path = "tach" }, { path = "tach.filesystem" }]
+visibility = ["tach.check"]
+
+[[modules]]
+path = "tach.check"
+depends_on = [
+    { path = "tach.extension" },
+    { path = "tach.filesystem" },
+    { path = "tach.parsing" },
+]
+
+[[interfaces]]
+expose = ["types.*]
+
+[[interfaces]]
+expose = [
+    "parse_project_config",
+    "dump_project_config_to_toml",
+]
+from = [
+    "tach.parsing",
+]
+
+...
+
+[cache]
+file_dependencies = ["python/tests/**", "src/*.rs"]
+
+[external]
+exclude = ["pytest"]
+
+[rules]
+unused_ignore_directives = "warn"
+```
+
+## Modules
+
+Each module listed under the `modules` key above can accept the following attributes:
+
+- `path`: the Python import path to the module (e.g. `a.b` for `<root>/a/b.py`)
+- `depends_on`: a list of the other modules which this module can import from (default: `[]`)
+- `visibility`: a list of other modules which can import from this module (default: `['*']`)
+- `utility`: marks this module as a **Utility**, meaning all other modules may import from it without declaring an explicit dependency (boolean)
+- `unchecked`: marks this module as [**unchecked**](unchecked-modules), meaning Tach will not check its imports (boolean)
+
+<Note>
+  Tach also supports [deprecating individual dependencies](../usage/deprecate).
+</Note>
+
+## Interfaces
+
+Public interfaces are defined separately from modules, and define the imports that are allowed from that module.
+
+For example, if a module should expose everything from a nested 'services' folder, the config would look like:
+
+```toml
+[[interfaces]]
+expose = ["services.*"]
+from = ["my_module"]
+```
+
+More specifically:
+
+- `expose`: a list of regex patterns which define the public interface
+- `from` (optional): a list of regex patterns which define the modules which adopt this interface
+
+<Note>
+If an interface entry does not specify `from`, all modules will adopt the interface.
+</Note>
+
+<Note>
+A module can match multiple interface entries - if an import matches _any_ of the entries, it will be considered valid.
+</Note>
+
+## The Root Module
+
+By default, Tach checks all of the source files beneath all of the configured [source roots](#source_roots).
+This means that some code may not be contained within any configured [module](#modules).
+
+For example, given the file tree below:
+
+```
+my_repo/
+  tach.toml
+  script.py
+  lib/
+    module1.py
+    module2/
+      __init__.py
+      service.py
+    module3.py
+  docs/
+  tests/
+```
+
+If `lib.module1`, `lib.module2`, and `lib.module3` are the only configured modules, then the code in `script.py` would be automatically part of the `<root>` module.
+
+This module can declare its own dependencies with `depends_on` and use the rest of the available module configuration.
+Further, other modules need to declare an explicit dependency on `<root>` to use code which rolls up to the root.
+
+Tach allows configuring how the root module should be treated through the `root_module` key in `tach.toml`. It may take one of the following values:
+
+- **(default)** `"allow"`: Treat `<root>` as a catch-all rollup module which must be explicitly declared as a dependency and must declare its own dependencies on other modules.
+- **(permissive)** `"ignore"`: Disable all checks related to the `<root>` module. `tach check` will never fail due to code in the `<root>` module, and `tach sync` will never add `<root>` to `tach.toml`
+- **(stricter)** `"dependenciesonly"`: Forbid any module from listing `<root>` as a dependency, but allow `<root>` to declare its own dependencies.
+- **(strictest)** `"forbid"`: Forbid any reference to the `<root>` module in tach.toml. This means that all code in [source roots](#source_roots) MUST be contained within an explicitly configured [module](#modules).
+
+## Source Roots
+
+The `source_roots` key is required for Tach to understand the imports within your project.
+If it is not set explicitly, `source_roots` defaults to your project root path: `['.']`.
+This means Tach will expect that your Python imports are resolved relative to the directory in which `tach.toml` exists.
+
+Below are typical cases in which modifying `source_roots` is necessary.
+
+### Example: Python below project root
+
+Suppose your repository contains a subfolder where all of your Python code lives. This could be a web server, a collection of serverless functions, or even utility scripts.
+In this example we will assume the Python code in our repo lives in the `backend/` folder.
+
+```
+my_repo/
+  tach.toml
+  backend/
+    module1.py
+    module2/
+      __init__.py
+      service.py
+    module3.py
+  docs/
+  tests/
+```
+
+In a Python module such as `backend/module1.py`, we can see imports from other modules.
+
+```python
+# In backend/module1.py
+
+import module3
+from module2.service import MyService
+```
+
+Notice that these import paths (`module3`, `module2.service.MyService`) are rooted in the `backend/` folder, NOT the project root.
+
+To indicate this structure to Tach, set:
+
+```toml
+source_roots = ["backend"]
+```
+
+in your `tach.toml`, or use [`tach mod`](commands#tach-mod) and mark the `backend` folder as the only source root.
+
+### Example: Monorepo
+
+Suppose you work on a 'monorepo', in which Python packages which import from each other are located in distinct project directories.
+You may package your utility libraries in a `utility`folder, while your core packages live in `core_one` and `core_two`.
+You may also use a [namespace package](https://peps.python.org/pep-0420/) to share a common top-level namespace. In this example we'll use `myorg` as the namespace package.
+
+The file tree in a case like this might look like:
+
+```
+my_repo/
+  tach.toml
+  utility/
+    pyproject.toml
+    myorg/
+      utils/
+        __init__.py
+  core_one/
+    pyproject.toml
+    myorg/
+      core_one/
+        __init__.py
+        module1.py
+        module2/
+          __init__.py
+          service.py
+        module3.py
+  core_two/
+    pyproject.toml
+    myorg/
+      core_two/
+        __init__.py
+        module1.py
+        module2/
+          __init__.py
+          service.py
+        module3.py
+  docs/
+  tests/
+```
+
+In a Python module such as `core_one/myorg/core_one/module1.py`, there may be imports from other packages:
+
+```python
+# In core_one/myorg/core_one/module1.py
+
+from myorg.utils import utility_fn
+```
+
+Notice that this import path (`myorg.utils.utility_fn`) is rooted in the `utility` folder, NOT the project root.
+
+To indicate the project structure to Tach, you would set:
+
+```toml
+source_roots = [
+  "utility",
+  "core_one",
+  "core_two"
+]
+```
+
+in your `tach.toml`, or use [`tach mod`](commands#tach-mod) and mark the same folders as source root.
+
+In `tach.toml`, each entry in `source_roots` is interpreted as a relative path from the project root.
+
+## Cache
+
+Tach allows configuration of the [computation cache](caching) it uses to speed up tasks like [testing](commands#tach-test).
+
+The `file_dependencies` key accepts a list of glob patterns to indicate additional file contents that should be considered when [checking for cache hits](caching#determining-cache-hits). This should typically include files outside of your [source roots](#source-roots) which affect your project's behavior under test, including the tests themselves. Additionally, if you have non-Python files which affect your project's behavior (such as Rust or C extensions), these should be included as well.
+
+The `env_dependencies` key accepts a list of environment variable names whose values affect your project's behavior under test. This may include a `DEBUG` flag, or database connection parameters in the case of tests which use a configurable database.
+
+## External
+
+When running [`check-external`](commands#tach-check-external), Tach allows excluding certain modules from validation.
+
+Adding the top level module name to the `exclude` key (underneath the `external` key) will allow all usages of the corresponding module.
+
+Example:
+```toml
+[external]
+exclude = ["PIL"]
+```
+
+Tach also allows supplying a `rename` field to handle cases where the top level module name does not match the name of the package.
+
+For example, the `pillow` package supplies the `PIL` module, so Tach needs to map imports from `PIL` to the `pillow` package specifier in your requirements.
+
+```toml
+[external]
+rename = [
+  # Format "[module name]:[package name]"
+  "PIL:pillow",
+  ...
+]
+```
+
+In most cases you should not need to specify `rename` manually (see the Note below).
+
+<Note>
+  It is recommended to run Tach within a virtual environment containing all of
+  your dependencies across all packages. This is because Tach uses the
+  distribution metadata to map module names like 'git' to their distributions
+  ('GitPython').
+</Note>
+
+## Rules
+
+Tach allows configuring the severity of certain issues.
+
+The `unused_ignore_directives` rule determines whether unnecessary [`tach-ignore`](tach-ignore) comments trigger a warning, an error, or nothing at all.
+
+Example:
+```py
+# tach-ignore valid_import_fn
+from other.valid import valid_import_fn
+```
+
+```toml
+[rules]
+# "warn" is the default for this rule,
+# other options are "error", "off"
+unused_ignore_directives = "warn"
+```
