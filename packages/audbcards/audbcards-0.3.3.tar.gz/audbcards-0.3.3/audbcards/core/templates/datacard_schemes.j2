@@ -1,0 +1,12 @@
+
+{% if schemes_table is defined and schemes_table|length > 1 %}
+Schemes
+^^^^^^^
+
+.. csv-table::
+    :header-rows: 1
+
+{% for row in schemes_table %}
+    "{{ row|join('", "') }}"
+{% endfor %}
+{% endif %}
