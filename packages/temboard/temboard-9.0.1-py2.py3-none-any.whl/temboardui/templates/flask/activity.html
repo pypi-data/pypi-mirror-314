@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}temBoard / {{instance}} / Activity{% endblock %}
+
+{% block head %}
+{% for link in vitejs.css_links_for('activity.js') %}{{ link | safe }}{% endfor %}
+{% endblock %}
+
+{% block content %}
+<div id="app">
+  <activity></activity>
+</div>
+
+<script type="module" src="{{ vitejs.url_for('activity.js') }}"></script>
+<script>
+var agent_address = "{{instance.agent_address}}";
+var agent_port = "{{instance.agent_port}}";
+</script>
+
+{% endblock %}

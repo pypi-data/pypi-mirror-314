@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ super() }}/ Maintenance / {{database}} / {{schema}} / {{table}}{% endblock %}
+
+{% block head %}
+{% for link in vitejs.css_links_for('maintenance.table.js') %}{{ link | safe }}{% endfor %}
+{% endblock %}
+
+{% block content %}
+
+{% include "maintenance/breadcrumb.html" %}
+
+<div id="app">
+  <maintenancetable
+    api-url="/proxy/{{ instance.agent_address }}/{{ instance.agent_port }}/maintenance/{{ database }}/schema/{{ schema }}/table/{{ table }}"
+    schema-api-url="/proxy/{{ instance.agent_address }}/{{ instance.agent_port }}/maintenance/{{ database }}/schema/{{ schema }}"
+    :instance="{
+      'agentAddress': '{{instance.agent_address}}',
+      'agentPort': '{{instance.agent_port}}'
+    }"
+    maintenance-base-url="/proxy/{{ instance.agent_address }}/{{ instance.agent_port }}/maintenance"
+    database="{{ database }}"
+    schema="{{ schema }}"
+    table="{{ table }}"
+  />
+</div>
+
+<script type="module" src="{{ vitejs.url_for('maintenance.table.js') }}"></script>
+{% endblock %}

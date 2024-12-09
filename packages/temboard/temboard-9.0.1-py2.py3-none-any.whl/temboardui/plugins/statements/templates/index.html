@@ -1,0 +1,22 @@
+{% extends ../../../templates/base.html %}
+
+{% block title %}temBoard / {{instance}} / Statements{% end %}
+
+{% block head %}
+{% for link in vitejs.css_links_for('statements.js') %}{% raw link %}{% end %}
+<link href="/css/dygraph.css" rel="stylesheet" />
+{% end %}
+
+{% block content %}
+
+<div id="app">
+  <statements />
+</div>
+
+<script src="/js/dygraph.min.js"></script>
+<script type="module" src="{{ vitejs.url_for('statements.js') }}"></script>
+<script>
+var apiUrl = "/server/{{instance.agent_address}}/{{instance.agent_port}}/statements/data";
+var chartApiUrl = "/server/{{instance.agent_address}}/{{instance.agent_port}}/statements/chart";
+</script>
+{% end %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{super()}} / Configuration{% endblock %}
+
+{% block head %}
+  {% for link in vitejs.css_links_for('home.js') %}
+    {{ link | safe}}
+  {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div id="app">
+  <configuration
+    address="{{ instance.agent_address }}"
+    port="{{ instance.agent_port }}"
+  />
+</div>
+<script type="module" src="{{ vitejs.url_for('pgconf.js') }}"></script>
+{% endblock %}

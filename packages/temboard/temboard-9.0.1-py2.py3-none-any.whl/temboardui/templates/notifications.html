@@ -1,0 +1,35 @@
+{% extends base.html %}
+
+{% block title %}temBoard / {{instance}} / Notifications{% end %}
+
+{% block head %}
+{% for link in vitejs.css_links_for('settings.users.js') %}{% raw link %}{% end %}
+{% end %}
+
+{% block content %}
+<div class="limiter">
+<div class="row">
+  <div class="col-12">
+    <table id="tableNotifications" class="table table-sm table-striped" cellspacing="0">
+    <thead>
+      <tr>
+        <th width="150">Date</th>
+        <th>Username</th>
+        <th>Content</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for notification in notifications %}
+      <tr>
+        <td>{{notification['date']}}</td>
+        <td>{{notification['username']}}</td>
+        <td>{{notification['message']}}</td>
+      </tr>
+      {% end %}
+    </tbody>
+    </table>
+  </div>
+</div>
+</div> <!-- end limiter -->
+<script type="module" src="{{ vitejs.url_for('notifications.js') }}"></script>
+{% end %}
