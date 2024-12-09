@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: falcon-logger
+Version: 0.0.5
+Summary: module for faster python logging
+Author-email: "J. Arrizza" <cppgent0@gmail.com>
+Maintainer-email: "J. Arrizza" <cppgent0@gmail.com>
+License: MIT
+Project-URL: Website, https://arrizza.com/python-falcon-logger
+Project-URL: Source, https://bitbucket.org/arrizza-public/falcon-logger/src/master
+Project-URL: Download, https://bitbucket.org/arrizza-public/falcon-logger/get/master.zip
+Keywords: gui,test,verification
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Environment :: Console
+Classifier: Topic :: Utilities
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3.9
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+* website: <https://arrizza.com/python-falcon-logger>
+* installation: see <https://arrizza.com/setup-common>
+
+## Summary
+
+This is a python module that provides a way to run a fast logger.
+Peregrine Falcons are the fastest animals alive (according to Google).
+They go that fast by having as minimal drag as possible.
+
+* See [Quick Start](https://arrizza.com/user-guide-quick-start) for information on using scripts.
+* See [xplat-utils submodule](https://arrizza.com/xplat-utils) for information on the submodule.
+
+## Sample code
+
+see sample.py for a full example
+
+```python
+from falcon_logger import FalconLogger
+```
+
+## Sample
+
+Use doit script to run the logger and compare against other loggers.
+
+To run the FalconLogger:
+
+```bash
+./doit falcon
+./doit falcon --numlines=100000
+```
+
+To run the others loggers:
+
+```bash
+./doit stdout  # no file, just stdout
+./doit normal  # use the python logger
+./doit rsyslog # use the rsyslog python module
+```
+
+## Comparing Times
+
+The overall time is very dependent on which OS you use and the speed of your computer
+
+```text
+on MSYS2 for 100,000 lines:
+stdout: total time: 3170.0 ms
+falcon: total time: 3623.9 ms
+normal: total time: 5722.8 ms
+rsyslog fails with an exception 
+
+```
