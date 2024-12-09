@@ -1,0 +1,158 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "moapy",
+    "description": "Schema for moapy",
+    "version": "1.2.5"
+  },
+  "servers": [
+    {
+      "url": "https://moa.rpm.kr-st-midasit.com/backend/python-executor/"
+    }
+  ],
+  "paths": {
+    "/execute?functionId=moapy-dgnengine-test-call_getfy": {
+      "post": {
+        "summary": "Fy Calculation",
+        "description": "Fy Calculation",
+        "operationId": "call getfy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/call_getfy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutFy"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-content-info": {
+          "title": "Fy Calculation",
+          "description": "Fy Calculation"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InFy": {
+        "properties": {
+          "matlcode": {
+            "type": "string",
+            "title": "Matlcode",
+            "description": "Material code",
+            "default": "KS18(S)"
+          },
+          "matlname": {
+            "type": "string",
+            "title": "Matlname",
+            "description": "Material name",
+            "default": "SS275"
+          },
+          "thick": {
+            "type": "number",
+            "title": "Thick",
+            "description": "Thickness",
+            "default": 5.0
+          }
+        },
+        "type": "object",
+        "title": "Fy Input Data",
+        "dataclassname": "moapy.dgnengine.test.InFy"
+      },
+      "OutFy": {
+        "properties": {
+          "fy": {
+            "type": "number",
+            "title": "Fy",
+            "description": "Fy Value",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "title": "Fy Output Data",
+        "dataclassname": "moapy.dgnengine.test.OutFy"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "call_getfy": {
+        "properties": {
+          "inp": {
+            "$ref": "#/components/schemas/InFy"
+          }
+        },
+        "type": "object",
+        "required": [
+          "inp"
+        ],
+        "title": "call getfy"
+      }
+    }
+  }
+}

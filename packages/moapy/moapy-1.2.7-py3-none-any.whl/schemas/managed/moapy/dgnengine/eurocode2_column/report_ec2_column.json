@@ -1,0 +1,635 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "moapy",
+    "description": "Schema for moapy",
+    "version": "1.2.5"
+  },
+  "servers": [
+    {
+      "url": "https://moa.rpm.kr-st-midasit.com/backend/python-executor/"
+    }
+  ],
+  "paths": {
+    "/execute?functionId=moapy-dgnengine-eurocode2_column-report_ec2_column": {
+      "post": {
+        "summary": "Eurocode 2 Column Design",
+        "description": "Eurocode 2 provides a comprehensive review of reinforced concrete (RC) column design with a focus on strength assessment, available in Excel format.",
+        "operationId": "report ec2 column",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/report_ec2_column"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultBytes"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-content-info": {
+          "title": "Eurocode 2 Column Design",
+          "description": "Eurocode 2 provides a comprehensive review of reinforced concrete (RC) column design with a focus on strength assessment, available in Excel format."
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BucklingLength": {
+        "properties": {
+          "lX": {
+            "title": "Lx",
+            "description": "Unbraced length(x-direction)",
+            "$ref": "#/components/schemas/Length"
+          },
+          "lY": {
+            "title": "Ly",
+            "description": "Unbraced length(y-direction)",
+            "$ref": "#/components/schemas/Length"
+          }
+        },
+        "type": "object",
+        "title": "Buckling Length",
+        "description": "Buckling length is the length at which a structural member, such as a column or plate, can resist the phenomenon of buckling. Buckling is the sudden deformation of a long member under compressive load along its own center of gravity, which has a significant impact on the safety of a structure. Buckling length is an important factor in analyzing and preventing this phenomenon.",
+        "dataclassname": "moapy.data_pre.BucklingLength"
+      },
+      "ColumnRebarPattern": {
+        "properties": {
+          "main": {
+            "items": {
+              "$ref": "#/components/schemas/RebarNumberRowNameCover"
+            },
+            "type": "array",
+            "title": "Main Rebar",
+            "description": "Main reinforcement bars for the column, including specifications such as number, size, and cover."
+          },
+          "endStirrup": {
+            "title": "End Stirrup",
+            "description": "End stirrup reinforcement for the column, typically used for confinement at the ends.",
+            "$ref": "#/components/schemas/RebarNumberNameSpace"
+          },
+          "midStirrup": {
+            "title": "Middle Stirrup",
+            "description": "Middle stirrup reinforcement for the column, used for confinement in the midsection.",
+            "$ref": "#/components/schemas/RebarNumberNameSpace"
+          }
+        },
+        "type": "object",
+        "title": "Column Rebar Pattern",
+        "description": "Defines the rebar pattern for a column, including main reinforcement bars, end stirrups, and mid stirrups.",
+        "dataclassname": "moapy.rc_pre.ColumnRebarPattern"
+      },
+      "EffectiveLengthFactor": {
+        "properties": {
+          "kx": {
+            "type": "number",
+            "title": "Kx",
+            "description": "Effect buckling length factor(x direction)",
+            "default": 1.0
+          },
+          "ky": {
+            "type": "number",
+            "title": "Ky",
+            "description": "Effect buckling length factor(y direction)",
+            "default": 1.0
+          }
+        },
+        "type": "object",
+        "title": "Effective Length factor",
+        "description": "The Effective Length Factor is an important parameter used to evaluate the ability of a column or member in a structure to resist buckling. This factor adjusts the actual length of the member to help analyze buckling based on the anchorage conditions of the column. The effective buckling length factor defines the relationship between the buckling length and the column's anchorage conditions.",
+        "dataclassname": "moapy.data_pre.EffectiveLengthFactor"
+      },
+      "Force": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Force"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitForce"
+          }
+        },
+        "type": "object",
+        "title": "Force",
+        "description": "Force",
+        "dataclassname": "moapy.data_pre.Force"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Length": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Length"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitLength"
+          }
+        },
+        "type": "object",
+        "title": "Length",
+        "description": "Length",
+        "dataclassname": "moapy.data_pre.Length"
+      },
+      "MaterialNative": {
+        "properties": {
+          "fck": {
+            "title": "Concrete Compressive Strength (fck)",
+            "description": "The characteristic strength of concrete in compression, typically measured in MPa (SI) or psi (US). This is a key parameter in the design of concrete structures.",
+            "$ref": "#/components/schemas/Stress"
+          },
+          "fy": {
+            "title": "Rebar Yield Strength (fy)",
+            "description": "The yield strength of the reinforcement bars (rebar) used in concrete, typically measured in MPa (SI) or psi (US). It represents the stress at which the rebar begins to plastically deform.",
+            "$ref": "#/components/schemas/Stress"
+          },
+          "fys": {
+            "title": "Stirrup Yield Strength (fys)",
+            "description": "The yield strength of stirrups (reinforcing steel ties used for shear reinforcement) in concrete, typically measured in MPa (SI) or psi (US).",
+            "$ref": "#/components/schemas/Stress"
+          }
+        },
+        "type": "object",
+        "title": "Material Strength Properties",
+        "description": "Defines the material strength properties of concrete and reinforcement used in structural design, including compressive strength of concrete and yield strength of rebars and stirrups.",
+        "dataclassname": "moapy.rc_pre.MaterialNative"
+      },
+      "MemberForce": {
+        "properties": {
+          "i": {
+            "title": "Design Forces at i End",
+            "description": "The forces acting at the 'i' end of the member, including axial force, bending moments, and shear forces.",
+            "$ref": "#/components/schemas/SectionForce"
+          },
+          "j": {
+            "title": "Design Forces at j End",
+            "description": "The forces acting at the 'j' end of the member, including axial force, bending moments, and shear forces.",
+            "$ref": "#/components/schemas/SectionForce"
+          }
+        },
+        "type": "object",
+        "title": "Member Force",
+        "description": "Defines the forces acting on a structural member at both ends (i and j), including axial forces, bending moments, and shear forces for design load combination.",
+        "dataclassname": "moapy.data_pre.MemberForce"
+      },
+      "Moment": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Moment"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitMoment"
+          }
+        },
+        "type": "object",
+        "title": "Moment",
+        "description": "Moment",
+        "dataclassname": "moapy.data_pre.Moment"
+      },
+      "RebarNumberNameSpace": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "title": "Number of Legs",
+            "description": "The number of legs for the reinforcement bar. This specifies how many individual legs (bars) are used for the rebar.",
+            "default": 2
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "P4",
+              "P5",
+              "P6",
+              "P8",
+              "P10",
+              "P12",
+              "P14",
+              "P16",
+              "P18",
+              "P20",
+              "P22",
+              "P24",
+              "P26",
+              "P30",
+              "P32",
+              "P36",
+              "P40"
+            ],
+            "title": "Rebar Name",
+            "description": "The name or designation of the rebar. This typically refers to the type or size of the rebar, such as 'P10' or 'D12'.",
+            "default": "P10"
+          },
+          "space": {
+            "title": "Rebar Spacing",
+            "description": "The distance between adjacent rebars. This specifies the spacing between each reinforcement bar to ensure proper load transfer and concrete bonding.",
+            "$ref": "#/components/schemas/Length"
+          }
+        },
+        "type": "object",
+        "title": "Rebar Number and Spacing",
+        "description": "Defines the number of legs of rebars and the spacing between them for reinforcement in concrete structures. Proper spacing ensures load transfer efficiency and concrete bonding around the rebar.",
+        "dataclassname": "moapy.rc_pre.RebarNumberNameSpace"
+      },
+      "RebarNumberRowNameCover": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "title": "Number of Rebars",
+            "description": "The total number of reinforcement bars (rebars) used in the given location. This specifies how many rebars are placed together in a beam or column section.",
+            "default": 4
+          },
+          "row": {
+            "type": "integer",
+            "title": "Number of Rows",
+            "description": "The number of rows of rebars in the given location. This specifies how the rebars are distributed vertically in the section.",
+            "default": 2
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "P4",
+              "P5",
+              "P6",
+              "P8",
+              "P10",
+              "P12",
+              "P14",
+              "P16",
+              "P18",
+              "P20",
+              "P22",
+              "P24",
+              "P26",
+              "P30",
+              "P32",
+              "P36",
+              "P40"
+            ],
+            "title": "Rebar Name",
+            "description": "The name or designation of the rebar. This typically refers to the type or size of the rebar, such as 'P26' or 'D16'.",
+            "default": "P26"
+          },
+          "cover": {
+            "title": "Concrete Cover",
+            "description": "The distance from the centroid of the rebar to the nearest surface of the concrete. This cover ensures adequate protection for the rebar and prevents corrosion.",
+            "$ref": "#/components/schemas/Length"
+          }
+        },
+        "type": "object",
+        "title": "Rebar Number, Row, and Cover",
+        "description": "Defines the number of rebars, the number of rows of rebars, and the concrete cover for reinforcement bars (rebars) used in concrete structures. The concrete cover ensures the durability and protection of the rebars from environmental factors.",
+        "dataclassname": "moapy.rc_pre.RebarNumberRowNameCover"
+      },
+      "ResultBytes": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "description": "Type",
+            "default": "xlsx"
+          },
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": "have to base64 to binary data",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "Bytes",
+        "description": "Result Bytes",
+        "dataclassname": "moapy.data_post.ResultBytes"
+      },
+      "SectionForce": {
+        "properties": {
+          "Fz": {
+            "title": "Axial Force",
+            "description": "Axial force acting along the longitudinal axis of the member. Positive values indicate compression, negative values indicate tension.",
+            "$ref": "#/components/schemas/Force"
+          },
+          "Mx": {
+            "title": "Moment about X-axis",
+            "description": "Bending moment acting about the member's major axis (X-axis). This represents the primary flexural action in the strong axis direction.",
+            "$ref": "#/components/schemas/Moment"
+          },
+          "My": {
+            "title": "Moment about Y-axis",
+            "description": "Bending moment acting about the member's minor axis (Y-axis). This represents the secondary flexural action in the weak axis direction.",
+            "$ref": "#/components/schemas/Moment"
+          },
+          "Vx": {
+            "title": "Shear Force along X-axis",
+            "description": "Shear force acting parallel to the member's major axis (X-axis). This represents the transverse force causing horizontal shear deformation.",
+            "$ref": "#/components/schemas/Force"
+          },
+          "Vy": {
+            "title": "Shear Force along Y-axis",
+            "description": "Shear force acting parallel to the member's minor axis (Y-axis). This represents the transverse force causing vertical shear deformation.",
+            "$ref": "#/components/schemas/Force"
+          }
+        },
+        "type": "object",
+        "title": "Design Forces",
+        "description": "Critical section forces for structural design including axial force, biaxial moments, and shear forces. These forces represent the controlling load combination for member design and analysis.",
+        "dataclassname": "moapy.data_pre.SectionForce"
+      },
+      "SectionRectangle": {
+        "properties": {
+          "sectionType": {
+            "const": "Solid_Rectangle",
+            "title": "Section Type",
+            "description": "Type of the section, fixed as 'Solid_Rectangle' for this class",
+            "default": "Solid_Rectangle",
+            "readOnly": true
+          },
+          "b": {
+            "title": "Width",
+            "description": "The width of the rectangular section. This dimension is critical for determining the bending and shear resistance of the section.",
+            "$ref": "#/components/schemas/Length"
+          },
+          "h": {
+            "title": "Height",
+            "description": "The height of the rectangular section. This dimension is crucial for calculating the section's capacity to resist bending moments and axial loads.",
+            "$ref": "#/components/schemas/Length"
+          }
+        },
+        "type": "object",
+        "title": "Solid Rectangle Section",
+        "description": "Defines a solid rectangular section with specified width (b) and height (h). These parameters are used in structural design to evaluate the section's capacity to resist bending, shear, and axial forces.",
+        "dataclassname": "moapy.data_pre.SectionRectangle"
+      },
+      "Stress": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Stress"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitStress"
+          }
+        },
+        "type": "object",
+        "title": "Stress",
+        "description": "Stress",
+        "dataclassname": "moapy.data_pre.Stress"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "enUnitForce": {
+        "type": "string",
+        "enum": [
+          "N",
+          "kN",
+          "MN",
+          "lbf",
+          "kip"
+        ],
+        "title": "enUnitForce"
+      },
+      "enUnitLength": {
+        "type": "string",
+        "enum": [
+          "mm",
+          "cm",
+          "m",
+          "in",
+          "ft"
+        ],
+        "title": "enUnitLength"
+      },
+      "enUnitMoment": {
+        "type": "string",
+        "enum": [
+          "kN.m",
+          "kip.in",
+          "kip.ft",
+          "N.mm",
+          "N.m"
+        ],
+        "title": "enUnitMoment"
+      },
+      "enUnitStress": {
+        "type": "string",
+        "enum": [
+          "Pa",
+          "KPa",
+          "MPa",
+          "psi",
+          "ksi"
+        ],
+        "title": "enUnitStress"
+      },
+      "report_ec2_column": {
+        "properties": {
+          "matl": {
+            "default": {
+              "fck": {
+                "unit": "MPa",
+                "value": 24.0
+              },
+              "fy": {
+                "unit": "MPa",
+                "value": 400.0
+              },
+              "fys": {
+                "unit": "MPa",
+                "value": 400.0
+              }
+            },
+            "$ref": "#/components/schemas/MaterialNative"
+          },
+          "sect": {
+            "default": {
+              "sectionType": "Solid_Rectangle",
+              "b": {
+                "unit": "mm",
+                "value": 400.0
+              },
+              "h": {
+                "unit": "mm",
+                "value": 600.0
+              }
+            },
+            "$ref": "#/components/schemas/SectionRectangle"
+          },
+          "rebar": {
+            "default": {
+              "main": [
+                {
+                  "cover": {
+                    "unit": "mm",
+                    "value": 60.0
+                  },
+                  "name": "P26",
+                  "number": 4,
+                  "row": 2
+                }
+              ],
+              "endStirrup": {
+                "name": "P10",
+                "number": 2,
+                "space": {
+                  "unit": "mm",
+                  "value": 100.0
+                }
+              },
+              "midStirrup": {
+                "name": "P10",
+                "number": 2,
+                "space": {
+                  "unit": "mm",
+                  "value": 100.0
+                }
+              }
+            },
+            "$ref": "#/components/schemas/ColumnRebarPattern"
+          },
+          "force": {
+            "default": {
+              "i": {
+                "Fz": {
+                  "unit": "kN",
+                  "value": 0.0
+                },
+                "Mx": {
+                  "unit": "kN.m",
+                  "value": 0.0
+                },
+                "My": {
+                  "unit": "kN.m",
+                  "value": 0.0
+                },
+                "Vx": {
+                  "unit": "kN",
+                  "value": 0.0
+                },
+                "Vy": {
+                  "unit": "kN",
+                  "value": 0.0
+                }
+              },
+              "j": {
+                "Fz": {
+                  "unit": "kN",
+                  "value": 0.0
+                },
+                "Mx": {
+                  "unit": "kN.m",
+                  "value": 0.0
+                },
+                "My": {
+                  "unit": "kN.m",
+                  "value": 0.0
+                },
+                "Vx": {
+                  "unit": "kN",
+                  "value": 0.0
+                },
+                "Vy": {
+                  "unit": "kN",
+                  "value": 0.0
+                }
+              }
+            },
+            "$ref": "#/components/schemas/MemberForce"
+          },
+          "length": {
+            "default": {
+              "lX": {
+                "unit": "mm",
+                "value": 3000.0
+              },
+              "lY": {
+                "unit": "mm",
+                "value": 3000.0
+              }
+            },
+            "$ref": "#/components/schemas/BucklingLength"
+          },
+          "eff_len": {
+            "default": {
+              "kx": 1.0,
+              "ky": 1.0
+            },
+            "$ref": "#/components/schemas/EffectiveLengthFactor"
+          }
+        },
+        "type": "object",
+        "title": "report ec2 column"
+      }
+    }
+  }
+}

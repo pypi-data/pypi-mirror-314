@@ -1,0 +1,949 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "moapy",
+    "description": "Schema for moapy",
+    "version": "1.2.5"
+  },
+  "servers": [
+    {
+      "url": "https://moa.rpm.kr-st-midasit.com/backend/python-executor/"
+    }
+  ],
+  "paths": {
+    "/execute?functionId=moapy-dgnengine-aisc16m_baseplate-report_aisc16m_baseplate": {
+      "post": {
+        "summary": "AISC-LRFD16M Base Plate Design",
+        "description": "The AISC-LRFD16M standard outlines the requirements for designing base plates that connect steel columns to foundations, emphasizing both safety and efficiency. The design process incorporates key considerations such as material properties, load conditions, and connection integrity. The analyses included are:\n\n- Verification of bearing and shear capacities based on material, thickness, and concrete contact\n- Design for axial, shear, and bending forces to maintain structural integrity\n- Analysis of bolt group effects and anchor design, ensuring resistance without excessive deformation\n- Incorporation of ductility and stability to accommodate misalignments and differential movements\n- Concrete bearing and punching checks to prevent failure or excessive cracking\n\nThe AISC approach integrates these factors into a unified design methodology, providing engineers with reliable tools and recommendations for designing safe and effective base plate connections.",
+        "operationId": "report aisc16m baseplate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/report_aisc16m_baseplate"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultBytes"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-content-info": {
+          "title": "AISC-LRFD16M Base Plate Design",
+          "description": "The AISC-LRFD16M standard outlines the requirements for designing base plates that connect steel columns to foundations, emphasizing both safety and efficiency. The design process incorporates key considerations such as material properties, load conditions, and connection integrity. The analyses included are:\n\n- Verification of bearing and shear capacities based on material, thickness, and concrete contact\n- Design for axial, shear, and bending forces to maintain structural integrity\n- Analysis of bolt group effects and anchor design, ensuring resistance without excessive deformation\n- Incorporation of ductility and stability to accommodate misalignments and differential movements\n- Concrete bearing and punching checks to prevent failure or excessive cracking\n\nThe AISC approach integrates these factors into a unified design methodology, providing engineers with reliable tools and recommendations for designing safe and effective base plate connections."
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnchorBolt": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Cast-In-Place",
+              "Post-Installed"
+            ],
+            "title": "Anchor Bolt Installation Type",
+            "description": "Type of anchor bolt installation method. Options include Cast-in-Place (CIP) or Post-Installed types, defining how the anchor bolt is embedded into the foundation.",
+            "default": "Cast-In-Place"
+          },
+          "steelbolt": {
+            "title": "Steel Bolt",
+            "description": "Steel bolt used in the anchor bolt assembly. It defines the material and mechanical properties of the bolt that ensures its strength and load-bearing capacity.",
+            "$ref": "#/components/schemas/SteelBolt"
+          },
+          "length": {
+            "type": "number",
+            "title": "Anchor Bolt Length",
+            "description": "The length of the anchor bolt, typically specified as the total length including both the embedded length in the foundation and the exposed portion. Length is critical for proper installation and load transfer.",
+            "default": 25.0
+          },
+          "posX": {
+            "title": "Position X",
+            "description": "The horizontal position of the anchor bolt along the X-axis. This defines the placement of the anchor bolt relative to the foundation's coordinate system.",
+            "$ref": "#/components/schemas/Length"
+          },
+          "posY": {
+            "title": "Position Y",
+            "description": "The horizontal position of the anchor bolt along the Y-axis. This defines the placement of the anchor bolt relative to the foundation's coordinate system.",
+            "$ref": "#/components/schemas/Length"
+          },
+          "numX": {
+            "type": "integer",
+            "title": "Number of Anchor Bolts in X-direction",
+            "description": "The number of anchor bolts arranged along the X-axis. This influences the distribution of forces and the overall stability of the connection.",
+            "default": 2
+          },
+          "numY": {
+            "type": "integer",
+            "title": "Number of Anchor Bolts in Y-direction",
+            "description": "The number of anchor bolts arranged along the Y-axis. This also impacts the force distribution and the structural integrity of the foundation.",
+            "default": 2
+          }
+        },
+        "type": "object",
+        "title": "Anchor Bolt Design",
+        "description": "Anchor bolts are critical for securing structures to concrete foundations. They are designed to withstand large forces and loads applied to the structure, offering essential support. The design of anchor bolts varies based on the application, foundation material, and structural needs.",
+        "dataclassname": "moapy.steel_pre.AnchorBolt"
+      },
+      "BasePlate": {
+        "properties": {
+          "matl": {
+            "title": "Base Plate Material Info",
+            "description": "Input specification for baseplate material properties. This data includes detailed material composition and characteristics of the base component. The specification outlines essential material parameters for baseplate construction and assembly.",
+            "$ref": "#/components/schemas/SteelMaterial"
+          },
+          "thk": {
+            "title": "Base Plate Thickness",
+            "description": "Physical thickness dimension of the baseplate component. This parameter defines the vertical depth of the plate material and is crucial for structural integrity and load-bearing capacity.",
+            "$ref": "#/components/schemas/Length"
+          },
+          "width": {
+            "title": "Base Plate Width",
+            "description": "Horizontal width measurement of the baseplate component. This dimension represents the lateral span of the plate and is essential for determining the overall footprint and load distribution capabilities",
+            "$ref": "#/components/schemas/Length"
+          },
+          "height": {
+            "title": "Base Plate Height",
+            "description": "Vertical height measurement of the baseplate component. This dimension defines the upward extension of the plate and is critical for ensuring proper component fitment and structural support requirements.",
+            "$ref": "#/components/schemas/Length"
+          },
+          "fck": {
+            "title": "Concrete Strength",
+            "description": "Characteristic compressive strength of concrete at 28 days. This parameter represents the structural concrete's design strength and is essential for determining the foundation's load-bearing capacity and structural performance.",
+            "$ref": "#/components/schemas/Stress"
+          }
+        },
+        "type": "object",
+        "title": "Base Plate Design Parameters",
+        "description": "Comprehensive specifications for base plate design including material properties, geometric dimensions, and foundation strength parameters. This configuration defines essential structural components for steel column base plate connections.",
+        "dataclassname": "moapy.steel_pre.BasePlate"
+      },
+      "BoltMaterial": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "A36",
+              "A307",
+              "A325",
+              "A354",
+              "A354-BD",
+              "A449",
+              "A490",
+              "A572-42",
+              "A572-50",
+              "F1554-36",
+              "F1554-55",
+              "F1554-105",
+              "F1852",
+              "F2280",
+              "A588",
+              "A36M",
+              "A325M",
+              "A572M-42",
+              "A572M-50",
+              "A588M",
+              "A193-B7",
+              "A193M-B7"
+            ],
+            "title": "Bolt Material Type",
+            "description": "The type or grade of the material used for the bolt. This determines the bolt's mechanical properties, such as strength, ductility, and corrosion resistance."
+          }
+        },
+        "type": "object",
+        "title": "Bolt Material Specifications",
+        "description": "This model defines the properties of the bolt material, including its type and mechanical characteristics. The material type affects the bolt's strength, durability, and suitability for specific applications.",
+        "dataclassname": "moapy.steel_pre.BoltMaterial"
+      },
+      "Force": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Force"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitForce"
+          }
+        },
+        "type": "object",
+        "title": "Force",
+        "description": "Force",
+        "dataclassname": "moapy.data_pre.Force"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Length": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Length"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitLength"
+          }
+        },
+        "type": "object",
+        "title": "Length",
+        "description": "Length",
+        "dataclassname": "moapy.data_pre.Length"
+      },
+      "Moment": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Moment"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitMoment"
+          }
+        },
+        "type": "object",
+        "title": "Moment",
+        "description": "Moment",
+        "dataclassname": "moapy.data_pre.Moment"
+      },
+      "ResultBytes": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "description": "Type",
+            "default": "xlsx"
+          },
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": "have to base64 to binary data",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "Bytes",
+        "description": "Result Bytes",
+        "dataclassname": "moapy.data_post.ResultBytes"
+      },
+      "SectionForce": {
+        "properties": {
+          "Fz": {
+            "title": "Axial Force",
+            "description": "Axial force acting along the longitudinal axis of the member. Positive values indicate compression, negative values indicate tension.",
+            "$ref": "#/components/schemas/Force"
+          },
+          "Mx": {
+            "title": "Moment about X-axis",
+            "description": "Bending moment acting about the member's major axis (X-axis). This represents the primary flexural action in the strong axis direction.",
+            "$ref": "#/components/schemas/Moment"
+          },
+          "My": {
+            "title": "Moment about Y-axis",
+            "description": "Bending moment acting about the member's minor axis (Y-axis). This represents the secondary flexural action in the weak axis direction.",
+            "$ref": "#/components/schemas/Moment"
+          },
+          "Vx": {
+            "title": "Shear Force along X-axis",
+            "description": "Shear force acting parallel to the member's major axis (X-axis). This represents the transverse force causing horizontal shear deformation.",
+            "$ref": "#/components/schemas/Force"
+          },
+          "Vy": {
+            "title": "Shear Force along Y-axis",
+            "description": "Shear force acting parallel to the member's minor axis (Y-axis). This represents the transverse force causing vertical shear deformation.",
+            "$ref": "#/components/schemas/Force"
+          }
+        },
+        "type": "object",
+        "title": "Design Forces",
+        "description": "Critical section forces for structural design including axial force, biaxial moments, and shear forces. These forces represent the controlling load combination for member design and analysis.",
+        "dataclassname": "moapy.data_pre.SectionForce"
+      },
+      "SteelBolt": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "M12",
+              "M16",
+              "M20",
+              "M22",
+              "M24",
+              "M27",
+              "M30",
+              "M36"
+            ],
+            "title": "Bolt Size",
+            "description": "The size or type of the steel bolt, represented by its designation (e.g., M16). This defines the dimensions and thread specifications of the bolt."
+          },
+          "matl": {
+            "title": "Bolt Material",
+            "description": "The material from which the steel bolt is manufactured (e.g., carbon steel, stainless steel). This affects the bolt's strength, durability, and corrosion resistance.",
+            "$ref": "#/components/schemas/BoltMaterial"
+          }
+        },
+        "type": "object",
+        "title": "Steel Bolt Specifications",
+        "description": "This model defines the properties of a steel bolt, including its size and material. Steel bolts are essential components in fastening structures, and their properties affect the overall strength and stability of the connection.",
+        "dataclassname": "moapy.steel_pre.SteelBolt"
+      },
+      "SteelMaterial": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code",
+            "description": "Unique code for the material as defined in the material database. This is used to identify the specific steel material.",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "A36",
+              "A53",
+              "A242-40",
+              "A242-42",
+              "A242-46",
+              "A242-50",
+              "A283-24",
+              "A283-27",
+              "A283-30",
+              "A283-33",
+              "A283-36",
+              "A500-39",
+              "A500-42",
+              "A500-46",
+              "A500-50",
+              "A501",
+              "A514-90",
+              "A514-100",
+              "A529-42",
+              "A529-50",
+              "A572-42",
+              "A572-50",
+              "A572-60",
+              "A572-65",
+              "A588-40",
+              "A588-42",
+              "A588-46",
+              "A588-50",
+              "A606-45",
+              "A606-50",
+              "A618-50",
+              "A709-36",
+              "A709-50",
+              "A709-50S",
+              "A709-50W",
+              "A709-HPS50W",
+              "A709-HPS70W",
+              "A709-100(Thin)",
+              "A709-100(Thick)",
+              "A709-100W(Thin)",
+              "A709-100W(Thick)",
+              "A847",
+              "A852",
+              "A913-50",
+              "A913-60",
+              "A913-65",
+              "A913-70",
+              "A992",
+              "A1011-30",
+              "A1011-33",
+              "A1011-36",
+              "A1011-40",
+              "A1011-45",
+              "A1011-50",
+              "A1011-55",
+              "A1011-60",
+              "A1011-70",
+              "A1011-80"
+            ],
+            "title": "Name",
+            "description": "Name of the steel material. The material name is selected from a list of available materials."
+          }
+        },
+        "type": "object",
+        "title": "Steel Material",
+        "description": "A steel material used in structural design, with customizable options for material code and name. The material properties are selected from a predefined list.",
+        "dataclassname": "moapy.steel_pre.SteelMaterial"
+      },
+      "SteelSection": {
+        "properties": {
+          "shape": {
+            "type": "string",
+            "title": "Section Shape",
+            "description": "Structural steel section profile type (e.g., H-shape, I-beam, Channel, Angle). This parameter defines the fundamental cross-sectional geometry of the steel member.",
+            "default": "H",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "HP200X53",
+              "HP250X62",
+              "HP250X85",
+              "HP310X110",
+              "HP310X125",
+              "HP310X79",
+              "HP310X93",
+              "HP360X108",
+              "HP360X132",
+              "HP360X152",
+              "HP360X174",
+              "HP410X131",
+              "HP410X151",
+              "HP410X181",
+              "HP410X211",
+              "HP410X242",
+              "HP410X272",
+              "HP460X202",
+              "HP460X234",
+              "HP460X269",
+              "HP460X304",
+              "M100X4.3",
+              "M100X4.8",
+              "M100X5.1",
+              "M100X6.1",
+              "M100X8.9",
+              "M130X28.1",
+              "M150X5.5",
+              "M150X6.6",
+              "M200X9.2",
+              "M200X9.7",
+              "M250X11.2",
+              "M250X11.9",
+              "M250X13.4",
+              "M310X14.9",
+              "M310X16.1",
+              "M310X17.6",
+              "M318X17.3",
+              "M318X18.5",
+              "S100X11.5",
+              "S100X14.1",
+              "S130X15",
+              "S150X18.6",
+              "S150X25.7",
+              "S200X27.4",
+              "S200X34",
+              "S250X37.8",
+              "S250X52",
+              "S310X47.3",
+              "S310X52",
+              "S310X60.7",
+              "S310X74",
+              "S380X64",
+              "S380X74",
+              "S460X104",
+              "S460X81.4",
+              "S510X112",
+              "S510X128",
+              "S510X143",
+              "S510X98.2",
+              "S610X119",
+              "S610X134",
+              "S610X149",
+              "S610X158",
+              "S610X180",
+              "S75X11.2",
+              "S75X8.5",
+              "W1000X222",
+              "W1000X249",
+              "W1000X272",
+              "W1000X296",
+              "W1000X314",
+              "W1000X321",
+              "W1000X350",
+              "W1000X371",
+              "W1000X393",
+              "W1000X412",
+              "W1000X415",
+              "W1000X438",
+              "W1000X443",
+              "W1000X483",
+              "W1000X486",
+              "W1000X494",
+              "W1000X539",
+              "W1000X554",
+              "W1000X584",
+              "W1000X591",
+              "W1000X642",
+              "W1000X748",
+              "W1000X883",
+              "W100X19.3",
+              "W1100X343",
+              "W1100X390",
+              "W1100X433",
+              "W1100X499",
+              "W130X23.8",
+              "W130X28.1",
+              "W150X13",
+              "W150X13.5",
+              "W150X18",
+              "W150X22.5",
+              "W150X24",
+              "W150X29.8",
+              "W150X37.1",
+              "W200X100",
+              "W200X15",
+              "W200X19.3",
+              "W200X22.5",
+              "W200X26.6",
+              "W200X31.3",
+              "W200X35.9",
+              "W200X41.7",
+              "W200X46.1",
+              "W200X52",
+              "W200X59",
+              "W200X71",
+              "W200X86",
+              "W250X101",
+              "W250X115",
+              "W250X131",
+              "W250X149",
+              "W250X167",
+              "W250X17.9",
+              "W250X22.3",
+              "W250X25.3",
+              "W250X28.4",
+              "W250X32.7",
+              "W250X38.5",
+              "W250X44.8",
+              "W250X49.1",
+              "W250X58",
+              "W250X67",
+              "W250X73",
+              "W250X80",
+              "W250X89",
+              "W310X107",
+              "W310X117",
+              "W310X129",
+              "W310X143",
+              "W310X158",
+              "W310X179",
+              "W310X202",
+              "W310X21",
+              "W310X226",
+              "W310X23.8",
+              "W310X253",
+              "W310X28.3",
+              "W310X283",
+              "W310X313",
+              "W310X32.7",
+              "W310X342",
+              "W310X375",
+              "W310X38.7",
+              "W310X415",
+              "W310X44.5",
+              "W310X454",
+              "W310X500",
+              "W310X52",
+              "W310X60",
+              "W310X67",
+              "W310X74",
+              "W310X79",
+              "W310X86",
+              "W310X97",
+              "W360X101",
+              "W360X1086",
+              "W360X110",
+              "W360X122",
+              "W360X134",
+              "W360X147",
+              "W360X162",
+              "W360X179",
+              "W360X196",
+              "W360X216",
+              "W360X237",
+              "W360X262",
+              "W360X287",
+              "W360X314",
+              "W360X32.9",
+              "W360X347",
+              "W360X382",
+              "W360X39",
+              "W360X421",
+              "W360X44",
+              "W360X463",
+              "W360X509",
+              "W360X51",
+              "W360X551",
+              "W360X57.8",
+              "W360X592",
+              "W360X634",
+              "W360X64",
+              "W360X677",
+              "W360X72",
+              "W360X744",
+              "W360X79",
+              "W360X818",
+              "W360X900",
+              "W360X91",
+              "W360X990",
+              "W410X100",
+              "W410X114",
+              "W410X132",
+              "W410X149",
+              "W410X38.8",
+              "W410X46.1",
+              "W410X53",
+              "W410X60",
+              "W410X67",
+              "W410X75",
+              "W410X85",
+              "W460X106",
+              "W460X113",
+              "W460X128",
+              "W460X144",
+              "W460X158",
+              "W460X177",
+              "W460X193",
+              "W460X213",
+              "W460X235",
+              "W460X260",
+              "W460X286",
+              "W460X315",
+              "W460X349",
+              "W460X384",
+              "W460X421",
+              "W460X464",
+              "W460X52",
+              "W460X60",
+              "W460X68",
+              "W460X74",
+              "W460X82",
+              "W460X89",
+              "W460X97",
+              "W530X101",
+              "W530X109",
+              "W530X123",
+              "W530X138",
+              "W530X150",
+              "W530X165",
+              "W530X182",
+              "W530X196",
+              "W530X219",
+              "W530X248",
+              "W530X272",
+              "W530X300",
+              "W530X66",
+              "W530X72",
+              "W530X74",
+              "W530X82",
+              "W530X85",
+              "W530X92",
+              "W610X101",
+              "W610X113",
+              "W610X125",
+              "W610X140",
+              "W610X153",
+              "W610X155",
+              "W610X174",
+              "W610X195",
+              "W610X217",
+              "W610X241",
+              "W610X262",
+              "W610X285",
+              "W610X307",
+              "W610X341",
+              "W610X372",
+              "W610X415",
+              "W610X455",
+              "W610X498",
+              "W610X551",
+              "W610X82",
+              "W610X92",
+              "W690X125",
+              "W690X140",
+              "W690X152",
+              "W690X170",
+              "W690X192",
+              "W690X217",
+              "W690X240",
+              "W690X265",
+              "W690X289",
+              "W690X323",
+              "W690X350",
+              "W690X384",
+              "W690X419",
+              "W690X457",
+              "W690X500",
+              "W690X548",
+              "W690X802",
+              "W760X134",
+              "W760X147",
+              "W760X161",
+              "W760X173",
+              "W760X185",
+              "W760X196",
+              "W760X220",
+              "W760X257",
+              "W760X284",
+              "W760X314",
+              "W760X350",
+              "W760X389",
+              "W760X434",
+              "W760X484",
+              "W760X531",
+              "W760X582",
+              "W840X176",
+              "W840X193",
+              "W840X210",
+              "W840X226",
+              "W840X251",
+              "W840X299",
+              "W840X329",
+              "W840X359",
+              "W840X392",
+              "W840X433",
+              "W840X473",
+              "W840X527",
+              "W840X576",
+              "W920X201",
+              "W920X223",
+              "W920X238",
+              "W920X253",
+              "W920X271",
+              "W920X289",
+              "W920X313",
+              "W920X344",
+              "W920X345",
+              "W920X368",
+              "W920X381",
+              "W920X390",
+              "W920X420",
+              "W920X449",
+              "W920X491",
+              "W920X537",
+              "W920X588",
+              "W920X656",
+              "W920X725",
+              "W920X787",
+              "W920X970"
+            ],
+            "title": "Section Designation",
+            "description": "Standardized designation of the steel section based on industry specifications. This identifier corresponds to specific dimensional and structural properties in the steel section database."
+          }
+        },
+        "type": "object",
+        "title": "Steel Section Database Parameters",
+        "description": "Database specifications for structural steel sections including section shape and standardized member designations. This configuration provides essential cross-sectional properties for structural steel design and analysis.",
+        "dataclassname": "moapy.steel_pre.SteelSection"
+      },
+      "Stress": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Stress"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/enUnitStress"
+          }
+        },
+        "type": "object",
+        "title": "Stress",
+        "description": "Stress",
+        "dataclassname": "moapy.data_pre.Stress"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "enUnitForce": {
+        "type": "string",
+        "enum": [
+          "N",
+          "kN",
+          "MN",
+          "lbf",
+          "kip"
+        ],
+        "title": "enUnitForce"
+      },
+      "enUnitLength": {
+        "type": "string",
+        "enum": [
+          "mm",
+          "cm",
+          "m",
+          "in",
+          "ft"
+        ],
+        "title": "enUnitLength"
+      },
+      "enUnitMoment": {
+        "type": "string",
+        "enum": [
+          "kN.m",
+          "kip.in",
+          "kip.ft",
+          "N.mm",
+          "N.m"
+        ],
+        "title": "enUnitMoment"
+      },
+      "enUnitStress": {
+        "type": "string",
+        "enum": [
+          "Pa",
+          "KPa",
+          "MPa",
+          "psi",
+          "ksi"
+        ],
+        "title": "enUnitStress"
+      },
+      "report_aisc16m_baseplate": {
+        "properties": {
+          "baseplate": {
+            "default": {
+              "matl": {
+                "code": "ASTM",
+                "name": "A36"
+              },
+              "thk": {
+                "unit": "mm",
+                "value": 6.0
+              },
+              "width": {
+                "unit": "mm",
+                "value": 390.0
+              },
+              "height": {
+                "unit": "mm",
+                "value": 400.0
+              },
+              "fck": {
+                "unit": "MPa",
+                "value": 24.0
+              }
+            },
+            "$ref": "#/components/schemas/BasePlate"
+          },
+          "sect": {
+            "default": {
+              "shape": "H",
+              "name": "HP410X151"
+            },
+            "$ref": "#/components/schemas/SteelSection"
+          },
+          "force": {
+            "default": {
+              "Fz": {
+                "unit": "kN",
+                "value": 0.0
+              },
+              "Mx": {
+                "unit": "kN.m",
+                "value": 0.0
+              },
+              "My": {
+                "unit": "kN.m",
+                "value": 0.0
+              },
+              "Vx": {
+                "unit": "kN",
+                "value": 0.0
+              },
+              "Vy": {
+                "unit": "kN",
+                "value": 0.0
+              }
+            },
+            "$ref": "#/components/schemas/SectionForce"
+          },
+          "anchor": {
+            "default": {
+              "type": "Cast-In-Place",
+              "steelbolt": {
+                "matl": {
+                  "name": "A193-B7"
+                },
+                "name": "M16"
+              },
+              "length": 25.0,
+              "posX": {
+                "unit": "mm",
+                "value": 50.0
+              },
+              "posY": {
+                "unit": "mm",
+                "value": 50.0
+              },
+              "numX": 2,
+              "numY": 2
+            },
+            "$ref": "#/components/schemas/AnchorBolt"
+          }
+        },
+        "type": "object",
+        "title": "report aisc16m baseplate"
+      }
+    }
+  }
+}
