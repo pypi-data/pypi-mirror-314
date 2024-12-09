@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "certbot-dnspod"
+version = "0.1.4"
+description = "A certbot plugin for DNSPod"
+authors = ["codeif <me@codeif.com>"]
+license = "BSD-3-Clause"
+readme = "README.md"
+repository = "https://github.com/codeif/certbot-dnspod"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+certbot = "^3.0.1"
+"zope.interface" = "^7.2"
+dnspod-sdk = "^0.0.2"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.0.1"
+
+[tool.black]
+line-length = 120
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'
+
+[tool.poetry.plugins."certbot.plugins"]
+"certbot-dnspod" = "certbot_dnspod:Authenticator"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
