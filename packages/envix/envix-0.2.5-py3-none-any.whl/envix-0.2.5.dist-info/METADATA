@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: envix
+Version: 0.2.5
+Summary: convinient secret manager.
+Author: yassun7010
+Author-email: yassun7010@outlook.com
+Requires-Python: >=3.11,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: google-cloud-secret-manager (>=2.19.0,<3.0.0)
+Requires-Dist: pydantic (>=2.7.0,<3.0.0)
+Requires-Dist: python-dotenv (>=1.0.1,<2.0.0)
+Requires-Dist: pyyaml (>=6.0.1,<7.0.0)
+Requires-Dist: rich (>=13.7.1,<14.0.0)
+Requires-Dist: rich-argparse (>=1.4.0,<2.0.0)
+Description-Content-Type: text/markdown
+
+# Simple Secret Injector CLI tool
+
+[![pypi package](https://badge.fury.io/py/envix.svg)](https://pypi.org/project/envix)
+
+## Support Envs Types
+- Raw
+- Local
+- GoogleCloudSecretManager
+
+## Usage
+
+```sh
+cat > envix.toml <<EOF
+[envix]
+version = 1
+
+[[envs]]
+type = "Raw"
+[envs.items]
+MY_SECRET = '!!!secret!!!!'
+
+EOF
+
+envix inject --clear-environments -- env
+```
+
