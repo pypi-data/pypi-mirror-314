@@ -1,0 +1,68 @@
+# SuperTab: A Tab Management Library
+
+## Overview
+`supertab` is a Python library designed to simplify tab management with SQLAlchemy and a MySQL database. It provides a reusable interface for managing tabs, allowing for operations like creating, closing, reordering, and querying tabs.
+
+## Features
+- Manage hierarchical tab structures.
+- Seamless integration with SQLAlchemy.
+- Easily create and update database records for tabs.
+- Handle tab-specific logic like ordering and level-based hierarchies.
+
+---
+
+## Installation
+
+### Prerequisite
+Ensure Python 3.7+ is installed.
+
+### Local Installation
+Clone this repository:
+```bash
+git clone https://gitlab.com/bydata/pypi-manager/supertab
+cd supertab
+pip install .
+```
+
+## Getting Started
+
+
+### 1. Setting Up the Database
+Use the init_engine function to initialize the database connection:
+```python
+from supertab import init_engine
+DATABASE_URL = "mysql+pymysql://username:password@hostname/super_tab"
+engine = init_engine(DATABASE_URL, pool_size=10)
+```
+
+## 2. Creating Tables
+Automatically create tables in the database:
+```python
+from supertab import Base
+Base.metadata.create_all(bind=engine)
+```
+
+## 3. Using the TabManager
+Create an instance of TabManager:
+```python
+from supertab import TabManager
+tab_manager = TabManager(engine)
+```
+
+## Examples
+
+Example: Open a Tab
+tab_info = {"title": "Home", "url": "/home"}
+new_tab = tab_manager.open_tab(
+    unique_identifier="user123",
+    created_by=1,
+    tab_info=tab_info,
+    parent_tab_id=None
+)
+print(new_tab)
+
+Example: Close a Tab
+tab_manager.close_tab(tab_id=42)
+
+Example: Reorder Tabs
+tab_manager.reorder_tabs(tab_id=42, new_order=3)
