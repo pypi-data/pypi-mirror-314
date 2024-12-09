@@ -1,0 +1,141 @@
+Index: src/mqtt_backend_serrawatch/data/Config.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from .BrokerConfig import BrokerConfig\r\nfrom .TopicsConfig import TopicsConfig\r\nfrom typing import Any\r\n\r\nfrom SerraWatchLogger.backend.LoggerSerraWatch import LoggerSerraWatch\r\nLogger = LoggerSerraWatch.get_instance(\"SerraWatch\")\r\n\r\n\r\nclass Config:\r\n    def __init__(self, broker: BrokerConfig, broker_public: BrokerConfig, topics: TopicsConfig):\r\n        \"\"\"\r\n        Initializes the Config class with broker, public broker, and topics configurations.\r\n        :param broker: Configuration for the private MQTT broker (address and port).\r\n        :param broker_public: Configuration for the public MQTT broker (address and port).\r\n        :param topics: Configuration for the topics to subscribe and publish to.\r\n        \"\"\"\r\n        self.broker = broker\r\n        self.broker_public = broker_public\r\n        self.topics = topics\r\n        Logger.debug(self=Logger, message=\"Config initialized with broker, public broker, and topics configurations.\")\r\n\r\n    @staticmethod\r\n    def from_dict(config_dict: dict[str, Any]):\r\n        \"\"\"\r\n        Creates an instance of Config from a dictionary.\r\n        :param config_dict: Dictionary containing configuration data.\r\n        \"\"\"\r\n        Logger.debug(self=Logger, message=\"Validating configuration dictionary.\")\r\n        Config.validate_config_dict(config_dict)\r\n        Logger.debug(self=Logger, message=\"Dictionary has the correct format.\")\r\n\r\n        broker = BrokerConfig(**config_dict['broker'])\r\n        broker_public = BrokerConfig(**config_dict['broker-public'])\r\n        topics = TopicsConfig(\r\n            publishers=config_dict['topics']['publishers'],\r\n            subscribers=config_dict['topics']['subscribers']\r\n        )\r\n\r\n        return Config(broker=broker, broker_public=broker_public, topics=topics)\r\n\r\n    @staticmethod\r\n    def validate_config_dict(config_dict: dict[str, Any]):\r\n        \"\"\"\r\n        Validates the structure of the configuration dictionary.\r\n        :param config_dict: Dictionary containing configuration data.\r\n        \"\"\"\r\n        required_broker_keys = {'address', 'port'}\r\n        required_topics_keys = {'publishers', 'subscribers'}\r\n\r\n        if 'broker' not in config_dict:\r\n            raise ValueError(\"Missing 'broker' section in configuration.\")\r\n        if 'broker-public' not in config_dict:\r\n            raise ValueError(\"Missing 'broker-public' section in configuration.\")\r\n        if 'topics' not in config_dict:\r\n            raise ValueError(\"Missing 'topics' section in configuration.\")\r\n\r\n        broker_keys = set(config_dict['broker'].keys())\r\n        if not required_broker_keys.issubset(broker_keys):\r\n            missing_keys = required_broker_keys - broker_keys\r\n            raise ValueError(f\"Missing keys in 'broker' section: {missing_keys}\")\r\n\r\n        broker_public_keys = set(config_dict['broker-public'].keys())\r\n        if not required_broker_keys.issubset(broker_public_keys):\r\n            missing_keys = required_broker_keys - broker_public_keys\r\n            raise ValueError(f\"Missing keys in 'broker-public' section: {missing_keys}\")\r\n\r\n        topics_keys = set(config_dict['topics'].keys())\r\n        if not required_topics_keys.issubset(topics_keys):\r\n            missing_keys = required_topics_keys - topics_keys\r\n            raise ValueError(f\"Missing keys in 'topics' section: {missing_keys}\")\r\n\r\n        # Validate that publishers and subscribers are lists\r\n        if not isinstance(config_dict['topics']['publishers'], list):\r\n            raise ValueError(\"'publishers' section must be a list.\")\r\n        if not isinstance(config_dict['topics']['subscribers'], list):\r\n            raise ValueError(\"'subscribers' section must be a list.\")
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/mqtt_backend_serrawatch/data/Config.py b/src/mqtt_backend_serrawatch/data/Config.py
+--- a/src/mqtt_backend_serrawatch/data/Config.py	(revision 296429c6447de2d45aa84c22277bc3aea61e4d82)
++++ b/src/mqtt_backend_serrawatch/data/Config.py	(date 1733657937822)
+@@ -7,7 +7,7 @@
+ 
+ 
+ class Config:
+-    def __init__(self, broker: BrokerConfig, broker_public: BrokerConfig, topics: TopicsConfig):
++    def __init__(self, broker: BrokerConfig, topics: TopicsConfig,broker_public: BrokerConfig = None):
+         """
+         Initializes the Config class with broker, public broker, and topics configurations.
+         :param broker: Configuration for the private MQTT broker (address and port).
+@@ -30,12 +30,16 @@
+         Logger.debug(self=Logger, message="Dictionary has the correct format.")
+ 
+         broker = BrokerConfig(**config_dict['broker'])
+-        broker_public = BrokerConfig(**config_dict['broker-public'])
+         topics = TopicsConfig(
+             publishers=config_dict['topics']['publishers'],
+             subscribers=config_dict['topics']['subscribers']
+         )
+ 
++        # Handle optional 'broker-public' key
++        broker_public = None
++        if 'broker-public' in config_dict:
++            broker_public = BrokerConfig(**config_dict['broker-public'])
++
+         return Config(broker=broker, broker_public=broker_public, topics=topics)
+ 
+     @staticmethod
+@@ -49,8 +53,6 @@
+ 
+         if 'broker' not in config_dict:
+             raise ValueError("Missing 'broker' section in configuration.")
+-        if 'broker-public' not in config_dict:
+-            raise ValueError("Missing 'broker-public' section in configuration.")
+         if 'topics' not in config_dict:
+             raise ValueError("Missing 'topics' section in configuration.")
+ 
+@@ -59,18 +61,27 @@
+             missing_keys = required_broker_keys - broker_keys
+             raise ValueError(f"Missing keys in 'broker' section: {missing_keys}")
+ 
+-        broker_public_keys = set(config_dict['broker-public'].keys())
+-        if not required_broker_keys.issubset(broker_public_keys):
+-            missing_keys = required_broker_keys - broker_public_keys
+-            raise ValueError(f"Missing keys in 'broker-public' section: {missing_keys}")
+-
+         topics_keys = set(config_dict['topics'].keys())
+         if not required_topics_keys.issubset(topics_keys):
+             missing_keys = required_topics_keys - topics_keys
+             raise ValueError(f"Missing keys in 'topics' section: {missing_keys}")
+ 
++        # Validate optional 'broker-public'
++        if 'broker-public' in config_dict:
++            broker_public_keys = set(config_dict['broker-public'].keys())
++            if not required_broker_keys.issubset(broker_public_keys):
++                missing_keys = required_broker_keys - broker_public_keys
++                raise ValueError(f"Missing keys in 'broker-public' section: {missing_keys}")
++
+         # Validate that publishers and subscribers are lists
+         if not isinstance(config_dict['topics']['publishers'], list):
+             raise ValueError("'publishers' section must be a list.")
+         if not isinstance(config_dict['topics']['subscribers'], list):
+-            raise ValueError("'subscribers' section must be a list.")
+\ No newline at end of file
++            raise ValueError("'subscribers' section must be a list.")
++
++    def has_public_broker(self) -> bool:
++        """
++        Checks if the public broker is configured.
++        :return: True if the public broker is configured, False otherwise.
++        """
++        return self.broker_public is not None
+\ No newline at end of file
+Index: pyproject.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[build-system]\r\nrequires = [\"hatchling\"]\r\nbuild-backend = \"hatchling.build\"\r\n\r\n[tool.hatch.build.targets.wheel]\r\npackages = [\"src/mqtt_backend_serrawatch\"]\r\n\r\n[project]\r\nname = \"mqtt_backend_serrawatch\"\r\nversion = \"0.2.8\"\r\nauthors = [\r\n  { name=\"Alexandre Grzegorczyk\", email=\"alexandregrzegorczyk2@gmail.com\" },\r\n]\r\ndescription = \"This project was created as part of the Internet of Things (IoT) course in the Master's program in Computer Architecture at the Haute École de la Province de Liège (HEPL).\"\r\nreadme = \"README.md\"\r\nrequires-python = \">=3.6\"\r\nclassifiers = [\r\n    \"Programming Language :: Python :: 3\",\r\n    \"License :: OSI Approved :: MIT License\",\r\n    \"Operating System :: OS Independent\",\r\n]\r\n\r\n[project.urls]\r\nHomepage = \"https://github.com/IOTSerraWatch/Client_OnUbuntu\"\r\nIssues = \"https://github.com/IOTSerraWatch/Client_OnUbuntu/issues\"\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml	(revision 296429c6447de2d45aa84c22277bc3aea61e4d82)
++++ b/pyproject.toml	(date 1733658139996)
+@@ -7,7 +7,7 @@
+ 
+ [project]
+ name = "mqtt_backend_serrawatch"
+-version = "0.2.8"
++version = "0.2.9"
+ authors = [
+   { name="Alexandre Grzegorczyk", email="alexandregrzegorczyk2@gmail.com" },
+ ]
+Index: .idea/Client_OnUbuntu.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/.venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.10 (Client_OnUbuntu)\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Client_OnUbuntu.iml b/.idea/Client_OnUbuntu.iml
+--- a/.idea/Client_OnUbuntu.iml	(revision 296429c6447de2d45aa84c22277bc3aea61e4d82)
++++ b/.idea/Client_OnUbuntu.iml	(date 1733657586958)
+@@ -3,8 +3,9 @@
+   <component name="NewModuleRootManager">
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/.venv" />
++      <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.10 (Client_OnUbuntu)" jdkType="Python SDK" />
++    <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Black\">\r\n    <option name=\"sdkName\" value=\"Python 3.10 (Client_OnUbuntu)\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.10 (Client_OnUbuntu)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 296429c6447de2d45aa84c22277bc3aea61e4d82)
++++ b/.idea/misc.xml	(date 1733657586961)
+@@ -3,5 +3,5 @@
+   <component name="Black">
+     <option name="sdkName" value="Python 3.10 (Client_OnUbuntu)" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (Client_OnUbuntu)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (Client_OnUbuntu)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
