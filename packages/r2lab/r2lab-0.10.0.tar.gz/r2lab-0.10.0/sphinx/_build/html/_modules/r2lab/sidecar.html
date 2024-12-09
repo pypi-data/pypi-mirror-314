@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>r2lab.sidecar &#8212; r2lab v0.6.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=d59dc883" />
+    <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.sidecar</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for r2lab.sidecar</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The R2lab sidecar is a websocket service that runs on</span>
+<span class="sd">``wss://r2lab.inria.fr:999/`` and that exposes the status of the testbed.</span>
+
+<span class="sd">This module implements client classes, for interacting with the sidecar service.</span>
+
+<span class="sd">The core of the implementation is ``asyncio``-friendly and accessible</span>
+<span class="sd">through the :class:`~r2lab.sidecar.SidecarAsyncClient` class, but for</span>
+<span class="sd">convenience some features are also available to synchronous code through</span>
+<span class="sd">the :class:`~r2lab.sidecar.SidecarSyncClient` class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># pylint: disable=w1203</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="c1"># required with websockets v9.x</span>
+<span class="kn">import</span> <span class="nn">websockets.client</span>
+
+<span class="kn">from</span> <span class="nn">.sidecar_payload</span> <span class="kn">import</span> <span class="n">SidecarPayload</span> <span class="k">as</span> <span class="n">Payload</span>
+
+
+<span class="n">default_sidecar_url</span> <span class="o">=</span> <span class="s1">&#39;wss://r2lab.inria.fr:999/&#39;</span>
+
+<span class="c1"># provide a simpler way to turn on debugging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_websockets_logging_to_stdout</span><span class="p">(</span><span class="n">level</span><span class="p">):</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;sidecar&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger</span>
+
+
+<span class="c1"># when doing</span>
+<span class="c1"># async with AsyncSidecarProxy(url) as proxy:</span>
+<span class="c1"># the proxy variable actually points at the underlying protocol</span>
+<span class="c1"># so that&#39;s where to add our send / receive methods</span>
+
+<div class="viewcode-block" id="SidecarProtocol">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol">[docs]</a>
+<span class="k">class</span> <span class="nc">SidecarProtocol</span><span class="p">(</span><span class="n">websockets</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">WebSocketClientProtocol</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The SidecarProtocol class is an asyncio-compliant implementation</span>
+<span class="sd">    of the R2lab sidecar system.</span>
+
+<span class="sd">    It inherits ``websockets.client.WebSocketClientProtocol``</span>
+<span class="sd">    as documented here:</span>
+<span class="sd">    https://websockets.readthedocs.io/en/stable/api.html#module-websockets.client</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SidecarProtocol.send_payload">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.send_payload">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a :class:`~r2lab.sidecar_payload.SidecarPayload`</span>
+<span class="sd">        object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">string</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SidecarProtocol.recv_payload">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.recv_payload">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">recv_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receives and returns a</span>
+<span class="sd">        :class:`~r2lab.sidecar_payload.SidecarPayload` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wired</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Payload</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">wired</span><span class="p">)</span></div>
+
+
+    <span class="c1"># for historical reasons, if &#39;incremental&#39; is not present</span>
+    <span class="c1"># then its a full info message</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_not_incremental</span><span class="p">(</span><span class="n">umbrella</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;incremental&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">umbrella</span>
+                <span class="ow">or</span> <span class="ow">not</span> <span class="n">umbrella</span><span class="p">[</span><span class="s1">&#39;incremental&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="SidecarProtocol.send_umbrella">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.send_umbrella">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_umbrella</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set one payload, constructed from its parts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_payload</span><span class="p">(</span>
+            <span class="n">Payload</span><span class="p">(</span>
+                <span class="n">umbrella</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="SidecarProtocol.recv_umbrella">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.recv_umbrella">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">recv_umbrella</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read one payload, and returns it as a dict with 3 keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">recv_payload</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">payload</span><span class="o">.</span><span class="n">umbrella</span></div>
+
+
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_probe_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">category</span><span class="p">):</span>
+        <span class="c1"># send a request and wait for answer</span>
+        <span class="c1"># as opposed to socketio, we may receive other traffic here</span>
+        <span class="c1"># since all goes into the same pipe</span>
+        <span class="c1"># so, wait until we receive corresponding &#39;info&#39;</span>
+        <span class="c1"># improvement could be to repeat the &#39;request&#39; after a timeout</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_umbrella</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="s2">&quot;PLEASE&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">umbrella</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">recv_umbrella</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;receives answer=</span><span class="si">{</span><span class="n">umbrella</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">umbrella</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">category</span>
+                    <span class="ow">and</span> <span class="n">umbrella</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;info&#39;</span>
+                    <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_not_incremental</span><span class="p">(</span><span class="n">umbrella</span><span class="p">)):</span>
+                <span class="n">infos</span> <span class="o">=</span> <span class="n">umbrella</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span>
+                <span class="n">info_by_id</span> <span class="o">=</span> <span class="p">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]:</span> <span class="n">info</span> <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">}</span>
+                <span class="k">return</span> <span class="n">info_by_id</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_set_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">triples</span><span class="p">):</span>
+        <span class="c1"># build the corresponding infos - a list of the form</span>
+        <span class="c1"># [ { &#39;id&#39; : id, &#39;attibute&#39; : value, ..}, ...]</span>
+        <span class="c1"># and emit that on the proper channel</span>
+        <span class="c1"># for that we start with a hash id -&gt; info</span>
+        <span class="c1"># send infos on proper channel and json-encoded</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">Payload</span><span class="p">()</span><span class="o">.</span><span class="n">fill_from_triples</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">triples</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+
+
+    <span class="c1"># nodes</span>
+
+<div class="viewcode-block" id="SidecarProtocol.nodes_status">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.nodes_status">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">nodes_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A function call that returns the JSON nodes status for the complete testbed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A python dictionary indexed by integers 1 to 37, whose values are</span>
+<span class="sd">            dictionaries with keys corresponding to each node&#39;s attributes at that time.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Get the complete testbed status::</span>
+
+<span class="sd">                async with SidecarAsyncClient() as sidecar:</span>
+<span class="sd">                    nodes_status = await sidecar.nodes_status()</span>
+<span class="sd">                print(nodes_status[1][&#39;usrp_type&#39;])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probe_category</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SidecarProtocol.set_nodes_triples">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.set_nodes_triples">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_nodes_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">triples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">          triples: each argument is expected to be a tuple (or list)</span>
+<span class="sd">            of the form ``id, attribute, value``. The same node</span>
+<span class="sd">            id can be used in several triples.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            To mark node 1 as unavailable and node 2 as turned off::</span>
+
+<span class="sd">                await sidecar.set_nodes_triples(</span>
+<span class="sd">                    (1, &#39;available&#39;, &#39;ok&#39;),</span>
+<span class="sd">                    (2, &#39;cmc_on_off&#39;, &#39;off&#39;),</span>
+<span class="sd">                   )</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_triples</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">,</span> <span class="n">triples</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SidecarProtocol.set_node_attribute">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.set_node_attribute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_node_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            id: a node_id as an int or str</span>
+<span class="sd">            attribute(str): the name of the attribute to be written</span>
+<span class="sd">            value(str): the new value</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            To mark node 1 as unavailable::</span>
+
+<span class="sd">                await sidecar.set_node_attribute(1, &#39;available&#39;, &#39;ko&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_nodes_triples</span><span class="p">((</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span></div>
+
+
+
+    <span class="c1"># phones</span>
+
+<div class="viewcode-block" id="SidecarProtocol.phones_status">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.phones_status">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">phones_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Just like ``nodes_status`` but on phones&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probe_category</span><span class="p">(</span><span class="s1">&#39;phones&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SidecarProtocol.set_phones_triples">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.set_phones_triples">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_phones_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">triples</span><span class="p">):</span>
+        <span class="s2">&quot;Identical to ``set_nodes_triples`` but on phones&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_triples</span><span class="p">(</span><span class="s1">&#39;phones&#39;</span><span class="p">,</span> <span class="n">triples</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SidecarProtocol.set_phone_attribute">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarProtocol.set_phone_attribute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_phone_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Similar to ``set_node_attribute`` on a phone</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            To mark phone 2 as being turned off (although this is constantly</span>
+<span class="sd">            recomputed by the phones monitor)::</span>
+
+<span class="sd">                await sidecar.set_phone_attribute(2, &#39;airplane_mode&#39;, &#39;on&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_phones_triples</span><span class="p">((</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span></div>
+</div>
+
+
+
+
+<div class="viewcode-block" id="SidecarAsyncClient">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarAsyncClient">[docs]</a>
+<span class="k">class</span> <span class="nc">SidecarAsyncClient</span><span class="p">(</span><span class="n">websockets</span><span class="o">.</span><span class="n">connect</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class behaves as an asynchronous context manager for</span>
+<span class="sd">    talking with the R2lab sidecar server.</span>
+
+<span class="sd">    Optional arguments `args` and `kwds` are passed as-is to</span>
+<span class="sd">    `websockets.client.connect`, see</span>
+<span class="sd">    https://websockets.readthedocs.io/en/stable/api.html#websockets.client.connect</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Set a node as available from some asynchronous code::</span>
+
+<span class="sd">            async with SidecarAsyncClient() as sidecar:</span>
+<span class="sd">                await sidecar.set_node_attribute(1, &#39;available&#39;, &#39;ok&#39;)</span>
+
+<span class="sd">        In this example, the ``sidecar`` object is</span>
+<span class="sd">        a :class:`~r2lab.sidecar.SidecarProtocol` instance.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        **About SSL server certificate verification:**</span>
+<span class="sd">        Verifying server certificates relies on a set of &quot;trusted&quot; CAs.</span>
+<span class="sd">        Web browsers do come with a maintained set of such trust anchors,</span>
+<span class="sd">        however the standard Python installation has no such knowledge;</span>
+<span class="sd">        and for that reason attempting to check for the testbed&#39;s certificate</span>
+<span class="sd">        will fail unless you&#39;ve taken the time to somehow configure all this.</span>
+
+<span class="sd">        If you just want to probe the testbed though, this looks like a lot</span>
+<span class="sd">        of hassle. In that case you can turn off server verification as foolows::</span>
+
+<span class="sd">            import ssl</span>
+<span class="sd">            ssl_context = ssl.SSLContext()</span>
+<span class="sd">            # this is where we ask for no verification</span>
+<span class="sd">            ssl_context.verify_mode = ssl.CERT_NONE</span>
+<span class="sd">            async with SidecarSyncClient(ssl=ssl_context) as sidecar:</span>
+<span class="sd">                await sidecar.set_node_attribute(1, &#39;available&#39;, &#39;ok&#39;)</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">default_sidecar_url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;create_protocol&#39;</span> <span class="ow">in</span> <span class="n">kwds</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;should not overwrite create_protocol&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">create_protocol</span><span class="o">=</span><span class="n">SidecarProtocol</span><span class="p">,</span>
+                         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span></div>
+
+
+
+
+<span class="c1"># -------- synchronous wrapper</span>
+
+<div class="viewcode-block" id="SidecarSyncClient">
+<a class="viewcode-back" href="../../API.html#r2lab.sidecar.SidecarSyncClient">[docs]</a>
+<span class="k">class</span> <span class="nc">SidecarSyncClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A synchronous wrapper to perform the same operations</span>
+<span class="sd">    from sequential code without having to worry about the</span>
+<span class="sd">    event loop, asynchronous context manager and coroutine business.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Set a node as available from some synchronous code::</span>
+
+<span class="sd">            with SidecarSyncClient() as sidecar:</span>
+<span class="sd">                sidecar.set_node_attribute(1, &#39;available&#39;, &#39;ok&#39;)</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">      This is a convenience only, it would be unwise, obviously,</span>
+<span class="sd">      to call this from asynchronous code; if it works at all.</span>
+<span class="sd">      Use :class:`~r2lab.sidecar.SidecarAsyncClient` instead</span>
+<span class="sd">      in this use case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">default_sidecar_url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aclient</span> <span class="o">=</span> <span class="n">SidecarAsyncClient</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proto</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proto</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;SyncClient already connected&quot;</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proto</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">aclient</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coro</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">proto</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;SyncClient not connected&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">proto</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">proto</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coro</span><span class="p">())</span>
+
+
+    <span class="c1"># of course we can&#39;t inherit from the async class as-is</span>
+    <span class="c1"># so let&#39;s wrap the async methods</span>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="c1">#print(f&quot;SyncClient resolving method {method}&quot;)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">SidecarProtocol</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no such method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> in SidecarProtocol&quot;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+            <span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proto</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coro</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.sidecar</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2016, Thierry Parmentelat.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

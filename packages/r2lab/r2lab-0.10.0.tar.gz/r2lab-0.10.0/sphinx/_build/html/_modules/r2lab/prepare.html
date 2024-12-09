@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>r2lab.prepare &#8212; r2lab v0.6.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=d59dc883" />
+    <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.prepare</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for r2lab.prepare</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains a utility for preparing the testbed.</span>
+
+<span class="sd">The logic is that you write a scheduler that implements your</span>
+<span class="sd">pure experimental logic.</span>
+
+<span class="sd">You can then pass this scheduler to ``r2lab_prepare_scheduler()``,</span>
+<span class="sd">that returns a scheduler where your original one is embedded.</span>
+
+<span class="sd">This overall scheduler will prepend instructions for preparing the testbed,</span>
+<span class="sd">in terms of loading images on nodes, turning off unused nodes, and similar.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">asynciojobs</span> <span class="kn">import</span> <span class="n">Scheduler</span>
+<span class="kn">from</span> <span class="nn">apssh</span> <span class="kn">import</span> <span class="n">SshNode</span><span class="p">,</span> <span class="n">SshJob</span><span class="p">,</span> <span class="n">Run</span><span class="p">,</span> <span class="n">RunScript</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">PHONES</span><span class="p">,</span> <span class="n">r2lab_id</span><span class="p">,</span> <span class="n">find_local_embedded_script</span>
+
+<span class="c1"># how to run something on all nodes but a specified list</span>
+<span class="c1"># be flexible on how to specify that list</span>
+<span class="c1"># e.g _rhubarbe_command(&#39;off&#39;, [&#39;fit1&#39;, &#39;fit02&#39;, 5, &#39;10&#39;, b&#39;12&#39;])</span>
+<span class="c1"># =&gt; &quot;rhubarbe off --all ~1 ~2 ~5 ~10 ~12&quot;</span>
+<span class="k">def</span> <span class="nf">_rhubarbe_command</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">left_alone</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;rhubarbe </span><span class="si">{}</span><span class="s2"> --all&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">verb</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">left_alone</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot; ~</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<div class="viewcode-block" id="prepare_testbed_scheduler">
+<a class="viewcode-back" href="../../API.html#r2lab.prepare.prepare_testbed_scheduler">[docs]</a>
+<span class="k">def</span> <span class="nf">prepare_testbed_scheduler</span><span class="p">(</span>                   <span class="c1"># pylint: disable=r0913, r0914</span>
+        <span class="n">gateway</span><span class="p">:</span> <span class="n">SshNode</span><span class="p">,</span>
+        <span class="n">load_flag</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">experiment_scheduler</span><span class="p">:</span> <span class="n">Scheduler</span><span class="p">,</span>
+        <span class="n">images_mapping</span><span class="p">,</span>
+        <span class="n">nodes_left_alone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">sdrs_left_alone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">phones_left_alone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose_jobs</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function is designed as a standard way for experiments to warm up.</span>
+<span class="sd">    Experimenters only need to write a scheduler that defines the behaviour</span>
+<span class="sd">    of their core experiment, this function will add additional steps that</span>
+<span class="sd">    take care of a) checking for a valid lease, b) load images on nodes, and</span>
+<span class="sd">    c) turn off unused devices.</span>
+
+<span class="sd">    It is generally desirable to write an experiment script that has a</span>
+<span class="sd">    `--load/-l` boolean flag; typically, one would use the ``--load`` flag the</span>
+<span class="sd">    first time that an experiment is launched during a given timeslot, while</span>
+<span class="sd">    subsequent calls won&#39;t. That is the purpose of the ``load_flag`` below;</span>
+<span class="sd">    when set to False, only step a) is performed, otherwise the resulting</span>
+<span class="sd">    scheduler will go for the full monty.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">      gateway_sshnode: the ssh handle to the gateway</span>
+<span class="sd">      load_flag(bool): if not set, only the lease is checked</span>
+<span class="sd">      experiment_scheduler: core scheduler for the experiment</span>
+<span class="sd">      images_mapping: a dictionary that specifies images to be loaded on nodes;</span>
+<span class="sd">        see examples below</span>
+<span class="sd">      nodes_left_alone: a list of node numbers that should be left intact,</span>
+<span class="sd">        neither loaded nor turned off;</span>
+<span class="sd">      phones_left_alone: a list of node numbers that should be left intact,</span>
+<span class="sd">        i.e. not switched to airplane mode.</span>
+
+<span class="sd">    Return :</span>
+<span class="sd">      The overall scheduler where the input ``experiment_scheduler`` is embedded.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">      Specify a mapping like the following::</span>
+
+<span class="sd">          images_mapping = { &quot;ubuntu&quot; : [1, 4, 5], &quot;gnuradio&quot;: [16]}</span>
+
+<span class="sd">      Note that the format for ``images_mapping``, is flexible;</span>
+<span class="sd">      if only one node is to be loaded, the iterable level is optional;</span>
+<span class="sd">      also each node can be specified as an ``int``, a ``bytes``, a ``str``,</span>
+<span class="sd">      in which case non numeric characters are ignored. So this is a legitimate</span>
+<span class="sd">      requirement as well::</span>
+
+<span class="sd">        images_mapping = { &#39;openair-cn&#39;: 12 + 4,</span>
+<span class="sd">                           &#39;openair-enodeb&#39;: (&#39;fit32&#39;,),</span>
+<span class="sd">                           &#39;ubuntu&#39;: {12, &#39;reboot1&#39;, &#39;004&#39;,</span>
+<span class="sd">                                      &#39;you-get-the-picture-34&#39;}</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># handle default mutable args</span>
+    <span class="n">nodes_left_alone</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">nodes_left_alone</span><span class="p">)</span> <span class="k">if</span> <span class="n">nodes_left_alone</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">sdrs_left_alone</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sdrs_left_alone</span><span class="p">)</span> <span class="k">if</span> <span class="n">sdrs_left_alone</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">phones_left_alone</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">phones_left_alone</span><span class="p">)</span> <span class="k">if</span> <span class="n">phones_left_alone</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="n">scheduler</span> <span class="o">=</span> <span class="n">Scheduler</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Preparation&quot;</span><span class="p">)</span>
+
+    <span class="n">check_lease</span> <span class="o">=</span> <span class="n">SshJob</span><span class="p">(</span>
+        <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+        <span class="n">node</span><span class="o">=</span><span class="n">gateway</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_jobs</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Check lease </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gateway</span><span class="o">.</span><span class="n">username</span><span class="p">),</span>
+        <span class="n">command</span><span class="o">=</span><span class="n">Run</span><span class="p">(</span><span class="s2">&quot;rhubarbe leases --check&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;rlease&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="c1"># if no image loading is requested, we&#39;re done here</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">load_flag</span><span class="p">:</span>
+        <span class="n">scheduler</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">experiment_scheduler</span><span class="p">)</span>
+        <span class="n">experiment_scheduler</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="n">check_lease</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scheduler</span>
+
+    <span class="c1"># otherwise, we want to do in parallel</span>
+    <span class="c1"># (*) as many image-loading jobs as we have entries in images_mapping</span>
+    <span class="c1"># (*) one job to turn off phones, nodes and usrps</span>
+    <span class="c1">#     as parallelizing brings no speed up at all</span>
+
+    <span class="c1"># todo ideally we could also probe the testbed to figure out which nodes</span>
+    <span class="c1"># are currently unavailable, and let them alone as well; but well.</span>
+
+    <span class="c1"># the jobs that we need to wait for before going on with the real stuff</span>
+    <span class="n">octopus</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">loaded_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">images_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># let&#39;s be as flexible as possible</span>
+        <span class="c1"># (1) empty node list should be fine</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># (2) atomic types should be allowed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">nodes</span><span class="p">]</span>
+        <span class="c1"># (3) accept all forms of inputs</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">{</span><span class="n">r2lab_id</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+        <span class="n">duplicates</span> <span class="o">=</span> <span class="n">loaded_nodes</span> <span class="o">&amp;</span> <span class="n">nodes</span>
+        <span class="k">if</span> <span class="n">duplicates</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING - nodes in </span><span class="si">{}</span><span class="s2"> have been assigned several images&quot;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">duplicates</span><span class="p">))</span>
+        <span class="n">loaded_nodes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="c1"># for there on we need strings</span>
+        <span class="n">node_args</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">)</span>
+        <span class="n">octopus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">SshJob</span><span class="p">(</span>
+                <span class="n">gateway</span><span class="p">,</span>
+                <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+                <span class="n">required</span><span class="o">=</span><span class="n">check_lease</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;loading </span><span class="si">{}</span><span class="s2"> on </span><span class="si">{}</span><span class="s2">&quot;</span>
+                       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">node_args</span><span class="p">)),</span>
+                <span class="n">commands</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">Run</span><span class="p">(</span><span class="s2">&quot;rhubarbe load -i </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">node_args</span><span class="p">)),</span>
+                    <span class="n">Run</span><span class="p">(</span><span class="s2">&quot;rhubarbe wait </span><span class="si">{}</span><span class="s2">&quot;</span> <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_args</span><span class="p">)),</span>
+                <span class="p">],</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_jobs</span><span class="p">,</span>
+                <span class="p">))</span>
+
+    <span class="c1">### turn off stuff</span>
+    <span class="c1"># nodes</span>
+    <span class="n">dont_off_nodes</span> <span class="o">=</span> <span class="n">nodes_left_alone</span> <span class="o">|</span> <span class="n">loaded_nodes</span>
+    <span class="c1"># do turn off usrp device even on loaded nodes</span>
+    <span class="n">dont_off_sdrs</span> <span class="o">=</span> <span class="n">sdrs_left_alone</span>
+    <span class="c1"># phones - there&#39;s no equivalent of --all ~ notation with phones</span>
+    <span class="n">off_phones</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">PHONES</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> \
+                 <span class="o">-</span> <span class="p">{</span><span class="n">r2lab_id</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span> <span class="k">for</span> <span class="n">ph</span> <span class="ow">in</span> <span class="n">phones_left_alone</span><span class="p">}</span>
+
+    <span class="n">r2lab_includes</span> <span class="o">=</span> <span class="p">[</span><span class="n">find_local_embedded_script</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;faraday.sh&quot;</span><span class="p">,</span> <span class="s2">&quot;r2labutils.sh&quot;</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">off_phones</span><span class="p">:</span>
+        <span class="n">octopus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">SshJob</span><span class="p">(</span>
+                <span class="n">gateway</span><span class="p">,</span>
+                <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+                <span class="n">required</span><span class="o">=</span><span class="n">check_lease</span><span class="p">,</span>
+                <span class="n">critical</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">commands</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">RunScript</span><span class="p">(</span>
+                        <span class="n">find_local_embedded_script</span><span class="p">(</span><span class="s2">&quot;faraday.sh&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;macphone</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">phone</span><span class="p">),</span>
+                        <span class="s2">&quot;r2lab-embedded/shell/macphone.sh&quot;</span><span class="p">,</span> <span class="s2">&quot;phone-off&quot;</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;turn off phone </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">phone</span><span class="p">),</span>
+                        <span class="n">includes</span><span class="o">=</span><span class="n">r2lab_includes</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">phone</span> <span class="ow">in</span> <span class="n">off_phones</span><span class="p">],</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_jobs</span><span class="p">)</span>
+            <span class="p">)</span>
+
+
+    <span class="n">octopus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">SshJob</span><span class="p">(</span><span class="n">gateway</span><span class="p">,</span>
+               <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+               <span class="n">required</span><span class="o">=</span><span class="n">check_lease</span><span class="p">,</span>
+               <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Turn off unused devices&quot;</span><span class="p">,</span>
+               <span class="n">commands</span><span class="o">=</span><span class="p">[</span>
+                   <span class="n">Run</span><span class="p">(</span><span class="n">_rhubarbe_command</span><span class="p">(</span><span class="n">verb</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="p">,</span> <span class="n">left_alone</span><span class="o">=</span><span class="n">dont_off_nodes</span><span class="p">)),</span>
+                   <span class="n">Run</span><span class="p">(</span><span class="n">_rhubarbe_command</span><span class="p">(</span><span class="n">verb</span><span class="o">=</span><span class="s2">&quot;usrpoff&quot;</span><span class="p">,</span> <span class="n">left_alone</span><span class="o">=</span><span class="n">dont_off_sdrs</span><span class="p">)),</span>
+               <span class="p">],</span>
+               <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_jobs</span><span class="p">,</span>
+               <span class="p">))</span>
+
+    <span class="c1"># embed experiment scheduler</span>
+    <span class="n">experiment_scheduler</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="n">octopus</span><span class="p">)</span>
+    <span class="n">scheduler</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">experiment_scheduler</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">scheduler</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.prepare</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2016, Thierry Parmentelat.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

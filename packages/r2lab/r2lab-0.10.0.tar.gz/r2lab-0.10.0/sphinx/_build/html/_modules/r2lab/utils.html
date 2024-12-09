@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>r2lab.utils &#8212; r2lab v0.6.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=d59dc883" />
+    <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.utils</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for r2lab.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">PHONES</span> <span class="o">=</span> <span class="mi">2</span>
+
+<div class="viewcode-block" id="r2lab_id">
+<a class="viewcode-back" href="../../API.html#r2lab.utils.r2lab_id">[docs]</a>
+<span class="k">def</span> <span class="nf">r2lab_id</span><span class="p">(</span><span class="n">anything</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an integer from an input that can be either ``1`` (int),</span>
+<span class="sd">    ``1`` (str), b``1``(bytes), ``01`` (str) ,</span>
+<span class="sd">    ``fit1``, ``fit01`` or even ``reboot01``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">anything</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">anything</span> <span class="o">=</span> <span class="n">anything</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">anything</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># ignore all but digits</span>
+        <span class="n">anything</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^0-9]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">anything</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">anything</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_r2lab_name</span><span class="p">(</span><span class="n">anything</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}{:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">r2lab_id</span><span class="p">(</span><span class="n">anything</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="r2lab_hostname">
+<a class="viewcode-back" href="../../API.html#r2lab.utils.r2lab_hostname">[docs]</a>
+<span class="k">def</span> <span class="nf">r2lab_hostname</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a valid hostname like ``fit01`` from an input that can be</span>
+<span class="sd">    either ``1`` (int), ``1`` (str), ``01`` (str) , ``fit1``, ``fit01`` or even ``reboot01``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">       x(str): loosely typed input that reflects node number</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">       Simple use case::</span>
+
+<span class="sd">           r2lab_hostname(1) == &#39;fit01&#39;</span>
+
+<span class="sd">       And::</span>
+
+<span class="sd">           rl2ab_hostname(&#39;reboot1&#39;) == &#39;fit01&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_r2lab_name</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="r2lab_reboot">
+<a class="viewcode-back" href="../../API.html#r2lab.utils.r2lab_reboot">[docs]</a>
+<span class="k">def</span> <span class="nf">r2lab_reboot</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Same as ``r2lab_hostname`` but returns a hostname of the form ``reboot01``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_r2lab_name</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;reboot&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="r2lab_data">
+<a class="viewcode-back" href="../../API.html#r2lab.utils.r2lab_data">[docs]</a>
+<span class="k">def</span> <span class="nf">r2lab_data</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Same as ``r2lab_hostname`` but returns an interface name of the form ``data01``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_r2lab_name</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="r2lab_parse_slice">
+<a class="viewcode-back" href="../../API.html#r2lab.utils.r2lab_parse_slice">[docs]</a>
+<span class="k">def</span> <span class="nf">r2lab_parse_slice</span><span class="p">(</span><span class="nb">slice</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns username and hostname from a slice.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        slice(str): can be either ``username@hostname`` or just ``username``.</span>
+<span class="sd">           In the latter case the hostname defaults to</span>
+<span class="sd">           the R2lab gateway i.e. ``faraday.inria.fr``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: ``slice``, ``hostname``</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Typical usage is::</span>
+
+<span class="sd">            slice, hostname = r2lab_parse_slice(&quot;inria_r2lab.tutorial&quot;)</span>
+
+<span class="sd">            slice, hostname = r2lab_parse_slice(&quot;inria_r2lab.tutorial@faraday.inria.fr&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">slice</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">user</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="nb">slice</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">user</span><span class="p">,</span> <span class="n">host</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">,</span> <span class="s2">&quot;faraday.inria.fr&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="find_local_embedded_script">
+<a class="viewcode-back" href="../../API.html#r2lab.utils.find_local_embedded_script">[docs]</a>
+<span class="k">def</span> <span class="nf">find_local_embedded_script</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">extra_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This helper is designed to find a script that typically comes with</span>
+<span class="sd">    the ``r2lab-embedded`` repo, specifically in its ``shell``</span>
+<span class="sd">    subdirectory.</span>
+
+<span class="sd">    It knows of a few heuristics to locate your ``r2lab-embedded``</span>
+<span class="sd">    repo, relative to your home and current directories. You can</span>
+<span class="sd">    specify additional places to search for in ``extra_paths``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        script(str): the simple name of a script to find</span>
+<span class="sd">        extra_paths(List(str)): optional, a list of paths</span>
+<span class="sd">           (can be ``Path`` instances too) where to search too</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: a valid path in the local filesystem, or ``None``</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ``FileNotFoundError(script)`` if script can&#39;t be found</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Search for ``oai-enb.sh`` so as to run it remotely::</span>
+
+<span class="sd">            local_script = find_local_embedded_script(&quot;oai-enb.sh&quot;)</span>
+<span class="sd">            RunScript(localscript, ...)</span>
+
+<span class="sd">    Note:</span>
+
+<span class="sd">        Should this also look for some env. variable ?</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">heuritics</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># for people who have their git root in $HOME</span>
+        <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">(),</span>
+        <span class="c1"># for people who have their git root in ~/git</span>
+        <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;git&quot;</span><span class="p">,</span>
+        <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;fit-r2lab&quot;</span><span class="p">,</span>
+        <span class="c1"># when in r2lab-demos/one-demo</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../&quot;</span><span class="p">),</span>
+        <span class="c1"># when in r2lab-demos</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">),</span>
+        <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="c1"># convert extra paths into Paths</span>
+    <span class="k">if</span> <span class="n">extra_paths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">heuritics</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">extra_paths</span><span class="p">]</span>
+
+    <span class="c1"># several chances each time</span>
+    <span class="n">relatives</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;r2lab-embedded/shell&#39;</span><span class="p">,</span> <span class="s1">&#39;shell&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">heuritics</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">relative</span> <span class="ow">in</span> <span class="n">relatives</span><span class="p">:</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">relative</span> <span class="o">/</span> <span class="n">script</span>
+            <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: could not find local embedded script </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">script</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">heuritics</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">relative</span> <span class="ow">in</span> <span class="n">relatives</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;W: searched in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="n">relative</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">script</span><span class="p">)</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.utils</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2016, Thierry Parmentelat.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

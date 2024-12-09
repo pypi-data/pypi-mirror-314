@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>r2lab.argparse_additions &#8212; r2lab v0.6.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=d59dc883" />
+    <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.argparse_additions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for r2lab.argparse_additions</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The classes in this module extend the argparse ecosystem.</span>
+
+<span class="sd">Purpose is to enable the creation of CLI options that would behave a bit like</span>
+<span class="sd">``action=append``, but with a check on choices, that is to say:</span>
+
+<span class="sd">* **accumulative** : *dest* holds a list of strings - it&#39;s possible to use the type system as well</span>
+<span class="sd">* **restrictive** : all elements in the list must be in *choices*</span>
+<span class="sd">* optionnally **reset-able** : it should be possible for add_argument to specify a non-void default</span>
+<span class="sd">    and in this case we need a means for the CLI to explicitly void the value</span>
+
+<span class="sd">In practical terms, we want to specify one or several values for a parameter</span>
+<span class="sd">that is itself constrained, like an antenna mask that must be among &#39;1&#39;, &#39;3&#39; and &#39;7&#39;</span>
+
+<span class="sd">As of this writing at least, using &#39;append&#39; as an action won&#39;t work</span>
+<span class="sd">it is possible to write a code that uses</span>
+<span class="sd">action=append, choices=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;] and default=[&#39;a&#39;, &#39;b&#39;]</span>
+<span class="sd">but then defaults are always returned...</span>
+
+<span class="sd">**Resetting**</span>
+
+<span class="sd">The actual syntax offered by your CLI for actually resetting the target list may vary from one need to another</span>
+
+<span class="sd">As an example, let us consider a use case where we have 2 physical</span>
+<span class="sd">phones, and we want to be able to select any number of them. Let us</span>
+<span class="sd">further imagine that the code expects that selection to be expressed as a</span>
+<span class="sd">list of integers in the *1-2* range. </span>
+
+<span class="sd">So we&#39;d like to say e.g.:</span>
+
+<span class="sd">``parser.add_argument(&quot;-p&quot;, &quot;--phones&quot;, default=[1], choices=(1, 2), type=int, ...)``</span>
+
+<span class="sd">And with that in place, we&#39;d like to have</span>
+
+<span class="sd">* no option: results in ``phones = [1]``</span>
+<span class="sd">* ``-p 2``:      ``phones = [2]``</span>
+<span class="sd">* ``-p 1 -p 2``: ``phones = [1, 2]``</span>
+<span class="sd">* ``-p 0``:      ``phones = []``</span>
+
+<span class="sd">Now, it is **not possible** to adopt a convention where e.g.</span>
+
+<span class="sd">* ``-p none`` would mean ``phones = []`` </span>
+
+<span class="sd">because we have this ``type = int`` setting to ``add_argument``, which</span>
+<span class="sd">causes the string ``&quot;none&quot;`` to be rejected as an input.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+
+<div class="viewcode-block" id="ListOfChoices">
+<a class="viewcode-back" href="../../API.html#r2lab.argparse_additions.ListOfChoices">[docs]</a>
+<span class="k">class</span> <span class="nc">ListOfChoices</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Action</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The generic class assumes there is a means_resetting method</span>
+<span class="sd">    that is used to check for special incoming values that mean resetting</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Not resettable::</span>
+
+<span class="sd">            parser.add_argument(choices=(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;), default=[&#39;1&#39;, &#39;2&#39;],</span>
+<span class="sd">                                typeaction=ListOfChoices)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="c1"># initialize list of arguments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># initialize superclass</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_means_resetting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Override this method if you want special values to mean resetting</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">option_string</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># check if this means resetting</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_means_resetting</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="c1"># in any case</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ListOfChoicesNullReset">
+<a class="viewcode-back" href="../../API.html#r2lab.argparse_additions.ListOfChoicesNullReset">[docs]</a>
+<span class="k">class</span> <span class="nc">ListOfChoicesNullReset</span><span class="p">(</span><span class="n">ListOfChoices</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Example:</span>
+<span class="sd">       Resettable with ``-p 0``::</span>
+
+<span class="sd">           parser.add_argument(choices=(1, 2, 3, 0), type=int,</span>
+<span class="sd">                               default=[1],</span>
+<span class="sd">                               typeaction=ListOfChoicesNullReset)</span>
+
+<span class="sd">    **Note** make sure to mention ``0`` in the `choices`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_means_resetting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">r2lab v0.6.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">r2lab.argparse_additions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2016, Thierry Parmentelat.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>
