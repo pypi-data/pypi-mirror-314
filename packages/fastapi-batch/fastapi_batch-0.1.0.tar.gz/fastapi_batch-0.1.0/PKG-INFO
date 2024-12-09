@@ -1,0 +1,136 @@
+Metadata-Version: 2.3
+Name: fastapi-batch
+Version: 0.1.0
+Summary: FastAPI dependency for batch requesting
+Project-URL: Homepage, https://github.com/sarbagyastha/fastapi-batch
+Project-URL: Documentation, https://github.com/sarbagyastha/fastapi-batch/blob/main/README.md
+Project-URL: Repository, https://github.com/sarbagyastha/fastapi-batch
+Project-URL: Issues, https://github.com/sarbagyastha/fastapi-batch/issues
+Project-URL: Changelog, https://github.com/sarbagyastha/fastapi-batch/blob/main/CHANGELOG.md
+Author-email: Sarbagya Dhaubanjar <sarbagyastha@gmail.com>
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Framework :: AsyncIO
+Classifier: Framework :: FastAPI
+Classifier: Framework :: Pydantic
+Classifier: Framework :: Pydantic :: 1
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: HTTP Servers
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Python: >=3.12
+Requires-Dist: asyncer>=0.0.8
+Requires-Dist: fastapi>=0.115.6
+Requires-Dist: httpx>=0.28.1
+Description-Content-Type: text/markdown
+
+# FastAPI Batch
+
+FastAPI Batch is a Python library that allows you to batch multiple requests into a single request. It is built on top of FastAPI and Pydantic.
+
+
+## Installation
+
+```bash
+uv add fastapi-batch
+```
+
+
+## Usage
+
+[Navigate to the example directory](https://github.com/sarbagyastha/fastapi-batch/tree/main/example)
+
+```python
+@app.post("/api/v1/fruit")
+async def identify_fruit(fruit: FruitModel):
+    return {
+        "message": f"{fruit.name} is a fruit and is{' ' if fruit.poisonous else ' not '}poisonous."
+    }
+
+@app.post("/api/v1/animal")
+async def identify_animal(animal: AnimalModel):
+    return {
+        "message": f"{animal.name} is an animal and is{' ' if animal.carnivore else ' not '}a carnivorous."
+    }
+
+@app.post("/api/v1/batch")
+async def batch_endpoint(gateway: BatchGateway) -> BatchResponse:
+    return await gateway.execute()
+```
+
+#### Request
+```json
+{
+  "requests": {
+    "fruit": {
+      "body": {
+        "name": "Mango",
+        "poisonous": false
+      },
+      "headers": {
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "url": "/api/v1/fruit"
+    },
+    "animal": {
+      "body": {
+        "name": "Lion",
+        "carnivore": true
+      },
+      "headers": {
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "url": "/api/v1/animal"
+    }
+  }
+}
+```
+
+### Response
+```json
+{
+  "responses": {
+    "fruit": {
+      "body": {
+        "message": "Mango is a fruit and is not poisonous."
+      },
+      "status_code": 200
+    },
+    "animal": {
+      "body": {
+        "message": "Lion is an animal and is a carnivorous."
+      },
+      "status_code": 200
+    }
+  }
+}
+```
+
+## License
+Copyright 2024 Sarbagya Dhaubanjar
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
