@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "SmoothRPC"
+version = "0.9.3"
+description = "Decorator-based RPC library based on asyncio."
+authors = ["weary <wearyspam@weary.nl>"]
+readme = "README.md"
+keywords = ["asyncio", "rpc"]
+packages = [{ include = "smooth_rpc" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.13.0"
+pytest = "^8.3.3"
+pytest-asyncio = "^0.24.0"
+pytest-cov = "^6.0.0"
+ruff = "^0.7.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "semver"
+
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["ALL"]
+extend-ignore = [
+    "ANN101",
+    "ANN102",
+    "COM812",
+    "D203",
+    "D212",
+    "EM101",
+    "ERA001",
+    "FA102",
+    "FIX001",
+    "ISC001",
+    "T201",
+    "TD",
+    "TRY003",
+]
+
+[tool.ruff.format]
+
+[tool.ruff.lint.per-file-ignores]
+# more lenient in tests
+"tests/**.py" = [
+    "D100",
+    "D103",
+    "PLR2004",
+    "S101",
+    "SLF001",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=smooth_rpc --cov-report html"
+asyncio_default_fixture_loop_scope="function"
+
+[tool.coverage.report]
+fail_under=100
