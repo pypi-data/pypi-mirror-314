@@ -1,0 +1,154 @@
+[tool.poetry]
+package-mode = true
+license = "GNU GPLv3"
+name = "torchvinecopulib"
+version = "2024.12.5"
+description = "yet another vine copula library for PyTorch."
+authors = ["Tuoyuan Cheng <tuoyuan.cheng@nus.edu.sg>"]
+maintainers = ["Xiaosheng You <e1204754@u.nus.edu>"]
+readme = "README.md"
+# homepage = ""
+repository = "https://github.com/TY-Cheng/torchvinecopulib"
+documentation = "https://ty-cheng.github.io/torchvinecopulib/"
+keywords = ["vine copula", "copula", "torch"]
+classifiers = [
+    "Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.1",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.sphinx-pyproject]
+source-dir = "docs"
+build-dir = "docs/_build"
+all_files = true
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.coverage",
+    "sphinx.ext.doctest",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.graphviz",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.imgconverter",
+    "sphinx.ext.inheritance_diagram",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+html_theme = "furo"
+
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/TY-Cheng/torchvinecopulib/issues/new"
+
+[[tool.poetry.source]]
+name = "torch_cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "torch_cuda"
+url = "https://download.pytorch.org/whl/cu124"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+numpy = "*"
+python = "^3.10"
+scipy = "*"
+torch = { version = "^2", optional = true }
+# 
+[tool.poetry.group.dev_cpu]
+optional = true
+[tool.poetry.group.dev_cpu.dependencies]
+torch = { version = "^2", source = "torch_cpu", markers = "extra=='dev_cpu' and extra!='dev_cuda'" }
+# 
+black = { version = "*", extras = ["jupyter"] }
+coverage = { version = "*" }
+fastkde = { version = "*" }
+flake8 = { version = "*" }
+furo = { version = "*" }
+ipykernel = { version = "*" }
+matplotlib = { version = "*" }
+pandas = { version = "*" }
+pot = { version = "*" }
+pytest = { version = "*" }
+pyvinecopulib = { version = "0.6.6" }
+scikit-learn = { version = "*" }
+sphinx = { version = "*" }
+sphinx-pyproject = { version = "*" }
+tokenize-rt = { version = "*" }
+yfinance = { version = "*" }
+# 
+[tool.poetry.group.dev_cuda]
+optional = true
+[tool.poetry.group.dev_cuda.dependencies]
+torch = { version = "^2", source = "torch_cuda", markers = "extra=='dev_cuda' and extra!='dev_cpu'" }
+# 
+black = { version = "*", extras = ["jupyter"] }
+coverage = { version = "*" }
+fastkde = { version = "*" }
+flake8 = { version = "*" }
+furo = { version = "*" }
+ipykernel = { version = "*" }
+matplotlib = { version = "*" }
+pandas = { version = "*" }
+pot = { version = "*" }
+pytest = { version = "*" }
+pyvinecopulib = { version = "0.6.6" }
+scikit-learn = { version = "*" }
+sphinx = { version = "*" }
+sphinx_pyproject = { version = "*" }
+tokenize-rt = { version = "*" }
+yfinance = { version = "*" }
+
+[tool.poetry.extras]
+dev_cpu = [
+    "torch",
+    "black",
+    "coverage",
+    "fastkde",
+    "flake8",
+    "furo",
+    "ipykernel",
+    "matplotlib",
+    "pandas",
+    "pot",
+    "pytest",
+    "pyvinecopulib",
+    "scikit-learn",
+    "sphinx",
+    "sphinx_pyproject",
+    "tokenize-rt",
+    "yfinance",
+]
+dev_cuda = [
+    "torch",
+    "black",
+    "coverage",
+    "fastkde",
+    "flake8",
+    "furo",
+    "ipykernel",
+    "matplotlib",
+    "pandas",
+    "pot",
+    "pytest",
+    "pyvinecopulib",
+    "scikit-learn",
+    "sphinx",
+    "sphinx_pyproject",
+    "tokenize-rt",
+    "yfinance",
+]
