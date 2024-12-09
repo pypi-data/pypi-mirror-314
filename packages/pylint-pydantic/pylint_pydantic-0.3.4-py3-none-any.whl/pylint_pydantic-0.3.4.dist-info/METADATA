@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: pylint-pydantic
+Version: 0.3.4
+Summary: A Pylint plugin to help Pylint understand the Pydantic
+Home-page: https://github.com/fcfangcc/pylint-pydantic
+Author: fcfangcc
+Author-email: swjfc22@163.com
+License: GPLv3
+Keywords: pylint,pydantic
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+License-File: LICENSE
+Requires-Dist: pylint<4.0,>2.0
+Requires-Dist: pydantic<3.0
+Requires-Dist: pylint-plugin-utils
+
+pylint-pydantic
+================
+A Pylint plugin to help Pylint understand the Pydantic
+
+How to use
+===============
+Installation
+
+.. code:: shell
+
+    pip install pylint-pydantic
+
+Use in console
+
+.. code:: shell
+
+    pylint --load-plugins pylint_pydantic xxxxx
+
+Use in vscode,settings.json add item
+
+.. code:: shell
+
+    "pylint.args": ["--load-plugins", "pylint_pydantic"]
+    # in old vscode version maybe
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_pydantic"]
+
+Tests
+============
+.. code:: shell
+
+    pylint --rcfile=pylintrc --load-plugins pylint_pydantic tests/
+    ------------------------------------
+    Your code has been rated at 10.00/10
+
+FAQ
+=====================
+- How to resolve `pylint: No name 'BaseModel' in module 'pydantic'`?
+    Add `--extension-pkg-whitelist='pydantic'` parameter (see `#1961 <https://github.com/samuelcolvin/pydantic/issues/1961>`_)
+
+Other
+=====================
+If you have any questions, please create a issue.
+https://github.com/fcfangcc/pylint-pydantic/issues
+
+
+Changelog
+=====================
+
+- v0.3.4: fixed #35 #34
+- v0.3.1: fixed #29
+- v0.3.0: support pylint3
+- v0.2.4: fix pydantic.Field with BaseModel support
+- v0.2.2: fix model_validator keyword **mode**, pydatic>=2.0.3
+- v0.2.1: support `model_validator`
+- v0.2.0: support Pydantic V2
+
+
