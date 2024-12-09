@@ -1,0 +1,62 @@
+[project]
+name = "torchattack"
+description = "A set of adversarial attacks implemented in PyTorch"
+authors = [{ name = "spencerwooo", email = "spencer.woo@outlook.com" }]
+requires-python = ">=3.10,<3.13"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: GPU :: NVIDIA CUDA",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "torch>=1.13.0",
+    "torchvision>=0.14.0",
+    "numpy>=1.24.2",
+    "scipy>=1.10.1",
+]
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/spencerwooo/torchattack"
+Documentation = "https://github.com/spencerwooo/torchattack/blob/main/README.md"
+
+[project.optional-dependencies]
+dev = ["mypy", "rich", "timm"]
+test = ["pytest", "pytest-cov"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "torchattack.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["torchattack", "torchattack.*"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "B", "SIM"]
+ignore = ["E501", "B905"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.mypy]
+no_implicit_optional = true
+check_untyped_defs = true
+ignore_missing_imports = true # Used as torchvision does not ship type hints
+# disallow_any_unimported = true
+# disallow_untyped_defs = true
+# warn_return_any = true
