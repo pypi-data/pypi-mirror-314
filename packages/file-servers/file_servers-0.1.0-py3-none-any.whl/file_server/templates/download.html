@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+
+{% block title %}
+文件下载
+{% endblock %}
+{% block panel_title %}
+文件下载
+{% endblock %}
+{% block content %}
+
+<h3>./data/{{res.cur}}</h3>
+
+<br>
+<ul>
+  {% if res.dirs %}
+  {% for dir in res.dirs %}
+  <li><span class="glyphicon glyphicon-folder-open text-info"><a href="/down/{{dir[0]}}">&nbsp;<u
+          style="font-size: large;">{{dir[1]}}</u></a> </li>
+  {% endfor %}
+  {% endif %}
+  {% if res.files %}
+  {% for file in res.files %}
+  <li><span class="glyphicon glyphicon-download-alt text-info"></span><a href="/down/{{file[0]}}">&nbsp;&nbsp;&nbsp;<u
+        style="font-size: large;">{{file[1]}}</u>
+    </a> &nbsp;<a href="/download_file/{{file[0]}}" class="btn btn-primary btn-sm">下载</a> </li>
+  {% endfor %}
+  {% endif %}
+
+</ul>
+<br>
+<a href="{{ url_for('index') }}" class="btn btn-info">返回首页</a>
+&nbsp;
+<a href=""  id="previous" class="btn btn-info">上一页</a>
+
+
+<script>
+  var path = window.location.pathname
+  var lst = path.split('/')
+  var last = lst[lst.length-1]
+  if (last=='') {
+    $('#previous').hide();
+  } else {
+    $("#previous").attr('href', path.replace('/'+last,''));
+  }
+ 
+</script>
+{% endblock %}
