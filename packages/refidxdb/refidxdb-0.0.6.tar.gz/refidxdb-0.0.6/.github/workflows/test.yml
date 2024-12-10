@@ -1,0 +1,39 @@
+name: Testing
+
+on:
+  # push:
+  #   tags:
+  #     - "v*.*.*"
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    name: python
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Setup venv for testing
+        run: uv venv
+
+      - name: Install dependencies
+        run: uv sync --extra test
+
+      - name: Cache databases
+        id: cache-databases
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/refidxdb
+          key: ${{ runner.os }}-databases-${{ hashFiles('pyproject.toml') }}
+
+      - name: Download databases
+        if: steps.cache-databases.outputs.cache-hit != 'true'
+        run: uv run refidxdb db --download all
+
+      - name: Test with pytest
+        run: uv run pytest
