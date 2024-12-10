@@ -1,0 +1,33 @@
+[project]
+name = "easyweb"
+description = "UOS easyweb"
+authors = [
+    { name = "mikigo", email = "huangmingqiang@uniontech.com" },
+]
+dependencies = [
+    "pytest",
+    "playwright",
+]
+dynamic = [
+  "version",
+]
+requires-python = ">=3.7"
+readme = "README.md"
+license = { text = "GPL2.0" }
+
+[project.entry-points.pytest11]
+webdirver-plugin = "easyweb.plugin"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.hatch]
+version = { path = "easyweb/__version__.py" }
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "/easyweb",
+]
+
