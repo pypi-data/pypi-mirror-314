@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools >= 61.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "ttspod.version.__version__"}  
+
+[project]
+name = "ttspod"
+dynamic = ["version"]
+description = 'Convert any content to a podcast'
+authors = [
+  {name = "Adam Kessel", email = "adam@rosi-kessel.org"}
+]
+maintainers = [
+  {name = "Adam Kessel", email = "adam@rosi-kessel.org"}
+]
+keywords = [ 'podcast', 'text-to-speech' ]
+readme = 'README.md'
+license = {text = "MIT License"}
+classifiers=[
+  'Development Status :: 3 - Alpha',
+  'Intended Audience :: End Users/Desktop',
+  'License :: OSI Approved :: MIT License',
+  'Programming Language :: Python :: 3.11',
+  'Operating System :: POSIX :: Linux',
+  'Operating System :: MacOS :: MacOS X',
+  'Environment :: MacOS X',
+  'Environment :: Win32 (MS Windows)'
+] 
+requires-python = '==3.11.*'
+dependencies = [ 
+  'anyascii',
+  'cython',
+  'fastapi',
+  'Requests',
+  'Unidecode',
+  'ffmpeg',
+  'html2text',
+  'instapaper',
+  'ipython',
+  'lxml',
+  'lxml_html_clean',
+  'nltk',
+  'numpy<=1.26.4',
+  'pandoc',
+  'paramiko',
+  'pip',
+  'pocket',
+  'pocket_api',
+  'pod2gen',
+  'posix_ipc; platform_system != "Windows"',
+  'psutil',
+  'python-magic-bin; platform_system == "Windows"',
+  'semaphore_win_ctypes; platform_system == "Windows"',
+  'spacy<3.8,>=3',
+  'pydub',
+  'pyenchant',
+  'pymupdf',
+  'pypandoc',
+  'pypandoc-binary',
+  'python-dotenv',
+  'python_magic; platform_system != "Windows"',
+  'trafilatura',
+  'validators'
+  ]
+[project.optional-dependencies]
+local = [
+      'torch>=2.2.2',
+      'torchaudio>=2.2.2',
+      'whisperspeech',
+      'webdataset',
+      'coqui-tts==0.25.1',
+      'transformers',
+      'coqui-tts-trainer',
+      'ctranslate2'
+]
+remote = ['openai','elevenlabs']
+truststore = ['truststore']
+dev = ['posix_ipc; platform_system != "Windows"','semaphore_win_ctypes','build','twine']
+
+[project.urls]
+Homepage = "https://github.com/ajkessel/ttspod"
+Documentation = "https://github.com/ajkessel/ttspod/blob/main/README.md"
+Repository = "https://github.com/ajkessel/ttspod"
+Issues = "https://github.com/ajkessel/ttspod/issues"
+Changelog = "https://github.com/ajkessel/ttspod/commits/main/"
+
+[project.scripts]
+"ttspod" = "ttspod.cli:main"
+"generate_samples" = "ttspod.generate_samples:main"
