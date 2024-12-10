@@ -1,0 +1,13 @@
+class Props:
+    TEXT = 'text()'
+    HTML = 'html()'
+    HREF = 'href'
+    SRC = 'src'
+    TITLE = 'title'
+    ALT = 'alt'
+    CLASS = 'class'
+    ID = 'id'
+    VALUE = 'value'
+    NAME = 'name'
+    PROP = 'prop'
+    DATA = 'data'
