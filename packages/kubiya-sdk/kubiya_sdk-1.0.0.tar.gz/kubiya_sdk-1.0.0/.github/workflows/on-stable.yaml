@@ -1,0 +1,40 @@
+name: Bump version
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GHCR_GITHUB_TOKEN }}
+          default_bump: minor
+          release_branches: main
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: |
+            ${{ steps.tag_version.outputs.changelog }}
+            Docker Image: ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
+          generateReleaseNotes: true
+          token: ${{ secrets.GHCR_GITHUB_TOKEN }}
