@@ -1,0 +1,189 @@
+[tool.poetry]
+name = "gOdoo-cli"
+version = "0.12.7"
+description = "Wrapper around Odoo-Bin with some convinience RPC functions."
+authors = ["Joshua Kreuder <Joshua_Kreuder@outlook.com>"]
+license = "LGPL-3"
+readme = "README.md"
+packages = [{include = "godoo_cli",  from = "src"}]
+repository = "https://github.com/OpenJKSoftware/gOdoo"
+keywords = ["odoo", "godoo","devcontainer"]
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = ">=3.4.0"
+
+[tool.poetry_bumpversion.file."src/godoo_cli/version.py"]
+
+[tool.poetry.scripts]
+godoo = "godoo_cli:launch_cli"
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+python-dotenv = ">=0.20.0"
+ruamel-yaml = ">=0.17.21"
+gitpython = ">=3.1.27"
+godoo-rpc = ">=0.1.4"
+openupgradelib = ">=3.3.4"
+psycopg2-binary = "^2.9.10"
+passlib = ">=1.7.3" # Mirror Odoo Reqs
+typer-common-functions = ">=0.0.12"
+typer = ">=0.9.0"
+
+pylint-odoo = { version=">=8.0.16", optional = true}
+ipdb = { version=">=0.13.9", optional = true}
+debugpy = { version=">=1.6.0", optional = true}
+black = { version=">=22.10.0", optional = true}
+isort = { version=">=5.10.1", optional = true}
+watchdog = { version=">=2.1.7", optional = true}
+py-spy = { version=">=0.3.11", optional = true}
+rope = { version=">=0.23.0", optional = true}
+flake8 = { version=">=5.0.4", optional = true}
+inotify = { version=">=0.2.10",optional = true}
+mock = { version=">=4.0.3", optional= true}
+pytest = { version=">=7.2.1", optional= true}
+pytest-cov = {version=">=4.0.0",optional=true}
+pydevd-odoo = { version=">=1.2.1",optional=true}
+
+[tool.poetry.extras]
+devcontainer = [
+    "ipdb",
+    "debugpy",
+    "watchdog",
+    "rope",
+    "py-spy",
+    "inotify",
+    "mock",
+    "pydevd-odoo"
+]
+codequality = [
+    "pylint-odoo",
+    "black",
+    "isort",
+    "flake8",
+    "pytest",
+    "pytest-cov"
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.pyright]
+ignore=["**/__manifest__.py"]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile="black"
+multi_line_output=3
+include_trailing_comma=true
+force_grid_wrap=0
+combine_as_imports=true
+use_parentheses=true
+line_length=120
+known_odoo="odoo"
+known_odoo_addons="odoo.addons"
+sections="FUTURE,STDLIB,THIRDPARTY,ODOO,ODOO_ADDONS,FIRSTPARTY,LOCALFOLDER"
+default_section="THIRDPARTY"
+ensure_newline_before_comments=true
+
+[tool.pylint.format]
+max-line-length=120
+
+[tool.pylint.master]
+init-hook='import sys; sys.path.append("/odoo/odoo")'
+load-plugins="pylint_odoo"
+score="n"
+
+[tool.pylint.odoolint]
+readme-template-url="https://github.com/OCA/maintainer-tools/blob/master/template/module/README.rst"
+manifest-required-authors="Joshua Kreuder <Joshua_Kreuder@outlook.com>"
+manifest-required-keys="license"
+manifest-deprecated-keys="active"
+license-allowed="AGPL-3,GPL-2,GPL-2 or any later version,GPL-3,GPL-3 or any later version,LGPL-3,Other proprietary"
+valid-odoo-versions="16.0"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable="all"
+
+enable=[
+    "anomalous-backslash-in-string",
+    "api-one-deprecated",
+    "api-one-multi-together",
+    "assignment-from-none",
+    "attribute-deprecated",
+    "class-camelcase",
+    "dangerous-default-value",
+    "dangerous-view-replace-wo-priority",
+    "development-status-allowed",
+    "duplicate-id-csv",
+    "duplicate-key",
+    "duplicate-xml-fields",
+    "duplicate-xml-record-id",
+    "eval-referenced",
+    "eval-used",
+    "incoherent-interpreter-exec-perm",
+    "license-allowed",
+    "manifest-author-string",
+    "manifest-deprecated-key",
+    "manifest-required-author",
+    "manifest-required-key",
+    "manifest-version-format",
+    "method-compute",
+    "method-inverse",
+    "method-required-super",
+    "method-search",
+    "openerp-exception-warning",
+    "pointless-statement",
+    "pointless-string-statement",
+    "print-used",
+    "redundant-keyword-arg",
+    "redundant-modulename-xml",
+    "reimported",
+    "relative-import",
+    "return-in-init",
+    "rst-syntax-error",
+    "sql-injection",
+    "too-few-format-args",
+    "translation-field",
+    "translation-required",
+    "unreachable",
+    "use-vim-comment",
+    "wrong-tabs-instead-of-spaces",
+    "xml-syntax-error",
+    # messages that do not cause the lint step to fail
+    "consider-merging-classes-inherited",
+    "create-user-wo-reset-password",
+    "dangerous-filter-wo-user",
+    "deprecated-module",
+    "file-not-used",
+    "invalid-commit",
+    "missing-manifest-dependency",
+    "missing-newline-extrafiles",
+    # missing-readme",
+    "no-utf8-coding-comment",
+    "odoo-addons-relative-import",
+    "old-api7-method-defined",
+    "redefined-builtin",
+    "too-complex",
+    "unnecessary-utf8-coding-comment",
+    "unidiomatic-typecheck",
+    "unsubscriptable-object",
+    "missing-return",
+    # "use-a-generator",
+    "no-else-raise",
+    "useless-return"
+    ]
+
+
+[tool.pylint.reports]
+msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"
+output-format="colorized"
+reports="no"
