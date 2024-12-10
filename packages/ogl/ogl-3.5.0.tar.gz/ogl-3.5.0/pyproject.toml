@@ -1,0 +1,35 @@
+[build-system]
+requires = ['setuptools', 'wheel']
+build-backend = "setuptools.build_meta"
+
+[project]
+name='ogl'
+dynamic     = ["version"]
+description = 'External Pyut Graphical Shapes'
+readme      = "README.md"
+license     = {text = 'GNU AFFERO GENERAL PUBLIC LICENSE'}
+authors     = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@gmail.com'}]
+maintainers = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@gmail.com'}]
+keywords    = ['pyut', 'graphical shapes', 'python',]
+
+dependencies = [
+  'wxPython~=4.2.2',
+  'codeallybasic>=1.7.0',
+  'codeallyadvanced>=1.3.2',
+  'pyutmodelv2>=2.2.0',
+]
+
+[project.urls]
+Repository = 'https://github.com/hasii2011/ogl'
+
+
+[tool.setuptools.packages.find]
+where = ['src']
+
+[tool.setuptools.package-data]
+miniogl = ['py.typed']
+ogl     = ['py.typed']
+
+
+[tool.setuptools.dynamic]
+version = {attr = 'ogl.__version__'}
