@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Signing you in...
+{% endblock title %}
+{% block content %}
+<div class="flex justify-center h-screen w-100 place-items-center bg-gradient">
+  <div class="p-8 mx-4 space-y-3 shadow-lg bg-background rounded-4 w-100" style="max-width:30rem">
+    {% if app.app_logo %}
+    <div class="mb-5 text-center">
+      <img src="{{ app.app_logo }}" alt="{{ app.app_info }} Logo" style="height:3.25rem"/>
+    </div>
+    {% endif %}
+    {% if success %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">You are signed in!</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">Please wait while you are being
+      redirected to home.</p>
+    {% elif error %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">Something went wrong!</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">{{ error }}. Please try
+      again.</p>
+    <div class="mt-6">
+      <a class="w-full text-gray-600 btn" href="{% url 'login' %}">Go to Sign in</a>
+    </div>
+    {% elif totp %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">Almost there...</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">We need one more thing before
+      you are authenticated.</p>
+    {% else %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">Signing you in...</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">Please wait while we sign you
+      in.</p>
+    {% endif %}
+    {% if form %}
+    <form id="m-form" method="post" class="mt-8 space-y-3 login-form"
+          data-auto="{% if load %}true{% else %}false{% endif %}">
+      {% csrf_token %}
+      <input type="hidden" name="token" value="{{ form.token.value }}">
+      {% if totp %}
+      <div class="bg-warning bg-opacity-10 p-3.5 rounded-2 text-gray-900">
+        <h2 class="mb-1 font-semibold">2FA Code Required</h2>
+        <p class="text-md">Please use your authenticator app and enter the code below.</p>
+      </div>
+      <div class="space-y-1">
+        {{ form.code.label_tag }}
+        {{ form.code }}
+      </div>
+      <button type="submit" class="w-full mt-5 btn-primary">
+        Sign In
+      </button>
+      {% endif %}
+    </form>
+    {% endif %}
+  </div>
+</div>
+<script>
+  // Automatically submit the form when the page loads
+  window.onload = function () {
+    const form = document.getElementById('m-form');
+    if (form.dataset.auto === 'true') {
+      form.submit();
+    }
+  };
+</script>
+{% endblock content %}
