@@ -1,0 +1,231 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [{ name = "Adam Hendry", email = "adam.grant.hendry@gmail.com" }]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+description = "The ``pyvista`` version of ``ParaView``."
+license = { text = "MIT" }
+name = "pyvista-view"
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+version = "0.0.0"
+dependencies = [
+    "pyside6>=6.8.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pyvista-view[docs,github,utils,lint,typing,stubs,tests,perftests]"
+]
+docs = [
+    "Jinja2 >=3.0,<3.1",
+    "myst-parser>=3.0.1", # See https://github.com/astropy/astropy/issues/11725
+    "numpydoc >=1.4.0",
+    "sphinx>=7.3.7",
+    "sphinx-book-theme >=0.3.3",
+    "sphinx-copybutton>=0.5.2",
+    "tomli >=2.0.1",
+]
+github = [
+    "pytest-github-actions-annotate-failures>=0.2.0",
+]
+utils = [
+    "appdirs >=1.4.4",
+    "seedir >=0.3.0",
+]
+lint = [
+    "pre-commit >=2.18.1",
+]
+typing = [
+    "mypy >=0.991",
+    "mypy-extensions >=0.4.3",
+    "typing-extensions >=4.2.0",
+]
+stubs = [
+    "tqdm-stubs >=0.2.0",
+    "types-psutil>=6.1.0.20241102",
+    "types-setuptools >=57.4.17",
+    "types-tabulate>=0.9.0.20240106",
+]
+tests = [
+    "coverage[toml] >=6.4",
+    "pytest >=7.1.2",
+    "pytest-doctestplus >=0.12.0",
+    "pytest-env>=1.1.5",
+    "pytest-mock >=3.7.0",
+    "pytest-qt>=4.4.0",
+    "pytest-randomly >=3.11.0",
+    "pytest-xdist >=2.5.0",
+    "tox>=4.23.2",
+]
+perftests = [
+    "pytest-memprof >=0.2.0",
+]
+
+[tool.ruff]
+line-length = 90
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "__pycache__",
+    "__pypackages__",
+    "_build",
+    ".bzr",
+    ".cache",
+    ".direnv",
+    ".eggs",
+    ".git-rewrite",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "*.egg-info",
+    "*.pyc",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "stubs",
+]
+
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
+
+[tool.ruff.lint]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+
+unfixable = []
+
+# Enable linting and formatting rules
+select = [
+    "A",  # flake8-builtins (Linter to check for python builtins being used as variables or parameters)
+    "ARG",  # flake8-unused-arguments (Linter for unused arguments)
+    "B",  # flake8-bugbear (Linter for additional flake8 rules)
+    "BLE",  # flake8-blined-except (Linter for bare `except Exception/BaseException`)
+    "C4",  # flake8-comprehensions (Linter for writing better comprehensions)
+    "C90",  # mccabe (Linter for code complexity)
+    "D",  # pydocstyle (Static code analyzer for PEP 257 and Numpy/Google/Sphinx-style docstrings)
+    "DTZ",  # flake8-datetimez (Lint for usage of unsafe naive datetime class)
+    "E",  # pycodestyle (PEP 8 style guide checker)
+    "F",  # pyflakes (Static code analyzer for code smells)
+    "FA",  # flake8-future-annotations (Linter for `from __future__ import annotations`)
+    "FBT",  # flake8-boolean-trap (Linter for antipattern of using a positional boolean arg to switch behavior in public API)
+    "FLY",  # flynt (Linter to enforce using f-strings over join
+    "ICN",  # flake8-import-conventions (Linter for commonly accepted `import as` statements, e.g. `import pandas as pd`)
+    "INP",  # flake8-no-pep420  (Linter to prevent namespace packages)
+    "ISC",  # flake8-implicit-str-concat (Linter for improper string concatenation usages)
+    "N",  # pep8-naming (PEP 8 class, function, variable naming linter)
+    "PERF",  # perflint (Linter for performance antipatterns)
+    "PGH",  # flake8-pygrep-hooks (Linter for using `eval` and adding rule codes to type ignores)
+    "PIE",  # flake8-pie (Linter for extra flake8 rules)
+    "PL",  # pylint
+    "PT",  # flake8-pytest-style (Linter for pytest)
+    "PTH",  # flake8-use-pathlib (Linter for using pathlib over os)
+    "PYI",  # flake8-pyi (Linter for stub files)
+    "Q",  # flake8-quotes (Linter for consistent string quoting)
+    "RSE",  # flake8-raise (Linter for common `raise` statement errors)
+    "RUF",  # ruff-specific rules
+    "S",  # bandit (Static code analyzer for security issues)
+    "SIM",  # flake8-simplify (Linter to simplify certain expressions in code)
+    "SLF",  # flake8-self (Linter to prevent private member access)
+    "SLOT",  # flake8-slots (Linter to require `__slots__` for subclasses of immutable types)
+    "T10",  # flake8-debugger (Linter for left in pdb/ipdb statements in code)
+    "T20",  # flake8-print (Linter for left over `(p)print` statements)
+    "TC",  # flake8-type-checking (Linter to use `if TYPE_CHECKING` if module not needed at runtime)
+    "TRY",  # tryceratops (Linter for exception handling antipatterns)
+    "UP",  # pyupgrade
+    "YTT",  # flake8-2020 (Linter for `sys.version` usage errors with Python>=3.10),
+    "W",
+]
+
+ignore = [
+    # pycodestyle
+    "E203",  # Whitespace before ':'
+    "E501",  # Line length too long
+    "E731",  # Do not assign a lambda expression, use a def
+
+    # pydocstyle
+    "D101",  # Missing class docstring; Use docstring in `__init__` instead
+    "D105",  # Missing docstring in magic method
+
+    # flake8-implicit-str-concat
+    "ISC001",  # Implicitly concatenated string literals on one line; See https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+
+    # pep8-naming
+    "N802",  # Qt uses camelCase
+
+    # pytest
+    "PT022",  # Fixtures can use yield without a teardown
+
+    # flake8-quotes
+    "Q000",  # Single quotes found but double preserved; See https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "Q003",  # Change outer quotes to avoid escaping inner quotes
+
+    # bandit
+    "S101",  # `assert` is removed when compiling to optimized bytecode; (ignored for `pytest`)
+    "S301",  # builtin `pickle` module can be unsafe
+    "S403",  # pickle, cPickle, dill, and shelve modules are possibly insecure
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # "Imported but unused: happens with packages
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.lint.isort]
+required-imports = [
+  "from __future__ import annotations",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.mypy]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+strict_equality = true
+check_untyped_defs = true
+ignore_missing_imports = true
+pretty = true
+show_error_context = true
+packages = ['pyvista_view']
+exclude = [
+    'stubs/',
+    '[.]venv/',
+    'build/',
+    'dist/',
+    'ci/',
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
