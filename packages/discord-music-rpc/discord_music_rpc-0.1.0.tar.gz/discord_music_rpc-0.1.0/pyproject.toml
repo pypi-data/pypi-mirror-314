@@ -1,0 +1,32 @@
+[project]
+name = "discord-music-rpc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pillow>=11.0.0",
+    "plexapi>=4.16.0",
+    "pydantic>=2.10.3",
+    "pypresence>=4.3.0",
+    "pystray>=0.19.5",
+    "pyyaml>=6.0.2",
+    "requests>=2.32.3",
+    "soundcloud-v2>=1.6.0",
+    "spotipy>=2.24.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "nuitka>=2.5.6",
+]
+
+[tool.uv.sources]
+pypresence = { url = "https://github.com/qwertyquerty/pypresence/archive/master.zip" }
+
+[project.scripts]
+discord-music-rpc = "discord_music_rpc.main:main"
