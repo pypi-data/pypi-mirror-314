@@ -1,0 +1,105 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "build",
+    "wheel",
+    "toml",
+    ]
+
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gda-importer"
+version = "1.3.3"  # See CHANGELOG.md and use semantic versioning.
+authors = [{name="Abraham D. Smith (Geometric Data Analytics, Inc)", email="abraham.smith@geomdata.com"}]
+description = "GDA Importer provides simple command-line utilities that aide the installation of Python packages."
+readme = "README.md"
+license = {text = "AGPLv3"}
+urls = { Documentation="https://geomdata.pages.geomdata.com/gda-importer", Source="https://gitlab.geomdata.com/geomdata/gda-importer" }
+requires-python = ">=3.10,<3.13"
+
+dependencies = [
+    # See DEPENDENCIES.md
+    "packaging",
+    "pydantic>=1,<3",
+    "toml",
+]
+
+[project.scripts]
+ppinfo = "gda_importer.ppinfo:main"
+pull-private-deps = "gda_importer.pull_private_deps:main"
+
+
+[project.optional-dependencies]
+
+# ruff code hygiene checks
+ruff = [ "ruff>=0.5,<0.6" ]  # Stay current but beware future breaks that would fail tests
+
+# notebooks is for things that would help a user or developer do example experiments,
+# but are not needed for direct use.
+notebooks = [
+
+]
+
+# testing is for things that are required only to run the test suite
+testing = [
+    "pytest",
+    "pytest-cov",
+    "pytest-html",
+    "pytest-timeout",
+    "pytest-shell-utilities",
+    "pytest-xdist",
+]
+
+# docs is for things that are required only for building the online documentation
+docs = [
+
+    "griffe<1.0",
+    "quarto",
+    "quarto-cli",
+    "quartodoc",
+    "toml",
+]
+
+
+[tool.ruff]
+# Ruff performs our linting and formatting.
+# If you receive an error you don't understand, you can run `ruff rule <error code>` to learn more.
+# The full list of Ruff rules are here: https://docs.astral.sh/ruff/rules/
+extend-include = ["*.pyi"]
+
+# Add files here to be completely skipped by ruff.
+extend-exclude = [
+    "docs",
+    "sandbox",
+]
+
+output-format = "full"
+target-version = "py311"
+
+[tool.ruff.lint]
+extend-ignore = [
+    "D200",  # 1-line docstrings will be tolerated
+    "D203",  # We do not want one blank line before class. Must ignore either D211 or D203.
+    "D212",  # Docstring text starts on new line from the triple quotes. Ignore D213 to force it on the same line. 
+    "D213",  # Docstring text starts on the same line as the triple quotes. Ignore D212 to have a new line after the triple quotes.
+    # "E203",  # E203 removes whitespace around colons, semicolons, and commas in expressions. https://black.readthedocs.io/en/stable/faq.html#why-are-flake8-s-e203-and-w503-violated
+    # "E501",  # can't check line-length and have long hyperlinks in the docs
+    # "W292",  # Files should end in a newline; Ignoring W292 does not enforce newlines at EOF.
+]
+
+extend-select = [
+    "D", # Use pydoc style rules. See https://docs.astral.sh/ruff/rules/#pydocstyle-d
+    "E", # Use pycodestyle errors. See https://docs.astral.sh/ruff/rules/#error-e
+    "I", # Use isort rules. See https://docs.astral.sh/ruff/rules/#isort-i
+    "W", # Use pycodestyle warnings. See https://docs.astral.sh/ruff/rules/#warning-w
+]
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"  # Accepts: "google", "numpy", or "pep257".
+# This determines the Docstring style that is checked by ruff.
+# If your docstrings aren't in this convention, CI TESTS MAY FAIL.
+# If you change conventions, tools like pandoc or pyment may help.
