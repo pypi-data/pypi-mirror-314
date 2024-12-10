@@ -1,0 +1,135 @@
+[project]
+name = "osm-rawdata"
+dynamic = []
+description = "Make data extracts from OSM data."
+authors = [
+    { name = "Rob Savoye", email = "rob.savoye@hotosm.org" },
+    { name = "Sam Woodcock", email = "sam.woodcock@hotosm.org" },
+]
+dependencies = [
+    "PyYAML>=6.0.0",
+    "requests>=2.26.0",
+    "shapely>=1.8.1",
+    "geojson>=2.5.0",
+    "psycopg2>=2.9.1",
+    "flatdict>=4.0.1",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = "AGPL-3.0-only"
+keywords = [
+    "hot",
+    "osm",
+    "openstreetmap",
+]
+classifiers = [
+    "Topic :: Utilities",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+version = "0.4.1"
+
+[project.urls]
+homepage = "https://hotosm.github.io/osm-rawdata"
+documentation = "https://hotosm.github.io/osm-rawdata"
+repository = "https://github.com/hotosm/osm-rawdata"
+
+[project.scripts]
+importer = "osm_rawdata.importer:main"
+geofabrik = "osm_rawdata.geofabrik:main"
+
+[build-system]
+requires = [
+    "pdm-pep517>=1.1.4",
+]
+build-backend = "pdm.pep517.api"
+
+[tool.pytest.ini_options]
+addopts = "-ra -q -p no:warnings"
+testpaths = [
+    "tests",
+]
+pythonpath = "osm_rawdata"
+log_cli = true
+log_cli_level = "DEBUG"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.4.1"
+version_files = [
+    "pyproject.toml:version",
+    "osm_rawdata/__version__.py",
+    "Makefile:VERSION",
+]
+update_changelog_on_bump = true
+
+[tool.pdm.version]
+from = "osm_rawdata/__version__.py"
+
+[tool.pdm.build]
+includes = [
+    "osm_rawdata",
+]
+source-includes = [
+    "LICENSE.md",
+    "README.md",
+]
+
+[tool.pdm.dev-dependencies]
+importer = [
+    "sqlalchemy>=2.0.0",
+    "GeoAlchemy2>=0.11.0",
+    "SQLAlchemy-Utils>=0.38.3",
+]
+dev = [
+    "commitizen>=3.6.0",
+    "pre-commit>=3.3.3",
+]
+debug = [
+    "debugpy>=1.6.7.post1",
+    "ipdb>=0.13.13",
+]
+test = [
+    "pytest>=7.4.0",
+]
+docs = [
+    "mkdocs>=1.5.2",
+    "mkdocs-material>=9.2.3",
+    "mkdocstrings-python>=1.5.2",
+    "mkdocs-exclude>=1.0.2",
+]
+
+[tool.ruff]
+fix = true
+line-length = 88
+target-version = "py310"
+exclude = [
+    ".git",
+    ".ruff_cache",
+    ".vscode",
+    "__pypackages__",
+    "build",
+    "dist",
+    "osm_rawdata/__version__.py",
+]
+
+[tool.ruff.lint]
+select = [
+    "I",
+    "E",
+    "W",
+    "D",
+    "B",
+    "F",
+    "N",
+    "Q",
+]
+ignore = [
+    "N805",
+    "B008",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
