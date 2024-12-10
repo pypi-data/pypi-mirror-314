@@ -1,0 +1,76 @@
+Metadata-Version: 2.3
+Name: bnf-string-generator
+Version: 0.1.0
+Summary: A tool for generating random strings based on Backus-Naur Form (BNF) grammar.
+Project-URL: Homepage, https://github.com/romelium/bnf-string-generator
+Project-URL: Issues, https://github.com/romelium/bnf-string-generator/issues
+Author-email: Romelium <romeomanzanillaiii@gmail.com>
+License: MIT
+Keywords: BNF,generator,grammar,random,string
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Education
+Classifier: Topic :: Education :: Computer Aided Instruction (CAI)
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Text Processing
+Description-Content-Type: text/markdown
+
+# BNF String Generator
+
+## Description
+
+This is a tool for generating random strings from grammars defined in Backus-Naur Form (BNF). It operates by iteratively expanding non-terminal symbols into their corresponding production rules until only terminal symbols remain.
+
+### Install from PyPI:
+
+```bash
+pip install bnf-string-generator
+```
+
+### Install from Source:
+
+Clone the repository and install:
+
+```bash
+git clone https://github.com/yourusername/bnf-string-generator.git
+cd bnf-string-generator
+pip install .
+```
+
+## Usage
+
+You can generate random strings by providing a BNF grammar. Here’s an example:
+
+### Example:
+
+```python
+from bnf_string_generator import bnf_string_generator
+
+bnf_grammar = """
+<greeting> ::= <salutation> | <salutation> <intro> <EOL> <reply>
+<reply> ::= <salutation>
+<salutation> ::= "Hello" | "Hi" | "Hey" | "Greetings"
+<intro> ::= ", I'm " <name>
+<name> ::= "Alice" | "Bob" | "Charlie" | "Sam" | "Emma" | "John"
+"""
+
+random_string = bnf_string_generator(bnf_grammar)
+print(random_string)
+```
+
+This will generate a random greeting like:
+
+```
+Hello, I'm Bob
+```
