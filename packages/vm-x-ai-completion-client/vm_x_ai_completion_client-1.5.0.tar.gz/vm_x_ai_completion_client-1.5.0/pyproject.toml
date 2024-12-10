@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "vm-x-ai-completion-client"
+version = "1.5.0"
+description = "VM-X AI Completion Client"
+authors = [ "VM-X Engineering <eng@vm-x.ai>" ]
+maintainers = [ "VM-X Engineering <eng@vm-x.ai>" ]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/vm-x-ai/vm-x-ai-sdk"
+keywords = [ "VM-X", "AI", "Completion", "Client", "Python" ]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3"
+]
+
+[tool.poetry.group.dev]
+dependencies = { }
+
+  [[tool.poetry.packages]]
+  include = "vmxai_completion_client"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<4"
+  requests = "^2.31.0"
+  cachetools = "^5.3.3"
+  grpcio = "^1.62.2"
+  protobuf = "^4.21.6"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+  "vmxai_completion_client/protos"
+]
+line-length = 120
+indent-width = 4
+
+  [tool.ruff.lint]
+  select = [ "E", "F", "UP", "B", "SIM", "I" ]
+  ignore = [ ]
+  fixable = [ "ALL" ]
+  unfixable = [ ]
+
+[build-system]
+requires = [ "poetry-core" ]
+build-backend = "poetry.core.masonry.api"
