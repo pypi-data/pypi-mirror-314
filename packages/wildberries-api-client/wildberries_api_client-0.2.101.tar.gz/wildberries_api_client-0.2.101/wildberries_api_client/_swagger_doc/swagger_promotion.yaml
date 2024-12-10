@@ -1,0 +1,4284 @@
+openapi: 3.0.1
+info:
+  title: Opisanie API Prodvihenie
+  version: ""
+  description: Sinhronizacia dannyh iz bazy dannyh proishodit raz v 3 minuty.  <br>Izmenenie statusa proishodit raz v 1 minutu. Vnutri etogo intervala budet sohraneno poslednee deistvie po izmeneniu statusa. <br>Izmenenie stavki proishodit raz v 30 sekund. Vnutri etogo intervala budet sohraneno poslednee deistvie po izmeneniu stavki.
+    
+security:
+  - HeaderApiKey: []
+x-tagGroups:
+  - name: WB. Prodvihenie
+    tags:
+      - Prodvihenie
+      - Aktivnost kampanii
+      - Finansy
+      - Upravlenie parametrami kampanii Aukcion
+      - Upravlenie parametrami avtomatiheskih kampanii
+      - Slovari
+      - Statistika
+  - name: WB. Media
+    tags:
+      - Media
+      - Aktivnost mediakampanii
+      - Statistika mediakampanii
+      - Stavki mediakampanii
+tags:
+  - name: Prodvihenie
+  - name: Aktivnost kampanii
+  - name: Finansy
+  - name: Upravlenie obhimi parametrami kampanii
+  - name: Upravlenie parametrami kampanii Aukcion
+  - name: Upravlenie parametrami avtomatiheskih kampanii
+  - name: Slovari
+    description: Dla poluhenia informacii po kartohkam tovara ispolzuite metody kontenta [Spisok nomenklatur (NM)](https://openapi.wb.ru/content/api/ru/#tag/Prosmotr/paths/~1content~1v2~1get~1cards~1list/post) i [Spisok NM, nahodahihsa v korzine](https://openapi.wb.ru/content/api/ru/#tag/Korzina/paths/~1content~1v2~1get~1cards~1trash/post), oni dostupny po tokenu c opciei `Prodvihenie`.
+  - name: Statistika
+  - name: Media
+    description: Publihnyi API dla raboty s mediakampaniami
+paths:
+  /adv/v1/save-ad: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Sozdat avtomatiheskuu kampaniu
+      description: |
+        Sozdaut avtomatiheskuu kampaniu.<br>
+        Maksimum 1 zapros v 20 sekund.
+      tags:
+        - Prodvihenie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: 
+                  description: |
+                    <dl>
+                    <dt>Tip avtomatiheskoi kampanii:</dt>
+                    <dd><code>8</code>
+                    </dl>
+                  type: integer
+                  example: 8
+                name: 
+                  description: Nazvanie kampanii (max. 128 simvolov)
+                  type: string
+                  example: Parahuty
+                subjectId:
+                  description: |
+                    ID predmeta, dla kotorogo sozdaetsa kampania.
+                    <br>
+                    Suhestvuuhie u prodavca identifikatory mohno poluhit metodom iz razdela "Kontent / Prosmotr" - "Spisok NM", pole otveta - `subjectID`.
+                  type: integer
+                  example: 270                
+                sum:
+                  description: Summa popolnenia
+                  type: integer
+                  example: 500
+                btype:
+                  description: |
+                    <dl>
+                    <dt>Tip spisania.</dt>
+                    <dd><code>0</code> - Shet</dd>
+                    <dd><code>1</code> - Balans</dd>
+                    <dd><code>3</code> - Bonusy</dd>
+                    </dl>
+                  type: integer
+                  example: 1
+                on_pause:
+                  description: |
+                    <dl>
+                    <dt>Posle sozdania kampania:</dt> 
+                    <dd>
+                      <dl>
+                        <dt><code>true</code> - budet na pauze.</dt>
+                        <dd>Zapusk kampanii budet dostupen herez 3 minuty posle sozdania kampanii.</dd>
+                      </dl>
+                    </dd> 
+                    <dd><code>false</code> - budet srazu zapuhena</dd> 
+                    </dl>
+                  type: boolean
+                  example: true
+                nms: 
+                  description: |
+                    Massiv artikulov WB. <br>
+                    Maksimum 100 artikulov. 
+                  type: array
+                  items:
+                    type: integer
+                cpm: 
+                  description: |
+                    Stavka. <br>
+                    Esli budet ukazana stavka menhe dopustimogo razmera, to avtomatiheski ustanovitsa stavka minimalno dopustimogo razmera.
+                  type: integer
+            example: {"type": 8, "name": "Parahuty", "subjectId": 270, "sum": 500, "btype": 1, "on_pause": true, "nms":[9178363,9178364],"cpm": 10}
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                description: ID sozdannoi kampanii
+                type: string
+              example: "9008917"
+        400:
+          description: Nevernaa forma zaprosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                IncorrectId:
+                  summary: ""
+                  description: ""
+                  value:
+                    error: "nekorrektnyi ID predmeta"
+                BaseBudget500:
+                  value:
+                    error: "bazovyi budhet dolhen byt bolhe 500r"                
+                InvalidWriteOffType:
+                  value:
+                    error: "nekorrektnyi tip spisania"                
+                DepositAmount50:
+                  value:
+                    error: "Summa popolnenia dolhna byt kratna 50r"                
+                InsufficientFundsInAccount:
+                  value:
+                    error: "nedostatohno sredstv na shete"                
+                IncorrectCompanyName:
+                  value:
+                    error: "Nekorrektnoe nazvanie kampanii"                
+                NoProductsSelectedCategory:
+                  value:
+                    error: "Tovary vybrannoi kategorii ne v nalihii"                
+                PlacementIsNotPossible:
+                  value:
+                    error: "razmehenie nevozmohno"             
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                ReceivingRecommendationsOnMainPage:
+                  value:
+                    error: "Ohibka poluhenia razmehenia v rekomendaciah na glavnoi"
+                NotGetSupplierBalance:
+                  value:
+                    error: "ne udalos poluhit balans postavhika"                
+                CreatingSinglePlacement:
+                  value:
+                    error: "Ohibka sozdania edinstvennogo razmehenia"
+                ReceivingInProductCard:
+                  value:
+                    error: "Ohibka poluhenia razmehenia v kartohke tovara"    
+                GettingCpmCalculation:
+                  value:
+                    error: "Ohibka poluhenia rasheta stavok"                
+                SavingPlacementInCard:
+                  value:
+                    error: "Ohibka sohranenia razmehenia v kartohke"                
+                SavingPlacementInRecommend:
+                  value:
+                    error: "Ohibka sohranenia razmehenia v rekomendaciah"                
+                FailedPutCampaignInCache:
+                  value:
+                    error: "ne udalos polohit kampaniu v keh"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v2/seacat/save-ad: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Sozdat kampaniu Aukcion
+      description: |
+        Sozdaet kampaniu Aukcion. <br>
+        Maksimum 5 zaprosov v minutu
+      tags:
+        - Prodvihenie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                campaignName:
+                  description: "Nazvanie kampanii"
+                  type: string
+                nms:
+                  type: array
+                  description: |
+                    Nomenklatury dla kampanii. Dostupnye nomenklatury mohno poluhit s pomohu metoda [Nomenklatury dla kampanii](./#tag/Slovari/paths/~1adv~1v2~1supplier~1nms/post). Maksimum 50 tovarov (`nm`)
+                  items:
+                    type: integer
+                    description: Artikul Wildberries (`nmId`)
+            example: {"name": "Telefony", "nms": [146168367,200425104]}
+      responses:
+        200:
+          description: "Uspehno"
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: ID kampanii
+                example: 1234567
+        400:
+          description: "Nepravilnyi zapros"
+          content:
+            application/json:
+              schema:
+                type: string
+              example: Net dostupnyh kategorii dla rk. Sozdaite novuu kampaniu dla popadania v tekuhie kategorii
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v0/delete: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Udalenie kampanii
+      description: |
+        Metod pozvolaet udalat kampanii v statuse <b>4 - gotova k zapusku</b>. <br>
+        <br> Dopuskaetsa 5 zaprosov v sekundu.<br> 
+        Posle udalenia kampania nekotoroe vrema budet nahoditsa v <b>-1</b> statuse.<br>
+        Polnoe udalenie kampanii zanimaet ot 3 do 10 minut.         
+      tags:
+        - Prodvihenie
+      parameters:
+        - name: id
+          in: query
+          description: ID kampanii
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseAdvError1'
+              examples:
+                ResponseInvalidCampaignID:
+                  $ref: '#/components/examples/ResponseInvalidCampaignID'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v0/rename: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Pereimenovanie kampanii
+      description: Metod pozvolaet pereimenovat kampaniu. <br>Dopuskaetsa 5 zaprosov v sekundu.
+      tags:
+        - Prodvihenie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [advertId, name]
+              properties:
+                advertId:
+                  type: integer
+                  description: Identifikator kampanii, u kotoroi menaetsa nazvanie
+                name:
+                  type: string
+                  description: Novoe nazvanie (maksimum 100 simvolov)
+            example: {"advertId":2233344,"name":"newnmame"}
+      responses:
+        200:
+          description: Nazvanie izmeneno
+        400:
+          description: Nevernaa forma zaprosa
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                InvalidRcIdAdv:
+                  $ref: '#/components/examples/InvalidRcIdAdv'
+                IncorrectName:
+                  $ref: '#/components/examples/IncorrectName'
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                RequestBodyProcessErrorAdv:
+                  $ref: '#/components/examples/RequestBodyProcessErrorAdv'
+                CompanyNameChangeErr:
+                  $ref: '#/components/examples/CompanyNameChangeErr'
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v1/promotion/count: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Spiski kampanii
+      description: |
+        Metod pozvolaet poluhat spiski kampanii, sgruppirovannyh po tipu i statusu, s informaciei o date poslednego izmenenia kampanii. 
+        <br>
+        Dopuskaetsa 5 zaprosov v sekundu.
+      tags:
+        - Prodvihenie
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  adverts:
+                    type: array
+                    nullable: true
+                    description: "Dannye po kampaniam"
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          description: "Tip kampanii"
+                          type: integer
+                        status:
+                          description: "Status kampanii"
+                          type: integer
+                        count:
+                          description: "Kolihestvo kampanii"
+                          type: integer
+                        advert_list: 
+                          description: "Spisok kampanii"
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              advertId:
+                                description: "ID kampanii"
+                                type: integer
+                              changeTime:
+                                description: "Data i vrema poslednego izmenenia kampanii"
+                                type: string
+                                format: date-time
+                  all:
+                    description: "Obhee kolihestvo kampanii vseh statusov i tipov"
+                    type: integer
+              example: {"adverts":[{"type": 4,"status": 8,"count": 3,"advert_list": [{"advertId": 6485174,"changeTime": "2023-05-10T12:12:52.676254+03:00"},{"advertId": 6500443,"changeTime": "2023-05-10T17:08:46.370656+03:00"},{"advertId": 7936341,"changeTime": "2023-07-12T15:51:08.367478+03:00"}]}], "all": 3}
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v1/promotion/adverts: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Informacia o kampaniah
+      description: |
+        Metod pozvolaet poluhat informaciu o kampaniah po query parametram, libo po spisku ID kampanii. 
+        <br>
+        Dopuskaetsa 5 zaprosov v sekundu.
+      tags:
+        - Prodvihenie
+      parameters:
+        - name: status
+          in: query
+          description: |
+            <dl>
+            <dt>Status kampanii:</dt>
+            <dd><code>-1</code> - kampania v processe udalenia </dd>
+            <dd><code>4</code> - gotova k zapusku </dd>
+            <dd><code>7</code> - kampania zaverhena</dd>
+            <dd><code>8</code> - otkazalsa</dd>
+            <dd><code>9</code> - idut pokazy</dd>
+            <dd><code>11</code> - kampania na pauze</dd>
+            </dl>
+            Kampania v processe udalenia. Status oznahaet, hto kampania byla udalena, i herez 3-10 minut ona isheznet iz otveta metoda.
+          schema:
+            type: integer
+            enum: [-1, 4, 7, 8, 9, 11]
+        - name: type
+          in: query
+          description: |
+            <dl>
+            <dt>Tip kampanii:</dt>
+            <dd><code>4</code> - kampania v kataloge (<strong>ustarevhii tip</strong>)</dd>
+            <dd><code>5</code> - kampania v kartohke tovara (<strong>ustarevhii tip</strong>)</dd>
+            <dd><code>6</code> - kampania v poiske (<strong>ustarevhii tip</strong>)</dd>
+            <dd><code>7</code> - kampania v rekomendaciah na glavnoi stranice (<strong>ustarevhii tip</strong>)</dd>
+            <dd><code>8</code> - avtomatiheskaa kampania </dd>
+            <dd><code>9</code> - Aukcion </dd>
+            </dl>
+          schema:
+            type: integer
+            enum: [4, 5, 6, 7, 8, 9]
+        - name: order
+          in: query
+          description: |
+            <dl>
+            <dt>Poradok:</dt>
+            <dd><code>create</code> (po vremeni sozdania kampanii)</dd>
+            <dd><code>change</code> (po vremeni poslednego izmenenia kampanii)</dd>
+            <dd><code>id</code> (po identifikatoru kampanii)</dd>
+            </dl>
+          schema:
+            type: string
+            enum: ["create", "change", "id"]
+        - name: direction
+          in: query
+          description: |
+            <dl>
+            <dt>Napravlenie:</dt>
+            <dd><code>desc</code> (ot bolhego k menhemu)</dd>
+            <dd><code>asc</code> (ot menhego k bolhemu)</dd>
+            </dl>
+            <br>Naprimer: <code>/adv/v1/promotion/adverts?type=6&order=change&<b>direction=asc</b></code>
+          schema:
+            type: string
+            enum: ["desc", "asc"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              # nullable: false
+              # minItems: 1
+              # maxItems: 50              
+              items:
+                type: integer
+                description: "Spisok ID kampanii. Maksimum 50. <br> <br> Poluhit id kampanii mohno metodom <b>Spiski kampanii</b>. "
+            example: [1234567, 63453471]
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/ResponseInfoAdvert'
+                    - $ref: '#/components/schemas/ResponseInfoAdvertType8'
+                    - $ref: '#/components/schemas/ResponseInfoAdvertType9'
+              examples:
+                ResponseInfoAdvert:
+                  $ref: '#/components/examples/ResponseInfoAdvert'
+                ResponseInfoAdvertType8:
+                  $ref: '#/components/examples/ResponseInfoAdvertType8'
+                ResponseInfoAdvertType9:
+                  $ref: '#/components/examples/ResponseInfoAdvertType9'
+                ResponseInfoAdvertsAll:
+                  $ref: '#/components/examples/ResponseInfoAdvertsAll'
+        204:
+          description: Kampanii ne naideny
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                IncorrectTypeAdv:
+                  $ref: '#/components/examples/IncorrectTypeAdv'
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+                IncorrectUsingMethods:
+                  $ref: '#/components/examples/IncorrectUsingMethods'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                ErrorProcessRequestParam:
+                  $ref: '#/components/examples/ErrorProcessRequestParam'     
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v0/cpm: # GET POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Izmenenie stavki u kampanii
+      description: |
+        Izmenenie stavki u kampanii.<br>
+        Izmenennaa stavka otobrazitsa v informacii o kampanii v tehenie treh minut.<br>
+        Dopuskaetsa 5 zaprosov v sekundu.<br>
+        <br>
+        `Vahno!` Esli ustanavlivaemaa stavka imeet razmer menhe dopustimogo, to v otvet Vy poluhite status-kod 422 (Razmer stavki ne izmenen).<br>
+        Informacia ob izmenenii minimalnogo razmera stavki publikuetsa v razdele Novosti, na portale prodavcov.<br>
+        <br> 
+        `Vahno!` Princip zapolnenia parametrov `type`, `instrument`, `param` pri izmenenii stavki dla kampanii s tipom 9 (Aukcion): 
+
+        <br> Dla `type` ukazyvaetsa znahenie 9 (vsegda).
+
+        <br> Dla `instrument` ukazyvaetsa znahenie 6 (<strong>ustarevhii tip kampanii</strong>).
+
+        <br> Dla `param` vsegda ukazyvaetsa znahenie pola <b>id</b> iz struktury <b>subject</b> otveta metoda "Informacia o kampanii".
+      tags:
+        - Prodvihenie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [advertId, type, cpm, param]
+              properties:
+                advertId:
+                  description: Identifikator kampanii, gde menaetsa stavka
+                  type: integer
+                  example: 789
+                type:
+                  description: |
+                    <dl>
+                    <dt>kampanii, gde menaetsa stavka:</dt>
+                    <dd><code>4</code> - kampania v kataloge (<strong>ustarevhii tip</strong>)</dd> 
+                    <dd><code>5</code> - kampania v kartohke tovara (<strong>ustarevhii tip</strong>)</dd>
+                    <dd><code>6</code> - kampania v poiske (<strong>ustarevhii tip</strong>)</dd>
+                    <dd><code>7</code> - kampania v rekomendaciah na glavnoi stranice (<strong>ustarevhii tip</strong>)</dd>
+                    <dd><code>8</code> - avtomatiheskaa kampania</dd>
+                    <dd><code>9</code> - kampania Aukcion </dd>
+                    </dl>
+                  type:  integer
+                  enum: [5, 6, 7, 8, 9]
+                cpm:
+                  description: Novoe znahenie stavki
+                  type: integer
+                  example: 456
+                param:
+                  description: |
+                    Parametr, dla kotorogo budet vneseno izmenenie. avlaetsa znaheniem `subjectId` (dla kampanii v poiske i rekomendaciah), `setId` (dla kampanii v kartohke tovara) ili `menuId` (dla kampanii v kataloge). 
+                    <br> Dla avtomatiheskoi kampanii ukazyvat etot parametr ne trebuetsa.
+                  type: integer
+                  example: 23
+                instrument: 
+                  description: tip kampanii dla izmenenia stavki v 4 - katalog (<strong>ustarevhii tip</strong>), 6 - poisk (<strong>ustarevhii tip</strong>)
+                  type: integer
+                  example: 4
+      responses:
+        200:
+          description: Razmer stavki izmenen
+        400:
+          description: Razmer stavki ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                IncorrectParamAdv:
+                  $ref: '#/components/examples/IncorrectParamAdv'
+                IncorrectTypeAdv:
+                  $ref: '#/components/examples/IncorrectTypeAdv'
+                IncorrectCpmAdv:
+                  $ref: '#/components/examples/IncorrectCpmAdv'
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: Razmer stavki ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                RequestBodyProcessErrorAdv:
+                  $ref: '#/components/examples/RequestBodyProcessErrorAdv'
+                AmountNotChanged:
+                  $ref: '#/components/examples/AmountNotChanged'  
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"    
+  /adv/v1/advert/stop: # POST
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Zaverhenie mediakampanii
+      description: |
+        Metod zaverhaet mediakampaniu - perevodit ee v status `7`. 
+        <br>  Dopuskaetsa maksimum 10 zaprosov v minutu.
+        <dl>
+        <dt>Statusy, v kotoryh dla mediakampanii dostupno zaverhenie:</dt>
+          <dd><code>1</code> - hernovik</dd>
+          <dd><code>3</code> - otkloneno (s vozmohnostu vernut na moderaciu)</dd>
+          <dd><code>4</code> - odobreno</dd>
+          <dd><code>5</code> - zaplanirovano</dd>
+          <dd><code>6</code> - na pokazah</dd>
+          <dd><code>8</code> - otkazalsa</dd>
+          <dd><code>9</code> - priostanovlena prodavcom</dd>
+          <dd><code>10</code> - pauza po dnevnomu limitu</dd>
+          <dd><code>11</code> - pauza po rashodu budheta</dd>
+        </dl>
+      tags:
+        - Aktivnost mediakampanii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [advert_id]
+              properties:
+                advert_id:
+                  description: "ID mediakampanii"
+                  type: integer
+                reason:
+                  description: "Opisanie prihiny zaverhenia"
+                  type: string
+            example: {"advert_id":123456, "reason":"Opisanie prihiny zaverhenia"}
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                ChangingStatusToNewIsNotPossible:
+                  $ref: '#/components/examples/ChangingStatusToNewIsNotPossible'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        404:
+          description: Ne naideno
+          content:
+            text/plain:
+              example: Ne naideno
+        422:
+          description: ""
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+          
+  /adv/v1/advert/pause: # POST
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Priostanovka mediakampanii
+      description: |
+        Metod pozvolaet priostanavlivat mediakampanii. <br> 
+        Perevodit priostanavlivaemuu mediakampaniu v status `9`.<br>
+        Dopuskaetsa maksimum 10 zaprosov v minutu. <br> 
+        `Vahno:` priostanovit mediakampaniu mohno ne bolhe 10 raz v sutki. Sutki otshityvautsa s polunohi po Moskovskomu vremeni.
+        <br>        
+        <dl>
+        <dt>Statusy, v kotoryh dla mediakampanii dostupna priostanovka:</dt>
+          <dd><code>4</code> — odobreno</dd>
+          <dd><code>5</code> — zaplanirovano</dd>
+          <dd><code>6</code> — na pokazah</dd>
+          <dd><code>10</code> — pauza po dnevnomu limitu</dd>
+          <dd><code>11</code> — pauza po rashodu budheta</dd>
+        </dl>
+      tags:
+        - Aktivnost mediakampanii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [advert_id]
+              properties:
+                advert_id:
+                  description: "ID mediakampanii"
+                  type: integer
+                reason:
+                  description: "Opisanie prihiny priostanovki"
+                  type: string
+            example: {"advert_id":123456, "reason":"Opisanie prihiny priostanovki"}
+      responses:
+        200:
+          description: ""
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        404:
+          description: Ne naideno
+          content:
+            text/plain:
+              example: Ne naideno
+        422:
+          description: ""
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+          
+  /adv/v1/advert/start: # POST
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Zapusk mediakampanii
+      description: |
+        Metod pozvolaet zapuskat priostanovlennye mediakampanii. 
+        <br>
+        Posle zapuska kampania v tehenie 2-5 minut budet nahoditsa v statuse `4`, posle hego status budet izmenen na aktualnyi, v zavisimosti ot konfiguracii mediakampanii.
+        <br>  Dopuskaetsa maksimum 10 zaprosov v minutu.
+        <dl>
+        <dt>Statusy, v kotoryh dla mediakampanii dostupen zapusk:</dt>
+          <dd><code>9</code> - priostanovlena prodavcom</dd>
+          <dd><code>11</code> - pauza po rashodu budheta</dd>
+        </dl>
+      tags:
+        - Aktivnost mediakampanii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [advert_id]
+              properties:
+                advert_id:
+                  description: "ID mediakampanii"
+                  type: integer
+                reason:
+                  description: "Opisanie prihiny zapuska"
+                  type: string
+            example: {"advert_id":123456, "reason":"Prihina zapuska"}
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                CampaignNotFound:
+                  $ref: '#/components/examples/CampaignNotFound'
+                ChangingStatusToNewIsNotPossible:
+                  $ref: '#/components/examples/ChangingStatusToNewIsNotPossible'
+                InsufficientFundsToResumeImpressions:
+                  $ref: '#/components/examples/InsufficientFundsToResumeImpressions'
+                DisableOrIncreaseDailyLimit:
+                  $ref: '#/components/examples/DisableOrIncreaseDailyLimit'
+                TopUpCampaignBudget:
+                  $ref: '#/components/examples/TopUpCampaignBudget'
+                ChooseSourceOfFundsDebiting:
+                  $ref: '#/components/examples/ChooseSourceOfFundsDebiting'
+                UnknownPaymentType:
+                  $ref: '#/components/examples/UnknownPaymentType'
+                InsufficientFunds:
+                  $ref: '#/components/examples/InsufficientFunds'
+                CreatePlacement:
+                  $ref: '#/components/examples/CreatePlacement'
+                TopUpCampaignBudgetToResumeImpressions2:
+                  $ref: '#/components/examples/TopUpCampaignBudgetToResumeImpressions2'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        404:
+          description: Ne naideno
+          content:
+            text/plain:
+              example: Ne naideno
+        422:
+          description: ""
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+          
+  /adv/v1/item/cpm/change: # POST
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Izmenenie stavki bannera
+      description: |
+        Metod pozvolaet izmenat stavku bannera v strukture <b>items</b>. <br> 
+        Izmenenie vozmohno tolko dla kampanii v odnom iz statusov: 4, 5, 6, 9, 10, 11.
+        <br>  Dopuskaetsa maksimum 10 zaprosov v minutu.
+      tags:
+        - Stavki mediakampanii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [advert_id, item_id, cpm]
+              properties:
+                advert_id:
+                  description: "ID mediakampanii"
+                  type: integer
+                item_id:
+                  description: "ID bannera"
+                  type: integer
+                cpm:
+                  description: " Novaa stavka"
+                  type: string
+            example: {"advert_id":80474, "item_id":41573, "cpm":300}
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                ErrorInGettingItems:
+                  $ref: '#/components/examples/ErrorInGettingItems'
+                TypePlacementShouldBeImpressions:
+                  $ref: '#/components/examples/TypePlacementShouldBeImpressions'
+                ChangeOnlyPossibleForActiveCampaigns:
+                  $ref: '#/components/examples/ChangeOnlyPossibleForActiveCampaigns'
+                SmallCpm:
+                  $ref: '#/components/examples/SmallCpm'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        404:
+          description: Ne naideno
+          content:
+            text/plain:
+              example: Ne naideno
+        422:
+          description: ""
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/count: # Get
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Poluhenie mediakampanii
+      description: |
+        Metod pozvolaet poluhit kolihestvo mediakampanii prodavca
+      tags:
+        - Media
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all:
+                    description: "Obhee kolihestvo mediakampanii vseh statusov i tipov"
+                    type: integer
+                  adverts:
+                    type: object
+                    properties:
+                      type:
+                        description: |
+                          <dl>
+                          <dt>Tip mediakampanii:</dt>
+                          <dd><code>1</code> - razmehenie po dnam</dd>
+                          <dd><code>2</code> - razmehenie po prosmotram</dd>
+                          </dl>
+                        type: integer
+                      status:
+                        description: |
+                          <dl>
+                          <dt>Status mediakampanii:</dt>
+                            <dd><code>1</code> - hernovik</dd>
+                            <dd><code>2</code> - moderacia
+                            <dd><code>3</code> - otkloneno (s vozmohnostu vernut na moderaciu)</dd>
+                            <dd><code>4</code> - odobreno</dd>
+                            <dd><code>5</code> - zaplanirovano</dd>
+                            <dd><code>6</code> - na pokazah</dd>
+                            <dd><code>7</code> - zaverheno</dd>
+                            <dd><code>8</code> - otkazalsa</dd>
+                            <dd><code>9</code> - priostanovlena prodavcom</dd>
+                            <dd><code>10</code> - pauza po dnevnomu limitu</dd>
+                            <dd><code>11</code> - pauza po rashodu budheta</dd>
+                          </dl>
+                        type: integer
+                      count:
+                        description: "Kolihestvo mediakampanii"
+                        type: integer
+              example: { "all": 6, "adverts": [ { "type": 2, "status": 7, "count": 2 }, { "type": 2, "status": 8, "count": 4 } ]}
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+                  
+  /adv/v1/adverts: # Get
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Spisok mediakampanii
+      description: |
+        Metod pozvolaet poluhit spisok mediakampanii prodavca
+      tags:
+        - Media
+      parameters:
+        - name: status
+          in: query
+          description: |
+            <dl>
+            <dt>Status mediakampanii:</dt>
+              <dd><code>1</code> - hernovik</dd>
+              <dd><code>2</code> - moderacia
+              <dd><code>3</code> - otkloneno (s vozmohnostu vernut na moderaciu)</dd>
+              <dd><code>4</code> - odobreno</dd>
+              <dd><code>5</code> - zaplanirovano</dd>
+              <dd><code>6</code> - na pokazah</dd>
+              <dd><code>7</code> - zaverheno</dd>
+              <dd><code>8</code> - otkazalsa</dd>
+              <dd><code>9</code> - priostanovlena prodavcom</dd>
+              <dd><code>10</code> - pauza po dnevnomu limitu</dd>
+              <dd><code>11</code> - pauza po rashodu budheta</dd>
+            </dl>
+          schema:
+            type: integer
+            example: 1
+        - name: type
+          in: query
+          description: |
+            <dl>
+            <dt>Tip mediakampanii:</dt>
+            <dd><code>1</code> - razmehenie po dnam</dd>
+            <dd><code>2</code> - razmehenie po prosmotram</dd>
+            </dl>
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Kolihestvo kampanii v otvete
+          schema:
+            type: integer
+            example: 1
+        - name: offset
+          in: query
+          description: Smehenie otnositelno pervoi mediakampanii
+          schema:
+            type: integer
+            example: 1
+        - name: order
+          in: query
+          description: |
+            <dl>
+            <dt>Poradok vyvoda otveta:</dt>
+            <dd><code>create</code> - po vremeni sozdania mediakampanii</dd>
+            <dd><code>id</code> - po identifikatoru mediakampanii</dd>
+            </dl>
+          schema:
+            type: string
+            example: id
+        - name: direction
+          in: query
+          description: |
+            <dl>
+            <dt>Poradok sortirovki:</dt>
+            <dd><code>desc</code> - ot bolhego k menhemu</dd>
+            <dd><code>asc</code> - ot menhego k bolhemu</dd>
+            </dl>
+          schema:
+            type: string
+            example: desc
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    advertId:
+                      description: "Identifikator mediakampanii"
+                      type: integer
+                    name:
+                      description: "Nazvanie mediakampanii"
+                      type: string
+                    brand:
+                      description: "Nazvanie brenda"
+                      type: string
+                    type:
+                      description: |
+                        <dl>
+                        <dt>Tip mediakampanii:</dt>
+                        <dd><code>1</code> - razmehenie po dnam</dd>
+                        <dd><code>2</code> - razmehenie po prosmotram</dd>
+                        </dl>
+                      type: integer
+                    status:
+                      description: |
+                        <dl>
+                        <dt>Status mediakampanii:</dt>
+                          <dd><code>1</code> - hernovik</dd>
+                          <dd><code>2</code> - moderacia
+                          <dd><code>3</code> - otkloneno (s vozmohnostu vernut na moderaciu)</dd>
+                          <dd><code>4</code> - odobreno</dd>
+                          <dd><code>5</code> - zaplanirovano</dd>
+                          <dd><code>6</code> - na pokazah</dd>
+                          <dd><code>7</code> - zaverheno</dd>
+                          <dd><code>8</code> - otkazalsa</dd>
+                          <dd><code>9</code> - priostanovlena prodavcom</dd>
+                          <dd><code>10</code> - pauza po dnevnomu limitu</dd>
+                          <dd><code>11</code> - pauza po rashodu budheta</dd>
+                        </dl>
+                      type: integer
+                    createTime:
+                      description: "Vrema sozdania mediakampanii"
+                      type: string
+                      format: date-time
+                    endTime:
+                      description: "Vrema zaverhenia mediakampanii (pri nalihii)"
+                      type: string
+                      format: date-time
+              example: [{ "advertId":123456,"name":"tost","brand":"goosb","type":2,"status": 8,"createTime":"2023-03-25T20:35:57.116943+03:00"},{"advertId":54321,"name":"test","brand":"bobr","type":1,"status":7,"createTime":"2023-07-24T16:48:20.935599+03:00","endTime":"2023-07-25T20:35:50.104978Z"}]
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v1/advert: # Get
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Informacia o mediakampanii
+      description: |
+        Metod pozvolaet poluhit informaciu ob odnoi mediakampanii
+      tags:
+        - Media
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator mediakampanii
+          schema:
+            type: integer
+            example: 23569
+          required: true
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  advertId:
+                    description: "Identifikator mediakampanii"
+                    type: integer
+                  name:
+                    description: "Nazvanie mediakampanii"
+                    type: string
+                  brand:
+                    description: "Nazvanie brenda"
+                    type: string
+                  type:
+                    description: |
+                      <dl>
+                      <dt>Tip mediakampanii:</dt>
+                      <dd><code>1</code> - razmehenie po dnam</dd>
+                      <dd><code>2</code> - razmehenie po prosmotram</dd>
+                      </dl>
+                    type: integer
+                  status:
+                    description: |
+                      <dl>
+                      <dt>Status mediakampanii:</dt>
+                        <dd><code>1</code> - hernovik</dd>
+                        <dd><code>2</code> - moderacia
+                        <dd><code>3</code> - otkloneno (s vozmohnostu vernut na moderaciu)</dd>
+                        <dd><code>4</code> - odobreno</dd>
+                        <dd><code>5</code> - zaplanirovano</dd>
+                        <dd><code>6</code> - na pokazah</dd>
+                        <dd><code>7</code> - zaverheno</dd>
+                        <dd><code>8</code> - otkazalsa</dd>
+                        <dd><code>9</code> - priostanovlena prodavcom</dd>
+                        <dd><code>10</code> - pauza po dnevnomu limitu</dd>
+                        <dd><code>11</code> - pauza po rashodu budheta</dd>
+                      </dl>
+                    type: integer
+                  createTime:
+                    description: "Vrema sozdania mediakampanii"
+                    type: string
+                    format: date-time
+                  extended: 
+                    type: object
+                    properties:
+                      reason:
+                        description: "Kommentarii moderatora (pri nalihii)"
+                        nullable: true
+                        type: string
+                      expenses:
+                        description: "Zatraty"
+                        type: integer
+                      from:
+                        description: "Nahalo pokazov mediakampanii"
+                        type: string
+                        format: date-time
+                      to:
+                        description: "Konec pokazov mediakampanii"
+                        type: string
+                        format: date-time    
+                      updated_at:
+                        description: "Vrema izmenenia mediakampanii"
+                        type: string
+                        format: date-time
+                      price:
+                        description: "Stoimost razmehenia po dnam (dla tipa 1)"
+                        type: integer
+                      budget:
+                        description: "Ostatok budheta (dla tipa 2)"
+                        type: integer
+                      operation:
+                        description: "Istohnik spisania (1 - balans, 2 - shet)"
+                        type: integer
+                      contract_id:
+                        description: "Identifikator kontrakta (dla prodavcov na kontrakte)"
+                        type: integer
+                  items:
+                    description: |
+                      Informacia o bannere.
+                      <br>
+                      Nalihie v otvete teh ili inyh polei zavisit ot konfiguracii mediakampanii.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          description: "ID bannera"
+                          type: integer
+                        name:
+                          description: "Brend"
+                          type: string
+                        status:
+                          description: "Status (takoi he kak u mediakampanii)"
+                          type: integer
+                        place:
+                          description: "Pozicia na stranice razmehenia"
+                          type: integer
+                        budget:
+                          description: "Budhet"
+                          type: integer
+                        daily_limit:
+                          description: "Dnevnoi limit (dla bannerov po pokazam)"
+                          type: integer
+                        category_name:
+                          description: "Nazvanie kategorii razmehenia"
+                          type: string
+                        cpm:
+                          description: "Stavka"
+                          type: integer
+                        url:
+                          description: "URL stranicy, na kotoruu popadaet polzovatel pri klike po banneru"
+                          type: string
+                        advert_type:
+                          description: |
+                            <dl>
+                            <dt>Tip prodvihenia:</dt>
+                            <dd><code>1</code> - banner</dd>
+                            <dd><code>2</code> - vsplyvauhee menu</dd>
+                            <dd><code>3</code> - pohtovaa rassylka</dd>
+                            <dd><code>4</code> - socialnye seti</dd>
+                            <dd><code>5</code> - push-uvedomlenia v mobilnom prilohenii</dd>
+                            </dl>
+                          type: integer
+                        created_at:
+                          description: "Data sozdania bannera"
+                          format: date-time
+                          type: string
+                        updated_at:
+                          description: "Data obnovlenia bannera"
+                          format: date-time
+                          type: string
+                        date_from:
+                          description: "Data nahala raboty bannera"
+                          format: date-time
+                          type: string
+                        date_to:
+                          description: "Data zaverhenia raboty bannera"
+                          format: date-time
+                          type: string
+                        nms:
+                          description: "Podborka artikulov WB"
+                          type: array
+                          items:
+                            type: integer
+                        bottomText1:
+                          description: "Tekst pod plahkoi bannera"
+                          type: string
+                        bottomText2:
+                          description: "2-a stroka s tekstom pod plahkoi bannera"
+                          type: string
+                        message:
+                          description: "Tekst push-uvedomlenia ili rassylki"
+                          type: string
+                        additionalSettings:
+                          description: |
+                            Dopolnitelnye nastroiki.
+                            <dl>
+                            <dt>Format pohtovoi rassylki:</dt>
+                            <dd><code>1</code> - obhii</dd>
+                            <dd><code>2</code> - hastihnyi</dd>
+                            <dd><code>3</code> - unikalnyi</dd>
+                            </dl>
+                            <dl>
+                            <dt>Socialnaa set:</dt>
+                            <dd><code>1</code> - VKontakte</dd>
+                            <dd><code>2</code> - OK (Odnoklassniki)</dd>
+                            </dl>
+                          type: integer
+                        receiversCount:
+                          description: "Kol-vo poluhatelei push-uvedomlenii"
+                          type: integer
+                        subject_id:
+                          description: "ID roditelskoi kategorii tovara"
+                          type: integer
+                        subject_name:
+                          description: "Nazvanie roditelskoi kategorii tovara"
+                          type: string
+                        action_name:
+                          description: "Nazvanie akcii"
+                          type: string
+                        show_hours:
+                          description: "hasy pokaza"
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              From:
+                                description: "Nahalo pokaza"
+                                type: integer
+                              To:
+                                description: "Konec pokaza"
+                                type: integer
+                        Erid:
+                          description: "Unikalnyi identifikator mediakampanii dla raboty s ORD"
+                          type: string
+                example: {"advertId":23569, "name":"Reklama deneg prinesi", "brand":"Plank", "type":2, "status":11, "createTime":"2023-07-19T11:13:41.195138+03:00", "extended": {"reason":"Dla vozobnovlenia pokazov popolnite budhet mediakampanii", "expenses":10000, "from":"2023-07-19T12:05:35.847348Z", "to":"2123-07-20T08:14:13.079176+03:00", "updated_at":"2023-07-21T13:25:31.129766+03:00", "price":0, "budget":0, "operation":1, "contract_id":0 }, "items":[{"id":68080, "name":"Unison", "status":7, "place":2, "budget":650000, "daily_limit":500, "category_name":"Glavnaa", "cpm":351, "url":"https://www.wildberries.ru/promotions/ssylka-na-akciyou", "advert_type":1, "created_at":"2023-11-01T15:40:46.86165+03:00", "updated_at":"2023-11-08T23:44:33.248229+03:00", "date_from":"2023-11-01T16:05:22.286002Z", "date_to":"2023-11-09T17:27:32.745869+03:00", "nms":[ 123456, 11111111], "bottomText1":"string", "bottomText2":"string", "message":"string", "additionalSettings":1, "receiversCount":1, "subject_id":6945, "subject_name":"Bele", "action_name":"Rasprodaha! Sozdai sebe domahnii uut!", "show_hours":[{"From":7,"To":8}], "Erid":"string"}]}  
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v1/stats: # POST
+    servers:
+       - url: https://advert-media-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Statistika mediakampanii
+      description: |
+        Metod pozvolaet poluhat statistiku mediakampanii. 
+      tags:
+        - Statistika mediakampanii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/RequestWithDate'
+                - $ref: '#/components/schemas/RequestWithInterval'
+                #- $ref: '#/components/schemas/RequestWithoutParam'
+            examples:
+              RequestWithDate:
+                $ref: '#/components/examples/RequestWithDate'
+              RequestWithInterval:
+                $ref: '#/components/examples/RequestWithInterval'
+              RequestWithoutParam:
+                $ref: '#/components/examples/RequestWithoutParam'
+              RequestAggregate:
+                $ref: '#/components/examples/RequestAggregate'
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/StatInterval'
+                    - $ref: '#/components/schemas/StatDate'
+                    - $ref: '#/components/schemas/Stat'
+              examples:
+                RespStatMediaInterval:
+                  $ref: '#/components/examples/RespStatMediaInterval'
+                RespStatMediaDates:
+                  $ref: '#/components/examples/RespStatMediaDates'
+                RespStatMediaWithoutParam:
+                  $ref: '#/components/examples/RespStatMediaWithoutParam'
+                RespStatMediaAggregate:
+                  $ref: '#/components/examples/RespStatMediaAggregate'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v0/start: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Zapusk kampanii
+      description: |
+        Metod pozvolaet zapuskat kampanii nahodahiesa v statusah <b>4 - gotova k zapusku</b> ili <b>11 - kampania na pauze</b>.
+        <br>Dopuskaetsa 5 zaprosov v sekundu.
+        <br> 
+        Dla zapuska kampanii so statusom <b>11</b> neobhodimo nalihie u nee popolnennogo budheta.
+        <br>
+        <dl>
+        <dt>htoby zapustit kampaniu so statusom <b>4</b> neobhodimo vypolnit dva uslovia (pooherednost deistvii znahenia ne imeet):</dt>
+        <dd>1. Posle sozdania kampanii v kabinete VB. Prodvihenie neobhodimo nahat knopku "Primenit izmenenia".</dd>
+        <dd>2. Ustanovit budhet.</dd>
+        </dl>
+        
+      tags:
+        - Aktivnost kampanii
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234
+          required: true
+      responses:
+        200:
+          description: Status izmenen
+        400:
+          description: Status ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                InvalidRcIdAdv:
+                  $ref: '#/components/examples/InvalidRcIdAdv'
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: Status ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                StatusNoChangeAdv:
+                  $ref: '#/components/examples/StatusNoChangeAdv'
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v0/pause: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Pauza kampanii
+      description: |
+        Kampanii v statuse <b>"9 - idut pokazy"</b> - mohno postavit na pauzu, sdelav <b>GET</b> na  `/adv/v0/pause?id=***`.
+        <br>Dopuskaetsa 5 zaprosov v sekundu.
+      tags:
+        - Aktivnost kampanii
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234
+          required: true
+      responses:
+        200:
+          description: Status izmenen
+        400:
+          description: Status ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                InvalidRcIdAdv:
+                  $ref: '#/components/examples/InvalidRcIdAdv'
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: Status ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                StatusNoChangeAdv:
+                  $ref: '#/components/examples/StatusNoChangeAdv'
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v0/stop: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Zaverhenie kampanii
+      description: Metod pozvolaet zaverhit kampaniu, nahodahuusa v statuse 9 ili 11 ili 4.<br>Dopuskaetsa 5 zaprosov v sekundu.
+      tags:
+        - Aktivnost kampanii
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234
+          required: true
+      responses:
+        200:
+          description: Status izmenen
+        400:
+          description: Status ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                InvalidRcIdAdv:
+                  $ref: '#/components/examples/InvalidRcIdAdv'
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        422:
+          description: Status ne izmenen
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                StatusNoChangeAdv:
+                  $ref: '#/components/examples/StatusNoChangeAdv'
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/balance: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Balans
+      description: |
+        Metod pozvolaet poluhat informaciu o shete, balanse i bonusah prodavca. <br>
+        Dopuskaetsa 1 zapros v sekundu.
+      tags:
+        - Finansy
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    description: Shet, rublei
+                    type: integer
+                  net:
+                    description: Balans, rublei
+                    type: integer                  
+                  bonus:
+                    description: Bonusy, rublei
+                    type: integer
+              example: {"balance": 11083, "net": 0, "bonus": 15187}
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/budget: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Budhet kampanii
+      description: |
+        Metod pozvolaet poluhat informaciu o budhete kampanii. <br>
+        Dopuskaetsa 4 zaprosa v sekundu.
+      tags:
+        - Finansy
+      parameters:
+        - name: id
+          in: query
+          description: "Identifikator kampanii"
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cash:
+                    description: "Pole ne ispolzuetsa. Znahenie vsegda 0."
+                    type: integer
+                  netting:
+                    description: "Pole ne ispolzuetsa. Znahenie vsegda 0."
+                    type: integer
+                  total:
+                    description: "Budhet kampanii, ₽"
+                    type: integer
+              example: {"cash": 0, "netting": 0, "total": 500}
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                CampaignNotBelongSeller:
+                  $ref: '#/components/examples/CampaignNotBelongSeller'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/budget/deposit:
+    servers:
+    - url: https://advert-api.wildberries.ru
+    post:
+      security:
+      - HeaderApiKey: []
+      summary: Popolnenie budheta kampanii
+      description: |
+        Metod pozvolaet popolnat budhet kampanii.
+        <br> Dopuskaetsa 1 zapros v sekundu. 
+      tags:
+      - Finansy
+      parameters:
+      - name: id
+        in: query
+        description: Identifikator kampanii
+        schema:
+          type: integer
+          example: 1234567
+        required: true
+      requestBody:
+       required: true
+       content:
+         application/json:
+           schema:
+             type: object
+             properties:
+              sum:
+                description: Summa popolnenia (min. 500 ₽)
+                type: integer
+                example: 500
+              type:
+                description: |
+                  <dl>
+                  <dt>Tip istohnika popolnenia:</dt>
+                  <dd><code>0</code> - Shet</dd>
+                  <dd><code>1</code> - Balans</dd>
+                  <dd><code>3</code> - Bonusy</dd>
+                  </dl>
+                type: integer
+                example: 1
+              return:
+                type: boolean
+                description: Flag vozvrata otveta (`true` - v otvete vernetsa obnovlennyi razmer budheta kampanii, `false` ili ne ukazat parametr voobhe - ne vernetsa.)
+      responses:
+        200:
+          description: Budhet popolnen
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ResponseWithReturn'
+              examples:
+                ResponseWithReturn:
+                  $ref: '#/components/examples/ResponseWithReturn'
+        400:
+          description: Budhet ne popolnen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                DepositAmountMultiple50:
+                  description: Summa popolnenia dolhna byt kratna 50 rub
+                  value:
+                    error: "Summa popolnenia dolhna byt kratna 50 rub"
+                MinimumDepositAmountIs500:
+                  description: Minimalnaa summa popolnenia 500 rublei
+                  value:
+                    error: "Minimalnaa summa popolnenia 500 rublei"
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+                  
+  /adv/v1/upd: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Poluhenie istorii zatrat
+      description: |
+        Metod pozvolaet poluhat istoriu zatrat. 
+        <br> Dopuskaetsa 1 zapros v sekundu.
+      tags:
+        - Finansy
+      parameters:
+        - name: from
+          in: query
+          description: Nahalo intervala
+          schema:
+            type: string
+            format: date
+            example: "2023-07-31"
+          required: true
+        - name: to
+          in: query
+          description: | 
+            Konec intervala. <br> 
+            (Minimalnyi interval 1 den, maksimalnyi 31)
+          schema:
+            type: string
+            format: date
+            example: "2023-08-02"
+          required: true
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    updNum:
+                      description: "Nomer vystavlennogo dokumenta (pri nalihii)"
+                      type: integer
+                    updTime:
+                      description: "Vrema spisania"
+                      type: string
+                      format: time-date
+                    updSum:
+                      description: "Vystavlennaa summa"
+                      type: integer
+                    advertId:
+                      description: "Identifikator kampanii"
+                      type: integer
+                    campName:
+                      description: "Nazvanie kampanii"
+                      type: string 
+                    advertType:
+                      description: "Tip kampanii"
+                      type: integer
+                    paymentType:
+                      description:  >
+                        <dl>
+                        <dt>Istohnik spisania:</dt>
+                        <dd>Balans</dd>
+                        <dd>Bonusy</dd>
+                        <dd>Shet</dd>
+                        </dl>
+                      type: string 
+                    advertStatus:
+                      description: |
+                        <dl>
+                          <dt>Status kampanii:</dt>
+                          <dd><code>4</code> - gotova k zapusku </dd>
+                          <dd><code>7</code> - zaverhena</dd>
+                          <dd><code>8</code> - otkazalsa</dd>
+                          <dd><code>9</code> - aktivna</dd>
+                          <dd><code>11</code> - priostanovlena</dd>
+                        </dl>
+                      type: integer                  
+              example: [{ "updNum": 0, "updTime": "2023-07-31T12:12:54.060536+03:00", "updSum": 24, "advertId": 3355881, "campName": "luk luhok", "advertType": 6, "paymentType": "Balans", "advertStatus": 9}, { "updNum": 0, "updTime": null, "updSum": 107, "advertId": 3366882, "campName": "zolotaa lukovica", "advertType": 8, "paymentType": "Shet", "advertStatus": 11 }]
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/payments: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Poluhenie istorii popolnenii sheta
+      description: |
+        Metod pozvolaet poluhat istoriu popolnenii sheta. 
+        <br> Dopuskaetsa 1 zapros v sekundu.
+      tags:
+        - Finansy
+      parameters:
+        - name: from
+          in: query
+          description: Nahalo intervala
+          schema:
+            type: string
+            format: date
+            example: "2023-07-31"
+        - name: to
+          in: query
+          description: | 
+            Konec intervala. <br> 
+            (Minimalnyi interval 1 den, maksimalnyi 31)
+          schema:
+            type: string
+            format: date
+            example: "2023-08-02"
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      description: "Identifikator plateha"
+                      type: integer
+                    date:
+                      description: "Data plateha"
+                      type: string
+                      format: time-date
+                    sum:
+                      description: "Summa plateha"
+                      type: integer
+                    type:
+                      description: |
+                        <dl>
+                        <dt>Tip istohnika spisania:</dt>
+                        <dd><code>0</code> - Shet</dd>
+                        <dd><code>1</code> - Balans</dd>
+                        <dd><code>3</code> - Kartoi</dd>
+                        </dl>
+                      type: integer
+                    statusId:
+                      description: |
+                        <dl>
+                        <dt>Status:</dt>
+                        <dd><code>0</code> - ohibka</dd>
+                        <dd><code>1</code> - obrabotano</dd>
+                        </dl>
+                      type: integer
+                    cardStatus:
+                      description: |
+                        <dl>
+                        <dt>Status operacii(pri oplate kartoi):</dt>
+                        <dd><b>success</b> - uspeh</dd>
+                        <dd><b>fail</b> - neuspeh</dd>
+                        <dd><b>pending</b> - v ohidanii otveta</dd>
+                        <dd><b>unknown</b> - neizvestno</dd>
+                        </dl>
+                      type: string
+              example: [ { "id": 1036666, "date": "2022-02-04T09:06:47.985843Z", "sum": 600, "type": 0, "statusId": 1, "cardStatus": "" }, { "id": 55261296, "date": "2023-04-13T10:07:42", "sum": 1500, "type": 3, "statusId": 1, "cardStatus": "succeeded" }]
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                IncorrectSupplierIdAdv:
+                  $ref: '#/components/examples/IncorrectSupplierIdAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  /adv/v1/supplier/subjects: # GET
+    servers:
+       - url: https://advert-api.Wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Predmety dla kampanii
+      description: |
+        Vozvrahaet predmety, nomenklatury iz kotoryh mohno dobavit v kampanii. Maksimum 1 zapros v 12 sekund.
+      tags:
+        - Slovari
+      responses:
+        200:
+          description: "Uspehno"
+          content:
+            application/json:
+              schema:
+                type: array
+                nullable: true
+                x-nullable: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      description: "ID predmeta"
+                      type: integer
+                    name:
+                      description: "Predmet"
+                      type: string
+                    count:
+                      description: "Kolihestvo Artikulov Wildberries (`nmId`) s takim predmetom."
+                      type: integer
+              examples: 
+                Array: 
+                  value: [{"name": "3D ohki","id": 2560, "count": 1899}]
+                Null:
+                  value: null
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v2/supplier/nms: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Nomenklatury dla kampanii
+      description: |
+        Vozvrahaet nomenklatury, kotorye mohno dobavit v kampanii. <br>
+
+        Maksimum 5 zaprosov v minutu
+      tags:
+        - Slovari
+      requestBody:
+        description: ID predmetov, dla kotoryh nuhno poluhit nomenklatury
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+            example: [123,456,765,321]
+                
+      responses:
+        200:
+          description: "Uspehno"
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Nomenklatury dla kampanii
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: Nazvanie tovara
+                      example: Pled
+                    nm:
+                      type: integer
+                      description: Artikul Wildberries (`nmId`)
+                      example: 146168367
+                    subjectId:
+                      type: integer
+                      description: ID predmeta
+                      example: 765
+                  
+        400:
+          description: "Nepravilnyi zapros"
+          content:
+            application/json:
+              schema:
+                type: string
+              example: Ohibka obrabotki tela zaprosa
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v2/fullstats: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Statistika kampanii
+      description: |
+        Vozvrahaet statistiku kampanii. 
+        <br> Maksimum 1 zapros v minutu.
+        <br> Dannye vernutsa dla kampanii v statuse 7, 9 i 11.
+        <br> <b>Vahno</b>. V zaprose mohno peredavat libo parametr `dates` libo parametr `interval`, no ne oba.<br> Mohno otpravit zapros tolko s ID kampanii. Pri etom vernutsa dannye za poslednie sutki, no ne za ves period suhestvovania kampanii.  
+        <br>
+        
+      tags:
+        - Statistika
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/RequestWithDate'
+                - $ref: '#/components/schemas/RequestWithInterval'
+                - $ref: '#/components/schemas/RequestWithCampaignID'
+            examples:
+              RequestWithDate:
+                $ref: '#/components/examples/RequestWithDate'
+              RequestWithInterval:
+                $ref: '#/components/examples/RequestWithInterval'
+              RequestWithCampaignID:
+                $ref: '#/components/examples/RequestWithoutIDParam'
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ResponseWithDate'
+                  - $ref: '#/components/schemas/ResponseWithInterval'
+              examples:
+                ResponseWithDate:
+                  $ref: '#/components/examples/ResponseWithDate'
+                ResponseWithInterval:
+                  $ref: '#/components/examples/ResponseWithInterval'
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseAdvError1'
+              examples:
+                CampaignNotFoundAdv:
+                  $ref: '#/components/examples/CampaignNotFoundAdv'
+                responseIncorrectBeginDate:
+                  $ref: '#/components/examples/responseIncorrectBeginDate'
+                responseIncorrectEndDate:
+                  $ref: '#/components/examples/responseIncorrectEndDate'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+
+
+  /adv/v2/auto/stat-words: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Statistika avtomatiheskoi kampanii po klasteram fraz
+      description:  >
+        <p>Vozvrahaet klastery kluhevyh fraz (nabory pohohih), po kotorym pokazyvalis tovary v kampanii, i kolihestvo pokazov po nim. V otvet metoda popadaut tolko te frazy, po kotorym tovary pokazyvalis hota by odin raz.</p>
+        <p>Informacia obnovlaetsa raz v 15 minut.</p>
+        <p>Maksimum — 4 zaprosa sekundu.</p>
+      tags:
+        - Statistika
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234
+          required: true
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  excluded:
+                    description: Iskluhenia (minus-frazy) dla tovarov iz kampanii. Eto frazy, kotorye vy zadali s pomohu metoda Ustanovka/udalenie minus-fraz ili v lihnom kabinete, v nastroikah kampanii
+                    type: array
+                    items:
+                      type: string
+                    example: ["Samsung", "Xiaomi"]
+                  clusters:
+                    description: Klastery kluhevyh fraz
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cluster:
+                          description: Klaster — nabor pohohih kluhevyh fraz
+                          type: string
+                          example: Telefon
+                        count:
+                          description: Skolko raz tovary pokazyvalis po vsem frazam iz klastera
+                          type: integer
+                          example: 100
+                        keywords:
+                          description: Kluhevye frazy iz klastera, po kotorym tovary pokazyvalis hota by odin raz
+                          type: array
+                          items:
+                            type: string
+                          example: ["Telefon", "Mobilnyi telefon"]
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseAdvError1'
+              examples:
+                CampaignNotFoundAdv:
+                  $ref: '#/components/examples/CampaignNotFoundAdv'
+                AvailableOnlyForAutoCampaign:
+                  $ref: '#/components/examples/AvailableOnlyForAutoCampaign'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+
+  /adv/v1/stat/words: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Statistika poiskovoi kampanii po kluhevym frazam
+      description: |
+        Metod pozvolaet poluhat statistiku poiskovoi kampanii po kluhevym frazam.<br>
+        Dopuskaetsa maksimum 4 zaprosa v sekundu.<br> 
+        Informacia obnovlaetsa primerno kahdye polhasa. <br>
+        
+      tags:
+        - Statistika
+      parameters:
+        - name: id
+          in: query
+          description: "Identifikator kampanii"
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  words:
+                    description: "Blok informacii po kluhevym frazam"
+                    type: object
+                    properties:
+                      phrase:
+                        description: "Frazovoe sootvetstvie (minus frazy)"
+                        type: array
+                        items:
+                          type: string
+                      strong:
+                        description: "Tohnoe sootvetstvie (minus frazy)"
+                        type: array
+                        items:
+                          type: string
+                      excluded:
+                        description: "Minus frazy iz poiska"
+                        type: array
+                        items:
+                          type: string
+                      pluse:
+                        description: "Fiksirovannye frazy"
+                        type: array
+                        items:
+                          type: string
+                      keywords:
+                        description: "Blok so statistikoi po kluhevym frazam"
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            keyword:
+                              description: "Kluhevaa fraza"
+                              type: string
+                            count:
+                              description: "Kolihestvo prosmotrov po kluhevoi fraze"
+                              type: integer
+                      fixed:
+                        description: |
+                          Fiksirovannye kluhevye frazy (`true` - vkluheny, `false` - vykluheny)
+                        type: boolean
+                  stat:
+                    description: |
+                      Massiv informacii po statistike.<br>
+                      <b>Pervyi element massiva</b> s `keyword: "Vsego po kampanii"` soderhit summarnuu informaciu po vsem kluhevym frazam.<br>
+                      <b>Kahdyi sleduuhii element massiva</b> soderhit informaciu po otdelnoi kluhevoi fraze.<br>
+                      Otobrahaetsa 60 kluhevyh fraz s naibolhim kolihestvom prosmotrov.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        advertId: 
+                          description: "Identifikator kampanii v sisteme Wildberries"
+                          type: integer
+                        keyword:
+                          description: Kluhevaa fraza
+                          type: string
+                        advertName:
+                          description: "Pole permanentno otkluheno"
+                          type: string                        
+                        campaignName:
+                          description: "Nazvanie kampanii"
+                          type: string                        
+                        begin:
+                          description: "Data zapuska kampanii"
+                          type: string
+                          format: date-time
+                        end:
+                          description: "Data zaverhenia kampanii"
+                          type: string
+                          format: date-time
+                        views:
+                          description: Kolihestvo prosmotrov
+                          type: integer                        
+                        clicks:
+                          description: Kolihestvo klikov
+                          type: integer                        
+                        frq:
+                          description: hastota (otnohenie kolihestva prosmotrov k kolihestvu unikalnyh polzovatelei)
+                          type: integer                        
+                        ctr:
+                          description: |
+                            Pokazatel klikabelnosti (otnohenie hisla klikov k kolihestvu pokazov. Vyrahaetsa v procentah).
+                          type: number                        
+                        cpc:
+                          description: Stoimost klika, ₽
+                          type: number                        
+                        duration:
+                          description: "Dlitelnost kampanii, v sekundah"
+                          type: integer                        
+                        sum:
+                          description: "Zatraty, ₽."
+                          type: number
+              example: { "words":{ "phrase":[ ], "strong":[ ], "excluded":[ ], "pluse":[ "detskoe postelnoe bele dla malhika 1.5" ], "keywords":[ { "keyword":"postelnoe bele 1.5", "count":772 } ], "fixed":true }, "stat":[ { "advertId":7703570, "keyword":"Vsego po kampanii", "advertName":"", "campaignName":"Bele", "begin":"2023-07-03T15:15:38.287441+03:00", "end":"2023-07-03T15:15:38.287441+03:00", "views":1846, "clicks":73, "frq":1.03, "ctr":3.95, "cpc":7.88, "duration":769159, "sum":575.6 }, { "advertId":7703570, "keyword":"postelnoe bele 1.5 detskoe", "advertName":"", "campaignName":"Bele", "begin":"2023-07-03T15:15:38.287441+03:00", "end":"2023-07-03T15:15:38.287441+03:00", "views":1846, "clicks":73, "frq":1.03, "ctr":3.95, "cpc":7.88, "duration":769159, "sum":575.6 }]}
+        400:
+          description: ""
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+  
+  /adv/v0/stats/keywords:
+    get:
+      servers:
+       - url: https://advert-api.wildberries.ru
+      security:
+        - HeaderApiKey: []
+      tags:
+        - Statistika
+      summary: Statistika po kluhevym frazam dla Avtomatiheskih kampanii i Aukciona  
+      description: |
+        Vozvrahaet statistiku po kluhevym frazam za kahdyi den, kogda kampania byla aktivna. 
+        <br> 
+        Mohno poluhit dannye maksimum za 7 dnei.
+        <br> 
+        Informacia obnovlaetsa raz v has.
+        <br> 
+        Maksimum 4 zaprosa sekundu
+      parameters:
+        - in: query
+          name: advert_id
+          required: true
+          description: ID kampanii
+          schema:
+            type: integer
+          example: 123456789
+        - in: query
+          name: from
+          required: true
+          description: Nahalo perioda
+          schema:
+            type: string
+            format: date
+          example: 2024-08-10
+        - in: query
+          required: true
+          name: to
+          description: Konec perioda
+          schema:
+            type: string
+            format: date
+          example: 2024-08-12
+      responses:
+        '200':
+          description: Uspehno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V0KeywordsStatisticsResponse'
+              example: {"keywords":[{"date":"2024-08-12","stats":[{"clicks":68,"ctr":3.73,"keyword":"svetilniki","sum":565.75,"views":1825}]}]}
+        '400':
+          description: Nepravilnyi zapros
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                DateRangeExceeded:
+                  $ref: '#/components/examples/DateRangeExceeded'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"          
+  
+
+  /adv/v1/search/set-plus:
+    servers:
+    - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Upravlenie aktivnostu fiksirovannyh fraz
+      description: |
+        Izmenaet aktivnost fiksirovannyh fraz. Tolko dla kampanii tipa Aukcion.
+        
+        Maksimum 1 zapros v 500 millisekund.
+      tags:
+        - Upravlenie parametrami kampanii Aukcion
+      parameters:
+      - name: id
+        in: query
+        description: Identifikator kampanii
+        schema:
+          type: integer
+          example: 1234567
+        required: true
+      - name: fixed
+        in: query
+        description: Novoe sostoanie (`false` - sdelat neaktivnymi, `true` - sdelat aktivnymi)
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Aktivnost izmenena
+        400:
+          description: Aktivnost fiksirovannyh fraz ne izmenena
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Nekorrektnyi zapros
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"    
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml" 
+    post:
+      security:
+      - HeaderApiKey: []
+      summary: Ustanovka/udalenie fiksirovannyh fraz
+      description: |
+        Ustanavlivaet i udalaet fiksirovannye frazy. Tolko dla kampanii tipa Aukcion.
+
+        Otpravka pustogo massiva udalaet vse fiksirovannye frazy i otkluhaet aktivnost fiksirovannyh fraz v kampanii.
+        Maksimum 1 zapros v 500 millisekund.
+      tags:
+      - Upravlenie parametrami kampanii Aukcion
+      parameters:
+      - name: id
+        in: query
+        description: Identifikator kampanii
+        schema:
+          type: integer
+          example: 1234567
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pluse:
+                  description: Spisok fiksirovannyh fraz (max. 100)
+                  type: array
+                  items:
+                    type: string
+            example:
+              pluse:
+              - Fraza 1
+              - Fraza 2
+      responses:
+        200:
+          description: Uspehno
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+                - Fraza 1
+                - Fraza 2
+        400:
+          description: Nekorrektnyi zapros
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "json: cannot unmarshal number into Go struct field request.pluse of type string"
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/search/set-phrase:
+    servers:
+    - url: https://advert-api.wildberries.ru
+    post:
+      security:
+      - HeaderApiKey: []
+      summary: Ustanovka/udalenie minus-fraz frazovogo sootvetstvia
+      description: |
+        Ustanavlivaet i udalaet minus-frazy frazovogo sootvetstvia. Tolko dla kampanii tipa Aukcion.<br> 
+        Maksimalno dopustimoe kolihestvo minus-fraz v kampanii - 1000 ht.<br> 
+        Otpravka pustogo massiva udalaet vse minus-frazy frazovogo sootvetstvia iz kampanii.
+
+        Maksimum 2 zaprosa v sekundu.
+      tags:
+        - Upravlenie parametrami kampanii Aukcion
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234567
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phrase:
+                  description: Minus-frazy (maks. 1000 ht.)
+                  type: array
+                  items:
+                    type: string
+            example: {"phrase": ["slo", "gu"]}
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Nekorrektnyi zapros
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/search/set-strong:
+    servers:
+    - url: https://advert-api.wildberries.ru
+    post:
+      security:
+      - HeaderApiKey: []
+      summary: Ustanovka/udalenie minus-fraz tohnogo sootvetstvia
+      description: |
+        Ustanavlivaet i udalaet minus-frazy tohnogo sootvetstvia. Tolko dla kampanii tipa Aukcion.<br> 
+        Maksimalno dopustimoe kolihestvo minus-fraz v kampanii - 1000 ht. <br> 
+        Otpravka pustogo massiva udalaet vse minus-frazy tohnogo sootvetstvia iz kampanii.
+        
+        Maksimum 2 zaprosa v sekundu.
+      tags:
+        - Upravlenie parametrami kampanii Aukcion
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234567
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                strong:
+                  description: Minus-frazy (maks. 1000 ht.)
+                  type: array
+                  items:
+                    type: string
+            example: {"strong": ["stoat", "lopata"]}
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Nekorrektnyi zapros
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/search/set-excluded:
+    servers:
+    - url: https://advert-api.wildberries.ru
+    post:
+      security:
+      - HeaderApiKey: []
+      summary: Ustanovka/udalenie minus-fraz iz poiska
+      description: |
+        Ustanavlivaet i udalaet minus-frazy iz poiska. Tolko dla kampanii tipa Aukcion.<br> 
+        Maksimalno dopustimoe kolihestvo minus-fraz v kampanii - 1000 ht. <br> 
+        Otpravka pustogo massiva udalaet vse minus-frazy iz poiska iz kampanii.
+        
+        Maksimum 2 zaprosa v sekundu.      
+      tags:
+        - Upravlenie parametrami kampanii Aukcion
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234567
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                excluded:
+                  description: Minus-frazy (maks. 1000 ht.)
+                  type: array
+                  items:
+                    type: string
+            example: {"excluded": ["hto-to sinee", "kartohehka"]}
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Nekorrektnyi zapros
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+
+  /adv/v1/auto/getnmtoadd: # GET
+    servers:
+       - url: https://advert-api.wildberries.ru
+    get:
+      security:
+        - HeaderApiKey: []
+      summary: Spisok nomenklatur dla avtomatiheskoi kampanii 
+      description: |
+        Metod pozvolaet poluhat spisok nomenklatur, dostupnyh dla dobavlenia v kampaniu. <br>
+        Dopuskaetsa 1 zapros v sekundu.
+      tags:
+        - Upravlenie parametrami avtomatiheskih kampanii
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        200:
+          description: Spisok dostupnyh nomenklatur
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+              example: [1111111111, 2222222222, 3333333333, 4444444444]
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  /adv/v1/auto/updatenm: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Izmenenie spiska nomenklatur v avtomatiheskoi kampanii
+      description: |
+        Metod pozvolaet dobavlat i udalat nomenklatury. <br>
+        Dopuskaetsa 1 zapros v sekundu.<br>
+        `Vahno`: Dobavit mohno tolko te nomenklatury, kotorye vernutsa v otvete metoda <b>"Spisok nomenklatur dla avtomatiheskoi kampanii"</b>.<br>
+        Udalit edinstvennuu nomenklaturu iz kampanii nelza.<br>
+        Proverki po parametru delete ne predusmotreno.<br>
+        Esli prihel otvet so status-kodom 200, a izmenenii ne proizohlo, to proverte zapros na sootvetstvie dokumentacii.
+      tags:
+        - Upravlenie parametrami avtomatiheskih kampanii
+      parameters:
+        - name: id
+          in: query
+          description: "Identifikator kampanii"
+          schema:
+            type: integer
+            example: 1
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                add:
+                  description: "Nomenklatury, kotorye neobhodimo dobavit."
+                  type: array
+                  items:
+                    type: integer
+                delete:
+                  description: "Nomenklatury, kotorye neobhodimo udalit."
+                  type: array
+                  items:
+                    type: integer
+            example: {"add":[11111111, 44444444], "delete": [55555555]}
+      responses:
+        200:
+          description: "Uspehno"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseAdvError1'
+              examples:
+                CampaignNotFoundAdv:
+                  $ref: '#/components/examples/CampaignNotFoundAdv'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+
+  
+
+  /adv/v1/auto/set-excluded: # POST
+    servers:
+       - url: https://advert-api.wildberries.ru
+    post:
+      security:
+        - HeaderApiKey: []
+      summary: Ustanovka/udalenie minus-fraz dla avtomatiheskoi kampanii
+      description: |
+        Metod pozvolaet ustanavlivat ili udalat minus frazy. <br>
+        <br> Dopuskaetsa 1 zapros v 6 sekund.
+        <br> Otpravka pustogo massiva udalaet vse minus-frazy iz kampanii.<br>       
+      tags:
+        - Upravlenie parametrami avtomatiheskih kampanii
+      parameters:
+        - name: id
+          in: query
+          description: Identifikator kampanii
+          schema:
+            type: integer
+            example: 1234567
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                excluded:
+                  description: "Spisok fraz (maks. 1000 ht.)"
+                  type: array
+                  items:
+                    type: string
+            examples:
+              SettingMinusPhrase:
+                $ref: '#/components/examples/SettingMinusPhrase'
+              RemovingMinusPhrase:
+                $ref: '#/components/examples/RemovingMinusPhrase'
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Nekorrektnyi zapros
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+components:
+  schemas:
+    ResponseWithReturn:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Razmer obnovlennogo budheta
+    StatInterval:
+      type: object
+      properties:
+        interval:
+          description: Zaprohennyi vremennoi diapazon.
+          type: object
+          properties:
+            begin:
+              description: Nahalo zaprahivaemogo perioda
+              type: string
+              format: date
+            end:
+              description: Konec zaprahivaemogo perioda
+              type: string
+              format: date
+        stats:
+          description: Blok statistiki
+          type: array
+          items:
+            $ref: '#/components/schemas/StatsBlok1'
+    StatDate:
+      type: object
+      properties:
+        dates:
+          description: Daty, za kotorye neobhodimo vydat informaciu.
+          type: array
+          items:
+            type: string
+            format: date
+        stats:
+          description: Blok statistiki
+          type: array
+          items:
+            $ref: '#/components/schemas/StatsBlok2'
+    Stat:
+      type: object
+      properties:
+        stats:
+          description: Blok statistiki
+          type: array
+          items:
+            $ref: '#/components/schemas/StatsBlok1'
+    StatsBlok1:
+      type: object
+      properties:
+        item_id:
+          description: ID bannera
+          type: integer
+        item_name:
+          description: Nazvanie brenda
+          type: string
+        category_name:
+          description: Nazvanie kategorii
+          type: string
+        advert_type:
+          description: |
+            <dl> <dt>Tip mediakampanii:</dt> <dd><code>1</code> - razmehenie po dnam</dd> <dd><code>2</code> - razmehenie po prosmotram</dd> </dl>
+            
+          type: integer
+        place:
+          description: Mesto na stranice
+          type: integer
+        views:
+          description: Kolihestvo prosmotrov
+          type: integer
+        clicks:
+          description: Kolihestvo klikov
+          type: integer
+        cr:
+          description: |
+            CR(conversion rate) — eto otnohenie kolihestva zakazov k obhemu kolihestvu posehenii mediakampanii
+            
+          type: number
+        ctr:
+          description: |
+            CTR (click-through rate) — pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov v ramkah mediakampanii
+          type: number
+        date_from:
+          description: Vrema nahala razmehenia
+          type: string
+          format: date-time
+        date_to:
+          description: Vrema zaverhenia razmehenia
+          type: string
+          format: date-time
+        subject_name:
+          description: Roditelskaa kategoria predmeta
+          type: string
+        atbs:
+          description: Kolihestvo dobavlenii tovarov v korzinu
+          type: integer
+        orders:
+          description: Kolihestvo zakazov
+          type: integer
+        price:
+          description: Stoimost razmehenia
+          type: integer
+        cpc:
+          description: (cost per click) - cena klika po prodvigaemomu tovaru
+          type: number
+        status:
+          description: Status mediakampanii
+          type: integer
+        daily_stats:
+          $ref: '#/components/schemas/DailyStats1'
+        expenses:
+          description: Stoimost razmehenia bannera
+          type: integer
+        cr1:
+          description: Otnohenie kolihestva dobavlenii v korzinu k kolihestvu klikov
+          type: number
+        cr2:
+          description: Otnohenie kolihestva zakazov k kolihestvu dobavlenii v korzinu
+          type: integer
+    DailyStats1:
+      
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            description: "Data"
+            type: string
+            format: date-time
+          app_type_stats:
+            description: "Statistika po platformam"
+            type: array
+            items:
+              type: object
+              properties:
+                app_type:
+                  description: |
+                    <dl>
+                    <dt>Tip platformy:</dt>
+                    <dd><code>1</code> - sait</dd>
+                    <dd><code>32</code> - Android</dd>
+                    <dd><code>64</code> - IOS</dd>
+                    </dl>
+                  type: integer
+                stats:
+                  $ref: '#/components/schemas/Stats1'
+    Stats1:
+      
+      type: array
+      items:
+        type: object
+        properties:
+          views:
+            description: Kolihestvo prosmotrov
+            type: integer
+          clicks:
+            description: Kolihestvo klikov
+            type: integer
+          atbs:
+            description: Kolihestvo dobavlenii tovarov v korzinu
+            type: integer
+          ctr:
+            description: |
+              CTR (click-through rate) — pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov v ramkah mediakampanii              
+            type: number
+    StatsBlok2:
+      type: object
+      properties:
+        item_id:
+          description: ID bannera
+          type: integer
+        item_name:
+          description: Nazvanie brenda
+          type: string
+        category_name:
+          description: Nazvanie kategorii
+          type: string
+        advert_type:
+          description: |
+            <dl> <dt>Tip mediakampanii:</dt> <dd><code>1</code> - razmehenie po dnam</dd> <dd><code>2</code> - razmehenie po prosmotram</dd> </dl>
+            
+          type: integer
+        place:
+          description: Mesto na stranice
+          type: integer
+        views:
+          description: Kolihestvo prosmotrov
+          type: integer
+        clicks:
+          description: Kolihestvo klikov
+          type: integer
+        cr:
+          description: |
+            CR(conversion rate) — eto otnohenie kolihestva zakazov k obhemu kolihestvu posehenii mediakampanii
+            
+          type: number
+        ctr:
+          description: |
+            CTR (click-through rate) — pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov v ramkah mediakampanii
+            
+          type: number
+        date_from:
+          description: Vrema nahala razmehenia
+          type: string
+          format: date-time
+        date_to:
+          description: Vrema zaverhenia razmehenia
+          type: string
+          format: date-time
+        subject_name:
+          description: Roditelskaa kategoria predmeta
+          type: string
+        atbs:
+          description: Kolihestvo dobavlenii tovarov v korzinu
+          type: integer
+        orders:
+          description: Kolihestvo zakazov
+          type: integer
+        price:
+          description: Stoimost razmehenia
+          type: integer
+        cpc:
+          description: (cost per click) - cena klika po prodvigaemomu tovaru
+          type: number
+        status:
+          description: Status mediakampanii
+          type: integer
+        daily_stats:
+          $ref: '#/components/schemas/DailyStats2'
+        expenses:
+          description: Stoimost razmehenia bannera
+          type: integer
+        cr1:
+          description: Otnohenie kolihestva dobavlenii v korzinu k kolihestvu klikov
+          type: number
+        cr2:
+          description: Otnohenie kolihestva zakazov k kolihestvu dobavlenii v korzinu
+          type: integer
+    DailyStats2:
+      
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            description: "Data"
+            type: string
+            format: date-time
+          app_type_stats:
+            description: "Statistika po platformam"
+            type: array
+            items:
+              type: object
+              properties:
+                app_type:
+                  description: |
+                    <dl>
+                    <dt>Tip platformy:</dt>
+                    <dd><code>1</code> - sait</dd>
+                    <dd><code>32</code> - Android</dd>
+                    <dd><code>64</code> - IOS</dd>
+                    </dl>
+                  type: integer
+                stats:
+                  $ref: '#/components/schemas/Stats2'   
+    Stats2:
+      type: array
+      items:
+        type: object
+        properties:
+          views:
+            description: Kolihestvo prosmotrov
+            type: integer
+          clicks:
+            description: Kolihestvo klikov
+            type: integer
+          atbs:
+            description: Kolihestvo dobavlenii tovarov v korzinu
+            type: integer
+          orders:
+            description: Kolihestvo zakazov
+            type: integer
+          cr:
+            description: |
+              CR(conversion rate) — otnohenie kolihestva zakazov k obhemu kolihestvu posehenii mediakampanii              
+            type: number
+          ctr:
+            description: |
+              CTR (click-through rate) — pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov v ramkah mediakampanii
+              
+            type: number
+    RequestWithDate:
+      type: array
+      minItems: 1
+      maxItems: 100
+      items:
+        type: object
+        properties:
+          id:
+            description: ID kampanii 
+            type: integer
+          dates:
+            description: Daty, za kotorye neobhodimo vydat informaciu.
+            type: array
+            items:
+              type: string
+              format: date
+    RequestWithCampaignID:
+      type: array
+      minItems: 1
+      maxItems: 100
+      items:
+        type: object
+        properties:
+          id:
+            description: ID kampanii 
+            type: integer
+    RequestWithInterval:
+      type: array
+      minItems: 1
+      maxItems: 100
+      items:
+        type: object
+        properties:
+          id:
+            description: ID kampanii
+            type: integer
+          interval:
+            description: Vremennoi diapazon, za kotoryi neobhodimo vydat dannye.
+            type: object
+            properties:
+              begin:
+                description: Nahalo zaprahivaemogo perioda
+                type: string
+                format: date
+              end:
+                description: Konec zaprahivaemogo perioda
+                type: string
+                format: date
+    Days:
+      description: Statistka po dnam
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            description: Data, za kotoruu predstavleny dannye
+            type: string
+            format: date-time
+          views:
+            type: integer
+            description: Kolihestvo prosmotrov
+          clicks:
+            type: integer
+            description: Kolihestvo klikov
+          ctr:
+            type: number
+            description: |
+              Pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov, %
+              
+          cpc:
+            type: number
+            description: Srednaa stoimost klika, ₽.
+          sum:
+            type: number
+            description: Zatraty, ₽.
+          atbs:
+            type: integer
+            description: Kolihestvo dobavlenii tovarov v korzinu
+          orders:
+            type: integer
+            description: Kolihestvo zakazov
+          cr:
+            type: integer
+            description: |
+              CR(conversion rate) — otnohenie kolihestva zakazov k obhemu kolihestvu posehenii kampanii
+              
+          shks:
+            type: integer
+            description: Kolihestvo zakazannyh tovarov, ht.
+          sum_price:
+            type: number
+            description: Zakazov na summu, ₽
+          apps:
+            description: Blok informacii o platforme
+            type: array
+            items:
+              type: object
+              properties:
+                views:
+                  type: integer
+                  description: Kolihestvo prosmotrov
+                clicks:
+                  type: integer
+                  description: Kolihestvo klikov
+                ctr:
+                  type: number
+                  description: |
+                    Pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov, %
+                    
+                cpc:
+                  type: number
+                  description: Srednaa stoimost klika, ₽.
+                sum:
+                  type: number
+                  description: Zatraty, ₽.
+                atbs:
+                  type: integer
+                  description: Kolihestvo dobavlenii tovarov v korzinu
+                orders:
+                  type: integer
+                  description: Kolihestvo zakazov
+                cr:
+                  type: integer
+                  description: |
+                    CR(conversion rate) — eto otnohenie kolihestva zakazov k obhemu kolihestvu posehenii kampanii
+                    
+                shks:
+                  type: integer
+                  description: Kolihestvo zakazannyh tovarov, ht.
+                sum_price:
+                  type: number
+                  description: Zakazov na summu, ₽
+                nm:
+                  description: Blok statistiki po artikulam WB
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      views:
+                        type: integer
+                        description: Kolihestvo prosmotrov
+                      clicks:
+                        type: integer
+                        description: Kolihestvo klikov
+                      ctr:
+                        type: number
+                        description: |
+                          Pokazatel klikabelnosti, otnohenie hisla klikov k kolihestvu pokazov, %
+                          
+                      cpc:
+                        type: number
+                        description: Srednaa stoimost klika, ₽.
+                      sum:
+                        type: number
+                        description: Zatraty, ₽.
+                      atbs:
+                        type: integer
+                        description: Kolihestvo dobavlenii tovarov v korzinu
+                      orders:
+                        type: integer
+                        description: Kolihestvo zakazov
+                      cr:
+                        type: integer
+                        description: |
+                          CR(conversion rate) — otnohenie kolihestva zakazov k obhemu kolihestvu posehenii kampanii
+                          
+                      shks:
+                        type: integer
+                        description: Kolihestvo zakazannyh tovarov, ht.
+                      sum_price:
+                        type: number
+                        description: Zakazov na summu, ₽
+                      name:
+                        description: Nazvanie tovara
+                        type: string
+              
+                      nmId:
+                        description: ID artikula WB
+                        type: integer
+              
+                appType:
+                  type: integer
+                  description: Tip platformy (`1` - sait, `32` - Android, `64` - IOS)
+    BoosterStats:
+      description: Statistika po srednei pozicii tovara na stranicah poiskovoi vydahi i kataloga (dla avtomatiheskih kampanii).
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            description: Data, za kotoruu predostavleny dannye.
+            type: string
+            format: date-time
+          nm:
+            description: Artikul WB
+            type: integer
+          avg_position:
+            description: Srednaa pozicia tovara na stranicah poiskovoi vydahi i kataloga
+            type: integer
+    ResponseWithInterval:
+      description: "Otvet pri zaprose s interval"
+      type: array
+      items:
+        type: object
+        properties:
+          interval:
+            description: "Zaprohennyi vremennoi diapazon."
+            type: object
+            properties:
+              begin:
+                description: "Nahalo zaprahivaemogo perioda"
+                type: string
+                format: date
+              end:
+                description: "Konec zaprahivaemogo perioda"
+                type: string
+                format: date
+          views: 
+            type: integer
+            description: |
+              Kolihestvo prosmotrov. <br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          clicks: 
+            type: integer
+            description: |
+              Kolihestvo klikov.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          ctr: 
+            type: number
+            description: |
+              Pokazatel klikabelnosti.<br>
+              Otnohenie hisla klikov k kolihestvu pokazov. Vyrahaetsa v procentah.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.<br>
+          cpc: 
+            type: number
+            description: |
+              Srednaa stoimost klika, ₽.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          sum: 
+            type: number
+            description: |
+              Zatraty, ₽.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          atbs: 
+            type: integer
+            description: |
+              Kolihestvo dobavlenii tovarov v korzinu.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          orders: 
+            type: integer
+            description: |
+              Kolihestvo zakazov.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          cr: 
+            type: integer
+            description: |
+              CR(conversion rate) — eto otnohenie kolihestva zakazov k obhemu kolihestvu posehenii kampanii.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          shks: 
+            type: integer
+            description: |
+              Kolihestvo zakazannyh tovarov, ht.<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          sum_price: 
+            type: number
+            description: |
+              Zakazov na summu, ₽<br>
+              Za vse dni zaprohennogo diapazona, po vsem artikulam WB i platformam.
+          days:
+            $ref: '#/components/schemas/Days'
+          boosterStats:
+            $ref: '#/components/schemas/BoosterStats'
+          advertId:
+            description: "ID kampanii"
+            type: integer
+
+    ResponseWithDate:
+      description: "Otvet pri zaprose s dates"
+      type: array
+      items:
+        type: object
+        properties:
+          dates:
+            description: "Daty, za kotorye neobhodimo vydat informaciu."
+            type: array
+            items:
+              type: string
+              format: date
+          views: 
+            type: integer
+            description: |
+              Kolihestvo prosmotrov. <br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          clicks: 
+            type: integer
+            description: |
+              Kolihestvo klikov.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          ctr: 
+            type: number
+            description: |
+              Pokazatel klikabelnosti.<br>
+              Otnohenie hisla klikov k kolihestvu pokazov. Vyrahaetsa v procentah.<br>
+              Za vse dni, po vsem artikulam WB i platformam.<br>
+          cpc: 
+            type: number
+            description: |
+              Srednaa stoimost klika, ₽.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          sum: 
+            type: number
+            description: |
+              Zatraty, ₽.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          atbs: 
+            type: integer
+            description: |
+              Kolihestvo dobavlenii tovarov v korzinu.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          orders: 
+            type: integer
+            description: |
+              Kolihestvo zakazov.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          cr: 
+            type: integer
+            description: |
+              CR(conversion rate) — eto otnohenie kolihestva zakazov k obhemu kolihestvu posehenii kampanii.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          shks: 
+            type: integer
+            description: |
+              Kolihestvo zakazannyh tovarov, ht.<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          sum_price: 
+            type: number
+            description: |
+              Zakazov na summu, ₽<br>
+              Za vse dni, po vsem artikulam WB i platformam.
+          days:
+            $ref: '#/components/schemas/Days'
+          boosterStats:
+            $ref: '#/components/schemas/BoosterStats'
+          advertId:
+            description: "ID kampanii"
+            type: integer
+    ResponseInfoAdvert:
+      type: object
+      properties:
+        endTime:
+          description: Data zaverhenia kampanii
+          type: string
+        createTime:
+          description: Vrema sozdania kampanii
+          type: string
+          example: '2022-03-09T10:50:21.831623+03:00'
+        changeTime:
+          description: Vrema poslednego izmenenia kampanii
+          type: string
+          example: '2022-12-22T18:24:19.808701+03:00'
+        startTime:
+          description: Data poslednego zapuska kampanii
+          type: string
+        name:
+          description: Nazvanie kampanii
+          type: string
+        params:
+          description: Parametry kampanii
+          type: array
+          items:
+            type: object
+            properties:
+              subjectName:
+                description: Nazvanie predmetnoi gruppy (dla kampanii v poiske i rekomendaciah)
+                type: string
+              active:
+                description: Flag aktivnosti predmetnoi gruppy, <code>true</code> - aktivna, <code>false</code> - neaktivna
+                type: boolean
+              intervals:
+                description: Intervaly hasov pokaza kampanii
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Begin:
+                      description: Vrema nahala pokazov
+                      type: integer
+                    End:
+                      description: Vrema okonhania pokazov
+                      type: integer
+              price:
+                description: Tekuhaa stavka
+                type: integer
+              menuId:
+                description: Identifikator menu, gde razmehaetsa kampania (dla kampanii v kataloge)
+                type: integer
+              subjectId:
+                description: Identifikator predmetnoi gruppy, dla kotoroi sozdana kampania (dla kampanii v poiske i rekomendaciah)
+                type: integer
+              setId:
+                description: Identifikator sohetania predmeta i pola (dla kampanii v kartohke tovara)
+                type: integer
+              setName:
+                description: Sohetanie predmeta i pola (dla kampanii v kartohke tovara)
+                type: string
+              menuName:
+                description: Nazvanie menu, gde razmehaetsa kampania (dla kampanii v kataloge)
+                type: string
+              nms:
+                description: Massiv nomenklatur kampanii
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nm:
+                      type: integer
+                      description: hislovoi identifikator nomenklatury Wildberries
+                        (<code>nmId</code>)
+                    active:
+                      type: boolean
+                      description: Sostoanie nomenklatury (<code>true</code> - aktivna
+                        ili <code>false</code> - neaktivna)
+        dailyBudget:
+          description: Dnevnoi budhet, esli ne ustanovlen, to 0
+          type: integer
+        advertId:
+          description: Identifikator kampanii
+          type: integer
+          example: 1234
+        status:
+          description: |
+            <dl>
+            <dt>Status kampanii:</dt>
+            <dd><code>-1</code> - kampania v processe udalenia </dd>
+            <dd><code>4</code> - gotova k zapusku </dd>
+            <dd><code>7</code> - Kampania zaverhena</dd>
+            <dd><code>8</code> - otkazalsa</dd>
+            <dd><code>9</code> - idut pokazy</dd>
+            <dd><code>11</code> - Kampania na pauze</dd>
+            </dl>
+            Kampania v processe udalenia. Status oznahaet, hto kampania byla udalena, i herez 3-10 minut ona isheznet iz otveta metoda.
+              
+          type: integer
+          example: 9
+        type:
+          description: |
+            <dl>
+              <dt>Tip kampanii:</dt>
+                <dd><code>4</code> - kampania  v kataloge (<strong>ustarevhii tip</strong>)</dd>
+                <dd><code>5</code> - kampania v kartohke tovara (<strong>ustarevhii tip</strong>)</dd>
+                <dd><code>6</code> - kampania v poiske (<strong>ustarevhii tip</strong>)</dd>
+                <dd><code>7</code> - kampania v rekomendaciah na glavnoi stranice (<strong>ustarevhii tip</strong>)</dd>
+              </dl>
+            
+          type: integer
+          example: 4
+        paymentType: 
+          type: string
+          description: |
+            Model oplaty:
+            - `cpm` — za pokazy
+            - `cpo` — za zakazy
+        searchPluseState:
+          type: boolean
+          description: |
+            Aktivnost fiksirovannyh fraz:
+              - `false` — ne aktivny
+              - `true` — aktivny
+    ResponseInfoAdvertType8:
+      type: object
+      properties:
+        endTime:
+          description: Data zaverhenia kampanii
+          type: string
+          format: date-time
+        createTime:
+          description: Data sozdania kampanii
+          type: string
+          format: date-time
+        changeTime:
+          description: Data poslednego izmenenia kampanii
+          type: string
+          format: date-time
+        startTime:
+          description: Data poslednego zapuska kampanii
+          type: string
+          format: date-time
+        autoParams:
+          type: object
+          properties:
+            subject:
+              description: Prodvigaemyi predmet
+              type: object
+              properties:
+                id:
+                  description: ID predmeta
+                  type: integer
+                name:
+                  description: Nazvanie predmeta
+                  type: string
+            sets:
+              description: Vnutrennaa (sistemnaa) suhnost (pol + predmet)
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    description: Identifikator set
+                    type: integer
+                  name:
+                    description: Nazvanie set
+                    type: string
+            menus:
+              type: array
+              items:
+                type: object
+                description: Menu, gde razmehaetsa kampania
+                properties:
+                  id:
+                    description: ID menu
+                    type: integer
+                  name:
+                    description: Nazvanie menu
+                    type: string
+            active:
+              description: Zony pokazov
+              type: object
+              properties:
+                carousel:
+                  description: Kartohka tovara (`false` - otkluheny, `true` - vkluheny)
+                  type: boolean
+                recom:
+                  description: Rekomendacii na glavnoi (`false` - otkluheny, `true` - vkluheny)
+                  type: boolean
+                booster:
+                  description: Poisk/Katalog (`false` - otkluheny, `true` - vkluheny)
+                  type: boolean
+            nmCPM:
+              type: array
+              description: >
+                Stavki nomenklatur (artikulov WB)
+              items:
+                type: object
+                properties:
+                  nm:
+                    description: Artikul WB
+                    type: integer
+                  cpm: 
+                    description: Stavka
+                    type: integer
+            nms:
+              description: Artikuly WB
+              type: array
+              items:
+                type: integer
+            cpm:
+              description: >
+                Stavka, ukazannaa pri sozdanii kampanii.<br>  Pole aktualno tolko dla kampanii, sozdannyh herez API.  
+              type: integer
+        name:
+          description: Nazvanie kampanii
+          type: string
+        dailyBudget:
+          description: Ne ispolzuetsa
+          type: integer
+        advertId:
+          description: Identifikator kampanii
+          type: integer
+        status:
+          description: |
+            <dl> <dt>Status kampanii:</dt> <dd><code>-1</code> - kampania
+            v processe udalenia </dd> <dd><code>4</code>
+            - gotova k zapusku </dd> <dd><code>7</code> - Kampania zaverhena</dd>
+            <dd><code>8</code> - otkazalsa</dd> <dd><code>9</code> - idut pokazy</dd>
+            <dd><code>11</code> - Kampania na pauze</dd> </dl> Kampania v processe
+            udalenia. Status oznahaet, hto kampania byla udalena, i herez 3-10 minut
+            ona isheznet iz otveta metoda.
+            
+          type: integer
+        type:
+          description: |
+            <dl> <dt>Tip kampanii:</dt> <dd><code>8</code> - avtomatiheskaa
+            kampania </dd> </dl>
+            
+          type: integer
+        paymentType: 
+          type: string
+          description: |
+            Model oplaty:
+            - `cpm` — za pokazy
+            - `cpo` — za zakazy
+    ResponseInfoAdvertType9:
+      type: object
+      properties:
+        endTime:
+          description: Data zaverhenia kampanii
+          type: string
+          format: date-time
+        createTime:
+          description: Data sozdania kampanii
+          type: string
+          format: date-time
+        changeTime:
+          description: Data poslednego izmenenia kampanii
+          type: string
+          format: date-time
+        startTime:
+          description: Data poslednego zapuska kampanii
+          type: string
+          format: date-time
+        searchPluseState:
+          type: boolean
+          description: |
+            Aktivnost fiksirovannyh fraz:
+              - `false` — ne aktivny
+              - `true` — aktivny
+        name:
+          description: Nazvanie kampanii
+          type: string
+        unitedParams:
+          type: array
+          items:
+            type: object
+            properties:
+              subject:
+                type: object
+                description: Prodvigaemyi predmet
+                properties:
+                  id:
+                    description: ID predmeta
+                    type: integer
+                  name:
+                    description: Nazvanie predmeta
+                    type: string
+              menus:
+                type: array
+                items:
+                  type: object
+                  description: Menu, gde razmehaetsa kampania
+                  properties:
+                    id:
+                      description: ID menu
+                      type: integer
+                    name:
+                      description: Nazvanie menu
+                      type: string
+              nms:
+                description: Artikuly WB
+                type: array
+                items:
+                  type: integer
+              searchCPM:
+                description: Stavka v Poiske
+                type: integer
+              catalogCPM:
+                description: Stavka v Kataloge, pri nalihii
+                type: integer
+        dailyBudget:
+          description: Ne ispolzuetsa
+          type: integer
+        advertId:
+          description: Identifikator kampanii
+          type: integer
+        status:
+          description: |
+            <dl> <dt>Status kampanii:</dt> <dd><code>-1</code> - kampania
+            v processe udalenia </dd> <dd><code>4</code>
+            - gotova k zapusku </dd> <dd><code>7</code> - Kampania zaverhena</dd>
+            <dd><code>8</code> - otkazalsa</dd> <dd><code>9</code> - idut pokazy</dd>
+            <dd><code>11</code> - Kampania na pauze</dd> </dl> Kampania v processe
+            udalenia. Status oznahaet, hto kampania byla udalena, i herez 3-10 minut
+            ona isheznet iz otveta metoda.
+          type: integer
+        paymentType: 
+          type: string
+          description: |
+            Model oplaty:
+            - `cpm` — za pokazy
+            - `cpo` — za zakazy
+        type:
+          description: |
+            <dl> <dt>Tip kampanii:</dt> <dd><code>9</code> - Aukcion
+            </dd> </dl>
+          type: integer
+      example:
+        endTime: '2100-01-01T00:00:00+03:00'
+        createTime: '2023-07-09T10:56:02.150362+03:00'
+        changeTime: '2023-07-11T02:48:44.767712+03:00'
+        startTime: '2023-07-10T08:02:31.949155+03:00'
+        searchPluseState: false
+        name: Protivovirusnye preparaty
+        unitedParams:
+          - subject:
+              id: 3038
+              name: Protivovirusnye preparaty
+            menus:
+              - id: -1
+                name: ''
+            nms:
+              - 38995344
+            searchCPM: 123
+            catalogCPM: 321
+        dailyBudget: 0
+        advertId: 1234567
+        status: 11
+        type: 9
+        paymentType: cpm
+    responseAdvError1:
+      type: object
+      properties:
+        error:
+          type: string
+    V0KeywordsStatistic:
+      type: object
+      required:
+        - keyword
+        - views
+        - clicks
+        - ctr
+        - sum
+      properties:
+        clicks:
+          type: integer
+          description: Kolihestvo klikov
+        ctr:
+          type: number
+          description: CTR (Click-Through Rate) — pokazatel klikabelnosti
+        keyword:
+          type: string
+          description: Kluhevaa fraza
+        sum:
+          type: number
+          description: Summa zatrat po kluhevoi fraze
+        views:
+          type: integer
+          description: Kolihestvo pokazov
+    V0KeywordsStatistics:
+      type: object
+      required:
+        - date
+        - stats
+      properties:
+        date:
+          type: string
+          format: date
+          description: Data
+        stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/V0KeywordsStatistic'
+    V0KeywordsStatisticsResponse:
+      type: object
+      required:
+        - keywords
+      properties:
+        keywords:
+          type: array
+          items:
+            $ref: '#/components/schemas/V0KeywordsStatistics'
+    ErrorResponse:
+      type: object
+      required:
+        - type
+        - message
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+  examples:
+    DateRangeExceeded:
+      description: Mohno poluhit dannye maksimum za 7 dnei
+      value: {"message":"the period of stats cannot be more than one week","type":"bad request"}
+    ResponseWithReturn:
+      description: Otvet pri return=true
+      value:
+        total: 500
+    SettingMinusPhrase:
+      description: Ustanovka minus-fraz
+      value:
+        excluded:
+          - pervaa fraza
+          - vtoraa fraza
+    RemovingMinusPhrase:
+      description: Udalenie minus-fraz
+      value:
+        excluded: []
+    RequestWithoutParam:
+      description: Zapros bez parametrov
+      value:
+        - id: 107024
+    RequestAggregate:
+      description: Zapros s intervalami i datami
+      value:
+        - id: 107024
+          interval:
+            begin: '2023-10-21'
+            end: '2023-10-21'
+        - id: 107024
+          dates:
+            - '2023-10-22'
+            - '2023-10-26'
+    RespStatMediaInterval:
+      description: Otvet pri zaprose s intervalami
+      value:
+        - interval:
+            begin: '2023-10-21'
+            end: '2023-10-25'
+          stats:
+            - item_id: 62237
+              item_name: Gloria Jeans
+              category_name: Detam
+              advert_type: 1
+              place: 2
+              views: 11849
+              clicks: 209
+              cr: 0.48
+              ctr: 1.76
+              date_from: '2023-10-21T00:00:00+03:00'
+              date_to: '2023-10-27T23:59:59+03:00'
+              subject_name: Odehda
+              atbs: 4
+              orders: 1
+              price: 175000
+              cpc: 837.32
+              status: 6
+              daily_stats:
+                - date: '2023-10-21T00:00:00+03:00'
+                  app_type_stats:
+                    - app_type: 1
+                      stats:
+                        - views: 2017
+                          clicks: 27
+                          atbs: 1
+                          ctr: 1.34
+              expenses: 175000
+              cr1: 1.91
+              cr2: 25
+    RespStatMediaDates:
+      description: Otvet pri zaprose s datami
+      value:
+        - dates:
+            - '2023-10-26'
+            - '2023-10-22'
+          stats:
+            - item_id: 62237
+              item_name: Gloria Jeans
+              category_name: Detam
+              advert_type: 1
+              place: 2
+              views: 4584
+              clicks: 74
+              cr: 1.35
+              ctr: 1.61
+              date_from: '2023-10-21T00:00:00+03:00'
+              date_to: '2023-10-27T23:59:59+03:00'
+              subject_name: Odehda
+              atbs: 2
+              orders: 1
+              price: 175000
+              cpc: 2364.86
+              status: 6
+              daily_stats:
+                - date: '2023-10-22T00:00:00+03:00'
+                  app_type_stats:
+                    - app_type: 1
+                      stats:
+                        - views: 2384
+                          clicks: 33
+                          atbs: 2
+                          orders: 1
+                          cr: 3.03
+                          ctr: 1.38
+              expenses: 175000
+              cr1: 2.7
+              cr2: 50
+    RespStatMediaWithoutParam:
+      description: Otvet pri zaprose bez parametrov
+      value:
+        - stats:
+            - item_id: 62237
+              item_name: Gloria Jeans
+              category_name: Detam
+              advert_type: 1
+              place: 2
+              views: 11849
+              clicks: 209
+              cr: 0.48
+              ctr: 1.76
+              date_from: '2023-10-21T00:00:00+03:00'
+              date_to: '2023-10-27T23:59:59+03:00'
+              subject_name: Odehda
+              atbs: 4
+              orders: 1
+              price: 175000
+              cpc: 837.32
+              status: 6
+              daily_stats:
+                - date: '2023-10-21T00:00:00+03:00'
+                  app_type_stats:
+                    - app_type: 1
+                      stats:
+                        - views: 2017
+                          clicks: 27
+                          atbs: 1
+                          ctr: 1.34
+              expenses: 175000
+              cr1: 1.91
+              cr2: 25
+    RespStatMediaAggregate:
+      description: Otvet pri zaprose s intervalami i datami
+      value:
+        - interval:
+            begin: '2023-10-21'
+            end: '2023-10-25'
+          stats:
+            - item_id: 62237
+              item_name: Gloria Jeans
+              category_name: Detam
+              advert_type: 1
+              place: 2
+              views: 11849
+              clicks: 209
+              cr: 0.48
+              ctr: 1.76
+              date_from: '2023-10-21T00:00:00+03:00'
+              date_to: '2023-10-27T23:59:59+03:00'
+              subject_name: Odehda
+              atbs: 4
+              orders: 1
+              price: 175000
+              cpc: 837.32
+              status: 6
+              daily_stats:
+                - date: '2023-10-21T00:00:00+03:00'
+                  app_type_stats:
+                    - app_type: 1
+                      stats:
+                        - views: 2017
+                          clicks: 27
+                          atbs: 1
+                          ctr: 1.34
+              expenses: 175000
+              cr1: 1.91
+              cr2: 25
+        - dates:
+            - '2023-10-26'
+            - '2023-10-22'
+          stats:
+            - item_id: 62237
+              item_name: Gloria Jeans
+              category_name: Detam
+              advert_type: 1
+              place: 2
+              views: 4584
+              clicks: 74
+              cr: 1.35
+              ctr: 1.61
+              date_from: '2023-10-21T00:00:00+03:00'
+              date_to: '2023-10-27T23:59:59+03:00'
+              subject_name: Odehda
+              atbs: 2
+              orders: 1
+              price: 175000
+              cpc: 2364.86
+              status: 6
+              daily_stats:
+                - date: '2023-10-22T00:00:00+03:00'
+                  app_type_stats:
+                    - app_type: 1
+                      stats:
+                        - views: 2384
+                          clicks: 33
+                          atbs: 2
+                          orders: 1
+                          cr: 3.03
+                          ctr: 1.38
+              expenses: 175000
+              cr1: 2.7
+              cr2: 50
+        - stats:
+            - item_id: 62237
+              item_name: Gloria Jeans
+              category_name: Detam
+              advert_type: 1
+              place: 2
+              views: 11849
+              clicks: 209
+              cr: 0.48
+              ctr: 1.76
+              date_from: '2023-10-21T00:00:00+03:00'
+              date_to: '2023-10-27T23:59:59+03:00'
+              subject_name: Odehda
+              atbs: 4
+              orders: 1
+              price: 175000
+              cpc: 837.32
+              status: 6
+              daily_stats:
+                - date: '2023-10-21T00:00:00+03:00'
+                  app_type_stats:
+                    - app_type: 1
+                      stats:
+                        - views: 2017
+                          clicks: 27
+                          atbs: 1
+                          ctr: 1.34
+              expenses: 175000
+              cr1: 1.91
+              cr2: 25
+    CampaignNotFound:
+      value: Kampania ne naidena
+    ChangingStatusToNewIsNotPossible:
+      description: ""
+      value: Perevod v novyi status nevozmohen
+    InsufficientFundsToResumeImpressions:
+      value: Nedostatohno sredstv dla vozobnovlenia pokazov. Popolnite budhet kampanii.
+    DisableOrIncreaseDailyLimit:
+      value: Dla vozobnovlenia pokazov otkluhite ili uvelihte dnevnoi limit.
+    TopUpCampaignBudget:
+      value: Popolnite budhet kampanii.
+    ChooseSourceOfFundsDebiting:
+      value: Ne vybran istohnik spisania sredstv
+    UnknownPaymentType:
+      value: Neizvestnyi tip oplaty
+    InsufficientFunds:
+      value: Nedostatohno sredstv
+    CreatePlacement:
+      value: Sozdaite razmehenie.
+    TopUpCampaignBudgetToResumeImpressions2:
+      value: Popolnite budhet kampanii dla vozobnovlenia pokazov
+    ErrorInGettingItems:
+      value: '"Ohibka poluhenia aitemov: {x}", Detali ohibki'
+    TypePlacementShouldBeImpressions:
+      value: Tip razmehenia dolhen byt po pokazam
+    ChangeOnlyPossibleForActiveCampaigns:
+      value: Izmenenie vozmohno tolko dla aktivnyh kampanii
+    SmallCpm:
+      value: '"Stavka ne mohet byt menee {x} rublei", Minimalnaa stavka'
+    RequestWithDate:
+      description: Zapros s datami
+      value:
+        - id: 8960367
+          dates:
+            - '2023-10-07'
+            - '2023-10-06'
+        - id: 9876543
+          dates:
+            - '2023-10-07'
+            - '2023-12-06'
+    RequestWithInterval:
+      description: Zapros s intervalami
+      value:
+        - id: 8960367
+          interval:
+            begin: '2023-10-08'
+            end: '2023-10-10'
+        - id: 78978565
+          interval:
+            begin: '2023-09-08'
+            end: '2023-09-11'
+    RequestWithoutIDParam:
+      description: Zapros tolko s id kampanii
+      value:
+        - id: 8960367
+        - id: 9876543
+    ResponseWithDate:
+      description: Otvet pri zaprose s polem date
+      value:
+        - views: 1052
+          clicks: 2
+          ctr: 0.19
+          cpc: 0.09
+          sum: 177.7
+          atbs: 0
+          orders: 0
+          cr: 0
+          shks: 0
+          sum_price: 0
+          dates:
+            - '2023-10-07'
+            - '2023-10-06'
+          days:
+            - date: '2023-10-06T03:00:00+03:00'
+              views: 414
+              clicks: 1
+              ctr: 0.24
+              cpc: 70
+              sum: 70
+              atbs: 0
+              orders: 0
+              cr: 0
+              shks: 0
+              sum_price: 0
+              apps:
+                - views: 228
+                  clicks: 0
+                  ctr: 0
+                  cpc: 0
+                  sum: 38.71
+                  atbs: 0
+                  orders: 0
+                  cr: 0
+                  shks: 0
+                  sum_price: 0
+                  nm:
+                    - views: 25
+                      clicks: 0
+                      ctr: 0
+                      cpc: 0
+                      sum: 4
+                      atbs: 0
+                      orders: 0
+                      cr: 0
+                      shks: 0
+                      sum_price: 0
+                      name: Tapohki
+                      nmId: 111111111111
+                  appType: 1
+          boosterStats:
+            - date: '2023-10-07T00:00:00Z'
+              nm: 170095908
+              avg_position: 348
+          advertId: 10524818
+    ResponseWithInterval:
+      description: Otvet pri zaprose s polem interval
+      value:
+        - interval:
+            begin: '2023-10-08'
+            end: '2023-10-10'
+          views: 1052
+          clicks: 2
+          ctr: 0.19
+          cpc: 0.09
+          sum: 177.7
+          atbs: 0
+          orders: 0
+          cr: 0
+          shks: 0
+          sum_price: 0
+          days:
+            - date: '2023-10-08T03:00:00+03:00'
+              views: 730
+              clicks: 1
+              ctr: 0.14
+              cpc: 124.91
+              sum: 124.91
+              atbs: 0
+              orders: 0
+              cr: 0
+              shks: 0
+              sum_price: 0
+              apps:
+                - views: 424
+                  clicks: 1
+                  ctr: 0.24
+                  cpc: 72.63
+                  sum: 72.63
+                  atbs: 0
+                  orders: 0
+                  cr: 0
+                  shks: 0
+                  sum_price: 0
+                  nm:
+                    - views: 424
+                      clicks: 1
+                      ctr: 0.24
+                      cpc: 72.63
+                      sum: 72.63
+                      atbs: 0
+                      orders: 0
+                      cr: 0
+                      shks: 0
+                      sum_price: 0
+                      name: Tapohki
+                      nmId: 1111111111111
+                  appType: 1
+          boosterStats:
+            - date: '2023-10-08T00:00:00Z'
+              nm: 1111111111111
+              avg_position: 395
+          advertId: 10524818
+    InvalidSubjectForm:
+      
+      value: Nevernaa forma subject
+    CouldNotGetDataForSearchBar:
+      
+      value: Ne udalos poluhit dannye dla poiskovoi stroki
+    ResponseInvalidCampaignID:
+      description: Nekorrektnyi identifikator kampanii
+      value:
+        error: Nekorrektnyi identifikator kampanii
+    
+    StatusNoChangeAdv:
+      value: Status kampanii ne izmenen
+    IncorrectSupplierIdAdv:
+      value: Nekorrektnyi identifikator prodavca
+    InvalidRcIdAdv:
+      value: Nekorrektnyi identifikator RK
+    IncorrectParamAdv:
+      value: Nekorrektnoe znahenie parametra param
+    IncorrectSubjectID:
+      value: Nekorrektnoe znahenie parametra subjectId
+    IncorrectTypeAdv:
+      value: Nekorrektnoe znahenie parametra type
+    IncorrectUsingMethods:
+      description: Nekorrektnoe ispolzovanie metoda
+      value: Dla poluhenia informacii peredaite ili spisok kampanii, ili nabor filtrov
+    IncorrectStatusAdv:
+      value: Nekorrektnoe znahenie parametra status
+    IncorrectName:
+      value: Nekorrektnoe nazvanie
+    IncorrectCpmAdv:
+      value: Nekorrektnoe znahenie parametra cpm
+    AmountNotChanged:
+      value: Razmer stavki ne izmenen
+    ActivitySubjectGroupNotChanged:
+      value: Aktivnost predmetnoi gruppy ne izmenena
+    CompanyNameChangeErr:
+      value: Ohibka izmenenia nazvania kampanii
+    ErrorProcessRequestParam:
+      value: Ohibka obrabotki parametrov zaprosa
+    RequestBodyProcessErrorAdv:
+      value: Ohibka obrabotki tela zaprosa
+    CampaignNotBelongSeller:
+      value: kampania ne prinadlehit prodavcu
+    CampaignNotFoundAdv:
+      value:
+        error: kampania ne naidena
+    FailedGetAdvertTools:
+      value: ne udalos poluhit aktivnost instrumentov prodvihenia
+    responseIncorrectBeginDate:
+      value:
+        error: Nekorrektnaa data nahala
+    responseIncorrectEndDate:
+      value:
+        error: Nekorrektnaa data konca
+    AvailableOnlyForAutoCampaign:
+      description: Dostupno tolko dla avtomatiheskih kampanii
+      value:
+        error: dostupno tolko dla avtomatiheskih kampanii
+    AvailableOnlyActiveCampaign:
+      description: Dostupno tolko dla aktivnyh kampanii
+      value:
+        error: dostupno tolko dla aktivnyh kampanii
+    TokenMissing:
+      description: Token otsutstvuet
+      value: 'proxy: unauthorized'
+    TokenInvalid:
+      description: Token nedeistvitelen
+      value: 'proxy: invalid token'
+    TokenNotFound:
+      description: Token udalen
+      value: 'proxy: not found'
+    ResponseInfoAdvert:
+      value: [{"endTime": "2100-01-01 00:00:00+03:00", "createTime": "2023-05-31 16:57:42.654141+03:00", "changeTime": "2023-06-21 22:10:43.074183+03:00", "startTime": "2023-07-21 21:17:42.872376+03:00", "name": "Noski_herstanye", "params": [{"intervals": [{"begin": 3, "end": 5}], "price": 400, "subjectId": 201, "subjectName": "Noski", "nms": [{"nm": 11111111, "active": true}], "active": false}], "dailyBudget": 0, "advertId": 12345, "status": 9, "type": 6, "paymentType": "cpm", "searchPluseState": false}]
+    ResponseInfoAdvertType8:
+      value: [{"endTime": "2023-10-05T21:37:37.226021+03:00", "createTime": "2023-08-21T13:45:31.121172+03:00", "changeTime": "2023-08-21T14:59:33.622594+03:00", "startTime": "2023-08-21T13:45:31.147601+03:00", "autoParams": {"subject": {"name": "Oblohki", "id": 342}, "sets": [{"name": "dla henhin", "id": 623}], "nms": [1234567], "active": {"carousel": true, "recom": true, "booster": true}, "nmCPM": [{"nm": 1234567, "cpm": 150}]}, "name": "Kampania1", "dailyBudget": 0, "advertId": 11111111, "status": 7, "type": 8, "paymentType": "cpm"}]
+    ResponseInfoAdvertType9:
+      value: [{"endTime": "2100-01-01T00:00:00+03:00", "createTime": "2023-07-09T10:56:02.150362+03:00", "changeTime": "2023-07-11T02:48:44.767712+03:00", "startTime": "2023-07-10T08:02:31.949155+03:00", "searchPluseState": false, "name": "Protivovirusnye preparaty", "unitedParams": [{"subject": {"id": 3038, "name": "Protivovirusnye preparaty"}, "menus": [{"id": -1, "name": ""}], "nms": [38995344], "searchCPM": 123, "catalogCPM": 321}], "dailyBudget": 0, "advertId": 1234567, "status": 11, "type": 9, "paymentType": "cpm"}]
+    ResponseInfoAdvertsAll:
+      value: [{"endTime": "2100-01-01 00:00:00+03:00", "createTime": "2023-05-31 16:57:42.654141+03:00", "changeTime": "2023-06-21 22:10:43.074183+03:00", "startTime": "2023-07-21 21:17:42.872376+03:00", "name": "Noski_herstanye", "params": [{"intervals": [{"begin": 3, "end": 5}], "price": 400, "subjectId": 201, "subjectName": "Noski", "nms": [{"nm": 11111111, "active": true}], "active": false}], "dailyBudget": 0, "advertId": 12345, "status": 9, "type": 6, "paymentType": "cpm", "searchPluseState": false}, {"endTime": "2023-10-05T21:37:37.226021+03:00", "createTime": "2023-08-21T13:45:31.121172+03:00", "changeTime": "2023-08-21T14:59:33.622594+03:00", "startTime": "2023-08-21T13:45:31.147601+03:00", "autoParams": {"subject": {"name": "Oblohki", "id": 342}, "sets": [{"name": "dla henhin", "id": 623}], "nms": [1234567], "active": {"carousel": true, "recom": true, "booster": true}, "nmCPM": [{"nm": 1234567, "cpm": 150}]}, "name": "Kampania1", "dailyBudget": 0, "advertId": 11111111, "status": 7, "type": 8, "paymentType": "cpm"}, {"endTime": "2100-01-01T00:00:00+03:00", "createTime": "2023-07-09T10:56:02.150362+03:00", "changeTime": "2023-07-11T02:48:44.767712+03:00", "startTime": "2023-07-10T08:02:31.949155+03:00", "searchPluseState": false, "name": "Protivovirusnye preparaty", "unitedParams": [{"subject": {"id": 3038, "name": "Protivovirusnye preparaty"}, "menus": [{"id": -1, "name": ""}], "nms": [38995344], "searchCPM": 123, "catalogCPM": 321}], "dailyBudget": 0, "advertId": 1234567, "status": 11, "type": 9, "paymentType": "cpm"}]
+  securitySchemes:
+    HeaderApiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+  responses: 
+    Responses401:
+      description: Polzovatel ne avtorizovan
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Zagolovok ohibki
+              detail:
+                type: string
+                description: Detali ohibki
+              code:
+                type: string
+                description: Vnutrennii kod ohibki
+              requestId:
+                type: string
+                description: Unikalnyi ID zaprosa
+              origin:
+                type: string
+                description: ID vnutrennego servisa WB
+              status:
+                type: number
+                description: HTTP status-kod
+              statusText:
+                type: string
+                description: Tekst HTTP status-koda
+          example: { "title": "unauthorized", "detail": "token problem; token is malformed: could not base64 decode signature: illegal base64 data at input byte 84", "code": "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75", "requestId": "7b80742415072fe8b6b7f7761f1d1211", "origin": "s2sauth-ca", "status": 401, "statusText": "Unauthorized" }
+      

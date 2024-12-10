@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: wildberries-api-client
+Version: 0.2.101
+Summary: 
+License: MIT
+Author: letby
+Author-email: fvahit2@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: certifi (>=2024.2.2,<2025.0.0)
+Requires-Dist: python-dateutil (>=2.9.0.post0,<3.0.0)
+Requires-Dist: ruamel-yaml (>=0.18.6,<0.19.0)
+Requires-Dist: six (==1.10)
+Requires-Dist: transliterate (>=1.10.2,<2.0.0)
+Requires-Dist: urllib3 (==2.2.1)
+Description-Content-Type: text/markdown
+
+# Код был сформирован с использованием Swagger CodeGen
+
+Данный модуль автоматически обновляется с получением измнений 
+с официального сайта [wildberries](https://openapi.wildberries.ru/general/description/ru/) 
+
+*Весь код был сформирован с использованием траслита на кривую латиницу*
+
+Установка:
+
+```python
+pip install wildberries-api-client
+```
+
+Инструкция:
+
+```python
+from wildberries_api_client import content  # выберете свой раздел
+
+
+conf = content.Configuration()
+conf.host = 'https://advert-api.wb.ru'  # Ссылку можно найти в официальной документаци
+conf.api_key['Authorization'] = ''  # Api token 
+api_client = content.ApiClient(conf)
+
+api_inst = content.ProsmotrApi(api_client)    # Наименования соответствуют подразделам
+print(api_inst.content_v2_get_cards_list_post(body={"settings": 
+                                                        {"cursor": 
+                                                             {"limit": 1000},
+                                                         "filter": {"withPhoto": -1}}
+                                                    },
+                                              locale='ru'))
+
+```
+
+Apache-2.0
+Swagger
