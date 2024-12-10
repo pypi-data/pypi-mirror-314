@@ -1,0 +1,125 @@
+Metadata-Version: 2.1
+Name: crabpy
+Version: 1.6.0
+Summary: Interact with geographical webservices by Informatie Vlaanderen.
+Project-URL: Repository, https://github.com/OnroerendErfgoed/crabpy.git
+Project-URL: Issues, https://github.com/OnroerendErfgoed/crabpy/issues
+Project-URL: Changelog, https://github.com/OnroerendErfgoed/crabpy/blob/master/CHANGES.rst
+Author-email: Flanders Heritage Agency <ict@onroerenderfgoed.be>
+License: The MIT License (MIT)
+        
+        Copyright (c) 2013-2016 Onroerend Erfgoed
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy of
+        this software and associated documentation files (the "Software"), to deal in
+        the Software without restriction, including without limitation the rights to
+        use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+        the Software, and to permit persons to whom the Software is furnished to do so,
+        subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+        FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+        COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+        IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+        CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+License-File: LICENSE
+Keywords: AGIV,CAPAKEY,crabpy,pyramid,web,wsgi
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: <3.13,>=3.10
+Requires-Dist: dogpile-cache
+Requires-Dist: requests
+Requires-Dist: suds-py3>=1.4.4.1
+Provides-Extra: dev
+Requires-Dist: black==24.10.0; extra == 'dev'
+Requires-Dist: coveralls==4.0.1; extra == 'dev'
+Requires-Dist: flake8-bugbear==24.8.19; extra == 'dev'
+Requires-Dist: flake8-import-order==0.18.2; extra == 'dev'
+Requires-Dist: flake8==7.1.1; extra == 'dev'
+Requires-Dist: pre-commit==4.0.1; extra == 'dev'
+Requires-Dist: pytest==8.3.3; extra == 'dev'
+Requires-Dist: responses==0.25.3; extra == 'dev'
+Requires-Dist: uv==0.4.20; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# CRABpy
+
+This library provides access to the CRAB and CAPAKEY webservices operated by
+the AGIV. Because connecting to these SOAP services from python can be somewhat
+complicated, this library makes it easier.
+
+[![docs](https://readthedocs.org/projects/crabpy/badge/?version=latest)](https://readthedocs.org/projects/crabpy/?badge=latest)
+[![pypi](https://badge.fury.io/py/crabpy.png)](http://badge.fury.io/py/crabpy)
+[![CI](https://github.com/OnroerendErfgoed/crabpy/actions/workflows/backend.yaml/badge.svg)](https://github.com/OnroerendErfgoed/crabpy/actions/workflows/backend.yaml)
+[![Coverage](https://coveralls.io/repos/OnroerendErfgoed/crabpy/badge.png?branch=master)](https://coveralls.io/r/OnroerendErfgoed/crabpy?branch=master)
+
+
+## Build wheel or sdist
+
+```sh
+pip install hatch
+hatch build
+hatch build -t wheel
+hatch build -t sdist
+```
+
+
+## Work with pip-compile / pip-sync
+
+full docs: https://pip-tools.readthedocs.io/en/latest/
+
+To start, first install pip-tools: 
+```sh
+pip install pip-tools
+```
+
+### uv (optional)
+
+You can also use `uv` and for the remainder of the readme replace `pip`, `pip-compile` or
+`pip-sync` by `uv pip`, `uv pip compile` and `uv pip sync`.
+
+`uv` is a very fast replacement for pip-toools. It's optional, but can save a lot of time.
+```sh
+pip install uv
+```
+
+### Install requirements: pip-sync
+
+Note, `pip-sync` also uninstalls everything from the virtualenv which does not belong 
+there according to the requirements file. This includes the project itself. You will
+have to install `crabpy` again after `pip-sync`.
+Since the requirements file of pip-sync is still a normal requirements file you can also
+use `pip install -r` to install all libraries defined in it. This will not cleanup your
+virtualenv and uninstall other libraries.
+
+The compiled requirements files are made in a 3.11 environment.
+```sh
+pip-sync requirements-dev.txt
+pip install -e .
+```
+`requirements-dev.txt` contains all libraries uncluding those for testing and development.
+
+`requirements.txt` contains only the necessary libraries for running the library.
+
+### Update requirements: pip-compile
+
+```sh
+echo -e "\nStarting"
+PIP_COMPILE_ARGS="-q --strip-extras --no-header --resolver=backtracking --no-emit-options pyproject.toml"
+pip-compile $PIP_COMPILE_ARGS -o requirements.txt;
+echo "requirements.txt done"
+pip-compile $PIP_COMPILE_ARGS --extra dev -o requirements-dev.txt;
+echo "requirements-dev.txt done"
+echo "Finished"
+```
