@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cz-changeup"
+version = "1.1.0"
+description = "Commitizen plugin for better changelog generation"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = ["changelog", "commitizen"]
+authors = [{ name = "Kimoon Han", email = "khan@kaist.ac.kr" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = ["commitizen>=3.0.0,<4.0.0"]
+
+[project.urls]
+Changelog = "https://github.com/kmnhan/cz-changeup/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/kmnhan/cz-changeup#readme"
+Issues = "https://github.com/kmnhan/cz-changeup/issues"
+Source = "https://github.com/kmnhan/cz-changeup"
+
+[project.entry-points."commitizen.plugin"]
+cz_changeup = "cz_changeup.cz_changeup:ChangeupCz"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cz_changeup"]
+
+[tool.commitizen]
+version_provider = "pep621"
+update_changelog_on_bump = true
+tag_format = "v$version"
+changelog_incremental = false
+name = "cz_changeup"
+
+# cz-changeup specific settings
+changeup_repo_base_url = "https://github.com/kmnhan/cz-changeup"
+changeup_show_hash = true
+changeup_show_body = true
+changeup_body_indent = 2
+changeup_link_issues = true
+changeup_scope_bold = true
+changeup_scope_prefix = "**"
+changeup_scope_suffix = ""
+changeup_scope_separator = ":** "
