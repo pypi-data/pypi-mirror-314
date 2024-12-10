@@ -1,0 +1,114 @@
+[project]
+name = "liteswarm"
+version = "0.1.1"
+description = "A lightweight framework for building AI agent systems"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [{name = "Evgenii Mozharovskii", email = "eugene@glyphy.ai"}]
+keywords = [
+    "ai",
+    "agents",
+    "llm",
+    "swarm",
+    "multi-agent",
+    "agent-systems",
+    "agent-orchestration",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "griffe>=1.5.1",
+    "json-repair>=0.30.2",
+    "litellm>=1.52.2",
+    "orjson>=3.10.11",
+    "pydantic>=2.9.2",
+]
+
+[project.urls]
+homepage = "https://github.com/GlyphyAI/liteswarm"
+repository = "https://github.com/GlyphyAI/liteswarm"
+documentation = "https://github.com/GlyphyAI/liteswarm#readme"
+bug-tracker = "https://github.com/GlyphyAI/liteswarm/issues"
+changelog = "https://github.com/GlyphyAI/liteswarm/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.13.0",
+    "ruff>=0.7.3",
+    "typing-extensions>=4.12.2",
+]
+
+[tool.setuptools.package-data]
+"liteswarm" = ["py.typed"]
+
+[tool.ruff]
+show-fixes = true
+line-length = 100
+indent-width = 4
+target-version = "py311"
+
+[tool.ruff.lint]
+preview = true
+explicit-preview-rules = true
+ignore = [
+    "E501",   # line too long, handled by black
+    "S101",   # assert
+    "ISC001", # single-line-implicit-string-concatenation, incompatible with ruff format
+    "D100",   # undocumented-public-module
+    "D101",   # undocumented-public-class
+    "D102",   # undocumented-public-method
+    "D103",   # undocumented-public-function
+    "D104",   # undocumented-public-package
+    "D105",   # undocumented-magic-method
+    "D107",   # undocumented-public-init
+]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions,
+    "PL",     # pylint
+    "TCH",    # flake8-type-checking
+    "N",      # pep8-naming
+    "YTT",    # flake8-2020
+    "TRY004", # type-check-without-type-error
+    "TRY201", # verbose-raise
+    "TRY302", # useless-try-except
+    "TRY401", # verbose-log-message
+    "RUF022", # unsorted-dunder-all
+    "RUF023", # unsorted-dunder-slots
+    "RUF025", # unnecessary-dict-comprehension-for-iterable
+    "RUF027", # missing-f-string-syntax
+    "RUF030", # assert-with-print-message
+    "RUF101", # redirected-noqa
+    "D",      # pydocstyle
+    "UP",     # pyupgrade
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+plugins = [
+    "pydantic.mypy",
+]
