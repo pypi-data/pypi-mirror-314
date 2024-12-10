@@ -1,0 +1,1 @@
+from .GraphLab import KnowledgeGraph
