@@ -1,0 +1,183 @@
+Metadata-Version: 2.1
+Name: sampledb
+Version: 0.30.0
+Summary: A sample and measurement metadata database
+Home-page: https://github.com/sciapp/sampledb
+Author: Florian Rhiem
+Author-email: f.rhiem@fz-juelich.de
+License: MIT
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Framework :: Flask
+Classifier: Topic :: Scientific/Engineering
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: APScheduler==3.10.4
+Requires-Dist: autocommand==2.2.2
+Requires-Dist: babel==2.16.0
+Requires-Dist: bcrypt==4.2.1
+Requires-Dist: beautifulsoup4==4.12.3
+Requires-Dist: bleach==6.2.0
+Requires-Dist: blinker==1.9.0
+Requires-Dist: Brotli==1.1.0
+Requires-Dist: certifi==2024.8.30
+Requires-Dist: cffi==1.17.1
+Requires-Dist: chardet==5.2.0
+Requires-Dist: charset-normalizer==3.4.0
+Requires-Dist: cheroot==10.0.1
+Requires-Dist: CherryPy==18.10.0
+Requires-Dist: click==8.1.7
+Requires-Dist: colorhash==2.0.0
+Requires-Dist: configparser==7.1.0
+Requires-Dist: cryptography==43.0.3
+Requires-Dist: cssselect2==0.7.0
+Requires-Dist: dnspython==2.7.0
+Requires-Dist: email_validator==2.2.0
+Requires-Dist: fido2==1.1.3
+Requires-Dist: Flask==3.1.0
+Requires-Dist: flask-babel==4.0.0
+Requires-Dist: Flask-HTTPAuth==4.8.0
+Requires-Dist: Flask-Login==0.6.3
+Requires-Dist: Flask-Mail==0.10.0
+Requires-Dist: Flask-MonitoringDashboard==3.3.2
+Requires-Dist: Flask-SQLAlchemy==3.1.1
+Requires-Dist: Flask-WTF==1.2.2
+Requires-Dist: flexcache==0.3
+Requires-Dist: flexparser==0.4
+Requires-Dist: fonttools==4.55.0
+Requires-Dist: greenlet==3.1.1
+Requires-Dist: idna==3.10
+Requires-Dist: itsdangerous==2.2.0
+Requires-Dist: jaraco.collections==5.1.0
+Requires-Dist: jaraco.context==6.0.1
+Requires-Dist: jaraco.functools==4.1.0
+Requires-Dist: jaraco.text==4.0.0
+Requires-Dist: Jinja2==3.1.4
+Requires-Dist: kaleido==0.2.1
+Requires-Dist: ldap3==2.9.1
+Requires-Dist: Markdown==3.7
+Requires-Dist: MarkupSafe==3.0.2
+Requires-Dist: more-itertools==10.5.0
+Requires-Dist: numpy==2.1.3
+Requires-Dist: packaging==24.2
+Requires-Dist: pillow==10.4.0
+Requires-Dist: Pint==0.24.4
+Requires-Dist: platformdirs==4.3.6
+Requires-Dist: plotly==5.24.1
+Requires-Dist: portend==3.2.0
+Requires-Dist: psutil==6.1.0
+Requires-Dist: psycopg2-binary==2.9.10
+Requires-Dist: pyasn1==0.6.1
+Requires-Dist: pycparser==2.22
+Requires-Dist: pydyf==0.11.0
+Requires-Dist: pyotp==2.9.0
+Requires-Dist: pyphen==0.15.0
+Requires-Dist: python-dateutil==2.9.0.post0
+Requires-Dist: pytz==2024.2
+Requires-Dist: qrcode==8.0
+Requires-Dist: reportlab==4.2.5
+Requires-Dist: requests==2.31.0
+Requires-Dist: scipy==1.14.1
+Requires-Dist: setuptools==75.5.0
+Requires-Dist: six==1.16.0
+Requires-Dist: soupsieve==2.6
+Requires-Dist: SQLAlchemy==2.0.36
+Requires-Dist: tempora==5.7.0
+Requires-Dist: tenacity==9.0.0
+Requires-Dist: tinycss2==1.4.0
+Requires-Dist: tinyhtml5==2.0.0
+Requires-Dist: typing_extensions==4.12.2
+Requires-Dist: tzlocal==2.0.0
+Requires-Dist: urllib3==2.2.3
+Requires-Dist: weasyprint==63.0
+Requires-Dist: webencodings==0.5.1
+Requires-Dist: Werkzeug==3.1.3
+Requires-Dist: WTForms==3.2.1
+Requires-Dist: zc.lockfile==3.0.post1
+Requires-Dist: zopfli==0.2.3.post1
+
+<img src="https://raw.githubusercontent.com/sciapp/sampledb/develop/docs/static/img/logo.svg" align="right" width="60" height="60" />
+
+# SampleDB
+
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/221237572.svg)](https://zenodo.org/badge/latestdoi/221237572)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02107/status.svg)](https://doi.org/10.21105/joss.02107)
+
+SampleDB is a web-based sample and measurement metadata database.
+
+## Documentation
+
+You can find the documentation for the current release at https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/.
+
+## Getting Started
+
+We recommend using our pre-built Docker images for setting up `SampleDB`. You will need two containers, one for a PostgreSQL database and another for SampleDB itself, and a directory to store all files in.
+
+If you would like to set up a development version of SampleDB instead, please see the [contribution guide](https://github.com/sciapp/sampledb/blob/develop/CONTRIBUTING.md).
+
+If you do not have Docker installed yet, please [install Docker](https://docs.docker.com/engine/install/).
+
+### Using docker-compose
+
+First, get the [docker-compose.yml](https://raw.githubusercontent.com/sciapp/sampledb/develop/docker-compose.yml.dist) configuration file. You can git clone this repo or just get the file:
+
+```bash
+curl https://raw.githubusercontent.com/sciapp/sampledb/develop/docker-compose.yml.dist --output docker-compose.yml
+```
+
+Then simply bring everything up with:
+
+```bash
+docker compose up -d
+```
+
+### Using docker commands
+
+First, start your database container:
+
+```bash
+docker run \
+    -d \
+    -e POSTGRES_PASSWORD=password \
+    -e PGDATA=/var/lib/postgresql/data/pgdata \
+    -v `pwd`/pgdata:/var/lib/postgresql/data/pgdata:rw \
+    --restart=always \
+    --name sampledb-postgres \
+    postgres:15
+```
+
+Next, start the SampleDB container:
+
+```bash
+docker run \
+    -d \
+    --link sampledb-postgres \
+    -e SAMPLEDB_CONTACT_EMAIL=sampledb@example.com \
+    -e SAMPLEDB_MAIL_SERVER=mail.example.com \
+    -e SAMPLEDB_MAIL_SENDER=sampledb@example.com \
+    -e SAMPLEDB_ADMIN_PASSWORD=password \
+    -e SAMPLEDB_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://postgres:password@sampledb-postgres:5432/postgres \
+    --restart=always \
+    --name sampledb \
+    -p 8000:8000 \
+    sciapp/sampledb:0.30.0
+```
+
+### Once it's started
+
+This will start a minimal SampleDB installation at `http://localhost:8000` and allow you to sign in with the username `admin` and the password `password` (which you should change immediately after signing in).
+
+To learn how to further set up SampleDB, please follow the rest of the [Getting Started guide](https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/administrator_guide/getting_started.html).
+
+## Contributing
+
+If you want to improve SampleDB, please read the [contribution guide](https://github.com/sciapp/sampledb/blob/develop/CONTRIBUTING.md) for a few notes on how to report issues or submit changes.
+
+## Support
+
+If you run into any issues setting up or running SampleDB, please [open an issue on GitHub](https://github.com/sciapp/sampledb/issues/new).
+
+You can also subscribe to the [SampleDB mailing list](https://lists.fz-juelich.de/mailman/listinfo/sampledb) to learn about new features and to discuss any questions regarding SampleDB.
