@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "mlcs-assignments"
+version = "0.2.0"
+description = ""
+authors = [
+    "Zurab Mujirishvili <zurab.mujirishvili@fau.de>",
+    "Julius Neuffer",
+    "Shuli Zhou",
+    "Fazal Feroz Kadri",
+    "Johannes Bellman",
+    "Lars Ullrich",
+]
+readme = "README.md"
+packages = [
+    { include = "helpers", from = "." }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+notebook = "^7.2.1"
+numpy = "^2.0.1"
+plotly = "^5.23.0"
+scipy = "^1.14.0"
+sympy = "^1.13.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.0"
+pyright = "^1.1.380"
+click = "^8.1.7"
+jinja2 = "^3.1.4"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.3"
+
+[tool.poetry.group.doc.dependencies]
+mkdocs = "^1.6.1"
+mkdocstrings = {extras = ["python"], version = "^0.27.0"}
+mkdocs-material = "^9.5.46"
+black = "^24.10.0"
+mkdocs-print-site-plugin = "^2.6.0"
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+lint.ignore = [
+    "E741",  # ambiguous variable name
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = [
+    "E731",  # do not assign a lambda expression, use a def
+    "E402",  # module level import not at top of file
+    "F811",  # redefinition of unused variable
+    "F401",  # module imported but unused
+    "F841",  # local variable is assigned to but never used
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["helpers", "tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
