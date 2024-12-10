@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block header %}
+{% endblock header %}
+{% block content %}
+  <body background="{{ url_for('static',filename='sjd.png') }}">
+    <div class="row">
+      <div class="col">
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <div class="row">
+              <img src="{{ url_for('static', filename='irsjd.svg') }}"
+                   width="50%"
+                   height="50%"
+                   alt="Logo">
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+              This is the SJD Babylab database. It provides an interface with the REDCap database
+              to consult
+              participant and appointment information conveniently. This is a work in progress, feel free to
+              report issues and
+              provide feed-back (<a href=" mailto:gonzalo.garcia@sjd.es">gonzalo.garcia@sjd.es</a>).
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        {% if not redcap_version %}
+          <div class="alert alert-light" role="alert">
+            <h4 class="alert-heading">Log in</h4>
+            <p>Please, provide your API token to access the database:</p>
+            <form class="form" method="post" action='{{ url_for("/") }}'>
+              <div class="form-group">
+                <input type="password"
+                       class="form-control"
+                       id="apiToken"
+                       name="apiToken"
+                       placeholder="API token">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+            <hr>
+            <p class="mb-0">You can find yor API token at REDCap.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+{% endblock content %}
