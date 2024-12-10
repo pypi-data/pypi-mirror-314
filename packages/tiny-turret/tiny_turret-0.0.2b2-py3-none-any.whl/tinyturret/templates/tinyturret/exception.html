@@ -1,0 +1,72 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Exception - {{exc_name}}{% endblock %}
+{% block extrahead %}
+    <style>
+        details {
+            margin-bottom: 1em;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+        }
+        summary:hover {
+            color: #007BFF;
+        }
+        .locals {
+            margin-left: 2em;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+<div>
+    <div id="content-main">
+    <a href="{% url 'tinyturret-main' %}">Back</a>
+    <div class="module" id="changelist">
+        <h1>{{exc_name}}</h1>
+        <div style="padding-bottom: 2em">
+            {{ exc_str }}
+        </div>
+        <div class="changelist-form-container">
+            <form id="changelist-form" method="post" {% if cl.formset and cl.formset.is_multipart %}
+                enctype="multipart/form-data" {% endif %} novalidate>{% csrf_token %}
+
+            {% if not exceptions %}
+            <div style="padding: 1em; text-align: center;">
+                <b>Exception not found</b>
+            </div>
+            {% endif %}
+
+            {%  for exc in exceptions %}
+                <details>
+                    <summary>
+                        {{exc.timestamp}} -
+                        {{exc.exception_name}}
+                        ({{exc.exception_message}})
+                    </summary>
+                    <ul>
+                        {%  for line in exc.stack_trace %}
+                        <div>
+                            {{line.formatted_str}}
+                            {% if line.locals %}
+                            <div class="locals">
+                                {%  for k, v in line.locals.items %}
+                                <div>
+                                    {{k}} = {{v}}
+                                </div>
+                                {% endfor%}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </ul>
+                </details>
+            {%  endfor %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
