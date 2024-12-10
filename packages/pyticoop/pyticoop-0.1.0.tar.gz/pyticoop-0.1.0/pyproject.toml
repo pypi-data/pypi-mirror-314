@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyticoop"
+version = "0.1.0"
+description = "Composants Python réutilisables."
+readme = "README.rst"
+authors = [
+  {name = "TiCoop", email = "informatique@ticoop.fr"}
+]
+maintainers = [
+  {name = "TiCoop", email = "informatique@ticoop.fr"}
+]
+classifiers = [
+
+]
+license = {text = "GNU General Public License v3"}
+
+dependencies = [
+  "typer"
+]
+
+[project.optional-dependencies]
+dev = [
+    "coverage",  # testing
+    "mypy",  # linting
+    "pytest",  # testing
+    "ruff",  # linting
+    "requests-mock" # mocking
+]
+
+[project.urls]
+
+bugs = "https://github.com/ticoop/pyticoop/issues"
+changelog = "https://github.com/ticoop/pyticoop/blob/master/changelog.md"
+homepage = "https://github.com/ticoop/pyticoop"
+
+[tool.setuptools]
+#packages = ["pyticoop"]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"*" = ["*.*"]
+#where = ["src"]
+
+
+
+
+# Mypy
+# ----
+
+[tool.mypy]
+files = "."
+
+# Use strict defaults
+strict = true
+warn_unreachable = true
+warn_no_return = true
+
+[[tool.mypy.overrides]]
+# Don't require test functions to include types
+module = "tests.*"
+allow_untyped_defs = true
+disable_error_code = "attr-defined"
+
