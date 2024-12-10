@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "oqc-qcaas-client"
+version = "3.12.0"
+description = "OQC Quantum Computing as a Service (QCaaS)"
+authors = [
+    "OQC <oqc_qcaas_support@oxfordquantumcircuits.com>",
+]
+readme = "README.md"
+license = "Proprietary"
+
+packages = [
+  { include = "qcaas_client", from = "." },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+toml = "^0.10.2"
+requests = "^2.32.3"
+python-dotenv = "^1.0.1"
+bandit = "^1.7.9"
+pip-audit = "^2.7.3"
+pip-licenses = "^5.0.0"
+setuptools = "^72.1.0"
+ujson = "^5.10.0"
+compiler-config= "0.1.0"
+
+[tool.poetry.dev-dependencies]
+ruff = "^0.5.3"
+
+[tool.poetry.scripts]
+oqc_client = "qcaas_client.commandline:main"
+
+[tool.poetry.group.testing.dependencies]
+pytest = "^8.2.2"
+pytest-mock = "^3.14.0"
+pytest-dotenv = "^0.5.2"
+python-dotenv = "^1.0.1"
+jinja2 = "^3.1.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+    "slow_test: marks tests as slow"
+]
+env_files = [
+  ".env",
+]
+pythonpath = ["./qcaas_client"]
+testpaths = [
+    "tests/client",
+]
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+# Isort (`I`)
+select = ["E4", "E7", "E9", "F" ,"I"]
