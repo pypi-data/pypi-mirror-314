@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: iomete_airflow_plugin
+Version: 1.1.2
+Summary: An Airflow plugin for interacting with IOMETE platform.
+Home-page: https://github.com/iomete/iomete-airflow-plugin
+Author: IOMETE
+Author-email: support@iomete.com
+License: Apache Software License 2.0
+Keywords: iomete,airflow,airflow plugin
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: requests==2.32.3
+Requires-Dist: setuptools==75.6.0
+Requires-Dist: Flask==2.2.5
+Requires-Dist: iomete-sdk==2.1.2
+Provides-Extra: dev
+Requires-Dist: black==24.10.0; extra == "dev"
+Requires-Dist: watchdog==6.0.0; extra == "dev"
+Requires-Dist: twine==6.0.1; extra == "dev"
+Requires-Dist: apache-airflow==2.10.3; extra == "dev"
+
+# IOMETE Airflow Plugin
+
+This Plugin helps to trigger/run Spark Jobs created in IOMETE platform.
+
+## Installation
+
+This plugin could be easily installed with `pip`. Just run the following in your aiflow server:
+```bash
+pip install iomete-airflow-plugin
+```
+Restart you server and check the plugins page on Airflow's admin panel to make sure plugin loaded successfully.
+
+## Configuration
+
+You need to add `iomete_access_token` and `iomete_host` keys to airflow's Variables page.  
+Check our documentation page on how to generate personal access token.
+
+## Usage
+
+Here are sample DAG:
+```python
+from airflow import DAG
+from iomete_airflow_plugin.iomete_operator import IometeOperator
+
+dag = DAG(dag_id="...", default_args={}, schedule_interval=None)
+
+task = IometeOperator(
+    task_id="random_task_id",
+    job_id="1b0fc29b-5491-4c0a-94ea-48e304c3c72e", # Spark Job ID or Name in IOMETE platform.
+    dag=dag,
+)
+
+```
+
+## Resources
+For more information check: 
+1. [Github repository](https://github.com/iomete/iomete-airflow-plugin)
+2. [IOMETE Docs](https://iomete.com/docs)
