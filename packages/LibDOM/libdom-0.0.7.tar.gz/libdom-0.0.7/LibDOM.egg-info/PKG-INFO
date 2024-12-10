@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: LibDOM
+Version: 0.0.7
+Summary: LibDOM is a Python library that abstracts all modern HTML tags, enabling you to build dynamic HTML documents programmatically. With a clean and intuitive Framework, LibDOM simplifies web development by allowing you to generate and manipulate HTML entirely in Python. Perfect for creating dynamic, maintainable, and responsive web pages.
+Author: Pedro Salles
+License: MIT License
+Keywords: Html,Builder,Html Builder,DOM,Document Object Model,DOM Builder
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# LibDOM
+
+LibDOM is a Python library that abstracts HTML tags, allowing you to create dynamic HTML documents in a simple and programmatic way. With LibDOM, you can generate HTML structures entirely in Python, bringing clarity and flexibility to web development.
+
+## Key Features
+
+- **Complete Abstraction**: Supports all HTML tags (non-obsolete).
+- **Flexibility**: Ideal for creating dynamic web pages that require frequent updates.
+- **Productivity**: Reduces repetitive code, simplifies maintenance, and accelerates development.
+
+## Example
+
+```py
+from libdom.Elements import *
+from libdom.Styles import *
+
+html = Html(
+    Head(
+        Style({
+            "body": {
+                Margin: "0",
+                Padding: "0",
+                Display: "flex",
+                JustifyContent: "center",
+                AlignItems: "center"
+            },
+            
+            ".div": {
+                Border: "1px solid black",
+                BackgroundColor: "red",
+                "&:hover": {
+                    BackgroundColor: "blue"
+                }
+            }
+        })
+    ),
+    Body(
+        Div(
+            P("Hello World"),
+            **{ Div.Attribute.Class: "div" }
+        )
+    )
+)
+
+print(html)
+
+#<html>
+#    <head>
+#        <style>
+#            body {
+#                margin: 0;
+#                padding: 0;
+#                display: flex;
+#                justify-content: center;
+#                align-items: center;
+#            }
+#            #div {
+#                border: 1px solid black;
+#                background-color: red;
+#                &:hover {
+#                    background-color: blue;
+#                }
+#            }
+#        </style>
+#    </head>
+#    <body>
+#        <div class="div">
+#            <p>
+#                Hello World
+#            </p>
+#        </div>
+#    </body>
+#</html>
+```
