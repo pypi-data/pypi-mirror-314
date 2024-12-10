@@ -1,0 +1,148 @@
+Metadata-Version: 2.1
+Name: harpy-analysis
+Version: 0.0.2
+Summary: single-cell spatial proteomics analysis that makes you happy
+Home-page: https://github.com/saeyslab/harpy
+Author: dambi
+License: BSD-3-Clause
+Project-URL: Bug Tracker, https://github.com/saeyslab/harpy/issues
+Project-URL: Documentation, https://github.com/saeyslab/harpy#README.md
+Project-URL: Source Code, https://github.com/saeyslab/harpy
+Project-URL: User Support, https://github.com/saeyslab/harpy/issues
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Framework :: napari
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: spatialdata>=0.2.6
+Requires-Dist: xarray>=v2024.10.0
+Requires-Dist: ome-zarr>=0.9.0
+Requires-Dist: scanpy>=1.9.1
+Requires-Dist: voronoi-diagram-for-polygons>=0.1.6
+Requires-Dist: rasterio>=1.3.2
+Requires-Dist: seaborn>=0.12.2
+Requires-Dist: leidenalg>=0.9.1
+Requires-Dist: geopandas>=1.0.1
+Requires-Dist: omegaconf==2.3.0
+Requires-Dist: nptyping
+Requires-Dist: magicgui
+Requires-Dist: pyrootutils
+Requires-Dist: universal_pathlib
+Requires-Dist: datasets
+Requires-Dist: crick
+Requires-Dist: spatialdata_io>=0.1.6
+Provides-Extra: plugin
+Requires-Dist: napari>=0.4.18; extra == "plugin"
+Requires-Dist: hydra-core>=1.2.0; extra == "plugin"
+Requires-Dist: hydra-colorlog>=1.2.0; extra == "plugin"
+Requires-Dist: napari-spatialdata>=0.2.6; extra == "plugin"
+Requires-Dist: squidpy>=1.5.0; extra == "plugin"
+Requires-Dist: cellpose>=2.2.3; extra == "plugin"
+Requires-Dist: pytest-qt; extra == "plugin"
+Provides-Extra: testing
+Requires-Dist: hydra-core>=1.2.0; extra == "testing"
+Requires-Dist: hydra-colorlog>=1.2.0; extra == "testing"
+Requires-Dist: cellpose>=2.2.3; extra == "testing"
+Requires-Dist: squidpy>=1.5.0; extra == "testing"
+Requires-Dist: datasets; extra == "testing"
+Requires-Dist: jax>=0.4.6; extra == "testing"
+Requires-Dist: jaxlib>=0.4.6; extra == "testing"
+Requires-Dist: basicpy>=1.0.0; extra == "testing"
+Requires-Dist: opencv-python; extra == "testing"
+Requires-Dist: pytest; extra == "testing"
+Requires-Dist: pytest-cov; extra == "testing"
+Requires-Dist: tox; extra == "testing"
+Requires-Dist: nbconvert; extra == "testing"
+Provides-Extra: cli
+Requires-Dist: hydra-core>=1.2.0; extra == "cli"
+Requires-Dist: hydra-colorlog>=1.2.0; extra == "cli"
+Requires-Dist: submitit>=1.4.5; extra == "cli"
+Requires-Dist: hydra-submitit-launcher>=1.2.0; extra == "cli"
+Provides-Extra: docs
+Requires-Dist: sphinx>=4.5; extra == "docs"
+Requires-Dist: sphinx-book-theme>=1.0.0; extra == "docs"
+Requires-Dist: sphinx_rtd_theme; extra == "docs"
+Requires-Dist: myst-nb; extra == "docs"
+Requires-Dist: sphinxcontrib-bibtex>=1.0.0; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints; extra == "docs"
+Requires-Dist: sphinx-design; extra == "docs"
+Requires-Dist: ipython>=8.6.0; extra == "docs"
+Requires-Dist: sphinx-copybutton; extra == "docs"
+Provides-Extra: clustering
+Requires-Dist: scikit-learn>=1.3.1; extra == "clustering"
+Requires-Dist: datasets; extra == "clustering"
+Requires-Dist: textalloc; extra == "clustering"
+Requires-Dist: joypy; extra == "clustering"
+Requires-Dist: bokeh; extra == "clustering"
+Requires-Dist: spatialdata-plot>=0.2.0; extra == "clustering"
+Provides-Extra: instanseg
+Requires-Dist: instanseg; extra == "instanseg"
+Requires-Dist: torchvision; extra == "instanseg"
+Requires-Dist: monai; extra == "instanseg"
+
+<!-- These badges won't work while the GitHub repo is private:
+[![License BSD-3](https://img.shields.io/pypi/l/harpy.svg?color=green)](https://github.com/saeyslab/harpy/raw/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/harpy.svg?color=green)](https://pypi.org/project/harpy)
+[![tests](https://github.com/saeyslab/harpy/workflows/tests/badge.svg)](https://github.com/saeyslab/harpy/actions)
+[![Python Version](https://img.shields.io/pypi/pyversions/harpy.svg?color=green)](https://python.org)
+[![codecov](https://codecov.io/gh/saeyslab/harpy/graph/badge.svg?token=7UXMDWVYFZ)](https://codecov.io/gh/saeyslab/harpy)
+[![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/harpy)](https://napari-hub.org/plugins/harpy)
+-->
+
+# **Harpy: single-cell spatial proteomics analysis that makes you happy** <img src="./docs/_static/img/logo.png" align ="right" alt="" width ="150"/>
+
+[![PyPI](https://img.shields.io/pypi/v/harpy-analysis.svg)](https://pypi.org/project/harpy-analysis)
+![Build Status](https://github.com//saeyslab/harpy/actions/workflows/build.yaml/badge.svg)
+[![documentation badge](https://readthedocs.org/projects/harpy/badge/?version=latest)](https://harpy.readthedocs.io/en/latest/)
+
+Note: This package is still under very active development.
+
+## Installation
+
+Check out the docs for [installation instructions](docs/installation.md).
+
+## Tutorials
+
+Tutorials are available [here](https://harpy.readthedocs.io/en/latest/).
+
+## Usage
+
+[Learn](docs/usage.md) how Harpy can be integrated into your workflow in different ways.
+
+## Contributing
+
+See [here](docs/contributing.md) for info on how to contribute to Harpy.
+
+## References
+
+- https://github.com/ashleve/lightning-hydra-template
+
+## License
+
+Check license under license. Harpy is free for academic usage.
+For commercial usage, please contact Saeyslab.
+
+## Issues
+
+If you encounter any problems, please [file an issue] along with a detailed description.
+
+[napari]: https://github.com/napari/napari
+[Cookiecutter]: https://github.com/audreyr/cookiecutter
+[BSD-3]: http://opensource.org/licenses/BSD-3-Clause
+[cookiecutter-napari-plugin]: https://github.com/napari/cookiecutter-napari-plugin
+[file an issue]: https://github.com/saeyslab/harpy/issues
+[napari]: https://github.com/napari/napari
+[tox]: https://tox.readthedocs.io/en/latest/
+[pip]: https://pypi.org/project/pip/
+[PyPI]: https://pypi.org/
