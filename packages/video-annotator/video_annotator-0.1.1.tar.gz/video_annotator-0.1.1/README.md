@@ -1,0 +1,163 @@
+# Video Annotator
+
+**Video Annotator** is a Python package designed for video annotation, object tracking, and cropping. It leverages the powerful **Supervision** library for seamless integration with various inference models and provides customizable annotators for bounding boxes, labels, ellipses, and other visual elements.
+
+---
+
+## 🚀 Features
+- **Object Detection and Annotation:**
+  Add bounding boxes, labels, and shapes to objects detected in video frames.
+- **Object Tracking:**
+  Track objects across frames with unique IDs.
+- **Object Cropping:**
+  Extract regions of interest (ROIs) based on detected objects.
+- **Highly Customizable:**
+  Fully customizable colors, styles, and text options for annotations.
+- **Integration Friendly:**
+  Compatible with a variety of object detection models via the `supervision` library.
+
+---
+
+## 🛠️ Installation
+To install the package, simply run:
+```bash
+pip install video-annotator
+
+📖 Usage
+1. Annotating Frames
+
+from video_annotator import VideoAnnotator
+import supervision as sv
+
+# Load a detection model
+model = sv.load_model("path/to/your/model")
+
+# Initialize the annotator
+annotator = VideoAnnotator(
+    model=model,
+    box_colors=["#FF8C00"],
+    label_colors=["#00FF00"],
+    label_text_color="#000000"
+)
+
+# Load a frame from a video
+video_path = "path/to/video.mp4"
+frame_generator = sv.get_video_frames_generator(video_path)
+frame = next(frame_generator)
+
+# Annotate the frame
+annotated_frame = annotator.annotate_frame(frame, confidence_threshold=0.3)
+
+# Display the annotated frame
+sv.plot_image(annotated_frame)
+
+2. Object Tracking
+from video_annotator import AdvancedVideoTracker
+
+# Initialize the tracker
+tracker = AdvancedVideoTracker(
+    model=model,
+    ellipse_colors=["#FF6347"],
+    label_colors=["#4682B4"],
+    label_text_color="#FFFFFF",
+    triangle_color="#FFD700"
+)
+
+# Annotate a single frame with tracking
+annotated_frame = tracker.process_frame(
+    video_path="path/to/video.mp4",
+    ball_id=0,
+    confidence_threshold=0.3
+)
+
+3. Collecting Crops
+from video_annotator import CropCollector
+
+# Initialize crop collector
+collector = CropCollector(
+    model=model,
+    stride=30,
+    confidence_threshold=0.3
+)
+
+# Collect crops of objects with a specific class ID
+crops = collector.collect_crops(video_path="path/to/video.mp4", class_id=2)
+
+# Save or process the crops as needed
+for idx, crop in enumerate(crops):
+    sv.save_image(crop, f"crop_{idx}.png")
+
+🎨 Customization
+
+All annotators can be customized with various parameters:
+
+    Colors: Use HEX codes for custom colors.
+    Styles: Adjust thickness, font sizes, and positions.
+    Tracking Options: Set tracking parameters such as NMS thresholds.
+
+🌟 Advanced Features
+
+    Batch Processing: Use the frame generator for batch annotation.
+    Video Export: Save annotated frames back into a video file:
+
+from video_annotator.utils import save_annotated_video
+
+save_annotated_video(
+    video_path="path/to/input_video.mp4",
+    output_path="path/to/output_video.mp4",
+    annotator=annotator,
+    confidence_threshold=0.3
+)
+
+📂 Project Structure
+
+video-annotator/
+│
+├── video_annotator/
+│   ├── __init__.py
+│   ├── annotators.py   # Core classes for annotation
+│   ├── tracker.py      # Advanced tracking logic
+│   ├── cropper.py      # Crop collection functionality
+│   ├── utils.py        # Utility functions (e.g., video export)
+│
+├── tests/              # Unit tests
+├── examples/           # Example scripts
+├── README.md           # Project documentation
+├── setup.py            # Package setup file
+
+📚 Dependencies
+
+    supervision
+    tqdm
+    opencv-python
+    pytest (for testing)
+
+Install dependencies via:
+
+pip install -r requirements.txt
+
+💡 Examples
+
+Check the examples folder for more detailed use cases:
+
+    Annotating a single frame
+    Batch processing frames
+    Exporting annotated video
+    Advanced object tracking
+
+🤝 Contributing
+
+Contributions are welcome! To contribute:
+
+    Fork the repository.
+    Create a new branch (feature/my-feature).
+    Commit your changes.
+    Push to the branch.
+    Open a pull request.
+
+📜 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+🛠️ Support
+
+If you encounter any issues, feel free to open an issue or reach out to [project email/contact].
