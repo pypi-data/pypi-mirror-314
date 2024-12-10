@@ -1,0 +1,32 @@
+Metadata-Version: 2.3
+Name: dynamicalsystem-halogen
+Version: 0.1.1
+Summary: Shared library from dynamicalsystem
+Author: Simon Horrobin
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.13
+Requires-Dist: python-dotenv>=1.0.2
+Requires-Dist: requests>=2.32.3
+Description-Content-Type: text/markdown
+
+# Halogen
+
+Halogen contains common objects and functions for dynamicalsystem projects:
+
+## Config
+
+`dynamicalsystem.halogen.config` provides a single instance immutable object which will provide a project's config given a name (typically `__name__`) in the presence of two environment variables:
+
+- `DYNAMICAL_SYSTEM_FOLDER` - a path to the config folders
+- `DYNAMICAL_SYSTEM_ENVIRONMENT` - the environment which the config applies to (dev, test, prod, e.g.)
+
+## Utils
+
+`dynamicalsystem.halogen.utils` provides common functions which do fun stuff like:
+
+- `url_join` which jangs some `/`s into the right places given some url fragments as a string and a list of strings.
+- `cli_hyperlink` which creates a hyperlink which will display on the cli.
+- `possessive` which turns a provided noun into the possessive form in English.
