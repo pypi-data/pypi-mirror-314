@@ -1,0 +1,270 @@
+[tool.poetry]
+name = "basilisp"
+version = "0.3.4"
+description = "A Clojure-like lisp written for Python"
+authors = ["Christopher Rink <chrisrink10@gmail.com>"]
+license = "Eclipse Public License 1.0 (EPL-1.0)"
+readme = "README.md"
+packages = [
+    { include = "basilisp", from = "src" },
+]
+repository = "https://github.com/basilisp-lang/basilisp"
+documentation = "https://basilisp.readthedocs.io/"
+classifiers = [
+    # Trove classifiers
+    # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Eclipse Public License 1.0 (EPL-1.0)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Compilers",
+]
+include = ["README.md", "LICENSE"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+attrs = ">=22.2.0"
+immutables = ">=0.20,<1.0.0"
+prompt-toolkit = ">=3.0.0,<4.0.0"
+pyrsistent = ">=0.18.0,<1.0.0"
+typing-extensions = ">=4.7.0,<5.0.0"
+
+pytest = { version = ">=7.0.0,<9.0.0", optional = true }
+pygments = { version = ">=2.9.0,<3.0.0", optional = true }
+
+[tool.poetry.group.dev.dependencies]
+black = ">=24.0.0"
+docutils = "*"
+isort = "*"
+pygments = "*"
+pytest = ">=7.0.0,<9.0.0"
+pytest-pycharm = "*"
+# Ensure the Sphinx version remains synchronized with docs/requirements.txt
+# to maintain consistent output during both development and publishing on
+# Read The Docs.
+sphinx = "^7.1.0"
+sphinx-autobuild = { version = "^2024.04.16", python = ">=3.9" }
+sphinx-copybutton = "^0.5.2"
+sphinxext-opengraph = "^v0.9.1"
+furo = "^2023.08.19"
+tox = "*"
+
+[tool.poetry.extras]
+pygments = ["pygments"]
+pytest = ["pytest"]
+
+[tool.poetry.scripts]
+basilisp = "basilisp.cli:invoke_cli"
+basilisp-run = "basilisp.cli:run_script"
+
+[tool.poetry.plugins.pytest11]
+basilisp_test_runner = "basilisp.contrib.pytest.testrunner"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.bandit]
+skips = ["B101"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.cache
+  | \.graalvenv
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | docs
+  | htmlcov
+  | junit
+  | pip-wheel-metadata
+)/
+'''
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/__version__.py",
+    "*/basilisp/contrib/sphinx/*",
+]
+
+[tool.coverage.paths]
+source = [
+   "src/basilisp",
+   ".tox/*/lib/py*/site-packages/basilisp",
+   ".tox/pypy*/site-packages/basilisp",
+]
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    'if self\.debug',
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
+
+[tool.isort]
+known_first_party = "basilisp"
+profile = "black"
+skip = [
+  ".env",
+  ".hg",
+  ".git",
+  ".graalvenv",
+  ".mypy_cache",
+  ".pytest_cache",
+  ".tox",
+  ".venv",
+  "buck-out",
+  "build",
+  "dist",
+  "docs",
+  "lispcore.py",
+  "htmlcov",
+  "junit",
+  "pip-wheel-metadata",
+]
+
+[tool.pylint.main]
+ignore = [
+  ".cache",
+  ".env",
+  ".hg",
+  ".git",
+  ".mypy_cache",
+  ".pytest_cache",
+  ".tox",
+  ".venv",
+  "build",
+  "dist",
+  "docs",
+  "htmlcov",
+  "junit",
+  "pip-wheel-metadata",
+  "lispcore.py",
+]
+ignore-patterns = ["^\\.#"]
+load-plugins = [
+  "pylint.extensions.code_style",
+  "pylint.extensions.docstyle",
+  "pylint.extensions.private_import",
+  "pylint.extensions.redefined_loop_name",
+  "pylint.extensions.set_membership"
+]
+
+[tool.pylint.basic]
+docstring-min-length = 5
+no-docstring-rgx = "^_"
+
+[tool.pylint.logging]
+logging-format-style = "new"
+
+[tool.pylint."messages control"]
+disable = [
+  "bad-inline-option",
+  "consider-using-assignment-expr",
+  "deprecated-pragma",
+  "docstring-first-line-empty",
+  "duplicate-code",
+  "file-ignored",
+  "fixme",
+  "global-statement",
+  "implicit-str-concat",
+  "import-outside-toplevel",
+  "invalid-name",
+  "len-as-condition",
+  "line-too-long",
+  "locally-disabled",
+  "logging-format-interpolation",
+  "logging-fstring-interpolation",
+  "logging-too-many-args",
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "missing-module-docstring",
+  "no-else-continue",
+  "no-else-raise",
+  "no-else-return",
+  "protected-access",
+  "raw-checker-failed",
+  "redefined-outer-name",
+  "redundant-keyword-arg",
+  "suppressed-message",
+  "too-few-public-methods",
+  "too-many-ancestors",
+  "too-many-public-methods",
+  "too-many-instance-attributes",
+  "too-many-positional-arguments",
+  "trailing-whitespace",
+  "unnecessary-lambda-assignment",
+  "unspecified-encoding",
+  "useless-import-alias",
+  "useless-suppression",
+  "use-symbolic-message-instead"
+]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_decorators = true
+mypy_path = "src/"
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+    "astor.*",
+    "prompt_toolkit.*",
+    "pygments.*",
+    "pytest.*",
+    "sphinx.*"
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+junit_family = "legacy"
+
+[tool.ruff]
+exclude = [
+  ".cache",
+  ".env",
+  ".hg",
+  ".git",
+  ".mypy_cache",
+  ".pytest_cache",
+  ".tox",
+  ".venv",
+  "build",
+  "dist",
+  "docs",
+  "htmlcov",
+  "junit",
+  "pip-wheel-metadata",
+  "lispcore.py",
+]
+
+[tool.ruff.lint]
+ignore = ["E731", "E741"]
