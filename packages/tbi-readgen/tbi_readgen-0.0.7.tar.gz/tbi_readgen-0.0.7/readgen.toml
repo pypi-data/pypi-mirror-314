@@ -1,0 +1,98 @@
+[ReadGen]
+title = "ReadGen"
+content = """
+### ${project.name} (${project.version})
+A simple yet powerful Python project README.md generator.
+"""
+
+[Features]
+content = """
+1. Read project information from pyproject.toml
+2. Read custom content from readgen.toml
+    - Support variable substitution from pyproject.toml
+    - Configure directory structure display with depth control
+    - Toggle directory section display
+3. Scan the project directory structure
+4. Extract docstrings from `__init__.py` files in each folder
+5. Generate a standardized README.md
+"""
+
+
+[Installation]
+content = """
+```bash
+$ pip install tbi-readgen
+
+# Recommendation, as it can be used globally.
+$ pipx install tbi-readgen
+```
+"""
+
+[Usage]
+content = """
+
+## CLI
+```bash
+$ readgen
+
+# Overwrite README.md.
+$ readgen --f
+```
+
+## Project Configuration File
+Create a `readgen.toml` file in the project root:
+````toml
+[Title]
+title = "Method to overwrite [Title], with support for spaces."
+content = "Content of the Title Block"
+
+[Markdown]
+content = \"\"\"
+## This is a markdown block
+1. Read project information from pyproject.toml
+2. Read custom content from readgen.toml
+3. Scan the project directory structure
+4. Extract docstrings from `__init__.py` files in each folder
+5. Generate a standardized README.md
+
+```bash
+$ pipx install tbi-readgen
+```
+\"\"\"
+
+[Variables]
+content = \"\"\"
+Examples of variables from pyproject.toml:
+- Use \\${project.version} to get the project version
+- Use \\${project.name} to get the project name
+\"\"\"
+
+
+[directory] # `directory` is a built-in method and will not be listed.
+title = "Directory Structure" # You can customize block names to override the default "Directory Structure."
+content = "123"
+enable = true # If `enable = false`, it won't list all directories or scan the init instructions.
+exclude_dirs = [".git", "venv", "__pycache__", ".venv", "env", "build", "dist"] # Exclude directories from scanning.
+depth_limits = { "root" = 1, "root/mother" = 2 } # List the depth of directories, list all by default.
+````
+"""
+
+[Development]
+content = """
+### Setup
+```bash
+git clone https://github.com/yourusername/gcp-secret-manager-cli.git
+cd gcp-secret-manager-cli
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+pip install -e ".[dev]"
+```
+"""
+
+[License]
+content = "This project is licensed under the ${project.license} License."
+
+
+[directory]
+enable = true
+exclude_dirs = [".git", "venv", "__pycache__", ".venv", "env", "build", "dist"]
