@@ -1,0 +1,2 @@
+class MissingASTError(Exception):
+    pass
