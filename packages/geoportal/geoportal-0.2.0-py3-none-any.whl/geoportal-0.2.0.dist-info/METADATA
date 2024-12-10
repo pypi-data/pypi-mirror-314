@@ -1,0 +1,69 @@
+Metadata-Version: 2.1
+Name: geoportal
+Version: 0.2.0
+Summary: GeoPortal plugin for OneCode
+Home-page: https://github.com/deeplime-io/geoportal
+License: MIT
+Keywords: onecode,plugin,geoportal
+Author: DeepLime
+Author-email: contact@deeplime.io
+Requires-Python: >=3.7,<3.12
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Code Generators
+Requires-Dist: onecode (>=1.0.0)
+Requires-Dist: pydash (>=5.1.0)
+Requires-Dist: python-slugify (>=6.1.2)
+Project-URL: Documentation, https://deeplime-io.github.io/geoportal
+Project-URL: Repository, https://github.com/deeplime-io/geoportal
+Description-Content-Type: text/markdown
+
+# GeoPortal Plugin for OneCode
+
+This plugin wraps OneCode input and output elements so that they work seamlessly with the GeoPortal.
+Compatible with OneCode 1.0.0+ only.
+
+## CLI
+
+To produce `interface.json` as well as `i18n` files, run from the root OneCode project:
+
+```bash
+geoportal-extract
+```
+
+## API
+
+**Inputs**
+Use `geo_` prefix in front of all OneCode elements, e.g. `geo_slider` instead of `slider`, etc.
+
+**Outputs**
+
+```python
+geo_file_output(
+    path: str,              # Path to the output file
+    type: str,              # GeoPortal type, e.g. CSV, BlockModel, etc.
+    prefix: str = "",       # Optional prefix to left-strip file path
+    group: bool = False,    # True for GeoPortal multi-files (e.g. ShpFile)
+    release: bool = False,  # True to record file as a release for the sign-off process
+    key: str = None,        # Specific key in case file is reference in another workflow
+    **kwargs                # Any additional properties to attach to the GeoPortal file
+)
+```
+
+## Examples
+
+Checkout the examples folders.
+
