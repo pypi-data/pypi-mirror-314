@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Signing out...
+{% endblock title %}
+{% block content %}
+  <div class="flex justify-center h-screen w-100 place-items-center bg-gradient">
+    <div class="p-8 mx-4 space-y-3 shadow-xl bg-background rounded-4 w-100" style="max-width:30rem">
+      {% if app.app_logo %}
+        <div class="mb-5 text-center">
+          <img src="{{ app.app_logo }}" alt="{{ app.app_info }} Logo" style="height:3.25rem"/>
+        </div>
+      {% endif %}
+      {% if success %}
+        <h1 class="text-3xl font-bold tracking-tight text-center text-black">Successfully Signed Out</h1>
+        <p class="mb-5 font-medium text-center text-gray-500 text-md">Redirecting in <span id="timer">few</span>
+          seconds...</p>
+        {% if redirect %}
+          <div class="text-center truncate">
+            <a class="text-center text-sm" href="{{ redirect }}">{{ redirect }}</a>
+          </div>
+        {% endif %}
+      {% else %}
+        <h1 class="text-3xl font-bold tracking-tight text-center text-black">Confirm Sign Out</h1>
+        <p class="mb-5 font-medium text-center text-gray-500 text-md">To continue, please click the button
+          below.</p>
+        <form id="logout-form" method="post" class="mt-6">
+          {% csrf_token %}
+          <input type="submit" value="Sign Out" class="btn w-full btn-danger"/>
+        </form>
+        {% if referrer %}
+          <a href="{{ referrer }}" class="btn w-full">Cancel and Go Back</a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  {% if success and redirect %}
+    <script>
+        const timer = document.getElementById('timer');
+        setTimeout(() => {
+            window.location.href = "{{ redirect }}";
+        }, 3000);
+        let count = 3;
+        setInterval(() => {
+            count--;
+            if (count <= 0) {
+                timer.innerText = 'few';
+            } else {
+                timer.innerText = `${count}`;
+            }
+        }, 1000);
+    </script>
+  {% endif %}
+{% endblock content %}
