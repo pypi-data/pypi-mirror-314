@@ -1,0 +1,38 @@
+name: gama
+
+services:
+  gama_gs:
+    container_name: gama_gs
+    image: ghcr.io/greenroom-robotics/gama_gs:${GAMA_VERSION:-latest}
+    volumes:
+      - ~/.config/greenroom:/home/ros/.config/greenroom
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - type: bind
+        source: /dev
+        target: /dev
+        bind:
+          propagation: rshared
+    privileged: true
+    command: ${GAMA_GS_COMMAND}
+    environment:
+      - ROS_DOMAIN_ID
+      - GAMA_GS_CONFIG
+
+  gama_ui:
+    container_name: gama_ui
+    image: ghcr.io/greenroom-robotics/gama_ui:${GAMA_VERSION:-latest}
+    ports:
+      - "3000:3000"
+      - "3100:3100"
+    environment:
+      GAMA_VESSEL_HOST: ${GAMA_VESSEL_HOST:-}
+      GAMA_VARIANT: ${GAMA_VARIANT:-whiskey_bravo}
+      GAMA_NAMESPACE_VESSEL: ${GAMA_NAMESPACE_VESSEL:-vessel_1}
+      GAMA_NAMESPACE_GROUNDSTATION: ${GAMA_NAMESPACE_GROUNDSTATION:-vessel_1}
+      GAMA_UI_HOST: "groundstation"
+    networks:
+      - gs
+    stop_signal: SIGINT
+
+networks:
+  gs:
