@@ -1,0 +1,179 @@
+[tool.poetry]
+name = "py-cachify"
+version = "2.0.7"
+homepage = "https://github.com/EzyGang/py-cachify"
+repository = "https://github.com/EzyGang/py-cachify"
+license = "MIT"
+description = "Distributed locks, caching, and locking decorators at hand"
+authors = ["Galtozzy <galtozzy+git@gmail.com>"]
+readme = "README.md"
+include = ["README.md"]
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+]
+packages = [
+    { include = 'py_cachify' },
+    { include = 'py_cachify/py.typed'},
+]
+
+[project]
+requires-python = ">=3.8,<4.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+typing-extensions = "^4.12.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+pytest-mock = "^3.14.0"
+pytest-cov = "^5.0.0"
+taskipy = "^1.13.0"
+mypy = "^1.11.1"
+coverage = "^7.6.1"
+pytest-asyncio = "^0.24.0"
+pytest-socket = "^0.7.0"
+ruff = ">=0.7.1,<0.9.0"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.6.0"
+mkdocs-material = "^9.5.28"
+pygments = "^2.18.0"
+termynal = { version = "^0.12.1", python = ">=3.8.1,<4.0" }
+beautifulsoup4 = "^4.12.3"
+
+
+[tool.poetry.group.integration.dependencies]
+redis = "^5.0.7"
+
+[tool.taskipy.tasks]
+format-and-lint = "task ruff && task mypy-lint"
+
+ruff = "ruff format ./py_cachify/ ./tests/ ./integration_tests/ ./docs/scripts/ && ruff check ./py_cachify/ ./tests/ ./integration_tests/ ./docs/scripts/ --fix --unsafe-fixes"
+tests = "PYTHONPATH=. pytest tests/ -vvv"
+integration-tests = "PYTHONPATH=. pytest integration_tests/ --no-cov"
+
+docs-dev = "mkdocs serve"
+ruff-lint = "ruff check ./py_cachify"
+mypy-lint = "mypy --install-types --non-interactive ./py_cachify/"
+poetry-check = "poetry check"
+pip-check = "pip check"
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["site-packages", "*.pyi"]
+target-version = 'py38'
+
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+unfixable = []
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = [
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+    "B010", # do not rewrite setattr()
+]
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = 'space'
+line-ending = 'auto'
+skip-magic-trailing-comma = false
+exclude = ['*.pyi']
+
+[tool.ruff.lint.mccabe]
+max-complexity = 6
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+lines-after-imports = 2
+known-first-party = ["py_cachify"]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.mypy]
+# Mypy configuration:
+# https://mypy.readthedocs.io/en/latest/config_file.html
+strict = true
+pretty = true
+
+exclude = ['test_']
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    '--strict-markers',
+    '--strict-config',
+    '--allow-unix-socket',
+    '--allow-hosts=127.0.0.1,127.0.1.1,::1',
+    '--tb=short',
+    '--cov=py_cachify/',
+    '--cov-branch',
+    '--cov-report=term-missing:skip-covered',
+    '--cov-report=xml',
+    '--cov-fail-under=100',
+]
+asyncio_mode = "auto"
+python_files = "test*.py"
+# Directories that are not visited by pytest collector:
+norecursedirs = "*.egg .eggs dist build docs .tox .git __pycache__ config docker etc"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+# Coverage configuration:
+# https://coverage.readthedocs.io/en/latest/config.html
+omit = []
+concurrency = ['thread']
+
+
+[tool.coverage.report]
+omit = []
+exclude_lines = [
+    'pragma: no cover',
+    '@overload',
+    'SyncOrAsync',
+    '@abstract',
+    'def __repr__',
+    'raise AssertionError',
+    'raise NotImplementedError',
+    'if __name__ == .__main__.:',
+    '__all__',
+    'if TYPE_CHECKING:',
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
