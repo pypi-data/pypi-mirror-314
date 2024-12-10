@@ -1,0 +1,164 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "labone"
+dynamic = ["version"]
+description = "Python API for Zurich Instruments LabOne software."
+readme = "README.md"
+license = { text = "Apache 2.0" }
+requires-python = ">=3.9"
+authors = [
+  { name = "Zurich Instruments Development Team", email = "info@zhinst.com" },
+]
+keywords = ["zhinst"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = [
+  "numpy>=1.20",
+  "packaging",
+  "typing_extensions>=4.8.0",
+  "zhinst-comms~=3.0",
+]
+
+[project.urls]
+homepage = "https://zhinst.com"
+repository = "https://github.com/zhinst/labone-python"
+changelog = "https://github.com/zhinst/labone-python/blob/main/CHANGELOG.md"
+
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/labone/_version.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github", "/docs"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/labone"]
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+[tool.hatch.envs.test]
+dependencies = ["coverage[toml]>=6.5", "hypothesis", "pytest", "pytest-asyncio"]
+
+[tool.pytest.ini_options]
+markers = [
+  "mock_compatibility: Testing that session mock (still) behaves like hpk server",
+]
+
+
+[tool.hatch.envs.test.scripts]
+test = "pytest {args:tests} -m 'not mock_compatibility'"
+test-cov = "coverage run -m pytest {args:tests} -m 'not mock_compatibility'"
+mock_compatibility = "pytest {args:tests} -m mock_compatibility"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+  "coverage html",
+  "coverage xml",
+]
+cov = ["test-cov", "cov-report"]
+
+[[tool.hatch.envs.lint.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+[tool.hatch.envs.lint]
+dependencies = [
+  "black>=24.8.0",
+  "mypy>=1.11.2",
+  "ruff>=0.6.4",
+  "numpy>=1.20",
+  "zhinst-comms~=3.0",
+]
+
+[tool.hatch.envs.lint.scripts]
+typing = "mypy --install-types --non-interactive {args:src/labone}"
+style = ["ruff check {args:.}", "black --check --diff {args:.}"]
+fmt = ["black {args:.}", "ruff check --fix {args:.}", "style"]
+all = ["style", "typing"]
+
+[tool.black]
+target-version = ["py39"]
+
+[tool.ruff]
+src = ["src", "tests"]
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  # Missing docstring in `__init__`
+  "D107",
+  # Missing docstring in magic method
+  "D105",
+  # Missing type annotation for `*args`
+  "ANN002",
+  # Missing type annotation for `**kwargs`
+  "ANN003",
+  # Too many return statements
+  "PLR0911",
+  # Missing return type annotation for special method
+  "ANN204",
+  # Too many arguments in function definition
+  "PLR0913",
+]
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+# Flag errors (`C901`) whenever the complexity level exceeds 15.
+max-complexity = 15
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = [
+  "PLR2004",
+  "S101",
+  "TID252",
+  "ANN",
+  "D",
+  "SLF001",
+  "PT011",
+  "RUF006",
+]
+
+[tool.coverage.run]
+source_pkgs = ["labone"]
+branch = true
+parallel = true
+omit = ["src/labone/__about__.py"]
+
+[tool.coverage.paths]
+labone = ["src/labone", "*/labone/src/labone"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "if t.TYPE_CHECKING:",
+  "\\.\\.\\.",
+]
