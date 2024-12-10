@@ -1,0 +1,83 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        build-type: [Release]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        if: runner.os == 'macOS'
+        with:
+          xcode-version: latest-stable
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Initialize Build Configuration
+        id: init
+        shell: bash
+        run: |
+          # Set up configuration variables
+          os="${{ runner.os }}"
+          build_type="${{ matrix.build-type }}"
+          arch="$(echo "${{ runner.arch }}" | tr '[:upper:]' '[:lower:]')"
+          configuration="$os-$build_type-$arch"
+
+          # Output for subsequent steps
+          echo "os=$os" >> $GITHUB_OUTPUT
+          echo "build_type=$build_type" >> $GITHUB_OUTPUT
+          echo "arch=$arch" >> $GITHUB_OUTPUT
+          echo "configuration=$configuration" >> $GITHUB_OUTPUT
+
+      - uses: Nuitka/Nuitka-Action@main
+        id: build
+        with:
+          nuitka-version: main
+          script-name: discord_music_rpc
+          mode: standalone
+          output-dir: dist
+          include-data-dir: |
+            discord_music_rpc/resources=discord_music_rpc/resources
+          windows-console-mode: disable
+          python-flag: -m
+
+      # - name: Tar binaries (so they're executable)
+      #   id: tar
+      #   shell: bash
+      #   run: |
+      #     output_folder=dist/discord_music_rpc.dist
+
+      #     if [[ "${{ steps.init.outputs.os }}" != "Windows" ]]; then
+      #       cd dist
+
+      #       # chmod +x "$output_folder"
+      #       tar -cvf "$output_folder.tar.gz" discord_music_rpc.dist
+
+      #       output_folder="$output_folder.tar.gz"
+      #     fi
+
+      #     echo "output_folder=$output_folder" >> $GITHUB_OUTPUT
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: discord-music-rpc-${{ steps.init.outputs.configuration }}
+          path: |
+            dist/discord_music_rpc.dist
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
+        with:
+          files: |
+            dist/discord_music_rpc.dist
