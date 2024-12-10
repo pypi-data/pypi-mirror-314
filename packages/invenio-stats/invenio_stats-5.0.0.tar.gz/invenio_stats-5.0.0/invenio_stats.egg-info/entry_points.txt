@@ -1,0 +1,23 @@
+[flask.commands]
+stats = invenio_stats.cli:stats
+
+[invenio_base.api_apps]
+invenio_stats = invenio_stats:InvenioStats
+
+[invenio_base.api_blueprints]
+invenio_stats = invenio_stats.views:blueprint
+
+[invenio_base.apps]
+invenio_stats = invenio_stats:InvenioStats
+
+[invenio_celery.tasks]
+invenio_stats = invenio_stats.tasks
+
+[invenio_queues.queues]
+invenio_stats = invenio_stats.queues:declare_queues
+
+[invenio_search.index_templates]
+invenio_stats = invenio_stats.templates:register_index_templates
+
+[invenio_search.templates]
+invenio_stats = invenio_stats.templates:register_templates
