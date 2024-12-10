@@ -1,0 +1,73 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main, test]
+
+jobs:
+  pre-commit:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - uses: pre-commit/action@v3.0.0
+
+  test:
+    name: Python
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python: [ "3.11" ]
+        os:  [ ubuntu-latest, ]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
+        run: |
+            pip install -r requirements.txt
+            playwright install
+
+      - name: Tests with numba
+        run: coverage run --source=tsbrowse -m pytest -x tests
+
+      - name: Tests with coverage (no numba)
+        run: TSBROWSE_DISABLE_NUMBA=1 coverage run --source=tsbrowse -m pytest -x tests
+
+      - name: Upload coverage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          coveralls --service=github
+
+
+  
+      - name: Build wheel
+        run: python -m build --wheel
+
+      - name: Install wheel
+        run: |
+          pip install dist/*.whl
+          python -m tsbrowse --help
