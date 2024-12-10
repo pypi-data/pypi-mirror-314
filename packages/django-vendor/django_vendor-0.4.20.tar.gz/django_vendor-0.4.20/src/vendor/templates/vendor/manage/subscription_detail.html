@@ -1,0 +1,247 @@
+{% extends "vendor/manage/base.html" %}
+{% load i18n %}
+
+{% block vendor_content %}
+
+<h2>{% trans 'Admin: Subscription Detail' %}</h2>
+<div class='row'>
+  <div class='col-6'>
+    <div class='card'>
+      <div class='card-header'>
+        {% trans 'Subscription Overview' %}
+      </div>
+      <div class='card-body'>
+        <h4>{{ object.gateway_id}}</h4>
+        <h4>{{ object.name}}</h4>
+        <p>{{ object.receipts.first.order_item.offer.offer_description|default_if_none:"" }}</p>
+        <div class='row'>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>
+              {% trans 'Transaction' %}
+            </div>
+            {{object.gateway_id}}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>
+              {% trans 'Auto Renew' %}
+            </div>
+            {{ object.auto_renew }}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>
+              {% trans 'Term Type' %}
+            </div>
+            {{object.receipts.first.order_item.offer.get_terms_display}}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>
+              {% trans 'Trial Period' %}
+            </div>
+            {{object.receipts.first.order_item.offer.term_details.trial_occurrences|default:'0'}}
+            {% if object.receipts.first.order_item.offer.term_details.term_units == 10 %}
+            {% trans 'Days' %}
+            {% else %}
+            {% trans 'Months' %}
+            {% endif %}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>
+              {% trans 'Ends On' %}
+            </div>
+            <div class="{% if not object.auto_renew %}text-danger{% endif %}">
+              {{ object.receipts.last.end_date|date:'Y-M-d' }}
+            </div>
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>
+              {% trans 'Cost' %}
+            </div>
+            ${{ object.payments.last.amount }} {{ object.receipts.first.order_item.invoice.currency|upper }}
+          </div>
+          <div class='d-flex flex-column w-100 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Actions:' %}</div>
+            {% if object.status == 30 %}
+            <form class="align-items-center m-2" method="post" action="{{ object.receipts.first.order_item.offer.add_to_cart_link }}">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-primary" type="submit">{% trans 'Renew Subscription' %}</button>
+            </form>
+            {% else %}
+            <form id="cancelSubscription" class="align-items-center m-2" method="post"
+              action="{% url 'vendor_api:customer-subscription-cancel' object.uuid %}">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-primary" type="submit">{% trans 'Cancel Subscription' %}</button>
+            </form>
+            {% endif %}
+            <div class="align-items-center m-2">
+              <a class="btn btn-sm btn-primary" href="{% url 'vendor_admin:manager-subscription-add-payment' object.uuid object.profile.uuid %}">{% trans 'Add Payment' %}</a>
+            </div>
+            <div class="align-items-center m-2">
+              <a class="btn btn-sm btn-primary" href="{% url 'vendor_admin:manager-stripe-subscription-recreate' object.uuid %}">{% trans 'Re Create Subscription' %}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='col-6'>
+    <div class='card'>
+      <div class='card-header'>
+        {% trans 'Billing' %}
+      </div>
+      <div class='card-body'>
+        <div class='row'>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Customer Name' %}</div>
+            {{payment.profile.user.first_name}}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Customer Last Name' %}</div>
+            {{payment.profile.user.last_name}}
+          </div>
+          <div class='d-flex flex-column w-100 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Customer E-Mail' %}</div>
+            {{payment.profile.user.email}}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Name on Card' %}</div>
+            {{payment.payee_full_name}}
+          </div>
+          <div class='d-flex flex-column w-50 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Account' %}</div>
+            {{payment.result.payment_info.account_number}}
+          </div>
+          <div class='d-flex flex-column w-100 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Billing Address:' %}</div>
+            {{payment.billing_address.get_address_display}}
+          </div>
+          <div class='d-flex flex-column w-100 px-3 py-2'>
+            <div class='font-weight-bold'>{% trans 'Actions:' %}</div>
+            <div class='d-flex flex-row'>
+              <form class="mr-3">
+                <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#update_billing_info">
+                  {% trans 'Update Card' %}
+                </a>
+              </form>
+              <form>
+                <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#update_billing_address">
+                  {% trans 'Update Address' %}
+                </a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='modal fade' tabindex="1" role="dialog" id="update_billing_info">
+    <div class='modal-dialog modal-dialog-centered' role="document">
+      <div class='modal-content p-5'>
+        <h3 class="mb-3">{% trans 'Update Card Info' %}</h3>
+        <hr class="m-0" />
+        <div class='d-flex flex-row w-100 align-items-center my-3'>
+          <form method="POST" action="{% url 'vendor:customer-subscription-update-payment' object.uuid %}">
+            {% csrf_token %}
+            {{ payment_form.as_p }}
+            <button class="btn btn-primary mt-3">{% trans 'Update' %}</button>
+            <button class="btn btn-link mt-3" type="button" role="button" aria-pressed="true" data-toggle="modal"
+              data-target="#update_billing_info">{% trans 'Cancel' %}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if billing_form %}
+  <div class='modal fade' tabindex="1" role="dialog" id="update_billing_address">
+    <div class='modal-dialog modal-dialog-centered' role="document">
+      <div class='modal-content p-5'>
+        <h3 class="mb-3">{% trans 'Update Billing Address' %}</h3>
+        <hr class="m-0" />
+        <div class='d-flex flex-row w-100 align-items-center my-3'>
+          <form method="POST" action="{% url 'vendor:customer-billing-update' billing_form.instance.uuid %}">
+            {% csrf_token %}
+            {{ billing_form.as_p }}
+            <button class="btn btn-primary mt-3">{% trans 'Update' %}</button>
+            <button class="btn btn-link mt-3" type="button" role="button" aria-pressed="true" data-toggle="modal"
+              data-target="#update_billing_address">{% trans 'Cancel' %}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+<p></p>
+<div class="row">
+  <div class="col-6">
+    <div class='card'>
+      <div class='card-header'>
+        {% trans 'Payments' %}
+      </div>
+      <div class='card-body'>
+        <div class="table-responsive">
+        <table class="table mb-0">
+          <thead class="thead-dark">
+            <tr>
+              <th>{% trans '#' %}</th>
+              <th>{% trans 'Invoice' %}</th>
+              <th>{% trans 'Transaction' %}</th>
+              <th>{% trans 'Submitted Date' %}</th>
+              <th>{% trans 'Amount' %}</th>
+              <th>{% trans 'Status' %}</th>
+              <th>{% trans 'Succeded' %}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for payment in payments %}
+            <tr class="table-secondary">
+              <th>{{payment.pk }}</th>
+              <th>{{payment.invoice.pk }}</th>
+              <th>{{payment.transaction }}</th>
+              <th>{{payment.submitted_date|date:'Y-m-d' }}</th>
+              <th>{{payment.amount }}</th>
+              <th>{{payment.get_status_display }}</th>
+              <th colspan="2">{{payment.success }}</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class='card'>
+      <div class='card-header'>
+        {% trans 'Receipts' %}
+      </div>
+      <div class='card-body'>
+        <div class="table-responsive">
+        <table class="table mb-0">
+          <thead class="thead-dark">
+            <tr>
+              <th>{% trans '#' %}</th>
+              <th>{% trans 'Invoice' %}</th>
+              <th>{% trans 'Transaction' %}</th>
+              <th>{% trans 'Start Date' %}</th>
+              <th>{% trans 'End Date' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for receipt in receipts %}
+            <tr class="table-secondary">
+              <th>{{receipt.pk }}</th>
+              <th>{{receipt.order_item.invoice.pk }}</th>
+              <th>{{receipt.transaction }}</th>
+              <th>{{receipt.start_date|date:'Y-m-d' }}</th>
+              <th>{{receipt.end_date|date:'Y-m-d' }}</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
