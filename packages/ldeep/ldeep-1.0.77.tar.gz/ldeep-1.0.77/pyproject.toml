@@ -1,0 +1,69 @@
+[project]
+name = "ldeep"
+dynamic = []
+description = "In-depth ldap enumeration utility"
+authors = [
+    { name = "b0z", email = "bastien@faure.io" },
+    { name = "flgy", email = "florian.guilbert@synacktiv.com" },
+]
+dependencies = [
+    "commandparse >= 1.1.1, < 2",
+    "cryptography>=42.0.7",
+    "dnspython >= 1.15.0",
+    "gssapi >= 1.8.0, < 2",
+    "ldap3-bleeding-edge == 2.10.1.1337",
+    "oscrypto >= 1.3.0, < 2",
+    "pycryptodome >= 3.19.0, < 4",
+    "pycryptodomex >= 3.19.0, < 4",
+    "six >= 1.16.0, < 2",
+    "termcolor >= 2.3.0, < 3",
+    "tqdm >= 4.26.0, < 5",
+]
+requires-python = ">=3.8.1,<3.14"
+readme = "README.rst"
+keywords = [
+    "pentesting security windows active-directory networks",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Security",
+]
+version = "1.0.77"
+
+[project.license]
+text = "MIT"
+
+[project.urls]
+Homepage = "https://github.com/franc-pentest/ldeep"
+
+[project.scripts]
+ldeep = "ldeep.__main__:main"
+
+[tool.pdm.version]
+source = "scm"
+write_to = "ldeep/_version.py"
+write_template = "__version__ = '{}'"
+
+[tool.pdm.dev-dependencies]
+exe = []
+publishing = [
+    "twine>=5.1.0",
+]
+dev = [
+    "nuitka>=2.3",
+]
+lint = [
+    "black>=24.4.2",
+]
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
