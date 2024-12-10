@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: caketool
+Version: 1.4.0
+Summary: Common tools for MLOps
+Author-email: Khoi Do <khoi.do@cake.vn>
+License: MIT License
+        
+        Copyright (c) 2018 Real Python
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/cake-digital-bank
+Keywords: cake,ds,mlops
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: google-cloud-aiplatform
+Requires-Dist: google-cloud-storage
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: xgboost
+Requires-Dist: scikit-learn
+Requires-Dist: statsmodels
+Requires-Dist: category_encoders
+Requires-Dist: catboost
+Requires-Dist: tqdm
+Provides-Extra: dev
+Requires-Dist: build; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+Requires-Dist: pip-tools; extra == "dev"
+Requires-Dist: bumpver; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+
+- Enviroment
+
+```bash
+conda create -n caketool
+conda activate caketool
+pip-compile pyproject.toml
+pip-sync
+pip install pip-tools bumpver build twine ipykernel
+```
+
+- Publish libs
+
+```bash
+bumpver update --major # Increment the MAJOR version when you make incompatible API changes.
+bumpver update --minor # Increment the MINOR version when you add functionality in a backwards compatible manner.
+bumpver update --patch # Increment the PATCH version when you make backwards compatible bug fixes.
+python -m pip install -e . # Install on local machine
+rm ./dist/*
+python -m build
+twine upload -r testpypi dist/*
+twine upload dist/*
+pip install caketool
+```
