@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: tma-authenticator
+Version: 1.3.1
+Summary: Verifying telegram user token.
+Author: Pavel Mulin
+Author-email: pavel@tg-shops.com
+Requires-Python: >=3.9.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: aiocache (>=0.12.3)
+Requires-Dist: fastapi (>=0.112.2)
+Description-Content-Type: text/markdown
+
+
+
+
+## How to use
+
+### 1. `authorization.py`
+```python
+
+from tma_authenticator.tma_authentication_router import TMAAuthenticationRouter
+from tma_authenticator.tma_authenticator import TMAAuthenticator
+
+from database.users import UsersDatabase
+from config import TELEGRAM_BOT_TOKEN, IMPERSONATE_ADMIN_PASSWORD
+
+user_database: UsersDatabase = UsersDatabase()
+authenticator = TMAAuthenticator(TELEGRAM_BOT_TOKEN, IMPERSONATE_ADMIN_PASSWORD, user_database)
+authentication_router = authenticator.authentication_router
+    
+```
