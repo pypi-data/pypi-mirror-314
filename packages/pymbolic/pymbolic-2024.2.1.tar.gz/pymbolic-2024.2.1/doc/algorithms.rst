@@ -1,0 +1,4 @@
+Algorithms
+==========
+
+.. automodule:: pymbolic.algorithm
