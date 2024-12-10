@@ -1,0 +1,51 @@
+Metadata-Version: 2.1
+Name: numba-cuda
+Version: 0.0.17.1
+Summary: CUDA target for Numba
+Author: Anaconda Inc., NVIDIA Corporation
+License: BSD 2-clause
+Project-URL: Homepage, https://github.com/rapidsai/numba-cuda
+Project-URL: Documentation, https://github.com/rapidsai/numba-cuda/blob/main/README.md
+Project-URL: Repository, https://github.com/rapidsai/numba-cuda
+Project-URL: License, https://github.com/rapidsai/numba-cuda/blob/main/LICENSE
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numba>=0.59.1
+
+# Numba CUDA Target
+
+An out-of-tree CUDA target for Numba.
+
+This contains an entire copy of Numba's CUDA target (the `numba.cuda` module),
+and a mechanism to ensure the code from this module (`numba_cuda.numba.cuda`) is
+used as the `numba.cuda` module instead of the code from the `numba` package.
+
+This is presently in an early state and is published for testing and feedback.
+
+## Building / testing
+
+Install as an editable install:
+
+```
+pip install -e .
+```
+
+Running tests:
+
+```
+python -m numba.runtests numba.cuda.tests
+```
+
+This should discover the`numba.cuda` module from the `numba_cuda` package. You
+can check where `numba.cuda` files are being located by running
+
+```
+python -c "from numba import cuda; print(cuda.__file__)"
+```
+
+which will show a path like:
+
+```
+<path to numba-cuda repo>/numba_cuda/numba/cuda/__init__.py
+```
