@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "garf-executors"
+version = "0.0.2"
+dependencies = [
+  "garf-core",
+  "garf-io",
+]
+authors = [
+  {name = "Google Inc. (gTech gPS CSE team)", email = "no-reply@google.com"},
+]
+requires-python = ">=3.8"
+description = "Executes queries against API and writes data to local/remote storage."
+readme = "README.md"
+license = {text = "Apache 2.0"}
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: Apache Software License",
+]
+
+[project.optional-dependencies]
+bq=[
+  "garf-io[bq]",
+  "pandas",
+]
+sql=[
+  "garf-io[sqlalchemy]",
+  "pandas",
+]
+all = [
+  "garf-executors[bq,sql]"
+]
+[project.scripts]
+garf-sql-executor="garf_executors.entrypoints.cli.sql:main"
+garf-bq-executor="garf_executors.entrypoints.cli.bq:main"
