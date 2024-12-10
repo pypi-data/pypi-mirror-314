@@ -1,0 +1,75 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "setuptools_scm[toml]>=3.4.3",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bilby_tgr"
+description = "Testing GR analysis pipelines to use with Bilby"
+authors = [
+        {name = "Gregory Ashton", email = "gregory.ashton@ligo.org"},
+        {name = "Colm Talbot"},
+        {name = "Soumen Roy"},
+        {name = "Geraint Pratten"},
+        {name = "Tsun-Ho Pang"},
+        {name = "Michalis Agathos", email = "michalis.agathos@ligo.org"},
+        {name = "Tomasz Baka"},
+        {name = "Elise Sänger"},
+        {name = "Ajit Mehta"},
+        {name = "Jan Steinhoff"},
+        {name = "Elisa Maggio"},
+        {name = "Abhirup Ghosh"},
+        {name = "Stanislav Babak"},
+        {name = "Gregorio Carullo"},
+        {name = "Danny Laghi"},
+        {name = "Haris K"},
+        {name = "Balazs Cirok"},
+        {name = "Krishnendu N V"},
+        {name = "Naresh Adhikari"},
+        {name = "Anuradha Gupta"},
+        {name = "Ish Gupta"},
+        {name = "Aditya Vijaykumar"}
+        ]
+maintainers = [
+        {name = "Michalis Agathos", email = "michalis.agathos@ligo.org"},
+        {name = "Aditya Vijaykumar"},
+        ]
+readme = "README.rst"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+version = "0.2a1"
+dependencies = [
+    "bilby",
+    "lalsuite>=7.20",
+    "numpy>=1.17"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Astronomy",
+]
+
+[project.urls]
+repository = "https://git.ligo.org/lscsoft/bilby_tgr"
+
+[project.optional-dependencies]
+automation = ["cbcflow>=0.2.2", "asimov>=0.5.0b11"]
+
+[tool.setuptools]
+packages = ["bilby_tgr",
+            "bilby_tgr.fti",
+            "bilby_tgr.mdr",
+            "bilby_tgr.pseob",
+            "bilby_tgr.siqm",
+            "bilby_tgr.ssb",
+            "bilby_tgr.tiger",
+]
+
+[tool.setuptools_scm]
+write_to = "bilby_tgr/_version.py"
