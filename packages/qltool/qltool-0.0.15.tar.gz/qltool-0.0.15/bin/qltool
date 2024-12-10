@@ -1,0 +1,345 @@
+#!/usr/bin/env python3
+#
+# to override print <= can be a big problem with exceptions
+#
+# colors in df_table _fg _bg columns:
+##########$###
+# see
+# https://github.com/mixmastamyk/console/blob/master/console/color_tables_x11.py#L112
+#
+# from __future__ import print_function  # must be 1st
+# import builtins
+import sys
+from fire import Fire
+from qltool.version import __version__
+# from qltool import unitname
+from qltool import config
+#
+# from qltool import topbar
+# from qltool import key_enter
+# # from qltool  import df_table
+# from qltool.df_table import create_dummy_df, show_table, \
+#     inc_dummy_df
+# from qltool.config import move_cursor
+# from qltool import mmapwr
+# from qltool import interpreter
+# from qltool import objects # I have no reach from remote-keyboard BUT from mainkb
+
+import time
+import datetime as dt
+from console import fg, bg, fx
+# from blessings import Terminal
+import os
+# from pyfiglet import Figlet
+import signal
+
+
+from  qltool.ql_utils import runme, annotate_img, \
+    rotate_img, rescale_img, dither, \
+    monochrom, make_triple, make_double, \
+    check_lpx
+
+import tempfile
+import os
+import subprocess as sp
+import shlex
+import random
+
+import numpy as np
+import cv2
+import screeninfo
+from flashcam import usbcheck
+
+import socket
+import shutil
+from console import fg,bg
+
+import qrcode
+
+
+
+import importlib.resources
+
+
+
+
+
+
+def main( img_or_text ,
+          command = "v",
+          fimgname  = None,
+          FONTSIZE = None,
+          paper = 62,
+          qr=False,
+          rotate = None,
+          sizeqr2=False, # 1/4 or 1/2
+          xsize = None,
+          ysize = None, # by default 1
+         ):
+    """
+Print a label with ql700 printer. \n
+
+Usage:
+    qltool /tmp/ql700_showa.png ... just prints the image
+    qltool "asd:123;id:12315;name:Bedna;owner:pepa"  -q  #... qr code with id label
+    qltool "Some string"  -q -s  #... qr code with string displayed
+    qltool text_one_row -c p  # this command prints
+    qltool "one row\ntwo row" -q -s -f /tmp/a.jpg
+
+Args:
+        img_or_text: Either a text 1. /max.two lines=north/south/        for multiline use Alt-Enter\n
+                                OR 2. an image to process or\n
+                                   3."id: a;name: b" string
+        command:     -v-iew  (default)\n
+                     -q-uit\n
+                     -p-rint
+        fimgname:   if output to a specific filename is needed (just an image)
+        FONTSIZE:  try to override automatic guess...like with 100
+        paper: For now it works with 62, wide label
+        qr: create txt and qr code from "id:12345;owner:Pepa z Depa;aaa:etc;name:NAME" or a string (with -s). Overrides img
+        rotate: for webcam, rotation may be needed.
+        sizeqr2: QRCODE - set size 1/2 rather than 1/4
+        xsize: possibility to resize to certain x size, do not use this
+        ysize: force the height of the label (width == 714 @62case), internal default is 1
+
+    """
+    print("#"*70)
+
+    print("i... I Call ql570 to print on brother QL700 directly. Be in lp group")
+    print("i...   USE  62   - DK-22205   for printing")
+    print("i...   ")
+    print(f"i...   /{img_or_text}/")
+    print("i...   ")
+    print()
+
+    # this will point to .local/bin/....
+    #exe_path1 = os.path.join(os.path.dirname(__file__), 'data/ql570')
+    #
+    exe_path1 = None
+    with importlib.resources.path('qltool.data', 'ql570') as exe_path1:
+        exe_path1 = str(exe_path1)
+
+    IMG_SHOW_PATH = "/tmp/ql700_show.png"
+    IMG_VIEWER = "geeqie -t"
+    IMG_MODE = None # dither for image
+    MAIN_WIDTH_PARAMETER = 714
+    height,width = 480,640
+    height,width = 480,240
+    height,width = 1,714 # a trick for text
+
+    img_work = fimgname # None
+    keypress = None
+    printme = None
+    myformat = str(paper)
+    slabel = None # no south label for the monent
+
+
+    qft = str(img_or_text)
+    if os.path.exists(qft) and (qft.find(".jpg")>0 or qft.find(".png")>0):
+        print("i... IMAGE filename detected, ditching sentence")
+        sentence = None
+        IMG_MODE = True
+        # doesnt work imagename = qft
+        img_work = qft
+        print("D... img_work", img_work)
+    else:
+        print("i... sentence detected, not image")
+        sentence = qft
+        IMG_MODE = False
+        print("D... img_work", img_work)
+
+    # REDEFINE  ???
+    if img_work is None:
+        imgname2 = "/tmp/blank.jpg"
+        if  ysize is not None:
+            height = ysize
+        blank_image = np.zeros((height,width,3), np.uint8)
+        blank_image[:,:] = (55,155,255)
+        cv2.imwrite( imgname2 , blank_image)
+        img_work = imgname2
+
+    print(f"D... img_work === {img_work}  **** ")
+
+    if img_work is None: # returns on 'q'
+        return
+
+    if sentence is None:
+        nlabel = input("> Sentence : ")
+    else:
+        nlabel = sentence
+
+    #print("i... ",  sentence.split("\n"))
+    if len(nlabel.split("\n"))>1:
+        nor,sou = nlabel.split("\n")[0] , nlabel.split("\n")[1]
+        nlabel = nor
+        slabel = sou
+        print("i... SPLIT IS THERE: ",  nlabel, "x", slabel)
+    else:
+        print("D... NO SPLIT NO MULTILINE")
+
+
+    # --------------------------------- Extract nlabel and slabel from "id: 123; name: hahaha"
+    if qr:
+        # nlabel seems DONE
+        qrtag = f"{nlabel};{slabel}"
+        qrtag = qrtag.replace("     ", " ")
+        qrtag = qrtag.replace("    ", " ")
+        qrtag = qrtag.replace("   ", " ")
+        qrtag = qrtag.replace("  ", " ")
+        print(f"i... QRTAG /{fg.cyan}{qrtag}{fg.default}/")
+        # I will join Name: asoidj ; owner: OKjd ; location: asd o; ID: 8998244;
+        qr = qrcode.make( qrtag )
+        qrs = qrtag.split(";")
+        # I have nlabel and slabel:  what about midlabel
+        midlabel = None
+        for q in qrs:
+            nam, *val= q.split(":")
+            if len(val) == 0:continue
+            # EXTRACT ID and NAME
+            if nam.strip().find( "id") == 0:
+                nlabel = val[0].strip()
+            if nam.strip().find( "name") == 0:
+                slabel = val[0].strip()
+            if nam.strip().find( "owner") == 0:
+                midlabel = val[0].strip()
+
+        #if len(midlabel) > 0:
+        #    nlabel = f"{nlabel} * {midlabel}"
+        print(f"i... LABELS SN: /{fg.green}{nlabel}{fg.default}/ x /{fg.yellow}{midlabel}{fg.default}/ x  /{fg.green}{slabel}{fg.default}/")
+        #print(f"i... qr tag -  name: {nam} val: {val[0]},  LABELS SN: /{fg.green}{nlabel}{fg.default}/ x /{fg.green}{slabel}{fg.default}/")
+        qr.save("/tmp/qrcode.png")
+
+        qft = None
+        # -------------------------------------- new QR image - but 1/3 of a width
+        if not sizeqr2:
+        #if (1 == 0):
+            qft = make_triple("/tmp/qrcode.png", nlabel=nlabel, slabel=slabel, midlabel=midlabel, destination=img_work)
+            nlabel, slabel = None, None
+        else:
+            qft = make_double("/tmp/qrcode.png", destination=img_work)
+
+
+        IMG_MODE = True
+        #qft = "/tmp/qrcode.png"
+        print(f"D... img_work == {qft}")
+        img_work = qft
+
+
+
+    if command is None:
+        keypress = input("> Give me a command: q/p/v (quit,print,view) :")
+        if keypress == "":
+            keypress = "q"
+        keypress = ord(keypress)
+        print(keypress)
+    else:
+        keypress = command
+        keypress = ord(keypress)
+
+
+    if keypress == ord('n'):
+        print(f"i... n returned, {fg.red} NOT printing {fg.default}")
+        printme = False
+    elif keypress == ord('p'):
+        printme = True
+        print(f"i... SPACE or p ...{fg.green} printing {fg.default}", printme, keypress)
+    elif keypress == ord('q'):
+        print(f"i... q pressed - {bg.red}{fg.white}  QUIT   {bg.default}{fg.default}", printme, keypress)
+        return
+    elif keypress == ord('v'):
+        print(f"i... v pressed - {bg.green}{fg.white}  viewing   {bg.default}{fg.default}", printme, keypress)
+    else:
+        print(f"i... unknown commad - {bg.red}{fg.white}  QUITing   {bg.default}{fg.default}", printme, keypress)
+        return
+        printme = False
+        print("i... default printme = False")
+    # printme = False
+
+
+
+
+
+    #img_work = test_img(img_work)
+    # ===========================================================================================
+    #       commands are clear .... DO THINGS NOW
+    # ===========================================================================================
+
+    # - IF SIZE GIVEN :::: re size first
+    if xsize is not None: # some resize given in cmdline
+        print(f"D... resizing to {xsize}")
+        img_work = resize_img(img_work, factor=xsize)
+
+    if nlabel is None and slabel is None: # BOTH No north,south -- randoms --
+        pass# nlabel,slabel = get_random_labels()
+    else:
+        # Annotate: in case of no image : TRICK, annotate one line
+        print("i... annotating:", img_work)
+        img_work = annotate_img(img_work, nlabel, slabel, points = FONTSIZE)
+        print("i.. annotated:")
+
+
+
+    # =====================================================================
+    # rotation for printing....
+    #
+    if rotate:
+        print("D... ROTATING because of commandline")
+        img_work = rotate_img(img_work)
+    if rotate is None and printme:
+        print("D... ROTATING for printing")
+        img_work = rotate_img(img_work)
+
+
+    # ===========================================================================
+    #
+    #  THE LAST THING TO DO  ======>>                     MONOCHOMIZE
+    #
+    # ===================================================== DITHER
+    img_work = rescale_img(img_work, maxw = MAIN_WIDTH_PARAMETER) #
+    if IMG_MODE:
+        img_work = dither(img_work, percent = 30)
+    else:
+        img_work = monochrom(img_work)
+
+
+
+    #  myformat 62 ..... FANTASTIC......
+    #  29x90 ... works, but....
+    #
+    #
+    if printme:
+        res = runme("groups").split()
+        print("i... groups:",res)
+        if not "lp" in res:
+            print(f"X.. {fg.red}you arre not in lp group{fg.default}")
+            return
+        lpx = check_lpx()
+        print("D... path to the executable:", exe_path1)
+        CMD = f"{exe_path1} {lpx} {myformat} {img_work}"
+        #CMD = f"geeqie {OUTPUT}"
+        runme(CMD)
+    else:
+        #CMD = f"./ql570 /dev/usb/lp0 62 {OUTPUT}"
+        shutil.copy(img_work,  IMG_SHOW_PATH)
+        # check if geeqie is runnung
+        CMD = "ps -ef"
+        allps = runme(CMD,silent= True).split("\n")
+        allps = [x for x in allps if x.find(IMG_VIEWER.split()[0])>0 ]
+        allps = [x for x in allps if x.find(IMG_SHOW_PATH)>0 ]
+        print(fg.green, allps, fg.default)
+        # if no geeqie with my image, launch one
+        if len(allps)<1:
+            CMD = f"{IMG_VIEWER} {IMG_SHOW_PATH}"
+            #sp.Popen([IMG_VIEWER,   IMG_SHOW_PATH])
+            sp.Popen(CMD.split())
+        #runme(CMD)
+# =======================================================
+
+
+
+# ====================================================================
+
+
+if __name__ == "__main__":
+    Fire(main)
+    #print("*********************************")
