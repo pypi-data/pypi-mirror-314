@@ -1,0 +1,18 @@
+FROM python:3.12
+
+# the name of the junction package to install with pip this can be either a pypi
+# package name, a wheel URL, or a local path to a wheel.
+#
+# NOTE: If you're using this as a local path to a wheel, you may have to mount
+# the wheel into the container with Docker's --volume arg.
+ARG junction_wheel
+
+WORKDIR /client
+
+ADD ${junction_wheel} .
+
+RUN python -m venv .venv
+RUN .venv/bin/pip install --upgrade pip
+RUN .venv/bin/pip install *.whl
+ADD junction-python/samples/routing-and-load-balancing/client.py .
+CMD [".venv/bin/python", "./client.py"]
