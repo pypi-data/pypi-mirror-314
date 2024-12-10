@@ -1,0 +1,293 @@
+openapi: 3.0.3
+info:
+  title: "Vozvraty pokupatelami"
+  description: Rabota s vozvratami tovarov pokupatelami
+  version: ""
+security:
+- HeaderApiKey: []
+
+paths:
+  /api/v1/claims: #GET
+    servers:
+     - url: https://returns-api.wildberries.ru
+    get: #Zaavki pokupatelei na vozvrat
+      security:
+        - HeaderApiKey: []
+      summary: Zaavki pokupatelei na vozvrat
+      description: >
+        Vozvrahaet zaavki pokupatelei na vozvrat tovarov za tekuhie 14 dnei.<br>
+        Maksimum 20 zaprosov v minutu
+      parameters:
+        - $ref: '#/components/parameters/is_archive'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/nm_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetClaimsSuccessResponse'
+        '400':
+          $ref: '#/components/responses/Error400GetClaims'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+        '5XX':
+          $ref: '#/components/responses/ErrorInternalResponse'
+  /api/v1/claim: #PATCH
+    servers:
+     - url: https://returns-api.wildberries.ru
+    patch: #Obrabotka zaavki pokupatela
+      security:
+        - HeaderApiKey: []
+      summary: Otvet na zaavku pokupatela
+      description: >
+        Otpravlaet otvet na zaavku pokupatela na vozvrat.<br>
+        Maksimum 20 zaprosov v minutu
+      requestBody:
+        $ref: '#/components/requestBodies/PatchClaimReq'
+      responses:
+        '200':
+          $ref: '#/components/responses/PatchClaimSuccessResponse'
+        '400':
+          $ref: '#/components/responses/Error400PatchClaim'
+        401:
+          $ref: "../../../../openapi/ru/responses/401.yaml"
+        429:
+          $ref: "../../../../openapi/ru/responses/429.yaml"
+        '5XX':
+          $ref: '#/components/responses/ErrorInternalResponse'
+components:
+  responses:
+    PatchClaimSuccessResponse:
+      description: Uspehno
+    GetClaimsSuccessResponse:
+      description: Uspehno
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {"claims": [{"id": "fe3e9337-e9f9-423c-8930-946a8ebef80","claim_type": 1,"status": 2,"status_ex": 8,"nm_id": 196320101,"user_comment": "Dlina provoda ne sootvetstvuet opisaniu","wb_comment": "Prodavec odobril vahu zaavku na vozvrat. V tehenie 14 dnei prinesite tovar v opredelennyi punkt vydahi — vse zavisit ot togo, kak vy poluhali zakaz:\r\n\r\n∙ V punkte vydahi. Togda nuhno budet vernut v tot he punkt po tomu he adresu. \r\n∙ Kurerom. Zaidite v razdel «Pokupki» na saite — tam budet adres punkta, v kotoryi nuhno prinesti tovar.\r\n\r\nVozmite s soboi paket so htrih-kodom, v kotorom byl tovar. Esli vy ego poterali ili vybrosili — nihego strahnogo, my vse ravno smohem provesti vozvrat. No v buduhem, pohaluista, sohranaite etot paket. \r\n\r\nDengi pridut na vahu kartu ili shet v tehenie 10 dnei posle vozvrata tovara na sklad.\r\n\r\nEsli u vas krupnogabaritnyi tovar, to dla ego vozvrata vyzovite kurera herez razdel «Dostavki».","dt": "2024-03-26T17:06:12.245611","imt_name": "Kabel 0.5 m, 3797","order_dt": "2020-10-27T05:18:56","dt_update": "2024-05-10T18:01:06.999613","photos": ["//photos.wbstatic.net/claim/fe3e9337-e9f9-423c-8930-946a8ebef80/1.webp", "//photos.wbstatic.net/claim/fe3e9337-e9f9-423c-8930-946a8ebef80/2.webp"],"video_paths": ["//video.wbstatic.net/claim/fe3e9337-e9f9-423c-8930-946a8ebef80/1.mp4"],"actions": ["autorefund1","approve1"],"price": 157,"currency_code": "643"}],"total": 31}
+            properties:
+              claims:
+                type: array
+                description: Zaavki                
+                items:
+                   type: object
+                   properties:
+                      id:
+                        type: string
+                        description: ID zaavki
+                        format: UUID
+                      claim_type:
+                        type: integer
+                        description: |
+                          Istohnik zaavki:
+                            * `1` — portal pokupatelei
+                            * `3` — hat
+                      status:
+                        type: integer
+                        description: | 
+                          Rehenie po vozvratu pokupatelu:
+                            * `0` — na rassmotrenii
+                            * `1` — otkaz
+                            * `2` — odobreno
+                      status_ex:
+                        type: integer
+                        description: |
+                          Status tovara:
+                            * `0` — na rassmotrenii
+                            * `1` — ostaetsa u pokupatela
+                            * `2` — bez vozvrata                          
+                            * `5` — bez vozvrata
+                            * `8` — tovar budet vozvrahen v realizaciu ili oformlen na vozvrat posle proverki WB
+                            * `10` — vozvrat prodavcu
+                      nm_id:
+                        type: integer
+                        description: Artikul WB
+                      user_comment:
+                        type: string
+                        maxLength: 1000
+                        description: Kommentarii pokupatela
+                      wb_comment:
+                        type: string
+                        maxLength: 10000
+                        description: Otvet pokupatelu
+                      dt:
+                        type: string
+                        format: date-time
+                        description: Data i vrema oformlenia zaavki pokupatelem
+                      imt_name:
+                        type: string
+                        description: Nazvanie tovara
+                      order_dt:
+                        type: string
+                        format: date-time
+                        description: Data i vrema zakaza
+                      dt_update:
+                        type: string
+                        format: date-time
+                        description: Data i vrema rassmotrenia zaavki. Dla nerassmotrennoi zaavki — data i vrema oformlenia
+                      photos:
+                        type: array
+                        description: Fotografii iz zaavki pokupatela
+                        minItems: 0
+                        maxItems: 10
+                        items:
+                          type: string
+                          format: WEBP
+                      video_paths:
+                        type: array
+                        description: Video iz zaavki pokupatela
+                        minItems: 0
+                        maxItems: 1                        
+                        items:
+                          type: string
+                          format: MP4                          
+                      actions:
+                        type: array
+                        description: |
+                          Varianty [otveta prodavca na zaavku](./#/paths/~1api~1v1~1claim/patch).<br> Otklonennye zaavki mohno peresmotret. Esli massiv pust, s zaavkoi rabotat nelza.
+                            * `approve1` — odobrit s proverkoi braka.<br>Dengi vernutsa pokupatelu posle vozvrata tovara. Tovar budet proveren na sklade. Pri podtverhdenii braka/ohibki vlohenia tovar budet otpravlen prodavcu. Esli brak/ohibka vlohenia ne podtverdatsa, tovar budet vozvrahen v prodahu.<br>Neprimenimo pri sheme <b>Samovyvoz</b>. 
+                            * `approve2` — odobrit i zabrat tovar.<br> Dengi vernutsa pokupatelu posle vozvrata tovara. Tovar budet otpravlen prodavcu.<br>Neprimenimo pri sheme <b>Samovyvoz</b>.
+                            * `autorefund1` — odobrit bez vozvrata tovara.<br> Tovar ostanetsa u pokupatela. Dengi za nego budut vozvraheny pokupatelu bez vozvrata tovara.
+                            * `reject1` — otklonit s hablonom otveta: <details><summary><strong>Brak ne obnaruhen</strong></summary>Zdravstvuite!<br>Prodavec rassmotrel i otklonil vahu zaavku: on ne nahel brak, kotoryi vy opisali, na foto ili video.<br>Esli brak proizvodstvennyi, mohete: — poprobovat rehit vopros napramuu v hate s prodavcom — v razdele «Pokupki» nahmite na tri tohki vozle tovara i vyberite «Zadat vopros prodavcu», — obratitsa v servisnyi centr ili nezavisimuu ekspertizu, htoby poluhit zakluhenie o brake. Posle ekspertizy otpravte skan zakluhenia, sozdav novuu zaavku na proverku tovara.<br>Esli defekt neproizvodstvennyi, to mohno osporit rehenie prodavca, dla etogo otkroite v prilohenii razdel «Vozvrat tovara po braku» ili na saite razdel «Brak ili drugaa problema», vyberite zaavku, nahmite knopku «Osporit rehenie» i napihite, pohemu vy ne soglasny. My vse proverim i napihem vam.</details>
+                            * `reject2` — otklonit s hablonom otveta: <details><summary><strong>Dobavit foto/video</strong></summary>Zdravstvuite!<br>K sohaleniu, prodavec ne smog podtverdit brak, povrehdenie ili nesootvetstvie opisaniu. Otpravte novuu zaavku i proverte, hto defekt viden na foto i video, a sami oni horohego kahestva. Napomnim, hto nuhno prikrepit k zaavke:<br>1. Foto tovara celikom.<br>2. Foto i video braka.<br>3. Foto s birkoi ili drugoi markirovkoi tovara.<br>4. Foto upakovki so htrih-kodom, esli ona ostalas.<br>5. Kommentarii, v kotorom podrobno opisano, hto slomano i kak vy eto vyasnili.</details>
+                            * `reject3` — otklonit s hablonom otveta: <details><summary><strong>Napravit v servisnyi centr</strong></summary>Zdravstvuite!<br>My vnimatelno prohitali zaavku, proverili foto i video. K sohaleniu, my ne nahli brak, povrehdenie ili nesootvetstvie opisaniu v vahem tovare.<br>Obratites napramuu v servisnyi centr — ego adres i kontakty est na saite proizvoditela ili na garantiinom talone. Tam provedut okonhatelnuu proverku tovara i vydadut vam akt. Esli centr nahel brak, to otpravte etot akt v hat na nahem saite.</details>
+                            * `rejectcustom` — otklonit s kommentariem.<br> Kommentarii peredaetsa v parametre `comment`.
+                            * `approvecc1` — odobrit zaavku s vozvratom tovara v magazin prodavca.<br>Mohno peredat kommentarii (naprimer, telefon dla svazi ili vrema raboty svoego otdela vozvratov) v parametre `comment`. Po itogu vozvrata neobhodimo otvetit na zaavku s `"action":"confirmreturngoodcc1"` ili `"action":"rejectcustom"`.<br>Primenimo tolko pri sheme <b>Samovyvoz</b>.
+                            * `confirmreturngoodcc1` — podtverdit priemku tovara ot pokupatela.<br>Primenimo tolko pri sheme <b>Samovyvoz</b>.
+                        items:
+                          type: string
+                      price:
+                        type: number
+                        description: Faktiheskaa cena s uhetom vseh skidok. Vzimaetsa s pokupatela
+                      currency_code:
+                        type: string
+                        description: Kod valuty ceny
+              total:
+                type: integer
+                description: Kolihestvo zaavok, sootvetstvuuhih parametram zaprosa. Bez uheta `limit` i `offset`
+    ErrorInternalResponse:
+      description: Vnutrennaa ohibka servisa
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "Internal server error"
+    Error400GetClaims:
+      description: Nekorrektnyi zapros
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: ID ohibki
+                example: Invalid query params
+              detail:
+                description: Opisanie ohibki
+                type: string
+                example: "Failed to deserialize query string: missing field `is_archive`"
+              requestId:
+                description: ID zaprosa
+                type: string
+                example: e0aedc10-9789-49c1-9a83-d8422b4703dc
+    Error400PatchClaim:
+      description: Nekorrektnyi zapros
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: ID ohibki
+                example: Validation error
+              detail:
+                description: Opisanie ohibki
+                type: string
+                example: "Input model is not valid; Details: The Action field is required."
+              requestId:
+                description: ID zaprosa
+                type: string
+                example: 0HN3PI6JUGFSL:00000004
+  requestBodies:
+    PatchClaimReq:
+      required: true
+      description: "Otvet na zaavku"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                description: ID zaavki
+                type: string
+                format: UUID
+                example: fe3e9337-e9f9-423c-8930-946a8ebef80
+              action:
+                description: Deistvie s zaavkoi.<br>Ispolzuite odno iz znahenii massiva `actions` — otveta [metoda poluhenia zaavok](./#/paths/~1api~1v1~1claims/get)
+                type: string
+                example: "rejectcustom"
+              comment:
+                description: Kommentarii.<br>Primenimo tolko pri `"action":"rejectcustom"` ili `"action":"approvecc1"`. Pri `"action":"rejectcustom"` parametr obazatelen
+                type: string
+                minLength: 10
+                maxLength: 1000
+                example: Foto ne imeet otnohenia k tovaru v zaavke
+            required:
+              - id
+              - action
+  parameters:
+    limit:
+      in: query
+      name: limit
+      description: Kolihestvo zaavok v otvete. Po umolhaniu `50`
+      schema:
+        type: integer
+        format: uint
+        minimum: 1
+        maximum: 200
+        example: 50
+    offset:
+      in: query
+      name: offset
+      description: Posle kakogo elementa vydavat dannye. Po umolhaniu `0`
+      schema:
+        type: integer
+        format: uint
+        minimum: 0
+        example: 0
+    is_archive:
+      in: query
+      name: is_archive
+      description: | 
+        Sostoanie zaavki:
+          * `false` — na rassmotrenii
+          * `true` — v arhive
+      required: true
+      schema:
+        type: boolean
+        example: true
+    id:
+      in: query
+      name: id
+      description: ID zaavki
+      schema:
+        type: string
+        format: UUID
+        example: fe3e9337-e9f9-423c-8930-946a8ebef80
+    nm_id:
+      in: query
+      name: nm_id
+      description: Artikul WB
+      schema:
+        type: integer
+        example: 196320101
+  securitySchemes:
+    HeaderApiKey:
+      type: apiKey
+      name: Authorization
+      in: header
