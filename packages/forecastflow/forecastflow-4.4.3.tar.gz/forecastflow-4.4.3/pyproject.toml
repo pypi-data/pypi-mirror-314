@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "forecastflow"
+version = "4.4.3"
+description = "ForecastFlow Python API"
+# readme = "README.md"
+authors = ["GRI, Inc <forecastflow@gri.jp>"]
+license = "Apache-2.0"
+homepage = "https://forecastflow.jp/"
+packages = [{ include = "forecastflow" }]
+
+[tool.poetry.dependencies]
+python = ">=3.8, <3.11"
+pandas = ">=1.3.0"
+requests = ">=2.13.0"
+toml = ">=0.10.0"
+google-cloud-storage = { version = ">=1.24.0", optional = true }
+tabpy = { version = ">=0.8.9", optional = true }
+pyarrow = { version = ">=3.0.0", optional = true }
+
+[tool.poetry.extras]
+gcs = ["google-cloud-storage"]
+tabpy = ["tabpy"]
+parquet = ["pyarrow"]
+
+[tool.poetry.group.dev.dependencies]
+black = ">=22.8.0"
+mypy = ">=0.971"
+pytest = ">=7.0.1"
+pytest-timeout = "^1.4.2"
+ipykernel = "^6.29.5"
+
+[tool.black]
+target-version = ["py36", "py37", "py38", "py39", "py310"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
