@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "gravitools.__version__"}
+
+[project]
+name = "gravitools"
+description = "A collection of tools for gravimeter data analysis"
+authors = [
+  {name = "Marvin Reich", email = "mreich@gfz-potsdam.de"},
+  {name = "Julian Glässel", email = "julian.glaessel@bkg.bund.de"},
+]
+keywords = ["gravimetry", "gravimeter", "geodesy"]
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+dynamic = ["version"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Hydrology",
+  "Topic :: Scientific/Engineering",
+]
+requires-python = ">= 3.8"
+dependencies = [
+  "allantools",
+  "fpdf2",
+  "matplotlib",
+  "netCDF4",
+  "numpy",
+  "packaging",
+  "pandas",
+  "pyyaml",
+  "requests",
+  "xarray",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-cov",
+]
+docs = [
+  "mkdocs",
+  "mkdocs-jupyter",
+  "mkdocs-material",
+  "mkdocstrings-python",
+]
+dashboard = [
+  "pyqtgraph",
+  "PySide6",
+]
+all = [
+  "pytest",
+  "pytest-cov",
+  "mkdocs",
+  "mkdocs-jupyter",
+  "mkdocs-material",
+  "mkdocstrings-python",
+  "pyqtgraph",
+  "PySide6",
+]
+
+[project.scripts]
+gt-aqg-proc = "gravitools.aqg.cli:main"
+
+[project.gui-scripts]
+gt-aqg-dash = "gravitools.aqg.dashboard:main"
+
+[project.urls]
+Repository = "https://gitlab.opencode.de/bkg/gravitools"
+Documentation = "https://gravitools.readthedocs.io/"
+Issues = "https://gitlab.opencode.de/bkg/gravitools/-/issues"
+Changelog = "https://gitlab.opencode.de/bkg/gravitools/-/blob/main/CHANGELOG.md"
+
+[tool.pytest.ini_options]
+# Include example code in docstrings
+addopts = "--doctest-modules"
+
+[tool.isort]
+profile = "black"
+filter_files = true
+force_sort_within_sections = true
