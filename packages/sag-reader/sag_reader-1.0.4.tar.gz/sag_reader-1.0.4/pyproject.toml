@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools==75.6.0", "wheel==0.45.1", "setuptools-scm==8.1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sag-reader"
+description = "Python app to read CISA Software Acquisition Guide Spreadsheets based on CISA format https://cisa.gov/sag"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.10"
+authors = [
+    { name = "Richard (Dick) Brooks", email = "dick@reliableenergyanalytics.com" },
+    { name = "Joseph Wortmann", email = "joseph.wortmann@gmail.com" },
+]
+keywords = ["Software Acquisition Guide", "CISA", "Secure by Design"]
+dynamic = ["version"]
+
+dependencies = [
+    "openpyxl==3.1.5",
+    "pandas==2.2.3",
+    "typer==0.15.1",
+    "xlrd==2.0.1",
+]
+
+[project.scripts]
+sag-reader = "sag_reader:main"
+
+[project.optional-dependencies]
+# If you have any optional dependencies, they would be listed here.
+
+[project.urls]
+Homepage = "https://github.com/rjb4standards/CISASAGReader"
+Repository = "https://github.com/rjb4standards/CISASAGReader.git"
+Issues = "https://github.com/rjb4standards/CISASAGReader/issues"
+
+
+[tool.setuptools.packages.find]
+include = ["*"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "dirty-tag"
