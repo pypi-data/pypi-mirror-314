@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "twinlab"
+version = "2.19.0"
+description = "twinLab - Probabilistic Machine Learning for Engineers"
+homepage = "https://twinlab.ai"
+documentation = "https://twinlab.ai"
+authors = ["digiLab Solutions Ltd. <twinlab@digilab.co.uk>"]
+maintainers = ["twinLab Product Team <twinlab@digilab.co.uk>"]
+keywords = ["machine-learning", "AI", "cloud", "twinLab", "digiLab"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.13"
+kiwisolver = "=1.4.6"
+matplotlib = "^3.7"
+numpy = [
+    { version = "^1.24", python = ">=3.8,<3.9" },
+    { version = "^1.26", python = ">=3.9,<3.13" },
+]
+pandas = [
+    { version = "^1.5.3", python = ">=3.8,<3.9" },
+    { version = "^2.1.4", python = ">=3.9,<3.13" },
+    # Note this version of pandas can be bumped once remove support for 3.8
+    # This is due to the deprecation of DataFrame.applymap
+]
+python-dotenv = "^1.0.0"
+requests = "^2.28.2"
+typeguard = "^4.0.0"
+deprecated = "^1.2.14"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+ipykernel = "^6.22.0"
+IPython = "^8.11"
+pytest = "^7.1.2"
+pytest-timeout = "^2.3.1"
+pytest-cov = "^3.0.0"
+pytest-regtest = "^1.5.1"
+pytest-regressions = "^2.5.0"
+isort = "^5.13.2"
+# flake8 = "^7.1.0"
+setuptools = "^70.3.0" # Needed for pytest-regtest in Python 3.12
+
+# NOTE: Ensure the compatibility tests are not run by default
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib -m 'not compatibility'"
+markers = [
+    "compatibility: marks tests as compatibility (deselect with '-m \"not compatibility\"')",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
