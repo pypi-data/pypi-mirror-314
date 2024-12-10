@@ -1,0 +1,7 @@
+mkdir inplace
+mv doc.tex biblio.bib inplace
+$PYTHON ../rubber.py $VERBOSE --inplace         inplace/doc.tex
+[ -r inplace/doc.bbl ]
+$PYTHON ../rubber.py $VERBOSE --inplace --clean inplace/doc.tex
+mv inplace/doc.tex inplace/biblio.bib .
+rmdir inplace

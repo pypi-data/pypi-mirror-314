@@ -1,0 +1,81 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "latex-rubber"
+dynamic = ["version"]
+description = "an automated system for building LaTeX documents"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {text = "GPL-3.0-or-later"}
+requires-python = ">=3.8"
+authors = [
+    { name = "Sebastian Kapfer", email = "sebastian.kapfer@fau.de" },
+]
+maintainers = [
+    { name = "Florian Schmaus", email = "flo@geekplace.eu" },
+]
+
+[project.urls]
+Homepage = "https://gitlab.com/latex-rubber/rubber"
+
+[project.scripts]
+rubber = "rubber.cmdline:main_rubber_plain"
+rubber-info = "rubber.cmdline:main_rubber_info"
+rubber-lsmod = "rubber.cmdline:main_rubber_lsmod"
+rubber-pipe = "rubber.cmdline:main_rubber_pipe"
+
+[tool.hatch.version]
+path = "rubber/version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    # Files in Git
+    "*.in",
+    "/man/fr/man1/rubber-pipe.1",
+    "/man/man1/rubber-pipe.1",
+    "/misc/zsh-completion",
+    "/NEWS",
+    "/rubber",
+    "/tests",
+
+    # Generated files
+    # NOTE: Keep in sync with .targets.wheel.shared-data below
+    "/doc/rubber/rubber.html",
+    "/doc/rubber/rubber.info",
+    "/doc/rubber/rubber.pdf",
+    "/doc/rubber/rubber.texi",
+    "/doc/rubber/rubber.txt",
+    "/man/fr/man1/rubber.1",
+    "/man/fr/man1/rubber-info.1",
+    "/man/man1/rubber.1",
+    "/man/man1/rubber-info.1",
+]
+
+[tool.hatch.build.targets.wheel.shared-data]
+# NOTE that
+#      - this list is targeting a complete build, not a fresh Git clone
+#      - typos here will not fail the build but produce incomplete
+#        archives (as of hatchling 1.21.1).  So be careful please.
+#      - this should remain in sync with .targets.sdist above
+"doc/rubber/rubber.html" = "share/doc/rubber/rubber.html"
+"doc/rubber/rubber.info" = "share/doc/rubber/rubber.info"
+"doc/rubber/rubber.pdf" = "share/doc/rubber/rubber.pdf"
+"doc/rubber/rubber.texi" = "share/doc/rubber/rubber.texi"
+"doc/rubber/rubber.txt" = "share/doc/rubber/rubber.txt"
+"man/fr/man1/rubber.1" = "share/man/fr/man1/rubber.1"
+"man/fr/man1/rubber-info.1" = "share/man/fr/man1/rubber-info.1"
+"man/fr/man1/rubber-pipe.1" = "share/man/fr/man1/rubber-pipe.1"
+"man/man1/rubber.1" = "share/man/man1/rubber.1"
+"man/man1/rubber-info.1" = "share/man/man1/rubber-info.1"
+"man/man1/rubber-pipe.1" = "share/man/man1/rubber-pipe.1"
+"misc/zsh-completion" = "share/zsh/site-functions/_rubber"
+
+[tool.hatch.build.targets.wheel]
+packages = ["rubber"]
+
+# These two empty sections enable the custom build hook
+# in file `hatch_build.py`.
+# (https://hatch.pypa.io/1.9/config/build/#build-hooks)
+[tool.hatch.build.targets.sdist.hooks.custom]
+[tool.hatch.build.targets.wheel.hooks.custom]

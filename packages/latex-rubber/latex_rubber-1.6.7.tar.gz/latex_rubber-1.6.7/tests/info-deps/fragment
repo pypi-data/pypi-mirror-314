@@ -1,0 +1,16 @@
+$PYTHON ../rubber.py $VERBOSE -d doc.tex
+# the result depends on the verbosity level.
+
+$PYTHON ../rubber-info.py $VERBOSE --deps doc > stdout
+
+case `wc -w < stdout` in
+    2|24|38)
+        ;;
+    *)
+        echo "rubber-info returned an unexpected word count"
+        cat stdout
+        exit 1
+        ;;
+esac
+rm stdout
+$PYTHON ../rubber.py $VERBOSE -d --clean doc

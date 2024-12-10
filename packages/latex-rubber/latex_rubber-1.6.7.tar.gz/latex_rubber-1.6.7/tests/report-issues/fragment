@@ -1,0 +1,14 @@
+#!/bin/bash
+
+RUBBER_STDERR=$(mktemp)
+
+$PYTHON ../rubber.py --warn all main 2> >(tee "${RUBBER_STDERR}")
+
+if ! grep -qF "Overfull \hbox" "${RUBBER_STDERR}"; then
+	echo "Rubber did not report an overfull hbox on stderr" 2>&1
+	exit 1
+fi
+
+rm "${RUBBER_STDERR}"
+
+$PYTHON ../rubber.py --clean main

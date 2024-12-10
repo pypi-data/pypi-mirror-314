@@ -1,0 +1,7 @@
+mkdir sub
+mv biblio.bib sub
+$PYTHON ../rubber.py $VERBOSE doc.tex
+[ -r doc.bbl ]
+$PYTHON ../rubber.py $VERBOSE --clean doc.tex
+mv sub/biblio.bib .
+rmdir sub

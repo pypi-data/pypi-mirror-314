@@ -1,0 +1,10 @@
+$PYTHON ../rubber.py $VERBOSE --pdf doc.tex
+rm doc.pdf
+$PYTHON ../rubber.py $VERBOSE --pdf doc.tex
+
+if [[ ! -f doc.pdf ]]; then
+   echo "ERROR: rubber did not rebuild although the end-product is missing"
+   exit 1
+fi
+
+$PYTHON ../rubber.py $VERBOSE --clean --pdf doc.tex
