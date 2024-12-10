@@ -1,0 +1,89 @@
+Metadata-Version: 2.1
+Name: dopplrSDKtest
+Version: 1.11
+Summary: UNKNOWN
+Home-page: UNKNOWN
+Author: Anand
+Author-email: anandt@systechusa.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+Requires-Dist: psycopg2-binary (==2.9.9)
+Requires-Dist: pandas (==2.2.0)
+Requires-Dist: boto3 (==1.26.153)
+Requires-Dist: pycryptodome (==3.18.0)
+Requires-Dist: cryptography (==41.0.1)
+Requires-Dist: azure-storage-blob (==12.15.0)
+Requires-Dist: botocore (==1.29.153)
+
+
+Definition:
+
+	dopplrSDK is a software development kit that provides a set of functionalities for working with Dopplr, a data management and analytics platform. 
+	It offers convenient methods to interact with Dopplr's DataLake and perform various operations such as uploading files and retrieving files in ML Studio.
+
+Installation Procedure:
+
+	To install the dopplrSDK, please visit https://pypi.org/project/dopplrSDK
+	(OR)
+ 	pip install dopplrSDK
+
+
+It have 7 functions , those are putFileTomywrkspace, putFolderTomywrkspace, getWorkspaceFile, getWorkspaceFolderFiles and getWorkspaceFile_URL 
+
+1.	The function putFileToMyWorkspace() is designed to return your file to the DataLake. You can use the following syntax:
+
+putFileToMyWorkspace("File Path without file extension", "File Type", "user name","Project_name", "client Key") – [client key common for all users]
+
+For example:
+putFileToMyWorkspace("C:\Downloads\customer", "csv", "Dhoni","demo",  "client key")
+
+2.	The function putFileTomywrkspace_Ingestion() is designed to return your file to the DataLake and ingest data into druid. You can use the following syntax:
+
+putFileTomywrkspace_Ingestion("File Path without file extension", "File Type", "user name","Project_name","Option" "client Key") – [client key common for all users]
+
+For example:
+putFileTomywrkspace_Ingestion("C:\Downloads\customer", "csv", "Dhoni","demo","yes"  "client key")
+
+3.	The function putFileTomywrkspace_Profiling() is designed to return your file to the DataLake,ingest data into druid and will do pandas profiling. You can use the following syntax:
+
+putFileTomywrkspace_Profiling("File Path without file extension", "File Type", "user name","Project_name","Option" "client Key") – [client key common for all users]
+
+For example:
+putFileTomywrkspace_Profiling("C:\Downloads\customer", "csv", "Dhoni","demo","yes"  "client key")
+
+
+4.	The function putFolderTomywrkspace() is designed to return your folder to the DataLake. You can use the following syntax:
+
+putFolderTomywrkspace("Folder Path ", "Target name", "user name","Project_name", "client Key") – [client key common for all users]
+
+For example:
+putFolderTomywrkspace ("C:\Downloads\folder", " Target name ", "Dhoni","demo",  "client key")
+
+
+5.	The function  getWorkspaceFile() is designed to retrieve  your file from the Data Lake with the following parameters:
+getWorkspaceFile("File Name", "Download Path", "user name", "client key")
+
+For example:
+getWorkspaceFile("customer.csv", "C:\Downloads\", "Dhoni", "client key")
+
+
+
+
+6.	The function getWorkspaceFolderFiles() is designed to retrieve your files from the folder from the datalake with the following parameters:
+
+getWorkspaceFolderFiles("folder","Download Path","user name", "client key")
+
+For example:
+
+getWorkspaceFolderFiles("customer","C:\Downloads\", "Dhoni", "client key")
+
+7.	The function getWorkspaceFile_URL() () is designed to retrieve pre-signed URL of your file from the storage with the following parameters:
+getWorkspaceFile_URL(("File Name", "user name", "client key")
+
+NOTE:
+	Please contact admin team for client key
+
