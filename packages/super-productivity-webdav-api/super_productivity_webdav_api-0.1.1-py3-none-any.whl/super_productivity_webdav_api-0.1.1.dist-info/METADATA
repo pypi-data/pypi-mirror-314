@@ -1,0 +1,56 @@
+Metadata-Version: 2.1
+Name: super_productivity_webdav_api
+Version: 0.1.1
+Summary: A python API for managing Super Productivity tasks through webdav.
+Author-email: Arnoud van Heuvelen <avanheuvelen@pm.me>
+License: MIT
+Project-URL: homepage, https://github.com/avanheuvelen/super-productivity-webdav-api
+Project-URL: repository, https://github.com/avanheuvelen/super-productivity-webdav-api
+Project-URL: issues, https://github.com/avanheuvelen/super-productivity-webdav-api/issues
+Keywords: webdav,task management,super-productivity
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: webdav4>=0.10
+Requires-Dist: nanoid>=2.0
+
+# Super Productivity Webdav API
+This is a Python package that allows you to interact with a WebDAV server to manage tasks for [Super Productivity](https://super-productivity.com/).
+
+## Features
+- Currently only supports adding tasks.
+- Handle ETag changes to avoid conflicts.
+- Uses Basic Auth to authenticate to the webdav server.
+
+## Installation
+Install using pip:
+```
+pip install super-productivity-webdav-api
+```
+
+## Requirements
+- A WebDAV server to which Super Productivity is syncing
+
+## Usage:
+
+```
+from super_productivity_webdav_api.client import Client
+
+# Initialize the client
+client = Client(
+    url="https://your-webdav-server.com",
+    username="your-username",
+    password="your-password",
+    remote_path="/super-productivity/"
+)
+
+# Add a task
+client.add_task("My New Task")
+```
+
+- By default the tasks are added to your Inbox (with projectId "INBOX").
+- Remote path is the folder in which your `MAIN.json` lives. Do not include the filename.
+
+Adding tasks to another project should be possible, you will have to find the projectId in the JSON file and add it as an arg to `add_task`
