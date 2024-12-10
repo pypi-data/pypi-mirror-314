@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "tesseract-olap"
+version = "0.14.2"
+description = "A simple OLAP library."
+authors = [
+    "Francisco Abarzua <francisco@datawheel.us>",
+    "Jelmy Hermosilla <jelmy@datawheel.us>",
+    "Samuel Osorio <samuel@datawheel.us>",
+]
+maintainers = ["Francisco Abarzua <francisco@datawheel.us>"]
+license = "MIT"
+readme = "PACKAGE.md"
+repository = "https://github.com/Datawheel/tesseract-python"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+clickhouse-cityhash = { version = "^1.0.2.4", optional = true }
+clickhouse-driver = { extras = ["lz4"], version = "^0.2.0", optional = true }
+httpx = ">=0.18.0 <1.0"
+immutables = ">=0.16 <1.0"
+lfudacache = "^0.0.2"
+lxml = "^4.6.0"
+orjson = "^3.9.15"
+polars = "^1.0"
+pydantic = "^2.9.2"
+pyparsing = "^3.1.2"
+PyPika = ">=0.48.0 <1.0"
+python-dateutil = "^2.9.0.post0"
+redis = { version = "^5.0.0", optional = true }
+strenum = "^0.4.15"
+typing-extensions = ">=4.5.0"
+xlsxwriter = "^3.2.0"
+xmlschema = "^3.3.1"
+
+[tool.poetry.extras]
+clickhouse = ["clickhouse-driver", "clickhouse-cityhash"]
+redis = ["redis"]
+
+[tool.poetry.group.dev.dependencies]
+clickhouse-cityhash = "^1.0.2.4"
+clickhouse-driver = "^0.2.0"
+fastapi-slim = ">=0.111.0"
+granian = { extras = ["reload"], version = "^1.1.2" }
+logiclayer = "^0.4.0"
+pytest = "^8.0.0"
+pytest-asyncio = "^0.20.0"
+redis = "^5.0.3"
+sqlparse = "^0.4.0"
+tomli = "^2.0.1"
+types-lxml = "^2024.11.8"
+
+[tool.pyright]
+pythonVersion = "3.8"
+reportCallInDefaultInitializer = "hint"
+reportMissingTypeStubs = false
+reportUnknownMemberType = "hint"
+reportUnreachable = "hint"
+venv = ".venv"
+venvPath = "."
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
