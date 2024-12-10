@@ -1,0 +1,2 @@
+ACTIVE_ON= "ON"
+ACTIVE_OFF = "OFF"
