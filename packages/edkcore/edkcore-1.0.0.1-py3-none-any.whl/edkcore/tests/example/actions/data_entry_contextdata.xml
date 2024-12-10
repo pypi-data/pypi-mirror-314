@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EDK xmlns="http://www.edkcore.org/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.edkcore.org/XMLSchema edk-core.xsd">
+<ContextData class="edkcore.support.context.context_action_data.ContextActionData">
+    <Persistents>
+        <PersistentDevice name="memory" class="edkcore.support.persistents.dict_persistent_device.DictPersistentDevice" />
+    </Persistents>
+    <Datas>
+        <Data dataType="str" name="SiteCode" inputBy="User">
+            <Getter userInput="Site001"/>
+        </Data>
+        <Data dataType="str" name="SubjectName" inputBy="User">
+            <Getter userInput="Subj002"/>
+        </Data>
+        <Data dataType="str" name="Visit" inputBy="User">
+            <Getter userInput="Screening"/>
+        </Data>
+        <Data dataType="str" name="Form" inputBy="User">
+            <Getter userInput="Informed Consent"/>
+        </Data>
+        <Data dataType="str" name="Ig" inputBy="User">
+            <Getter userInput="SN 1"/>
+        </Data>
+        <Data dataType="int" name="odmId" inputBy="Sys">
+            <Getter userInput="" class="edkcore.tests.example.actions.getter.odm_id_getter.OdmIdGetter"/>
+        </Data>
+        <Data dataType="dict" name="ODM" inputBy="Sys">
+            <Getter userInput="" class="edkcore.tests.example.actions.getter.odm_getter.ODMGetter"/>
+            <Persistent ref="memory">
+                <Persistence class="edkcore.tests.example.persistence.odm_persistence.OdmPersistence" />
+                <Serialize class="edkcore.tests.example.serialize.odm_serialize.OdmSerialize" />
+            </Persistent>
+        </Data>
+    </Datas>
+</ContextData>
+</EDK>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<EDK xmlns="http://www.edkcore.org/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.edkcore.org/XMLSchema edk-core.xsd">
+<MetaAction class="class1" contextData="contextData1">
+    <Properties>
+        <Property name="Description">进入指定的Site,根据系统生产的受试者名创建受试者</Property>
+    </Properties>
+    <ACS>
+        <MetaAction class="class2">
+            <Properties>
+                <Property name="Description">进入Study页面获取Site所有信息</Property>
+            </Properties>
+        </MetaAction>
+        <MetaAction class="class3">
+            <Properties>
+                <Property name="Description">根据指定的SiteCode获取系统生成的受试者名</Property>
+
+            </Properties>
+        </MetaAction>
+        <MetaAction class="class4">
+            <Properties>
+                <Property name="Description">根据系统自动生成的受试者名,创建受试者</Property>
+            </Properties>
+            <ACS>
+                <MetaAction class="Y1" contextData="contextDataY1">
+                    <Properties>
+                        <Property name="Description">根据指定的SiteCode获取系统生成的受试者名</Property>
+
+                    </Properties>
+                </MetaAction>
+                <MetaAction class="Y2">
+                    <Properties>
+                        <Property name="Description">根据指定的SiteCode获取系统生成的受试者名</Property>
+
+                    </Properties>
+                </MetaAction>
+                <ContextAction class="Y3" />
+            </ACS>
+        </MetaAction>
+        <AssertAction class="Aclass5">
+            <Properties>
+                <Property name="Description">测试AssertAction</Property>
+            </Properties>
+            <Expects>
+                <Field name='字段名1' description='描述1' expect='期望值1'/>
+                <Field name='字段名2' description='描述2' expect='期望值2'/>
+                <Field name='字段名3' description='描述3' expect='期望值3'/>
+                <Field name='字段名4' description='描述4' expect='期望值4'/>
+                <Field name='字段名5' description='描述5' expect='期望值5'/>
+            </Expects>
+        </AssertAction>
+        <ContextAction class="Cclass1"/>
+    </ACS>
+</MetaAction>
+</EDK>

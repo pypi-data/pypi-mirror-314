@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EDK xmlns="http://www.edkcore.org/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.edkcore.org/XMLSchema edk-core.xsd">
+    <ContextData class="edkcore.tests.test_context_data.simple_xml_context_data.SimpleXMLContextData">
+        <Persistents>
+            <PersistentDevice name="TinyDB"
+                        class="edkcore.tests.test_context_data.external.tinydb_persistent_device.TinydbPersistentDevice">
+                <Configurations>
+                    <Configuration name="path">TinyDB.json</Configuration>
+                </Configurations>
+            </PersistentDevice>
+            <PersistentDevice name="MySQL" class="edkcore.tests.test_context_data.external.mysql_persistent_device.MySqlPersistentDevice">
+                <Configurations>
+                    <Configuration name="host">automation-01.chengdudev.edetekapps.cn</Configuration>
+                    <Configuration name="user">root</Configuration>
+                    <Configuration name="password">123456</Configuration>
+                    <Configuration name="port">3307</Configuration>
+                    <Configuration name="database">context_test</Configuration>
+                </Configurations>
+            </PersistentDevice>
+            <PersistentDevice name="MemoryDict" class="edkcore.support.persistents.dict_persistent_device.DictPersistentDevice">
+            </PersistentDevice>
+        </Persistents>
+        <Datas>
+            <Data dataType="str" name="siteCode" inputBy="User" >
+                <Getter userInput="sss"/>
+            </Data>
+            <Data dataType="int" name="siteCode" inputBy="Sys">
+                <Getter userInput="" class="com.xxxx"/>
+                <Persistent ref="MySQL">
+                    <Persistence class="ssssss"/>
+                    <Serialize class="cccccccc"/>
+                </Persistent>
+            </Data>
+
+
+        </Datas>
+    </ContextData>
+</EDK>

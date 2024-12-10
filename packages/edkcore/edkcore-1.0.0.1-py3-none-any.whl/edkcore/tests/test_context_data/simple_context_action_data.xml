@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EDK xmlns="http://www.edkcore.org/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.edkcore.org/XMLSchema edk-core.xsd">
+<ContextData class="edkcore.support.context.context_action_data.ContextActionData">
+        <Persistents>
+            <PersistentDevice name="TinyDB"
+                        class="edkcore.tests.test_context_data.external.tinydb_persistent_device.TinydbPersistentDevice">
+                <Configurations>
+                    <Configuration name="path">TinyDB.json</Configuration>
+                </Configurations>
+            </PersistentDevice>
+            <PersistentDevice name="MySQL" class="edkcore.tests.test_context_data.external.mysql_persistent_device.MySqlPersistentDevice">
+                <Configurations>
+                    <Configuration name="host">automation-01.chengdudev.edetekapps.cn</Configuration>
+                    <Configuration name="user">root</Configuration>
+                    <Configuration name="password">123456</Configuration>
+                    <Configuration name="port">3307</Configuration>
+                    <Configuration name="database">context_test</Configuration>
+                </Configurations>
+            </PersistentDevice>
+            <PersistentDevice name="MemoryDict" class="edkcore.tests.test_context_data.external.memory_persistent_device.MemoryPersistentDevice">
+            </PersistentDevice>
+        </Persistents>
+        <Datas>
+            <Data dataType="str" name="login" inputBy="User" >
+                <Getter userInput="sss"/>
+                <Persistent ref="MemoryDict">
+                    <Persistence class="edkcore.tests.test_context_data.persistence.login_persistence.LoginPersistence"/>
+                    <Serialize class="edkcore.tests.test_context_data.serialize.login_serialize.LoginSerialize"/>
+                </Persistent>
+            </Data>
+            <Data dataType="int" name="pwd" inputBy="Sys">
+                <Getter userInput="" class="edkcore.tests.test_context_data.getter.pwd_getter.PwdGetter"/>
+                <Persistent ref="TinyDB">
+                    <Persistence class="edkcore.tests.test_context_data.persistence.pwd_persistence.PwdPersistence"/>
+                    <Serialize class="edkcore.tests.test_context_data.serialize.pwd_serialize.PwdSerialize"/>
+                </Persistent>
+            </Data>
+            <Data dataType="str" name="token" inputBy="Sys">
+                <Getter userInput="" class="edkcore.tests.test_context_data.getter.token_getter.TokenGetter"/>
+                <Persistent ref="MySQL">
+                    <Persistence class="edkcore.tests.test_context_data.persistence.token_persistence.TokenPersistence"/>
+                    <Serialize class="edkcore.tests.test_context_data.serialize.token_serialize.TokenSerialize"/>
+                </Persistent>
+            </Data>
+
+
+        </Datas>
+    </ContextData>
+</EDK>
