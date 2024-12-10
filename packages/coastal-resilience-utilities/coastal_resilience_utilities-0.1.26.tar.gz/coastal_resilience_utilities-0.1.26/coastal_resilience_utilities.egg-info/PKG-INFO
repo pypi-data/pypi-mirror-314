@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: coastal-resilience-utilities
+Version: 0.1.26
+Summary: A utility package for coastal resilience analysis.
+Author-email: Chris Lowrie <lowriechris779@gmail.com>
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: xarray
+Requires-Dist: pandas
+Requires-Dist: geopandas
+Requires-Dist: fiona
+Requires-Dist: numpy
+Requires-Dist: rioxarray
+Requires-Dist: rasterio
+Requires-Dist: h5netcdf
+Requires-Dist: matplotlib
+Requires-Dist: google-cloud-storage
+Requires-Dist: pytest
+Requires-Dist: s2sphere
+Requires-Dist: fastparquet
+Requires-Dist: pyarrow
+Requires-Dist: zarr
+Requires-Dist: fsspec
+Requires-Dist: gcsfs
+Requires-Dist: odc-geo
+Requires-Dist: numba==0.60.0
+Requires-Dist: xarray-spatial
+Requires-Dist: s2sphere
+Requires-Dist: pytest
+Requires-Dist: tqdm
+Requires-Dist: memory_profiler
+Requires-Dist: joblib
+
+# Coastal Resilience Utilities
+This repository contains utilities for coastal resilience analysis and design.
+
+## Contents
+- `damage_assessment`: damage assessments based on earth observation data and National Structure Inventory.
+- `damage_assessment_usvi`: damage assessments based on low-res NSI grids + OpenBuildings 
+- `mosaic`: Mosaicking datasets.
+- `summary_stats`: Summarize raster datasets using vector points and polygons.
+- `utils`: A variety of functionality for doing geospatial analysis.  Rasterize, vectorize, fetch features from OSM/OpenBuildings/ArcOnline, extract values from rasters.
+
+## Installation
+The recommended way to install this repo is to use the provided `Makefile` to build a Docker image.
+
+For example:
+```bash
+EXTRA_DOCKER_ARGS="-v <YOUR DATA DIRECTORY>:/data -v /cccr-lab:/cccr-lab" make bash-terminal
+```
+
+There are two env files:
+- `.env`, which at this moment just contains GCP credentials
+- `.data.env`, which maps files necessary for damage assessment
+
+Note that it's a little tricky to guarantee out-of-the-box until we get more developers actively using this repo, but I do attempt to deploy this on multiple computers and make sure things work.  If you have trouble let's work it out!
+
+## Examples
+Check out the testing directory for examples on running analysis.
+
+There are two other relevant repos in Gitlab:
+- Datacube, which basically scales raster analyses
+- GeospatialServices, which runs a variety of servers such as:
+  - Jupyter for an analysis env
+  - Prefect for reproducibility
+  - Tile servers for app development
+
+You don't need either to run, but the examples in GeospatialServices/Jupyter/notebooks are useful to understand using damage assessment.
+
+## Schematic
+The Figjam schematic can be found [here](https://git.ucsc.edu/chlowrie/coastal-resilience-utilities/-/blob/main/coastal_resilience_utilities/damage_assessment/damage_assessment.py?ref_type=heads)
