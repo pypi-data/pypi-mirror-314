@@ -1,0 +1,3 @@
+def {{ ctx.hook_name }}(self{% if ctx.is_init %}, *, is_new_object: bool, kwargs: dict[str, Any]{% endif %}):
+    # TODO: implementation here
+    ...
