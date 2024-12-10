@@ -1,0 +1,49 @@
+[project]
+name = "coloc_sat"
+requires-python = ">= 3.9"
+license = {text = "MIT"}
+dependencies = [
+    "geopandas",
+    "xarray-datatree",
+    "xsar >=2023.8",
+    "numpy",
+    "numba",
+    "xarray",
+    "h5netcdf",
+    "shapely",
+    "fsspec",
+    "affine",
+    "pandas",
+    "geopandas",
+    "dask",
+    "more-itertools",
+    "pyyaml",
+    "pyproj",
+    "xradarsat2",
+    "xarray-safe-s1",
+]
+readme = "README.md"
+dynamic = ["version"]
+
+[build-system]
+requires = ["setuptools>=64.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["coloc_sat"]
+
+[tool.setuptools_scm]
+fallback_version = "0"
+write_to = "coloc_sat/version.py"
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+float_to_top = true
+default_section = "THIRDPARTY"
+known_first_party = "coloc_sat"
+
+[project.scripts]
+Coloc_between_product_and_mission = "coloc_sat.scripts.coloc_between_product_and_mission:main"
+Coloc_2_products = "coloc_sat.scripts.coloc_2_products:main"
+Coloc_from_parquet = "coloc_sat.scripts.coloc_from_parquet:main"
