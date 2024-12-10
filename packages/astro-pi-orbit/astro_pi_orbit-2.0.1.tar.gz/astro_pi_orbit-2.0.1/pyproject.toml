@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "astro_pi_orbit"
+description = "Module for interfacing with the Astro Pi"
+dynamic = ["version"]
+authors = [
+  { name="Ben Nuttall", email="ben@bennuttall.com" },
+  { name="George Boukeas", email="boukeas@gmail.com" },
+  { name="Geraint Ballinger", email="G3zz@users.noreply.github.com" }
+]
+license = {file="LICENSE"}
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent"
+]
+dependencies = [
+  "skyfield"
+]
+
+[tool.setuptools]
+packages = ["astro_pi_orbit"]
+
+[tool.setuptools.dynamic]
+version = {attr = "astro_pi_orbit.__init__.__version__"}
+
+
+# Configure static checkers/tools
+[tool.isort]
+atomic = true
+line_length = 88
+profile = "black"
+skip_gitignore = true
+src_paths = ["astro_pi_orbit", "test"]
+skip_glob = ["test/resources", "venv", "dist", "site", "docs", "scripts"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+(
+  ^/test/resources
+)
+'''
+
+[tool.bandit]
+skips = ["B101", "B404"]
+exclude = ["test/resources"]
+
