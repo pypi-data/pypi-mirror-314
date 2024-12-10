@@ -1,0 +1,1476 @@
+FK_MAKEFILE_VERSION:=1.0.0
+.SUFFIXES: .js .css .html .svg .jpeg .png .htm
+
+# We want variables defined in this Makefile to be available in shells launched in sub-processes
+.EXPORT_ALL_VARIABLES:
+SHELL:=/bin/bash
+
+# We want all docker commands to have buildkit enabled
+DOCKER_BUILDKIT:=1
+
+
+
+# Information
+################################################################################
+
+.PHONY: info
+.PHONY: all
+all: help
+
+
+.PHONY: help-main
+help: help-main
+help-main:
+	@echo ""
+
+	@echo "  ############### Makefile.fk internal state ################"
+	@echo ""
+	@echo "  Information"
+	@echo ""
+	@echo "    info                             - Lists internal variables"
+	@echo "    (env)ironment                    - Lists environment variables"
+#	@echo "    wtf                              - Detect errors in current environment"
+	@echo ""
+
+# This is useful when debugging in CI/CD environments
+.PHONY: environment
+environment:
+	@echo "=== ENV"
+	export -p
+	@echo " "
+
+# Shortcut
+.PHONY: env
+env: environment
+
+
+
+# Settings
+################################################################################
+
+
+
+# Which git branch represents "main" or "release"
+# NOTE: Can be overriden
+FK_RELEASE_BRANCH?=development
+
+# Which git branch represents "beta"
+# NOTE: Can be overriden
+FK_BETA_BRANCH?=beta
+
+# The python virtual environment we will use
+FK_VENV_NAME:=fk_venv
+
+# A python this makefile can invoke
+FK_PYTHON:=python3
+
+# We add these variables to the info target
+.PHONY: info-settings
+info: info-settings
+info-settings:
+	@echo ""
+	@echo "############### Settings ################"
+	@echo ""
+	@echo "FK_RELEASE_BRANCH:  $(FK_RELEASE_BRANCH)"
+	@echo "FK_BETA_BRANCH: $(FK_BETA_BRANCH)"
+	@echo "FK_VENV_NAME: $(FK_VENV_NAME)"
+	@echo ""
+
+
+
+
+# Gitlab CI/CD
+################################################################################
+
+
+# TODO: Not exactly sure how this all works. Fix this section once we figure it out!
+FK_NAMESPACE:=merchbot-$(FK_GIT_ACTUAL_BRANCH)
+GITLAB_CACHE_DIR:=$(shell pwd)/gitlab_cache
+GOOGLE_APPLICATION_CREDENTIALS_EMAIL:=${GOOGLE_APPLICATION_CREDENTIALS_EMAIL}
+GOOGLE_APPLICATION_CREDENTIALS:=${GOOGLE_APPLICATION_CREDENTIALS}
+GOOGLE_APPLICATION_CREDENTIALS_TEMP:=/tmp/GOOGLE_APPLICATION_CREDENTIALS.secret
+
+
+# We add these variables to the info target
+.PHONY: info-gitlab
+info: info-gitlab
+info-gitlab:
+	@echo ""
+	@echo "############### Gitlab CI/CD ################"
+	@echo ""
+	@echo "GOOGLE_APPLICATION_CREDENTIALS_EMAIL: $(GOOGLE_APPLICATION_CREDENTIALS_EMAIL)"
+	@echo "GOOGLE_APPLICATION_CREDENTIALS:       $(GOOGLE_APPLICATION_CREDENTIALS)"
+	@echo "GOOGLE_APPLICATION_CREDENTIALS_TEMP:  $(GOOGLE_APPLICATION_CREDENTIALS_TEMP)"
+	@echo "FK_NAMESPACE:                         $(CI_COMMIT_TAG)"
+	@echo "GITLAB_CACHE_DIR:                     $(GITLAB_CACHE_DIR)"
+	@echo "CI_COMMIT_TAG:                        $(CI_COMMIT_TAG)"
+	@echo "CI_PROJECT_DIR:                       $(CI_PROJECT_DIR)"
+
+	@echo ""
+	
+
+
+
+
+# Project directories
+################################################################################
+
+
+FK_PREV_MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+
+# Use abspath to convert it to an absolute path
+FK_INCLUDING_MAKEFILE := $(abspath $(FK_PREV_MAKEFILE))
+
+# The directory in which the top-level Makefile resides
+FK_ROOT_DIR:=$(patsubst %/,%, $(dir $(FK_INCLUDING_MAKEFILE)))
+
+# The directory where software tests reside, when applicable
+FK_TESTS_DIR:=${FK_ROOT_DIR}/tests
+
+# The directory where code quality tools reside, when applicable
+FK_CODE_QUALITY_DIR:=${FK_ROOT_DIR}/code_quality
+
+# The directory where python requirements reside, when applicable
+FK_REQUIREMENTS_DIR:=${FK_ROOT_DIR}/requirements
+
+# The file in which the one source of version resides
+FK_VERSION_FILE:=$(FK_ROOT_DIR)/VERSION
+
+# A temporary file used during execution of version bump targets
+FK_VERSION_FILE_TMP:=$(FK_ROOT_DIR)/VERSION.tmp
+
+
+
+
+# We add these variables to the info target
+.PHONY: info-project-directories
+info: info-project-directories
+info-project-directories:
+	@echo ""
+	@echo "############### Project version ################"
+	@echo ""
+	@echo "MAKEFILE_LIST:         $(MAKEFILE_LIST)"
+	@echo "FK_PREV_MAKEFILE:      $(FK_PREV_MAKEFILE)"
+	@echo "FK_INCLUDING_MAKEFILE: $(FK_INCLUDING_MAKEFILE)"
+	@echo "FK_ROOT_DIR:           $(FK_ROOT_DIR)"
+	@echo "FK_TESTS_DIR:          $(FK_TESTS_DIR)"
+	@echo "FK_CODE_QUALITY_DIR:   $(FK_CODE_QUALITY_DIR)"
+	@echo "FK_REQUIREMENTS_DIR:   $(FK_REQUIREMENTS_DIR)"
+	@echo "FK_VERSION_FILE:       $(FK_VERSION_FILE)"
+	@echo "FK_VERSION_FILE_TMP:   $(FK_VERSION_FILE_TMP)"
+
+	@echo ""
+	
+
+# Project version
+################################################################################
+
+# The bare version number as read from the one source version file
+FK_BARE_VERSION:=$(shell cat "$(FK_ROOT_DIR)/VERSION")
+
+# NOTE: Prefers the value if set in the environment. This allows the value to be set from gitlab during CI/CD
+CI_COMMIT_REF_NAME?=$(shell git rev-parse --abbrev-ref HEAD)
+
+# The currently selected git branch
+FK_GIT_ACTUAL_BRANCH:=$(CI_COMMIT_REF_NAME)
+
+# The current git commit's hash
+FK_GIT_HASH:=$(shell git rev-parse HEAD)
+
+# A shortened version of the full git commit's hash
+FK_GIT_HASH_SHORT:=$(shell git rev-parse --short HEAD)
+
+# The timestamp right now on simplified ISO format
+FK_BUILD_DATE:=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
+
+
+# The calculated version string based on current branch and bare version
+ifeq ($(FK_GIT_ACTUAL_BRANCH),$(FK_RELEASE_BRANCH))
+# If we are on the release branch, version string is bare
+FK_VERSION_STRING := $(FK_BARE_VERSION)
+else ifeq ($(FK_GIT_ACTUAL_BRANCH),$(FK_BETA_BRANCH))
+# If we are on the beta branch, version string is bare version + "b"
+FK_VERSION_STRING := $(FK_BARE_VERSION)b
+else ifneq ($(findstring feature-,$(FK_GIT_ACTUAL_BRANCH)),)
+# If we are on a feature branch, version string is branch-name + bare version
+#FK_VERSION_STRING := $(FK_GIT_ACTUAL_BRANCH)-$(FK_BARE_VERSION)
+FK_VERSION_STRING := $(FK_BARE_VERSION)-$(subst feature-,,$(FK_GIT_ACTUAL_BRANCH))
+else
+# Fall back to bare version + "-nonprod"
+FK_VERSION_STRING := $(FK_BARE_VERSION)-nonprod
+endif
+
+
+
+# We add these variables to the info target
+.PHONY: info-project-version
+info: info-project-version
+info-project-version:
+	@echo ""
+	@echo "############### Project version ################"
+	@echo ""
+	@echo "FK_VERSION_STRING:    $(FK_VERSION_STRING)"
+	@echo "CI_COMMIT_REF_NAME:   $(CI_COMMIT_REF_NAME)"
+	@echo "FK_GIT_ACTUAL_BRANCH: $(FK_GIT_ACTUAL_BRANCH)"
+	@echo "FK_GIT_HASH:          $(FK_GIT_HASH)"
+	@echo "FK_GIT_HASH_SHORT:    $(FK_GIT_HASH_SHORT)"
+	@echo "FK_BUILD_DATE:        $(FK_BUILD_DATE)"
+	@echo "FK_BARE_VERSION:      $(FK_BARE_VERSION)"
+	@echo ""
+
+
+
+# Project name
+################################################################################
+
+
+# The project's group name in domain form (hyphen allowed, underscore not)
+# NOTE: Should be set outside!
+FK_PROJECT_GROUP_BASE_NAME_D?=FK_PROJECT_GROUP_BASE_NAME_D_UNSET
+
+# The project's base name in domain form (hyphen allowed, underscore not)
+# NOTE: Should be set outside!
+FK_PROJECT_BASE_NAME_D?=FK_PROJECT_BASE_NAME_D_UNSET
+
+# The project's group name in variable form
+FK_PROJECT_GROUP_BASE_NAME_V:=$(subst -,_,$(FK_PROJECT_GROUP_BASE_NAME_D))
+
+# The project's base name in variable form
+FK_PROJECT_BASE_NAME_V:=$(subst -,_,$(FK_PROJECT_BASE_NAME_D))
+
+# The project's git name
+FK_PROJECT_GIT_NAME:=$(FK_PROJECT_GROUP_BASE_NAME_D)/$(FK_PROJECT_BASE_NAME_D)
+
+# The project's pip name (Ref. PEP625 https://peps.python.org/pep-0625/ )
+FK_PROJECT_PIP_NAME:=$(FK_PROJECT_GROUP_BASE_NAME_D)_$(FK_PROJECT_BASE_NAME_D)
+
+# The project's domain name
+FK_PROJECT_DOMAIN_NAME:=$(FK_PROJECT_GROUP_BASE_NAME_D)-$(FK_PROJECT_BASE_NAME_D)
+
+
+# We add these variables to the info target
+.PHONY: info-project-name
+info: info-project-name
+info-project-name:
+	@echo ""
+	@echo "############### Project name ################"
+	@echo ""
+	@echo "FK_PROJECT_GROUP_BASE_NAME_D:  $(FK_PROJECT_GROUP_BASE_NAME_D)"
+	@echo "FK_PROJECT_GROUP_BASE_NAME_V:  $(FK_PROJECT_GROUP_BASE_NAME_V)"
+	@echo "FK_PROJECT_BASE_NAME_D:        $(FK_PROJECT_BASE_NAME_D)"
+	@echo "FK_PROJECT_BASE_NAME_V:        $(FK_PROJECT_BASE_NAME_V)"
+	@echo "FK_PROJECT_GIT_NAME:           $(FK_PROJECT_GIT_NAME)"
+	@echo "FK_PROJECT_PIP_NAME:           $(FK_PROJECT_PIP_NAME)"
+	@echo "FK_PROJECT_DOMAIN_NAME:        $(FK_PROJECT_DOMAIN_NAME)"
+	@echo ""
+
+
+
+# Project init
+################################################################################
+
+# Initialize a project from scratch by creating expected folder and touching expecte filenames within them.
+.PHONY: init
+init: init-worker readme
+
+# Touch and mkdir
+.PHONY: init-worker
+init-worker:
+	@mkdir -p resources/templates static volumes .gitlab
+	@touch resources/templates/README.md
+	@touch .gitlab/ci.yaml
+	@touch README.md LICENSE MANDATE CONTRIBUTORS .gitignore .dockerignore 
+
+
+
+# Project templates
+################################################################################
+
+# The warning put in top of generated files to signify that it is audgenerated and should not be edited manually
+define FK_TEMPLATE_WARNING
+<!---
+                                                         
+                                                         
+     ## ## ## ## ## ## ## ## ## ## ##                    
+        ## ## ## ## ## ## ## ## ##                       
+           ## ## ## ## ## ## ##                          
+              ## ## ## ## ##                             
+                 ## ## ##                                
+                    ##                                   
+                                                         
+                                                         
+WARNING: This file is AUTO GENERATED from "${FK_TEMPLATE_IN}".
+         Any changes you make will be OVERWRITTEN at the 
+         next invocation of relevant `make` target.      
+                                                         
+                                                         
+                    ##                                   
+                 ## ## ##                                
+              ## ## ## ## ##                             
+           ## ## ## ## ## ## ##                          
+        ## ## ## ## ## ## ## ## ##                       
+     ## ## ## ## ## ## ## ## ## ## ##                    
+                                                         
+                                                         
+-->
+endef
+export FK_TEMPLATE_WARNING
+
+# Template directory
+
+# The template directory and temporary file suffix
+FK_TEMPLATE_DIR:=resources/templates
+FK_TEMPLATE_TMP_SUFFIX:=.tmp
+
+
+# The command line executable this project provides (defaults to project name)
+# NOTE: Can be overriden outside! true is a valid binary that is on the path of most unix systems that simply exits with no error
+FK_CLI_EXECUTABLE?=true
+#$(FK_PROJECT_BASE_NAME_D)
+
+
+# Detect presence of cli executable
+ifeq ($(FK_CLI_EXECUTABLE),true)
+FK_HAS_CLI_EXECUTABLE:=false
+else
+FK_HAS_CLI_EXECUTABLE:=true
+endif
+
+
+FK_CLI_OUTPUT:=""
+
+# Generic rule to process any template
+%: $(FK_TEMPLATE_DIR)/%
+	@echo "Processing $< --> $@$(FK_TEMPLATE_TMP_SUFFIX)"
+	@envsubst 'FK_TEMPLATE_WARNING="$${FK_TEMPLATE_WARNING}"' < $< > $@$(FK_TEMPLATE_TMP_SUFFIX)
+	@{ \
+		echo "Processing $@$(FK_TEMPLATE_TMP_SUFFIX) --> $@"; \
+		echo "FK_CLI_EXECUTABLE: $(FK_CLI_EXECUTABLE)"; \
+		echo "FK_HAS_CLI_EXECUTABLE: $(FK_HAS_CLI_EXECUTABLE)"; \
+		if [ "$(FK_HAS_CLI_EXECUTABLE)" = "true" ]; then \
+			echo "CLI executable is present. Running it..."; \
+			FK_CLI_OUTPUT=$$($(FK_CLI_EXECUTABLE) --help); \
+		else \
+			echo "CLI executable is not present. Skipping execution."; \
+			FK_CLI_OUTPUT=""; \
+		fi; \
+		echo "Output was:"; \
+		echo "$$FK_CLI_OUTPUT"; \
+		export FK_CLI_OUTPUT="$$FK_CLI_OUTPUT"; \
+		export FK_PROJECT_GROUP_BASE_NAME_D="$(FK_PROJECT_GROUP_BASE_NAME_D)"; \
+		export FK_PROJECT_BASE_NAME_D="$(FK_PROJECT_BASE_NAME_D)"; \
+		export FK_VERSION_STRING="$(FK_VERSION_STRING)"; \
+		export FK_CLI_EXECUTABLE="$(FK_CLI_EXECUTABLE)"; \
+		export FK_HAS_CLI_EXECUTABLE="$(FK_HAS_CLI_EXECUTABLE)"; \
+		envsubst < "$@$(FK_TEMPLATE_TMP_SUFFIX)" > "$@"; \
+		echo "Removing $@$(FK_TEMPLATE_TMP_SUFFIX)"; \
+		rm $@$(FK_TEMPLATE_TMP_SUFFIX); \
+	}
+
+# Find all templates in the template directory
+FK_TEMPLATES := $(wildcard $(FK_TEMPLATE_DIR)/*)
+
+
+# Regenerate LICENSE from template
+.PHONY: license
+license: LICENSE
+
+# Regenerate README.md from template
+.PHONY: readme
+readme: README.md
+
+# Regenerate README.md from template with force
+.PHONY: readme-force-t
+readme-force-t:
+	touch $(FK_TEMPLATE_DIR)/README.md
+
+.PHONY: readme-force
+readme-force: readme-force-t readme
+
+# Regenerate LICENSE from template with force
+.PHONY: license-force-t
+license-force-t:
+	touch $(FK_TEMPLATE_DIR)/LICENSE
+
+.PHONY: license-force
+license-force: license-force-t license
+
+
+
+# We add these variables to the info target
+.PHONY: info-templates
+info: info-templates
+info-templates:
+	@echo ""
+	@echo "############### Templates ########################"
+	@echo ""
+	@echo "FK_TEMPLATE_DIR:           $(FK_TEMPLATE_DIR)"
+	@echo "FK_TEMPLATES:              $(FK_TEMPLATES)"
+	@echo "FK_CLI_EXECUTABLE:         $(FK_CLI_EXECUTABLE)"
+	@echo "FK_HAS_CLI_EXECUTABLE:     $(FK_HAS_CLI_EXECUTABLE)"
+	@echo ""
+
+
+# We add this documentation to the help target
+.PHONY: help-templates
+help: help-templates
+help-templates:
+	@echo ""
+	@echo "  Templates"
+	@echo ""
+	@echo "    license:                         - Generate LICENSE from template if changed"
+	@echo "    license-force:                   - Generate LICENSE from template forced"
+	@echo "    readme:                          - Generate README.md from template if changed"
+	@echo "    readme-force:                    - Generate README.md from template forced"
+	@echo ""
+
+
+
+# Web development
+################################################################################
+
+# The source directory for static (web) files to be processed by webminify
+FK_STATIC_MINIFY_SRC:=static/
+
+# The destination directory for static (web) files processed by webminify
+FK_STATIC_MINIFY_DST:=shopify_app/static/
+
+# The source directory for tempalte (web) files to be processed by webminify
+FK_TEMPLATE_MINIFY_SRC:=templates/
+
+# The destination directory for template (web) files processed by webminify
+FK_TEMPLATE_MINIFY_DST:=shopify_app/templates/
+
+# The source directory for sql (database) files processed by webminify
+FK_SQL_MINIFY_SRC:=sql/
+
+# Command for webminify (tool used to process web related files for beautification, obfuscation or minification)
+FK_WEBMINIFY_CMD:=web-minify
+
+# Level of multi processing used with webminify (number of concurrent processes)
+FK_WEBMINIFY_NPROC:=120
+
+# Options for webminify in beautify mode
+FK_WEBMINIFY_BEAUTIFY_OPTS:= --mode beautify --overwrite --nproc $(FK_WEBMINIFY_NPROC)
+
+# Options for webminify in minify mode
+FK_WEBMINIFY_MINIFY_OPTS:=   --mode minify   --overwrite --nproc $(FK_WEBMINIFY_NPROC) --gzip --on-change 
+
+# We add these variables to the info target
+.PHONY: info-webminify
+info: info-webminify
+info-webminify:
+	@echo ""
+	@echo "############### Webminify ################"
+	@echo ""
+	@echo "FK_STATIC_MINIFY_SRC:       $(FK_STATIC_MINIFY_SRC)"
+	@echo "FK_STATIC_MINIFY_DST:       $(FK_STATIC_MINIFY_DST)"
+	@echo "FK_TEMPLATE_MINIFY_SRC:     $(FK_TEMPLATE_MINIFY_SRC)"
+	@echo "FK_TEMPLATE_MINIFY_DST:     $(FK_TEMPLATE_MINIFY_DST)"
+	@echo "FK_SQL_MINIFY_SRC:          $(FK_SQL_MINIFY_SRC)"
+	@echo "FK_WEBMINIFY_CMD:           $(FK_WEBMINIFY_CMD)"
+	@echo "FK_WEBMINIFY_NPROC:         $(FK_WEBMINIFY_NPROC)"
+	@echo "FK_WEBMINIFY_BEAUTIFY_OPTS: $(FK_WEBMINIFY_BEAUTIFY_OPTS)"
+	@echo "FK_WEBMINIFY_MINIFY_OPTS:   $(FK_WEBMINIFY_MINIFY_OPTS)"
+	@echo ""
+	
+
+
+# External git variables
+################################################################################
+
+# External environment variables that we expect to be set for git credentials
+FK_DOCKER_REGISTRY_NAME:=${FK_DOCKER_REGISTRY_NAME}
+FK_DOCKER_REGISTRY_FILENAME:=$(FK_DOCKER_REGISTRY_NAME)_credentials.yaml
+FK_DOCKER_REGISTRY_DOMAIN?="registry.gitlab.com"
+FK_DOCKER_REGISTRY_URL:=https://$(FK_DOCKER_REGISTRY_DOMAIN)
+FK_DOCKER_REGISTRY_PROJECT_URL:=$(FK_DOCKER_REGISTRY_URL)/$(FK_PROJECT_GIT_NAME)
+
+# NOTE: This worked for octomy-website project. If it is wrong, make sure to test it there after changes
+
+FK_DOCKER_REGISTRY_PROJECT_DOMAIN:=$(FK_DOCKER_REGISTRY_DOMAIN)/$(FK_PROJECT_GIT_NAME)
+
+FK_DOCKER_REGISTRY_IMAGE_URL:=${FK_DOCKER_REGISTRY_DOMAIN}/${FK_PROJECT_PIP_NAME}:${FK_VERSION_STRING}
+FK_DOCKER_REGISTRY_USERNAME:=${FK_DOCKER_REGISTRY_USERNAME}
+FK_DOCKER_REGISTRY_PASSWORD:=${FK_DOCKER_REGISTRY_PASSWORD}
+
+
+
+# We add these variables to the info target
+.PHONY: info-external-gi
+info: info-external-gi
+info-external-gi:
+	@echo ""
+	@echo "############### External git ################"
+	@echo ""
+	@echo "FK_DOCKER_REGISTRY_DOMAIN:         $(FK_DOCKER_REGISTRY_DOMAIN)"
+	@echo "FK_DOCKER_REGISTRY_USERNAME:       $(FK_DOCKER_REGISTRY_USERNAME)"
+	@echo "FK_DOCKER_REGISTRY_PASSWORD:       $(FK_DOCKER_REGISTRY_PASSWORD)"
+	@echo "FK_DOCKER_REGISTRY_NAME:           $(FK_DOCKER_REGISTRY_NAME)"
+	@echo "FK_DOCKER_REGISTRY_URL:            $(FK_DOCKER_REGISTRY_URL)"
+	@echo "FK_DOCKER_REGISTRY_FILENAME:       $(FK_DOCKER_REGISTRY_FILENAME)"
+	@echo "FK_DOCKER_REGISTRY_IMAGE_URL:      $(FK_DOCKER_REGISTRY_IMAGE_URL)"
+	@echo "FK_DOCKER_REGISTRY_PROJECT_DOMAIN: $(FK_DOCKER_REGISTRY_PROJECT_DOMAIN)"
+	@echo "FK_DOCKER_REGISTRY_PROJECT_URL:    $(FK_DOCKER_REGISTRY_PROJECT_URL)"
+	@echo ""
+
+
+
+# Python from source
+################################################################################
+
+#FK_PYTHON_SOURCE_VERSION?=3.9.17
+FK_PYTHON_SOURCE_VERSION?=3.10.14
+FK_PYTHON_SOURCE_URL:=https://www.python.org/ftp/python/$(FK_PYTHON_SOURCE_VERSION)/Python-$(FK_PYTHON_SOURCE_VERSION).tar.xz
+#FK_PYTHON_SOURCE_DOWNLOAD_PATH:=/tmp
+FK_PYTHON_SOURCE_INSTALL_PATH:=/usr/local/share/python$(FK_PYTHON_SOURCE_VERSION)
+FK_PYTHON_SOURCE_PATH:=/usr/local/share/python$(FK_PYTHON_SOURCE_VERSION)
+
+FK_PYTHON_SOURCE_DOWNLOAD_PATH:=python-from-source-${FK_PYTHON_SOURCE_VERSION}
+FK_PYTHON_SOURCE_UNCOMPRESS_PATH:=Python-${FK_PYTHON_SOURCE_VERSION}
+
+# We add these variables to the info target
+.PHONY: info-python-build
+info: info-python-build
+info-python-build:
+	@echo ""
+	@echo "############### python Build ################"
+	@echo ""
+	@echo "FK_PYTHON_SOURCE_VERSION: $(FK_PYTHON_SOURCE_VERSION)"
+	@echo "FK_PYTHON_SOURCE_URL:     $(FK_PYTHON_SOURCE_URL)"
+	@echo "FK_PYTHON_SOURCE_PATH:    $(FK_PYTHON_SOURCE_PATH)"
+	@echo ""
+
+
+# We add this documentation to the help target
+.PHONY: help-python-build
+help: help-python-build
+help-python-build:
+	@echo ""
+	@echo "  python Build"
+	@echo ""
+	@echo "    python-source                     - Download and build python from source"
+	@echo "    python-source-download            - Download python source"
+	@echo "    python-source-build               - Build python from source"
+	@echo ""
+
+.PHONY: python-build-prep-apt sync
+python-build-prep-apt:
+	sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev -y
+
+.PHONY: python-source-download
+python-source-download:
+	@{ \
+	set -e ;\
+	echo "USING PATH $${FK_PYTHON_SOURCE_DOWNLOAD_PATH}"; \
+	echo "PWD1:"; \
+	pwd; \
+	echo "MKDIR:"; \
+	mkdir -p $${FK_PYTHON_SOURCE_DOWNLOAD_PATH}; \
+	echo "CHOWN:"; \
+	sudo chown $$(whoami) $${FK_PYTHON_SOURCE_DOWNLOAD_PATH} ;\
+	echo "PUSHD:"; \
+	pushd $${FK_PYTHON_SOURCE_DOWNLOAD_PATH}; \
+	echo "PWD1:"; \
+	pwd; \
+	echo "POPD:"; \
+	if [ ! -f "$${FK_PYTHON_SOURCE_UNCOMPRESS_PATH}" ]; then \
+		echo "CURL:"; \
+		curl -s -L "$(FK_PYTHON_SOURCE_URL)" | tar pJxv; \
+		sync; \
+	fi; \
+	echo "PUSHD:"; \
+	pushd $${FK_PYTHON_SOURCE_UNCOMPRESS_PATH}; \
+	echo "CONFIG:"; \
+	./configure --enable-optimizations --enable-shared; \
+	sync; \
+	echo "build:"; \
+	make -j; \
+	sync; \
+	echo "install:"; \
+	sudo make altinstall; \
+	sync; \
+	echo "ld config:"; \
+	ldconfig .;\
+	popd ;\
+	}
+
+# TODO: What is this?
+sdfsadf:
+	sudo mv $(FK_PYTHON_SOURCE_DOWNLOAD_PATH) $(FK_PYTHON_SOURCE_INSTALL_PATH)
+
+.PHONY: python-source-build
+python-source-build:
+	@{ \
+	set -e ;\
+	tmp_dir=$$(sudo mktemp -d "/tmp/firstkiss-XXXX") ;\
+	sudo chown $$(whoami) $$tmp_dir ;\
+	pushd $$tmp_dir ;\
+	echo "TEMPDIR: $$tmp_dir" PWD: $$(pwd);\
+	popd ;\
+	echo rm -rf $$tmp_dir ;\
+	}
+
+#&& pwd \
+
+#lol:
+	#&& curl -s -L "$(FK_PYTHON_SOURCE_URL)" | tar pJxv -C . \
+	#cd $(FK_PYTHON_SOURCE_INSTALL_PATH) \
+	#&& ./configure --enable-optimizations --enable-shared \
+	#&& make -j \
+	#&& sudo make altinstall
+	#&& ldconfig .
+
+
+
+.PHONY: python-source
+python-source: python-build-prep-apt python-source-download python-source-build
+
+
+#&& sudo ldconfig /usr/local/share/python3.9
+
+
+# Versions
+################################################################################
+
+
+.PHONY: versions
+# Lists current tool versions"
+versions:
+	@echo "############### Makefile.fk
+	@echo "=== Makefile.fk VERSION:"
+	@echo "$(FK_MAKEFILE_VERSION)"
+	@echo " "
+	@echo "=== DOCKER TAG / PYPI VERSION:"
+	@echo "$(FK_VERSION_STRING)"
+	@echo " "
+	@echo "=== PYTHON & PIP:"
+	@. ~/.venv/$(FK_VENV_NAME)/bin/activate;\
+	 python --version || python3 --version || echo "NO PYTHON IN VENV $(FK_VENV_NAME)";\
+	 pip --version || pip3 --version || echo "NO PIP IN VENV $(FK_VENV_NAME)"
+	@echo " "
+	@echo "=== DOCKER:"
+	@docker --version || echo "NO DOCKER"
+	@echo " "
+	@echo "=== DOCKER COMPOSE:"
+	@docker compose version || echo "NO DOCKER-COMPOSE"
+	@echo " "
+	@echo "=== KUBECTL:"
+	@kubectl version --client || echo "NO KUBECTL"
+	@echo " "
+	@echo "=== GCLOUD:"
+	@gcloud --version || echo "NO GCLOUD"
+	@echo " "
+	@echo "=== WHICH:"
+	@which docker || echo "NO WHICH DOCKER"
+	@which kubectl || echo "NO WHICH KUBECTL"
+	@which gcloud || echo "NO WHICH GCLOUD"
+	@echo " "
+
+# Shortcut
+.PHONY: ver
+ver: versions
+
+
+
+# Show content of version file
+.PHONY: version-show
+version-show:
+	@echo ""
+	@echo -e "Current version is \033[30m\033[107m\033[1m\033[4m  $$(cat $(FK_VERSION_FILE))  \033[24m\033[21m\033[49m\033[39m"
+	@echo ""
+
+
+# Bump major version in version file silently, resetting minor and patch to 0
+.PHONY: version-bump-major-silent
+version-bump-major-silent:
+	@{ \
+		awk -F. '{printf "%d.%d.%d\n", $$1+1, 0, 0}' $(FK_VERSION_FILE) > $(FK_VERSION_FILE_TMP); \
+		if [ -f $(FK_VERSION_FILE_TMP) ]; then \
+			mv $(FK_VERSION_FILE_TMP) $(FK_VERSION_FILE); \
+		else \
+			echo "Error: Temporary version file not created."; \
+			exit 1; \
+		fi; \
+	}
+
+
+# Bump major version in version file, resetting minor and patch to 0
+.PHONY: version-bump-major
+version-bump-major: version-bump-major-silent version-show
+	@echo "Bumped MAJOR version"
+
+# Bump minor version in version file silently, resetting patch to 0 and leaving major as is
+.PHONY: version-bump-minor
+version-bump-minor-silent:
+	@{ \
+		awk -F. '{printf "%d.%d.%d\n", $$1, $$2+1, 0}' $(FK_VERSION_FILE) > $(FK_VERSION_FILE_TMP); \
+		if [ -f $(FK_VERSION_FILE_TMP) ]; then \
+			mv $(FK_VERSION_FILE_TMP) $(FK_VERSION_FILE); \
+		else \
+			echo "Error: Temporary version file not created."; \
+			exit 1; \
+		fi; \
+	}
+
+
+
+# Bump minor version in version file, resetting minor and patch to 0
+.PHONY: version-bump-minor
+version-bump-minor: version-bump-minor-silent version-show
+	@echo "Bumped MINOR version"
+
+# Bump patch version in version file silently, leaving minro and major as is
+.PHONY: version-bump-patch
+version-bump-patch-silent:
+	@{ \
+		awk -F. '{printf "%d.%d.%d\n", $$1, $$2, $$3+1}' $(FK_VERSION_FILE) > $(FK_VERSION_FILE_TMP); \
+		if [ -f $(FK_VERSION_FILE_TMP) ]; then \
+			mv $(FK_VERSION_FILE_TMP) $(FK_VERSION_FILE); \
+		else \
+			echo "Error: Temporary version file not created."; \
+			exit 1; \
+		fi; \
+	}
+
+
+# Bump patch version in version file, resetting minor and patch to 0
+.PHONY: version-bump-patch
+version-bump-patch: version-bump-patch-silent version-show
+	@echo "Bumped PATCH version"
+
+# We add this documentation to the help target
+.PHONY: help-project-version
+help: help-project-version
+help-project-version:
+	@echo ""
+	@echo "  Project version"
+	@echo ""
+	@echo "    (ver)sions                       - Lists current tool versions"
+	@echo "    version-show                     - Show content of version file"
+	@echo "    version-bump-major               - Bump major version in version file, resetting minor and patch to 0"
+	@echo "    version-bump-minor               - Bump minor version in version file, resetting patch to 0 and leaving major as is"
+	@echo "    version-bump-patch               - Bump patch v ersion in version file, leaving minro and major as is"
+	@echo ""
+
+
+
+# Release management
+################################################################################
+
+# Make sure we are on the release branch
+.PHONY: ensure-release-branch
+ensure-release-branch:
+	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" = "$(FK_RELEASE_BRANCH)" ]; then \
+		echo "We are on the release branch '$(FK_RELEASE_BRANCH)'"; \
+	else \
+		echo "This operation can only be run on the release branch '$(FK_RELEASE_BRANCH)'"; \
+		exit 1; \
+	fi
+	
+# Make sure a tag matching current version string does not allready exist
+.PHONY: ensure-tag-is-unused
+ensure-tag-is-unused:
+	@if git rev-parse "$(FK_BARE_VERSION)" >/dev/null 2>&1; then \
+		echo "Tag $(FK_BARE_VERSION) already exists"; \
+		exit 1; \
+	else \
+		echo "Tag $(FK_BARE_VERSION) does not exist"; \
+	fi
+
+# Create a tag matching current version string
+.PHONY: create-release-tag
+create-release-tag:
+	@git tag -a "$(FK_BARE_VERSION)" -m "Release version $(FK_BARE_VERSION)"
+	@git push origin "$(FK_BARE_VERSION)"
+
+# Perform neccessary changes to versions and tags for a release
+.PHONY: release
+release: ensure-release-branch ensure-tag-is-unused create-release-tag 
+
+
+# We add this documentation to the help target
+.PHONY: help-release-management
+help: help-release-management
+help-release-management:
+	@echo ""
+	@echo "  Release Management"
+	@echo ""
+	@echo "    ensure-release-branch            - Make sure we are on the release branch"
+	@echo "    ensure-tag-is-unused             - Make sure a tag matching current version string does not allready exist"
+	@echo "    create-release-tag               - Create a tag matching current version string"
+	@echo "    release                          - Perform neccessary changes to versions and tags for a release"
+	@echo ""
+
+
+# Python requirements management
+################################################################################
+
+FK_REQUIREMENTS_IN:=requirements.in
+FK_REQUIREMENTS_OUT:=requirements.txt
+FK_TEST_REQUIREMENTS_IN:=test_requirements.in
+FK_TEST_REQUIREMENTS_OUT:=test_requirements.txt
+
+# Upgrade package management toolchan for Python (pip).
+.PHONY: requirements-update-pip
+requirements-update-pip:
+	pip install --upgrade pip pip-tools
+
+
+$(FK_REQUIREMENTS_DIR)/$(FK_REQUIREMENTS_OUT):$(FK_REQUIREMENTS_DIR)/$(FK_REQUIREMENTS_IN)
+	cd "$(FK_REQUIREMENTS_DIR)"; \
+	pip-compile --resolver=backtracking --no-header --no-emit-index-url --output-file=$(FK_REQUIREMENTS_OUT) \
+		$(FK_REQUIREMENTS_IN);
+
+$(FK_REQUIREMENTS_DIR)/$(FK_TEST_REQUIREMENTS_OUT):$(FK_REQUIREMENTS_DIR)/$(FK_TEST_REQUIREMENTS_IN)
+	cd "$(FK_REQUIREMENTS_DIR)"; \
+	pip-compile --resolver=backtracking --no-header --no-emit-index-url --output-file=$(FK_TEST_REQUIREMENTS_OUT) \
+		$(FK_REQUIREMENTS_IN) \
+		$(FK_TEST_REQUIREMENTS_IN);
+
+# Compile pinned versions into requirements.txt from requirements.in
+.PHONY: requirements-compile-source
+requirements-compile-source: $(FK_REQUIREMENTS_DIR)/$(FK_REQUIREMENTS_OUT)
+
+# Compile pinned versions into test_requirements.txt from test_requirements.in
+.PHONY: requirements-compile-test-source
+requirements-compile-test-source: $(FK_REQUIREMENTS_DIR)/$(FK_TEST_REQUIREMENTS_OUT)
+
+# Compile pinned versions into *requirements.txt from respective *requirements.in"
+.PHONY: requirements-compile
+requirements-compile: requirements-compile-source requirements-compile-test-source
+
+# Install packages in requirements.txt into local venv
+.PHONY: requirements-install
+requirements-install:
+	cd "$(FK_REQUIREMENTS_DIR)"; \
+	pip install -r $(FK_REQUIREMENTS_OUT)
+
+# Install packages in test_requirements.txt into local venv
+.PHONY: requirements-install-test
+requirements-install-test:
+	cd "$(FK_REQUIREMENTS_DIR)"; \
+	pip install -r $(FK_TEST_REQUIREMENTS_OUT)
+
+# Process *requirements.in to *requirements.txt
+# Compile pinned versions in *requirements.txt from *requirements.in"
+.PHONY: requirements
+requirements: requirements-update-pip requirements-compile requirements-install
+
+.PHONY: requirements-test
+requirements-test: requirements-update-pip requirements-compile-test-source requirements-install-test
+
+# Uninstall editable package from local venv if installed
+.PHONY: uninstall
+uninstall:
+	pip uninstall -y $(FK_PROJECT_PIP_NAME);
+
+# Build and re-install package locally
+# (re)install as an editable package in local venv
+.PHONY: setup
+setup:
+	pip install --verbose --upgrade -e $(FK_ROOT_DIR)
+
+# Shortcut to "do the right thing"™ when updating deps 
+.PHONY: req
+req: uninstall requirements setup
+
+# We add this documentation to the help target
+.PHONY: help-requirements
+help: help-requirements
+help-requirements:
+	@echo ""
+	@echo "  Requirements"
+	@echo ""
+	@echo "    requirements-update-pip           - Upgrade package management toolchan for Python (pip)."
+	@echo "    requirements-compile-source       - Compile pinned versions into requirements.txt from requirements.in."
+	@echo "    requirements-compile-test-source  - Compile pinned versions into test_requirements.txt from test_requirements.in."
+	@echo "    requirements-install              - Compile pinned versions into test_requirements.txt from test_requirements.in."
+	@echo "    requirements-install-test         - Process test_requirements.in to test_requirements.txt."
+	@echo "    (req)irements                    - Process *requirements.in to *requirements.txt."
+	@echo "    uninstall                        - Uninstall editable package from local venv if installed."
+	@echo "    setup                            - (re)install as an editable package in local venv."
+	@echo ""
+
+
+
+# Web-minify - beautify
+################################################################################
+
+.PHONY: beautify-templates
+beautify-templates:
+	$(FK_WEBMINIFY_CMD) $(FK_TEMPLATE_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS)
+	
+.PHONY: beautify-templates-force
+beautify-templates-force:
+	$(FK_WEBMINIFY_CMD) $(FK_TEMPLATE_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS) --force
+
+.PHONY: beautify-templates-dry
+beautify-templates-dry:
+	$(FK_WEBMINIFY_CMD) $(FK_TEMPLATE_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS) --dry-run --verbose
+
+.PHONY: beautify-static
+beautify-static:
+	$(FK_WEBMINIFY_CMD) $(FK_STATIC_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS)
+
+.PHONY: beautify-static-force
+beautify-static-force:
+	$(FK_WEBMINIFY_CMD) $(FK_STATIC_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS) --force
+
+.PHONY: beautify-static-dry
+beautify-static-dry:
+	$(FK_WEBMINIFY_CMD) $(FK_STATIC_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS) --dry-run --verbose
+
+.PHONY: beautify-sql
+beautify-sql:
+	$(FK_WEBMINIFY_CMD) $(FK_SQL_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS)
+
+.PHONY: beautify-sql-force
+beautify-sql-force:
+	$(FK_WEBMINIFY_CMD) $(FK_SQL_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS) --force
+
+.PHONY: beautify-sql-dry
+beautify-sql-dry:
+	$(FK_WEBMINIFY_CMD) $(FK_SQL_MINIFY_SRC) $(FK_WEBMINIFY_BEAUTIFY_OPTS) --dry-run --verbose
+
+.PHONY: beautify
+beautify: beautify-templates beautify-static beautify-sql sync
+
+.PHONY: beautify-force
+beautify-force: beautify-templates-force beautify-static-force beautify-sql-force
+
+.PHONY: beautify-dry
+beautify-dry: beautify-templates-dry beautify-static-dry beautify-sql-dry
+
+# We add this documentation to the help target
+.PHONY: help-beautify
+help: help-beautify
+help-beautify:
+	@echo ""
+	@echo "  Beautify"
+	@echo ""
+	@echo "    beautify-templates               - Run web-minify in beautify mode on templates"
+	@echo "    beautify-templates-force         - Run web-minify in beautify mode on templates with force"
+	@echo "    beautify-templates-dry           - Run web-minify in beautify mode on templates with dry-run"
+	@echo "    beautify-static                  - Run web-minify in beautify mode on static files"
+	@echo "    beautify-static-force            - Run web-minify in beautify mode on static files with force"
+	@echo "    beautify-static-dry              - Run web-minify in beautify mode on static files with dry-run"
+	@echo "    beautify-sql                     - Run web-minify in beautify mode on sql files"
+	@echo "    beautify-sql-force               - Run web-minify in beautify mode on sql files with force"
+	@echo "    beautify-sql-dry                 - Run web-minify in beautify mode on sql files with dry-run"
+	@echo "    beautify                         - Run web-minify in beautify mode on all files"
+	@echo "    beautify-force                   - Run web-minify in beautify mode on all files with force"
+	@echo "    beautify-dry                     - Run web-minify in beautify mode on all files with dry-run"
+	@echo ""
+
+
+# Web-minify - minify
+################################################################################
+
+
+.PHONY: minify-templates
+minify-templates:
+	$(FK_WEBMINIFY_CMD) $(FK_TEMPLATE_MINIFY_SRC) --output $(FK_TEMPLATE_MINIFY_DST) $(FK_WEBMINIFY_MINIFY_OPTS)
+
+.PHONY: minify-templates-force
+minify-templates-force:
+	$(FK_WEBMINIFY_CMD) $(FK_TEMPLATE_MINIFY_SRC) --output $(FK_TEMPLATE_MINIFY_DST) $(FK_WEBMINIFY_MINIFY_OPTS) --force
+
+.PHONY: minify-templates-dry
+minify-templates-dry:
+	$(FK_WEBMINIFY_CMD) $(FK_TEMPLATE_MINIFY_SRC) --output $(FK_TEMPLATE_MINIFY_DST) $(FK_WEBMINIFY_MINIFY_OPTS) --dry-run --verbose
+
+.PHONY: minify-static
+minify-static:
+	$(FK_WEBMINIFY_CMD) $(FK_STATIC_MINIFY_SRC) --output $(FK_STATIC_MINIFY_DST) $(FK_WEBMINIFY_MINIFY_OPTS)
+
+.PHONY: minify-static-force
+minify-static-force:
+	$(FK_WEBMINIFY_CMD) $(FK_STATIC_MINIFY_SRC) --output $(FK_STATIC_MINIFY_DST) $(FK_WEBMINIFY_MINIFY_OPTS) --force
+
+.PHONY: minify-static-dry
+minify-static-dry:
+	$(FK_WEBMINIFY_CMD) $(FK_STATIC_MINIFY_SRC) --output $(FK_STATIC_MINIFY_DST) $(FK_WEBMINIFY_MINIFY_OPTS) --dry-run --verbose
+
+.PHONY: minify
+minify: minify-templates minify-static sync
+
+.PHONY: minify-force
+minify-force: minify-templates-force minify-static-force
+
+.PHONY: minify-dry
+minify-dry: minify-templates-dry minify-static-dry
+
+.PHONY: webminify-html-whitespace-cleanup
+webminify-html-whitespace-cleanup:
+	find templates/ -type f -name *.html -exec sed "s/                                                        //g" -i {} \;
+
+
+# We add this documentation to the help target
+.PHONY: help-minify
+help: help-minify
+help-minify:
+	@echo "  Minify"
+	@echo ""
+	@echo "    minify-templates                 - Run web-minify in minify mode on templates"
+	@echo "    minify-templates-force           - Run web-minify in minify mode on templates with force"
+	@echo "    minify-templates-dry             - Run web-minify in minify mode on templates with dry-run"
+	@echo "    minify-static                    - Run web-minify in minify mode on static files"
+	@echo "    minify-static-force              - Run web-minify in minify mode on static files with force"
+	@echo "    minify-static-dry                - Run web-minify in minify mode on static files with dry-run"
+	@echo "    minify                           - Run web-minify in minify mode on all files"
+	@echo "    minify-force                     - Run web-minify in minify mode on all files with force"
+	@echo "    minify-dry                       - Run web-minify in minify mode on all files with dry-run"
+	@echo ""
+
+# Web-minify testing (helping develop the web-minify project on a real codebase)
+################################################################################
+
+FORMATTER_TEST_BASE:="templates/shopify_admin_bp/social_pop_bp"
+#FORMATTER_TEST_BASE:="tests/webminify"
+#FORMATTER_TEST_VICTIM_ORGINAL:=$(FORMATTER_TEST_BASE)/original.html
+FORMATTER_TEST_VICTIM_ORGINAL:=$(FORMATTER_TEST_BASE)/invitations.html
+FORMATTER_TEST_VICTIM_COPY:=$(FORMATTER_TEST_BASE)/copy.html
+FORMATTER_TEST_VICTIM_BEAUTIFIED:=$(FORMATTER_TEST_BASE)/beautified.html
+FORMATTER_TEST_VICTIM_MINIFIED:=$(FORMATTER_TEST_BASE)/minified.html
+
+.PHONY: webminify-test-reset
+webminify-test-reset:
+	cp -a $(FORMATTER_TEST_VICTIM_ORGINAL) $(FORMATTER_TEST_VICTIM_COPY)
+	rm -f $(FORMATTER_TEST_VICTIM_BEAUTIFIED)
+	rm -f $(FORMATTER_TEST_VICTIM_MINIFIED)
+
+.PHONY: beautify-test
+beautify-test:
+	$(FK_WEBMINIFY_CMD) $(FORMATTER_TEST_VICTIM_COPY) --output $(FORMATTER_TEST_VICTIM_BEAUTIFIED) --mode beautify --verbose --diff
+	diff $(FORMATTER_TEST_VICTIM_COPY) $(FORMATTER_TEST_VICTIM_BEAUTIFIED) || true
+
+.PHONY: minify-test
+minify-test:
+	$(FK_WEBMINIFY_CMD)  $(FORMATTER_TEST_VICTIM_BEAUTIFIED) --output $(FORMATTER_TEST_VICTIM_MINIFIED) $(FK_WEBMINIFY_MINIFY_OPTS) --verbose
+	diff $(FORMATTER_TEST_VICTIM_BEAUTIFIED) $(FORMATTER_TEST_VICTIM_MINIFIED) || true
+
+.PHONY: webminify-test
+webminify-test: webminify-test-reset beautify-test minify-test
+	ls -alt $(FORMATTER_TEST_VICTIM_ORGINAL) $(FORMATTER_TEST_VICTIM_COPY) $(FORMATTER_TEST_VICTIM_BEAUTIFIED) $(FORMATTER_TEST_VICTIM_MINIFIED)
+
+# We add this documentation to the help target
+.PHONY: help-webminify-test
+help: help-webminify-test
+help-webminify-test:
+	@echo ""
+	@echo "  Webminify testing (advanced)"
+	@echo ""
+	@echo "    webminify-test-reset             - If you know you know"
+	@echo "    beautify-test                    - If you know you know"
+	@echo "    minify-test                      - If you know you know"
+	@echo "    webminify-test                   - If you know you know"
+	@echo ""
+
+# Docker
+################################################################################
+
+
+#=============================
+# Sanity checks
+
+.PHONY: docker-registry-sanity-check
+docker-registry-sanity-check:
+	@if [ -z "$${FK_DOCKER_REGISTRY_DOMAIN}" ]; then \
+		echo "ERROR: FK_DOCKER_REGISTRY_DOMAIN not set, terminating"; \
+		echo "       It should be set in gitlab -> settings -> CI/CD -> variables"; \
+		echo "       along with FK_DOCKER_REGISTRY_USERNAME and FK_DOCKER_REGISTRY_PASSWORD"; \
+		exit 1; \
+	fi
+
+
+#=============================
+# DOCKER-LOGIN
+
+# Helper for user to decide how to log in
+.PHONY: docker-login-
+docker-login-: docker-registry-sanity-check
+	@echo "Choose either docker-login-gitlab or docker-login-local"
+
+# Log in to Docker Registry automatically using CI/CD environment variables (used by gitlab runner)
+.PHONY: docker-login-gitlab
+docker-login-gitlab: docker-registry-sanity-check
+	echo  "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin "${CI_REGISTRY}"
+
+# Log in to Docker Registry using local credentials
+.PHONY: docker-login-local
+docker-login-local: docker-registry-sanity-check
+	@echo "FK_DOCKER_REGISTRY_USERNAME=$(FK_DOCKER_REGISTRY_USERNAME)"
+	@echo "FK_DOCKER_REGISTRY_PASSWORD=$(FK_DOCKER_REGISTRY_PASSWORD)"
+	echo "$(FK_DOCKER_REGISTRY_PASSWORD)" | docker login -u "$(FK_DOCKER_REGISTRY_USERNAME)" --password-stdin  "$(FK_DOCKER_REGISTRY_URL)"
+
+
+#=============================
+# DOCKER-BUILD
+
+# Build Docker Image
+.PHONY: docker-build
+docker-build: docker-registry-sanity-check
+	DOCKER_BUILDKIT=1 docker build \
+	--cache-from "$(FK_DOCKER_REGISTRY_PROJECT_DOMAIN)" \
+	--file ${FK_ROOT_DIR}/Dockerfile \
+	--pull \
+	--build-arg FK_PYPI_TOKEN=${FK_PYPI_TOKEN} \
+	--build-arg BUILD_DATE=${FK_BUILD_DATE} \
+	--build-arg VCS_REF=${FK_GIT_HASH_SHORT} \
+	--build-arg BUILD_VERSION=${FK_VERSION_STRING} \
+	--tag "$(FK_DOCKER_REGISTRY_PROJECT_DOMAIN):${FK_VERSION_STRING}" \
+	--progress=plain \
+	${FK_ROOT_DIR}
+	@sync
+
+#=============================
+# DOCKER-PUSH
+
+# Push Docker Image to Registry. Remeber to lopg in first.
+.PHONY: docker-push
+docker-push: docker-registry-sanity-check
+	DOCKER_BUILDKIT=1 docker push "$(FK_DOCKER_REGISTRY_PROJECT_DOMAIN):${FK_VERSION_STRING}"
+
+#=============================
+# DOCKER-PULL
+
+# Pull last Docker Image from Registry. Remeber to lopg in first.
+.PHONY: docker-pull
+docker-pull: docker-registry-sanity-check
+	DOCKER_BUILDKIT=1 docker pull "$(FK_DOCKER_REGISTRY_PROJECT_DOMAIN)"
+
+# Clean up wasted Docker system resources
+.PHONY: docker-prune
+docker-prune:
+	DOCKER_BUILDKIT=1 docker system prune -af
+
+# Docker test (not implemented)
+.PHONY: docker-test
+docker-test:
+	echo "No test implemented"
+
+# Look for obvious errors related to Docker (sanity check).
+.PHONY: docker-wtf
+docker-wtf:
+	@[ "" != "$(FK_DOCKER_REGISTRY_DOMAIN)" ] || echo "Missing value for FK_DOCKER_REGISTRY_DOMAIN"
+
+# Build and spin up docker environment for dev purposes
+.PHONY: docker-dev
+docker-dev:
+	DOCKER_BUILDKIT=1 docker compose up --build --remove-orphans
+
+
+#=============================
+# DOCKER VOLUMES
+
+
+# Delete test volume for postgresql
+.PHONY: postgres-prune
+postgres-prune:
+	sudo rm -rf volumes/postgres || echo "No postgres volume to delete"
+	mkdir -p volumes/postgres
+
+
+
+#=============================
+# DOCKER STACK
+
+.PHONY: docker-stack-deploy
+docker-stack-deploy:
+	echo "FK_DOCKER_REGISTRY_IMAGE_URL=$(FK_DOCKER_REGISTRY_IMAGE_URL)"
+	DOCKER_BUILDKIT=1 FK_DOCKER_REGISTRY_IMAGE_URL=$(FK_DOCKER_REGISTRY_IMAGE_URL) docker stack deploy --prune --with-registry-auth --compose-file docker/stack.yaml "$(FK_PROJECT_BASE_NAME_D)"
+
+.PHONY: docker-stack-rm
+docker-stack-rm:
+	DOCKER_BUILDKIT=1 docker stack rm $(FK_PROJECT_BASE_NAME_D)
+
+.PHONY: docker-stack-log
+docker-stack-log:
+	DOCKER_BUILDKIT=1 docker service logs oktopus-part-preview_oktopus --follow
+
+
+
+# We add this documentation to the help target
+.PHONY: help-docker
+help: help-docker
+help-docker:
+	@echo ""
+	@echo "  Docker"
+	@echo ""
+	@echo "    docker-login:                    - Helper for user to decide how to log in"
+	@echo "    docker-login-gitlab:             - Log in to Docker Registry automatically using CI/CD environment variables (used by gitlab runner)"
+	@echo "    docker-login-local:              - Log in to Docker Registry using local credentials"
+	@echo "    docker-build:                    - Build Docker Image"
+	@echo "    docker-push:                     - Push Docker Image to Registry. Remeber to lopg in first."
+	@echo "    docker-pull:                     - Pull last Docker Image from Registry. Remeber to lopg in first."
+	@echo "    docker-prune:                    - Clean up wasted Docker system resources"
+	@echo "    docker-test:                     - Docker test (not implemented)"
+	@echo "    docker-wtf:                      - Look for obvious errors related to Docker (sanity check)."
+	@echo "    docker-dev:                      - Build and spin up docker environment for dev purposes"
+	@echo "    postgres-prune:                  - Delete test volume for postgresql"
+	@echo ""
+	@echo "  Docker stack"
+	@echo ""
+	@echo "    docker-stack-deploy:             - Deploy to docker stack"
+	@echo "    docker-stack-rm:                 - Remove from docker stack"
+	@echo "    docker-stack-log:                - Log output from docker stack"
+	@echo ""
+
+
+
+# PyPi (Python package management)
+################################################################################
+
+FK_PYPI_REGISTRY_URL_BASE:=gitlab.com/api/v4/projects/23170380/packages/pypi/simple
+FK_PYPI_REGISTRY_USERNAME:=__token__
+FK_PYPI_REGISTRY_PASSWORD:=${FK_PYPI_TOKEN}
+FK_PYPI_REGISTRY_URL:=https://$(FK_PYPI_REGISTRY_USERNAME):$(FK_PYPI_REGISTRY_PASSWORD)@$(FK_PYPI_REGISTRY_URL_BASE)
+
+
+define twine_config
+[distutils]
+index-servers=pypi
+[pypi]
+username=__token__
+password=${TWINE_TOKEN}
+endef
+export twine_config
+
+
+#=============================
+# PYPI BUILD
+
+.PHONY: pypi-build
+pypi-build:
+	python setup.py build --parallel 99
+	sync
+	python setup.py sdist bdist_wheel
+	sync
+	ls -halt dist/
+
+
+
+#=============================
+# PYPI LIST
+
+.PHONY: pypi-list
+pypi-list:
+	unzip -l "dist/*-$(FK_BARE_VERSION)-*.whl"
+
+#=============================
+# PYPI PUSH
+
+# Helper for user to decide how to push PyPi packages
+.PHONY: pypi-push-
+pypi-push-:
+	@echo "Choose either pypi-push-gitlab or pypi-push-local"
+
+# Push PyPi package to package repository automatically using CI/CD environment variables (used by gitlab runner)
+.PHONY: pypi-push-gitlab
+pypi-push-gitlab:
+	@echo "$$twine_config" > 'twine.conf'
+	twine upload --config-file twine.conf dist/*.tar.gz --skip-existing --verbose
+	rm 'twine.conf'
+
+# Push PyPi package to package repository using local credentials
+.PHONY: pypi-push-local
+pypi-push-local:
+	@echo "Pushing using username and pass"
+	twine upload dist/*.tar.gz --skip-existing --verbose
+
+# We add these variables to the info target
+.PHONY: info-pypi
+info: info-pypi
+info-pypi:
+	@echo ""
+	@echo "############### PyPi ########################"
+	@echo ""
+	@echo "TWINE_TOKEN:                   $(TWINE_TOKEN)"
+	@echo "FK_PYPI_REGISTRY_URL_BASE: $(FK_PYPI_REGISTRY_URL_BASE)"
+	@echo "FK_PYPI_REGISTRY_USERNAME: $(FK_PYPI_REGISTRY_USERNAME)"
+	@echo "FK_PYPI_REGISTRY_PASSWORD: $(FK_PYPI_REGISTRY_PASSWORD)"
+	@echo "FK_PYPI_REGISTRY_URL:      $(FK_PYPI_REGISTRY_URL)"
+	@echo ""
+
+
+# We add this documentation to the help target
+.PHONY: help-pypi
+help: help-pypi
+help-pypi:
+	@echo ""
+	@echo "  PyPi"
+	@echo ""
+	@echo "    pypi-build:                      - Build PyPi package"
+	@echo "    pypi-list:                       - List the content of the PyPi package matching current version"
+	@echo "    pypi-push:                       - Helper for user to decide how to push PyPi packages"
+	@echo "    pypi-push-gitlab:                - Push PyPi package to package repository automatically using CI/CD environment variables (used by gitlab runner)"
+	@echo "    pypi-push-local:                 - Push PyPi package to package repository using local credentials"
+	@echo ""
+
+
+
+# Bootstrap
+################################################################################
+
+# The directory where we keep bootstrap
+FK_BOOTSTRAP_4_DIR:=$(FK_ROOT_DIR)/bootstrap/v4
+FK_BOOTSTRAP_5_DIR:=$(FK_ROOT_DIR)/bootstrap/v5
+FK_BOOTSTRAP_STYLES_DIR:=$(FK_ROOT_DIR)/webroot/static/styles
+
+# Prepare bootstrap 4 environment
+.PHONY: bootstrap-prep-4
+bootstrap-prep-4:
+	cd "$(FK_BOOTSTRAP_4_DIR)"; \
+	npm install
+
+# Prepare bootstrap 5 environment
+.PHONY: bootstrap-prep-5
+bootstrap-prep-5:
+	cd "$(FK_BOOTSTRAP_5_DIR)"; \
+	npm install
+
+# Build bootstrap 4 sources
+# TODO: Convert to use python sass
+.PHONY: bootstrap-build-4
+bootstrap-build-4:
+	cd "$(FK_BOOTSTRAP_4_DIR)"; \
+	sass "main.scss" "$(FK_BOOTSTRAP_STYLES_DIR)/main_4.css" --trace --sourcemap=none
+	@sync
+
+
+# Build bootstrap 5 sources
+# TODO: Convert to use python sass
+.PHONY: bootstrap-build-5
+bootstrap-build-5:
+	cd "$(FK_BOOTSTRAP_5_DIR)"; \
+	sass "main.scss" "$(FK_BOOTSTRAP_STYLES_DIR)/main_5.css" --trace --sourcemap=none
+	@sync
+
+bootstrap-prep: bootstrap-prep-4 bootstrap-prep-5
+
+bootstrap-build: bootstrap-build-4 bootstrap-build-5
+
+
+# We add these variables to the info target
+.PHONY: info-bootstrap
+info: info-bootstrap
+info-bootstrap:
+	@echo ""
+	@echo "############### Bootstrap ###################"
+	@echo ""
+	@echo "       FK_BOOTSTRAP_4_DIR: $(FK_BOOTSTRAP_4_DIR)"
+	@echo "       FK_BOOTSTRAP_5_DIR: $(FK_BOOTSTRAP_5_DIR)"
+	@echo "  FK_BOOTSTRAP_STYLES_DIR: $(FK_BOOTSTRAP_STYLES_DIR)"
+	@echo ""
+
+# We add this documentation to the help target
+.PHONY: help-bootstrap
+help: help-bootstrap
+help-bootstrap:
+	@echo ""
+	@echo "  Bootstrap"
+	@echo ""
+	@echo "    bootstrap-prep-4                 - Prepare for using bootstrap toolchain v4 by installing with npm"
+	@echo "    bootstrap-prep-5                 - Prepare for using bootstrap toolchain v5 by installing with npm"
+	@echo "    bootstrap-prep                   - Prepare for using bootstrap toolchain both v4 and v5 by installing with npm"
+	@echo "    bootstrap-build-4                - Build main CSS using botstrap v4"
+	@echo "    bootstrap-build-5                - Build main CSS using botstrap v5"
+	@echo "    bootstrap-build                  - Build main CSS using botstrap both v4 and v5"
+	@echo ""
+
+# Code quality
+################################################################################
+
+.PHONY: code-quality
+code-quality: docker-registry-sanity-check
+	cd "${FK_CODE_QUALITY_DIR}" && make all
+
+# Run most tests via $(FK_TESTS_DIR)/Makefile if applicable
+.PHONY: test
+test: docker-registry-sanity-check
+	cd "${FK_TESTS_DIR}" && make all
+
+# We add this documentation to the help target
+.PHONY: help-code-quality
+help: help-code-quality
+help-code-quality:
+	@echo ""
+	@echo "  Docker"
+	@echo ""
+	@echo "    code-quality                     - Run most code_quality via $(FK_CODE_QUALITY_DIR)/Makefile if applicable"
+	@echo "    tests                            - Run most tests via $(FK_TESTS_DIR)/Makefile if applicable"
+	@echo ""
+
+
+# Global Utilities
+################################################################################
+
+
+.PHONY: sync
+sync:
+	@sync
+
+
+.PHONY: sleep30
+sleep30:
+	@sleep 30
+
+
+.PHONY: sleep60
+sleep60:
+	@sleep 60
+
+
+.PHONY: sleep90
+sleep90:
+	@sleep 90
+
+
+.PHONY: sleep120
+sleep120:
+	@sleep 120
+
+
+# Generate
+.PHONY: utility-password-gen
+utility-password-gen:
+	@echo "$(shell shuf -n4 /usr/share/dict/words | tr -d '\n')"
+	@echo "$(shell openssl rand -base64 25 | tr -dc 'a-zA-Z0-9')123!"
+
+
+# We add this documentation to the help target
+.PHONY: help-global-utils
+help: help-global-utils
+help-global-utils:
+	@echo ""
+	@echo "  Utilities"
+	@echo ""
+	@echo "    sync                             - Synchronize disks. Useful as safeguard after large writes."
+	@echo "    sleep30                          - Sleep for 30 seconds"
+	@echo "    sleep60                          - Sleep for 60 seconds"
+	@echo "    sleep90                          - Sleep for 90 seconds"
+	@echo "    sleep120                         - Sleep for 120 seconds"
+	@echo "    utility-password-gen             - Generate passwords that meet project norm"
+	@echo ""
+
+#=============================
+# Sanity checks
+
+
+# See https://cloud.google.com/docs/authentication/production#automatically
+.PHONY: gc-sanity-check
+gc-sanity-check:
+	@if [ -z "$${GOOGLE_APPLICATION_CREDENTIALS_EMAIL}" ]; then \
+		echo "ERROR: GOOGLE_APPLICATION_CREDENTIALS_EMAIL environment variable not set, terminating"; \
+		echo "       It should be set in gitlab -> settings -> CI/CD -> variables"; \
+		echo "       along with GOOGLE_APPLICATION_CREDENTIALS"; \
+		exit 1; \
+	fi
+	@if [ -z "$${GOOGLE_APPLICATION_CREDENTIALS}" ]; then \
+		echo "ERROR: GOOGLE_APPLICATION_CREDENTIALS environment variable not set, terminating"; \
+		echo "       It should be set in gitlab -> settings -> CI/CD -> variables"; \
+		echo "       along with GOOGLE_APPLICATION_CREDENTIALS_EMAIL"; \
+		exit 1; \
+	fi
+
