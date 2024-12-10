@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "bugster"
+version = "0.2.2"
+description = "Python-Playwright based testing framework for Bugster's e2e testing agent"
+authors = ["Naquiao <nacho-solorzano@hotmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://www.bugster.dev"
+repository = "https://github.com/Bugsterapp/bugster-framework"
+keywords = ["testing", "bugster", "playwright", "pytest"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytest = "^8.3.4"
+playwright = "^1.49.0"
+
+# This section registers the plugin with Pytest. 
+# Pytest will load this plugin automatically when the package is installed.
+[tool.poetry.plugins."pytest11"]
+bugster = "bugster.test_runner.bugster_plugin"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
