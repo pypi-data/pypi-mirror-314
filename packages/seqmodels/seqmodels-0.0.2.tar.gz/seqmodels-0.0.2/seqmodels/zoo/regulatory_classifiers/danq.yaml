@@ -1,0 +1,23 @@
+model_name: DanQ
+input_len: 1000
+output_dim: 1
+arch_name: Hybrid
+arch:
+  conv1d_tower:
+    conv_channels: [4, 320]
+    conv_kernels: [26]
+    conv_padding: valid
+    activations: relu
+    pool_kernels: [13]
+    pool_types: max
+    dropout_rates: 0.2
+    orders: conv-act-pool-dropout
+  recurrent_block:
+      hidden_dim: 320
+      bidirectional: true
+      dropout_rate: 0.5
+  dense_tower:
+    hidden_dims: [925]
+    activations: [relu, null]
+    orders: linear-act
+  

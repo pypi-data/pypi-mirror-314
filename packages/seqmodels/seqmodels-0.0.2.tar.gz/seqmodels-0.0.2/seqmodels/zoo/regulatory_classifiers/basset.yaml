@@ -1,0 +1,20 @@
+model_name: Basset
+arch_name: CNN
+input_len: 600
+output_dim: 164
+arch:
+  conv1d_tower:
+    conv_channels: [4, 300, 200, 200]
+    conv_kernels: [19, 11, 7]
+    conv_paddings: [9, 5, 3]
+    activations: relu
+    pool_types: [max, max, max]
+    pool_kernels: [3, 4, 4]
+    norm_types: batchnorm
+    orders: conv-norm-act-pool
+  dense_tower:
+    hidden_dims: [1000, 1000]
+    activations: [relu, relu, null]
+    norm_types: batchnorm
+    dropout_rates: [0.3, 0.3, null]
+    orders: linear-norm-act-dropout
