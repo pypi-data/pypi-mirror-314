@@ -1,0 +1,126 @@
+Metadata-Version: 2.1
+Name: botrun-flow-lang
+Version: 4.12.101
+Summary: A flow language for botrun
+Author: sebastian-hsu
+Author-email: sebastian.hsu@gmail.com
+Requires-Python: >=3.11,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: aiohttp (>=3.10.8,<4.0.0)
+Requires-Dist: copilotkit (>=0.1.27,<0.2.0)
+Requires-Dist: deepdiff (>=8.0.1,<9.0.0)
+Requires-Dist: fastapi (>=0.115.5,<0.116.0)
+Requires-Dist: google-auth (>=2.35.0,<3.0.0)
+Requires-Dist: google-cloud-discoveryengine (>=0.13.3,<0.14.0)
+Requires-Dist: google-cloud-firestore (>=2.19.0,<3.0.0)
+Requires-Dist: google-cloud-storage (>=2.18.2,<3.0.0)
+Requires-Dist: langchain (>=0.3.7,<0.4.0)
+Requires-Dist: langchain-anthropic (>=0.2.4)
+Requires-Dist: langchain-community (>=0.3.9,<0.4.0)
+Requires-Dist: langchain-core (>=0.3.15,<0.4.0)
+Requires-Dist: langchain-google-community (>=2.0.3,<3.0.0)
+Requires-Dist: langchain-google-genai (>=2.0.6,<3.0.0)
+Requires-Dist: langchain-openai (>=0.2.10,<0.3.0)
+Requires-Dist: langgraph (>=0.2.45,<0.3.0)
+Requires-Dist: litellm (>=1.48.8,<2.0.0)
+Requires-Dist: pydantic-settings (>=2.5.2,<3.0.0)
+Requires-Dist: pytz (>=2024.2,<2025.0)
+Requires-Dist: pyyaml (>=6.0.2,<7.0.0)
+Requires-Dist: uvicorn (>=0.25.0,<0.26.0)
+Requires-Dist: vertexai (>=1.71.1,<2.0.0)
+Requires-Dist: wikipedia (>=1.4.0,<2.0.0)
+Description-Content-Type: text/markdown
+
+# botrun_flow_lang
+
+## 安裝
+- 用 poetry 管理 python 環境
+
+## 輸出可用的 requirements.txt
+```bash
+poetry export -f requirements.txt --output requirements.txt --without-hashes --without-urls
+```
+
+### 建立 dev 的 index
+```bash
+gcloud firestore indexes composite create \
+  --collection-group=botrun-hatch-dev-hatch \
+  --field-config=field-path=user_id,order=ascending \
+  --field-config=field-path=name,order=ascending \
+  --field-config=field-path=__name__,order=ascending \
+  --project=scoop-386004
+```
+
+### 打包 dev
+```bash
+gcloud builds submit --config cloudbuild_fastapi_dev.yaml --project=scoop-386004
+```
+### deploy cloud run, dev 的版本
+```bash
+gcloud run deploy botrun-flow-lang-fastapi-dev \
+  --image asia-east1-docker.pkg.dev/scoop-386004/botrun-flow-lang/botrun-flow-lang-fastapi-dev \
+  --port 8080 \
+  --platform managed \
+  --allow-unauthenticated \
+  --project=scoop-386004 \
+  --region=asia-east1 \
+  --cpu 2 \
+  --memory 8Gi \
+  --min-instances 0 \
+  --max-instances 5 \
+  --timeout 3600s \
+  --concurrency 300 \
+  --cpu-boost \
+```
+
+### 建立 staging 的 index
+```bash
+gcloud firestore indexes composite create \
+  --collection-group=botrun-hatch-hatch \
+  --field-config=field-path=user_id,order=ascending \
+  --field-config=field-path=name,order=ascending \
+  --field-config=field-path=__name__,order=ascending \
+  --project=scoop-386004
+```
+
+### 打包 Cloud Run, staging 的版本
+```bash
+gcloud builds submit --config cloudbuild_fastapi.yaml --project=scoop-386004
+```
+
+### 佈署 cloud run, staging 的版本
+```bash
+gcloud run deploy botrun-flow-lang-fastapi \
+  --image asia-east1-docker.pkg.dev/scoop-386004/botrun-flow-lang/botrun-flow-lang-fastapi \
+  --port 8080 \
+  --platform managed \
+  --allow-unauthenticated \
+  --project=scoop-386004 \
+  --region=asia-east1 \
+  --cpu 2 \
+  --memory 8Gi \
+  --min-instances 0 \
+  --max-instances 5 \
+  --timeout 3600s \
+  --concurrency 300 \
+  --cpu-boost \
+```
+
+## 為了要減少冷啟動的時間，每十分鐘呼叫一次 heartbeat
+```bash
+gcloud scheduler jobs create http botrun-flow-lang-heartbeat-job-$ENV \
+  --schedule "*/10 * * * *" \
+  --time-zone "Asia/Taipei" \
+  --uri "https://botrun-flow-lang-fastapi-$ENV-36186877499.asia-east1.run.app/heartbeat" \
+  --http-method GET \
+  --location "asia-east1" \
+  --project "scoop-386004"
+```
+測試 scheduler
+```bash
+gcloud scheduler jobs run botrun-flow-lang-heartbeat-job-$ENV --location "asia-east1" --project "scoop-386004"
+```
+
