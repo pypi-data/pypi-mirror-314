@@ -1,0 +1,813 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "./schema.schema.json/#/definitions/MSMLSpec",
+    "title": "MSML",
+    "$id": "https://github.com/BlockScience/MSML/src/schema.schema.json",
+    "definitions": {
+        "MSMLSpec": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Policies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Policy"
+                    }
+                },
+                "Spaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Space"
+                    }
+                },
+                "State": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/State"
+                    }
+                },
+                "Stateful Metrics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/StatefulMetric"
+                    }
+                },
+                "Parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Parameter"
+                    }
+                },
+                "Mechanisms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Mechanism"
+                    }
+                },
+                "Entities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Entity"
+                    }
+                },
+                "Boundary Actions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/BoundaryAction"
+                    }
+                },
+                "Control Actions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/ControlAction"
+                    }
+                },
+                "Wiring": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Wiring"
+                    }
+                },
+                "Types": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Type"
+                    }
+                },
+                "Metrics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Metric"
+                    }
+                },
+                "Displays": {"type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "wiring": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "./schema.schema.json/#/definitions/WiringDisplay"
+                        }
+                    }
+                },
+                "required": [
+                    "wiring"
+                ]}
+            },
+            "required": [
+                "Boundary Actions",
+                "Control Actions",
+                "Entities",
+                "Mechanisms",
+                "Parameters",
+                "Policies",
+                "Spaces",
+                "State",
+                "Stateful Metrics",
+                "Types",
+                "Wiring",
+                "Metrics"
+            ],
+            "title": "MSMLSpec",
+            "description": "A JSON schema that is used in the mathematical specification mapping library to create the underlying MSML object."
+        },
+        "ControlAction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the control action"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "The description of the control action"
+                },
+                "constraints": {
+                    "type": "array",
+                    "description": "Any constraints which the control action must respect",
+                    "items": {"type": "string"}
+                },
+                "control_action_options": {
+                    "type": "array",
+                    "items": {"$ref": "./schema.schema.json/#/definitions/ControlActionOption"},
+                    "description": "Possible implementations of the control action"
+                },
+                "codomain": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The output spaces of the control action"
+                },
+                "parameters_used": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "The parameters which the control action uses in its implenetations"
+                }
+            },
+            "required": [
+                "codomain",
+                "constraints",
+                "control_action_options",
+                "description",
+                "name",
+                "parameters_used"
+            ],
+            "title": "ControlAction",
+            "description": "The definition of actions that the system might call, such as an action to refill the stock of an item when reserves run too low or something that could get triggered from a sensor. The key differentiator from boundary actions is that there is no entity calling it and it is not done with randomness."
+        },
+        "BoundaryActionOption": {"type": "object",
+        "additionalProperties": false,
+    "properties": {"name": {"type": "string",
+    "description": "The name of the boundary action option"},
+    "description": {"type": "string",
+    "description": "A description of what this implementation does"},
+    "logic": {"type": "string",
+    "description": "The logic related to the implementation"},
+        "metadata": {"type": "object"}},
+    "title": "BoundaryActionOption",
+    "required": [
+        "name",
+        "description",
+        "logic"
+    ],
+"description": "Specific implementations of a control action which are in the same form of the underlying control action definition."},
+        "ControlActionOption": {"type": "object",
+        "additionalProperties": false,
+    "properties": {"name": {"type": "string",
+    "description": "The name of the control action option"},
+    "description": {"type": "string",
+    "description": "A description of what this implementation does"},
+    "logic": {"type": "string",
+    "description": "The logic related to the implementation"},
+        "metadata": {"type": "object"}},
+    "title": "ControlActionOption",
+    "required": [
+        "name",
+        "description",
+        "logic"
+    ],
+"description": "Specific implementations of a control action which are in the same form of the underlying control action definition."},
+        "Entity": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the entity"
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "Any notes on the entity"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "The string key for the state associated with the entity"
+                },
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "name",
+                "notes",
+                "state"
+            ],
+            "title": "Entity",
+            "description": "Entities are any class of user or infrastructure that should have their own state and potentially ability to call boundary actions. Examples could be a customer or a company (for which a simulation might assume it is acting as one cohesive unit)"
+        },
+        "Mechanism": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the mechanism"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "The description of what the mechanism does"
+                },
+                "constraints": {
+                    "type": "array",
+                    "description": "Any constraints which the mechanism must respect",
+                    "items": {"type": "string"}
+                },
+                "logic": {
+                    "type": "string",
+                    "description": "The logic of how the mechanism should work"
+                },
+                "domain": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The spaces which are the input into the mechanism"
+                },
+                "parameters_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The string keys of parameters which have an effect on the mechanism"
+                },
+                "updates": {
+                    "type": "array",
+                    "items": {
+                        "items": {
+                            "$ref": "./schema.schema.json/#/definitions/Update"
+                        }
+                    },
+                    "description": "The states updates that the mechanism causes in the form of (Entity, State Variable)"
+                },
+                "metadata": {"type": "object",
+            "description": "Any metadata that is added onto the mechanism"}
+            },
+            "required": [
+                "constraints",
+                "description",
+                "domain",
+                "logic",
+                "name",
+                "parameters_used",
+                "updates"
+            ],
+            "title": "Mechanism",
+            "description": "Anything that updates state in the system, usually policies will call these with the outputs of logic. The reasoning to split them out is so that if at some point you want to add a recording variable every time an account is changed or do something like have a variable listener, you can just change the mechanism responsible for it in only one place."
+        },
+        "Parameter": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the parameter set"
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "Any notes about the parameter set"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/ParameterElement"
+                    },
+                    "description": "All parameters that are a part of this parameter set"
+                }
+            },
+            "required": [
+                "name",
+                "notes",
+                "parameters"
+            ],
+            "title": "Parameter",
+            "description": "Both local and global parameter sets in the system that could be set"
+        },
+        "ParameterElement": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "variable_type": {
+                    "type": "string",
+                    "description": "The type of that the parameter takes."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The unique name of the parameter"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "The description of the parameter"
+                },
+                "symbol": {
+                    "type": ["string","null"],
+                    "description": "The symbol associated with the parameter (optional)"
+                },
+                "domain": {
+                    "type": ["string","null"],
+                    "description": "The mathematical domain of the parameter (optional)"
+                },
+                "parameter_class": {
+                    "type": "string",
+                    "description": "The type of paramter this is, of which the options are system (what you would find in production code of a system), behavioral (for what kinds of behavioral assumptions and distributions there are), and functional (for defining out different functional forms such as swapping in and out policies)"
+                }
+            },
+            "required": [
+                "description",
+                "domain",
+                "name",
+                "parameter_class",
+                "symbol",
+                "variable_type"
+            ],
+            "title": "ParameterElement"
+        },
+        "Policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the policy"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the policy"
+                },
+                "constraints": {
+                    "type": "array",
+                    "description": "Any constraints which the policy must respect",
+                    "items": {"type": "string"}
+                },
+                "policy_options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/PolicyOption"
+                    },
+                    "description": "Possible implementations of the policy"
+                },
+                "domain": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The spaces which are passed in as inputs to the policy"
+                },
+                "codomain": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The spaces which are returned as results of the policy"
+                },
+                "parameters_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "All parameters used in the implementations of policies"
+                },
+                "metrics_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "All metrics used in implementation of policies"
+                },
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "codomain",
+                "constraints",
+                "description",
+                "domain",
+                "name",
+                "parameters_used",
+                "policy_options",
+                "metrics_used"
+            ],
+            "title": "Policy",
+            "description": "A definition of the policies that handle all logical things. This could be, for example, a policy which determines what price is paid given a boundary action of someone putting in a market buy order for a stock."
+        },
+        "PolicyOption": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the policy option"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A description of the implementation"
+                },
+                "logic": {
+                    "type": "string",
+                    "description": "Any logic associated with the implementation"
+                },
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "description",
+                "logic",
+                "name"
+            ],
+            "title": "PolicyOption",
+            "description": "The concrete possible implementations that a given policy block can reference or select"
+        },
+        "Space": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "schema": {
+                    "$ref": "./schema.schema.json/#/definitions/Schema"
+                }
+            },
+            "required": [
+                "name",
+                "schema"
+            ],
+            "title": "Space",
+            "description": "Spaces are similar to types in that they define a schema for data and are used as the domain/codomain for different blocks. They can be thought of as typed dictionaries."
+        },
+        "StatefulMetric": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the stateful metric set"
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "Any notes about the stateful metric set"
+                },
+                "metrics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/StatefulMetricVar",
+                        "description": "All the attatched stateful metrics"
+                    }
+                }
+            },
+            "required": [
+                "metrics",
+                "name",
+                "notes"
+            ],
+            "title": "Stateful Metric",
+            "description": "Variables that are not held directly in the state but can computed from the state & parameters."
+        },
+        "BoundaryAction": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the boundary action"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Quick description of the boundary action"
+                },
+                "constraints": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Any constraints which the boundary action must respect"
+                },
+                "boundary_action_options": {
+                    "type": "array",
+                    "items": {"$ref": "./schema.schema.json/#/definitions/BoundaryActionOption"},
+                    "description": "The options for implementation of the boundary action"
+                },
+                "called_by": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The entities which are allowed to call this boundary action"
+                },
+                "codomain": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of outputs that come out of this block"
+                },
+                "parameters_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The string keys of parameters which have an effect on the boundary action"
+                }
+            },
+            "required": [
+                "boundary_action_options",
+                "called_by",
+                "codomain",
+                "constraints",
+                "description",
+                "name",
+                "parameters_used"
+            ],
+            "title": "Boundary Action",
+            "description": "The definition of different actions that might happen outside of the system such as customers coming into a shop. Generally will be called by entities."
+        },
+        "Schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [],
+            "title": "Schema"
+        },
+        "State": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Any notes about the state or its implementation"
+                },
+                "notes": {
+                    "type": "string",
+                    "description": "The name of the state"
+                },
+                "variables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "./schema.schema.json/#/definitions/Variable"
+                    },
+                    "description": "All the attatched state variables for the component"
+                }
+            },
+            "required": [
+                "name",
+                "notes",
+                "variables"
+            ],
+            "title": "State",
+            "description": "The definition of states in the system. There is one global system state and then the rest of the definitions are local states, generally for recording what entity states there are."
+        },
+        "Variable": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "The type of the variable"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Variable name"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of what the variable is"
+                },
+                "symbol": {
+                    "type": ["string","null"],
+                    "description": "The symbol associated with the parameter (optional)"
+                },
+                "domain": {
+                    "type": ["string","null"],
+                    "description": "The mathematical domain of the parameter (optional)"
+                },
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "description",
+                "domain",
+                "name",
+                "symbol",
+                "type"
+            ],
+            "title": "Variable"
+        },
+        "Type": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "name",
+                "notes",
+                "type"
+            ],
+            "title": "Type",
+            "description": "This is for defining what a type might in its most basic form. These could be single typings or compound typings. The point here is to allow for changing typing in one single place and having it flow through anywhere else. I.e. if one were to define the currency type as USD, but then the project switched to using EUR, it would just require changing currency to be EUR."
+        },
+        "Metric": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "variables_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "parameters_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "metrics_used": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "domain": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "logic": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": ["string", "null"]
+                }
+            },
+            "required": [
+                "description",
+                "domain",
+                "logic",
+                "name",
+                "parameters_used",
+                "symbol",
+                "type",
+                "variables_used",
+                "metrics_used"
+            ],
+            "title": "Metric",
+            "description": "This component takes a variety of potential inputs and creates a metric from it. This can be used for defining out system success metrics or trying to modularize certain calculations that are needed across many other system components."
+        },
+        "Wiring": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "components": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "constraints": {
+                    "type": "array",
+                    "items": {}
+                },
+                "type": {
+                    "$ref": "./schema.schema.json/#/definitions/TypeEnum"
+                },
+                "mermaid_show_name": {
+                    "type": "boolean"
+                },
+                "loop": {
+                    "type": "boolean"
+                },
+                "optional_indices": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "metadata": {"type": "object"}
+            },
+            "required": [
+                "components",
+                "constraints",
+                "description",
+                "name",
+                "type"
+            ],
+            "title": "Wiring",
+            "description": "A wiring is a block composed of other blocks with specific behaviors or orders of execution. For instance, there can be wirings that have blocks run one after another, passing their codomains to the next block's domain. There can also be wirings for blocks that all should run in parallel."
+        },
+        "Update": {
+            "title": "Update"
+        },
+        "TypeEnum": {
+            "type": "string",
+            "enum": [
+                "Parallel",
+                "Stack"
+            ],
+            "title": "TypeEnum"
+        },
+        "WiringDisplay": {"type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            },
+            "components": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "required": [
+            "components",
+            "name",
+            "description"
+        ]},
+        "StatefulMetricVar": {"type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "type": {
+                "type": "string",
+                "description": "The type of the metric variable"
+            },
+            "name": {
+                "type": "string",
+                "description": "The name of the stateful metric variable"
+            },
+            "description": {
+                "type": "string",
+                "description": "The description of the computation"
+            },
+            "variables_used": {
+                "type": "array",
+                "items": {
+
+                },
+                "description": "The variables used for computation of the form (state, variable)"
+            },
+            "parameters_used": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "description": "The string keys of parameters which are used in the metric calculation"
+                }
+            },
+            "symbol": {
+                "type": ["string","null"],
+                "description": "The symbol associated with the stateful metric (optional)"
+            },
+            "domain": {
+                "type": ["string","null"],
+                "description": "The mathematical domain of the stateful metric (optional)"
+            }
+        }
+    }
+}
+}
