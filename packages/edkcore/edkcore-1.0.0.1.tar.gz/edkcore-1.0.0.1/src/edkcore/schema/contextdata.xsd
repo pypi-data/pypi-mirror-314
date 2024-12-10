@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.edkcore.org/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.edkcore.org/XMLSchema"
+           elementFormDefault="qualified">
+
+    <xs:element name="Configuration">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="name"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Configurations">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Configuration" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PersistentDevice">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="Configurations" minOccurs="0" maxOccurs="1"/>
+            </xs:all>
+            <xs:attribute name="name" use="required"/>
+            <xs:attribute name="class" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Persistents">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="PersistentDevice" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ContextData">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="Persistents" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="Datas" minOccurs="1" maxOccurs="1"/>
+            </xs:all>
+            <xs:attribute name="class" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Data">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Getter" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="Persistent" minOccurs="0" maxOccurs="1"/>
+
+            </xs:sequence>
+            <xs:attribute name="dataType" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="int"/>
+                        <xs:enumeration value="str"/>
+                        <xs:enumeration value="dict"/>
+                        <xs:enumeration value="list"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="name" use="required"/>
+            <xs:attribute name="inputBy" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="User"/>
+                        <xs:enumeration value="Sys"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Datas">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Data" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Persistent">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Persistence" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:attribute name="class" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Serialize" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:attribute name="class" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:all>
+            <xs:attribute name="ref" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Getter">
+        <xs:annotation>
+            <xs:documentation>
+                定义获取属性的获取方法
+                class 指向的是实现类
+                userInput 表示的是用户的初始化输入
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="class" use="optional"/>
+            <xs:attribute name="userInput" use="required" default=""/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

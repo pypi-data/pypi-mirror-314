@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EDK xmlns="http://www.edkcore.org/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.edkcore.org/XMLSchema edk-core.xsd">
+    <MetaAction contextData="edkcore.tests.test_factory.sum_context_data.SumContextData">
+        <Properties>
+            <Property name="Description">设置变量并加</Property>
+        </Properties>
+        <ACS>
+            <MetaAction class="edkcore.tests.test_factory.meta_variable.MetaVariable">
+                <Properties>
+                    <Property name="Description">设置变量</Property>
+                    <Property name="Number">2</Property>
+                </Properties>
+            </MetaAction>
+            <MetaAction class="edkcore.tests.test_factory.meta_increment.MetaIncrement">
+                <Properties>
+                    <Property name="Description">加操作</Property>
+                </Properties>
+            </MetaAction>
+            <MetaAction class="edkcore.tests.test_factory.meta_increment.MetaIncrement">
+                <Properties>
+                    <Property name="Description">加操作</Property>
+                </Properties>
+            </MetaAction>
+            <AssertAction class="edkcore.tests.test_factory.assert_sum.AssertSum">
+                <Properties>
+                    <Property name="Description">测试AssertAction</Property>
+                </Properties>
+                <Expects>
+                    <Field name='Sum' description='求和' expect='4'/>
+                </Expects>
+            </AssertAction>
+        </ACS>
+    </MetaAction>
+</EDK>

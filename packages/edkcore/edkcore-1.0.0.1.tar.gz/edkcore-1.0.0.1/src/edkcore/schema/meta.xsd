@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.edkcore.org/XMLSchema"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.edkcore.org/XMLSchema"
+           elementFormDefault="qualified">
+    <xs:attributeGroup name="ActionAttribDef">
+        <xs:attribute name="path" type="xs:string" use="optional"/>
+        <xs:attribute name="class" type="xs:string" use="optional"/>
+        <xs:attribute name="contextData" type="xs:string" use="optional"/>
+
+    </xs:attributeGroup>
+    <xs:attributeGroup name="PropertyAttribDef">
+        <xs:annotation>
+            <xs:documentation>
+                Description: 简单的功能描述
+                Images: 涉及到的操作界面
+                Tags: 标签分类用
+                Images 和 Tags 是预留字段,目前没有解析.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Description" />
+                    <xs:enumeration value="Images" />
+                    <xs:enumeration value="Tags" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:complexType name="PropertyDef">
+        <xs:simpleContent>
+
+            <xs:extension base="xs:string">
+                <xs:attributeGroup ref="PropertyAttribDef"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="PropertiesDef">
+        <xs:sequence>
+            <xs:element name="Property" type="PropertyDef" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:element name="Properties" type="PropertiesDef"/>
+    <xs:element name="Field">
+        <xs:complexType>
+            <xs:attribute name="name" use="required"/>
+            <xs:attribute name="description" use="required"/>
+            <xs:attribute name="expect" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Expects">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Field" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="AssertActionDef">
+        <xs:all>
+            <xs:element ref="Properties"/>
+            <xs:element ref="Expects"/>
+        </xs:all>
+        <xs:attributeGroup ref="ActionAttribDef"/>
+    </xs:complexType>
+    <xs:element name="AssertAction" type="AssertActionDef"/>
+    <xs:element name="ContextAction">
+        <xs:complexType>
+            <xs:attributeGroup ref="ActionAttribDef"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="A">
+        <xs:sequence>
+            <xs:element ref="ContextAction" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="MetaAction" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="AssertAction" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AC">
+        <xs:complexContent>
+            <xs:extension base="A">
+                <xs:sequence>
+                    <xs:element ref="AssertAction" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="MetaAction" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="ContextAction" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+
+    </xs:complexType>
+
+    <xs:element name="ACS">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="AC">
+                    <xs:sequence>
+                        <xs:element ref="MetaAction" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element ref="ContextAction" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element ref="AssertAction" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="MetaAction">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="Properties" minOccurs="0"/>
+                <xs:element ref="ACS" minOccurs="0"/>
+            </xs:all>
+            <xs:attributeGroup ref="ActionAttribDef"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SceneAction">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="Properties"/>
+                <xs:element ref="ACS" minOccurs="0" maxOccurs="1"/>
+            </xs:all>
+            <xs:attribute name="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+
+</xs:schema>
