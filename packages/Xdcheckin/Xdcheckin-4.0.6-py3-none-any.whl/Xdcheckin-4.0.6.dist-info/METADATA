@@ -1,0 +1,85 @@
+Metadata-Version: 2.1
+Name: Xdcheckin
+Version: 4.0.6
+Summary: Chaoxing Checkin Tool for XDU.
+Author-email: Pairman <pairmanxlr@gmail.com>
+License: GNU General Public License v3 (GPLv3)
+Project-URL: Homepage, https://github.com/Pairman/Xdcheckin
+Project-URL: Changelog, https://github.com/Pairman/Xdcheckin/blob/main/CHANGELOG.md
+Keywords: xdu,xidian,chaoxing,livestream
+Classifier: Framework :: aiohttp
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: JavaScript
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiocache>=0.12.0
+Requires-Dist: aiohttp>=3.8.1
+Requires-Dist: aiohttp-compress>=0.2.0
+Requires-Dist: aiohttp-session>=2.6.0
+Requires-Dist: pillow>=8.4.0
+Requires-Dist: pycryptodome>=3.9.4
+Requires-Dist: yarl>=1.12.0
+Provides-Extra: image
+Requires-Dist: pyzbar>=0.1.8; extra == "image"
+Requires-Dist: xdcheckin-ffmpeg>=1.0.0; extra == "image"
+
+# Xdcheckin
+Don't use.
+
+## APP
+### Install
+Checkout [releases](https://github.com/Pairman/Xdcheckin/releases/).
+
+### Build
+1. Install build tool:
+```
+pip install briefcase
+```
+
+2. Clone this repo:
+```
+git clone https://github.com/Pairman/Xdcheckin
+```
+
+3. Build and package for your platform:
+```
+briefcase package
+```
+
+## Module
+### Install
+Install the module:
+```
+pip install Xdcheckin
+```
+
+### Usage
+The module provides ```xdcheckin```, ```xdcheckin.core``` (core APIs) and ```xdcheckin.server``` (server implementation) for importing. It also provides the ```xdcheckin-server``` commandline tool to start a server at the given IP and port.
+
+## Notes
+### For Android
+The APP doesn't use WebView on Android until upstream support, therefore it will open ```http://localhost:5001``` in your browser automatically.
+
+Due to signature change, if you upgrade from version 1.3.2 (or older) to 1.3.3 (or newer), please uninstall before upgrading.
+
+### For Linux
+The APP doesn't use WebView on Linux, therefore it will open ```http://localhost:5001``` in your browser automatically.
+
+### For Windows
+Version 3.1.1 (or older) needs [Visual C++ Redistributable Packages for Visual Studio 2013](https://www.microsoft.com/en-US/download/details.aspx?id=40784) to work on Windows. Please install [vcredist_x64.exe](https://download.microsoft.com/download/c/c/2/cc2df5f8-4454-44b4-802d-5ea68d086676/vcredist_x64.exe).
+
+### For server-side
+Due to cross origin problems on Safari, qrcode scanning on iOS devices are not supported on older versions. You must use version 3.6.1 (or newer) and run ```pip install xdcheckin[image]``` to make qrcode decoding work on iOS.
+
+## Credits
+[BenderBlog/traintime_pda](https://github.com/BenderBlog/traintime_pda) <br>
+[cxOrz/chaoxing-sign-cli](https://github.com/cxOrz/chaoxing-sign-cli) <br>
+[kuizuo/js-deobfuscator](https://github.com/kuizuo/js-deobfuscator) <br>
+[Reclu3e/xd_learning_live_publish](https://github.com/Reclu3e/xd_learning_live_publish) <br>
+[Rrrilac/XDUsign](https://github.com/Rrrilac/XDUsign) <br>
+[runoob09/xxt_library_seat](https://github.com/runoob09/xxt_library_seat) <br>
+[w964522982/xxtSign](https://github.com/w964522982/xxtSign) <br>
+[xdlinux/libxduauth](https://github.com/xdlinux/libxduauth) <br>
+[YangRucheng/Chaoxing-AutoSign](https://github.com/YangRucheng/Chaoxing-AutoSign)

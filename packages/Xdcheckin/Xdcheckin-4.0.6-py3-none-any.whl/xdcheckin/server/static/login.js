@@ -1,0 +1,299 @@
+async function setAccount(username) {
+	const account = JSON.parse(
+			    localStorage.getItem("accounts") || "{}")[username];
+	if (!account) {
+		alert("No such account.");
+		return;
+	}
+	localStorage.setItem("username", username);
+	localStorage.setItem("password", account.password);
+	localStorage.setItem("cookies", account.cookies);
+	localStorage.setItem("chaoxing_config",
+			     account.chaoxing_config || "{}");
+	localStorage.setItem("login_method", account.login_method);
+}
+
+async function deleteAccount() {
+	const accounts = JSON.parse(localStorage.getItem("accounts") || "{}");
+	let username;
+	if (Object.keys(accounts).length <= 1) {
+		alert("Cannot delete the only account.");
+		return;
+	}
+	else {
+		username = prompt("Input username to delete:");
+		if (username === null)
+			return;
+		else if (!(username in accounts)) {
+			alert("No such account.");
+			return;
+		}
+	}
+	delete accounts[username];
+	localStorage.setItem("accounts", JSON.stringify(accounts));
+	const b = document.getElementById(`accounts-${username}-button`);
+	b.parentElement.removeChild(b);
+	if (localStorage.getItem("username") == username) {
+		alert("Deleted the active one. Logging in with another.");
+		setAccount(Object.keys(accounts)[0]);
+		promptLogin(auto = 2);
+	}
+}
+
+async function reconfAccount() {
+	const accounts = JSON.parse(localStorage.getItem("accounts") || "{}");
+	let username;
+	if (Object.keys(accounts).length == 1)
+		username = localStorage.getItem("username");
+	else {
+		username = prompt(
+				 "Input username to reconfigure for Chaoxing:");
+		if (username === null)
+			return;
+		else if (!(username in accounts)) {
+			alert("No such account.");
+			return;
+		}
+	}
+	const account = accounts[username];
+	const chaoxing_config = prompt(`Modify Chaoxing configurations for ` +
+				       `${username}:`,
+				       account.chaoxing_config || "{}");
+	if (chaoxing_config === null)
+		return;
+	try {
+		assert(JSON.parse(chaoxing_config).constructor == Object);
+	}
+	catch (err) {
+		alert("Invalid configurations.");
+		return;
+	}
+	account.chaoxing_config = chaoxing_config;
+	localStorage.setItem("accounts", JSON.stringify(accounts));
+	if (localStorage.getItem("username") == username)
+		localStorage.setItem("chaoxing_config", chaoxing_config);
+	config_len = Object.keys(JSON.parse(chaoxing_config)).length;
+	document.getElementById(`accounts-${username}-button`).innerText =
+		 `${username} (${account.login_method}, ${config_len} configs)`;
+	alert(`Configurations updated for ${username}:\n` +
+	      `${JSON.stringify(JSON.parse(chaoxing_config), null, '    ')}`);
+}
+
+async function listAccounts() {
+	if (listAccounts.calling)
+		return;
+	listAccounts.calling = true;
+	document.getElementById("accounts-button").style.display = "none";
+	const accounts = JSON.parse(localStorage.getItem("accounts") || "{}");
+	const e = document.getElementById("accounts-list-div");
+	e.replaceChildren();
+	if (Object.keys(accounts).length < 4)
+		e.appendChild(newElement("button", {
+			innerText: "New", onclick: () => promptLogin()
+		}));
+	if (Object.keys(accounts).length > 1)
+		e.appendChild(newElement("button", {
+			innerText: "Delete", onclick: () => deleteAccount()
+		}));
+	if (Object.keys(accounts).length) {
+		e.appendChild(newElement("button", {
+			innerText: "Reconfigure", onclick: () => reconfAccount()
+		}));
+		e.appendChild(newElement("button", {
+			innerText: "Debug", onclick: () =>
+			prompt("Debug information (share with caution!):",
+			       dumpsDebugInfo())
+		}));
+	}
+	e.appendChild(document.createElement("br"));
+	for (let username in accounts) {
+		const account = accounts[username];
+		const login_method = account.login_method;
+		const config_len = Object.keys(JSON.parse(
+				       account.chaoxing_config || "{}")).length;
+		e.appendChild(newElement("button", {
+			id: `accounts-${username}-button`, innerText:
+			`${username} (${login_method}, ${config_len} configs)`,
+			onclick: () => {
+				setAccount(username);
+				promptLogin(auto = 2);
+			}
+		}));
+	}
+	hideOtherLists('accounts-list-div');
+	listAccounts.calling = false;
+}
+
+async function afterLoginDuties(auto = false) {
+	enablePlayers();
+	getCurriculum();
+	if (localStorage.getItem("fid") == "16820")
+		getCurriculum(true);
+	const username = localStorage.getItem("username");
+	const chaoxing_config = localStorage.getItem("chaoxing_config");
+	document.getElementById("logout-button").innerText =
+			 `Logout (*${username.substring(username.length - 4)})`;
+	const accounts = JSON.parse(localStorage.getItem("accounts") || "{}");
+	accounts[username] = {
+		"password": localStorage.getItem("password"),
+		"cookies": localStorage.getItem("cookies"),
+		"login_method": localStorage.getItem("login_method"),
+		chaoxing_config
+	}
+	localStorage.setItem("accounts", JSON.stringify(accounts));
+	["accounts-button", "accounts-list-div"].forEach(
+						   e_id => displayTag(e_id, 0));
+	[
+		"logout-button",
+		"player0-scan-button", "player2-scan-button",
+		"camera-scan-button",
+		"locations-button", "activities-button", "curriculum-button"
+	].forEach(e_id => displayTag(e_id, 1));
+	if (auto == 1)
+		return;
+	alert(`Logged in successfully as ${username}.\n\n` +
+	      `Chaoxing Configurations :\n` +
+	      `${JSON.stringify(JSON.parse(chaoxing_config), null, '    ')}`);
+}
+
+async function afterLogoutDuties() {
+	hideOtherLists();
+	[
+		"logout-button",
+		"player0-scan-button", "player2-scan-button",
+		"camera-scan-button",
+		"locations-button", "activities-button", "curriculum-button"
+	].forEach(e_id => displayTag(e_id, 0));
+	displayTag("accounts-button", 1);
+}
+
+async function promptLogin(auto = false) {
+	if (globalThis.g_logging_in || globalThis.g_logged_in)
+		return;
+	let username = localStorage.getItem("username");
+	let password = localStorage.getItem("password");
+	let chaoxing_config = localStorage.getItem("chaoxing_config") || "{}";
+	let method = (localStorage.getItem("login_method") === "ids");
+	if (!username || !auto) {
+		method = !confirm("Login?\nChoose account type: " +
+				 "confirm for Chaoxing, else IDS.");
+		username = prompt("Input username:");
+		if (username === null)
+			return;
+		assert(username, "Invalid username.");
+		password = prompt("Input password:");
+		if (password === null)
+			return;
+		assert(password, "Invalid password.");
+		chaoxing_config = prompt("(Optional) " +
+					 "Input configurations for Chaoxing " +
+					 "(in JSON string):") || "{}";
+		try {
+			assert(JSON.parse(chaoxing_config).constructor ==
+			       						Object);
+		}
+		catch (err) {
+			throw new Error("Invalid configurations.");
+		}
+	}
+	try {
+		const ret = await (method ? idsLogin(username, password,
+						     chaoxing_config =
+						     chaoxing_config) :
+					    chaoxingLogin(username, password,
+							  force = false,
+							  chaoxing_config =
+							  chaoxing_config));
+		assert(ret === true, ret);
+		globalThis.g_logged_in = true;
+		afterLoginDuties(auto = auto);
+	}
+	catch (err) {
+		globalThis.g_logged_in = false;
+		alert(`Login failed. (${err.message})`);
+	}
+	globalThis.g_logging_in = false;
+}
+
+async function promptLogout() {
+	if (globalThis.g_logging_in || !globalThis.g_logged_in)
+		return;
+	if (confirm("Logout?")) {
+		globalThis.g_logged_in = false;
+		afterLogoutDuties();
+	}
+}
+
+async function chaoxingLogin(username, password, force = false,
+			     chaoxing_config = "{}") {
+	let ret = false;
+	const cookies = force ? localStorage.getItem("cookies") :
+				(username != localStorage.getItem("username") ||
+				 password != localStorage.getItem("password") ?
+				 "" : localStorage.getItem("cookies"));
+	try {
+		const res = await post("/chaoxing/login", {
+			"username": username, "password": password,
+			"cookies": cookies, "chaoxing_config": chaoxing_config
+		});
+		assert(res.status == 200, "Backend Chaoxing login error.");
+		const data = res.json();
+		assert(!data.err, data.err);
+		assert(data.cookies, "Backend Chaoxing login failed.");
+		localStorage.setItem("login_method", "chaoxing");
+		localStorage.setItem("username", username);
+		localStorage.setItem("password", password);
+		localStorage.setItem("cookies", data.cookies);
+		localStorage.setItem("chaoxing_config", chaoxing_config);
+		localStorage.setItem("fid", data.fid);
+		globalThis.g_courses = data.courses;
+		ret = true;
+	}
+	catch (err) {
+		ret = err.message;
+	}
+	return ret;
+}
+
+async function idsLogin(username, password, chaoxing_config = "{}") {
+	let ret = false;
+	const cookies = username != localStorage.getItem("username") ||
+			password != localStorage.getItem("password") ?
+			"" : localStorage.getItem("cookies");
+	const l = document.getElementById("accounts-button");
+	try {
+		if (cookies) {
+			ret = await chaoxingLogin("", "", force = true,
+						  chaoxing_config =
+						  chaoxing_config);
+			if (ret === true) {
+				localStorage.setItem("login_method", "ids");
+				localStorage.setItem("username", username);
+				localStorage.setItem("password", password);
+				return true;
+			}
+		}
+		l.disabled = true;
+		const res = await post("/ids/login", {
+			"username": username, "password": password,
+			"chaoxing_config": chaoxing_config
+		});
+		assert(res.status == 200, "Backend IDS login finish error.");
+		const data = res.json();
+		assert(!data.err, data.err);
+		assert(data.cookies, "Backend IDS login failed.");
+		localStorage.setItem("login_method", "ids");
+		localStorage.setItem("username", username);
+		localStorage.setItem("password", password);
+		localStorage.setItem("cookies", data.cookies);
+		localStorage.setItem("chaoxing_config", chaoxing_config);
+		localStorage.setItem("fid", data.fid);
+		globalThis.g_courses = data.courses;
+		ret = true;
+	}
+	catch (err) {
+		ret = err.message;
+	}
+	l.disabled = false;
+	return ret;
+}
