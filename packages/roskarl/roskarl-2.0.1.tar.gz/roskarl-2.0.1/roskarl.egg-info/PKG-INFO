@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: roskarl
+Version: 2.0.1
+Summary: Environment variable helpers
+Author-email: Erik Bremstedt <erik.bremstedt@gmail.com>
+Project-URL: Homepage, https://github.com/ebremstedt/roskarl
+Project-URL: Issues, https://github.com/ebremstedt/roskarl/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: croniter>0.3.0
+
+# Roskarl
+
+Is a **tiny** module for environment variables.
+
+## How to install
+
+```sh
+pip install roskarl
+```
+
+## Example usage
+
+```python
+from roskarl import env_var
+```
+
+### str
+```python
+value = env_var(var="STR_VAR")
+```
+returns **`str`**
+
+### bool
+```python
+value = env_var(var="BOOL_VAR", type_=bool)
+```
+returns **`bool`** if environment variable value uppercase is `TRUE` or `FALSE`
+
+### list
+```python
+value = env_var(var="LIST_VAR", type_=list, separator="|")
+```
+returns **`list`** if value is splittable by separator
+
+### int
+```python
+value = env_var(var="INT_VAR", type_=int)
+```
+returns **`int`** if value is numeric
