@@ -1,0 +1,232 @@
+Metadata-Version: 2.1
+Name: cioblender
+Version: 0.3.10rc1
+Summary: Blender plugin for Conductor Cloud Rendering Platform.
+Home-page: https://github.com/ConductorTechnologies/cioblender
+Author: conductor
+Author-email: info@conductortech.com
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Multimedia :: Graphics :: 3D Rendering
+Description-Content-Type: text/markdown
+Requires-Dist: ciocore==8.2.0-beta.2
+Requires-Dist: ciopath<2.0.0,>=1.1.0
+Requires-Dist: cioseq<1.0.0,>=0.5.1
+Requires-Dist: json-stream<3.0.0,>=2.3.2
+Requires-Dist: PySide6<=6.7.0,>=6.0.0
+
+# Conductor for Blender
+
+Blender plugin submitter for the Conductor Cloud rendering service.
+
+## Install
+
+**To install the latest version.**
+```bash
+pip install --upgrade cioblender --target=$HOME/Conductor
+```
+
+**To install a specific version, for example 0.1.0.**
+```bash
+pip install --upgrade --force-reinstall cioblender==0.1.0 --target=$HOME/Conductor
+```
+
+**Then setup the Blender module.** 
+
+```bash
+python ~/Conductor/cioblender/post_install.py
+```
+
+> **NOTE** An alternative is to install from the Plugins page in the [Conductor Companion app](https://docs.conductortech.com/getting_started/installation/#companion-app)
+
+## Usage
+
+Open the Plugin Manager and load **Conductor.py**.
+
+Go to **Conductor->About** to check the version and other info.
+
+To set up a render, choose **Conductor->Submitter->Create** from the **Conductor** menu. 
+
+For detailed help, checkout the [tutorial](https://docs.conductortech.com/tutorials/blender) and [reference](https://docs.conductortech.com/reference/blender) documentation.
+
+
+## Contributing
+
+Clone the repo.
+
+```
+git clone git@github.com:ConductorTechnologies/cioblender.git
+cd cioblender
+```
+
+Set up a clean virtual envirionment with Python 3.7 for development (optional).
+
+```
+python -m virtualenv cioblender.venv
+. ./cioblender.venv/bin/activate
+```
+
+Install development dependencies
+```
+pip install -r requirements_dev.txt
+```
+
+Build and install from this directory into to a convenient location for testing.
+```
+
+pip install --upgrade -r requirements.txt --target=$HOME/ConductorDev
+
+python $HOME/ConductorDev/cioblender/post_install.py
+```
+
+When you install from the file requirements.txt, the dependency on ciocore is specified as a local sibling of this project, meaning you can develop ciocore and cioblender in parallel.
+
+The post_install.py script writes the conductor.mod file to your Blender modules directory. Check the output of the command to see where this is.
+
+
+
+## License
+[MIT](https://choosealicense.com/licenses/mit)
+
+## Changelog
+
+## Version:0.3.10-rc.1 -- 10 Dec 2024
+* Increased maximum supported resolution limit.
+
+## Version:0.3.9 -- 30 Sep 2024
+
+* Updating the plugin version number
+
+## Version:0.3.8 -- 19 Sep 2024
+
+* Double Space Path Validation: Implemented a check for double spaces in output paths to prevent errors and ensure smoother operation
+* Relative Output Path Validation
+* Added support for best fit instance types.
+
+## Version:0.3.7 -- 02 May 2024
+* Enhanced Output Path Generation
+
+## Version:0.3.6 -- 29 Apr 2024
+* Resolving Google drive mapping
+* Adding CONDUCTOR_MD5_CACHING environment variable to enable/disable md5 caching
+
+## Version:0.3.4 -- 22 Apr 2024
+* Resolving Asset Scanning Issues
+* Resolving the Shiboken Support Error
+
+## Version:0.3.2 -- 16 Apr 2024
+* Rendering Enhancements:
+  * Added new rendering options to render all active view layers and update the active camera for each frame.
+  * Increased the maximum limit for resolution percentage to 1000%, allowing for higher resolution outputs in renders.
+* Installation Updates:
+  * Implemented a procedure to clear existing Blender installations before upgrading.
+* Asset Support Expansion:
+  * Introduced support for Alembic and HDR assets.
+  * Enhanced asset handling by restricting the use of home directories and root drives as asset paths to improve stability and user experience on Windows.
+* Upload Features:
+  * Launched the Upload Daemon feature for background asset uploads, allowing uninterrupted Blender sessions. This feature lets users continue working while the daemon uploads assets as needed after job submissions.
+  * Updated the Submission dialog to facilitate continued work in Blender post-submission.
+  * Introduced the capability to upload entire directories of assets, enhancing the management and organization of resources.
+* User Interface Improvements:
+  * Added a feature where clicking 'Preview Script' without a JSON-associated app opens the script directly in a QT window for easy previewing.
+* Simulation and Baking Enhancements:
+  * Expanded support for simulation and baking processes, improving performance and flexibility for projects.
+## Version:0.2.3 -- 13 Feb 2024
+* Improved Installation on the Windows Platform:
+  * Enhanced the installation process for users on Windows, streamlining setup and reducing potential issues.
+* Improved Frame Handling for Efficiency:
+  * Enhanced rendering speed by treating task frames collectively as an animation sequence rather than processing them as separate, individual frames. This approach significantly reduces computational overhead, leading to faster rendering times. To fully benefit from this improvement, ensure that the chunk size is set higher than one and scout frames are turned off. This configuration maximizes the efficiency gains from processing frames as a continuous sequence.
+* Additional Rendering Options Panel:
+  * A newly introduced panel offering advanced control over rendering settings. It includes a key feature: Disable Audio, which sets the sound system to 'None'. This disables all audio processing in Blender during rendering tasks, streamlining the rendering pipeline and potentially enhancing render efficiency and speed.
+* Installation Script:
+  * Remove quarantine only if the platform is macOS
+  * Modified the plugin installation script to append our custom module directory to Python's search path, ensuring seamless integration without interfering with existing Python modules.
+* Enhanced Add-on Compatibility:
+  * The plugin now seamlessly integrates with a range of popular Blender add-ons, including Animation Nodes, BlenRig, Bricker, Flip Fluids, Molecular Plus, and Physical Starlight Atmosphere (PSA), enriching your animation and rendering capabilities.
+* RedShift Renderer Support:
+  * Fully compatible with the RedShift rendering engine, ensuring optimal performance and visual fidelity. Note: To leverage this feature, please use Blender version 3.6 or earlier.
+* Persistent Settings Preservation:
+  * Enhanced usability with the ability to retain previous plugin configurations and settings, even after reconnecting to the plugin for subsequent sessions. This ensures a smoother, more efficient workflow without the need to repeatedly adjust settings.
+
+
+## Version:0.2.0 -- 17 Jan 2024
+
+* New Features:
+
+  * UI Enhancements:
+    * Introduced a new Render Settings panel with adjustable parameters including Resolution (X, Y, Percentage), Camera, and Samples. This allows users to override existing scene settings for more precise control.
+    * Enhanced the Submission Widget by improving the visibility of push buttons and ensuring it remains prominently displayed (always on top).
+    * Added detailed tooltips across the UI for better guidance and clarity.
+    * Modified the Validation tab, offering two options for scene submission: 'Save Scene and Continue Submission' or 'Continue Submission', empowering users with more flexibility in their workflow.
+
+  * Performance Enhancements:
+    * Enabled script rendering functionality specifically for the Windows operating system.
+    * Improved Asset Scanning Efficiency, ensuring a smoother and faster process.
+
+  * Rendering Enhancements:
+    * Modified the Instant Type Tooltip to advocate for GPU usage with Cycles Render Software, aiming for enhanced speed and efficiency.
+
+* Updates:
+
+  * Upgraded PySide6 and shiboken6 to the latest versions.
+  * Updated the ciocore library to versions 7.0.2, bringing in the latest features and fixes.
+
+* Fixes:
+
+  * Resolved a naming conflict issue with cameras.
+  * Addressed an issue where spaces in scene names caused problems.
+  * Fixed an error related to the installation of the plugin into the Blender directory.
+  * Enhanced error detection for issues encountered during Blender file loading.
+  * Made sure each asset is unique before uploading, preventing redundancy and potential conflicts.
+  * Handled file paths with spaces more effectively.
+  * Ensured the creation of Blender user folders if they don't exist, improving the installation process.
+  * Implemented submission validation to catch potential issues before they occur.
+
+## Version:0.1.6-rc.2 -- 10 Oct 2023
+* Updating to PySide6 to provide compatibility with Apple Silicon M1/M2 chip architecture.
+
+## Version:0.1.5-rc.2 -- 10 Oct 2023
+* Upgrading the ciocore library to version 6.5.1
+* Implementing file validation for assets and additional assets
+
+## Version:0.1.4-rc.3 -- 06 Oct 2023
+* Adding support for Linked Assets
+* Enhancing Asset Scanning
+* Expanded Extra Asset Support
+* Extended Environment Variable Support
+* Directory Listing for Output
+* Revamped Post-Installation Instructions
+* Setting the default value for "Use Scout Frames" to True
+
+
+## Version:0.1.2-beta.3
+* Implementing Asset scanning
+* Implementing Extra env vars
+
+
+## Version:0.1.2-beta.1 
+* Implementing Progress tabs
+
+## Version 0.1.1-beta.21
+* Default frame range fix
+
+## Version 0.1.1-beta.18
+* Update to libraries
+
+## Version 0.1.1-beta.17
+* Update to the installation instructions
+
+## Version 0.1.1-beta.14
+* Extra assets panel
+* Fixing issue with Blender filepath in Windows
+
+## Version 0.1.1-beta.5
+
+* Updates to Blender filepath handling.
+
+### Version:0.1.0 -- 21 Oct 2021
+
+* Setup circle ci. [60c2d21]
+* Initial commit with. [cc7ec9d]
+
+--
