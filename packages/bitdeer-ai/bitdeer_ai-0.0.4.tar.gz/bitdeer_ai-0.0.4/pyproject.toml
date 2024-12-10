@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bitdeer-ai"
+dynamic = ["version"]
+description = "Bitdeer AI Cloud SDK for Python."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = ["bitdeer", "ai", "sdk", "cloud", "training"]
+authors = [
+  { name = "Bitdeer", email = "support@bitdeer.com" },
+]
+maintainers = [
+  {name = "Bitdeer", email = "support@bitdeer.com"}
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  'grpcio>=1.64.1',
+  'protobuf>=5.27.2',
+  'pydantic>=2.8.1',
+]
+
+[project.urls]
+Homepage = "https://www.bitdeer.ai"
+Documentation = "https://github.com/BitdeerAI/python-sdk#readme"
+Issues = "https://github.com/BitdeerAI/python-sdk/issues"
+Source = "https://github.com/BitdeerAI/python-sdk"
+
+[tool.hatch.version]
+path = "src/bitdeer_ai/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/bitdeer_ai tests}"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bitdeer_ai"]
+
+[tool.coverage.run]
+source_pkgs = ["bitdeer_ai", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/bitdeer_ai/__about__.py",
+]
+
+[tool.coverage.paths]
+bitdeer_ai = ["src/bitdeer_ai", "*/python-sdk/src/bitdeer_ai"]
+tests = ["tests", "*/python-sdk/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
