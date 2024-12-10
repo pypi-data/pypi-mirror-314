@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "esi-client"
+dynamic = ["version"]
+description = "A Python client for accessing the complete Eve Online ESI API."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.6"
+
+maintainers = [
+    { name = "Erik Kalkoken", email = "kalkoken87@gmail.com" },
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+keywords = [
+    "EVE Swagger Interface",
+    "Eve Online",
+]
+dependencies = [
+    "certifi>=2017.4.17",
+    "python-dateutil>=2.1",
+    "six>=1.10",
+    "urllib3>=1.23",
+]
+
+[project.urls]
+Homepage = "https://gitlab.com/ErikKalkoken/esi-client-generator"
+
+[tool.hatch.version]
+path = "esi_client/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/esi_client",
+]
