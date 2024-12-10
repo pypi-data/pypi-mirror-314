@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package llm.chat;
+
+import "google/protobuf/struct.proto";
+
+service CompletionService {
+  rpc create (CompletionRequest) returns (stream CompletionResponse);
+  rpc getResourceProviderCount (GetResourceProviderCountRequest) returns (GetResourceProviderCountResponse);
+}
+
+// getResourceProviderCount: Request Types
+message GetResourceProviderCountRequest {
+  optional string workspace_id = 1;
+  optional string environment_id = 2;
+  string resource = 3;
+}
+
+// getResourceProviderCount: Response Types
+message GetResourceProviderCountResponse {
+  int32 count = 1;
+}
+
+// create: Request Types
+message CompletionRequest {
+  optional string workspace_id = 1;
+  optional string environment_id = 2;
+  optional bool primary = 3;
+  optional int32 secondary_model_index = 4;
+  string resource = 5;
+  bool stream = 6;
+  repeated RequestMessage messages = 7;
+  repeated RequestTools tools = 8;
+  optional RequestToolChoice tool_choice = 9;
+  optional google.protobuf.Struct config = 10;
+  optional bool include_raw_response = 11;
+  optional google.protobuf.Struct resource_config_overrides = 12;
+  optional google.protobuf.Struct metadata = 13;
+}
+
+message RequestMessage {
+  optional string name = 1;
+  string role = 2;
+  optional string content = 3;
+  repeated RequestMessageToolCall tool_calls = 4;
+  optional string tool_call_id = 5;
+}
+
+message RequestMessageToolCall {
+  string id = 1;
+  string type = 2;
+  RequestMessageToolCallFunction function = 3;
+}
+
+message RequestMessageToolCallFunction {
+  string name = 1;
+  string arguments = 2;
+}
+
+message RequestTools {
+  string type = 1;
+  RequestToolFunction function = 2;
+}
+
+message RequestToolFunction {
+  string name = 1;
+  string description = 2;
+  google.protobuf.Struct parameters = 3;
+}
+
+message RequestToolChoice {
+  oneof type {
+    bool auto = 1;
+    bool none = 2;
+    RequestToolChoiceItem tool = 3;
+  }
+}
+
+message RequestToolChoiceItem {
+  string type = 1;
+  RequestToolChoiceFunction function = 2;
+}
+
+message RequestToolChoiceFunction {
+  string name = 1;
+}
+
+// create: Response Types
+message CompletionResponse {
+  string id = 1;
+  optional string message = 2;
+  string role = 3;
+  repeated RequestMessageToolCall tool_calls = 4;
+  optional CompletionUsage usage = 5;
+  optional int64 response_timestamp = 6;
+  CompletionResponseMetadata metadata = 7;
+  optional CompletionResponseMetrics metrics = 8;
+  optional google.protobuf.Struct raw_response = 9;
+  optional string finish_reason = 10;
+}
+
+message CompletionUsage {
+  int32 prompt = 1;
+  int32 completion = 2;
+  int32 total = 3;
+}
+
+message CompletionResponseMetadata {
+  bool primary = 1;
+  optional int32 secondary_model_index = 2;
+  string provider = 3;
+  string model = 4;
+  bool done = 5;
+  bool success = 6;
+  bool fallback = 7;
+  int32 fallback_attempts = 8;
+  optional string error_message = 9;
+  optional int32 error_code = 10;
+  optional string error_reason = 11;
+}
+
+message CompletionResponseMetrics {
+  optional float time_to_first_token = 1;
+  float tokens_per_second = 2;
+  optional float duration = 3;
+  optional float provider_duration = 4;
+}
