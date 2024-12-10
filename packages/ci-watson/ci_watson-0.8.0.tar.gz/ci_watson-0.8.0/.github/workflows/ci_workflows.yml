@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - '*'
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      submodules: false
+      coverage: ''
+      envs: |
+        # PEP
+        - linux: check-style
+        - linux: check-build
+
+        # Basic tests (Windows not supported)
+        - linux: py39-test
+        - macos: py310-test
+        - linux: py311-test
+
+        # --bigdata untestable due to Artifactory lockdown
+        - linux: py310-slow-stable
+
+        # Test with dev versions of upstream dependencies
+        - linux: py312-slow-devdeps
+          posargs: --verbose

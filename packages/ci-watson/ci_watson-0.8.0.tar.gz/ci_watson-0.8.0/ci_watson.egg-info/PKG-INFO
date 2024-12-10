@@ -1,0 +1,107 @@
+Metadata-Version: 2.1
+Name: ci_watson
+Version: 0.8.0
+Summary: CI helper for STScI Jenkins
+Author-email: STScI <help@stsci.edu>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2018-2023, Space Telescope Science Institute, AURA
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        * Redistributions of source code must retain the above copyright notice, this
+          list of conditions and the following disclaimer.
+        
+        * Redistributions in binary form must reproduce the above copyright notice,
+          this list of conditions and the following disclaimer in the documentation
+          and/or other materials provided with the distribution.
+        
+        * Neither the name of the copyright holder nor the names of its
+          contributors may be used to endorse or promote products derived from
+          this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://github.com/spacetelescope/ci_watson
+Classifier: Framework :: Pytest
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: crds
+Requires-Dist: colorama>=0.4.1
+Requires-Dist: pytest>=6
+Requires-Dist: readchar>=3.0
+Requires-Dist: requests
+Provides-Extra: all
+Requires-Dist: astropy; extra == "all"
+Provides-Extra: test
+Requires-Dist: pytest-astropy-header; extra == "test"
+Provides-Extra: docs
+Requires-Dist: numpydoc; extra == "docs"
+Requires-Dist: sphinx_rtd_theme>1.2.0; extra == "docs"
+Requires-Dist: sphinx-automodapi; extra == "docs"
+
+# ci_watson
+
+[![DOI](https://zenodo.org/badge/143923649.svg)](https://zenodo.org/doi/10.5281/zenodo.12699836)
+[![CI Status](https://github.com/spacetelescope/ci_watson/workflows/CI/badge.svg)](https://github.com/spacetelescope/ci_watson/actions)
+[![Documentation Status](https://readthedocs.org/projects/ci-watson/badge/?version=latest)](https://ci-watson.readthedocs.io/en/latest/?badge=latest)
+
+CI helper for STScI regression tests.
+If you ask nicely, it might also help you solve crimes.
+
+Nightly regression test results are available only from within the STScI
+network at this time.
+
+## Installation
+
+```console
+pip install ci-watson
+```
+
+## Scripts
+
+### `okify_regtests`
+
+```console
+usage: okify_regtests [-h] [--dry-run] {jwst,roman} run-number
+
+"okifies" a set of failing regression test results, by overwriting truth files on
+Artifactory so that a set of failing regression test results becomes correct. Requires
+JFrog CLI (https://jfrog.com/getcli/) configured with credentials (`jf login`) and write
+access to the desired truth file repository (`jwst-pipeline`, `roman-pipeline`, etc.).
+
+positional arguments:
+  {jwst,roman}  Observatory to overwrite truth files for on Artifactory
+  run-number    GitHub Actions job number of regression test run (see
+                https://github.com/spacetelescope/RegressionTests/actions)
+
+options:
+  -h, --help    show this help message and exit
+  --dry-run     do nothing (passes the `--dry-run` flag to JFrog CLI)
+```
+
+#### examples
+
+```console
+okify_regtests jwst 956 --dry-run
+okify_regtests roman 1317
+```
