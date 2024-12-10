@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "nshconfig"
+version = "0.31.5"
+description = "Fully typed configuration management, powered by Pydantic"
+authors = ["Nima Shoghi <nimashoghi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.urls]
+homepage = "https://github.com/nimashoghi/nshconfig"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "*"
+typing-inspect = "*"
+treescope = { version = "*", optional = true }
+pydantic-yaml = { version = "*", optional = true }
+
+[tool.poetry.group.dev.dependencies]
+pyright = "*"
+ruff = "*"
+ipykernel = "*"
+ipywidgets = "*"
+pytest = "*"
+pytest-cov = "*"
+sphinx = { version = "*", optional = true }
+sphinx-rtd-theme = { version = "*", optional = true }
+myst-parser = { version = "*", optional = true }
+sphinx-copybutton = { version = "*", optional = true }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+typeCheckingMode = "standard"
+deprecateTypingAliases = true
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+reportPrivateImportUsage = false
+
+[tool.ruff.lint]
+select = ["FA102", "FA100"]
+ignore = ["F722", "F821", "E731", "E741"]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+
+[tool.poetry.extras]
+extra = ["treescope", "pydantic-yaml"]
+yaml = ["pydantic-yaml"]
+docs = ["sphinx", "sphinx-rtd-theme", "myst-parser", "sphinx-copybutton"]
+
+[tool.poetry.scripts]
+nshconfig-export = "nshconfig.bin.export:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=nshconfig --cov-report=term-missing"
