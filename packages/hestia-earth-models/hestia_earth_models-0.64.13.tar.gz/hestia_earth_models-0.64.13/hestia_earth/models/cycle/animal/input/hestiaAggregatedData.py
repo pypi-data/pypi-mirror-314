@@ -1,0 +1,78 @@
+"""
+Animal Input HESTIA Aggregated Data
+
+This model adds `impactAssessment` to Animal inputs based on data which has been aggregated into country level averages.
+Note: to get more accurate impacts, we recommend setting the
+[input.impactAssessment](https://hestia.earth/schema/Input#impactAssessment)
+instead of the region-level averages using this model.
+"""
+from hestia_earth.models.log import logRequirements, logShouldRun
+from hestia_earth.models.utils.aggregated import should_link_input_to_impact, link_inputs_to_impact
+
+REQUIREMENTS = {
+    "Cycle": {
+        "animals": [{
+            "@type": "Animal",
+            "inputs": [{
+                "@type": "Input",
+                "value": "",
+                "none": {
+                    "impactAssessment": "",
+                    "fromCycle": "True",
+                    "producedInCycle": "True"
+                },
+                "optional": {
+                    "country": {"@type": "Term", "termType": "region"},
+                    "region": {"@type": "Term", "termType": "region"}
+                }
+            }]
+        }]
+    }
+}
+RETURNS = {
+    "Animal": [{
+        "inputs": [{
+            "@type": "Input",
+            "impactAssessment": "",
+            "impactAssessmentIsProxy": "True"
+        }]
+    }]
+}
+MODEL_ID = 'hestiaAggregatedData'
+MODEL_KEY = 'impactAssessment'
+
+
+def _run_animal_input(cycle: dict, input: dict):
+    inputs = link_inputs_to_impact(MODEL_ID, cycle, [input])
+    return inputs[0] if inputs else input
+
+
+def _run_animal(cycle: dict, animal: dict):
+    return animal | {
+        'inputs': [
+            (
+                _run_animal_input(cycle, input) if should_link_input_to_impact(cycle)(input) else input
+            ) for input in animal.get('inputs', [])
+        ]
+    }
+
+
+def _should_run_animal(cycle: dict, animal: dict):
+    end_date = cycle.get('endDate')
+    term_id = animal.get('term', {}).get('@id')
+    inputs = animal.get('inputs', [])
+    inputs = list(filter(should_link_input_to_impact(cycle), inputs))
+    nb_inputs = len(inputs)
+
+    logRequirements(cycle, model=MODEL_ID, term=term_id, key=MODEL_KEY,
+                    end_date=end_date,
+                    nb_inputs=nb_inputs)
+
+    should_run = all([end_date, nb_inputs > 0])
+    logShouldRun(cycle, MODEL_ID, term_id, should_run, key=MODEL_KEY)
+    return should_run, inputs
+
+
+def run(cycle: dict):
+    animals = list(filter(lambda a: _should_run_animal(cycle, a), cycle.get('animals', [])))
+    return list(map(lambda a: _run_animal(cycle, a), animals))
