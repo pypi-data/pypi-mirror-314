@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: twpl
+Version: 0.1.2
+Summary: Two-phase locking via lockfiles
+Home-page: https://github.com/LankyCyril/twpl/
+Author: Kirill Grigorev
+License: GPLv3
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development
+Classifier: Topic :: System
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: license
+Requires-Dist: filelock
+
+### Two-phase locking with lockfiles
+
+- Initial release
+- Currently supports Linux/POSIX only
+- Documentation coming soon
+
+Relies on modifying the number of open file descriptors for a lockfile.
+
+Currently implements the 2PL lock compatibility table:
+
+Lock type  | read-lock | write-lock
+-----------|-----------|-----------
+read-lock  |     Y     |     N
+write-lock |     N     |     N
+
+Read locks are called "concurrent," and write locks are called "exclusive."
+
+The API, the naming, and the implementation are all subjects to change until
+the first _stable_ release (i.e. until version 1.0.0, or earlier if explicitly
+stated).
