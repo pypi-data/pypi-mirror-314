@@ -1,0 +1,43 @@
+from vmxai_completion_client.protos.completion.completion_pb2 import (
+    CompletionRequest,
+    CompletionResponse,
+    CompletionResponseMetadata,
+    CompletionResponseMetrics,
+    CompletionUsage,
+    GetResourceProviderCountRequest,
+    GetResourceProviderCountResponse,
+    RequestMessage,
+    RequestMessageToolCall,
+    RequestMessageToolCallFunction,
+    RequestToolChoice,
+    RequestToolChoiceFunction,
+    RequestToolChoiceItem,
+    RequestToolFunction,
+    RequestTools,
+)
+from vmxai_completion_client.protos.completion.completion_pb2_grpc import (
+    CompletionService,
+    CompletionServiceServicer,
+    CompletionServiceStub,
+)
+
+__all__ = [
+    "CompletionRequest",
+    "CompletionResponse",
+    "CompletionResponseMetadata",
+    "CompletionResponseMetrics",
+    "CompletionUsage",
+    "RequestMessage",
+    "RequestMessageToolCall",
+    "RequestMessageToolCallFunction",
+    "RequestToolChoice",
+    "RequestToolChoiceFunction",
+    "RequestToolChoiceItem",
+    "RequestToolFunction",
+    "RequestTools",
+    "CompletionService",
+    "CompletionServiceServicer",
+    "CompletionServiceStub",
+    "GetResourceProviderCountRequest",
+    "GetResourceProviderCountResponse",
+]
