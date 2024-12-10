@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: ModelPK
+Version: 0.4
+Summary: A package for pharmacokinetic modeling
+Author-email: Jia Liang <jyliang@uw.edu>
+License: MIT License
+        
+        Copyright (c) 2024 jyliang27
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: ModelPK, https://github.com/jyliang27/ModelPK
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: tellurium
+Requires-Dist: scikit-learn
+
+# ModelPK
+
+ModelPK is a package designed to extract basic information about the pharmacokinetic profile of a drug from experimental data.
+
+Target users:
+for bench scientists who have little experience with PK modeling
+
+## Background
+### What is PK?
+Pharmacokinetics (PK) is the study of how a drug moves through the body. More specifically, it examines:
+* Absorption: How does a drug get into the body?
+* Distribution: Where does the drug go? For example, does it remain in the bloodstream, or does it partition into certain tissues?
+* Metabolism: Does it get broken down by the body?
+* Excretion: How does it leave the body?
+At any given point, the concentration of a drug in the body will be impacted by its absorption, distribution, metabolism, and excretion.
+
+### Why does it matter?
+PK is crucial to understanding the safety and efficacy of a drug. Every drug has a concentration above which it can have serious side effects or be toxic to patients. Likewise, every drug has a concentration below which it no longer has a therapeutic effect. As such, every drug has a therapeutic window in which it actually has a therapeutic effect for patients. Understanding PK profile of a drug allows clinicians and physicians to understand how to keep drug concentrations within this therapeutic window.
+
+## Installation and Use
+### Installation
+To install ModelPK run the following command:  
+>```!pip install ModelPK```
+
+This should also install any required dependencies listed in the requirements.txt file.
+
+## Use
+1. The dependencies below are required for ModelPK: 
+    * numpy
+    * pandas
+    * sci-kitlearn
+    * tellurium
+
+All required dependencies should be included when ModelPK or any of its modules is imported.
+
+2. Import ModelPK as entire package:  
+    >```import ModelPK```  
+      
+    OR import each module separately:  
+    >```from ModelPK import extractPKparam as extract```
+    >```from ModelPK import simulatePK as sim```
+
+3. See "examples" folder for sample code.
+
+## Author’s note:
+This package is currently only supports a 1 compartment model for a drug administered as an IV bolus. In other words, the drug must: i) have been administered intravenously as a single, large dose AND ii) remain in the bloodstream and do not partition into other tissues.
+
+Future work will expand the number of PK models supported.
