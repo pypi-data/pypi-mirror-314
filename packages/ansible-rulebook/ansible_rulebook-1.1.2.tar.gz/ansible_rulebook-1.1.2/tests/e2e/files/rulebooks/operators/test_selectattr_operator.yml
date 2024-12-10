@@ -1,0 +1,230 @@
+- name: Test selectattr operator
+  hosts: all
+  sources:
+    - generic:
+        event_delay: 0.05
+        payload:
+          - id: "testcase 01"
+            asteroids:
+              - asteroid:
+                  name: "apophis"
+          - id: "testcase 02"
+            asteroids:
+              - asteroid:
+                  name: "vesta"
+                  category: "main belt"
+                  description: |
+                    Named after the goddess of
+                    the hearth and household in
+                    Roman mythology.
+          - id: "testcase negative"
+            asteroids:
+              - asteroid:
+                  name: "eros"
+                  discovered_by: "gustav witt"
+                  radius: 8.42
+          - id: "testcase 03"
+            planets:
+              - planet:
+                  name: "jupiter"
+                  radius: 142984
+                  orbital_period: 4.31186e+3
+          - id: "testcase 03"
+            planets:
+              - planet:
+                  name: "earth"
+                  radius: 6371
+                  orbital_period: 365.01
+          - id: "testcase 04"
+            planets:
+              - planet:
+                  name: "venus"
+                  radius: 1200.01
+                  moons: null
+                  is_planet: true
+              - planet:
+                  name: "x"
+                  radius: 909.09
+                  moons: null
+                  is_planet: false
+          - id: "testcase 05"
+            planets:
+              - planet:
+                  name: "pluto"
+                  radius: 1188.3
+                  total_moons: 5
+                  is_planet: false
+          - id: "testcase 06"
+            planets:
+              - planet:
+                  name: "mars"
+                  moons:
+                    - "phobos"
+                    - "deimos"
+              - planet:
+                  name: "earth"
+                  moons:
+                    - "moon"
+          - id: "testcase 07"
+            planets:
+              - planet:
+                  name: "eris"
+                  moons:
+                    - "dysnomia"
+          - id: "testcase 08"
+            planets:
+              - planet:
+                  name: "saturn"
+                  total_moons: 62
+                  largest_moon: "titan"
+          - id: "testcase 09"
+            planets:
+              - planet:
+                  name: "neptune"
+                  total_moons: 14
+                  largest_moon: "triton"
+              - planet:
+                  name: "uranus"
+                  total_moons: 27
+                  largest_moon: "titania"
+          - id: "testcase 09"
+            planets:
+              - planet:
+                  name: "earth"
+                  total_moons: 1
+                  largest_moon: "moon"
+          - id: "testcase 10"
+            suns:
+              - sun:
+                  name: "sol"
+                  attributes:
+                    physical:
+                      age: 4600000000
+                      composition:
+                        gases:
+                          hydrogen: 73.46
+                          helium: 24.85
+          - id: "testcase 11"
+            spacecraft:
+              - craft:
+                  name: "voyager 1"
+                  detections:
+                    - 15
+                    - 8121.99
+                    - 1111
+          - id: "Testcase #12"
+            asd:
+              x:
+              - 0
+              -
+                - 0
+                - 0
+                - a:
+                    b: 3.1415
+
+
+  rules:
+    - name: Single condition selectattr, case insensitive
+      condition: event.asteroids is selectattr("asteroid.name", "regex", "(?i)APOPHi")
+      action:
+        debug:
+          msg: "Output for testcase #01"
+
+    - name: Multi condition selectattr with string search
+      condition: >
+        event.asteroids is selectattr("asteroid.name", "regex", "vest|Vest") and
+        event.asteroids is selectattr("asteroid.description", "search", "(?si)HeaRTH.*myTHology") and
+        event.asteroids is selectattr("asteroid.category", "match", "^main.*")
+      action:
+        debug:
+          msg: "Output for testcase #02"
+
+    - name: Multi condition selectattr negative # should never fire
+      condition: >
+        event.asteroids is selectattr("asteroid.name", "match", "eros") and
+        event.asteroids is selectattr("asteroid.discovered_by", "search", "gustav.*") and
+        event.asteroids is selectattr("asteroid.radius", "!=", 8.42)
+      action:
+        debug:
+          msg: "Negative testcase (should not fire)"
+
+    - name: Multi condition selectattr, float and int
+      condition: >
+        event.planets is selectattr("planet.name", "regex", "jupiter|earth") and
+        (event.planets is selectattr("planet.orbital_period", "<=", 365.01) or
+        event.planets is selectattr("planet.radius", ">", 140000))
+      action:
+        debug:
+          msg: "Output for testcase #03"
+
+    - name: Multi condition selectattr, bool and null and var
+      condition: >
+        event.planets is selectattr("planet.is_planet", "!=", vars.not_planet) and
+        (event.planets is selectattr("planet.moons", "==", null) or
+        event.planets is selectattr("planet.radius", "<", 1200.05))
+      action:
+        debug:
+          msg: "Output for testcase #04"
+
+    - name: Multi condition selectattr with negation and vars
+      condition: >
+        event.planets is not selectattr("planet.is_planet", "==", true) and
+        event.planets is selectattr("planet.radius", ">=", 1.18830e+3) and
+        (event.planets is selectattr("planet.total_moons", "!=", null) or
+        event.planets is not selectattr("planet.total_moons", ">", vars.pluto_moons))
+      action:
+        debug:
+          msg: "Output for testcase #05"
+
+    - name: Single condition selectattr with nested list contains
+      condition: event.planets is selectattr("planet.moons", "contains", "phobos")
+      action:
+        debug:
+          msg: "Output for testcase #06"
+
+    - name: Multi condition selectattr with nested list contains with negation
+      condition: >
+        event.planets is selectattr("planet.moons", "contains", vars.eris_moon) and
+        (event.planets is selectattr("planet.moons", "not contains", "deimos") or
+        event.planets is not selectattr("planet.moons", "contains", "titan"))
+      action:
+        debug:
+          msg: "Output for testcase #07"
+
+    - name: Multi condition selectattr with nested list in with var
+      condition: >
+        event.planets is selectattr("planet.total_moons", "in", vars.total_moons) and
+        event.planets is selectattr("planet.largest_moon", "in", ["titan", "triton"])
+      action:
+        debug:
+          msg: "Output for testcase #08"
+
+    - name: Multi condition selectattr with nested list in with negation and var
+      condition: >
+        event.planets is selectattr("planet.total_moons", "in", [27, 1, 84, 155.2]) and
+        event.planets is selectattr("planet.largest_moon", "not in", ["titania", "x"]) and
+        event.planets is not selectattr("planet.largest_moon", "in", vars.best_moons)
+      action:
+        debug:
+          msg: "Output for testcase #09"
+
+    - name: Multi condition selectattr with deeply nested attributes
+      condition: >
+        event.suns is selectattr("sun.attributes.physical.composition.gases.hydrogen", ">", 73) and
+        (event.suns is selectattr("sun.attributes.physical.composition.gases.helium", "==", 24.85) or
+        event.suns is selectattr("sun.attributes.physical.age", ">=", 4600000000))
+      action:
+        debug:
+          msg: "Output for testcase #10"
+
+    - name: Single condition selectattr nested list contains number
+      condition: event.spacecraft is selectattr("craft.detections", "contains", 8.12199e+3)
+      action:
+        debug:
+          msg: "Output for testcase #11"
+
+    - name: selectattr and squared accessor interaction
+      condition: event.asd["x"][1][2] is selectattr("a.b", "==", 3.1415)
+      action:
+        debug:
+          msg: "Output for testcase #12"

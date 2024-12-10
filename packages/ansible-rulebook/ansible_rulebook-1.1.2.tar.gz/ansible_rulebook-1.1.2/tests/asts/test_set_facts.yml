@@ -1,0 +1,54 @@
+- RuleSet:
+    hosts:
+    - all
+    name: Test Assert Fact of different data types
+    rules:
+    - Rule:
+        actions:
+        - Action:
+            action: set_fact
+            action_args:
+              fact:
+                alpha: 1
+                beta:
+                  location: "{{ Naboo }}"
+                  name: R2D2
+                msg: hello world
+        condition:
+          AllCondition:
+          - EqualsExpression:
+              lhs:
+                Event: i
+              rhs:
+                Integer: 1
+        enabled: true
+        name: r1
+    - Rule:
+        actions:
+        - Action:
+            action: run_playbook
+            action_args:
+              copy_files: true
+              name: playbooks/validate_args_playbook.yml
+              extra_vars:
+                my_vars:
+                  event.alpha: 1
+                  event.beta.location: "{{ Naboo }}"
+                  event.beta.name: R2D2
+                  event.msg: hello world
+        condition:
+          AllCondition:
+          - EqualsExpression:
+              lhs:
+                Event: msg
+              rhs:
+                String: hello world
+        enabled: true
+        name: r2
+    sources:
+    - EventSource:
+        name: range
+        source_args:
+          limit: 5
+        source_filters: []
+        source_name: range

@@ -1,0 +1,30 @@
+---
+- name: Test Assert Fact of different data types
+  hosts: all
+  sources:
+    - name: range
+      range:
+        limit: 5
+  rules:
+    - name: r1
+      condition: event.i == 1
+      action:
+        set_fact:
+          fact:
+            msg: hello world
+            alpha: 1
+            beta: 
+              name: R2D2
+              location: "{{ Naboo }}"
+    - name: r2
+      condition: event.msg == "hello world"
+      action:
+        run_playbook:
+          name: playbooks/validate_args_playbook.yml
+          extra_vars:
+            my_vars:
+              event.msg: hello world
+              event.alpha: 1
+              event.beta.name: R2D2
+              event.beta.location: "{{ Naboo }}"
+          copy_files: True
