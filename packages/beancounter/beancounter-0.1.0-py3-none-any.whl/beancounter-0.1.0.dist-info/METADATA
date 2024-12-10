@@ -1,0 +1,220 @@
+Metadata-Version: 2.1
+Name: beancounter
+Version: 0.1.0
+Summary: 
+Author: Aaron Buchholz
+Author-email: aaronbuchholz22@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: requests (>=2.32.3,<3.0.0)
+Description-Content-Type: text/markdown
+
+# Final Project
+
+## Overview 
+
+In this project you will culminate the programming knowledge and skills you have learned this term by creating a Python-based command-line tool.
+
+The purpose and behaviour of the tool is up to you. See Appendix A for a list of ideas, but you are not restricted to these suggestions. You are free to use additional modules and APIs like the `requests` module and OMDB API you used in Lab 8.
+
+## Setup
+
+1. In GitHub, create a branch on which to do your lab work
+2. Create a Codespace on this branch, and open it (give it a few minutes to initialize)
+
+##  Instructions 
+
+> **IMPORTANT**: In the LMS, open and read through the rubric attached to this project so that you have a clear understanding of where to invest effort as you work on this project.
+
+### Set up your project
+
+To manage your project, you will use a popular tool in the Python ecosystem named [Poetry](https://python-poetry.org/). This section guides you through the process of initializing a Poetry project, and then running your code.
+
+1. Open a terminal
+2. Install the Poetry commandline tool 
+   1. Run the command: `pipx install poetry`
+   2. Verify that poetry has been installed by running the following command. It should display the version of poetry that was installed: `poetry --version`
+   3. Use poetry to install the dependencies for the example project given in this starter code.
+
+       ```sh
+        $ cd greet
+        $ poetry install
+        ```
+3. Enable debugging with Poetry
+   1. In order for debugging to work with poetry, you will **also** need to install it as a module: `pip install poetry`
+   2. Verify that poetry has been installed as a module by opening the Run & Debug panel, selecting the "Greet" launch configuration, and then clicking the Run button.
+   3. **OBSERVE**: The 'greet' program should run with output, and you should be able to set breakpoints in the 'greet' code to step through the running program.
+4. Initialize your Poetry project
+   1. Select a project name
+      1. [Search PyPI](https://pypi.org/search/) to ensure that your project name is not already taken (you will need a unique name in order to publish to PyPI)
+      2. The name should be all lower-case with no spaces (but possibly hyphens), and should reflect the purpose of your project
+   2. Initialize a new poetry project
+      1. **IMPORTANT**: `cd` into the ROOT project folder (do NOT be inside the `greet` folder)
+      2. Run: `poetry new myprojectname` (replace `myprojectname` with your project name)
+      3. **OBSERVE**: There is now a folder with the name of your project, and ANOTHER folder inside of that with the same name.  **The INNER folder is where your code files must be saved.**
+5. Get it running
+   1. Add a file named `cli.py` to the INNER project folder
+   2. To this file, add a function named `main` with one statement: `print("Hello, world!")`
+   3. In your `pyproject.toml`, add the following section, replacing `commandname` with the name you want users to use to run your command, and `inner_folder_name` with the name of the inner code folder of your Poetry project:
+
+       ```toml
+       [tool.poetry.scripts]
+       commandname = 'inner_folder_name.cli:main'
+       ```
+   4. Be sure to save `pyproject.toml`
+   5. Run the `poetry install` command to register `commandname` with your environment.
+
+        > **NOTE**: If you ever change `commandname` you will need to run `poetry install` again
+   6. You should now be able to run your command using: `poetry run commandname` (replace `commandname` as appropriate)
+      
+6. Enable debugging for your project
+    1. In `.vscode/launch.json` update the "My Project" configuration to reflect your project's folder and file names.
+    2. Change the `cwd` (Current Working Directory) value to use your project's root folder name
+    3. Change the `args` value to include your  desired command-line arguments (for now, just change `commandname` to the correct value, but...)
+        > **NOTE**: You can add/change arguments here once you need to debug using different command-line arguments.
+    4. Verify that debugging is working by opening the Run & Debug panel, selecting the "My Project" configuration, and clicking the Run button.
+    5. **OBSERVE**: You should see the "Hello, world!" output, and you should be able to set breakpoints in your code.
+1. **CONGRATULATIONS!** You are ready to complete your final project. You can run it using `poetry run yourcommandname`, and debug it using the "My Project" launch configuration. You now just have to write the code.
+
+> **IMPORTANT**: Write all your code in your cli.py file.
+
+## Build your project
+
+> **IMPORTANT**: Since you are working in groups, only ONE of your repositories is needed. One person should add the others in their group as collaborators (Settings Tab -> Collaborators and Teams -> Add people).
+>
+> Each individual should then be able to create their own codespaces on that repository.
+>
+> It is recommended that the "pair programming" approach is used to work on this project. In pair programming, one person is doing the coding and the others are watching carefully as they work. In this way the 'watchers' can identify mistakes early while the 'coder' quickly produces code. It is also easy to have design discussions with everyone together.
+
+Using the given `greet` project as an example, your job is to create a command-line tool. Keep the following guideline in mind:
+
+Command-line tools are typically non-interactive—all configuration is provided by the user up-front in the form of command-line arguments. That means that you should avoid using the `input` function; instead, have the user provide their input as a commandline argument (or several).
+
+
+Write your command-line tool so that it fulfills the following constraints.
+
+1. Your tool must handle at least one command-line argument (but it may handle more, and it may have some default behaviour if none are provided)
+2. Use the `if __name__` pattern to ensure that there is no output when your program is used as a module
+3. There must be some way in which your program reads or writes to a file using the `open` function. (One simple way to do this is to allow for the user to provide a file name as a commandline argument, and write the program output to that file instead of to the console.)
+4. Be sure that any opened files are also closed
+5. Your program should not crash under any circumstances. Use condition statements to prevent errors where possible, and use  `try..except` blocks to gracefully handle errors that may arise. For example, print helpful messages indicating what the user did wrong and what they should do differently.
+6. Where appropriate, use data structures that match the information your program is working with. Think about whether a list, tuple, dictionary, or some combination of those can help you!
+7. Try your best to organize your code using the strategies you have learned in class:
+    1. Break code into functions that have one specific purpose
+    2. Specifically, try to separate the 'check that the user entered valid arguments' code from the code that does the real work in your program
+    3. Where possible, write your code in terms of pure functions
+    4. Use generalization to create functions with parameters that can be used to direct how the function behaves
+    5. Use comments to clarify tricky code
+    6. Document functions with appropriate docstrings
+8.  Test your tool thoroughly! See Appendix B for some testing strategies. If your program crashes with an error or does something incorrect or unexpected, debug it and make it gracefully handle the specific circumstance that caused the problem.
+
+## Publish your project
+
+1. Register a PyPI account
+2. Enable 2-factor authentication
+3. Obtain an API token
+4. Publish your project to PyPI: `poetry publish --build --username=__token__ --password=your-pypi-token-here`
+5. Try installing your project! `pipx install yourprojectname`
+6. Try running your command-line tool in your terminal!
+7. In `pypi-link.txt` copy the URL to your published PyPI package
+
+## Oral Assessment
+
+In lieu of a reflection report, 60% of your grade in this project will be determined by your **individual** ability to discuss the code you submit in your project.
+
+> **IMPORTANT**: You are responsible for scheduling an individual 15 minute oral assessment timeslot with your teacher sometime in the last week of classes.
+
+Be prepared to answer questions of the following kind:
+
+- Explain the purpose of this function/code structure/line of code
+- Which part of your code does X?
+- Point out an example of X data structure in your code
+- Why did you choose this data structure?
+- Describe thoroughly the flow of execution when a user runs your command using arguments X, Y, etc
+- Use the debugging tools, set a breakpoint at line X and tell me the value of variable Y
+- Demonstrate your tool gracefully handling an error
+- Describe one challenge you encountered in implementing your project, and how you overcame it
+- Did you employ any pure functions? Point them out and explain their purpose and utility.
+
+## Submission
+
+> **IMPORTANT**: Since you are working in groups, only **ONE** person needs to do the Commit/Push/Pull request process on your shared repository, but **EVERYONE** should submit the same URL in the LMS.
+
+1. **Test** your code to verify that it is working as expected (see [Appendix B](#appendix-b---testing-strategies)).
+2. **Review** your code to ensure that you are using appropriate names, comments, and docstrings
+3. **Commit** all changes in your lab files with meaningful commit messages.
+4. **Push** your commits to GitHub
+5. **Verify** that the code on GitHub is correct
+6. Create a **Pull request** using your lab branch as the 'compare' branch and the main branch as the 'base'
+7. Navigate to the "Files Changed" tab of your pull request, and **copy the URL** to this page into the lab folder on the LMS.
+
+## Rubric
+
+See the rubric attached to this lab in the LMS
+
+## Appendix A - Project Ideas
+
+This is a list of suggested commandline tools that you could try creating for your final project. You are encouraged to come up with your own idea, but you can use these as inspiration if you are having trouble coming up with your own.
+
+1. Working from your Lab 8 solution, create a tool called `movinf` that takes an IMDB ID and produces a movie description.  Allow the user to specify a file that contains a list of multiple IMDB IDs, and produce one summary for each of those IDs.<br><br>
+    Example:
+    ```sh
+    movinf tt938238
+    Office Space is a movie that...
+    ```
+    <br>
+2. Try to make a Python implementation of the `wc` command ([documentation here](https://linux.die.net/man/1/wc)), which can be used to calculate various statistics about a given text file, such as number of characters, number of lines, number of words, etc.<br><br>
+    Example:
+    ```sh
+    wc myfile.txt
+    5 lines, 56 words, 193 characters
+    ```
+    <br>
+3. Make a `dirstats` command that can analyze the contents of a file directory.  The [os.path](https://docs.python.org/3/library/os.path.html) module will be especially useful.
+    <br><br>
+    Example:
+    ```sh
+    dirstats .
+    dir1 - directory
+    dir2 - directory
+    f1.txt - 25 B file
+    f2.mp3 - 5 MB file
+    ```
+    <br>
+4. Find an interesting data set ([CSV](https://docs.python.org/3/library/csv.html) or [JSON](https://docs.python.org/3/library/json.html) files will be the simplest to process) at [Kaggle](https://www.kaggle.com/datasets) and create a command that can analyze this file in some way
+    <br><br>
+    Example:
+    ```sh
+    inspect mcdonalds-sales-history.csv 
+    10092393 BigMacs were sold over a period from 2020-01-01 to 2020-12-31
+    Average monthly BigMac sales: $123828
+    ```
+    <br>
+2. Make a character creator that generates random characters for your favourite Role Playing Game. The [random](https://docs.python.org/3/library/random.html) module will be helpful, and [this API](https://randomuser.me/api/) could be used with the `requests` module to generate random names.
+
+    Example:
+    ```sh
+    dndchar rogue
+    Seraphina Shadowblade is a chaotic neutral Tiefling Rogue.
+    Strength (STR): 10
+    Dexterity (DEX): 16
+    Constitution (CON): 12
+    Intelligence (INT): 14
+    Wisdom (WIS): 10
+    Charisma (CHA): 14
+    ```
+
+## Appendix B - Testing Strategies
+
+Below are some tips for discovering bugs that may be lurking in your code:
+
+- **Be evil**: All the strategies below are specific variations of this basic idea. Run your program, and don't obey anything your program suggests; do something else! Try to break it! If you do, debug it to make sure the specific circumstance that caused the problem is handled gracefully.
+- **Check condition expressions**: Inspect your code for loops and condition statements. Think about ways that you could make your program hit the boundaries of the condition expressions.  For example, if a condition statement is checking if the value of a variable is greater than 10, what happens if the variable is 9? 11? exactly 10? Is that correct?
+- **Check indexes**: Inspect your code for places where sequences or dictionaries are being indexed. If it is possible for the user to operate your program in such a way that an index would be outside the size of the sequence/dictionary, make sure you code handles this situation without crashing.
+- **Check data types**: Inspect your code for places where assumptions are made about the type of any given value. Is it possible for the user to operate your program in such a way that an invalid type is provided to code that is making such assumptions?
+- **Input/Output problems**: Inspect your code for places where it is reading/writing to the file system. If it is possible for the user to specify files or directories that don't exist, make sure that your code handles this situation without crashing.
