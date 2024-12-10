@@ -1,0 +1,1 @@
+import{r as e,G as t}from"./index.72e24882.js";const n=a=>e.exports.createElement(t,{severity:"warning"},'This item contains many arrays and/or tables. Bulk download was only recently added to the Tiled server, and it is not yet supported by this web interface. Go to the "View" tab and navigate to one items inside to download.');export{n as default};
