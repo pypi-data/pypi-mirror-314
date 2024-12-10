@@ -1,0 +1,116 @@
+# This script is an edited version of the example found at
+# https://git.ligo.org/lscsoft/example-ci-project/blob/python/.gitlab-ci.yml
+# Each 0th-indentation level is a job that will be run within GitLab CI
+# The only exception are a short list of reserved keywords
+#
+# https://docs.gitlab.com/ee/ci/yaml/#gitlab-ci-yml
+
+# stages is a reserved keyword that defines job dependencies and
+# parallelization. each stage runs in parallel but must complete
+# before the next stage begins
+
+stages:
+  - initial
+  - test
+  - deploy
+
+.list-env: &list-env
+  - PREFIX="$(dirname $(which python))/.."
+  - if [ -d "${PREFIX}/conda-meta" ]; then
+      conda list --prefix "${PREFIX}" --show-channel-urls;
+    else
+      python -m pip list installed;
+    fi
+
+.test-python: &test-python
+  stage: initial
+  image: python
+  script:
+    - python -m pip install .
+    - python -c "import bilby_tgr"
+
+# test basic setup on python3
+basic-3.8:
+  <<: *test-python
+  image: python:3.8 #possibly switch twose to bilby containers
+
+basic-3.9:
+  <<: *test-python
+  image: python:3.9
+
+basic-3.10:
+  <<: *test-python
+  image: python:3.10
+
+.precommits: &precommits
+  stage: initial
+  script:
+    - source activate $PYVERSION
+    - mkdir -p $CACHE_DIR
+    - pip install --upgrade pip
+    - pip --cache-dir=$CACHE_DIR install --upgrade bilby
+    - pip --cache-dir=$CACHE_DIR install .
+    - pip --cache-dir=$CACHE_DIR install pre-commit
+    # Run precommits (flake8, spellcheck, isort, no merge conflicts, etc)
+    - pre-commit run --all-files --verbose --show-diff-on-failure
+
+precommits-py3.8:
+  <<: *precommits
+  image: containers.ligo.org/lscsoft/bilby/v2-bilby-python38
+  variables:
+    CACHE_DIR: ".pip38"
+    PYVERSION: "python38"
+
+precommits-py3.9:
+  <<: *precommits
+  image: containers.ligo.org/lscsoft/bilby/v2-bilby-python39
+  variables:
+    CACHE_DIR: ".pip39"
+    PYVERSION: "python39"
+
+precommits-py3.10:
+  <<: *precommits
+  image: containers.ligo.org/lscsoft/bilby/v2-bilby-python310
+  variables:
+    CACHE_DIR: ".pip310"
+    PYVERSION: "python310"
+
+
+
+
+# test example on python 3.10
+python-3.10:
+  stage: test
+  image: containers.ligo.org/lscsoft/bilby/v2-bilby-python310
+  needs: ["basic-3.10", "precommits-py3.10"]
+  script:
+    - python -m pip install .[all]
+    - *list-env
+    # Run tests and collect coverage data
+    - pytest --cov=bilby_tgr --durations 10
+  after_script:
+    - coverage html
+    - coverage xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - htmlcov/
+    expire_in: 30 days
+
+
+pages:
+  stage: deploy
+  needs: [python-3.10]
+  script:
+    - mkdir public/
+    - mv htmlcov/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - master
