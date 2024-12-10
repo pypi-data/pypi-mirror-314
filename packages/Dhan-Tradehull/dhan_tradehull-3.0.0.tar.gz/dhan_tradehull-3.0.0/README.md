@@ -1,0 +1,102 @@
+# TradeHull Dhan Codebase Project
+
+This project is built to interact with the **Dhan API** using the `Dhan_Tradehull` library. It provides a comprehensive suite of tools for trading, fetching market data, placing orders, and analyzing options.
+
+---
+
+## Features
+- **Fetch Market Data**: Get Live Trading Price (LTP), historical data, and intraday data.
+- **Order Placement**: Place, modify, or cancel orders with various parameters.
+- **Option Greeks**: Retrieve Greeks like Delta, Theta, Gamma, and Vega for options.
+- **Option Strike Selection**: Automate ATM, ITM, and OTM strike price identification.
+- **Portfolio Management**: Fetch holdings, positions, and balances.
+- **Option Chain**: Retrieve and analyze option chain data.
+- **Advanced Order Types**: Supports sliced orders, bracket orders, and stop-loss orders.
+
+---
+
+## Installation
+1. pip install Dhan_Tradehull
+
+2. Install required dependencies:
+	pip install -r requirement.txt
+
+
+
+## Usage
+
+### Dhan API Authentication
+
+Update the client_code and token_id with your Dhan API credentials:
+
+client_code = "your_client_code"
+token_id = "your_token_id"
+tsl = Tradehull(client_code, token_id)
+
+
+## Key Functionalities
+
+1. **Fetch Live Market Data**
+Get the latest trading price (LTP):
+
+data = tsl.get_ltp_data(names=['CRUDEOIL', 'NIFTY'])
+crudeoil_ltp = data['CRUDEOIL']
+
+
+2. **Fetch Historical Data**
+Retrieve historical or intraday data:
+
+data = tsl.get_historical_data(tradingsymbol='NIFTY', exchange='INDEX', timeframe="DAY")
+intraday_data = tsl.get_intraday_data(tradingsymbol='NIFTY', exchange='INDEX', timeframe=10)
+
+
+3. **Option Strike Selection**
+Automated ATM/ITM/OTM strike selection:
+
+ce_strike, pe_strike, strike = tsl.ATM_Strike_Selection(Underlying='NIFTY', Expiry=0)
+ce_otm, pe_otm, ce_price, pe_price = tsl.OTM_Strike_Selection(Underlying='NIFTY', Expiry=0, OTM_count=5)
+
+
+4. **Option Greeks**
+Fetch Greeks for a specific option:
+
+all_greeks = tsl.get_option_greek(strike=24400, expiry=0, asset='NIFTY', interest_rate=10, flag='all_val', scrip_type='CE')
+
+
+5. **Order Placement and Management**
+Place, modify, or cancel orders:
+
+**Place a limit order**
+order_id = tsl.order_placement(tradingsymbol='NIFTY 19 DEC 23300 CALL', exchange='NFO', quantity=25, price=0.05, trigger_price=0, order_type='LIMIT', transaction_type='BUY', trade_type='MIS')
+
+**Modify an order**
+modified_order_id = tsl.modify_order(order_id=order_id, order_type="LIMIT", quantity=50, price=0.1)
+
+**Cancel an order**
+order_status = tsl.cancel_order(OrderID=order_id)
+
+
+6. **Portfolio Management**
+Fetch holdings, positions, and balances:
+
+holdings = tsl.get_holdings()
+positions = tsl.get_positions()
+available_balance = tsl.get_balance()
+
+7. **Option Chain Analysis**
+Retrieve and analyze the option chain:
+
+option_chain = tsl.get_option_chain(Underlying="NIFTY", exchange="INDEX", expiry=0)
+
+
+### Notes
+Ensure your token_id is valid for the session. Tokens expire after a set period.
+Always verify the data and status of API responses before processing.
+For debugging, use Python's pdb or enable debug mode in API calls by setting debug="YES".
+
+
+### License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+### Contact
+For queries or issues, please open an issue in the repository or contact your-contact.tradehull@gmail.com.
