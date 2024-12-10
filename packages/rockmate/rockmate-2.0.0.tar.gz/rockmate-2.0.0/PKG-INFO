@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: rockmate
+Version: 2.0.0
+Summary: Efficient and Automatic Rematerialization for Pytorch training
+Author: Théotime Le Hellard, Xunyi Zhao, Julia Gusak, Li Zhe, Olivier Beaumont, Lionel Eyraud-Dubois
+Maintainer-email: Lionel Eyraud-Dubois <lionel.eyraud-dubois@inria.fr>
+License: MIT License
+        
+        Copyright (c) 2021-present Inria 
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Repository, https://github.com/topal-team/rockmate.git
+Keywords: rematerialization,training,pytorch,memory
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: COPYING
+Requires-Dist: numpy
+Requires-Dist: torch>=1.7
+Requires-Dist: rkgb>=2.0.0
+Requires-Dist: pulp==2.7.0
+Requires-Dist: configmypy>=0.2.0
+
+# Rockmate
+
+The `Rockmate` framework is designed for training a PyTorch neural network within a given GPU budget
+constraint using automatic re-materialization (activation checkpointing) technique.
+
+Given a PyTorch model, a sample input, and a GPU memory budget, `Rockmate` builds a new
+`torch.nn.Module`, which performs forward and backward pass keeping activations under the given
+budget.
+
+- The new model produces the same outputs and gradients as the original one.
+- Model training with a budget constraint, which is lower than the one required by PyTorch Autodiff,
+  is achieved by re-computing some of the activations instead of storing them for gradient
+  calculation.
+- Depending on the budget, `Rockmate` defines automatically which activations should be recomputed.
+
+More information on [our repository](https://github.com/topal-team/rockmate).
