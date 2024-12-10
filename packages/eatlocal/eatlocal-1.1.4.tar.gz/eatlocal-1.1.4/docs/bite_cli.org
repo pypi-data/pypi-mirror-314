@@ -1,0 +1,98 @@
+#+TITLE: Eatlocal
+#+AUTHOR: Russell Helmstedter
+#+DATE: <2022-04-26>
+
+* Original Work Flow
+This is an outline for a project that helps people solve PyBites on the command line. Currently the workflow is annoying (at best). Consider the following:
+
+1. Navigate to the bite page on the website and 
+2. click the drop down button to solve locally.
+3. Download the zip file for that bite.
+4. Navigate to the directory where the bite was downloaded.
+5. Unzip the new directory into a folder named by the bite number: `../pybites/<bite number>`
+6. Solve the bite.
+7. Go through the steps to push up to GitHub:
+  + =git add .=
+  + =git commit -m 'solved <bite number>'=
+  + =git push=
+8. Navigate back to website.
+9. Download the code from GitHub.
+10. Submit bite.
+
+* Wishlist
+
+What I would like to have happen:
+    1. run `eatlocal download <bite number>` (Package downloads and extracts a bite into PyBites directory.)
+    2. run `eatlocal display <bite number>` (Bite instructions and python file are displayed in the terminal.)
+    2. Solve bite
+    3. run `eatlocal submit <bite number>` (Submit bite and open web browser to the corresponding bite page.)
+
+* Current Work Flow
+    I have a working version of eatlocal and the [[Wishlist][wishlist]] has been completely fulfilled. It can extract a zipped file that is already in the local repo. It can now submit a bite by first pushing it to GitHub then opening your default web browser to the corresponding bite page. It can download and extract a bite using selenium in headless mode. It works in windows powershell and on macOS.
+
+* Enhancements
+** TODO Add a display command to read the instructions of the bite in the terminal.
++ [X] find a nice way of finding the pybites repo
++ [X] nice way of exiting the read display
+
+** TODO create command to download data associated with bite
+Some bites (e.g.,[[https://codechalleng.es/bites/3/][bite 3]]) download external files and store them in a temp variable. These are usually handled by =urllib.request=. It would be awesome to have eatlocal download the data files to explore while trying to code.
+
+*** Potential Problems
+**** Problem 1
+***** Problem Statement
+
+Not all bites are formatted the same way. E.g., below are snippets from the source code of two bites. Bite 3 stores the URL and the name of the file in separate variables. Bite 7 only has the URL stored inside the =URLlib.request=.
+#+BEGIN_SRC python
+##################################
+##### Source code for bite 3 #####
+##################################
+import os
+import urllib.request
+
+# PREWORK
+TMP = os.getenv("TMP", "/tmp")
+S3 = "https://bites-data.s3.us-east-2.amazonaws.com/"
+DICT = "dictionary.txt"
+DICTIONARY = os.path.join(TMP, DICT)
+urllib.request.urlretrieve(f"{S3}{DICT}", DICTIONARY)
+
+##################################
+##### Source code for bite 7 #####
+##################################
+from datetime import datetime
+import os
+import urllib.request
+
+SHUTDOWN_EVENT = "Shutdown initiated"
+
+# prep: read in the logfile
+tmp = os.getenv("TMP", "/tmp")
+logfile = os.path.join(tmp, "log")
+urllib.request.urlretrieve(
+    "https://bites-data.s3.us-east-2.amazonaws.com/messages.log", logfile
+)
+#+END_SRC
+
+#+RESULTS:
+: None
+
+***** Solutions
+1. Ask Bob if the URLs for the data files are easily accessed in the database.
+2. Rewrite the bites containing data files in a consisent manner that can be parsed by =eatlocal=.
+
+* known issues
+  + [x] Erik mentioned that he needed to set up a pasword since he had authenticated pybites using github. need to add this caveat to the =readme.md=.
+  + [X] once Erik's pull requests are merged, I need to restructure the =readme.md=. perhaps have a quickstart documentation directly in the =readme.md= and then the full help documentation linked?
+  + [ ] need tests that cover submitting a bite
+  + [X] need tests that cover the display function
+
+* Testing Strategy
+** Download
+** Display
+** Submit
++ [X] submitting from non-git repo
++ [X] submitting bite that doesn't exist
++ [ ] end2end submit? Maybe have selenium unsubmit a bite and resumbit?
+* v2
+  ** TODO need to deal with submitted bites that don't pass. Currently is times out and crashes.
