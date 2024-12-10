@@ -1,0 +1,77 @@
+[tool.poetry]
+name = "iscc-crypto"
+version = "0.1.0"
+description = "ISCC - Crypto"
+authors = ["Titusz <tp@py7.de>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://iscc.codes"
+keywords=["iscc", "cryptography", "EdDSA", "jsc", "verifiable credentials", "content identification"]
+classifiers=[
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video",
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+cryptography = "*"
+jcs = "*"
+base58 = "*"
+python-dotenv = "*"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+bandit = "*"
+coverage = "*"
+pytest-cov = "*"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "*"
+ruff = "*"
+black = "*"
+mdformat = "*"
+mdformat-tables = "*"
+mdformat_admon = "*"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "*"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
+line-ending = "lf"
+
+[tool.black]
+line-length = 100
+preview = true
+enable-unstable-feature = ["string_processing"]
+target-version = ['py310']
+
+[tool.poe.tasks]
+build-docs = { script = "tests.build_docs:main", help = "Copy README & CHANGELOG to /docs" }
+format-code = { cmd = "poetry run ruff format", help = "Code style formating with ruff" }
+format-markdown = { cmd = "mdformat --wrap 100 --end-of-line lf .", help = "Markdown formating with mdformat" }
+convert-lf = { script = "tests.lf:convert_lf", help = "Convert line endings to LF"}
+run-tests = { cmd = "poetry run pytest --cov=iscc_crypto --cov-fail-under=100", help = "Run tests with coverage" }
+test-security = { cmd = "poetry run bandit -r iscc_crypto -q", help = "Run security check with bandit" }
+format = ["format-code", "format-markdown", "convert-lf"]
+all = ["build-docs ", "format-code", "format-markdown", "convert-lf", "run-tests", "test-security"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
