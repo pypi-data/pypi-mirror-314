@@ -1,0 +1,40 @@
+name: Test inner
+
+inputs:
+    os:
+        required: true
+        type: string
+    python-version:
+        required: true
+        type: string
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{inputs.python-version}}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{inputs.python-version}}
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install pytest
+        python3 -m pip install pytest-cov
+        python3 -m pip install -e .[tests,gym,memory_storage]
+  
+    - name: Tests
+      shell: bash
+      run: |
+        pytest --cov=cst_python --cov-report json  
+      
+    - if: ${{inputs.os == 'ubuntu-latest' && inputs.python-version == '3.12'}}
+      name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage_report
+        path: coverage.json
+    
