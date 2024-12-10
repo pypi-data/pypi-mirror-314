@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-data = { "rara_text_evaluator" = ["models/*", "data/*"] }
+
+[tool.setuptools.packages.find]
+include = ["rara_text_evaluator", "rara_text_evaluator.models"]
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION.txt" }
+
+[tool.pytest.ini_options]
+markers = [
+    "override: Custom marker to indicate tests that should not use autouse fixtures."
+]
+
+[project]
+name = "rara-text-evaluator"
+dynamic = ["version"]
+license = { file = "LICENSE" }
+description = "Evaluate the quality of texts from a range of 0-1"
+readme = "README.md"
+dependencies = ["langdetect"]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Science/Research",
+]
+
+[project.optional-dependencies]
+testing = [
+    "pytest>=8.0",
+]
