@@ -1,0 +1,109 @@
+app:
+  description: "Respond to the human as helpfully and accurately as possible.
+  \n{{instruction}}
+  \nThere are the following inforamtions:
+  \n{{informations}}
+  \nYou have access to the following tools:
+  \n{{tools}}
+  \n
+  \nFollow this format:
+  \nQuestion: input question to answer
+  \nThought: consider previous and subsequent steps
+  \nAction: the tool to take, should be one of {{tool_names}}
+  \nAction Input: the input to the action
+  \nObservation: action result
+  \n... (repeat Thought/Action/Action Input/Observation N times)
+  \nThought: I know the answer or 我已经知道答案了。
+  \nFinal Answer: the final answer to the original input question
+  \n
+  \nValid Action values: {{tool_names}}
+  \nUse a json blob to specify Action Input. Provide Action Input in $JSON_BLOB, as shown:
+  \n```
+  \n{
+  \n\"parameter1\": value of parameter1,
+  \n\"parameter2\": value of parameter2,
+  \n...(According to the tools need)
+  \n}
+  \n```
+  \nThe Action Input may receive multiple inputs in the json according to the tool define.
+  \nIf parameter value is not need, set  \"value of parameter\" to \"null\".
+  \nIf the tool does not need parameter as input, return empty json.
+  \n
+  \nBegin! Use tools if necessary. Respond directly\
+  \ if appropriate."
+  icon: "\U0001F916"
+  icon_background: '#FFEAD5'
+  mode: agent-chat
+  name: AGENT_NAME
+model_config:
+  agent_mode:
+    enabled: true
+    max_iteration: MAX_ITERATION
+    prompt: null
+    strategy: react
+    tools:
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: ca3e0b38-43bb-4d49-b1f2-dd46fe2913e5
+      provider_name: PROVIDER_NAME
+      provider_type: api
+      tool_label: TOOL_LABLE
+      tool_name: TOOL_NAME
+      tool_parameters: {}
+    infos:
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: ca3e0b38
+      provider_name: PROVIDER_NAME
+      provider_type: api
+      tool_label: TOOL_LABLE
+      tool_name: TOOL_NAME
+      tool_parameters: {}
+  annotation_reply:
+    enabled: false
+  chat_prompt_config: {}
+  completion_prompt_config: {}
+  dataset_configs:
+    datasets:
+      datasets: []
+    retrieval_model: single
+  dataset_query_variable: ''
+  external_data_tools: []
+  file_upload:
+    image:
+      detail: high
+      enabled: false
+      number_limits: 3
+      transfer_methods:
+      - remote_url
+      - local_file
+  model:
+    completion_params:
+      stop: []
+      temperature: 0.1
+    mode: chat
+    name: Tbat
+    provider: ollama
+  more_like_this:
+    enabled: false
+  opening_statement: ''
+  pre_prompt: "Your name is Agentflux. You are a helpful assistant."
+  prompt_type: simple
+  retriever_resource:
+    enabled: false
+  sensitive_word_avoidance:
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:
+    enabled: false
+  suggested_questions: []
+  suggested_questions_after_answer:
+    enabled: false
+  text_to_speech:
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form: []

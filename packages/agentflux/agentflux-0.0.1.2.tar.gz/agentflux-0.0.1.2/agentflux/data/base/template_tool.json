@@ -1,0 +1,72 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "{{TOOL_TITLE}}",
+    "description": "{{TOOL_INFO_DESCRIPTION}}",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "{{URL}}"
+    }
+  ],
+  "paths": {
+    "/{{TOOL_PATH_NAME}}": {
+      "post": {
+        "description": "{{TOOL_DESCRIPTION}}",
+        "operationId": "{{TOOL_PATH_ID}}",
+        "requestBody": {
+          "description": "None",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "{{ARG_NAME}}": {
+                      "description": "{{ARG_NAME_DESCRIPTION}}",
+                      "type": "{{ARG_TYPE}}"
+                  }
+              },
+              "required": ["REQUIRED_ARG_NAME"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "{{RESPONSE_DESCRIPTION}}",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "{{RETURN_NAME}}": {
+                        "description": "{{RETURN_NAME_DESCRIPTION}}",
+                        "type": "{{RETURN_TYPE}}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
+
