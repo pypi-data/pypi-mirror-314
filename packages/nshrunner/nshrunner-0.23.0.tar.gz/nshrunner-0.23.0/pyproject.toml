@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "nshrunner"
+version = "0.23.0"
+description = ""
+authors = ["Nima Shoghi <nimashoghi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.urls]
+homepage = "https://github.com/nimashoghi/nshrunner"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+tqdm = "*"
+typing-extensions = "*"
+cloudpickle = "*"
+deepmerge = "*"
+nshconfig = "*"
+nshutils = "*"
+nshsnap = "*"
+
+[tool.poetry.scripts]
+nshrunner-picklerunner = "nshrunner.picklerunner.main:main"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "*"
+ipykernel = "*"
+ipywidgets = "*"
+pyright = "*"
+pysnooper = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+typeCheckingMode = "standard"
+deprecateTypingAliases = true
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+reportPrivateImportUsage = false
+
+[tool.ruff.lint]
+select = ["FA102", "FA100"]
+ignore = ["F722", "F821", "E731", "E741"]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
