@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+#
+# Generates the expected output files for all the OGC example inputs.
+
+set -e
+
+cargo build
+
+tests=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+root=$(dirname "$tests")
+expected="$tests/expected"
+fixtures="$root/examples"
+
+for input_format in json text; do
+    if [ $input_format = "json" ]; then
+        input_extension="json"
+    else
+        input_extension="txt"
+    fi
+
+    for path in "$fixtures/$input_format"/*.$input_extension; do
+        for output_format in json text; do
+            if [ $output_format = "json" ]; then
+                output_extension="json"
+            else
+                output_extension="txt"
+            fi
+
+            file_name="${path##*/}"
+            file_stem="${file_name%.*}"
+            mkdir -p "$expected/$output_format"
+
+            target/debug/cql2 --output-format $output_format <$path > "$expected/$input_format/$file_stem.$output_extension"
+        done
+    done
+done
