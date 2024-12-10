@@ -1,0 +1,101 @@
+image: python:alpine
+
+doc:html:
+  stage: build
+  needs: []
+  before_script:
+  - apk add make sed
+  - pip install -e '.[doc]'
+  - pip uninstall -y pyheimdall  # we wanna use current sources
+  script:
+  - echo "Generating documentation…"
+  - sphinx-apidoc -f -o docs/source/ src/heimdall/  # generate .rst from .py
+  - cd docs/source ; ../hide_submodules heimdall.rst heimdall.util.rst ; cd -
+  - cd docs ; make clean && make html ; cd -  # generate .html from .rst
+  artifacts:
+    when: always
+    paths:
+    - docs/build/html
+
+test:lint:
+  stage: test
+  needs: []
+  before_script:
+  - pip install -e '.[dev]'
+  - pip uninstall -y pyheimdall  # use current sources, not last release
+  script:
+  - echo "Running linter…"
+  - pycodestyle --config=.pycodestyle ./src
+  allow_failure: true
+
+test:coverage:
+  stage: test
+  needs: []
+  services:
+    - name: mariadb:latest
+      alias: mariadb
+    #- name: mysql:latest
+    #  alias: mysql
+    #  command: [ "--default-authentication-plugin=mysql_native_password" ]
+  variables:
+    MARIADB_HOST: 'mariadb'
+    MARIADB_PORT: '3306'
+    MARIADB_ROOT_PASSWORD: 'password'
+    MARIADB_DATABASE: 'menagerie'  # this database will be created (empty)
+  before_script:
+  # add & setup database client
+  #- apk add mariadb-client
+  #- mysql
+  #  --host="$MARIADB_HOST" --port="$MARIADB_PORT"
+  #  --user=root --password="$MARIADB_ROOT_PASSWORD"
+  #  $MARIADB_DATABASE < tests/examples/menagerie/hera.sql
+  # install this pyheimdall and all its unit test python dependencies
+  # @see: https://pip.pypa.io/en/stable/
+  - pip install -e '.[tests]' ;
+    pip uninstall -y pyheimdall  # use current sources, not last release
+  script:
+  - coverage run -m pytest && coverage report -m && coverage html
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    paths:
+    - coverage/
+
+deploy:badges:
+  stage: deploy
+  needs: []
+  before_script:
+  - apk add git ruby
+  - gem install hoc
+  - pip install anybadge pygount
+  - mkdir badges
+  script:
+  - pygount --suffix=py --format=summary --out lines.txt ./src/
+  - export LINES_OF_CODE=`cat lines.txt | grep Sum | cut -d' ' -f16`; rm lines.txt
+  - export HITS_OF_CODE=`hoc`
+  - export COLOR=#007ec6
+  - anybadge -f badges/loc.svg --color=$COLOR -l lines\ of\ code -v $LINES_OF_CODE
+  - anybadge -f badges/hoc.svg --color=$COLOR -l hits\ of\ code -v $HITS_OF_CODE
+  artifacts:
+    paths:
+    - badges/
+
+pages:
+  stage: deploy
+  needs:
+  - job: doc:html
+    artifacts: true
+  - job: test:coverage
+    artifacts: true
+  - job: deploy:badges
+    artifacts: true
+  script:
+  - mkdir public
+  - mv docs/build/html/ public/doc
+  - mv coverage/ public/coverage
+  - mv badges/ public/badges
+  - echo "Uploading to pages…"
+  artifacts:
+    paths:
+    - public
+  only:
+  - main
