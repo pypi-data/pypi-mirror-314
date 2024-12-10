@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<header>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Participants ({{ ppt_id }})</h1>
+      <p class="lead">Showing details from participant {{ ppt_id }}.</p>
+    </div>
+  </div>
+  <hr class="my-4">
+</header>
+
+<body>
+  <div class="row">
+    <div class="col">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="{{ url_for('appointment_new', ppt_id = ppt_id)}}"><button type="button" class="btn btn-primary"
+            style="margin: 0.5em"><i class="fa fa-plus"></i>&nbsp&nbspNew
+            appointment</button></a>
+        <a href="{{ url_for('participant_modify', ppt_id = ppt_id) }}"><button type="button" class="btn btn-warning"
+            style="margin: 0.5em"><i class="fa fa-pen"></i>&nbsp&nbspModify
+            participant</button></a>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div style="text-align: left; width: 25%; float: left; margin-right: 2em;">
+    <h4>Participant information</h4>
+    <ul class="list-group list-group-horizontal-md">
+      <li class="list-group-item list-group-item-secondary col-4">Name</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["name"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal-md">
+      <li class="list-group-item list-group-item-secondary col-4">Added</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data["data"]["date_added"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Age</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data["data"]["age_now_months"] + ":" +
+        data["data"]["age_now_days"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Sex</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data["data"]["sex"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal" style="height: 7.75em;">
+      <li class="list-group-item list-group-item-secondary col-4">Comments</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data["data"]["comments"] }}</li>
+    </ul>
+  </div>
+  <div style="text-align: left; width: 25%; float: left; margin-right: 2em;">
+    <h4>Contact details</h4>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Phone</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["phone1"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">E-mail</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["email1"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Phone 2</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["phone2"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">E-mail 2</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["email2"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Address</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["address"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Postcode</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["postcode"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">City</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["City"]}}</li>
+    </ul>
+  </div>
+  <div style="text-align: left; width: 30%; float: left; margin-right: 2em; margin-bottom: 2em;">
+    <h4>Birth information</h4>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Delivery type</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["birth_type"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Gestational weeks</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["gest_weeks"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Weight (g)</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["birth_weight"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Head circunference (cm)</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{
+        data["data"]["head_circumference"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class=" list-group-item list-group-item-secondary col-7">Apgar</li>
+      <li class="list-group-item list-group-item-action user-select-all" style="text-align: center;">{{
+        data["data"]["apgar1"] }}</li>
+      <li class="list-group-item list-group-item-action user-select-all" style="text-align: center;">{{
+        data["data"]["apgar2"] }}</li>
+      <li class="list-group-item list-group-item-action user-select-all" style="text-align: center;">{{
+        data["data"]["apgar3"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Hearing</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["hearing"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Diagnoses</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data["data"]["diagnoses"]}}</li>
+    </ul>
+  </div>
+  <br><br>
+  <div class="card" style="width: 100%; margin-top: 2em;">
+    <h5 class="card-header">Appointments</h5>
+    <div class="card-body">
+      <h6 class="card-subtitle mb-2 text-muted">Click appointment IDs to see appointment details.</h6>
+      <div style="text-align: left" width="10%">
+        {{ data["table_appointments"] | safe }}
+      </div>
+    </div>
+  </div>
+  <div class="card" style="width: 100%; margin-top: 2em;">
+    <h5 class="card-header">Language questionnaires</h5>
+    <div class="card-body">
+      <h6 class="card-subtitle mb-2 text-muted">Click questionnaire IDs to see questionnaire details.</h6>
+      <div style="text-align: left" width="10%">
+        {{ data["table_questionnaires"] | safe }}
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
