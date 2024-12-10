@@ -1,0 +1,59 @@
+{% set printf_formats = {
+    "double": "%lf",
+    "float": "%f",
+    "int8_t": "%hhd",
+    "int16_t": "%hd",
+    "int32_t": "%d",
+    "int64_t": "%lld",
+    "uint8_t": "%hhu",
+    "uint16_t": "%hu",
+    "uint32_t": "%u",
+    "uint64_t": "%llu"
+} %}
+#include <cstdio>      // printf
+#include <cmath>       // std::abs
+#include "forward.hpp" // Exported forward
+
+// Inputs
+{% for name in inputs_name %}
+#include "{{ name }}.h"
+{% endfor %}
+
+// Outputs
+{% for name in outputs_name %}
+#include "{{ name }}_expected.h"
+{% endfor %}
+
+int main()
+{
+    // Initialize the output arrays
+    {%- for o in range(outputs_name | length) %}
+    {{ outputs_dtype[o] }}* {{ outputs_name[o] }} = nullptr;
+    {% endfor %}
+
+    const float abs_err = 0.001f;
+    const float rel_err = 0.0001f;
+
+    // Call the forward function
+    {{ func_name }}({{ inputs_name|join(", ") }}{% if inputs_name %}, {% endif %}&{{ outputs_name|join(", &") }});
+
+
+    int nb_identical;
+    int nb_out;
+
+    // Print the results of each output
+    {%- for o in range(outputs_name | length) %}
+    nb_identical = 0;
+    nb_out = 0;
+    printf("{{ outputs_name[o] }}:\n");
+    for (int o = 0; o < {{ outputs_size[o] }}; ++o) {
+        printf("Expected {{ printf_formats[outputs_dtype[o]] }} <-> Predicted {{ printf_formats[outputs_dtype[o]] }}\n", {{ outputs_name[o] }}_expected[o], {{ outputs_name[o] }}[o]);
+        if (std::abs({{ outputs_name[o] }}_expected[o] - {{ outputs_name[o] }}[o]) <= abs_err + rel_err * std::abs({{ outputs_name[o] }}_expected[o]))
+            nb_identical++;
+        nb_out++;
+    }
+    printf("\nNumber of equal outputs: %d / %d\n", nb_identical, nb_out);
+    {% endfor %}
+
+    return 0;
+}
