@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{% if success %}
+Email Verification Complete
+{% elif error %}
+Email Verification Failed
+{% else %}
+Verifying Email...
+{% endif %}
+{% endblock title %}
+{% block content %}
+<div class="flex justify-center h-screen w-100 place-items-center bg-gradient">
+  <div class="p-8 mx-4 space-y-3 shadow-lg bg-background rounded-4 w-100" style="max-width:30rem">
+    {% if app.app_logo %}
+    <div class="mb-5 text-center">
+      <img src="{{ app.app_logo }}" alt="{{ app.app_info }} Logo" style="height:3.25rem"/>
+    </div>
+    {% endif %}
+    {% if success %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">Email Verified!</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">You may close this window now.</p>
+    {% elif error %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">Something went wrong!</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">{{ error }}. Please try
+      again.</p>
+    {% else %}
+    <h1 class="text-3xl font-bold tracking-tight text-center text-black">Verifying email...</h1>
+    <p class="font-medium leading-normal text-center text-gray-500 text-md">Please wait while we run the checks.</p>
+    {% endif %}
+    {% if token %}
+    <form id="m-form" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="token" value="{{ token }}">
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% if token %}
+<script>
+  // Automatically submit the form when the page loads
+  window.onload = function () {
+    const form = document.getElementById('m-form');
+    if (form) {
+      form.submit();
+    }
+  };
+</script>
+{% endif %}
+{% endblock content %}
