@@ -1,0 +1,150 @@
+Metadata-Version: 2.3
+Name: utilyzer
+Version: 0.0.3
+Summary: A tool for awesome python utils
+Project-URL: Documentation, https://asmitul.github.io/utilyzer
+Project-URL: Issues, https://github.com/asmitul/utilyzer/issues
+Project-URL: Source, https://github.com/asmitul/utilyzer
+Author: asmitul
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Internet
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: <3.12,>=3.8
+Requires-Dist: pytz
+Requires-Dist: types-pytz
+Provides-Extra: docs
+Requires-Dist: mkdocs-git-revision-date-localized-plugin~=1.3.0; extra == 'docs'
+Requires-Dist: mkdocs-material~=9.5.48; extra == 'docs'
+Requires-Dist: mkdocstrings[python]~=0.27.0; extra == 'docs'
+Requires-Dist: mkdocs~=1.6.1; extra == 'docs'
+Provides-Extra: quality
+Requires-Dist: black~=24.10.0; extra == 'quality'
+Requires-Dist: mypy~=1.13.0; extra == 'quality'
+Requires-Dist: pre-commit~=4.0.1; extra == 'quality'
+Requires-Dist: ruff~=0.8.2; extra == 'quality'
+Provides-Extra: tests
+Requires-Dist: pytest-cov~=6.0.0; extra == 'tests'
+Requires-Dist: pytest~=8.3.4; extra == 'tests'
+Description-Content-Type: text/markdown
+
+# utilyzer 
+
+A tool for awesome python utils
+
+[![PyPI version](https://badge.fury.io/py/utilyzer.svg)](https://badge.fury.io/py/utilyzer)
+[![ci-cd](https://github.com/asmitul/utilyzer/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/asmitul/utilyzer/actions/workflows/ci-cd.yaml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Versions](https://img.shields.io/pypi/pyversions/utilyzer)](https://pypi.org/project/utilyzer)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/utilyzer)](https://pypi.org/project/utilyzer)
+
+## Installation
+
+```bash
+pip install utilyzer
+```
+
+## Features
+
+- String to Number conversion with support for:
+  - Integer conversion
+  - Float conversion
+  - Scientific notation
+  - Whitespace handling
+  - Robust error handling
+
+- Date utilities with support for:
+  - Getting day ranges with timestamps
+  - Timezone awareness
+  - Flexible day lookback
+
+## Quick Start
+
+```python
+from utilyzer import str_to_number
+
+# Convert string to integer
+str_to_number("123") # 123  
+
+# Convert string to float
+str_to_number("12.34") # 12.34
+
+# Convert string to scientific notation
+str_to_number("1e-10") # 1e-10
+
+# Handle whitespace
+str_to_number("  123  ") # 123
+
+# Handle invalid input
+str_to_number("abc") # None
+
+# Handle empty string
+str_to_number("") # None
+
+# Handle None
+str_to_number(None) # None
+```
+
+## Date Utilities
+
+```python
+from utilyzer import get_day_range
+
+# Get today's range
+today = get_day_range()
+
+# Get yesterday's range
+yesterday = get_day_range(1)
+
+# Get range with different timezone
+hk_time = get_day_range(0, timezone='Asia/Hong_Kong')
+```
+
+## Requirements
+
+- Python >= 3.8
+- Python < 3.12
+
+## Development on local, check code quality
+
+```bash
+# First review the changes
+black --check --diff --preview src tests
+
+# Then apply them if you're happy with the proposed changes
+black --preview src tests
+
+# Check ruff
+ruff check src tests
+
+# Fix ruff
+ruff check --fix src tests
+
+# Check mypy
+mypy src
+```
+
+## Documentation
+
+Full documentation is available at [https://asmitul.github.io/utilyzer](https://asmitul.github.io/utilyzer)
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+- **asmitul** - [GitHub](https://github.com/asmitul)
