@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: candbg
+Version: 0.1.0
+Summary: Debugging tools for can bus
+Author-email: ROX Automation <jev.kuznetsov@gmail.com>
+License: MIT
+Project-URL: Homepage, https://gitlab.com/roxautomation/tools/candbg
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENCE
+Requires-Dist: python-can
+Requires-Dist: cantools
+
+# candbg tool
+
+
+`candbg` is a simple tool that decodes canbus messages using a provided `dbc` file and shows them as a table.
+
+
+    usage: candbg [-h] [-i INTERFACE] [-c CHANNEL] dbc_file
+
+    candbg CLI
+
+    positional arguments:
+    dbc_file              Path to the DBC file
+
+    options:
+    -h, --help            show this help message and exit
+    -i INTERFACE, --interface INTERFACE
+                            Interface type (default: socketcan)
+    -c CHANNEL, --channel CHANNEL
+                            CAN channel (default: can0)
+
+
+
+"screenshot":
+
+    CAN Bus Monitor - Press 'q' to quit
+    -----------------------------------
+    [  9910] ID 0x0001: counter: {'counter': 25375238}
+    [  9910] ID 0x0002: echo: {'counter': 25375238, 'count_errors': 0, 'bus_errors': 0}
