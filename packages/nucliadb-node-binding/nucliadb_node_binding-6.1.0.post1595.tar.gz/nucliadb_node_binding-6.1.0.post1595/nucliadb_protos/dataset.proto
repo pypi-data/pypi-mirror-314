@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package dataset;
+
+
+import public "nucliadb_protos/resources.proto";
+
+// Train API V2
+enum TaskType {
+    FIELD_CLASSIFICATION = 0;
+    PARAGRAPH_CLASSIFICATION = 1;
+    SENTENCE_CLASSIFICATION = 2;
+    TOKEN_CLASSIFICATION = 3;
+    IMAGE_CLASSIFICATION = 4;
+    PARAGRAPH_STREAMING = 5;
+    QUESTION_ANSWER_STREAMING = 6;
+    FIELD_STREAMING = 7;
+}
+
+message TrainSet {
+    TaskType type = 1;
+    message Filter {
+        repeated string labels = 1;
+        repeated string paths = 2;
+        repeated string rids = 3;
+        repeated string tags = 4;
+        repeated string icons = 5;
+        repeated string metadata = 6;
+        repeated string entities = 7;
+        repeated string fields = 8;
+        repeated string status = 9;
+    }
+    Filter filter = 2;
+    int32 batch_size = 3;
+}
+
+enum LabelFrom {
+    PARAGRAPH = 0;
+    FIELD = 1;
+    RESOURCE = 2;
+}
+
+message Label {
+    string labelset = 1;
+    string label = 2;
+    LabelFrom origin = 3;
+}
+
+
+message TextLabel {
+    string text = 1;
+    repeated Label labels = 2;
+}
+
+message MultipleTextSameLabels {
+    repeated string text = 1;
+    repeated Label labels = 2;
+}
+
+message FieldClassificationBatch {
+    repeated TextLabel data = 1;
+}
+
+message ParagraphClassificationBatch {
+    repeated TextLabel data = 1;
+}
+
+message SentenceClassificationBatch {
+    repeated MultipleTextSameLabels data = 1;
+}
+
+
+message TokensClassification {
+    repeated string token = 1;
+    repeated string label = 2;
+}
+
+message TokenClassificationBatch {
+    repeated TokensClassification data = 1;
+}
+
+message ImageClassification {
+    string selections = 1;
+    string page_uri = 2;
+}
+
+message ImageClassificationBatch {
+    repeated ImageClassification data = 1;
+}
+
+
+message ParagraphStreamItem {
+    string id = 1;
+    string text = 2;
+}
+
+message ParagraphStreamingBatch {
+    repeated ParagraphStreamItem data = 1;
+}
+
+
+message QuestionDataset {
+    string text = 1;
+    string language = 2;
+    repeated string paragraphs = 3;
+}
+
+message Answer {
+    string text = 1;
+    string language = 2;
+    repeated string paragraphs = 3;
+}
+
+message QuestionAnswerStreamItem {
+    QuestionDataset question = 1;
+    Answer answer = 2;
+    bool cancelled_by_user = 3;
+}
+
+message QuestionAnswerStreamingBatch {
+    repeated QuestionAnswerStreamItem data = 1;
+}
+
+message FieldSplitData {
+    string split = 1;
+    string rid = 2;
+    string field = 3;
+    string field_type = 4;
+    repeated string labels = 5;
+    utils.ExtractedText text = 6;
+    resources.Basic basic = 7;
+    resources.FileExtractedData file = 8;
+    resources.LinkExtractedData link = 9;
+    resources.FieldComputedMetadata metadata = 10;
+}
+
+message FieldStreamingBatch {
+    repeated FieldSplitData data = 1;
+}

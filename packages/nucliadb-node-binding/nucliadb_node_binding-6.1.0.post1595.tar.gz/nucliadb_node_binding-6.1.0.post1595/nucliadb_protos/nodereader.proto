@@ -1,0 +1,473 @@
+syntax = "proto3";
+
+package nodereader;
+
+import public "nucliadb_protos/noderesources.proto";
+import "google/protobuf/timestamp.proto";
+import public "nucliadb_protos/utils.proto";
+
+
+message Filter {
+    repeated string field_labels = 1;
+    repeated string paragraph_labels = 2;
+    // JSON string with the filter expression for labels
+    string labels_expression = 3;
+    // JSON string with the filter expression for keywords
+    string keywords_expression = 4;
+}
+
+
+message StreamFilter {
+    enum Conjunction {
+        AND = 0;
+        OR = 1;
+        NOT = 2;
+    }
+    Conjunction conjunction = 1;
+
+    repeated string labels = 2;
+}
+
+
+message Faceted {
+    repeated string labels = 1;
+}
+
+
+message OrderBy {
+    enum OrderType {
+      DESC = 0;
+      ASC = 1;
+    }
+    enum OrderField {
+        CREATED = 0;
+        MODIFIED = 1;
+    }
+    string field = 1 [deprecated = true];
+    OrderType type = 2;
+    OrderField sort_by = 3;
+}
+
+
+message Timestamps {
+    google.protobuf.Timestamp from_modified = 1;
+    google.protobuf.Timestamp to_modified = 2;
+
+    google.protobuf.Timestamp from_created = 3;
+    google.protobuf.Timestamp to_created = 4;
+}
+
+message FacetResult {
+    string tag = 1;
+    int32 total = 2;
+}
+message FacetResults {
+    repeated FacetResult facetresults = 1;
+}
+
+
+message DocumentSearchRequest {
+    string id = 1;
+    string body = 2;
+
+    repeated string fields = 3;
+
+    Filter filter = 4;
+    OrderBy order = 5;
+    Faceted faceted = 6;
+
+    int32 page_number = 7;
+    int32 result_per_page = 8;
+
+    Timestamps timestamps = 9;
+
+    bool reload = 10 [deprecated = true];
+    bool only_faceted = 15;
+    optional noderesources.Resource.ResourceStatus with_status = 16;
+    optional string advanced_query = 17;
+
+    float min_score = 18;
+}
+
+
+message ParagraphSearchRequest {
+    string id = 1;
+    string uuid = 2;
+
+    repeated string fields = 3;
+    // query this text in all the paragraphs
+    string body = 4;
+
+    Filter filter = 5;
+
+    OrderBy order = 7;
+
+    // Faceted{ labels: Vec<String>}
+    Faceted faceted = 8;
+
+    int32 page_number = 10;
+    int32 result_per_page = 11;
+
+    Timestamps timestamps = 12;
+
+    bool reload = 13 [deprecated = true];
+    bool with_duplicates = 14;
+    bool only_faceted = 15;
+    optional string advanced_query = 16;
+    repeated string key_filters = 17;
+
+    float min_score = 18;
+
+    optional utils.Security security = 19;
+}
+
+message ResultScore {
+    float bm25 = 1;
+    // In the case of two equal bm25 scores, booster
+    // decides
+    float booster = 2;
+}
+
+message DocumentResult {
+    string uuid = 1;
+    ResultScore score = 3;
+    string field = 4;
+    repeated string labels = 5;
+}
+
+message DocumentSearchResponse {
+    int32 total = 1;
+
+    repeated DocumentResult results = 2;
+
+    map<string, FacetResults> facets = 3;
+
+    int32 page_number = 4;
+    int32 result_per_page = 5;
+
+    // The text that lead to this results
+    string query = 6;
+
+    // Is there a next page
+    bool next_page = 7;
+    bool bm25 = 8;
+}
+
+message ParagraphResult {
+    string uuid = 1;
+    string field = 3;
+    uint64 start = 4;
+    uint64 end = 5;
+    string paragraph = 6;
+    string split = 7;
+    uint64 index = 8;
+    ResultScore score = 9;
+    repeated string matches = 10;
+
+    // Metadata that can't be searched with but is returned on search results
+    noderesources.ParagraphMetadata metadata = 11;
+
+    repeated string labels = 12;
+}
+
+message ParagraphSearchResponse {
+    int32 fuzzy_distance = 10;
+    int32 total = 1;
+    //
+    repeated ParagraphResult results = 2;
+
+    // For each field what facets are.
+    map<string, FacetResults> facets = 3;
+
+    // What page is the answer.
+    int32 page_number = 4;
+
+    // How many results are in this page.
+    int32 result_per_page = 5;
+
+    // The text that lead to this results
+    string query = 6;
+
+    // Is there a next page
+    bool next_page = 7;
+    bool bm25 = 8;
+    repeated string ematches = 9;
+}
+
+message VectorSearchRequest {
+     //Shard ID
+    string id = 1;
+    // Embedded vector search.
+    repeated float vector = 2;
+    // labels to filter
+    repeated string field_labels = 3;
+    // paragraph labels to filter
+    repeated string paragraph_labels = 18;
+
+    // What page is the answer.
+    int32 page_number = 4;
+
+    // How many results are in this page.
+    int32 result_per_page = 5;
+    bool reload = 13 [deprecated = true];
+    bool with_duplicates = 14;
+    // ID for the vector set.
+    // Empty for searching on the original index
+    string vector_set = 15;
+    repeated string key_filters = 16;
+    float min_score = 17;
+    repeated string field_filters = 19;
+}
+
+message DocumentVectorIdentifier {
+    string id = 1;
+}
+
+message DocumentScored {
+    DocumentVectorIdentifier doc_id = 1;
+    float score = 2;
+    noderesources.SentenceMetadata metadata = 3;
+    repeated string labels = 4;
+}
+
+message VectorSearchResponse {
+    // List of docs closer to the asked one.
+    repeated DocumentScored documents = 1;
+
+    // What page is the answer.
+    int32 page_number = 4;
+
+    // How many results are in this page.
+    int32 result_per_page = 5;
+}
+
+message RelationNodeFilter {
+    utils.RelationNode.NodeType node_type = 1;
+    optional string node_subtype = 2;
+}
+
+message RelationEdgeFilter {
+    // Will filter the search to edges of type ntype.
+    utils.Relation.RelationType relation_type = 1;
+    optional string relation_subtype = 2;
+    repeated string relation_value = 3;
+}
+
+message RelationPrefixSearchRequest {
+    string prefix = 1;
+    repeated RelationNodeFilter node_filters = 2;
+}
+
+message RelationPrefixSearchResponse {
+    repeated utils.RelationNode nodes = 1;
+}
+
+
+message EntitiesSubgraphRequest {
+    // List of vertices where search will trigger
+    repeated utils.RelationNode entry_points = 1;
+
+    optional int32 depth = 3;
+
+    message DeletedEntities {
+        string node_subtype = 1;
+        repeated string node_values = 2;
+    }
+    repeated DeletedEntities deleted_entities = 4;
+    repeated string deleted_groups = 5;
+}
+
+message EntitiesSubgraphResponse {
+    repeated utils.Relation relations = 1;
+}
+
+
+// Query relation index to obtain different information about the
+// knowledge graph. It can be queried using the following strategies:
+//
+// - prefix search over vertex (node) names
+// - graph search:
+//   - given some entry vertices, get the filtered subgraph around them
+message RelationSearchRequest {
+    string shard_id = 1;
+    bool reload = 5 [deprecated = true];
+
+    RelationPrefixSearchRequest prefix = 11;
+    EntitiesSubgraphRequest subgraph = 12;
+}
+
+message RelationSearchResponse {
+    RelationPrefixSearchResponse prefix = 11;
+    EntitiesSubgraphResponse subgraph = 12;
+}
+
+
+message SearchRequest {
+    string shard = 1;
+
+    repeated string fields = 2;
+    // query this text in all the paragraphs
+    string body = 3;
+
+    Filter filter = 4;
+
+    OrderBy order = 5;
+
+    Faceted faceted = 6;
+
+    int32 page_number = 7;
+    int32 result_per_page = 8;
+
+    Timestamps timestamps = 9;
+
+    repeated float vector = 10; // Embedded vector search.
+
+    string vectorset = 15;
+
+    bool reload = 11 [deprecated = true];
+    bool paragraph = 12;
+    bool document = 13;
+
+    bool with_duplicates = 14;
+    bool only_faceted = 16;
+
+    optional string advanced_query = 18;
+    optional noderesources.Resource.ResourceStatus with_status = 17;
+
+    // if provided, search metadata for this nodes (nodes at distance
+    // one) and get the shortest path between nodes
+    RelationSearchRequest relations = 19 [deprecated = true];
+    RelationPrefixSearchRequest relation_prefix = 20;
+    EntitiesSubgraphRequest relation_subgraph = 21;
+    repeated string key_filters = 22;
+
+    float min_score_semantic = 23;
+    float min_score_bm25 = 25;
+
+    optional utils.Security security = 24;
+}
+
+enum SuggestFeatures {
+    ENTITIES = 0;
+    PARAGRAPHS = 1;
+}
+
+message SuggestRequest {
+    string shard = 1;
+
+    string body = 2;
+    repeated SuggestFeatures features = 6;
+
+    Filter filter = 3;
+    Timestamps timestamps = 4;
+    repeated string fields = 5;
+    repeated string key_filters = 7;
+}
+
+
+message RelatedEntities {
+    repeated string entities = 1;
+    uint32 total = 2;
+}
+
+message SuggestResponse {
+    int32 total = 1;
+    repeated ParagraphResult results = 2;
+
+    // The text that lead to this results
+    string query = 3;
+    repeated string ematches = 4;
+
+    // Entities related with the query
+    RelationPrefixSearchResponse entity_results = 6;
+}
+
+message SearchResponse {
+    DocumentSearchResponse document = 1;
+    ParagraphSearchResponse paragraph = 2;
+    VectorSearchResponse vector = 3;
+    RelationSearchResponse relation = 4;
+}
+
+message IdCollection {
+    repeated string ids = 1;
+}
+
+message RelationEdge {
+    utils.Relation.RelationType edge_type = 1;
+    string property = 2;
+}
+
+message EdgeList {
+    repeated RelationEdge list = 1;
+}
+
+message GetShardRequest {
+    noderesources.ShardId shard_id = 1;
+    string vectorset = 2;
+}
+
+message ParagraphItem {
+    string id = 1;
+    repeated string labels = 2;
+}
+
+message DocumentItem {
+    string uuid = 1;
+    string field = 2;
+    repeated string labels = 3;
+}
+
+message StreamRequest {
+    Filter filter__deprecated = 1 [deprecated = true];
+    bool reload = 2 [deprecated = true];
+    noderesources.ShardId shard_id = 3;
+    StreamFilter filter = 4;
+}
+
+message GetShardFilesRequest {
+    string shard_id = 1;
+}
+
+message ShardFileList {
+  repeated ShardFile files = 2;
+}
+
+message ShardFile {
+    string relative_path = 1;
+    uint64 size = 2;
+}
+
+message DownloadShardFileRequest {
+    string shard_id = 1;
+    string relative_path = 2;
+}
+
+message ShardFileChunk {
+    bytes data = 1;
+    int32 index = 2;
+}
+
+// Implemented at nucliadb_object_storage
+
+service NodeReader {
+    rpc GetShard(GetShardRequest) returns (noderesources.Shard) {}
+
+    rpc DocumentIds(noderesources.ShardId) returns (IdCollection) {}
+    rpc ParagraphIds(noderesources.ShardId) returns (IdCollection) {}
+    rpc VectorIds(noderesources.VectorSetID) returns (IdCollection) {}
+    rpc RelationIds(noderesources.ShardId) returns (IdCollection) {}
+
+    rpc RelationEdges(noderesources.ShardId) returns (EdgeList) {}
+
+    rpc Search(SearchRequest) returns (SearchResponse) {}
+    rpc Suggest(SuggestRequest) returns (SuggestResponse) {}
+
+    // Streams
+    rpc Paragraphs(StreamRequest) returns (stream ParagraphItem) {}
+    rpc Documents(StreamRequest) returns (stream DocumentItem) {}
+
+    // Shard Download
+    rpc GetShardFiles(GetShardFilesRequest) returns (ShardFileList) {};
+    rpc DownloadShardFile(DownloadShardFileRequest) returns (stream ShardFileChunk) {};
+}

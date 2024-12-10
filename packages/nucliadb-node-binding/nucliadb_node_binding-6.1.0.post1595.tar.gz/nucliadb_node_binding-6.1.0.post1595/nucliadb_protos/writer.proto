@@ -1,0 +1,500 @@
+syntax = "proto3";
+
+package fdbwriter;
+
+import "google/protobuf/timestamp.proto";
+
+import public "nucliadb_protos/noderesources.proto";
+import public "nucliadb_protos/resources.proto";
+import public "nucliadb_protos/knowledgebox.proto";
+import public "nucliadb_protos/audit.proto";
+
+// We receive this information throw an stream system
+
+message Audit {
+    string user = 1;
+    google.protobuf.Timestamp when = 2;
+    string origin = 3;
+    enum Source {
+        HTTP = 0;
+        DASHBOARD = 1;
+        DESKTOP = 2;
+    }
+    Source source = 4;
+    string kbid = 5;
+    string uuid = 6;
+    BrokerMessage.MessageSource message_source = 7;
+    repeated resources.FieldID field_metadata = 8;
+    repeated audit.AuditField audit_fields = 9;
+}
+
+message Error {
+    string field = 1;
+    resources.FieldType field_type = 2;
+    string error = 3;
+    enum ErrorCode {
+        GENERIC = 0;
+        EXTRACT = 1;
+        PROCESS = 2;
+        DATAAUGMENTATION = 3;
+    }
+    ErrorCode code = 4;
+}
+
+message BrokerMessage {
+    reserved 2, 12, 14, 15, 27;
+
+    string kbid = 1;
+    string uuid = 3;
+    string slug = 4;
+    Audit audit = 5;
+
+    enum MessageType {
+        AUTOCOMMIT = 0;
+        MULTI = 1;
+        COMMIT = 2;
+        ROLLBACK = 3;
+        DELETE = 4;
+    }
+
+    enum MessageSource {
+        WRITER = 0;
+        PROCESSOR = 1;
+    }
+
+    MessageType type = 6;
+    string multiid = 7;
+
+    resources.Basic basic = 8;
+
+    resources.Origin origin = 9;
+
+    repeated utils.Relation relations = 10;
+
+    // Field Conversations
+    map<string, resources.Conversation> conversations = 11;
+
+    // Field Text
+    map<string, resources.FieldText> texts = 13;
+
+    // Field Links
+    map<string, resources.FieldLink> links = 16;
+
+    // Field File
+    map<string, resources.FieldFile> files = 17;
+
+    // Link extracted extra info
+    repeated resources.LinkExtractedData link_extracted_data = 18;
+
+    // File extracted extra info
+    repeated resources.FileExtractedData file_extracted_data = 19;
+
+    // Field Extracted/Computed information
+    repeated resources.ExtractedTextWrapper extracted_text = 20;
+
+    repeated resources.FieldComputedMetadataWrapper field_metadata = 21;
+    repeated resources.ExtractedVectorsWrapper field_vectors = 22;
+
+    // Resource Large Computed Metadata
+    repeated resources.LargeComputedMetadataWrapper field_large_metadata = 23;
+
+    repeated resources.FieldID delete_fields = 24;
+
+    int32 origin_seq = 25;
+    float slow_processing_time = 26;
+    float pre_processing_time = 28;
+    google.protobuf.Timestamp done_time = 29;
+
+    // Not needed anymore
+    int64 txseqid = 30 [deprecated = true];
+
+    repeated Error errors = 31;
+    string processing_id = 32;
+    MessageSource source = 33;
+    int64 account_seq = 34;
+
+    repeated resources.UserVectorsWrapper user_vectors = 35;
+
+    // If true, force reindex all paragraphs in a resource
+    bool reindex = 36;
+
+    resources.Extra extra = 37;
+
+    repeated resources.FieldQuestionAnswerWrapper question_answers = 38;
+
+    utils.Security security = 39;
+}
+
+message BrokerMessageBlobReference {
+    string kbid = 1;
+    string uuid = 2;
+    string storage_key = 3;
+}
+
+
+message WriterStatusResponse {
+    repeated string knowledgeboxes = 1;
+    // map of last message processed
+    map<string, int64> msgid = 2;
+}
+
+message WriterStatusRequest {
+}
+
+
+
+message NewEntitiesGroupRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    string group = 2;
+    knowledgebox.EntitiesGroup entities = 3;
+}
+
+message NewEntitiesGroupResponse {
+    enum Status {
+        OK = 0;
+        ERROR = 1;
+        KB_NOT_FOUND = 2;
+        ALREADY_EXISTS = 3;
+    }
+    Status status = 1;
+}
+
+
+message SetEntitiesRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    string group = 2;
+    knowledgebox.EntitiesGroup entities = 3;
+}
+
+message UpdateEntitiesGroupRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+
+    string group = 2;
+
+    // entity_id: Entity
+    map<string, knowledgebox.Entity> add = 3;
+
+    // entity_id: Entity
+    map<string, knowledgebox.Entity> update = 4;
+
+    // entity_id
+    repeated string delete = 5;
+
+    string title = 6;
+    string color = 7;
+}
+
+message UpdateEntitiesGroupResponse {
+    enum Status {
+        OK = 0;
+        ERROR = 1;
+        KB_NOT_FOUND = 2;
+        ENTITIES_GROUP_NOT_FOUND = 3;
+    }
+    Status status = 1;
+}
+
+message ListEntitiesGroupsRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+}
+
+message ListEntitiesGroupsResponse {
+    map<string, knowledgebox.EntitiesGroupSummary> groups = 1;
+    enum Status {
+        OK = 0;
+        NOTFOUND = 1;
+        ERROR = 2;
+    }
+    Status status = 2;
+}
+
+message GetEntitiesRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+}
+
+
+message GetEntitiesResponse {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    map <string, knowledgebox.EntitiesGroup> groups = 2;
+    enum Status {
+        OK = 0;
+        NOTFOUND = 1;
+        ERROR = 2;
+    }
+    Status status = 3;
+}
+
+message DelEntitiesRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    string group = 2;
+}
+
+message MergeEntitiesRequest {
+    message EntityID {
+        string group = 1;
+        string entity = 2;
+    }
+    knowledgebox.KnowledgeBoxID kb = 1;
+    EntityID from = 2;
+    EntityID to = 3;
+}
+
+message GetLabelsResponse {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    knowledgebox.Labels labels = 2;
+    enum Status {
+        OK = 0;
+        NOTFOUND = 1;
+    }
+    Status status = 3;
+}
+
+message GetLabelsRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+}
+
+message GetEntitiesGroupRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    string group = 2;
+}
+
+message GetEntitiesGroupResponse {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    knowledgebox.EntitiesGroup group = 2;
+    enum Status {
+        OK = 0;
+        KB_NOT_FOUND = 1;
+        ENTITIES_GROUP_NOT_FOUND = 2;
+        ERROR = 3;
+    }
+    Status status = 3;
+}
+
+message GetVectorSetsRequest {
+    knowledgebox.KnowledgeBoxID kb = 1;
+}
+
+message GetVectorSetsResponse {
+    knowledgebox.KnowledgeBoxID kb = 1;
+    knowledgebox.VectorSets vectorsets = 2;
+    enum Status {
+        OK = 0;
+        NOTFOUND = 1;
+        ERROR = 2;
+    }
+    Status status = 3;
+}
+
+message OpStatusWriter {
+    enum Status {
+        OK = 0;
+        ERROR = 1;
+        NOTFOUND = 2;
+    }
+    Status status = 1;
+}
+
+enum NotificationSource {
+    UNSET = 0;
+    WRITER = 1;
+    PROCESSOR = 2;
+}
+
+message Notification {
+    int32 partition = 1;
+    string multi = 2;
+    string uuid = 3;
+    string kbid = 4;
+    int64 seqid = 5;
+    enum Action {
+        COMMIT = 0;
+        ABORT = 1;
+        INDEXED = 2;
+    }
+    Action action = 6;
+
+    enum WriteType {
+        UNSET = 0;
+        CREATED = 1;
+        MODIFIED = 2;
+        DELETED = 3;
+    }
+    WriteType write_type = 7;
+    BrokerMessage message = 8 [deprecated = true];
+    NotificationSource source = 9;
+    bool processing_errors = 10;
+    Audit message_audit = 11;
+}
+
+
+// The member information.
+message Member {
+    enum Type {
+        IO = 0;
+        SEARCH = 1;
+        INGEST = 2;
+        TRAIN = 3;
+        UNKNOWN = 4;
+    }
+    /// Member ID.　A string of the UUID.
+    string id = 1;
+
+    /// Cluster listen address. string of IP and port number.
+    /// E.g. 127.0.0.1:5000
+    string listen_address = 2;
+
+    /// If true, it means self.
+    bool is_self = 3 [deprecated = true];
+
+    /// Io, Ingest, Search, Train.
+    Type type = 4 [deprecated = true];
+
+    /// Dummy Member
+    bool dummy = 5 [deprecated = true];
+
+    /// The load score of the member.
+    float load_score = 6 [deprecated = true];
+
+    /// The number of shards in the node.
+    uint32 shard_count = 7;
+
+    /// The id of the primary node (if it is a secondary node).
+    string primary_id = 8;
+}
+
+message ListMembersRequest {
+}
+
+message ListMembersResponse {
+  repeated Member members = 1;
+}
+
+message ShardReplica {
+    noderesources.ShardCreated shard = 1;
+    string node = 2;
+}
+
+message ShardObject {
+    string shard = 1;
+    repeated ShardReplica replicas = 3;
+    google.protobuf.Timestamp timestamp = 4 [deprecated = true];
+    bool read_only = 5;
+    string nidx_shard_id = 6;
+}
+
+message Shards {
+    repeated ShardObject shards = 1;
+    string kbid = 2;
+
+    // DEPRECATED a KB know can have multiple alive shards and is tracked in
+    // each ShardObject
+    int32 actual = 3 [deprecated = true];
+
+    // DEPRECATED in favor of `model` to include more data
+    utils.VectorSimilarity similarity = 4 [deprecated = true];
+    // DEPRECATED: use vectorset configurations instead
+    knowledgebox.SemanticModelMetadata model = 5 [deprecated = true];
+
+    utils.ReleaseChannel release_channel = 6;
+    map<string, string> extra = 7;
+}
+
+message IndexResource {
+    string kbid = 1;
+    string rid = 2;
+    bool reindex_vectors = 3;
+}
+
+message IndexStatus {
+
+}
+
+message SynonymsRequest {
+    string kbid = 1;
+}
+
+message NewVectorSetRequest {
+    string kbid = 1;
+    string vectorset_id = 2;
+    nodewriter.VectorType vector_type = 3;
+    utils.VectorSimilarity similarity = 4;
+    uint32 vector_dimension = 5;
+    bool normalize_vectors = 6;
+    repeated uint32 matryoshka_dimensions = 7;
+}
+
+message NewVectorSetResponse {
+    enum Status {
+        OK = 0;
+        ERROR = 1;              // generic error
+    }
+    Status status = 1;
+    string details = 2;
+}
+
+message DelVectorSetRequest {
+    string kbid = 1;
+    string vectorset_id = 2;
+}
+
+message DelVectorSetResponse {
+    enum Status {
+        OK = 0;
+        ERROR = 1;              // generic error
+    }
+    Status status = 1;
+    string details = 2;
+}
+
+
+message NewKnowledgeBoxV2Request {
+    string kbid = 1;
+    string slug = 2;
+    string title = 3;
+    string description = 4;
+
+    message VectorSet {
+        string vectorset_id = 1;
+        utils.VectorSimilarity similarity = 2;
+        uint32 vector_dimension = 3;
+        repeated uint32 matryoshka_dimensions = 4;
+    }
+    repeated VectorSet vectorsets = 5;
+
+    knowledgebox.CreateExternalIndexProviderMetadata external_index_provider = 6;
+    bool hidden_resources_enabled = 7;
+    bool hidden_resources_hide_on_creation = 8;
+}
+
+message NewKnowledgeBoxV2Response {
+    knowledgebox.KnowledgeBoxResponseStatus status = 1;
+    string error_message = 2;
+}
+
+
+service Writer {
+    rpc NewKnowledgeBoxV2(NewKnowledgeBoxV2Request) returns (NewKnowledgeBoxV2Response) {}
+    rpc DeleteKnowledgeBox(knowledgebox.KnowledgeBoxID) returns (knowledgebox.DeleteKnowledgeBoxResponse) {}
+    rpc UpdateKnowledgeBox(knowledgebox.KnowledgeBoxUpdate) returns (knowledgebox.UpdateKnowledgeBoxResponse) {}
+
+    rpc ProcessMessage(stream BrokerMessage) returns (OpStatusWriter) {}
+
+    // Entities
+    rpc NewEntitiesGroup(NewEntitiesGroupRequest) returns (NewEntitiesGroupResponse) {}
+    rpc GetEntities(GetEntitiesRequest) returns (GetEntitiesResponse) {}
+    rpc GetEntitiesGroup(GetEntitiesGroupRequest) returns (GetEntitiesGroupResponse) {}
+    rpc ListEntitiesGroups(ListEntitiesGroupsRequest) returns (ListEntitiesGroupsResponse) {}
+    rpc SetEntities(SetEntitiesRequest) returns (OpStatusWriter) {}
+    rpc UpdateEntitiesGroup(UpdateEntitiesGroupRequest) returns (UpdateEntitiesGroupResponse) {}
+    rpc DelEntities(DelEntitiesRequest) returns (OpStatusWriter) {}
+
+    rpc Status(WriterStatusRequest) returns (WriterStatusResponse) {}
+
+    rpc ListMembers(ListMembersRequest) returns (ListMembersResponse);
+
+    rpc Index(IndexResource) returns (IndexStatus) {}
+    rpc ReIndex(IndexResource) returns (IndexStatus) {}
+
+    rpc NewVectorSet(NewVectorSetRequest) returns (NewVectorSetResponse) {}
+    rpc DelVectorSet(DelVectorSetRequest) returns (DelVectorSetResponse) {}
+}
