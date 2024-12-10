@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+
+{% block fileinput %}
+<link rel="stylesheet" href=" {{ url_for('static',filename='fileinput/css/fileinput.min.css' ) }}">
+<link rel="stylesheet" href=" {{ url_for('static',filename='fileinput/themes/explorer-fas/theme.min.css' ) }}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
+<script src="{{ url_for('static',filename='fileinput/js/fileinput.min.js' ) }}"></script>
+<script src="{{ url_for('static',filename='fileinput/themes/explorer-fas/theme.min.js' ) }}"></script>
+<script src="{{ url_for('static',filename='fileinput/js/locales/zh.js' ) }}"></script>
+{% endblock %}
+
+{% block title %}
+文件上传
+{% endblock %}
+{% block panel_title %}
+文件上传
+{% endblock %}
+{% block content %}
+
+<form enctype="multipart/form-data">
+  <div class="file-loading">
+    <input id="kv-explorer" type="file" multiple>
+  </div>
+</form>
+<br>
+<a href="{{ url_for('index') }}" class="btn btn-info">返回首页</a>
+<script>
+  $(document).ready(function () {
+    $("#kv-explorer").fileinput({
+      'theme': 'explorer-fas',
+      'language': 'zh',
+      // 'maxFileSize': 1000,
+      'maxFilesNum': 10,
+      'uploadUrl': 'uploader',
+    });
+  });
+</script>
+
+{% endblock %}
