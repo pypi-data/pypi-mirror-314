@@ -1,0 +1,328 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [{ name = "Adam Hendry", email = "adam.grant.hendry@gmail.com" }]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+description = "A pythonic interface to the Qt Graphics View Framework using qtpy"
+license = { text = "MIT" }
+name = "pyvista-view"
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+version = "0.0.1"
+dependencies = [
+    "qtpy>=2.4.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pyvista-view[docs,format,github,license,test]"
+]
+docs = [
+    "appdirs >=1.4.4",  # Abstracts program installation and user paths across all OSs
+    "Jinja2 >=3.0,<3.1",  # # Templating engine; See https://github.com/astropy/astropy/issues/11725
+    "numpydoc >=1.4.0",  # Numpy docstring format support in Sphinx
+    "seedir >=0.3.0",  # Creates folder tree diagrams
+    "sphinx <8.2.0",  # Documentation/static site generator
+    "sphinx-book-theme >=0.3.3",  # `sphinx` theme mimicing interactive book feel
+    "sphinxcontrib-email >=0.3.5",  # `sphinx` extension for obfuscating email `mail-to` links
+    "sphinxcontrib-napoleon >=0.7",  # `sphinx` extension to parse Numpy/Google-style docstrings and convert to rST before rendering
+    "tomli >=2.0.1"  # TOML parser for Python<3.11
+]
+format = [
+    "pre-commit >=2.18.1", # Multi-language package manager for pre-commit hooks
+    "mypy >=0.991", # Static type checker
+    "mypy-extensions >=0.4.3",
+    "tqdm-stubs >=0.2.0", # `tqdm` type hinting stubs
+    "types-beautifulsoup4 >=4.11.6.1", # `bs4` type hinting stubs
+    "types-setuptools >=57.4.17", # `setuptools` type hinting stubs # Enables type hinting features across various Python versions
+    "typing-extensions >=4.2.0"
+]
+github = [
+    "pytest-github-actions-annotate-failures >=0.2.0",  # pytest plugin to annotate failed tests with a workflow command for GitHub Actions
+]
+license = [
+    "licensecheck >=2023.3"
+]
+test = [
+    "coverage[toml] >=6.4", # Measures code coverage
+    "hypothesis >=6.46.2", # Property-based testing
+    "pytest >=7.1.2", # Unit testing framework
+    "pytest-cov >=3.0.0", # `pytest` plugin for producing test coverage reports
+    "pytest-doctestplus >=0.12.0", # `pytest` plugin for testing example code in docstrings
+    "pytest-env >=0.6.2", # `pytest` plugin for setting environment variables in `pyproject.toml`
+    "pytest-memprof >=0.2.0", # `pytest` plugin for estimating memory consumption of tests
+    "pytest-mock >=3.7.0",  # `pytest` plugin providing a `mocker` fixture
+    "pytest-qt>=4.4.0",
+    "pytest-randomly >=3.11.0", # `pytest` plugin to randomly order test execution and control `random.seed`
+    "pytest-xdist >=2.5.0", # `pytest` plugin enabling testing across multiple CPUs (i.e. `pytest -n auto`)
+]
+
+[tool.ruff]
+line-length = 90
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "__pycache__",
+    "__pypackages__",
+    "_build",
+    ".bzr",
+    ".cache",
+    ".direnv",
+    ".eggs",
+    ".git-rewrite",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "*.egg-info",
+    "*.pyc",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "stubs",
+]
+
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
+
+[tool.ruff.lint]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+
+unfixable = []
+
+# Enable linting and formatting rules
+select = [
+    "A",  # flake8-builtins (Linter to check for python builtins being used as variables or parameters)
+    "ARG",  # flake8-unused-arguments (Linter for unused arguments)
+    "B",  # flake8-bugbear (Linter for additional flake8 rules)
+    "BLE",  # flake8-blined-except (Linter for bare `except Exception/BaseException`)
+    "C4",  # flake8-comprehensions (Linter for writing better comprehensions)
+    "C90",  # mccabe (Linter for code complexity)
+    "D",  # pydocstyle (Static code analyzer for PEP 257 and Numpy/Google/Sphinx-style docstrings)
+    "DTZ",  # flake8-datetimez (Lint for usage of unsafe naive datetime class)
+    "E",  # pycodestyle (PEP 8 style guide checker)
+    "F",  # pyflakes (Static code analyzer for code smells)
+    "FA",  # flake8-future-annotations (Linter for `from __future__ import annotations`)
+    "FBT",  # flake8-boolean-trap (Linter for antipattern of using a positional boolean arg to switch behavior in public API)
+    "FLY",  # flynt (Linter to enforce using f-strings over join
+    "ICN",  # flake8-import-conventions (Linter for commonly accepted `import as` statements, e.g. `import pandas as pd`)
+    "INP",  # flake8-no-pep420  (Linter to prevent namespace packages)
+    "ISC",  # flake8-implicit-str-concat (Linter for improper string concatenation usages)
+    "N",  # pep8-naming (PEP 8 class, function, variable naming linter)
+    "PERF",  # perflint (Linter for performance antipatterns)
+    "PGH",  # flake8-pygrep-hooks (Linter for using `eval` and adding rule codes to type ignores)
+    "PIE",  # flake8-pie (Linter for extra flake8 rules)
+    "PL",  # pylint
+    "PT",  # flake8-pytest-style (Linter for pytest)
+    "PTH",  # flake8-use-pathlib (Linter for using pathlib over os)
+    "PYI",  # flake8-pyi (Linter for stub files)
+    "Q",  # flake8-quotes (Linter for consistent string quoting)
+    "RSE",  # flake8-raise (Linter for common `raise` statement errors)
+    "RUF",  # ruff-specific rules
+    "S",  # bandit (Static code analyzer for security issues)
+    "SIM",  # flake8-simplify (Linter to simplify certain expressions in code)
+    "SLF",  # flake8-self (Linter to prevent private member access)
+    "SLOT",  # flake8-slots (Linter to require `__slots__` for subclasses of immutable types)
+    "T10",  # flake8-debugger (Linter for left in pdb/ipdb statements in code)
+    "T20",  # flake8-print (Linter for left over `(p)print` statements)
+    "TC",  # flake8-type-checking (Linter to use `if TYPE_CHECKING` if module not needed at runtime)
+    "TRY",  # tryceratops (Linter for exception handling antipatterns)
+    "UP",  # pyupgrade
+    "YTT",  # flake8-2020 (Linter for `sys.version` usage errors with Python>=3.10),
+    "W",  #
+]
+
+ignore = [
+    # pycodestyle
+    "E203",  # Whitespace before ':'
+    "E501",  # Line length too long
+    "E731",  # Do not assign a lambda expression, use a def
+
+    # pydocstyle
+    "D101",  # Missing class docstring; Use docstring in `__init__` instead
+    "D105",  # Missing docstring in magic method
+
+    # flake8-implicit-str-concat
+    "ISC001",  # Implicitly concatenated string literals on one line; See https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+
+    # pep8-naming
+    "N802",  # Qt uses camelCase
+
+    # pytest
+    "PT022",  # Fixtures can use yield without a teardown
+
+    # flake8-quotes
+    "Q000",  # Single quotes found but double preserved; See https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "Q003",  # Change outer quotes to avoid escaping inner quotes
+
+    # bandit
+    "S101",  # `assert` is removed when compiling to optimized bytecode; (ignored for `pytest`)
+    "S301",  # builtin `pickle` module can be unsafe
+    "S403",  # pickle, cPickle, dill, and shelve modules are possibly insecure
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # "Imported but unused: happens with packages
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.lint.isort]
+required-imports = [
+  "from __future__ import annotations",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.coverage.paths]
+source = [
+    "src/",
+    "*/site-packages"
+]
+others = [
+    "src/",
+    "*/src",
+]
+
+[tool.coverage.run]
+branch = true
+# Append machine name, process id, and random number to data file name so coverage can be
+# run in parallel environments, e.g. in tox.
+parallel = true
+# `shiboken6`, which creates the python bindings for `Qt` C++ source, imports from a
+# `zip` file into the top-level directory at runtime. These files are deleted after
+# running, but `coverage` attempts to look at their source after they're gone, causing
+# warnings to appear. Namely, it looks for these modules/files:
+#
+#    project_dir/pysrcript
+#    project_dir/shibokensupport
+#    project_dir/signature_bootstrap.py
+#
+# To avoid this error, `source` is specified to the package subdirectory. However, this
+# can also be avoided by explicitly omitting these folders in the `omit` section.
+#
+# See https://github.com/nedbat/coveragepy/issues/1392
+source = [
+    'src/pyvista-view/'
+]
+omit = [
+    'src/pyvista-view/__main__.py',
+    '.vscode/',
+    '.venv/',
+    'tests/',
+    'stubs/'
+]
+disable_warnings = ['no-data-collected']
+
+[tool.coverage.html]
+directory = 'logs/coverage/html'
+
+[tool.coverage.json]
+output = 'logs/coverage/coverage.json'
+
+[tool.coverage.xml]
+output = 'logs/coverage/coverage.xml'
+
+[tool.coverage.report]
+exclude_lines = [
+    'pragma: no cover',
+    'def __repr__',
+    'raise AssertionError',
+    'raise NotImplementedError',
+    'if __name__ == .__main__.:',
+    '@(abc\.)?abstractmethod'
+]
+
+[tool.mypy]
+python_executable = ".venv/Scripts/python.exe"
+python_version = "3.9"
+disallow_untyped_defs = true
+warn_return_any = true
+warn_unused_configs = true
+# ``warn_unused_ignores`` seems to be giving several false positives.
+# See:
+#   - https://github.com/python/mypy/issues/4412
+#   - https://github.com/python/mypy/issues/5940
+#   - https://github.com/python/mypy/issues/8823
+#   - https://github.com/python/mypy/issues/2960
+warn_unused_ignores = false
+warn_redundant_casts = true
+show_error_codes = true
+show_column_numbers = true
+exclude = [
+    'stubs/',
+    '[.]venv/',
+    'build/',
+    'dist/',
+    'ci/',
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "stubs.*",
+]
+ignore_errors = true
+follow_imports = "skip"
+follow_imports_for_stubs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+# We want different runs each time (don't use seed)
+# --randomly-seed=1234
+addopts = """\
+--last-failed --last-failed-no-failures all \
+-p no:faulthandler \
+--import-mode=importlib \
+--cov \
+--cov-report term-missing \
+--doctest-modules"""
+testpaths = [
+    "tests",
+]
+doctest_plus = "enabled"
+env = [
+    # See https://github.com/pytest-dev/pytest-qt/issues/437
+    # "D:PYTEST_QT_API=pyside6",  # pytest-qt
+    # "D:QT_API=pyside6"  # qtpy
+    # "D:QT_QPA_PLATFORM=offscreen"
+    # "D:COVERAGE_DEBUG=trace",
+    # "D:COVERAGE_DEBUG_FILE=debug_log.txt"
+]
+filterwarnings = [
+    # Occurs when mocking QWidgets
+    'ignore:pyside_type_init:RuntimeWarning'
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
