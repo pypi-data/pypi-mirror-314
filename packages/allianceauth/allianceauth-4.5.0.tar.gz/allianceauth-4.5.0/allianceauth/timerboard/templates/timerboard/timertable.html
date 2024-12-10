@@ -1,0 +1,114 @@
+{% load evelinks %}
+{% load i18n %}
+
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th class="text-center">{% translate "Details" %}</th>
+            <th class="text-center">{% translate "Objective" %}</th>
+            <th class="text-center">{% translate "System" %}</th>
+            <th class="text-center">{% translate "Structure" %}</th>
+            <th class="text-center">{% translate "Eve Time" %}</th>
+            <th class="text-center">{% translate "Local Time" %}</th>
+            <th class="text-center">{% translate "Creator" %}</th>
+
+            {% if perms.auth.timer_management %}
+                <th class="text-center">{% translate "Action" %}</th>
+            {% endif %}
+        </tr>
+
+        {% for timer in timers %}
+            <tr class="{% if timer.important == True %}bg-danger bg-opacity-25{% else %}bg-info bg-opacity-25{% endif %}">
+
+                <td style="width: 150px;" class="text-center">
+                    {{ timer.details }}
+
+                    {% if timer.timer_type != 'UNSPECIFIED' %}
+                        <br />
+                        ({{ timer.get_timer_type_display }})
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    {% if timer.objective == "Hostile" %}
+                        <div class="badge bg-danger">{% translate "Hostile" %}</div>
+                    {% elif timer.objective == "Friendly" %}
+                        <div class="badge bg-primary">{% translate "Friendly" %}</div>
+                    {% elif timer.objective == "Neutral" %}
+                        <div class="badge bg-secondary">{% translate "Neutral" %}</div>
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    <a href="{{ timer.system|dotlan_solar_system_url }}">{{ timer.system }} {{ timer.planet_moon }}</a>
+                </td>
+
+                <td class="text-center">
+                    {% if timer.structure == "POCO" %}
+                        <div class="badge bg-info">{% translate "POCO" %}</div>
+                    {% elif timer.structure == "Orbital Skyhook" %}
+                        <div class="badge bg-warning">{% translate "Orbital Skyhook" %}</div>
+                    {% elif timer.structure == "I-HUB" %}
+                        <div class="badge bg-warning">{% translate "I-HUB" %}</div>
+                    {% elif timer.structure == "TCU" %} {% comment %} Pending Removal {% endcomment %}
+                        <div class="badge bg-secondary">{% translate "TCU" %}</div>
+                    {% elif timer.structure == "POS[S]" %}
+                        <div class="badge bg-info">{% translate "POS [S]" %}</div>
+                    {% elif timer.structure == "POS[M]" %}
+                        <div class="badge bg-info">{% translate "POS [M]" %}</div>
+                    {% elif timer.structure == "POS[L]" %}
+                        <div class="badge bg-info">{% translate "POS [L]" %}</div>
+                    {% elif timer.structure == "Citadel[M]" or timer.structure == "Astrahus" %}
+                        <div class="badge bg-danger">{% translate "Astrahus" %}</div>
+                    {% elif timer.structure == "Citadel[L]" or timer.structure == "Fortizar" %}
+                        <div class="badge bg-danger">{% translate "Fortizar" %}</div>
+                    {% elif timer.structure == "Citadel[XL]" or timer.structure == "Keepstar" %}
+                        <div class="badge bg-danger">{% translate "Keepstar" %}</div>
+                    {% elif timer.structure == "Engineering Complex[M]" or timer.structure == "Raitaru" %}
+                        <div class="badge bg-warning">{% translate "Raitaru" %}</div>
+                    {% elif timer.structure == "Engineering Complex[L]" or timer.structure == "Azbel" %}
+                        <div class="badge bg-warning">{% translate "Azbel" %}</div>
+                    {% elif timer.structure == "Engineering Complex[XL]" or timer.structure == "Sotiyo" %}
+                        <div class="badge bg-danger">{% translate "Sotiyo" %}</div>
+                    {% elif timer.structure == "Refinery[M]" or timer.structure == "Athanor" %}
+                        <div class="badge bg-warning">{% translate "Athanor" %}</div>
+                    {% elif timer.structure == "Refinery[L]" or timer.structure == "Tatara" %}
+                        <div class="badge bg-warning">{% translate "Tatara" %}</div>
+                    {% elif timer.structure == "Cyno Beacon" or timer.structure == "Pharolux Cyno Beacon" %}
+                        <div class="badge bg-warning">{% translate "Cyno Beacon" %}</div>
+                    {% elif timer.structure == "Cyno Jammer" or timer.structure == "Tenebrex Cyno Jammer" %}
+                        <div class="badge bg-warning">{% translate "Cyno Jammer" %}</div>
+                    {% elif timer.structure == "Jump Gate" or timer.structure == "Ansiblex Jump Gate" %}
+                        <div class="badge bg-warning">{% translate "Ansiblex Jump Gate" %}</div>
+                    {% elif timer.structure == "Moon Mining Cycle" %}
+                        <div class="badge bg-success">{% translate "Moon Mining Cycle" %}</div>
+                    {% elif timer.structure == "Metenox Moon Drill" %}
+                        <div class="badge bg-warning">{% translate "Metenox Moon Drill" %}</div>
+                    {% elif timer.structure == "Other" %}
+                        <div class="badge bg-secondary">{% translate "Other" %}</div>
+                    {% endif %}
+                </td>
+
+                <td class="text-center" nowrap>{{ timer.eve_time | date:"Y-m-d H:i" }}</td>
+
+                <td class="text-center" nowrap>
+                    <div id="localtime{{ timer.id }}"></div>
+                    <div id="countdown{{ timer.id }}"></div>
+                </td>
+
+                <td class="text-center">{{ timer.eve_character.character_name }}</td>
+
+                {% if perms.auth.timer_management %}
+                    <td class="text-center">
+                        <a href="{% url 'timerboard:delete' timer.id %}" class="btn btn-danger">
+                            <i class="fa-solid fa-trash-can fa-fw"></i>
+                        </a>
+                        <a href="{% url 'timerboard:edit' timer.id %}" class="btn btn-info">
+                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
