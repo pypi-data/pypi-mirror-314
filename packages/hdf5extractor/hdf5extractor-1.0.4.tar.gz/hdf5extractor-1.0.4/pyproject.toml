@@ -1,0 +1,95 @@
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "hdf5extractor"
+version = "1.0.4"
+description = "Extract datasets from a h5 file, depending on referenced dataset from a xml file."
+authors = ["Valentin Gauthier <valentin.gauthier@geosiris.com>"]
+maintainers = [
+    "Valentin Gauthier <valentin.gauthier@geosiris.com>"
+]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "http://www.geosiris.com"
+repository = "https://github.com/geosiris-technologies/hdf5-extractor"
+packages = [
+    { include = 'hdf5extractor', from = '.' }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+]
+keywords = ["Energyml", "hdf", "hdf5", "resqml", "osdu"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+lxml = "^4.6.3"
+h5py = "^3.7.0"
+requests = "^2.25.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0.0"
+bandit = "^1.7.1"
+pylint = "^2.11.1"
+black = "^22.10.0"
+flake8 = "^4.0.1"
+
+[tool.black]
+line-length = 79
+target-version = ["py39"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.coverage.run]
+branch = true
+source = ["hdf5extractor"]
+
+[tool.poetry.scripts]
+extracth5-local = "hdf5extractor.extract_local:main"
+extracth5-etp = "hdf5extractor.etp.extract_etp:main"
+
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "pep440"
+format-jinja = """
+    {%- if distance == 0 -%}
+        {{ serialize_pep440(base, stage, revision) }}
+    {%- elif revision is not none -%}
+        {{ serialize_pep440(base, stage, revision + 1, dev=distance) }}
+    {%- else -%}
+        {{ serialize_pep440(bump_version(base), stage, revision, dev=distance) }}
+    {%- endif -%}
+"""
