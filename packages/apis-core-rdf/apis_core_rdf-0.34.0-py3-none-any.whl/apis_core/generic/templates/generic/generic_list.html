@@ -1,0 +1,54 @@
+{% extends "generic/generic_content.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load generic %}
+{% load core %}
+{% if filter %}
+
+  {% block col %}
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col">{{ object_list.model|contenttype|model_meta:"verbose_name_plural"|title }}</div>
+          <div class="col">
+            {% if object_list.model.get_add_permission in perms %}
+              <a class="btn btn-outline-success float-right btn-sm"
+                 href="{{ object_list.model.get_createview_url }}">Create</a>
+              <a class="btn btn-outline-success float-right btn-sm mr-1"
+                 href="{{ object_list.model.get_importview_url }}">Import</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        {% block filter %}
+          {% crispy filter.form filter.form.helper %}
+        {% endblock filter %}
+
+      </div>
+      <div class="card-footer text-muted">
+        <a class="btn btn-outline-secondary"  href=".">Reset filter</a>
+      </div>
+    </div>
+  {% endblock col %}
+
+{% endif %}
+{% if table %}
+
+  {% block additionalcols %}
+    <div class="col-8">
+      <div class="card">
+        <div class="card-header">{{ table.paginator.count }} results</div>
+        <div class="card-body">
+
+          {% block table %}
+            {% render_table table %}
+          {% endblock table %}
+
+        </div>
+      </div>
+    </div>
+  {% endblock additionalcols %}
+
+{% endif %}
