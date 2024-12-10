@@ -1,0 +1,37 @@
+flask
+sqlalchemy>=2
+werkzeug
+typing-extensions>=4.1.0
+
+[backends]
+
+[backends:python_version <= "3.7"]
+flask-sqlalchemy-compat-backend-py37
+
+[backends:python_version >= "3.8"]
+flask-sqlalchemy>=3.1.0
+
+[backends:python_version >= "3.9"]
+flask-sqlalchemy-lite
+
+[dev]
+flask-migrate
+flask-alembic
+black
+flake8
+flake8-black
+packaging
+build
+wheel
+
+[dev:python_version < "3.8"]
+importlib-metadata
+
+[dev:python_version <= "3.7"]
+flask-sqlalchemy-compat-backend-py37
+
+[dev:python_version >= "3.8"]
+flask-sqlalchemy>=3.1.0
+
+[dev:python_version >= "3.9"]
+flask-sqlalchemy-lite
