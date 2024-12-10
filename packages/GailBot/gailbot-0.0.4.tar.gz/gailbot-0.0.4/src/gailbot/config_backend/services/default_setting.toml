@@ -1,0 +1,41 @@
+# default engine
+engine_name = "Default Engine"
+# default profile
+profile_name = "Default"
+
+[engine_data]
+engine = "whisper"
+language = "English"
+detect_speakers = false
+
+[profile_data]
+engine_setting_name = "Default Engine"
+
+[profile_data.engine_setting]
+engine = "whisper"
+language = "English"
+detect_speakers = false
+
+[profile_data.plugin_setting.HiLabSuite]
+OutputFileManager = []
+SyllableRatePlugin = ["OutputFileManager"]
+GapPlugin = ["OutputFileManager", "SyllableRatePlugin"]
+PausePlugin = ["OutputFileManager", "SyllableRatePlugin", "GapPlugin"]
+OverlapPlugin = ["OutputFileManager", "SyllableRatePlugin", "GapPlugin", "PausePlugin"]
+CSVPlugin = ["OutputFileManager", "SyllableRatePlugin", "GapPlugin", "PausePlugin", "OverlapPlugin"]
+TextPlugin = ["OutputFileManager", "SyllableRatePlugin", "GapPlugin", "PausePlugin", "OverlapPlugin"]
+XmlPlugin = ["OutputFileManager", "SyllableRatePlugin", "GapPlugin", "PausePlugin", "OverlapPlugin"]
+ChatPlugin = ["OutputFileManager", "SyllableRatePlugin", "GapPlugin", "PausePlugin", "OverlapPlugin", "XmlPlugin"]
+
+[profile_data_no_plugin]
+engine_setting_name = "Default Engine"
+
+[profile_data_no_plugin.engine_setting]
+engine = "whisper"
+language = "English"
+detect_speakers = false
+
+[profile_data_no_plugin.plugin_setting]
+
+
+

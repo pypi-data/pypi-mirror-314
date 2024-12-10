@@ -1,0 +1,27 @@
+suite_name = "UnresolvedDependency"
+
+[metadata]
+Author = "hilab"
+Email = "hilab.tufts.edu"
+Version = "v.0.1a"
+BucketName = ""
+ObjectName = ""
+ObjectUrl = ""
+
+[[plugins]]
+plugin_name = "TestOne"
+dependencies = ["TestTwo"]
+rel_path = "src/test_plugin/testOne.py"
+hidden = "True"
+
+[[plugins]]
+plugin_name = "TestTwo"
+dependencies = ["TestOne"]
+rel_path = "src/test_plugin/testTwo.py"
+hidden = "False"
+
+[[plugins]]
+plugin_name = "TestThree"
+dependencies = ["TestOne"]
+rel_path = "src/test_plugin/testThree.py"
+hidden = "False"

@@ -1,0 +1,65 @@
+[project]
+name = "GailBot"
+authors = [
+  { name="Muhammad Umair", email="muhammad.umair@tufts.edu" },
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+description = "GailBot API"
+maintainers=[
+    {name="Human Interaction Lab - Tufts University", email="hilab-dev@elist.tufts.edu"}
+]
+requires-python=">=3.10"
+classifiers=[
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: MacOS",
+]
+
+
+dynamic = ["dependencies", "version"]
+
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+version = {attr = "gailbot.__version__"}
+
+[tool.setuptools.packages.find]
+where =["src"]
+
+[project.urls]
+homepage = "https://sites.tufts.edu/hilab/gailbot-an-automatic-transcription-system-for-conversation-analysis/"
+source = "https://github.com/mumair01/GailBot"
+tracker = "https://github.com/mumair01/GailBot/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-timeout",
+    "pytest-xdist",
+    "ipython"
+]
+
+# pyproject.toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-rA"
+pythonpath = [
+  "src"
+]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning"
+]
+
