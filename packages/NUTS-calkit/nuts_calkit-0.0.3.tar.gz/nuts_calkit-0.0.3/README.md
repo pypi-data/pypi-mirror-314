@@ -1,0 +1,36 @@
+# Manuscript of NUTS_calkit
+**Non-Uniform Temperature Steel beam Calculation toolKit**
+_Y. Li et al. May 2024, The University of Manchester_
+
+## 1. Python commands:
+
+### 1.1 Establishing Beam
+### Access
+*import NUTS_cakit*
+*NUTS_calkit.Beam()*
+
+**<<<<< Required arguments >>>>>**
+d:  Section depth
+w:  Section width
+ft: Flange thickness
+wt: Web thickness
+fpl: Plastic strength of beam
+t_dist: Temperature distribtuion in the section
+    Dataformat: [temperature, ratio of the distance from beam top/section depth], 20C <= temperature <= 1200C.
+    Example: [[600,0],[270,0.7],[100,1]] 
+
+**<<<<< Returning objects >>>>>**
+A NUTS_calkit beam object
+ 
+*B1=NUTS_calkit(d=...,w=...,ft=...,wt=...,fpl=...,t_dist=[...])*
+
+### 1.1.1 Plas_m()
+Calculation of beam plastic bending moment
+
+**<<<<< Required arguments >>>>>**
+Beam: A NUTS_calkit beam objects
+
+*NUTS_calkit.Beam.Plas_m(B1)*
+
+
+
