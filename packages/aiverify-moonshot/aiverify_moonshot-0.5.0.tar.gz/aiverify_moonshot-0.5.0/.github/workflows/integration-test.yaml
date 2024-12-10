@@ -1,0 +1,166 @@
+# Smoke Test
+
+name: Moonshot Integration Test
+
+on:
+  # Runs on Pull Request Review
+  pull_request_review:
+   branches:
+     - 'main'
+
+  # Run this workflow manually from Actions tab
+  workflow_dispatch:
+    inputs:
+      moonshot_branch:
+        description: 'Moonshot Branch / Tag Name'
+        required: true
+        default: 'main'
+        type: string
+      moonshot_data_branch:
+        description: 'Moonshot Data Branch / Tag Name'
+        required: true
+        default: 'main'
+        type: string
+      moonshot_ui_branch:
+        description: 'Moonshot UI Branch / Tag Name'
+        required: true
+        default: 'main'
+        type: string
+
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.repository }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  integration-test:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+
+    - name: Checkout Moonshot (Pull Request Review)
+      if: github.event_name == 'pull_request_review'
+      uses: actions/checkout@v4
+      with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Checkout Moonshot (Workflow Dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/checkout@v4
+      with:
+          repository: aiverify-foundation/moonshot
+          ref: ${{ inputs.moonshot_branch }}
+    
+    - name: Setup Python 3.11
+      uses: actions/setup-python@v4
+      with:
+          python-version: '3.11'
+    
+    - name: Setup Moonshot
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        touch .env
+        echo "${{ secrets.ENVIRONMENT_VARS }}" >> .env
+
+    - name: Checkout Moonshot Data (Pull Request Review)
+      if: github.event_name == 'pull_request_review'
+      uses: actions/checkout@v4
+      with: 
+         repository: aiverify-foundation/moonshot-data
+         ref: ${{ vars.MOONSHOT_DATA_BRANCH }}
+         path: moonshot-data
+
+    - name: Checkout Moonshot Data (Workflow Dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/checkout@v4
+      with: 
+         repository: aiverify-foundation/moonshot-data
+         ref: ${{ inputs.moonshot_data_branch }}
+         path: moonshot-data
+
+    - name: Setup Moonshot Data
+      run: |
+        source venv/bin/activate
+        cd moonshot-data
+        pip install -r requirements.txt
+
+    - name: Checkout Moonshot UI (Pull Request Review)
+      if: github.event_name == 'pull_request_review'
+      uses: actions/checkout@v4
+      with:
+        repository: aiverify-foundation/moonshot-ui
+        ref: ${{ vars.MOONSHOT_UI_BRANCH }}
+        path: moonshot-ui
+
+    - name: Checkout Moonshot UI (Workflow Dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/checkout@v4
+      with:
+        repository: aiverify-foundation/moonshot-ui
+        ref: ${{ inputs.moonshot_ui_branch }}
+        path: moonshot-ui
+
+     # Download NLTK stopwords
+    - name: Download NLTK stopwords
+      run: |
+        source venv/bin/activate
+        pip install nltk
+        python -c "import nltk; nltk.download('stopwords')"
+    
+    - name: Setup Moonshot UI
+      run: |
+        cd moonshot-ui
+        npm ci
+        npm run build
+        cd ../
+        source venv/bin/activate
+        python -m moonshot web &
+
+    - name: Checkout Integration Test 
+      uses: actions/checkout@v4
+      with:
+          repository: aiverify-foundation/moonshot-integration-testing
+          path: moonshot-integration-testing
+
+    - name: Run Integration Test
+      env: 
+        URI: ${{ secrets.URI }}
+        TOKEN: ${{ secrets.TOKEN }}
+        URI2: ${{ secrets.URI2 }}
+        TOKEN2: ${{ secrets.TOKEN2 }}
+        ADDITIONAL_PARAMETERS: ${{ secrets.ADDITIONAL_PARAMETERS }}
+        TOGETHER_TOKEN: ${{ secrets.TOGETHER_TOKEN }}
+        OPENAI_TOKEN: ${{ secrets.OPENAI_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GOOGLE_TOKEN: ${{ secrets.GOOGLE_TOKEN }}
+      run: |
+         cd moonshot-integration-testing/ui-integration-testing
+         npm ci
+         npm install dotenv
+         npx playwright install --with-deps
+         URI="$URI" TOKEN="$TOKEN" URI2="$URI2" TOKEN2="$TOKEN2" ADDITIONAL_PARAMETERS="$ADDITIONAL_PARAMETERS" TOGETHER_TOKEN="$TOGETHER_TOKEN" OPENAI_TOKEN="$OPENAI_TOKEN" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" GOOGLE_TOKEN="$GOOGLE_TOKEN" npx playwright test
+
+    - name: TestRail CLI upload results
+      env:
+        TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+        TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+      run: |
+          cd moonshot-integration-testing/ui-integration-testing
+          pip install trcli
+          trcli -y \
+            -h https://imdabtg.testrail.io/ \
+            --project "Moonshot" \
+            -u $TESTRAIL_USERNAME \
+            -p $TESTRAIL_PASSWORD \
+            parse_junit \
+            --title "Moonshot" \
+            --result-fields "os:Ubuntu 22.04" \
+            --milestone-id "5" \
+            --run-description ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} \
+            -f "./test-results/junit-report.xml" 
