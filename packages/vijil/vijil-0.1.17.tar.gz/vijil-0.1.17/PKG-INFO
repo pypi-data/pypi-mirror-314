@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: vijil
+Version: 0.1.17
+Summary: Python Client for Vijil
+Author: Subho Majumdar
+Author-email: subho@vijil.ai
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Dist: fastparquet (>=2024.5.0,<2025.0.0)
+Requires-Dist: fpdf2 (>=2.7.9,<3.0.0)
+Requires-Dist: jinja2 (>=3.1.4,<4.0.0)
+Requires-Dist: mypy (>=1.12.1,<2.0.0)
+Requires-Dist: pandas (==2.1.4)
+Requires-Dist: python-dotenv (>=1.0.1,<2.0.0)
+Requires-Dist: requests (>=2.32.3,<3.0.0)
+Requires-Dist: ruff (>=0.7.0,<0.8.0)
+Requires-Dist: types-requests (>=2.32.0.20241016,<3.0.0.0)
+Description-Content-Type: text/markdown
+
+# vijil-python
+Python Client for Vijil
+
+
+## Setup
+
+```bash
+pip install -U vijil
+```
+
+Then initialize the client using
+
+```python
+from vijil import Vijil
+
+client = Vijil()
+```
+
+
+Requires a `VIJIL_API_KEY`, either loaded in the environment or suppllied as `api_key` argument above.
+
+## Run Evaluations
+
+```python
+client.evaluations.create(
+    model_hub="openai",
+    model_name="gpt-3.5-turbo",
+    model_params={"temperature": 0},
+    harnesses=["ethics","hallucination"],
+    harness_params={"sample_size": 5}
+)
+```
+
+See the [minimal example](tutorials/minimal_example.ipynb) for more functionalities.
+
