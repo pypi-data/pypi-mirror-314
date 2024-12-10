@@ -1,0 +1,20 @@
+{% load evelinks %}
+{% load tnnt_template_tags %}
+
+<meta name="author" content="{{ TNNT_TEMPLATE_ENTITY_NAME }}">
+
+{% if request.GET.next and request.GET.next|startswith:"/forum/" %}
+    <meta name="description" content="Our beloved Forum. Discuss here at your hearts content. You might also find some useful information here, who knows?">
+
+    <meta name="og:title" content="{{ TNNT_TEMPLATE_ENTITY_NAME }} Forum">
+    <meta name="og:description" content="Our beloved Forum. Discuss here at your hearts content. You might also find some useful information here, who knows?">
+{% else %}
+    <meta name="description" content="Authentication System to get access to {{ TNNT_TEMPLATE_ENTITY_NAME }} services, like Discord, Mumble, Forums and more.">
+
+    <meta name="og:title" content="{{ TNNT_TEMPLATE_ENTITY_NAME }} Authentication">
+    <meta name="og:description" content="Authentication System to get access to {{ TNNT_TEMPLATE_ENTITY_NAME }} services, like Discord, Mumble, Forums and more.">
+{% endif %}
+
+<meta name="og:image" content="{% if TNNT_TEMPLATE_ENTITY_ID == 1 %}{{ TNNT_TEMPLATE_AA_LOGO }}{% else %}{% if TNNT_TEMPLATE_ENTITY_TYPE == 'alliance' %}{{ TNNT_TEMPLATE_ENTITY_ID|alliance_logo_url:256 }}{% elif TNNT_TEMPLATE_ENTITY_TYPE == 'corporation' %}{{ TNNT_TEMPLATE_ENTITY_ID|corporation_logo_url:256 }}{% endif %}{% endif %}">
+<meta name="og:type" content="website">
+<meta name="og:site_name" content="auth.terra-nanotech.de">
