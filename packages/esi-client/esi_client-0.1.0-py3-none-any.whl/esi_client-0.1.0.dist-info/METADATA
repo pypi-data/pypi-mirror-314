@@ -1,0 +1,205 @@
+Metadata-Version: 2.3
+Name: esi-client
+Version: 0.1.0
+Summary: A Python client for accessing the complete Eve Online ESI API.
+Project-URL: Homepage, https://gitlab.com/ErikKalkoken/esi-client-generator
+Maintainer-email: Erik Kalkoken <kalkoken87@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2023 Erik Kalkoken
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Keywords: EVE Swagger Interface,Eve Online
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Requires-Python: >=3.6
+Requires-Dist: certifi>=2017.4.17
+Requires-Dist: python-dateutil>=2.1
+Requires-Dist: six>=1.10
+Requires-Dist: urllib3>=1.23
+Description-Content-Type: text/markdown
+
+# esi-client
+
+A Python client for accessing the complete Eve Online ESI API.
+
+[![release](https://img.shields.io/pypi/v/esi-client?label=release)](https://pypi.org/project/esi-client/)
+[![python](https://img.shields.io/pypi/pyversions/esi-client)](https://pypi.org/project/esi-client/)
+[![openapi](https://img.shields.io/badge/openapigen-6.6.0_SNAPSHOT-blue)](https://esi.evetech.net/ui/)
+[![ESI](https://img.shields.io/badge/ESI-1.28-blue)](https://esi.evetech.net/ui/)
+[![pipeline status](https://gitlab.com/ErikKalkoken/esi-client-generator/badges/main/pipeline.svg)](https://gitlab.com/ErikKalkoken/esi-client-generator/-/commits/main)
+[![license](https://img.shields.io/badge/license-MIT-green)](https://gitlab.com/ErikKalkoken/esi-client/-/blob/master/LICENSE)
+[![chat](https://img.shields.io/discord/790364535294132234)](https://discord.gg/zmh52wnfvM)
+
+## Contents
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
+
+## Overview
+
+This package is a library that provides a Python client for accessing the public 3rd party API of EVE Online, which is more commonly known as "ESI" (EVE Swagger Interface).
+
+The client is automatically generated from ESI's specification with the [Open API generator](https://openapi-generator.tech/).
+
+This approach offers many benefits in comparison to other ESI libraries:
+
+- Complete and correct coverage of all endpoints
+- Automatic serialization and mapping to Python data types
+- Python classes for all data models
+- Type annotations, i.e. enabling auto complete for API methods
+- No delay at startup for building the client
+- Robust and proven API client
+- Fast turnaround on API updates
+
+## Installation
+
+You can install the current this library directly from PyPI:
+
+```sh
+pip install esi-client
+```
+
+## Usage
+
+In this chapter we are showing how to get information from ESI with the open API client.
+
+### Accessing public endpoints
+
+The esi client from openAPI is easy to use. Here is a minimal example for fetching a character from the public endpoint:
+
+```python
+from esi_client.api.character_api import CharacterApi
+
+api = CharacterApi()
+character = api.get_characters_character_id(character_id=93330670)
+print(character.name)
+```
+
+### Error handling
+
+Common errors can be handled by catching `ApiException`:
+
+```python
+import esi_client
+from esi_client.api.character_api import CharacterApi
+
+api = CharacterApi()
+try:
+    character = api.get_characters_character_id(character_id=93330670)
+    print(character.name)
+except esi_client.ApiException as ex:
+    print(f"Exception occurred when trying to fetch a character: {ex}")
+```
+
+### Making multiple calls to endpoints
+
+When making multiple calls to endpoints it is more efficient to use the same API client instance. Here we are first calling the character endpoint to get information about a character and then we are calling the corporation endpoint to get the name of the corporation the character belongs to.
+
+```python
+import esi_client
+from esi_client.api.character_api import CharacterApi
+from esi_client.api.corporation_api import CorporationApi
+
+with esi_client.ApiClient() as api_client:
+    character_api = CharacterApi(api_client)
+    character = character_api.get_characters_character_id(character_id=93330670)
+    corporation_api = CorporationApi(api_client)
+    corporation = corporation_api.get_corporations_corporation_id(
+        corporation_id=character.corporation_id
+    )
+    print(f"{character.name} if a member of {corporation.name}")
+
+    
+```
+
+### Accessing private endpoints
+
+For accessing private endpoint you need a valid access token.
+
+Note that to topic of obtaining an access token is not in scope of this library. Please see the [SSO documentation](https://docs.esi.evetech.net/docs/sso/) for more information on how to obtain an access token for your web site or app. For testing purposes it is possible to generate an access token on the [ESI web site](https://esi.evetech.net/ui/).
+
+You can provide your access token in two ways:
+
+1. As configuration for the api client
+2. As parameter when calling an endpoint
+
+#### Token as configuration
+
+One way for providing your access token is as configuration for the api client:
+
+```python
+import esi_client
+from esi_client.api.character_api import CharacterApi
+
+configuration = esi_client.Configuration(access_token="ACCESS-TOKEN")
+
+with esi_client.ApiClient(configuration) as api_client:
+    api_instance = CharacterApi(api_client)
+    api_response = api_instance.get_characters_character_id_medals(
+        character_id=93330670
+    )
+    ...
+```
+
+#### Token as parameter
+
+Another way of providing your access token is as parameter when making the call to the endpoint:
+
+```python
+from esi_client.api.character_api import CharacterApi
+
+api_instance = CharacterApi(api_client)
+api_response = api_instance.get_characters_character_id_medals(
+    character_id=93330670, token="ACCESS-TOKEN"
+)
+```
+
+### Getting HTTP information for a response
+
+In some cases you also need to get the HTTP information for a response. e.g. if a endpoint supports paging the information about how many pages there are is in the HTTP header.
+
+To get the HTTP information you need to pass the argument `_return_http_data_only=False` when calling the API method. The API method will then return a tuple consisting of:
+
+- data
+- HTTP status code
+- HTTP response headers
+
+Here is an example:
+
+```python
+from esi_client.api.universe_api import UniverseApi
+
+api = UniverseApi()
+data, status_code, header = api.get_universe_types(_return_http_data_only=False)
+```
+
+The source code for these examples can also be found in project's `examples` folder.
