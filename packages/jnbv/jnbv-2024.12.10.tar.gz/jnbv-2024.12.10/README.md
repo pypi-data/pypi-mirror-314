@@ -1,0 +1,279 @@
+# JUPYTER NOTEBOOK VALIDATION
+[![gitlab jnbv](https://badgen.net/badge/icon/gitlab?icon=gitlab&label=jnbv)](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv)
+[![PyPI jnbv](https://img.shields.io/pypi/v/jnbv)](https://pypi.org/project/jnbv/)
+[![python versions](https://badgen.net/pypi/python/black)](https://www.python.org/)
+[![License](https://img.shields.io/pypi/l/jnbv)](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/-/blob/master/LICENSE)
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
+1. [Project Overview](#project-overview)
+2. [Install](#install)
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+
+
+## PROJECT OVERVIEW
+
+This repository contains scripts used to validate ipynb notebooks and Jupyter
+kernels.
+
+There is another related repository which contains a large number of test
+ipynb notebooks and routines to help with the execution of the validation tests
+via docker images and slurm batch jobs:
+- [jupyter-notebook-validation](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jupyter-notebook-validation)
+
+
+### PACKAGE
+A python package has been created which can be installed via pip:
+- PyPi package: [![PyPI jnbv](https://img.shields.io/pypi/v/jnbv)](https://pypi.org/project/jnbv/)
+
+### APPTAINER IMAGE
+In addittion to installing jnbv into a conda environment, a standalone
+apptainer image can also be created for simpler execution and distribution of
+jnbv.
+
+### GOALS
+The goals of this project are to be able to:
+1. Execute validation of Jupyter kernels using ipynb notebooks in the terminal
+2. Execute validations non-interactively in a CI pipeline
+3. Check execution output for errors
+4. Compare output of an execution to known output
+5. Select different Jupyter kernels to use
+6. Log results of notebook executions and tests
+
+
+### EXAMPLE OUTPUT
+Partial output from validation tests run in the terminal:
+
+![screenshot_validation_comparison_output_terminal](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/screenshot_validation_comparison_output_terminal.png)
+
+Output from an ipynb notebook created from failed execution of a notebook:
+
+![screenshot_jupyter_notebook_failed](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/screenshot_jupyter_notebook_failed.png)
+
+
+## INSTALL
+
+The jnbv module can be installed with pip:
+- PyPi package: [![PyPI jnbv](https://img.shields.io/pypi/v/jnbv)](https://pypi.org/project/jnbv/)
+- gitlab repository: [![gitlab jnbv](https://badgen.net/badge/icon/gitlab?icon=gitlab&label=jnbv)](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv)
+
+Or an apptainer image can be created, which contains a conda environment in
+which jnbv is installed.
+
+
+### INSTALL WITH PIP
+
+Create a virtual environment if you don't already have one:
+```bash
+python3 -m venv venv
+```
+
+Activate your environment, in this example it's in venv/:
+```bash
+source venv/bin/activate
+```
+
+Install the code from [PyPi](https://pypi.org/project/jnbv/) using pip:
+```bash
+pip install jnbv
+```
+
+Or install from gitlab using pip and git:
+```bash
+pip install git+https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv.git
+```
+
+With either method, dependencies will also be installed.
+
+
+## USAGE
+
+```bash
+jnbv -h
+```
+
+![jnbv_help](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/jnbv_help.png)
+
+### EXECUTE NOTEBOOK
+For this, you will need to have:
+1. A base environment in which jnbv has been installed (see above)
+2. An ipynb notebook file
+3. A Jupyter kernel that will be used to execute the file
+
+Once you have all these items, the base environment should be activated:
+```bash
+source venv/bin/activate
+```
+
+Check to see what kernels you have available:
+```bash
+jupyter kernelspec list
+    Available kernels:
+      hdf5-kernel    /var/www/jupyterhub/jnbv/venv/share/jupyter/kernels/hdf5-kernel
+      python3        /var/www/jupyterhub/jnbv/venv/share/jupyter/kernels/python3
+```
+If you don't have any kernels, then install ipykernel into your environment
+with either pip or conda:
+```bash
+pip install ipykernel
+conda install ipykernel
+```
+and then you should have the default kernel "python3" available.
+
+If you don't have an ipynb notebook handy, you can get an example notebook
+file here:
+```bash
+wget https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/-/raw/master/development/the-meaning-of-life.ipynb
+```
+
+And then the ipynb notebook can be executed in the terminal, using the default
+kernel python3 for example:
+```bash
+jnbv the-meaning-of-life.ipynb \
+    --kernel python3 \
+    --execute
+```
+
+![screenshot_execute](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/screenshot_execute.png)
+
+
+### READ NOTEBOOK
+By defualt, the result of executing an ipynb file is a new ipynb file named
+output.ipynb.  It can be read in the terminal with:
+```bash
+jnbv output.ipynb --read
+```
+
+![screenshot_read](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/screenshot_read.png)
+
+
+### TEST NOTEBOOK
+The same file can be checked for errors:
+```bash
+jnbv output.ipynb --test
+```
+
+![screenshot_test](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/screenshot_test.png)
+
+
+### COMPARE NOTEBOOKS
+And two ipynb notebooks can be compared:
+```bash
+jnbv output.ipynb --compare the-meaning-of-life.ipynb
+```
+
+![screenshot_compare](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/screenshot_compare.png)
+
+
+### EXECUTE, TEST, COMPARE, SAVE
+All steps can be made to run in succession with one command:
+```bash
+jnbv the-meaning-of-life.ipynb \
+    --kernel python3 \
+    --execute --read --test --compare --save
+```
+
+Or, more simply using the --validate option, which is a combination of 5 other
+options:
+```bash
+jnbv the-meaning-of-life.ipynb \
+    --kernel python3 \
+    --validate
+```
+
+Note that above the option --save was also added, which then creates the output
+directory test-results/, and within that creates subdirectories with kernel
+names, date stamps, and finally log files and new ipynb files.<br>
+For example:
+```bash
+test-results/
+└── python3/
+    └── 2021-06-11_14-39-40/
+        ├── the-meaning-of-life.ipynb
+        └── the-meaning-of-life.log
+```
+
+Example output from executing a simple notebook using the default kernel:
+
+![usage_python3_the-meaning-of-life](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/raw/master/screenshots/usage_python3_the-meaning-of-life.png)
+
+
+## APPTAINER
+
+The use of an apptainer image can make deployment and usage in a larger system
+simpler to handle.  A stand-alone apptainer image containing jnbv can be
+created and then used to evaluate kernels and notebooks in different locations,
+i.e. on and HPC node, a personal laptop, etc. without the user needing
+create and update their own conda environment containing jnbv.
+
+### APPTAINER IMAGE CREATION
+
+This requires that apptainer and fuse libraries are installed on the host
+system. On ubuntu systems the installation of apptainer is:
+```bash
+apt-get update
+apt-get install -yq fuse-overlayfs squashfuse software-properties-common
+add-apt-repository -y ppa:apptainer/ppa
+apt-get update apt-get install -y apptainer
+```
+
+Next, this repository is needed:
+```bash
+git clone git@gitlab.com:MAXIV-SCISW/JUPYTERHUB/jnbv.git
+cd jnbv/
+```
+
+Then to create an apptainer image which will contain a conda environment in
+which jnbv is installed:
+```bash
+make jnbv-sif
+```
+
+When run for the first time, a base image will be created along the way:
+```bash
+apptainer/
+└── sif-img-files/
+    ├── jnbv.sif
+    └── micromamba.sif
+```
+
+### APPTAINER IMAGE USAGE
+
+To see the help message:
+```bash
+apptainer run apptainer/sif-img-files/jnbv.sif jnbv -h
+```
+
+Example when running on cluster front-end with the pre-existing HDF5 kernel
+image and the usual notebooks used for kernel validations:
+```bash
+cd /mxn/groups/kits/scisw/jupyterhub/jupyter-notebook-validation/
+export APPTAINER_BINDPATH="/usr/bin/singularity,/usr/bin/apptainer,/etc/apptainer,/usr/libexec/apptainer,/var/lib/apptainer,/sw/jupyterhub/jupyter-kernels-apptainer/kernel-spec-files/share/jupyter:/usr/local/share/jupyter,/sw/jupyterhub/jupyter-kernels-apptainer/sif-img-files,/mxn/groups/kits/scisw/jupyterhub/jupyter-notebook-validation/notebooks,/mxn/groups/kits/scisw/jupyterhub/data-for-validations"
+
+apptainer run /sw/jupyterhub/jnbv/apptainer/sif-img-files/jnbv.sif jupyter kernelspec list
+apptainer run --nv /sw/jupyterhub/jnbv/apptainer/sif-img-files/jnbv.sif jnbv --kernel maxiv-jup-kernel-hdf5 --validate notebooks/maxiv/hdf5/*.ipynb
+```
+
+Note that the environmental variable APPTAINER_BINDPATH needs to be set, which
+tells apptainer to mount given files and directories within the apptainer
+image. Files and directories that need to be mounted include:
+- Apptainer related executables and libraries
+-- /usr/bin/singularity
+-- /usr/bin/apptainer
+-- /etc/apptainer
+-- /usr/libexec/apptainer
+-- /var/lib/apptainer
+- Kernels location on the host mounted to a particular place in the image
+-- /sw/jupyterhub/jupyter-kernels-apptainer/kernel-spec-files/share/jupyter:/usr/local/share/jupyter
+- Kernel environment images
+-- /sw/jupyterhub/jupyter-kernels-apptainer/sif-img-files
+- Jupyter notebooks
+-- /mxn/groups/kits/scisw/jupyterhub/jupyter-notebook-validation/notebooks
+- Data location for any data files used in the notebooks
+-- /mxn/groups/kits/scisw/jupyterhub/data-for-validations
+
+
+## CONTRIBUTING
+
+Would you like to contribute to this project?
+See: [CONTRIBUTING.md](https://gitlab.com/MAXIV-SCISW/JUPYTERHUB/jnbv/-/blob/master/CONTRIBUTING.md)
