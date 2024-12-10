@@ -1,0 +1,202 @@
+Metadata-Version: 2.1
+Name: volcengine-qcclient
+Version: 0.1.11
+Summary: A Python client for volcengine quantum chemistry service.
+Home-page: https://github.com/yourusername/myclient
+Author: Lifei Chen
+Author-email: chenlifei.fly@bytedance.com
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.20.0
+Requires-Dist: volcengine>=1.0.161
+Requires-Dist: retry>=0.9.2
+Requires-Dist: typing-extensions>=4.7.0
+Requires-Dist: h5py>=3.0.0
+
+# volcengine-qcclient
+
+A Python client for volcano engine quantum chemistry service.
+
+## Installation
+
+```bash
+pip install volcengine-qcclient
+```
+
+## Usage
+
+### High-level SDK.
+
+1. run GPU4PySCF tasks.
+```python
+import os
+import requests
+import h5py
+import tarfile
+
+from volcengine_qcclient import QcBatchJob
+
+
+# download_output download output of qc task to ./{task_id}/ dir.
+def download_output(url, task_id):
+    os.mkdir(f"./{task_id}")
+    if ".h5" in url:
+        output_h5 = f"./{task_id}/output.h5"
+        open(output_h5, 'wb').write(requests.get(url).content)
+    elif "tar.gz" in url:
+        output_targz = f"./{task_id}/output.tar.gz"
+        open(output_targz, 'wb').write(requests.get(url).content)
+        with tarfile.open(output_targz, 'r:gz') as tar:
+            tar.extractall(path=f"./{task_id}")
+        os.remove(output_targz)
+    else:
+        print("unsupported file type")
+
+
+if __name__ == '__main__':
+    ak = "{volc_ak}"
+    sk = "{volc_sk}"
+
+    # init batch_job
+    batch_job = QcBatchJob(ak=ak, sk=sk)
+
+    # load molecules.
+    molecules = [
+        '''
+3
+Water molecule
+O          0.00000        0.00000        0.11779
+H          0.00000        0.75545       -0.47116
+H          0.00000       -0.75545       -0.47116
+        '''
+    ]
+
+    batch_job.load_molecules(from_list=molecules)
+
+    # set task config.
+    task_config = {
+        "spin": 0,
+        "charge": 0,
+        "basis": "def2-tzvpp",
+    }
+    # submit task.
+    task_type = "sp"
+    task_ids = batch_job.submit(task_type=task_type, task_config=task_config)
+    print(task_ids)
+
+    # wait for task to finish.
+    batch_job.wait()
+
+    # get tasks when batch_job finished.
+    tasks = batch_job.get_tasks()
+    print(tasks)
+
+    # download output to ./{task_id}/
+    task = tasks[0]
+    download_output(task["OutputUrl"], task["Id"])
+
+    # operation with output.
+    if task_type in ["sp", "opt"]:
+        with h5py.File(f"./{task['Id']}/output.h5", 'r') as f:
+            print(f.keys())
+    elif task_type == "pysisyphus":
+        # print keys in `final_hessian.h5`.
+        with h5py.File(f"./{task['Id']}/final_hessian.h5", 'r') as f:
+            print(f.keys())
+
+        # print keys in `optimization.h5`
+        with h5py.File(f"./{task['Id']}/final_hessian.h5", 'r') as f:
+            print(f.keys())
+
+        # print final_geometry.xyz
+        with open(f"./{task['Id']}/final_geometry.xyz", 'r') as f:
+            print(f.read())
+```
+
+2. run pysisyphus tasks.
+```python
+import os
+import requests
+import h5py
+import tarfile
+
+from volcengine_qcclient import QcBatchJob
+
+
+# download_output download output of qc task to ./{task_id}/ dir.
+def download_output(url, task_id):
+    os.mkdir(f"./{task_id}")
+    if ".h5" in url:
+        output_h5 = f"./{task_id}/output.h5"
+        open(output_h5, 'wb').write(requests.get(url).content)
+    elif "tar.gz" in url:
+        output_targz = f"./{task_id}/output.tar.gz"
+        open(output_targz, 'wb').write(requests.get(url).content)
+        with tarfile.open(output_targz, 'r:gz') as tar:
+            tar.extractall(path=f"./{task_id}")
+        os.remove(output_targz)
+    else:
+        print("unsupported file type")
+
+
+if __name__ == '__main__':
+    ak = "{volc_ak}"
+    sk = "{volc_sk}"
+
+    # init batch_job
+    batch_job = QcBatchJob(ak=ak, sk=sk)
+
+    # load molecules.
+    molecules = [
+        '''
+3
+Water molecule
+O          0.00000        0.00000        0.11779
+H          0.00000        0.75545       -0.47116
+H          0.00000       -0.75545       -0.47116
+        '''
+    ]
+
+    batch_job.load_molecules(from_list=molecules)
+
+    # set task config.
+    task_config = {}
+    # submit task.
+    task_type = "pysisyphus"
+    task_ids = batch_job.submit(task_type=task_type, task_config=task_config)
+    print(task_ids)
+
+    # wait for task to finish.
+    batch_job.wait()
+
+    # get tasks when batch_job finished.
+    tasks = batch_job.get_tasks()
+    print(tasks)
+
+    # download output to ./{task_id}/
+    task = tasks[0]
+    download_output(task["OutputUrl"], task["Id"])
+
+    # operation with output.
+    if task_type in ["sp", "opt"]:
+        with h5py.File(f"./{task['Id']}/output.h5", 'r') as f:
+            print(f.keys())
+    elif task_type == "pysisyphus":
+        # print keys in `final_hessian.h5`.
+        with h5py.File(f"./{task['Id']}/final_hessian.h5", 'r') as f:
+            print(f.keys())
+
+        # print keys in `optimization.h5`
+        with h5py.File(f"./{task['Id']}/final_hessian.h5", 'r') as f:
+            print(f.keys())
+
+        # print final_geometry.xyz
+        with open(f"./{task['Id']}/final_geometry.xyz", 'r') as f:
+            print(f.read())
+```
+### Low level SDK:
+see [low-level.md](low-level.md)
