@@ -1,0 +1,73 @@
+Index: example_scripts/trace_loop_http.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import time\n\nfrom opentelemetry import trace\n\nSERVICE_NAME = \"my-otel-test\"\nNUM_ADDS = 12\n\nif __name__ == \"__main__\":\n    tracer = trace.get_tracer(\"my-tracer\")\n    for i in range(NUM_ADDS):\n        with tracer.start_as_current_span(\"my-span\"):\n            print(f\"simple_loop.py: {i+1}/{NUM_ADDS}\")\n            time.sleep(0.5)\n\n\n# Since we're not inheriting from the OtelTest base class (to avoid depending on it) we make sure our class name\n# contains \"OtelTest\".\nclass MyOtelTest:\n    def requirements(self):\n        return \"opentelemetry-distro\", \"opentelemetry-exporter-otlp-proto-http\"\n\n    def environment_variables(self):\n        return {\n            \"OTEL_SERVICE_NAME\": SERVICE_NAME,\n            \"OTEL_EXPORTER_OTLP_PROTOCOL\": \"http/protobuf\",\n        }\n\n    def wrapper_command(self):\n        return \"opentelemetry-instrument\"\n\n    def on_start(self):\n        return None\n\n    def on_stop(self, telemetry, stdout: str, stderr: str, returncode: int) -> None:\n        print(f\"script completed with return code {returncode}\")\n        print(f\"telemetry: {telemetry}\")\n\n    def is_http(self):\n        return True\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/trace_loop_http.py b/example_scripts/trace_loop_http.py
+--- a/example_scripts/trace_loop_http.py	(revision 626622e13f64082aa505ba0644d47dc43b26dfda)
++++ b/example_scripts/trace_loop_http.py	(date 1724878412566)
+@@ -1,16 +1,10 @@
+-import time
+-
+-from opentelemetry import trace
++from lib import trace_loop
+ 
+ SERVICE_NAME = "my-otel-test"
+ NUM_ADDS = 12
+ 
+ if __name__ == "__main__":
+-    tracer = trace.get_tracer("my-tracer")
+-    for i in range(NUM_ADDS):
+-        with tracer.start_as_current_span("my-span"):
+-            print(f"simple_loop.py: {i+1}/{NUM_ADDS}")
+-            time.sleep(0.5)
++    trace_loop(NUM_ADDS)
+ 
+ 
+ # Since we're not inheriting from the OtelTest base class (to avoid depending on it) we make sure our class name
+Index: example_scripts/logging_exception_bug.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"\"\"\nCauses a ValueError to be raised, caught, and logged. The exception arises because we are trying to log an object.\n\"\"\"\n\ndef main():\n    import logging\n    import time\n\n\n    logging.basicConfig(level=logging.NOTSET)\n    logging.getLogger().addHandler(create_logging_handler())\n\n    logger = logging.getLogger(__name__)\n\n    try:\n        raise ValueError(\"Err\")\n    except ValueError as e:\n        # log the raw exception object\n        logger.error(e)\n        # this causes a ValueError to be raised, caught, and logged\n\n    for _ in range(4):\n        # demonstrate that the exception was handled and that we can still perform an operation\n        time.sleep(1)\n        print(\"x\")\n\n\ndef create_logging_handler():\n    from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter\n    from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler\n    from opentelemetry.sdk._logs.export import BatchLogRecordProcessor\n\n    logger_provider = LoggerProvider()\n    logger_provider.add_log_record_processor(\n        BatchLogRecordProcessor(OTLPLogExporter(insecure=True))\n    )\n    return LoggingHandler(logger_provider=logger_provider)\n\n\nif __name__ == \"__main__\":\n    main()\n\n\nclass MyOtelTest:\n\n    def environment_variables(self):\n        return {}\n\n    def requirements(self):\n        return (\"opentelemetry-exporter-otlp==1.26.0\",)\n\n    def wrapper_command(self):\n        return \"\"\n\n    def on_start(self):\n        pass\n\n    def on_stop(self, tel, stdout: str, stderr: str, returncode: int) -> None:\n        pass\n\n    def is_http(self) -> bool:\n        return False\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/logging_exception_bug.py b/example_scripts/logging_exception_bug.py
+--- a/example_scripts/logging_exception_bug.py	(revision 626622e13f64082aa505ba0644d47dc43b26dfda)
++++ b/example_scripts/logging_exception_bug.py	(date 1724878269791)
+@@ -2,11 +2,11 @@
+ Causes a ValueError to be raised, caught, and logged. The exception arises because we are trying to log an object.
+ """
+ 
++
+ def main():
+     import logging
+     import time
+ 
+-
+     logging.basicConfig(level=logging.NOTSET)
+     logging.getLogger().addHandler(create_logging_handler())
+ 
+Index: example_scripts/lib.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/lib.py b/example_scripts/lib.py
+new file mode 100644
+--- /dev/null	(date 1724878083742)
++++ b/example_scripts/lib.py	(date 1724878083742)
+@@ -0,0 +1,11 @@
++import time
++
++from opentelemetry import trace
++
++
++def trace_loop(count):
++    tracer = trace.get_tracer("my-tracer")
++    for i in range(count):
++        with tracer.start_as_current_span("my-span"):
++            print(f"loop {i + 1}/{count}")
++            time.sleep(0.5)

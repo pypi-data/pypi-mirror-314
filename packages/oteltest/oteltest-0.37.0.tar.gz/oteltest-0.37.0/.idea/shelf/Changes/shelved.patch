@@ -1,0 +1,245 @@
+Index: example_scripts/metrics_trace_api.py
+===================================================================
+diff --git a/example_scripts/metrics_trace_api.py b/example_scripts/metrics_trace_api.py
+deleted file mode 100644
+--- a/example_scripts/metrics_trace_api.py	(revision 213496432aeabc79eee8b3854cb4b806d4751cd9)
++++ /dev/null	(revision 213496432aeabc79eee8b3854cb4b806d4751cd9)
+@@ -1,42 +0,0 @@
+-from typing import Mapping, Optional, Sequence
+-
+-
+-def print_time(iterations):
+-    import time
+-    from opentelemetry import metrics, trace
+-
+-    meter = metrics.get_meter("time-printer", "1.0")
+-    counter = meter.create_counter("loop-counter", unit="1", description="my desc")
+-    tracer = trace.get_tracer("my.tracer.name")
+-    for i in range(iterations):
+-        time.sleep(1)
+-        counter.add(1)
+-        with tracer.start_as_current_span("my-span"):
+-            print(f"{i + 1}/{iterations} current time: {round(time.time())}")
+-
+-
+-# We have the option to not inherit from the OtelTest base class, in which case we name our class so it contains
+-# "OtelTest". This has the benefit of not requiring a dependency on oteltest in the script's environment.
+-class MyOtelTest:
+-
+-    def environment_variables(self) -> Mapping[str, str]:
+-        return {}
+-
+-    def requirements(self) -> Sequence[str]:
+-        return ("splunk-opentelemetry[all]",)
+-
+-    def wrapper_command(self) -> str:
+-        # return "opentelemetry-instrument"
+-        return "splunk-py-trace"
+-
+-    def on_start(self) -> Optional[float]:
+-        print("started")
+-        return None
+-
+-    def on_stop(self, tel, stdout: str, stderr: str, returncode: int) -> None:
+-        print(f"stopped: {stdout}")
+-        print(f"telemetry: {tel}")
+-
+-
+-if __name__ == "__main__":
+-    print_time(10)
+Index: example_scripts/metrics_trace_api_19.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/metrics_trace_api_19.py b/example_scripts/metrics_trace_api_19.py
+new file mode 100644
+--- /dev/null	(date 1718049153379)
++++ b/example_scripts/metrics_trace_api_19.py	(date 1718049153379)
+@@ -0,0 +1,25 @@
++from typing import Mapping, Optional, Sequence
++
++from lib import print_time
++
++
++class MyOtelTest:
++
++    def environment_variables(self) -> Mapping[str, str]:
++        return {}
++
++    def requirements(self) -> Sequence[str]:
++        return ("splunk-opentelemetry[all]==1.19",)
++
++    def wrapper_command(self) -> str:
++        return "splunk-py-trace"
++
++    def on_start(self) -> Optional[float]:
++        return None
++
++    def on_stop(self, tel, stdout: str, stderr: str, returncode: int) -> None:
++        pass
++
++
++if __name__ == "__main__":
++    print_time(10)
+Index: example_scripts/metrics_trace_api_19_1.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/metrics_trace_api_19_1.py b/example_scripts/metrics_trace_api_19_1.py
+new file mode 100644
+--- /dev/null	(date 1718051628865)
++++ b/example_scripts/metrics_trace_api_19_1.py	(date 1718051628865)
+@@ -0,0 +1,25 @@
++from typing import Mapping, Optional, Sequence
++
++from lib import print_time
++
++
++class MyOtelTest:
++
++    def environment_variables(self) -> Mapping[str, str]:
++        return {"OTEL_SERVICE_NAME": "test-1.19.1"}
++
++    def requirements(self) -> Sequence[str]:
++        return ("splunk-opentelemetry[all]==1.19.1",)
++
++    def wrapper_command(self) -> str:
++        return "splunk-py-trace"
++
++    def on_start(self) -> Optional[float]:
++        return None
++
++    def on_stop(self, tel, stdout: str, stderr: str, returncode: int) -> None:
++        pass
++
++
++if __name__ == "__main__":
++    print_time(100000)
+Index: example_scripts/metrics_trace_api_18.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/metrics_trace_api_18.py b/example_scripts/metrics_trace_api_18.py
+new file mode 100644
+--- /dev/null	(date 1718049153382)
++++ b/example_scripts/metrics_trace_api_18.py	(date 1718049153382)
+@@ -0,0 +1,25 @@
++from typing import Mapping, Optional, Sequence
++
++from lib import print_time
++
++
++class MyOtelTest:
++
++    def environment_variables(self) -> Mapping[str, str]:
++        return {}
++
++    def requirements(self) -> Sequence[str]:
++        return ("splunk-opentelemetry[all]==1.18",)
++
++    def wrapper_command(self) -> str:
++        return "splunk-py-trace"
++
++    def on_start(self) -> Optional[float]:
++        return None
++
++    def on_stop(self, tel, stdout: str, stderr: str, returncode: int) -> None:
++        pass
++
++
++if __name__ == "__main__":
++    print_time(10)
+Index: example_scripts/lib.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/lib.py b/example_scripts/lib.py
+new file mode 100644
+--- /dev/null	(date 1718048571278)
++++ b/example_scripts/lib.py	(date 1718048571278)
+@@ -0,0 +1,12 @@
++def print_time(iterations):
++    import time
++    from opentelemetry import metrics, trace
++
++    meter = metrics.get_meter("time-printer", "1.0")
++    counter = meter.create_counter("loop-counter", unit="1", description="my desc")
++    tracer = trace.get_tracer("my.tracer.name")
++    for i in range(iterations):
++        time.sleep(1)
++        counter.add(1)
++        with tracer.start_as_current_span("my-span"):
++            print(f"{i + 1}/{iterations} current time: {round(time.time())}")
+Index: example_scripts/ot_flask_traceparent.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/example_scripts/ot_flask_traceparent.py b/example_scripts/ot_flask_traceparent.py
+new file mode 100644
+--- /dev/null	(date 1718217608472)
++++ b/example_scripts/ot_flask_traceparent.py	(date 1718217608472)
+@@ -0,0 +1,59 @@
++import http.client
++import time
++from typing import Mapping, Optional, Sequence
++
++TRACE_ID = "12345678901234567890123456789012"
++
++PORT = 8909
++HOST = "127.0.0.1"
++
++if __name__ == "__main__":
++    from flask import Flask, request
++
++    app = Flask(__name__)
++
++    @app.route("/")
++    def home():
++        headers = request.headers
++        for header, value in headers.items():
++            print(f"{header}: {value}")
++
++        return __file__
++
++    app.run(port=PORT, host=HOST)
++
++
++class FlaskOtelTest:
++    def environment_variables(self):
++        return {}
++
++    def requirements(self):
++        return (
++            "opentelemetry-distro[otlp]",
++            "opentelemetry-instrumentation-flask",
++            "flask",
++        )
++
++    def wrapper_command(self):
++        return "opentelemetry-instrument"
++
++    def on_start(self):
++        # wait for server to start
++        time.sleep(10)
++
++        conn = http.client.HTTPConnection(HOST, PORT)
++        traceparent = f"00-{TRACE_ID}-1234567890123456-01"
++        conn.request("GET", "/", headers={"Traceparent": traceparent})
++        conn.close()
++
++        return 30
++
++    def on_stop(self, tel, stdout: str, stderr: str, returncode: int):
++        trace_id = (
++            tel.trace_requests[0]
++            .pbreq.resource_spans[0]
++            .scope_spans[0]
++            .spans[0]
++            .trace_id.hex()
++        )
++        assert trace_id == TRACE_ID
