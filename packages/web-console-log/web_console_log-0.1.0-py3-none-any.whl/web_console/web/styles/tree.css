@@ -1,0 +1,56 @@
+.tree {
+	font-family: monospace;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: thin;
+}
+.tree .value a {
+	color: inherit;
+}
+.tree .value,
+.tree details summary {
+	white-space: nowrap;
+}
+
+.tree details {
+	display: inline-block;
+}
+.tree details[open]{
+	display: inline;
+}
+.tree .key::after {
+	content: ":";
+	margin: 0.3rem;
+}
+
+.tree details > summary .value::before {
+	content: "{...}";
+}
+.tree details[open] > summary .value::before {
+	content: "{";
+}
+.tree details[open]::after {
+	content: "}";
+}
+
+.tree details[type="array"] > summary .value::before {
+	content: "[...]";
+}
+.tree details[type="array"][open] > summary .value::before {
+	content: "[";
+}
+.tree details[type="array"][open]::after {
+	content: "]";
+}
+
+.tree ul {
+	list-style-type: none;
+	margin: 0; padding: 0;
+	padding-left: 2rem;
+}
+.tree ul li {
+	margin: 0.3rem 0;
+}
+.tree ul li:not(:last-child)::after{
+	content: ",";
+}
