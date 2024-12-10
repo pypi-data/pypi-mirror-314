@@ -1,0 +1,53 @@
+[package]
+name = "genius-agent-factor-graph"
+version = "1.5.0"
+edition = "2021"
+
+[features]
+default = []
+python = ["dep:pyo3", "dep:numpy", "json"]
+json = ["dep:serde", "dep:serde_json"]
+bench = ["dep:microbench", "dep:nanoid"]
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[[example]]
+name = "usage"
+path = "examples/usage.rs"
+required-features = ["json"]
+
+[[bin]]
+# benchmark for graph validation; `#[bench]` is *still* unstable
+name = "graph_validation"
+path = "benches/graph_validation.rs"
+required-features = ["bench"]
+
+[dependencies]
+rkyv = { version = "0.8.8", features = ["unaligned"] }
+thiserror = "1.0.64"
+heed = "0.20.5"
+# rust-side dependencies
+pyo3 = { version = "0.22.3", features = ["extension-module"], optional = true }
+ndarray = { version = "0.16.1" }
+numpy = { version = "0.22.0", features = ["gil-refs"], optional = true }
+# json support for python
+serde = { version = "1.0.210", optional = true }
+serde_json = { version = "1.0.128", optional = true }
+itertools = { version = "0.13.0" }
+# -- logging and telemetry
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1.40"
+tracing-subscriber = { version="0.3.18", features = ["env-filter", "json"] }
+telemetry-rust = { version = "0.1.1", registry = "verses", features = ["trace"] }
+tracing-opentelemetry = "0.24.0"
+# benchmark
+microbench = { version = "0.5.0", optional = true }
+nanoid = { version = "0.4.0", optional = true }
+
+[dev-dependencies]
+nanoid = "0.4.0"
+
+[package.metadata.cargo-all-features]
+# https://github.com/PyO3/pyo3/issues/340
+denylist = ["python"]

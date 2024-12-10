@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: genius-agent-factor-graph
+  annotations:
+    github.com/project-slug: VersesTech/genius-agent-factor-graph
+    backstage.io/kubernetes-id: 'genius-agent-factor-graph'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: engineering
+  providesApis:
+    - genius-agent-factor-graph
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: genius-agent-factor-graph
+  description: Genius-agent-factor-graph api
+spec:
+  type: asyncapi
+  lifecycle: production
+  owner: engineering
+  system: genius-agent
+  definition:
+    $asyncapi: ./api/asynch/fgs.asyncapi.yaml

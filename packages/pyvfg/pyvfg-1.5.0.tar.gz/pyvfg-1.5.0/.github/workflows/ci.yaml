@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    name: Check
+    # Don't run on release commits
+    if: ${{ !contains(github.event.head_commit.message, '[skip build]') }}
+    uses: VersesTech/github-actions/.github/workflows/rust-check.yaml@main
+    secrets: inherit
+
+  lints:
+    name: Lints
+    # Don't run on release commits
+    if: ${{ !contains(github.event.head_commit.message, '[skip build]') }}
+    uses: VersesTech/github-actions/.github/workflows/rust-lint.yaml@main
+    secrets: inherit
+    with:
+      format: false
+
+  build-test:
+    name: Build and test
+    # Don't run on release commits
+    if: ${{ !contains(github.event.head_commit.message, '[skip build]') }}
+    uses: ./.github/workflows/build-test.yaml
+    secrets: inherit
+  
+  maturin:
+    name: Maturin
+    # Don't run on release commits
+    if: ${{ !contains(github.event.head_commit.message, '[skip build]') }}
+    uses: ./.github/workflows/maturin.yaml
+    secrets: inherit

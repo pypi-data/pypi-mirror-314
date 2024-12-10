@@ -1,0 +1,30 @@
+services:
+  k6_test:
+    image: grafana/k6
+    container_name: test_k6
+    volumes:
+      - ./:/test_data
+    command: run /test_data/k6_loadtest.js
+    environment:
+        - TARGET_URL=http://gpil-server:8080
+        - K6_VUS=10
+        - K6_DURATION=30s
+    networks:
+      - default
+
+  k6_test2:
+    image: grafana/k6
+    container_name: test2_k6
+    volumes:
+      - ./:/test_data
+    command: run /test_data/k6_loadtest.js
+    environment:
+      - TARGET_URL=https://gpil-server-default.demo.dev.verses.build      
+      - K6_VUS=20
+      - K6_DURATION=1m
+networks:
+  default:
+    driver: bridge
+      
+
+  

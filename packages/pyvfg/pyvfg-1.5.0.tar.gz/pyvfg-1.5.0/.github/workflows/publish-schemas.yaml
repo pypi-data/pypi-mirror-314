@@ -1,0 +1,36 @@
+name: Publish schemas to s3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docs/schemas/vfg/**
+
+jobs:
+  publish:
+    name: Publish schemas to s3
+    # Don't run on release commits
+    if: ${{ !contains(github.event.head_commit.message, '[skip build]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.ECR_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_KEY }}
+          aws-region: us-west-1
+          mask-aws-account-id: false
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_GITHUB_ACTIONS }}
+          role-skip-session-tagging: true
+          role-duration-seconds: 1200
+      
+      - name: Upload model to s3
+        run: |-
+          aws s3 cp docs/schemas/vfg/ s3://verses-json-schema-registry-gitops-usw1/vfg/ --recursive
+          aws s3 cp test_data/ s3://verses-json-schema-registry-gitops-usw1/vfg/examples/ --recursive
+        env:
+          AWS_DEFAULT_REGION: us-west-1

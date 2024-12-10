@@ -1,0 +1,79 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "definitions": {
+        "tensor": {
+            "oneOf": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tensor"
+                    }
+                }
+            ]
+        },
+        "factor": {
+            "type": "object",
+            "properties": {
+                "variables": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "distribution": {
+                    "enum": [
+                        "categorical",
+                        "categorical_conditional"
+                    ]
+                },
+                "values": {
+                    "$ref": "#/definitions/tensor"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "likelihood",
+                        "transition",
+                        "preference"
+                    ]
+                }
+            },
+            "required": [
+                "variables",
+                "distribution",
+                "values"
+            ]
+        }
+    },
+    "properties": {
+        "version": {
+            "type": "string",
+            "const": "0.2.0"
+        },
+        "factors": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/factor"
+            }
+        },
+        "variables": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "required": [
+        "version",
+        "factors",
+        "variables"
+    ]
+  }
+  

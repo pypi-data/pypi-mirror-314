@@ -1,0 +1,64 @@
+name: CI (Pull Request)
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - edited
+      - synchronize
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check
+    # Don't run on release commits
+    if: ${{ !contains(github.event.pull_request.title, '[skip build]') }}
+    uses: VersesTech/github-actions/.github/workflows/rust-check.yaml@main
+    secrets: inherit
+
+  lints:
+    name: Lints
+    # Don't run on release commits
+    if: ${{ !contains(github.event.pull_request.title, '[skip build]') }}
+    uses: VersesTech/github-actions/.github/workflows/rust-lint.yaml@main
+    secrets: inherit
+    with:
+      format: false
+    
+  get-short-sha:
+    name: Get short SHA to use as image tag
+    # Don't run on release commits
+    if: ${{ !contains(github.event.pull_request.title, '[skip build]') }}
+    runs-on: ubuntu-latest
+    outputs:
+      short-sha: ${{ steps.compute-short-sha.outputs.short-sha }}
+    steps:
+      - name: Compute short SHA
+        uses: VersesTech/github-actions/actions/short-sha@main
+        id: compute-short-sha
+
+  build-test:
+    name: Build and test
+    # Don't run on release commits
+    if: ${{ !contains(github.event.pull_request.title, '[skip build]') }}
+    uses: ./.github/workflows/build-test.yaml
+    secrets: inherit
+    
+  maturin:
+    name: Maturin
+    # Don't run on release commits
+    if: ${{ !contains(github.event.pull_request.title, '[skip build]') }}
+    uses: ./.github/workflows/maturin.yaml
+    secrets: inherit
+  
+  pr-title-check:
+    name: Check PR title
+    # Don't run on release commits
+    if: ${{ !contains(github.event.pull_request.title, '[skip build]') }}
+    uses: VersesTech/github-actions/.github/workflows/pr-title-check.yaml@main
+    secrets: inherit

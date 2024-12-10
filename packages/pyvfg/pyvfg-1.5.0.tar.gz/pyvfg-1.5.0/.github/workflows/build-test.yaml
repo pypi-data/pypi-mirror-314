@@ -1,0 +1,61 @@
+name: Build and Test
+
+on:
+  workflow_call:
+
+jobs:
+  build-test:
+    name: Build and Test
+    runs-on: ubuntu-latest-xl
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: VersesTech/github-actions/actions/setup-rust@main
+        id: setup-rust
+        with:
+          cargo-registry-auth-github-app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          cargo-registry-auth-github-app-private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+          cargo-registry-auth-github-app-owner: ${{ github.repository_owner }}
+
+      - name: Add llvm tools
+        shell: bash
+        run: |-
+          rustup component add llvm-tools-preview
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@nextest
+      
+      - name: Install cargo-all-features
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-all-features
+      
+      - name: Build
+        run: |-
+          cargo build-all-features
+
+      - name: Test
+        run: |-
+          cargo test-all-features
+
+      - name: Run tests and collect coverage
+        run: |-
+          cargo llvm-cov --features json --workspace --no-report nextest
+          cargo llvm-cov report --codecov --output-path lcov.info
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          url: https://codecov.develop.verses.io
+          slug: ${{ github.repository }}
+          token: ${{ secrets.CODECOV_GLOBAL_TOKEN }}
+          files: lcov.info
+          fail_ci_if_error: true

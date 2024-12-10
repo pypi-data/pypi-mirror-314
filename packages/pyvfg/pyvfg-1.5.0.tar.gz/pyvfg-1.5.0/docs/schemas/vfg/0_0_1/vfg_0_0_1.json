@@ -1,0 +1,63 @@
+{
+    "type": "object",
+    "definitions": {
+        "factor": {
+            "type": "object",
+            "properties": {
+                "variables": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "cpd": {
+                    "type": "boolean"
+                },
+                "learnable": {
+                    "type": "boolean"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "variables",
+                "values"
+            ]
+        }
+    },
+    "properties": {
+      "factors": {
+        "type": "array",
+        "items": {
+            "$ref": "#/definitions/factor"
+          }
+      },
+      "variables": {
+        "type": "object",
+        "additionalProperties": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+      }
+    },
+    "required": [
+        "factors",
+        "variables"
+    ]
+}
