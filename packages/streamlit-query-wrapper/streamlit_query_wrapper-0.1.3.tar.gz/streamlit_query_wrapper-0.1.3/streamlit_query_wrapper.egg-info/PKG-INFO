@@ -1,0 +1,59 @@
+Metadata-Version: 2.1
+Name: streamlit-query-wrapper
+Version: 0.1.3
+Summary: A wrapper for Streamlit components accessable via query parameters
+Home-page: https://github.com/minolee/streamlit_query_wrapper
+Author: Minho Lee
+Author-email: Minho Lee <lmh30002@gmail.com>
+Maintainer-email: Minho Lee <lmh30002@gmail.com>
+Project-URL: Homepage, https://github.com/minolee/streamlit_query_wrapper
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: streamlit
+
+# streamlit_query_wrapper
+
+## About
+This project provides wrapper of default streamlit input widgets(checkbox, multibox, etc.).
+
+With sharable link, you can access with exactly same setting you used.
+
+## Install
+`pip install streamlit-query-wrapper`
+
+## Usage
+
+```python
+import streamlit_query_wrapper as stq
+
+stq.radio("Test", ["Hello", "world"])
+
+stq.sharable_link() # shows st.code component with sharable URL
+```
+
+Result
+
+
+<img src="https://github.com/minolee/streamlit_query_wrapper/blob/main/readme/basic.png?raw=true" alt="drawing"/>
+
+Now you can access your page with given link. If you access your page with given URL, all settings you made will be loaded.
+
+## Components
+Works with basic streamlit input components.
+
+Supports
+* `checkbox`
+* `radio`
+* `selectbox`
+* `multiselect`
+* `slider`
+* `text_input`
+* `number_input`
+
+Also works with `st.sidebar`. You can use either `stq.sidebar.checkbox`, or `stq.checkbox` in `with st.sidebar` statement.
+
+As in original streamlit, this module uses label as default key value, and duplicate is not allowed.
