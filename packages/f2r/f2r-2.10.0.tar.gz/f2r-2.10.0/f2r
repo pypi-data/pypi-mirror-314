@@ -1,0 +1,171 @@
+#!/usr/bin/python3
+
+import coloredlogs
+import logging
+import argparse
+import sys
+import time
+import os
+import threading
+
+from alibuild_helpers.utilities import detectArch
+
+import flp2rpm.config as config
+from flp2rpm.Package import Package
+from flp2rpm.Fpm import Fpm
+from flp2rpm.S3 import S3
+from flp2rpm.Repo import Repo
+from flp2rpm.Module import Module
+
+
+def configure_logging():
+    coloredlogs.install(level=config.log_level)
+
+
+def set_config_args(args):
+    """ Sets the configuration variables as parsed """
+    if 'ali_prefix' in args:
+        config.ali_prefix = args.ali_prefix
+    logging.info("Using aliBuild work directory: %s" % config.ali_prefix)
+
+    if 'release_tag' in args:
+        config.release_tag = args.release_tag
+
+    if 'dry_run' in args:
+        config.dry_run = args.dry_run
+        logging.info("Starting dry run: %s" % config.dry_run)
+
+    if 'skip_deps' in args:
+        config.skip_deps = args.skip_deps
+        logging.info("Skipping dependencies: %s" % config.skip_deps)
+
+    if 'devel' in args:
+        config.devel = args.devel
+        logging.info("Generating devel dependencies: %s" % config.devel)
+
+    if 'architecture' in args:
+        config.architecture = args.architecture
+    else:
+        config.architecture = detectArch()
+        logging.info('Detected aliBuild architecture: %s' % config.architecture)
+
+    if 'target_rpm_dir' in args:
+        config.target_rpm_dir = args.target_rpm_dir
+
+    if 'tag_version' in args:
+        config.tag_version = args.tag_version
+
+    config.target_rpm_dir = os.path.join(config.target_rpm_dir, config.release_tag, 'o2')
+    logging.info("Using output directory: %s" % config.target_rpm_dir)
+
+def process_deco(func):
+    """ Decorator for generate_rpm: recursively calls process_wrap on the dependencies of the package
+        and call the generate_rpm on all of them.
+        process_deco.processed keeps a list of everything that has already been built.
+        System dependencies are skipped.
+        It creates a thread for each rpm generation. What is not clear to me is whether it builds the
+        RPMs in parallel or if it waits for the thread to finish.
+        """
+    process_deco.processed = []
+    def process_wrap(name, version):
+        logging.debug("Processing %s %s" % (name, version))
+        if version == 'from_system':
+            logging.debug("  from_system")
+            return
+
+        package = Package(name, version)
+        deps = package.deps_with_versions()
+        devel_deps = package.get_devel_deps_with_versions()
+        extra_deps = package.get_extra_deps()
+
+        if not config.skip_deps:
+            # runtime deps
+            for dep_name, dep_version in deps.items():
+                process_wrap(dep_name, dep_version)
+            # devel deps
+            for dev_name, dev_version in devel_deps.items():
+                process_wrap(dev_name, dev_version)
+
+        if name not in process_deco.processed:
+            process_deco.processed.append(name)
+            process_wrap.threads.append(func(name, version, deps, devel_deps, extra_deps))
+            return process_wrap.threads
+
+    process_wrap.threads = []
+    return process_wrap
+
+@process_deco
+def generate_rpm(name, version, deps=None, devel_deps = None, extra_deps=None) -> threading.Thread:
+    fpm = Fpm()
+    t = threading.Thread(target=fpm.run, args=(name, version, deps, devel_deps, extra_deps))
+    t.start()
+    return t
+
+def main(args):
+    start_main = time.time()
+    if 'log_level' in args:
+        config.log_level = args.log_level
+    configure_logging()
+    set_config_args(args)
+    if args.command == 'generate':
+        thread_list = generate_rpm(args.package, args.version)
+        logging.info('Waiting for RPM generation to finish...')
+        for t in thread_list: # TODO this makes no sense, we have a single thread
+            t.join()
+        logging.info('RPM generation completed in %.1f seconds' % (time.time() - start_main))
+    if args.command == 'validate':
+        Repo.validate_rpms()
+        logging.info('RPM validation completed in %.1f seconds' % (time.time() - start_main))
+    if args.command == 'repo':
+        Repo.create()
+        logging.info('Repo create completed in %.1f seconds' % (time.time() - start_main))
+    if args.command == 'sync' and not args.pull:
+        S3().push_rpms(args.delete_removed)
+        logging.info('Sync push completed in %.1f seconds' % (time.time() - start_main))
+    if args.command == 'sync' and args.pull:
+        S3().pull_rpms()
+        logging.info('Sync pull completed in %.1f seconds' % (time.time() - start_main))
+    if args.command == 'module':
+        print('\n'.join(Module(args.avail).versions(False)))
+    if args.command == 's3-copy':
+        S3().copy(args.from_tag, args.to, args.delete_removed)
+        logging.info('Copy completed in %.1f seconds' % (time.time() - start_main))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dry-run', help='do a dry run, skipping fpm execution', action="store_true", required=False, default=argparse.SUPPRESS)
+    parser.add_argument('--target-rpm-dir', help='path to store RPMs in (=' + config.target_rpm_dir + ' by default)', required=False, default=argparse.SUPPRESS)
+    parser.add_argument('--release-tag', help='Release tag, this is mostly to provide correct dir structure', required=False, default=argparse.SUPPRESS)
+    parser.add_argument('--architecture', help='OS architecture', required=False, default=argparse.SUPPRESS)
+    parser.add_argument('--log-level', help='Set log level (DEBUG, INFO, WARN, ERROR)', required=False, default=argparse.SUPPRESS)
+    subparser = parser.add_subparsers(help='Available commands:', dest='command')
+    # generate command
+    parser_generate = subparser.add_parser('generate', help='Generate RPMs')
+    parser_generate.add_argument('--package', help='package name (as recipe name in alidist)', required=True)
+    parser_generate.add_argument('--version', help='package version (as in modulefile: X.Y.Z-A)', required=True)
+    parser_generate.add_argument('--ali-prefix', help='path to alibuild dir', required=False, default=argparse.SUPPRESS)
+    parser_generate.add_argument('--skip-deps', help='Generate single RPM without dependencies', action="store_true", required=False, default=argparse.SUPPRESS)
+    parser_generate.add_argument('--devel', help='Generate also devel RPM', action="store_true", required=False, default=argparse.SUPPRESS)
+    parser_generate.add_argument('--tag-version', help='Add release tag to RPM version', action="store_true", required=False, default=argparse.SUPPRESS)
+    # sync
+    parser_sync = subparser.add_parser('sync', help='Sync RPMs to S3')
+    parser_sync.add_argument('--delete-removed', help='Remove locally deleted files from S3', action="store_true", required=False, default=False)
+    parser_sync.add_argument('--pull', help='Pulls instead of pushing', action="store_true", required=False, default=False)
+    # s3
+    parser_s3 = subparser.add_parser('s3-copy', help='Copy files between <folders> on S3')
+    parser_s3.add_argument('--from', help='Origin as release tag (eg. dev)', required=True, dest='from_tag')
+    parser_s3.add_argument('--to', help='Destination as release tag (eg. flp-suite-v1.0)', required=True)
+    parser_s3.add_argument('--delete-removed', help='Remove destination files no longer available in origin', action="store_true", required=False, default=False)
+  
+    # validate
+    parser_validate = subparser.add_parser('validate', help='Validate RPMs')
+    # repo
+    parser_repo = subparser.add_parser('repo', help='Create YUM repo')
+    # module
+    parser_module = subparser.add_parser('module', help='Operate on modulefiles')
+    parser_module.add_argument('--avail', help='Display available modules for given prefix', required=True)
+    parser_module.add_argument('--ali-prefix', help='path to alibuild dir', required=False, default=argparse.SUPPRESS)
+    args = parser.parse_args()
+    main(args)
+    sys.exit(0)
