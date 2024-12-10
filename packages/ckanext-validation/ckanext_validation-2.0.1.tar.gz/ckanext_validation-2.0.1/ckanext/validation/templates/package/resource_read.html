@@ -1,0 +1,16 @@
+{% ckan_extends %}
+
+
+{% block resource_read_title %}
+  <h1 class="page-heading">{{ h.resource_display_name(res) | truncate(50) }}
+  {{ h.get_validation_badge(res)|safe }}
+  </h1>
+
+  {% if h.use_webassets() %}
+      {% snippet 'validation/snippets/validation_asset.html', name='ckanext-validation/validation-css' %}
+  {% else %}
+      {% snippet 'validation/snippets/validation_resource.html', name='ckanext-validation/main' %}
+  {% endif %}
+
+{% endblock %}
+
