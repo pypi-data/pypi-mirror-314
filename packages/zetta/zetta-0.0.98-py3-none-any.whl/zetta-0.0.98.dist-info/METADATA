@@ -1,0 +1,257 @@
+Metadata-Version: 2.1
+Name: zetta
+Version: 0.0.98
+Summary: Python client library for ZettaBlock AI Network
+Author: ZettaBlock Labs
+Author-email: support@zettablock.com
+Project-URL: Homepage, https://zettablock.com
+Project-URL: Source, https://github.com/Zettablock/zetta-py-client
+Keywords: zettablock,client,cloud,AI,blockchain,infrastructure
+Classifier: Topic :: System :: Distributed Computing
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: click
+Requires-Dist: typer
+Requires-Dist: synchronicity (~=0.6.7)
+Requires-Dist: openai
+Requires-Dist: requests
+Requires-Dist: termcolor
+Requires-Dist: pyfiglet
+Requires-Dist: PyYAML
+Requires-Dist: web3
+Requires-Dist: grpcio
+Requires-Dist: grpcio-tools
+Requires-Dist: pyiceberg
+Requires-Dist: pyarrow
+Requires-Dist: boto
+Requires-Dist: boto3
+Requires-Dist: botocore
+
+Python client for ZettaBlock AI Network.
+
+
+# Development
+## Setup
+### Install locally
+1. Clone the repository.
+2. Create a virtual environment and install the package.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+### GRPC
+The client import zetta-grpc-protos as an external repo, you will need to provide your github username and password to install
+```bash
+# using below command to store and skip the repeatly input username / password
+git config credential.helper store
+```
+For two phase authentication enabled account, password is private-access-token.
+
+### IDE setup
+for PyCharm, you will need to run 
+```bash
+pip install -e . 
+```
+to recognize the GRPC imported library correctly
+
+### Run the Client
+Try run the client.
+```sh
+zetta --help
+```
+
+## CICD
+1. the cicd is integrated with python 3.8 to 3.12 and on Ubuntu, MacOS and windows. make sure your PR passed all checks on all environment
+2. make sure some tests are added in the folder, cicd will run checks and test automatically
+3. if all tests passes, the version will be automatically boost and submit a newer version to PyPi
+4. If you want to include the comment in CHANGELOG.md, in Pull request, add ##Changelog in the comment
+
+# Examples of commands
+
+## datasets v2
+
+upload parquets to create iceberg tables
+````shell
+zetta datasetsv2 create --namespace=ai-lake-test --dataset=imagenet-object-localization-challenge-dec03 --path=tests/data/
+````
+
+read and show datasets contents
+```shell
+(venv) cpei@Chengchengs-MacBook-Pro zetta-py-client % zetta datasetsv2 read --namespace=ai-lake-test --dataset=imagenet-object-localization-challenge-dec03 --limit=1
+read ai-lake-test.imagenet-object-localization-challenge-dec03 limit = 1
+                              id                                         image_data
+0  ILSVRC2012_test_00090558.JPEG  b'/9j/4AAQSkZJRgABAQEASABIAAD/4gJASUNDX1BST0ZJ...
+```
+
+save datasets to local parquets
+```shell
+zetta datasetsv2 save --namespace=ai-lake-test --dataset=imagenet-object-localization-challenge-dec03
+```
+
+## datasetsv2 ls
+
+```shell
+(venv) cpei@Chengchengs-MacBook-Pro zetta-py-client % zetta datasetsv2 ls --id=ai-network-worker-demo_imagenet-object-localization-challenge-dec06-1
+{
+    "data": {
+        "id": "ai-network-worker-demo_imagenet-object-localization-challenge-dec06-1",
+        "name": "imagenet-object-localization-challenge-dec06-1",
+        "data_source": "sdk",
+        "region": "us-east-1",
+        "bucket": "ai-network-worker-demo",
+        "path": "s3://ai-network-worker-demo/ai-lake-test-imagenet-object-localization-challenge-dec06-1/test.parquet",
+        "category": "image",
+        "database": "ai-network-worker-demo",
+        "status": 0,
+        "created_at": "2024-12-07T00:03:24.961821Z",
+        "updated_at": "2024-12-07T00:03:24.961821Z",
+        "tenant": "zettablock.com"
+    },
+    "error": ""
+}
+(venv) cpei@Chengchengs-MacBook-Pro zetta-py-client % zetta datasetsv2 ls                                                                           
+{
+    "data": [
+        {
+            "id": "string_string",
+            "name": "string",
+            "data_source": "sdk",
+            "region": "string",
+            "bucket": "string",
+            "path": "",
+            "category": "string",
+            "database": "string",
+            "status": 0,
+            "created_at": "2024-12-03T06:20:01.66634Z",
+            "updated_at": "2024-12-03T06:20:01.66634Z",
+            "tenant": "zettablock.com"
+        },
+        {
+            "id": "elit dolore ipsum Duis aliquip_���������������������",
+            "name": "���������������������",
+            "data_source": "sdk",
+            "region": "dolore",
+            "bucket": "elit dolore ipsum Duis aliquip",
+            "path": "",
+            "category": "mollit Ut cillum",
+            "database": "elit dolore ipsum Duis aliquip",
+            "status": 0,
+            "created_at": "2024-12-03T06:21:18.293455Z",
+            "updated_at": "2024-12-03T06:21:18.293455Z",
+            "tenant": "zettablock.com"
+        },
+        {
+            "id": "s3://ai-network-worker-demo_imagenet-object-localization-challenge-dec03",
+            "name": "imagenet-object-localization-challenge-dec03",
+            "data_source": "sdk",
+            "region": "us-east-1",
+            "bucket": "s3://ai-network-worker-demo",
+            "path": "",
+            "category": "image",
+            "database": "s3://ai-network-worker-demo",
+            "status": 0,
+            "created_at": "2024-12-06T03:02:27.264242Z",
+            "updated_at": "2024-12-06T03:02:27.264242Z",
+            "tenant": "zettablock.com"
+        },
+        {
+            "id": "ai-network-worker-demo_imagenet-object-localization-challenge-dec05",
+            "name": "imagenet-object-localization-challenge-dec05",
+            "data_source": "sdk",
+            "region": "us-east-1",
+            "bucket": "ai-network-worker-demo",
+            "path": "",
+            "category": "image",
+            "database": "ai-network-worker-demo",
+            "status": 0,
+            "created_at": "2024-12-06T03:03:24.825562Z",
+            "updated_at": "2024-12-06T03:03:24.825562Z",
+            "tenant": "zettablock.com"
+        },
+        {
+            "id": "Excepteur consectetur_������������",
+            "name": "������������",
+            "data_source": "sdk",
+            "region": "cupidatat esse",
+            "bucket": "Excepteur consectetur",
+            "path": "",
+            "category": "in",
+            "database": "Excepteur consectetur",
+            "status": 0,
+            "created_at": "2024-12-06T04:06:10.719442Z",
+            "updated_at": "2024-12-06T04:06:10.719442Z",
+            "tenant": "zettablock.com"
+        },
+        {
+            "id": "ai-network-worker-demo_imagenet-object-localization-challenge-dec06",
+            "name": "imagenet-object-localization-challenge-dec06",
+            "data_source": "sdk",
+            "region": "us-east-1",
+            "bucket": "ai-network-worker-demo",
+            "path": "s3://ai-network-worker-demo/ai-lake-test-imagenet-object-localization-challenge-dec06/test.parquet",
+            "category": "image",
+            "database": "ai-network-worker-demo",
+            "status": 0,
+            "created_at": "2024-12-07T00:02:14.163344Z",
+            "updated_at": "2024-12-07T00:02:14.163344Z",
+            "tenant": "zettablock.com"
+        },
+        {
+            "id": "ai-network-worker-demo_imagenet-object-localization-challenge-dec06-1",
+            "name": "imagenet-object-localization-challenge-dec06-1",
+            "data_source": "sdk",
+            "region": "us-east-1",
+            "bucket": "ai-network-worker-demo",
+            "path": "s3://ai-network-worker-demo/ai-lake-test-imagenet-object-localization-challenge-dec06-1/test.parquet",
+            "category": "image",
+            "database": "ai-network-worker-demo",
+            "status": 0,
+            "created_at": "2024-12-07T00:03:24.961821Z",
+            "updated_at": "2024-12-07T00:03:24.961821Z",
+            "tenant": "zettablock.com"
+        }
+    ],
+    "error": ""
+}
+
+```
+
+## databasesv2
+```shell
+(venv) cpei@Chengchengs-MacBook-Pro zetta-py-client % zetta databasesv2 ls --database=testdb
+{
+    "data": {
+        "id": 1,
+        "name": "testdb",
+        "catalog": "AwsDataCatalog",
+        "region": "us-east-1",
+        "user": "AKIA5BW25JP6YMRT2EPN",
+        "pwd": "pVC2HlV72+jYOFLfWkHP9xOUxKNgcoOXoVAOxC7s",
+        "bucket": "my-678737862272-us-east-1-spark",
+        "root": "athena-result",
+        "workgroup": ""
+    },
+    "error": ""
+}
+(venv) cpei@Chengchengs-MacBook-Pro zetta-py-client % zetta databasesv2 ls                  
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "testdb",
+            "catalog": "AwsDataCatalog",
+            "region": "us-east-1",
+            "user": "AKIA5BW25JP6YMRT2EPN",
+            "pwd": "pVC2HlV72+jYOFLfWkHP9xOUxKNgcoOXoVAOxC7s",
+            "bucket": "my-678737862272-us-east-1-spark",
+            "root": "athena-result",
+            "workgroup": ""
+        }
+    ],
+    "error": ""
+}
+```
