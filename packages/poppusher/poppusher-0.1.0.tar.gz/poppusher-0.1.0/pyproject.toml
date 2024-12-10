@@ -1,0 +1,215 @@
+[build-system]
+requires = ["maturin>=0.15,<2"]
+build-backend = "maturin"
+
+
+[project]
+name = "poppusher"
+version = "0.1.0"
+authors = [
+  { name = "Andy Smith", email = "andrewphilipsmith@users.noreply.github.com" },
+  { name = "dabreegster" },
+  { name = "stuartlynn" },
+  { name = "Penelope Yong", email = "penelopeysm@users.noreply.github.com" },
+  { name = "sgreenbury" },
+]
+description = "A convenience tool for downloading census data from different countries"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+]
+dependencies = [
+  # Upper version of Dasgter is pinned below 1.7.0, until the DeprecationWarning for `AssetSelection.keys()`
+  # is resolved. See https://github.com/dagster-io/dagster/releases/tag/1.7.0
+  "dagster >=1.6.11,<1.7.0", # Version matched to `dagster-cloud` and `dagster-webserver` (see below)
+  "dagster-cloud >=1.6.11,<1.7.0", # Version matched to dagster (see above)
+  "dagster-azure >=0.22.11",  # Only required for production deployments, could be moved to an optional
+  "pandas >=2.1,<2.2", # Pinned to 2.1 as 2.2 might be causing the failure here https://github.com/Urban-Analytics-Technology-Platform/poppusher/actions/runs/7593850248/job/20684737578
+  "geopandas >=0.14.1,<1", # Compatibility with 1.0 to be determined
+  "docker",  # Use and version to be confirmed, see https://github.com/Urban-Analytics-Technology-Platform/poppusher/issues/38#issuecomment-2009350512
+  "lxml >=4.9.3,<5.1.1",  # Used by `download_from_wfs` function
+  "pyarrow", # Used interface with polars-arrow
+  "fsspec",  # Used in legacy `get_path_to_cache` function (pending removal)
+  "aiohttp", # Used by `fsspec` in legacy `get_path_to_cache` function (pending removal)
+  "matplotlib >=3.8.2", # Used in utils.py, for plotting thumbnail maps in dagster metadata
+  "pydantic>=2.7.1", # Schema validation and serialisation for downstream CLI consumption. As of Apr 2024, Dagster enforces a <3.0 bound on pydantic so we don't need one ourselves.
+  "rdflib >=7.0.0", # Required to parse BEL TTL Metadata catalogue.
+  "icecream >=2.1.3", # General debugging tool
+  "python-slugify >=8.0.4", # Required for generating asset names from GBR Ordnance Survey OpenData Product names
+  "zipfile-deflate64 >= 0.1.0", # Required for handling zipped files in Scotland DAG
+  "jcs >=0.2.1", # For generating IDs from class attributes
+  "beautifulsoup4 >=4.12.3", # For extracting catalogs from web pages
+  "openpyxl >=3.1.3", # For reading Excel files
+  "xlrd >=2.0.1", # For reading Excel files
+  "iso639-lang >=2.2.3", # For checking ISO639-3 language codes
+  "aiohttp >=3.9.5", # Async HTTP
+  "more-itertools >= 10.3.0", # For batched iterator
+]
+
+
+
+[project.optional-dependencies]
+test = [
+  "pytest >=6",
+  "pytest-cov >=3",
+]
+dev = [
+  "dagster-webserver >=1.6.11", # Version matched to dagster (see above)
+  "pytest >=6", # general purpose testing framework
+  "pytest-cov >=3", # Required for test coverage reporting
+  "maturin >=1.3.2", # required for compiling the rust code and including it in the package
+  "pandas-stubs",  # Required for type checking pandas
+  "types-requests",  # Required for type checking requests
+  "urllib3<2", # Pin this, pending this PR for dagster https://github.com/dagster-io/dagster/pull/16738
+  "pre-commit", # Used for managing pre-commit hooks
+  "pyright >=1.1.339"  # Used for static type checking (mypy is not yet compatible with Dagster)
+]
+docs = [
+  "mkdocs >=1.6.0",
+  "mkdocs-mermaid2-plugin >=1.2.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/Urban-Analytics-Technology-Platform/poppusher"
+"Bug Tracker" = "https://github.com/Urban-Analytics-Technology-Platform/poppusher/issues"
+Discussions = "https://github.com/Urban-Analytics-Technology-Platform/poppusher/discussions"
+Changelog = "https://github.com/Urban-Analytics-Technology-Platform/poppusher/releases"
+
+[project.scripts]
+poppusher-export-schema = "poppusher.metadata:export_schema"
+
+[tool.maturin]
+module-name = "poppusher._core"
+python-packages = ["poppusher"]
+python-source = "python"
+# sdist-generator = "git"  # default is cargo
+
+
+[tool.cibuildwheel]
+test-command = "pytest {project}/tests"
+test-extras = ["test"]
+test-skip = ["*universal2:arm64"]
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-rA", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = [
+  "error",
+  "ignore:.*category=dagster.ExperimentalWarning",
+  "ignore:.*utcfromtimestamp.* is deprecated:DeprecationWarning", # This ignores warnings from within Dagster v1.6.11 on Python v3.12
+  "ignore:.*Type google._upb._message.*MapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated:DeprecationWarning", # This ignores warnings from within Dagster v1.6.11 on Python v3.12
+  "ignore:.*Support for class-based `config` is deprecated, use ConfigDict instead.*:pydantic.warnings.PydanticDeprecatedSince20" # Ignore warnings arising from Dagster's use of deprecated Pydantic v1 API
+]
+log_cli_level = "INFO"
+testpaths = [
+  "tests",
+  "poppusher_tests"
+]
+
+[tool.coverage]
+run.source = ["poppusher"]
+port.exclude_lines = [
+  'pragma: no cover',
+  '\.\.\.',
+  'if typing.TYPE_CHECKING:',
+]
+
+[tool.pyright]
+include = [
+  "python/poppusher/utils.py",
+  "python/poppusher/assets/uk/__init__.py",
+  "python/poppusher/assets/be/",
+  # "python/**/*.py",
+  # "tests/**/*.py",
+]
+exclude = [
+  "python/poppusher/assets/uk/legacy",
+  "python/poppusher/assets/uk_venv",
+]
+ignore = [
+  "previous_code",
+  "python/poppusher/assets/uk_venv/",
+  "python/poppusher/assets/uk/legacy/*.py",
+]
+defineConstant = { DEBUG = true }
+stubPath = "src/stubs"
+reportMissingImports = true
+reportMissingTypeStubs = false
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
+useLibraryCodeForTypes = false
+
+
+[tool.ruff]
+src = ["python"]
+
+[tool.ruff.lint]
+extend-select = [
+  "B",           # flake8-bugbear
+  "I",           # isort
+  "ARG",         # flake8-unused-arguments
+  "C4",          # flake8-comprehensions
+  "EM",          # flake8-errmsg
+  "ICN",         # flake8-import-conventions
+  "G",           # flake8-logging-format
+  "PGH",         # pygrep-hooks
+  "PIE",         # flake8-pie
+  "PL",          # pylint
+  "PT",          # flake8-pytest-style
+  "PTH",         # flake8-use-pathlib
+  "RET",         # flake8-return
+  "RUF",         # Ruff-specific
+  "SIM",         # flake8-simplify
+  "T20",         # flake8-print
+  "UP",          # pyupgrade
+  "YTT",         # flake8-2020
+  "EXE",         # flake8-executable
+  "NPY",         # NumPy specific rules
+  "PD",          # pandas-vet
+]
+ignore = [
+  "PLR",    # Design related pylint codes
+]
+isort.required-imports = ["from __future__ import annotations"]
+# Uncomment if using a _compat.typing backport
+# typing-modules = ["poppusher._compat.typing"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["T20"]
+"noxfile.py" = ["T20"]
+
+
+[tool.pylint]
+py-version = "3.11"
+ignore-paths = [".*/_version.py"]
+extension-pkg-allow-list = ["poppusher._core"]
+reports.output-format = "colorized"
+similarities.ignore-imports = "yes"
+messages_control.disable = [
+  "design",
+  "fixme",
+  "line-too-long",
+  "missing-module-docstring",
+  "wrong-import-position",
+]
+
+
+[tool.dagster]
+module_name = "poppusher"
+
+
+[tool.codespell]
+ignore-words-list = "ONS,ons"
