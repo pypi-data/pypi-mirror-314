@@ -1,0 +1,25 @@
+{
+  "name": "@nasa-jpl/seq-json-schema",
+  "version": "1.2.0",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NASA-AMMOS/seq-json-schema.git"
+  },
+  "files": [
+    "schema.json",
+    "types.ts"
+  ],
+  "scripts": {
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run types",
+    "test": "node --no-warnings test/test.js",
+    "types": "node scripts/generate-types.js && npm run format"
+  },
+  "devDependencies": {
+    "ajv": "^8.12.0",
+    "json-schema-to-typescript": "^13.0.2",
+    "prettier": "^2.8.8"
+  }
+}

@@ -1,0 +1,786 @@
+{
+  "$id": "https://github.com/NASA-AMMOS/seq-json-schema/tree/v1.2.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "immediate_activate": {
+      "additionalProperties": false,
+      "description": "Untimed activate object",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "engine": {
+          "type": "integer",
+          "description": "Sequence target engine."
+        },
+        "epoch": {
+          "type": "string",
+          "description": "Onboard epoch to pass to the sequence for derivation of epoch-relative timetags"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "sequence": {
+          "type": "string",
+          "description": "Onboard path and filename of sequence to be loaded."
+        },
+        "type": {
+          "const": "immediate_activate"
+        }
+      },
+      "required": ["sequence", "type"],
+      "type": "object"
+    },
+    "activate": {
+      "additionalProperties": false,
+      "description": "Activate object",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "engine": {
+          "type": "integer",
+          "description": "Sequence target engine."
+        },
+        "epoch": {
+          "type": "string",
+          "description": "Onboard epoch to pass to the sequence for derivation of epoch-relative timetags"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "sequence": {
+          "type": "string",
+          "description": "Onboard path and filename of sequence to be loaded."
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "type": {
+          "const": "activate"
+        }
+      },
+      "required": ["sequence", "time", "type"],
+      "type": "object"
+    },
+    "args": {
+      "description": "Array of command arguments",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/string_argument"
+          },
+          {
+            "$ref": "#/$defs/number_argument"
+          },
+          {
+            "$ref": "#/$defs/boolean_argument"
+          },
+          {
+            "$ref": "#/$defs/symbol_argument"
+          },
+          {
+            "$ref": "#/$defs/hex_argument"
+          },
+          {
+            "$ref": "#/$defs/repeat_argument"
+          }
+        ]
+      }
+    },
+    "immediate_fsw_command": {
+      "additionalProperties": false,
+      "description": "Object representing a single Immediate Command",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "stem": {
+          "type": "string",
+          "description": "Command stem"
+        },
+        "type": {
+          "const": "immediate_command"
+        }
+      },
+      "required": ["stem", "args"],
+      "type": "object"
+    },
+    "command": {
+      "additionalProperties": false,
+      "description": "Command object",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "stem": {
+          "type": "string",
+          "description": "Command stem"
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "type": {
+          "const": "command"
+        },
+        "return_assign_to": {
+          "description": "Name of a defined local variable to which the exit status of this command should be written to. For this to work, that local variable must have been defined with the 'SC_Name' property set to LCS",
+          "type": "string"
+        }
+      },
+      "required": ["stem", "args", "time", "type"],
+      "type": "object"
+    },
+    "description": {
+      "description": "Description. Can be attached to any sequence step.",
+      "type": "string"
+    },
+    "ground_block": {
+      "additionalProperties": false,
+      "description": "Ground blocks",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Ground block name",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "type": {
+          "const": "ground_block"
+        }
+      },
+      "required": ["name", "time", "type"],
+      "type": "object"
+    },
+    "ground_epoch": {
+      "description": "Ground epoch object",
+      "properties": {
+        "delta": {
+          "description": "Epoch delta given as a duration, start time will be epoch+delta.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of ground-defined epoch.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ground_event": {
+      "additionalProperties": false,
+      "description": "Ground events",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Ground event name",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "type": {
+          "const": "ground_event"
+        }
+      },
+      "required": ["name", "time", "type"],
+      "type": "object"
+    },
+    "immediate_load": {
+      "additionalProperties": false,
+      "description": "Untimed load object",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "engine": {
+          "type": "integer",
+          "description": "Sequence target engine."
+        },
+        "epoch": {
+          "type": "string",
+          "description": "Onboard epoch to pass to the sequence for derivation of epoch-relative timetags"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "sequence": {
+          "type": "string",
+          "description": "Onboard path and filename of sequence to be loaded."
+        },
+        "type": {
+          "const": "immediate_load"
+        }
+      },
+      "required": ["sequence", "type"],
+      "type": "object"
+    },
+    "load": {
+      "additionalProperties": false,
+      "description": "Load object",
+      "properties": {
+        "args": {
+          "$ref": "#/$defs/args"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "engine": {
+          "type": "integer",
+          "description": "Sequence target engine."
+        },
+        "epoch": {
+          "type": "string",
+          "description": "Onboard epoch to pass to the sequence for derivation of epoch-relative timetags"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "models": {
+          "items": {
+            "$ref": "#/$defs/model"
+          },
+          "type": "array"
+        },
+        "sequence": {
+          "type": "string",
+          "description": "Onboard path and filename of sequence to be loaded."
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "type": {
+          "const": "load"
+        }
+      },
+      "required": ["sequence", "time", "type"],
+      "type": "object"
+    },
+    "metadata": {
+      "description": "Flexible sequence metadata for any key-value pairs.",
+      "type": "object"
+    },
+    "model": {
+      "additionalProperties": false,
+      "description": "Model object that be included with commands to set variables for modeling purposes only, usually to direct sequence execution down a particular branch during modeling.",
+      "properties": {
+        "offset": {
+          "description": "Duration to wait after step time to trigger model change",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value to set in variable.",
+          "type": ["string", "number", "boolean"]
+        },
+        "variable": {
+          "description": "Variable to be set in the model",
+          "type": "string"
+        }
+      },
+      "required": ["offset", "value", "variable"],
+      "type": "object"
+    },
+    "request": {
+      "additionalProperties": false,
+      "description": "Sequence steps can be grouped into a request, which can then be shifted or adjusted altogether as part of the request.",
+      "oneOf": [
+        {
+          "required": ["ground_epoch"]
+        },
+        {
+          "required": ["time"]
+        }
+      ],
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "ground_epoch": {
+          "$ref": "#/$defs/ground_epoch"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "name": {
+          "description": "Request Name, used for tracking commands back to the original request after ground expansion. Must be unique.",
+          "type": "string"
+        },
+        "steps": {
+          "description": "Sequence steps that are part of this request.",
+          "items": {
+            "$ref": "#/$defs/step"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "type": {
+          "const": "request"
+        }
+      },
+      "required": ["name", "steps", "type"],
+      "type": "object"
+    },
+    "step": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/activate"
+        },
+        {
+          "$ref": "#/$defs/command"
+        },
+        {
+          "$ref": "#/$defs/ground_block"
+        },
+        {
+          "$ref": "#/$defs/ground_event"
+        },
+        {
+          "$ref": "#/$defs/load"
+        }
+      ]
+    },
+    "hardware_command": {
+      "additionalProperties": false,
+      "description": "Object representing a single Hardware Command",
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "stem": {
+          "type": "string",
+          "description": "Command stem"
+        }
+      },
+      "required": ["stem"],
+      "type": "object"
+    },
+    "time": {
+      "additionalProperties": false,
+      "description": "Time object",
+      "properties": {
+        "tag": {
+          "description": "Relative or absolute time. Required for ABSOLUTE, COMMAND_RELATIVE, and EPOCH_RELATIVE time tags but not COMMAND_COMPLETE.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Allowed time types: ABSOLUTE, COMMAND_RELATIVE, EPOCH_RELATIVE, or COMMAND_COMPLETE.",
+          "enum": ["ABSOLUTE", "COMMAND_RELATIVE", "EPOCH_RELATIVE", "COMMAND_COMPLETE"],
+          "type": "string"
+        }
+      },
+      "required": ["type"],
+      "type": "object"
+    },
+    "variable_range": {
+      "additionalProperties": false,
+      "description": "A range of allowable variable values between a defined min and max, inclusive. min and max must be numbers",
+      "properties": {
+        "min": {
+          "description": "Minimum value of the variable, inclusive",
+          "type": "number"
+        },
+        "max": {
+          "description": "Maximum value of the variable, inclusive",
+          "type": "number"
+        }
+      },
+      "required": ["min", "max"],
+      "type": "object"
+    },
+    "symbol_argument": {
+      "additionalProperties": false,
+      "description": "A step argument referencing a local or global variable, or some other symbolic name known to downstream modeling software (such as CONDITION in SEQGEN)",
+      "properties": {
+        "name": {
+          "description": "An optional symbol argument name.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The symbol argument type.",
+          "const": "symbol"
+        },
+        "value": {
+          "description": "The symbolic name being referenced.",
+          "type": "string"
+        }
+      },
+      "required": ["type", "value"],
+      "type": "object"
+    },
+    "repeat_argument": {
+      "additionalProperties": false,
+      "description": "An argument that can be repeated.",
+      "properties": {
+        "name": {
+          "description": "An optional repeat argument name.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The repeat argument type.",
+          "const": "repeat"
+        },
+        "value": {
+          "description": "A repeat argument value.",
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/string_argument"
+                },
+                {
+                  "$ref": "#/$defs/number_argument"
+                },
+                {
+                  "$ref": "#/$defs/boolean_argument"
+                },
+                {
+                  "$ref": "#/$defs/symbol_argument"
+                },
+                {
+                  "$ref": "#/$defs/hex_argument"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "required": ["type", "value"],
+      "type": "object"
+    },
+    "string_argument": {
+      "additionalProperties": false,
+      "description": "A step argument containing a string.",
+      "properties": {
+        "name": {
+          "description": "An optional string argument name.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The string type.",
+          "const": "string"
+        },
+        "value": {
+          "description": "A valid string value.",
+          "type": "string"
+        }
+      },
+      "required": ["type", "value"],
+      "type": "object"
+    },
+    "number_argument": {
+      "additionalProperties": false,
+      "description": "A step argument containing a number.",
+      "properties": {
+        "name": {
+          "description": "An optional number argument name.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The number type.",
+          "const": "number"
+        },
+        "value": {
+          "description": "The number value. The number must be valid.",
+          "type": "number"
+        }
+      },
+      "required": ["type", "value"],
+      "type": "object"
+    },
+    "boolean_argument": {
+      "additionalProperties": false,
+      "description": "A step argument containing a boolean.",
+      "properties": {
+        "name": {
+          "description": "An optional boolean argument name.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The boolean type.",
+          "const": "boolean"
+        },
+        "value": {
+          "description": "The boolean value. The value must be all lowercase.",
+          "type": "boolean"
+        }
+      },
+      "required": ["type", "value"],
+      "type": "object"
+    },
+    "hex_argument": {
+      "additionalProperties": false,
+      "description": "A step argument containing an unsigned integer in hexadecimal format.",
+      "properties": {
+        "name": {
+          "description": "An optional hex argument name.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The hex type.",
+          "const": "hex"
+        },
+        "value": {
+          "description": "The hexadecimal integer value, as a string prefixed with 0x. Digits A-F must be uppercase.",
+          "pattern": "^0x([0-9A-F])+$",
+          "type": "string"
+        }
+      },
+      "required": ["type", "value"],
+      "type": "object"
+    },
+    "variable_declaration": {
+      "allOf": [
+        {
+          "description": "Variable (local or parameter) declarations.",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "description": "Variable type. Allowed types: FLOAT, INT, STRING, UINT, ENUM.",
+              "enum": ["FLOAT", "INT", "STRING", "UINT", "ENUM"],
+              "type": "string"
+            },
+            "name": {
+              "description": "User-friendly variable names that will be mapped to FSW variable names. Must begin with a letter and contain only letters, numbers, and underscores.",
+              "pattern": "^[A-Za-z][A-Za-z_0-9]*$",
+              "type": "string"
+            },
+            "enum_name": {
+              "description": "For enumerated type variables, the name of the corresponding FSW-defined ENUM.",
+              "pattern": "^[A-Za-z][A-Za-z_0-9]*$",
+              "type": "string"
+            },
+            "allowable_values": {
+              "description": "A list of allowable values for this variable.",
+              "type": "array"
+            },
+            "allowable_ranges": {
+              "description": "One or more allowable ranges of values, for FLOAT, INT, or UINT variable types.",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/variable_range"
+              }
+            },
+            "sc_name": {
+              "description": "The FSW-specified name for this variable that should be used in the translated sequence, in case this must be specified. Used for variables which are specially-handled onboard such as LCS (Last Command Status)",
+              "type": "string"
+            }
+          },
+          "required": ["type", "name"],
+          "type": "object"
+        },
+        {
+          "$comment": "This if/then/else block causes 'enum_name' to be a required property if the type is ENUM, and disallows it otherwise.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "ENUM"
+              }
+            }
+          },
+          "then": {
+            "required": ["enum_name"]
+          },
+          "else": {
+            "properties": {
+              "enum_name": false
+            }
+          }
+        },
+        {
+          "$comment": "This if/then/else block causes 'allowable_values' to require a number as its array item type if the variable type is FLOAT, UINT, or INT. If it is STRING or ENUM, it causes 'allowable_values' to require a string and disallows 'allowable_ranges'.",
+          "if": {
+            "properties": {
+              "type": {
+                "oneOf": [
+                  {
+                    "const": "FLOAT"
+                  },
+                  {
+                    "const": "UINT"
+                  },
+                  {
+                    "const": "INT"
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "allowable_values": {
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "allowable_values": {
+                "items": {
+                  "type": "string"
+                }
+              },
+              "allowable_ranges": false
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "Unique identifier",
+      "type": "string"
+    },
+    "locals": {
+      "description": "Local variable declarations.",
+      "items": {
+        "$ref": "#/$defs/variable_declaration"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "parameters": {
+      "description": "Parameter variable declarations.",
+      "items": {
+        "$ref": "#/$defs/variable_declaration"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "requests": {
+      "description": "Commands groups into requests",
+      "items": {
+        "$ref": "#/$defs/request"
+      },
+      "type": "array"
+    },
+    "steps": {
+      "description": "Sequence steps",
+      "items": {
+        "$ref": "#/$defs/step"
+      },
+      "type": "array"
+    },
+    "immediate_commands": {
+      "description": "Immediate commands which are interpreted by FSW and not part of any sequence.",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/immediate_fsw_command"
+          },
+          {
+            "$ref": "#/$defs/immediate_load"
+          },
+          {
+            "$ref": "#/$defs/immediate_activate"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "hardware_commands": {
+      "description": "Hardware commands which are not interpreted by FSW and not part of any sequence.",
+      "items": {
+        "$ref": "#/$defs/hardware_command"
+      },
+      "type": "array"
+    }
+  },
+  "required": ["id", "metadata"],
+  "type": "object"
+}
