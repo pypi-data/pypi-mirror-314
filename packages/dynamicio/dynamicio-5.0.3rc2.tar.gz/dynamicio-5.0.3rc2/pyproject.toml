@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=62"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+py38 = true
+line-length = 185
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.git
+    | \.mypy_cache
+    | \.github
+    | \.circleci
+    | \.tox
+    | \venv
+    | \flake8
+    | docs
+    | demo
+  )/
+  | tests/conftest.py
+)
+'''
+
+[tool.pytest.ini_options]
+    markers = [
+        "unit: mark tests that asses the logic of a functions smaller logical components",
+        "integration: mark a test concerned with the use of multiple functions",
+    ]
+    addopts = "-p no:warnings"
+    log_cli = false
+
+[tool.pydocstyle]
+convention = 'google'
+add_ignore = 'D103' # Ignore missing docstring in public function
