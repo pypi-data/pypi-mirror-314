@@ -1,0 +1,1 @@
+from .operation import mul_num
