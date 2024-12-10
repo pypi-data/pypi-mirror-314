@@ -1,0 +1,82 @@
+[tool.poetry]
+name = "python-ntfy"
+version = "0.4.4"
+description = "An ntfy library aiming for feature completeness"
+authors = ["Matthew Cane <matthew.cane0@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/MatthewCane/python-ntfy"
+documentation = "https://matthewcane.github.io/python-ntfy/"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.12, <=3.13"
+requests = "^2.31.0"
+mkdocstrings = {extras = ["python"], version = ">=0.26.2,<0.28.0"}
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.12.0"
+pytest = ">=7.4.1,<9.0.0"
+python-dotenv = "^1.0.0"
+pytest-asyncio = ">=0.21.1,<0.25.0"
+pytest-codecov = ">=0.5.1,<0.7.0"
+ruff = "^0.7.0"
+mkdocs-material = "^9.5.41"
+mkdocstrings-python = "^1.12.1"
+types-pygments = "^2.18.0.20240506"
+types-colorama = "^0.4.15.20240311"
+types-requests = "^2.32.0.20241016"
+types-setuptools = "^75.2.0.20241018"
+black = "^24.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+select = [
+    "E",    # PycodeStyle errors
+    "W",    # PycodeStyle warnings
+    "F",    # PyFlakes
+    "I",    # Isort
+    "N",    # pep8-naming
+    "D",    # Pydocstyle
+    "UP",   # PyUpgrade
+    "ANN",  # Flake8-annotations
+    "S",    # Flake8-bandit
+    "BLE",  # Flake8-blind-except
+    "B",    # Flake8-bugbear
+    "A",    # Flake8-builtins
+    "C4",   # Flake8-comprehensions
+    "T10",  # Flake8-debugger
+    "EM",   # Flake8-errmessages
+    "Q",    # Flake8-quotes
+    "RET",  # Flake8-return
+    "TRY",  # Triceratops
+    "FURB", # Refurb
+    "RUF",  # Ruff
+    "PERF", # Perflint
+]
+ignore = [
+    "E501",   # Line too long
+    "D103",   # Missing docstring in public function
+    "D417",   # Undocumented parameters
+    "D104",   # First line of docstring should be in imperative moof
+    "D100",   # Missing docstring in public module
+    "ANN001", # Missing type annotation for function argument
+    "ANN101", # Missing type annotation for self in method
+    "S101",   # Use of assert detected
+    "TRY003", # Use of vanilla exception messages
+]
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
