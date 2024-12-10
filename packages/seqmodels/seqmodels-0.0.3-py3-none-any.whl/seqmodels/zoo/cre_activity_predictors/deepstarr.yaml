@@ -1,0 +1,22 @@
+model_name: DeepSTARR
+arch_name: CNN
+input_len: 249
+output_dim: 2
+arch:
+  conv1d_tower:
+    conv_channels: [4, 246, 60, 60, 120]
+    conv_kernels: [7, 3, 5, 3]
+    conv_strides: [1, 1, 1, 1]
+    conv_paddings: same
+    activations: relu
+    pool_kernels: [2, 2, 2, 2]
+    pool_strides: [1, 1, 1, 1]
+    pool_types: max
+    norm_types: batchnorm
+    orders: conv-norm-act-pool
+  dense_tower:
+    hidden_dims: [256, 256]
+    activations: [relu, relu, null]
+    dropout_rates: [0.4, 0.4, null]
+    norm_types: [batchnorm, batchnorm, null]
+    orders: linear-norm-act-dropout

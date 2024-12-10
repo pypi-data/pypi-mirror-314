@@ -1,0 +1,18 @@
+model_name: DeepBind
+input_len: 41
+output_dim: 1
+arch_name: CNN
+arch:
+  conv1d_tower:
+    conv_channels: [4, 16]
+    conv_kernels: [16]
+    activations: relu
+    pool_types: [max]
+    pool_kernels: [4, 4, null]
+    norm_types: null
+    dropout_rates: [0.2, 0.2, 0.5]
+    orders: conv-act-pool-dropout
+  dense_tower:
+    hidden_dims: [925]
+    activations: [relu, null]
+    orders: linear-act

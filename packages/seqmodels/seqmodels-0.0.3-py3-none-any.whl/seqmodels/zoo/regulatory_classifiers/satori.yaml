@@ -1,0 +1,25 @@
+model_name: Satori
+input_len: 1000
+output_dim: 1
+arch_name: Transformer
+arch:
+  conv1d_tower:
+    conv_channels: [4, 320]
+    conv_kernels: [26]
+    conv_padding: valid
+    conv_biases: false
+    norm_types: batchnorm
+    activations: relu
+    pool_types: max
+    pool_kernels: [3]
+    pool_paddings: [1]
+    dropout_rates: 0.2
+    orders: conv-norm-act-pool-dropout
+  mha_layer:
+    head_dim: 64
+    num_heads: 8
+    dropout_rate: 0.1
+  dense_tower:
+    hidden_dims: []
+    orders: linear
+  
