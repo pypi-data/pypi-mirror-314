@@ -1,0 +1,3 @@
+import cbfpy
+
+cbfpy.CBF()
