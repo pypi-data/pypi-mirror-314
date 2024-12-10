@@ -1,0 +1,86 @@
+[tool.poetry]
+name = "apis-core-rdf"
+version = "0.34.0"
+description = "Base package for the APIS framework"
+authors = [
+    "Matthias Schlögl <matthias.schloegl@oeaw.ac.at>",
+    "Birger Schacht <birger.schacht@oeaw.ac.at>",
+    "K Kollmann <dev-kk@oeaw.ac.at>",
+    "Saranya Balasubramanian <saranya.balasubramanian@oeaw.ac.at>"
+]
+license = "MIT"
+packages = [{include = "apis_core"}]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = ">5"
+djangorestframework = "^3.14.0"
+django-filter = ">=24.1"
+django-autocomplete-light = ">=3.9.4,<3.12.0"
+django-crum = "^0.7.9"
+django-crispy-forms = "^2"
+django-tables2 = "^2.3.3"
+rdflib = ">=6.0.2,<8.0.0"
+drf-spectacular = ">=0.26.1,<0.29.0"
+requests = "^2.25.0"
+django-model-utils = ">=4.1.1,<6.0.0"
+apis-override-select2js = ">=0.1,<0.3"
+crispy-bootstrap4 = ">=2023.1,<2025.0"
+django-simple-history = ">=3.6"
+pydot = "^3.0.2"
+
+[tool.poetry.group.docs]
+optional = true
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=7,<9"
+sphinx-rtd-theme = ">=2.0.0"
+myst-parser = ">=3.0.1,<5.0.0"
+
+[tool.poetry.group.tests]
+optional = true
+[tool.poetry.group.tests.dependencies]
+faker = "*"
+coverage = "^7.5.3"
+
+[tool.poetry.group.dev]
+optional = true
+[tool.poetry.group.dev.dependencies]
+djlint = "^1.31.1"
+ruff = ">=0.5.0,<0.9.0"
+deptry = ">=0.12,<0.22"
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.djlint]
+indent=2
+profile="django"
+extension="html"
+blank_line_before_tag="block"
+blank_line_after_tag="endblock"
+format_js=false
+
+[tool.ruff]
+lint.select = ["E4", "E7", "E9", "F", "I"]
+lint.ignore = ["E501", "F403"]
+lint.isort.known-first-party = ["apis_core"]
+
+[tool.deptry]
+extend_exclude = [".*/tests"]
+
+[tool.deptry.per_rule_ignores]
+DEP001 = ["apis_ontology"]
+DEP002 = ["apis-override-select2js", "crispy-bootstrap4"]
+
+[tool.deptry.package_module_name_map]
+djangorestframework = "rest_framework"
+django-autocomplete-light = ["dal", "dal_select2"]
+django-filter = "django_filters"
+django-crispy-forms = "crispy_forms"
+django-reversion = "reversion"
+django-model-utils = "model_utils"
+djangorestframework-csv = "rest_framework_csv"
+django-crum = "crum"
+django-simple-history = "simple_history"

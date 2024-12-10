@@ -1,0 +1,24 @@
+{% extends basetemplate|default:"base.html" %}
+{% load static %}
+
+{% block styles %}
+  {{ block.super }}
+  <link href="{% static 'css/generic.css' %}" rel="stylesheet" />
+{% endblock styles %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+
+        {% block col %}
+        {% endblock col %}
+
+      </div>
+
+      {% block additionalcols %}
+      {% endblock additionalcols %}
+
+    </div>
+  </div>
+{% endblock content %}
