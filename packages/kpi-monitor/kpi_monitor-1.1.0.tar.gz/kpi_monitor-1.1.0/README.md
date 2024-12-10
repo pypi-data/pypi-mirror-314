@@ -1,0 +1,318 @@
+# kpi_monitor
+This is the documentation to enabling kpi monitoring for the modelling.
+
+The repository, in its current shape, contains the data cleanning pipeline, revenue calculation and visualisation of the revenue results. The next step would be to add the modelling data in order calculate the KPIs.
+
+The current pipeline include only the ancillary markets (FCR-D up & down).
+The FFR market is going to be added.
+
+- [**Package Overview**](#package-overview)
+   - [Directory structure](#directory-structure)
+   - [Install dependencies](#install-dependencies)
+   - [Quick Start](#quick-start)
+   - [Tools](#tools)
+   - [Executable Scripts](#executable-scripts)
+- [**Set-Up**](#set-up)
+   - [Tests Run](#test-run)
+   - [Trouble Shooting](#trouble-shooting)
+   - [Additional Notes](#additional-notes)
+- [**Repository default settings**](#repository-settings)
+
+
+## Package Overview
+
+### Directory Structure
+
+This project is organized into several directories and files to facilitate data processing and analysis. Below is an overview of the directory structure:
+
+```
+https://github.com/Krafthem/kpi_monitor/
+│
+├── data/                     # Store raw and processed data files
+│   ├── raw/                  # Raw data files (e.g., .csv)
+│   └── processed/            # Cleaned and processed data files
+│
+├── notebooks/                # Jupyter notebooks for exploratory
+│   └── example_revenue.ipynb # Get data from database host
+│
+├── src/                      # Source codes
+│   └── kpi_monitor           # pipeline
+│       ├── __init__.py           # Makes this a package
+│       ├── utils.py              # Helper functions and function classes
+│       ├── dashboard.py          # dashboard to explore the revenue and volumes
+|       ├── data_clean.py         # Outputs cleaned data (volume + price)
+│       ├── data_analysis.py      # Aggregate and calculate the revenue
+│       └── data_get.py           # Get data from flow database for modeling
+|
+├── tests/                    # Unit tests for your functions
+│   ├── __init__.py           # Makes this a package
+│   ├── integration           # Integration test 
+│   ├── unit                  # Unit test 
+│   └── misc                  #  
+│
+├── README.md                 # Project documentation
+├── Makefile                  # Make file
+├── requirements.txt          # List of dependencies
+├── create_env_file.py        # Environment variable setup script
+└── Makefile                  # Makefile for automation
+```
+
+### Set-Up
+
+After cloning the repository, follow these steps to set up the package.
+
+#### **Navigate to main directory**
+Navigate to the main directory: kpi_monitor
+
+#### **Create Required Directories**  
+Run the following to create the necessary directories for raw and processed data:
+
+#### **Install Dependencies**  
+
+Follow these steps:
+
+1. **From the main directory:**
+
+2. **Activate Your Virtual Environment (if applicable):**
+   - If you are using a virtual environment, activate it:
+     - For **Windows**:
+       ```bash
+       .\venv\Scripts\activate
+       ```
+     - For **macOS/Linux**:
+       ```bash
+       $ source venv/bin/activate
+       ```
+   - Replace `venv` with the name of your virtual environment folder if it’s different.
+
+3. **Install Dependencies (if not done already):**
+   - If you haven’t installed the project dependencies yet, you can do so with
+      1. ***Poetry***:
+         ```bash
+         pip install poetry
+         ```
+
+         ```bash
+         poetry install
+         ```
+         ***NOTE!*** Poetry versions older that 1.2 do not support dependency groups introduced here. To upgrade your poetry run:
+
+         ```bash
+         pip install --upgrade poetry
+         ```
+
+         Once you have the up-to-date poetry up and running, direct to the repo directory
+
+         ```bash
+         cd ./kpi_monitor
+         ```
+         and install and set up the dependencies by running
+         ```bash
+         install poetry
+         poetry shell
+         ```
+
+         If the poetry environment is successfully set up, you should see similar to the following in the terminal
+
+         ```bash
+         (kpi-monitor-py3.12) (base) ./kpi_monitor %
+         ```
+
+      2. ***Pip***
+
+         Assuming you have pip already installed, you run
+
+         ```bash
+         $ pip install -r requirements.txt
+         ```
+
+         Verify the installation:
+
+         ```bash
+         pip list
+         ```
+   
+### Quick Start
+
+1. Loading the data
+The data used for this package is located in RDS AWS as read-only provided by ImpOps for the usage of modeling squad.
+
+1. Set the credentials of flowdb for modeling via creating the environment `.env`
+
+   ```bash
+   python create_env_file.py
+   ```
+
+2. Enter the credentials: dbhost, username, password and dbname
+
+   ***NOTE!*** if you have working poetry shell, you can simply run within the repo:
+
+      ```bash
+      data-get
+      data-clean
+      dashboard
+      ```
+
+   Otherwise continue as below:
+
+3. To download the data into ```data/raw```:
+
+   ```bash
+   python src/kpi_monitor/data_get.py
+   ```
+
+4. Run the following to clean and save the processed data
+
+   ```bash
+   python src/kpi_monitor/data_clean.py --save
+   ```
+
+5. To analyse and visualise the data:
+
+   ```bash
+   python src/kpi_monitor/dashboard.py --save
+   ```
+
+
+### Tools
+#### `src/utils.py`
+
+This file provides two main classes, `DataPipeline` and `DataProcessor`, that facilitate the cleaning, processing, and transformation of data in energy market analytics. The classes handle tasks such as aggregating, pivoting, merging data, and performing time and price-related transformations.
+
+**DataPipeline**  
+*Purpose*: Processes volume data, adds price information, and performs data transformation tasks like renaming columns, handling JSON columns, and converting time columns.
+
+***Key Methods***:
+- `process_volume_data`: Aggregates, pivots, and merges volume data.
+- `add_price`: Adds price data to the main DataFrame by matching timestamps.
+- `add_agg_column`: Adds a new column based on an aggregation function.
+- `rename_columns`: Renames columns based on provided mappings.
+- `extract_json_column`: Extracts key-value pairs from a JSON column into separate columns.
+- `convert_time_column`: Converts numeric UNIX timestamps to pandas datetime format.
+
+
+
+**DataProcessor**  
+*Purpose*: Loads, cleans, and processes raw FCR (Frequency Containment Reserve) data, and saves the cleaned data.
+
+*Key Methods*:
+- `load_data`: Loads data from a CSV file.
+- `clean_data`: Cleans and preprocesses raw FCR data.
+- `convert_time_columns`: Converts UNIX timestamps to pandas datetime format.
+- `pivot_data`: Pivots the data for event types.
+- `save_data`: Saves processed data into a CSV file.
+- `process`: Main method that orchestrates the data processing pipeline for both volume and price data.
+
+---
+
+### Executable Scripts
+#### `src/data_clean.py`
+
+This script processes FCR (Frequency Containment Reserve) bid and price data, transforming and cleaning it for analysis. Using the `DataProcessor` and `DataPipeline` classes defined in `utils.py`, it applies various transformations and optional aggregations to prepare the data.
+
+***Prerequisites***
+
+Ensure that the `utils.py` file includes the required `DataProcessor` and `DataPipeline` classes. Dependencies include `pandas` and `numpy`.
+
+#### `src/data_analysis.py`
+
+The script utilizes several key libraries for data manipulation, visualization, and argument parsing.
+
+***Key Functions***
+- `find_in_dataframe(df, target, target_format='auto', rows=None, cols=None, list=False)` 
+   This function searches for specific values in a DataFrame based on the target format. It supports:
+
+- `aggregate_volumes(df, recipients=None, products=None, start_date=None, end_date=None, agg_period='D', agg_func='sum', price_col='price_cents')`  
+   Aggregates data on sent, staged, approved, and rejected volumes, calculating `revenue_gain` and `revenue_loss` based on approved and rejected volumes.
+
+- `run_aggregation_and_plot(recipient, product, func, period, start_date, end_date)` 
+   High-level function for reading data, running volume aggregation, saving output, and plotting.
+
+- `main()`
+   The main function for handling command-line arguments and initiating the `run_aggregation_and_plot` function.
+
+***Usage Example***
+
+Run the data_clean.py from the command line to output the cleaned data:
+
+```bash
+$ ./src/data_clean.py [input_file] --price [price_file] --save --output [output_file]
+```
+
+Run the data_analysis.py to aggregate and plot FCR data for specified recipients and products:
+
+```bash
+$ python data_analysis.py --recipient volue --product fcr-d-up --func sum --period D --start_date 2024-08-01 --end_date 2024-09-01
+```
+This command reads the data, aggregates it daily (based on --period D), and generates a plot saved in the processed data directory.
+
+---
+
+### Test Run
+
+### Additional Notes
+- **Ensure the Script is Executable:** 
+   Executable scripts start with the necessary shebang line if you want to run it directly on Unix-like systems:
+   ```python
+   #!/usr/bin/env python
+   ```
+
+## Repository Default Settings
+
+The following instructions are taken from the README.md of the template used to create this repository:
+https://github.com/Krafthem/trading-ds-repo-template
+
+### Setup
+The following is done:
+
+If you have not used poetry (read more on poetry https://python-poetry.org/docs/basic-usage/) before
+1. install pyenv (https://github.com/pyenv/pyenv#installation) or conda (https://docs.conda.io/projects/miniconda/en/latest/)
+2. install python 3.11 using pyenv (`pyenv install <python-version>`) or conda (`conda install python=<python-version>`)
+3. install poetry (https://python-poetry.org/docs/#installation)
+
+If you have poetry already installed then do the following:
+0. dirct to the repo on your local computer: (`cd <PATH-TO-REPO>/kpi_monitor`)
+1. set python 3.11 to be used by poetry (`poetry env use <path-to-python3.nn>`)
+2. install env / dependencies (`poetry install`)
+3. activate environment (`poetry shell`)
+4. install pre-commit hooks (`pre-commit install`), only needed the first time
+
+
+### Versioning
+
+The latest version is specified in `pyproject.toml` and follows semver. The version needs to manually be updated either by changing it in the `pyproject.toml` file or by running `poetry version <major|minor|patch>`.
+
+To make sure we do not forget to update the version we have a test to make sure that version in the `branch` is higher than in `main`
+
+### Code formatting and linting
+To keep our code nice and clean and reduce git differences we use `ruff` for liniting, `black` and `isort` for code formatting and `pyright` for typing. We also enforce our docstrings to be according to the 'NumPy' style using `numpydoc`. Moreover, we use `nbstripout` to clean the output of Jupyter notebooks.
+
+You can find the configuration settings in `pyproject.toml`.
+
+To ensure code quality we have `pre-commit` hooks in place that run the above libraries everytime you make a commit. For pre-commit to be in place, you need to run `pre-commit install` in the virtual environment the first time you make contributions to this repository. Otherwise, these checks also run as Github Actions when opening a PR.
+
+If you want to check the code formatting and linting manually you have two options:
+
+1. run each library independently
+
+    - black: `black . --check`
+    - isort: `isort . --check`
+    - pyright: `pyright . `
+    - ruff: `ruff check .`
+
+2. run them together
+
+    - check code style: run `make format-check`
+    - format code: run `make format`
+
+Checking that the docstrings align completly with the 'NumPy' style is only checked by a pre-commit hook. This is because `numpydoc` only validates the docstrings as a pre-commit hook or inside a Sphinx build.
+
+### Testing
+We use `pytest` for testing and have split between unit and integration tests.
+
+To run the tests intedependently run
+
+- integration tests `pytest /tests/integration/`
+- unit tests `pytest /tests/unit/`
+
+If you want to run all tests (incl. code style checks) run `make all-tests`

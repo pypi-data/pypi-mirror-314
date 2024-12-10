@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "kpi_monitor"
+version = "1.1.0"
+description = ""
+authors = ["trading <trading@flowertech.se>"]
+readme = "README.md"
+packages = [
+    { include = "kpi_monitor", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^1.10.7"
+pandas = "^2.0.2"
+pymysql = "^1.1.1"
+jupyter = "^1.1.1"
+streamlit = "^1.40.1"
+python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.10"
+matplotlib = "^3.9.2"
+
+[tool.poetry.scripts]
+dashboard = "kpi_monitor.dashboard:main"
+data-get = "kpi_monitor.data_get:main"
+data-clean = "kpi_monitor.data_clean:main"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+isort = "^5.12.0"
+ruff = "^0.0.267"
+pytest = "^7.3.1"
+pyright = "^1.1.308"
+semver = "^3.0.0"
+pre-commit = "^3.3.3"
+nbqa = "^1.7.0"
+nbstripout = "^0.6.1"
+ipykernel = "^6.23.3"
+numpydoc = "^1.6.0rc0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version ="py311"
+extend-select = ["D"]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
+
+[tool.isort]
+profile = "black"
+
+[tool.pyright]
+allow-redefinition = true
+reportGeneralTypeIssues = "warning"
+reportOptionalSubscript = "warning"
+exclude = ["model_development"]
+
+[tool.numpydoc_validation]
+ignore = [
+    "EX01", # No Example section
+    "SA01", # No See Also section
+]
+override_GL08 = '^(__init__)$'
