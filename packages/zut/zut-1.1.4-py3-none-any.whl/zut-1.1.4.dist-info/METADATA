@@ -1,0 +1,163 @@
+Metadata-Version: 2.1
+Name: zut
+Version: 1.1.4
+Summary: Reusable Python utilities.
+Author-email: Sébastien Hocquet <dev@ipamo.net>
+Project-URL: Homepage, https://gitlab.com/ipamo/zut
+Project-URL: Bug Tracker, https://gitlab.com/ipamo/zut/issues
+Keywords: reusable,util,utils,common,commons,base,flexout,csv,excel,tabulate,smb,samba,share,dump,dump_object,tabular_dumper,db,DbAdapter
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: >=3.7.3
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: typing-extensions; python_version < "3.8"
+Provides-Extra: default
+Requires-Dist: tabulate; extra == "default"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "default"
+Requires-Dist: pytz; python_version < "3.9" and extra == "default"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "default"
+Provides-Extra: excel
+Requires-Dist: openpyxl; extra == "excel"
+Requires-Dist: defusedxml; extra == "excel"
+Requires-Dist: tabulate; extra == "excel"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "excel"
+Requires-Dist: pytz; python_version < "3.9" and extra == "excel"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "excel"
+Provides-Extra: smb
+Requires-Dist: smbprotocol; extra == "smb"
+Requires-Dist: tabulate; extra == "smb"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "smb"
+Requires-Dist: pytz; python_version < "3.9" and extra == "smb"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "smb"
+Provides-Extra: sqlite
+Requires-Dist: sqlparse; extra == "sqlite"
+Requires-Dist: tabulate; extra == "sqlite"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "sqlite"
+Requires-Dist: pytz; python_version < "3.9" and extra == "sqlite"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "sqlite"
+Provides-Extra: sqlserver
+Requires-Dist: pyodbc; extra == "sqlserver"
+Requires-Dist: sqlparse; extra == "sqlserver"
+Requires-Dist: sqlparams; extra == "sqlserver"
+Requires-Dist: tabulate; extra == "sqlserver"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "sqlserver"
+Requires-Dist: pytz; python_version < "3.9" and extra == "sqlserver"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "sqlserver"
+Provides-Extra: mariadb
+Requires-Dist: mysqlclient; extra == "mariadb"
+Requires-Dist: sqlparse; extra == "mariadb"
+Requires-Dist: tabulate; extra == "mariadb"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "mariadb"
+Requires-Dist: pytz; python_version < "3.9" and extra == "mariadb"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "mariadb"
+Provides-Extra: mysql
+Requires-Dist: mysqlclient; extra == "mysql"
+Requires-Dist: sqlparse; extra == "mysql"
+Requires-Dist: tabulate; extra == "mysql"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "mysql"
+Requires-Dist: pytz; python_version < "3.9" and extra == "mysql"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "mysql"
+Provides-Extra: postgresql
+Requires-Dist: psycopg; extra == "postgresql"
+Requires-Dist: sqlparse; extra == "postgresql"
+Requires-Dist: tabulate; extra == "postgresql"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "postgresql"
+Requires-Dist: pytz; python_version < "3.9" and extra == "postgresql"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "postgresql"
+Provides-Extra: pg
+Requires-Dist: psycopg; extra == "pg"
+Requires-Dist: sqlparse; extra == "pg"
+Requires-Dist: tabulate; extra == "pg"
+Requires-Dist: tzlocal; (python_version < "3.9" or sys_platform == "win32") and extra == "pg"
+Requires-Dist: pytz; python_version < "3.9" and extra == "pg"
+Requires-Dist: tzdata; (python_version >= "3.9" and sys_platform == "win32") and extra == "pg"
+
+Zut
+===
+
+Reusable Python utilities.
+
+
+## Installation
+
+Zut package is published [on PyPI](https://pypi.org/project/zut/). Install with default, minimal dependencies:
+
+```sh
+pip install zut[default]
+```
+
+Other possible dependency specifications:
+
+- `pip install zut` : no dependency installed
+- `pip install zut[excel]` : dependencies to manage Excel files (including [openpyxl](https://pypi.org/project/openpyxl))
+- `pip install zut[smb]` : dependencies to access files on Samba shares from Linux, or on Windows with non-standard security context (including [smbprotocol](https://pypi.org/project/smbprotocol)) - Not required to access Samba shares from Windows using default credentials
+- `pip install zut[sqlite]` : dependencies to connect with a SQLite database ([sqlparse](https://pypi.org/project/sqlparse))
+- `pip install zut[postgresql]` (or `[pg]`) : dependencies to connect with a PostgreSQL database ([psycopg](https://pypi.org/project/psycopg) and [sqlparse](https://pypi.org/project/sqlparse))
+- `pip install zut[mariadb]` (or `[mysql]`) : dependencies to connect with a MariaDB or MySQL database ([mysqlclient](https://pypi.org/project/mysqlclient) and [sqlparse](https://pypi.org/project/sqlparse))
+- `pip install zut[sqlserver]` : dependencies to connect with a Microsoft SQL Server database (including [pyodbc](https://pypi.org/project/pyodbc) and [sqlparse](https://pypi.org/project/sqlparse))
+
+
+## Usage examples
+
+See also [full documentation](https://ipamo.net/zut) (including [API reference](https://ipamo.net/zut/latest/api-reference.html)).
+
+
+### Configure logging
+
+```py
+from zut import configure_logging
+configure_logging()
+```
+
+### Flexible output
+
+Write tabular data to a flexible, easily configurable output: CSV or Excel file, or tabulated stdout/stderr.
+
+The output file may be on the local file system or on a Windows/Samba share (including when the library is used on Linux).
+    
+Export tabular data to stdout or to a file:
+
+```py
+import sys
+from zut import tabular_dumper
+
+with tabular_dumper(filename or sys.stdout, headers=["Id", "Word"]) as t:
+    t.append([1, "Hello"])
+    t.append([2, "World"])
+```
+
+Tabular data can also be exported using dictionnaries (in this case, headers will be detected automatically by the library):
+
+```py
+import sys
+from zut import tabular_dumper
+
+with tabular_dumper(filename or sys.stdout) as t:
+    t.append({'id': 1, 'name': "Hello"})
+    t.append({'id': 2, 'col3': True})
+```
+
+If `filename` has extension with `.xlsx`, output will be in Excel 2010 format.
+Otherwise it will be in CSV format.
+
+If `filename` starts with `\\`, output will be done on the corresponding Windows/Samba share.
+To indicate Samba credentials, call `configure_smb_credentials` before using function `tabular_dumper`.
+Example:
+
+```py
+from zut import tabular_dumper, configure_smb_credentials
+
+configure_smb_credentials(user=..., password=...)
+
+with tabular_dumper(r"\\server\share\path\to\file") as o:
+    ...
+```
+
+
+## Legal
+
+This project is licensed under the terms of the [MIT license](https://gitlab.com/ipamo/zut/-/raw/main/LICENSE.txt).
