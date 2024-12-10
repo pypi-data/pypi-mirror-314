@@ -1,0 +1,71 @@
+Metadata-Version: 2.1
+Name: hdf5extractor
+Version: 1.0.4
+Summary: Extract datasets from a h5 file, depending on referenced dataset from a xml file.
+Home-page: http://www.geosiris.com
+License: Apache-2.0
+Keywords: Energyml,hdf,hdf5,resqml,osdu
+Author: Valentin Gauthier
+Author-email: valentin.gauthier@geosiris.com
+Maintainer: Valentin Gauthier
+Maintainer-email: valentin.gauthier@geosiris.com
+Requires-Python: >=3.9,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Internet
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Requires-Dist: h5py (>=3.7.0,<4.0.0)
+Requires-Dist: lxml (>=4.6.3,<5.0.0)
+Requires-Dist: requests (>=2.25.1,<3.0.0)
+Project-URL: Repository, https://github.com/geosiris-technologies/hdf5-extractor
+Description-Content-Type: text/markdown
+
+<!--
+Copyright (c) 2022-2023 Geosiris.
+SPDX-License-Identifier: Apache-2.0
+-->
+# hdf5-extractor
+
+Extract mini hdf5 files from an epc and an H5 file. 
+The mini-h5 are created by finding Datasets referenced from the epc. Each representation will have its own mini-h5 file.
+
+# installation :
+
+## With poetry :
+
+```console
+poetry add hdf5extractor
+```
+
+## With pip :
+
+```console
+pip install hdf5extractor
+```
+
+# Run :
+
+Extract a small h5 from a bigger one, to only have dataset of a specific resqml file : 
+```console
+extracth5-local -i myResqmlFile.xml --h5 myH5File.h5 -o outputFolder
+```
+
+Extract every h5 parts from a bigger one, to only have in each, the dataset of a specific resqml file inside an epc : 
+```console
+extracth5-local -i myEPCFile.epc --h5 myH5File.h5 -o outputFolder
+```
