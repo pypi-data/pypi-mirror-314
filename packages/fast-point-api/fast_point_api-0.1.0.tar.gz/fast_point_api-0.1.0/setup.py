@@ -1,0 +1,38 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="fast-point-api",
+    version="0.1.0",
+    description="A framework for building modular APIs with FastAPI, featuring CouchDB integration for dynamic collections and CRUD operations.",
+    long_description=open("README.md", "r", encoding="utf-8").read(),
+    long_description_content_type="text/markdown",
+    author="maynerac",
+    author_email="mayneranahuacoaquira@gmail.com",
+    url="https://github.com/UPT-FAING-EPIS/proyecto-si8811a-2024-ii-u2-api-y-funciones-anahua",
+    packages=find_packages(),
+    install_requires=[
+        "annotated-types==0.7.0",
+        "anyio==4.4.0",
+        "click==8.1.7",
+        "colorama==0.4.6",
+        "CouchDB==1.2",
+        "fastapi==0.114.0",
+        "h11==0.14.0",
+        "idna==3.8",
+        "pydantic==2.9.0",
+        "pydantic_core==2.23.2",
+        "sniffio==1.3.1",
+        "starlette==0.38.4",
+        "typing_extensions==4.12.2",
+        "tzdata==2024.1",
+        "uvicorn==0.30.6",
+    ],
+    license="MIT",
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Programming Language :: Python :: 3.12",
+        "Framework :: FastAPI",
+        "License :: OSI Approved :: MIT License",
+    ],
+    python_requires=">=3.12",
+)
