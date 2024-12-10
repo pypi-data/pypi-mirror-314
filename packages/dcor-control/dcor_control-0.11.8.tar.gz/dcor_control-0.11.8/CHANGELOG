@@ -1,0 +1,235 @@
+0.11.8
+ - fix: get_dcor_site_config_dir did not always return a pathlib.Path (#20)
+ - fix: --dcor-site-config-dir CLI argument did not accept directory (#20)
+0.11.7
+ - fix: don't try to edit client_max_body_size
+0.11.6
+ - fix: update scripts not working with new pyproject.toml installs
+0.11.5
+ - setup: remove symlinks
+0.11.4
+ - build: fix installation
+0.11.3
+ - build: fix build pipeline
+0.11.2
+ - build: fix build pipeline
+0.11.1
+ - build: fix build pipeline
+0.11.0
+ - ref: restructure site configuration workflow logic
+ - setup: migrate to pyproject.toml
+0.10.11
+ - enh: only restart nginx/supervisor in 'dcor inspect' when necessary
+0.10.10
+ - fix: don't ask user to remove empty list in inspect
+ - update compatible versions
+0.10.9
+ - enh: add local S3 endpoint URL for DCOR-med
+ - fix: include all resources when searching for orphaned files on S3
+0.10.8
+ - fix: bad json file
+0.10.7
+ - enh: add cache location for DCOR-med
+ - ref: remove "dcor_object_store.local_backup_location"
+   (we now have backups of S3 data)
+0.10.6
+ - update compatible versions
+0.10.5
+ - setup: supervisor configuration files not in distribution
+0.10.4
+ - fix: quoting and ckan.ini options
+0.10.3
+ - enh: improve inspect (fine-grained permissions control)
+ - enh: include explicit DCOR worker config
+ - update compatible versions
+0.10.2
+ - enh: include DCOR worker configuration
+ - update compatible versions
+0.10.1
+ - fix: add ckanext.dc_serve.tmp_dir, a temporary data location for
+   condensing data before uploading to S3
+ - enh: upgrade pip when updating packages
+0.10.0
+ - enh: update package located in /testing in dcor update
+ - enh: also check S3 storage for orphaned objects in `dcor inspect`
+ - enh: always encrypt beaker session cookies
+ - enh: set up cookies more strictly
+ - enh: always perform CSS rebranding after `dcor develop`
+ - enh: install additional dependencies in `dcor develop`
+ - enh: introduce "dcor_object_store.local_backup_location" configuration
+   option and check write permissions
+ - enh: add "etag" to search pattern
+ - ref: migrate to dcor_shared 0.7.5
+ - setup: pin uwsgi==2.0.21 due to non-working harakiri
+0.9.5
+ - enh: properly check for nginx status before attempting to reload
+0.9.4
+ - maintenance release
+0.9.3
+ - enh: add dcor_control to compatible version list
+ - cleanup
+0.9.2
+ - fix: fix compatible versions header
+0.9.1
+ - enh: set up beaker session cookies with validate_key
+ - update compatible versions
+0.9.0
+ - feat: perform compatible version check during update
+ - feat: introduce CLI `dcor develop`, editable install of all extensions
+0.8.13
+ - update incompatible versions
+ - fix: ckan_uwsgi parser
+0.8.12
+ - maintenance release
+0.8.11
+ - maintenance release
+0.8.10
+ - enh: update compatible version list
+ - ref: remove ckan config ckan.auth.public_activity_stream_detail
+0.8.9
+ - enh: display S3 usage in info
+ - ref: disable activity stream which is optional in CKAN 2.10 and broken
+0.8.8
+ - fix: setup correct circle names for colab and dev machines
+ - enh: add endpoint URL for MPCDF OpenStack
+0.8.7
+ - ref: remove deprecated API key generation configuration option
+ - docs: update supported extension version list
+0.8.6
+ - enh: introduce object store configuration options
+0.8.5
+ - enh: enforce CSRF protection for all extensions
+ - enh: remove deprecated recline_view (for tabular data)
+0.8.4
+ - tests: fix tests
+ - docs: update compatible versions list
+0.8.3
+ - enh: add vagrant server options
+0.8.2
+ - tests: fix tests for CKAN 2.10
+0.8.1
+ - fix: correct SOLR search URL
+0.8.0
+ - ref: migration to CKAN 2.10
+0.7.5
+ - docs: added info on GPG
+ - fix: use regular DCOR resource schemas for dcor-colab (#14)
+0.7.4
+ - enh: remove old db backup files and keep daily for 14 days,
+   monthly for a year, and yearly for ten years
+0.7.3
+ - fix: typo in server options for dcor-colab
+0.7.2
+ - enh: add server options for dcor-colab
+ - enh: add restrictions for uploading avatars
+0.7.1
+ - fix: inspect asked for confirmation to delete no files
+ - setup: bump numpy to 1.21
+0.7.0
+ - fix: properly handle broken symlinks when checking resources
+ - fix: find and remove garbage files in resources tree
+ - ref: move CKAN path handling to dcor_shared package
+0.6.0
+ - ref: major refactoring of module structure (new cli submodule, removed
+   creation of ancillary files, renamed click methods)
+ - fix: use CKAN_INI from environment if defined
+ - fix: properly handly symlink loops in inspect
+ - fix: do not reload supervisord if it is not running
+0.5.0
+ - feat: add check for css branding in new dcor_theme 0.6.0
+ - fix: check perms for resource condense lock location
+0.4.14
+ - fix: add ckan.auth.allow_collaborators_to_change_owner_org=false
+0.4.13
+ - ref: remove patch_ckan_issue_5637
+0.4.12
+ - fix: also install git repositories in editable mode after
+   updating via "git pull"
+0.4.11
+ - fix: support new name "generate_condensed_dataset_job"
+   in ckanext.dc_serve
+ - docs: added readme
+0.4.10
+ - enh: refine supplementary schema for medical branding
+0.4.9
+ - fix: rename resource schema supplement keys and fix typo for
+   medical branding
+0.4.8
+ - enh: add apple-touch-icon images for medical and test brandings
+0.4.7
+ - enh: add "execution" meta-data for medical branding
+ - enh: add "chip" meta-data section for medical branding
+0.4.6
+ - docs: documented code in scan.py
+0.4.5
+ - fix: increase maximum resource size to 100G
+ - enh: use ckanext.dcor_schemas.allow_public_datasets config value
+   to disable public datasets on medical branding
+0.4.4
+ - fix: set https ckan URL for medical braning
+0.4.3
+ - fix: set domain_data for patient licens in for medical branding
+ - fix: possible infinite-loop when getting setup identifier
+0.4.2
+ - fix: typo in server.py (public path not set in config)
+0.4.1
+ - updated MANIFEST.in
+0.4.0
+ - enh: add custom licenses.json for medical branding
+ - enh: add custom json_resource_schema_dir for medical branding
+ - enh: add custom templates for medical branding
+ - fix: use hostname instead of IP for medical branding
+ - ref: added branding and imported stuff from ckanext-dcor_theme
+ - ref: favicon is no longer symlinked - it is taken from branding
+ - ref: ckan options from dcor_options.ini and server_options.json
+   are not anymore exclusive - serer_options.json overrides any
+   parameters in dcor_options.ini
+ - ref: do not generate API keys by default, because we now support
+   API tokens
+ - ref: increase uWSGI harakiri timeout to 7200
+0.3.3
+ - fix: reordered ckan.plugins list (tests did not run because
+   background jobs ran in wrong order
+0.3.2
+ - enh: print version changed when updating DCOR packages
+0.3.1
+ - fix: issues when performing initial install
+ - enh: include GPG Key ID and hostname in "encrypted-database-backup"
+   file names
+ - ci: migrate to GH Actions
+ - build: rely on extensions install_requires
+0.3.0
+ - feat: "encrypted-database-backup" on /data
+ - enh: "reset" now allows to remove zombie users
+0.2.0
+ - enh: "inspect" also reloads nginx
+ - enh: add patch for ckan/ckan/#5637
+ - enh: allow to select setup-identifier if multiple apply
+0.1.8
+ - enh: "inspect" set favicon link
+ - enh: use subprocess.check_output everywhere
+ - enh: fine-grained options in "reset"
+0.1.7
+ - enh: add --assume-yes to "dcor scan"
+0.1.6
+ - enh: "scan" can now recreate missing ancillary files
+ - enh: "inspect" now also checks UWSGI harakiri
+ - ref: migrate to dcor_shared 0.2.5
+0.1.5
+ - enh: "update" now also deals with git repositories
+ - enh: "inspect" now also checks for the presence of the
+   "short", "normal", and "long" ckan workers in supervisord
+ - enh: add "scan" command to scan for orphaned file
+0.1.4
+ - enh: reload CKAN after "update"
+ - enh: recursively check "storage" directory in ckan.storage_path
+0.1.3
+ - fix: typo lead "update" to believe it is always an editable install
+0.1.2
+ - enh: add "update" command to udpate all extensions
+0.1.1
+ - maintenance release
+0.1.0
+ - initial release
+0.0.1
+ - draft release
