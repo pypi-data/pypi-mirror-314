@@ -1,0 +1,685 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: Text Summarization Workflow
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1711526421923-1711526430540
+      selected: false
+      source: '1711526421923'
+      sourceHandle: source
+      target: '1711526430540'
+      targetHandle: target
+      type: custom
+    - data:
+        sourceType: llm
+        targetType: variable-assigner
+      id: 1711526430540-1711526428184
+      selected: false
+      source: '1711526430540'
+      sourceHandle: source
+      target: '1711526428184'
+      targetHandle: '1711526430540'
+      type: custom
+    - data:
+        sourceType: llm
+        targetType: variable-assigner
+      id: 1711526424455-1711526428184
+      selected: false
+      source: '1711526424455'
+      sourceHandle: source
+      target: '1711526428184'
+      targetHandle: '1711526424455'
+      type: custom
+    - data:
+        sourceType: variable-assigner
+        targetType: template-transform
+      id: 1711526428184-1711526522789
+      selected: false
+      source: '1711526428184'
+      sourceHandle: source
+      target: '1711526522789'
+      targetHandle: target
+      type: custom
+    - data:
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: 1712563849389-1711526421923
+      selected: false
+      source: '1712563849389'
+      sourceHandle: 'true'
+      target: '1711526421923'
+      targetHandle: target
+      type: custom
+    - data:
+        sourceType: if-else
+        targetType: llm
+      id: 1712563849389-1711526424455
+      selected: false
+      source: '1712563849389'
+      sourceHandle: 'false'
+      target: '1711526424455'
+      targetHandle: target
+      type: custom
+    - data:
+        sourceType: start
+        targetType: if-else
+      id: 1711526002155-1712563849389
+      selected: false
+      source: '1711526002155'
+      sourceHandle: source
+      target: '1712563849389'
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: code
+      id: 1711526522789-source-1729592705139-target
+      selected: false
+      source: '1711526522789'
+      sourceHandle: source
+      target: '1729592705139'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1729679073808'
+        sourceType: iteration-start
+        targetType: http-request
+      id: 1729679073808start-source-1729679101631-target
+      selected: false
+      source: 1729679073808start
+      sourceHandle: source
+      target: '1729679101631'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '1729679073808'
+        sourceType: http-request
+        targetType: code
+      id: 1729679101631-source-1729679105757-target
+      selected: false
+      source: '1729679101631'
+      sourceHandle: source
+      target: '1729679105757'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 1729592705139-source-1729679073808-target
+      source: '1729592705139'
+      sourceHandle: source
+      target: '1729679073808'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: end
+      id: 1729679073808-source-1711526526878-target
+      source: '1729679073808'
+      sourceHandle: source
+      target: '1711526526878'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 'Input here. '
+          max_length: 200
+          options: []
+          required: true
+          type: paragraph
+          variable: input
+        - label: Technical Summary OR General Overview
+          max_length: 48
+          options:
+          - Technical Summary
+          - General Overview
+          required: true
+          type: select
+          variable: summaryStyle
+      dragging: false
+      height: 116
+      id: '1711526002155'
+      position:
+        x: 80.5
+        y: 515.5
+      positionAbsolute:
+        x: 80.5
+        y: 515.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: '1712563872930'
+            value: Technical
+            variable_selector:
+            - '1711526002155'
+            - summaryStyle
+          id: 'true'
+          logical_operator: and
+        conditions:
+        - comparison_operator: contains
+          id: '1712563872930'
+          value: Technical
+          variable_selector:
+          - '1711526002155'
+          - summaryStyle
+        desc: ''
+        logical_operator: and
+        selected: false
+        title: IF/ELSE
+        type: if-else
+      height: 126
+      id: '1712563849389'
+      position:
+        x: 369.5
+        y: 515.5
+      positionAbsolute:
+        x: 369.5
+        y: 515.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - 6084ed3f-d100-4df2-a277-b40d639ea7c6
+        desc: 'If technical, use knowledge to access external information. '
+        query_variable_selector:
+        - '1711526002155'
+        - input
+        retrieval_mode: single
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params: {}
+            mode: chat
+            name: gpt-3.5-turbo
+            provider: openai
+        title: Knowledge Retrieval
+        type: knowledge-retrieval
+      dragging: false
+      height: 98
+      id: '1711526421923'
+      position:
+        x: 645.5
+        y: 515.5
+      positionAbsolute:
+        x: 645.5
+        y: 515.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: General Overview
+        model:
+          completion_params:
+            frequency_penalty: 0
+            max_tokens: 512
+            presence_penalty: 0
+            temperature: 0.7
+            top_p: 1
+          mode: chat
+          name: gpt-3.5-turbo
+          provider: openai
+        prompt_template:
+        - id: b26499df-97fe-4cfb-935f-dc5e311180ac
+          role: system
+          text: "<Task>\nDo a general overview style summary to the following text.\
+            \ Use the same language as text to be summarized. \n<Text to be summarized>\n\
+            {{#1711526002155.input#}}\n<Summary>"
+        selected: false
+        title: LLM 2
+        type: llm
+        variables:
+        - value_selector:
+          - '1711526002155'
+          - input
+          variable: input
+        vision:
+          enabled: false
+      dragging: false
+      height: 126
+      id: '1711526424455'
+      position:
+        x: 928.5
+        y: 675.0714285714286
+      positionAbsolute:
+        x: 928.5
+        y: 675.0714285714286
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: 'Combine output of two branches into one.  '
+        output_type: string
+        selected: false
+        title: Variable Assigner
+        type: variable-assigner
+        variables:
+        - - '1711526430540'
+          - text
+        - - '1711526424455'
+          - text
+      dragging: false
+      height: 182
+      id: '1711526428184'
+      position:
+        x: 1211.5
+        y: 515.5
+      positionAbsolute:
+        x: 1211.5
+        y: 515.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1711526421923'
+          - result
+        desc: 'Use knowledge to generate a more technical and accurate summary. '
+        model:
+          completion_params:
+            frequency_penalty: 0
+            max_tokens: 512
+            presence_penalty: 0
+            temperature: 0.7
+            top_p: 1
+          mode: chat
+          name: gpt-3.5-turbo
+          provider: openai
+        prompt_template:
+        - id: 1e203401-d486-4073-b5c9-061e2b55b7d6
+          role: system
+          text: "<Task>\nWith reference to result of knowledge retrieval. Do a technical\
+            \ summary to the following text. Use the same language as text to be summarized.\
+            \ \n<Knowledge>\nUse the following context as your learned knowledge,\
+            \ inside <context></context> XML tags.\n<context>\n{{#context#}}\n</context>\n\
+            When answer to user:\n- If you don't know, just say that you don't know.\n\
+            - If you don't know when you are not sure, ask for clarification.\nAvoid\
+            \ mentioning that you obtained the information from the context.\nAnd\
+            \ answer according to the language of the user's question.\n<Text to be\
+            \ summarized>\n{{#1711526002155.input#}}\n<Summary>"
+        selected: false
+        title: LLM
+        type: llm
+        variables:
+        - value_selector:
+          - '1711526002155'
+          - input
+          variable: input
+        vision:
+          enabled: false
+      dragging: false
+      height: 142
+      id: '1711526430540'
+      position:
+        x: 928.5
+        y: 515.5
+      positionAbsolute:
+        x: 928.5
+        y: 515.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: "<h1> Summary </h1>\r\n{{ output }}\r\n"
+        title: Template
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1711526428184'
+          - output
+          variable: output
+      dragging: false
+      height: 54
+      id: '1711526522789'
+      position:
+        x: 1494.5
+        y: 515.5
+      positionAbsolute:
+        x: 1494.5
+        y: 515.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1729679073808'
+          - output
+          variable: output
+        selected: false
+        title: End
+        type: end
+      dragging: false
+      height: 90
+      id: '1711526526878'
+      position:
+        x: 2367.447514282602
+        y: 659.961046219241
+      positionAbsolute:
+        x: 2367.447514282602
+        y: 659.961046219241
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(arg1: str) -> dict:\n    return {\n        \"result\": arg1,\n\
+          \    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: array[string]
+        selected: false
+        title: Code
+        type: code
+        variables:
+        - value_selector: []
+          variable: arg1
+      height: 54
+      id: '1729592705139'
+      position:
+        x: 1702.2342770505322
+        y: 638.2945479970755
+      positionAbsolute:
+        x: 1702.2342770505322
+        y: 638.2945479970755
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config:
+            api_key: fjwioejfpoqjfowejofiqwjo
+            type: bearer
+          type: api-key
+        body:
+          data:
+          - id: key-value-1
+            key: ''
+            type: text
+            value: '{
+
+              "query":"育兒津貼",
+
+              "count":20
+
+              }'
+          type: json
+        desc: ''
+        headers: 'Content-type:json
+
+          Content-length:100'
+        method: post
+        params: 'userId:sebastian.hsu@gmail.com
+
+          settingId:12345'
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: HTTP Request
+        type: http-request
+        url: http://0.0.0.0:8080/api/search
+        variables: []
+      height: 110
+      id: '1729671189586'
+      position:
+        x: 1513.9712477902174
+        y: 1215.4841945915723
+      positionAbsolute:
+        x: 1513.9712477902174
+        y: 1215.4841945915723
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        iterator_selector:
+        - '1729592705139'
+        - result
+        output_selector:
+        - '1729679105757'
+        - result
+        output_type: array[string]
+        selected: false
+        start_node_id: 1729679073808start
+        title: my Iteration
+        type: iteration
+        width: 692
+      height: 148
+      id: '1729679073808'
+      position:
+        x: 1690.961041765483
+        y: 890.8150183821679
+      positionAbsolute:
+        x: 1690.961041765483
+        y: 890.8150183821679
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 692
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1729679073808start
+      parentId: '1729679073808'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1714.961041765483
+        y: 958.8150183821679
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-6
+            key: item
+            type: text
+            value: '{{#1729679073808.item#}}'
+          - id: key-value-7
+            key: index
+            type: text
+            value: '{{#1729679073808.index#}}'
+          type: form-data
+        desc: ''
+        headers: ''
+        isInIteration: true
+        iteration_id: '1729679073808'
+        method: get
+        params: ''
+        selected: true
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: HTTP Request 2
+        type: http-request
+        url: ''
+        variables: []
+      height: 54
+      id: '1729679101631'
+      parentId: '1729679073808'
+      position:
+        x: 128
+        y: 68
+      positionAbsolute:
+        x: 1818.961041765483
+        y: 958.8150183821679
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        code: "\ndef main(arg1: str, arg2: str) -> dict:\n    return {\n        \"\
+          result\": arg1 + arg2,\n    }\n"
+        code_language: python3
+        desc: ''
+        isInIteration: true
+        iteration_id: '1729679073808'
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: Code 2
+        type: code
+        variables:
+        - value_selector: []
+          variable: arg1
+        - value_selector: []
+          variable: arg2
+      height: 54
+      id: '1729679105757'
+      parentId: '1729679073808'
+      position:
+        x: 432
+        y: 68
+      positionAbsolute:
+        x: 2122.961041765483
+        y: 958.8150183821679
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        is_array_file: false
+        selected: false
+        title: Doc Extractor
+        type: document-extractor
+        variable_selector: []
+      height: 54
+      id: '1729726153510'
+      position:
+        x: 1521.862512489752
+        y: 1125.2983123111821
+      positionAbsolute:
+        x: 1521.862512489752
+        y: 1125.2983123111821
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -1167.293055873768
+      y: -533.6473259765639
+      zoom: 1.009766176434342
