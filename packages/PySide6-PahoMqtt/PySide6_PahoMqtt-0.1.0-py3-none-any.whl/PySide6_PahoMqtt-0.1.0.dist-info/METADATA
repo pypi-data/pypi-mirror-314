@@ -1,0 +1,80 @@
+Metadata-Version: 2.1
+Name: PySide6-PahoMqtt
+Version: 0.1.0
+Summary: This is a wrapping class for using paho-mqtt(V2.x) in pyside6.
+Author: chanmin.park
+Author-email: devcamp@gmail.com
+Keywords: PySide6,paho-mqtt
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: paho-mqtt
+Requires-Dist: PySide6
+
+This is a wrapping class for using paho-mqtt(V2.x) in pyside6.
+
+### History
+- V0.1.0
+  - Convert paho-mqtt callbacks to qt signal-slots
+  - Add wrapper method for paho-mqtt
+
+### Install
+```sh
+pip install PySide6-PahoMqtt
+```
+
+### Example
+```python
+from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.PahoMqtt import Client
+
+class UI(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        
+        self.mqtt = Client()
+        self.mqtt.on_connect.connect(self.onConnect)
+        self.mqtt.on_connect_fail.connect(self.onConnectFail)
+        self.mqtt.on_disconnect.connect(self.onDisconnect)
+        self.mqtt.on_publish.connect(self.onPublish)
+        self.mqtt.on_subscribe.connect(self.onSubscribe)
+        self.mqtt.on_message.connect(self.onMessage)
+        self.mqtt.connection("mqtt.eclipseprojects.io")
+
+    def closeEvent(self, event):
+        print("Window is closing")
+        self.mqtt.disconnection()
+        event.accept()
+        
+    def onConnect(self, connect_flags, reason_code, properties):
+        print(f"connect: {connect_flags}, {reason_code}, {properties}")
+        
+        if reason_code == 0:
+            self.mqtt.subscribe("planxlabs/#")
+            self.mqtt.publish("planxlabs/test", {"data": "Hello World"})
+        else:
+            print("fail")
+    
+    def onConnectFail(self):
+        print("connect fail")   
+        
+    def onDisconnect(self, disconnect_flags, reason_code):
+        print(f"disconnect: {disconnect_flags}, {reason_code}")   
+                
+    def onPublish(self, mid, reason_code):
+        print(f"publish: {mid}, {reason_code}")
+    
+    def onSubscribe(self, mid, reason_code_list):
+        print(f"subscribe: {mid}, {reason_code_list}")
+    
+    def onMessage(self, topic, payload, qos, retain, properties):
+        print(f"message: {topic}, {payload}, {qos}, {retain}, {properties}")
+
+if __name__ == "__main__":                            
+    app = QApplication([])
+    win = UI()
+    win.show()
+    app.exec()   
+```
