@@ -1,0 +1,21 @@
+[package]
+name = "denormalized-common"
+version = { workspace = true }
+edition = { workspace = true }
+readme = "README.md"
+
+
+[features]
+python = ["dep:pyo3"]
+default = ["python"]
+
+
+[dependencies]
+anyhow = "1.0.86"
+datafusion = { workspace = true, features = ["avro"] }
+arrow = { workspace = true }
+thiserror = "1.0.63"
+pyo3 = { workspace = true, optional = true }
+serde_json.workspace = true
+apache-avro = "0.16.0"
+slatedb = { workspace = true }
