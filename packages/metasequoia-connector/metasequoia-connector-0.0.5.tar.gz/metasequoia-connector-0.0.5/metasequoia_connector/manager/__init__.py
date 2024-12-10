@@ -1,0 +1,1 @@
+from metasequoia_connector.manager.connect_manager import ConnectManager
