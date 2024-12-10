@@ -1,0 +1,127 @@
+Metadata-Version: 2.1
+Name: rootdump
+Version: 0.1.1
+Summary: Directory content dumping utility
+Author-email: Hirotaka Hiraki <hirotakahiraki@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# rootdump
+
+A Python library for dumping directory contents into a single text file. It allows you to easily inspect and document your project structure and file contents.
+
+## Features
+
+- Dump all text files from a directory into a single file
+- Exclude binary files (optional)
+- Filter files by extension
+- Generate tree-style directory structure visualization
+- UTF-8 support
+
+## Installation
+
+```bash
+pip install rootdump
+```
+
+## Usage
+
+### Command Line Interface
+
+Basic usage:
+```bash
+rootdump /path/to/source output.txt
+```
+
+Exclude binary files:
+```bash
+rootdump /path/to/source output.txt --exclude-binary
+```
+
+Include only specific file extensions:
+```bash
+rootdump /path/to/source output.txt --extensions .py .txt .md
+
+Skip directory tree structure:
+```bash
+rootdump /path/to/source output.txt --no-tree
+```
+
+### Python API
+
+```python
+from rootdump import dump_directory
+
+# Basic usage
+dump_directory("source_dir", "output.txt")
+
+# Exclude binary files and include only specific extensions
+dump_directory(
+    "source_dir",
+    "output.txt",
+    exclude_binary=True,
+    include_extensions=[".py", ".txt"],
+    show_tree=True  # Set to False to skip directory tree
+)
+```
+
+## Output Format
+
+The output file will contain:
+
+1. A tree-style directory structure overview
+2. Contents of each file, separated by headers showing the relative path
+
+Example output:
+```
+# Directory structure:
+# .
+# ├── src/
+# │   ├── __init__.py
+# │   └── core.py
+# └── tests/
+#     └── test_core.py
+
+## src/__init__.py
+
+[file contents here]
+
+## src/core.py
+
+[file contents here]
+```
+
+## License
+
+MIT License
