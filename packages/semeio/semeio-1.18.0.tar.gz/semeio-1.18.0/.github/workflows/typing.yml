@@ -1,0 +1,33 @@
+name: Type checking
+
+on:
+ push:
+   branches:
+     - main
+     - 'version-**'
+ pull_request:
+
+jobs:
+  type-checking:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: ['3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: "pip"
+    - name: Install semeio and dependencies
+      run: |
+        pip install ".[types]"
+    - name: Run mypy
+      run: |
+        mypy src/semeio
