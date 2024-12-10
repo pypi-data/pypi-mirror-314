@@ -1,0 +1,35 @@
+[project]
+name = "vinset"
+version = "5.2.0"
+authors = [
+  { name="Zaw Lin Tun", email="zawlintun1511@gmail.com" },
+]
+description = "Command line program to draw the graph from video and csv files."
+readme = "README.md"
+dependencies = ["setuptools>=61.0", "opencv-python>=4.8.1.78", "scipy>=1.11.3", "numpy>=1.26.1", "ehdg_tools>=4.6.1", "pillow>=11.0.0", "pymediainfo>=6.1.0"]
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+vinset = "vinset.vinset:main"
+
+[project.urls]
+"Homepage" = "https://github.com/jtur044/vinset"
+"Bug Tracker" = "https://github.com/jtur044/vinset/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "opencv-python>=4.8.1.78", "scipy>=1.11.3", "numpy>=1.26.1", "ehdg_tools>=4.6.1", "pillow>=11.0.0", "pymediainfo>=6.1.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+vinset = ["*"]
