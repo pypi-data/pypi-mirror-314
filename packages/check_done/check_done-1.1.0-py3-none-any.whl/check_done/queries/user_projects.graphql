@@ -1,0 +1,19 @@
+query userProjects($login: String!, $maxEntriesPerPage: Int!, $after: String) {
+  user(login: $login) {
+    projectsV2(
+      first: $maxEntriesPerPage
+      after: $after
+      orderBy: { field: NUMBER, direction: ASC }
+    ) {
+      nodes {
+        __typename
+        id
+        number
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
