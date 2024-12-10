@@ -1,0 +1,4593 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "DELEGATE-ACCESS-CONTROL" "1" "Dec 09, 2024" "3.50.3" "OCI CLI Command Reference"
+.SH NAME
+delegate-access-control \- 
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH DESCRIPTION
+.sp
+Oracle Delegate Access Control allows ExaCC and ExaCS customers to delegate management of their Exadata resources operators outside their tenancies.
+With Delegate Access Control, Support Providers can deliver managed services using comprehensive and robust tooling built on the OCI platform.
+Customers maintain control over who has access to the delegated resources in their tenancy and what actions can be taken.
+Enterprises managing resources across multiple tenants can use Delegate Access Control to streamline management tasks.
+Using logging service, customers can view a near real\-time audit report of all actions performed by a Service Provider operator.
+.SH AVAILABLE COMMANDS
+.INDENT 0.0
+.IP \(bu 2
+delegated\-resource\-access\-request
+.INDENT 2.0
+.IP \(bu 2
+approve
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.IP \(bu 2
+list\-delegated\-resource\-access\-request\-histories
+.IP \(bu 2
+list\-service\-provider\-interactions
+.IP \(bu 2
+reject
+.IP \(bu 2
+revoke
+.IP \(bu 2
+service\-provider\-interaction\-request
+.UNINDENT
+.IP \(bu 2
+delegated\-resource\-access\-request\-audit\-log\-report
+.INDENT 2.0
+.IP \(bu 2
+get
+.UNINDENT
+.IP \(bu 2
+delegation\-control
+.INDENT 2.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.IP \(bu 2
+list\-delegation\-control\-resources
+.IP \(bu 2
+update
+.UNINDENT
+.IP \(bu 2
+delegation\-subscription
+.INDENT 2.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.IP \(bu 2
+update
+.UNINDENT
+.IP \(bu 2
+service\-provider
+.INDENT 2.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.IP \(bu 2
+service\-provider\-action
+.INDENT 2.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.IP \(bu 2
+work\-request
+.INDENT 2.0
+.IP \(bu 2
+work\-request
+.INDENT 2.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.IP \(bu 2
+work\-request\-error
+.INDENT 2.0
+.IP \(bu 2
+list\-errors
+.UNINDENT
+.IP \(bu 2
+work\-request\-log
+.INDENT 2.0
+.IP \(bu 2
+list\-logs
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS delegated\-resource\-access\-request
+.SS Description
+.sp
+A support operator raises Delegated Resource Access Request when they need access to any infrastructure resource governed by Delegation Control. The Delegated Resource Access Request identifies the target resource and the set of Service Provider Actions. Delegated Resource Access Request handling depends upon the Delegation Control that governs the target resource, and the set of Service Provider Actions listed for approval in the Delegated Resource Access Request. If all of the Service Provider Actions listed in the Delegated Resource Access Request are in the pre\-approved list in the Delegation Control that governs the target resource, then the Delegated Resource Access Request is automatically approved. If not, then the Delegated Resource Access Request requires explicit approval from the approver group specified by the Delegation Control governing the target resource.
+.sp
+You can approve or reject a Delegated Resource Access Request. You can also revoke the approval of an already approved Delegated Resource Access Request. While creating a Delegated Resource Access Request, the support operator specifies the duration of access. You have the option to approve the entire duration or reduce or even increase the time duration. A support operator can also request for an extension. The approval for such an extension is processed the same way the original Delegated Resource Access Request was processed.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+approve
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.IP \(bu 2
+list\-delegated\-resource\-access\-request\-histories
+.IP \(bu 2
+list\-service\-provider\-interactions
+.IP \(bu 2
+reject
+.IP \(bu 2
+revoke
+.IP \(bu 2
+service\-provider\-interaction\-request
+.UNINDENT
+.SS \fBapprove\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Approves a Delegated Resource Access Request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request approve [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-additional\-message [text]
+.UNINDENT
+.sp
+Message that needs to be displayed to the operator.
+.INDENT 0.0
+.TP
+.B \-\-approver\-comment [text]
+.UNINDENT
+.sp
+Comment by the approver during approval.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-time\-approved\-for\-access [datetime]
+.UNINDENT
+.sp
+Access start time that is actually approved by the customer in 
+.nf
+\(ga
+.fi
+RFC 3339 <\fI\%https://tools.ietf.org/html/rfc3339\fP>\(ga__timestamp format, e.g. ‘2020\-05\-22T21:10:29.600Z’.
+.INDENT 0.0
+.INDENT 3.5
+The following datetime formats are supported:
+.UNINDENT
+.UNINDENT
+.SS UTC with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ss.ssssssTZD
+Example: 2017\-09\-15T20:30:00.123456Z
+
+UTC with milliseconds
+***********************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ss.sssTZD
+    Example: 2017\-09\-15T20:30:00.123Z
+
+UTC without milliseconds
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T20:30:00Z
+
+UTC with minute precision
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T20:30Z
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Timezone with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ssTZD
+Example: 2017\-09\-15T12:30:00.456789\-08:00, 2017\-09\-15T12:30:00.456789\-0800
+
+Timezone with milliseconds
+***************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00.456\-08:00, 2017\-09\-15T12:30:00.456\-0800
+
+Timezone without milliseconds
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00\-08:00, 2017\-09\-15T12:30:00\-0800
+
+Timezone with minute precision
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T12:30\-08:00, 2017\-09\-15T12:30\-0800
+
+Short date and time
+********************
+The timezone for this date and time will be taken as UTC (Needs to be surrounded by single or double quotes)
+
+\&.. code::
+
+    Format: \(aqYYYY\-MM\-DD HH:mm\(aq or "YYYY\-MM\-DD HH:mm"
+    Example: \(aq2017\-09\-15 17:25\(aq
+
+Date Only
+**********
+This date will be taken as midnight UTC of that day
+
+\&.. code::
+
+    Format: YYYY\-MM\-DD
+    Example: 2017\-09\-15
+
+Epoch seconds
+**************
+\&.. code::
+
+    Example: 1412195400
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/approve.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request approve \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets details of a Delegated Resource Access Request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/get.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request get \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists all Delegated Resource Access Requests in the compartment. Note that only one of lifecycleState or requestStatus query parameter can be used.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-delegation\-control\-id [text]
+.UNINDENT
+.sp
+unique Delegation Control identifier
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only Delegated Resource Access Requests whose lifecycleState matches the given Delegated Resource Access Request lifecycleState.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-request\-status [text]
+.UNINDENT
+.sp
+A filter to return only Delegated Resource Access Requests whose status matches the given Delegated Resource Access Request status.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+APPROVAL_WAITING, APPROVED, APPROVED_FOR_FUTURE, CLOSE_FAILED, COMPLETED, COMPLETING, CREATED, DEPLOYED, DEPLOY_FAILED, EXPIRED, EXPIRY_FAILED, EXTENDED, EXTENDING, EXTENSION_FAILED, EXTENSION_REJECTED, OPERATOR_ASSIGNMENT_WAITING, PREAPPROVED, REJECTED, REVOKED, REVOKE_FAILED, REVOKING, UNDEPLOYED, UNDEPLOY_FAILED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-resource\-id [text]
+.UNINDENT
+.sp
+A filter to return only Delegated Resource Access Requests for the given resource identifier.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending. If no value is specified, default is timeCreated.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-time\-end [datetime]
+.UNINDENT
+.sp
+Query end time in UTC in ISO 8601 format(inclusive). Example 2019\-10\-30T00:00:00Z (yyyy\-MM\-ddThh:mm:ssZ). timeIntervalStart and timeIntervalEnd parameters cannot be used together.
+.INDENT 0.0
+.INDENT 3.5
+The following datetime formats are supported:
+.UNINDENT
+.UNINDENT
+.SS UTC with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ss.ssssssTZD
+Example: 2017\-09\-15T20:30:00.123456Z
+
+UTC with milliseconds
+***********************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ss.sssTZD
+    Example: 2017\-09\-15T20:30:00.123Z
+
+UTC without milliseconds
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T20:30:00Z
+
+UTC with minute precision
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T20:30Z
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Timezone with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ssTZD
+Example: 2017\-09\-15T12:30:00.456789\-08:00, 2017\-09\-15T12:30:00.456789\-0800
+
+Timezone with milliseconds
+***************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00.456\-08:00, 2017\-09\-15T12:30:00.456\-0800
+
+Timezone without milliseconds
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00\-08:00, 2017\-09\-15T12:30:00\-0800
+
+Timezone with minute precision
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T12:30\-08:00, 2017\-09\-15T12:30\-0800
+
+Short date and time
+********************
+The timezone for this date and time will be taken as UTC (Needs to be surrounded by single or double quotes)
+
+\&.. code::
+
+    Format: \(aqYYYY\-MM\-DD HH:mm\(aq or "YYYY\-MM\-DD HH:mm"
+    Example: \(aq2017\-09\-15 17:25\(aq
+
+Date Only
+**********
+This date will be taken as midnight UTC of that day
+
+\&.. code::
+
+    Format: YYYY\-MM\-DD
+    Example: 2017\-09\-15
+
+Epoch seconds
+**************
+\&.. code::
+
+    Example: 1412195400
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-time\-start [datetime]
+.UNINDENT
+.sp
+Query start time in UTC in ISO 8601 format(inclusive). Example 2019\-10\-30T00:00:00Z (yyyy\-MM\-ddThh:mm:ssZ). timeIntervalStart and timeIntervalEnd parameters cannot be used together.
+.INDENT 0.0
+.INDENT 3.5
+The following datetime formats are supported:
+.UNINDENT
+.UNINDENT
+.SS UTC with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ss.ssssssTZD
+Example: 2017\-09\-15T20:30:00.123456Z
+
+UTC with milliseconds
+***********************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ss.sssTZD
+    Example: 2017\-09\-15T20:30:00.123Z
+
+UTC without milliseconds
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T20:30:00Z
+
+UTC with minute precision
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T20:30Z
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Timezone with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ssTZD
+Example: 2017\-09\-15T12:30:00.456789\-08:00, 2017\-09\-15T12:30:00.456789\-0800
+
+Timezone with milliseconds
+***************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00.456\-08:00, 2017\-09\-15T12:30:00.456\-0800
+
+Timezone without milliseconds
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00\-08:00, 2017\-09\-15T12:30:00\-0800
+
+Timezone with minute precision
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T12:30\-08:00, 2017\-09\-15T12:30\-0800
+
+Short date and time
+********************
+The timezone for this date and time will be taken as UTC (Needs to be surrounded by single or double quotes)
+
+\&.. code::
+
+    Format: \(aqYYYY\-MM\-DD HH:mm\(aq or "YYYY\-MM\-DD HH:mm"
+    Example: \(aq2017\-09\-15 17:25\(aq
+
+Date Only
+**********
+This date will be taken as midnight UTC of that day
+
+\&.. code::
+
+    Format: YYYY\-MM\-DD
+    Example: 2017\-09\-15
+
+Epoch seconds
+**************
+\&.. code::
+
+    Example: 1412195400
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/list.html#cmdoption\-compartment\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request list \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-delegated\-resource\-access\-request\-histories\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns a history of all status associated with the Delegated Resource Access RequestId.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request list\-delegated\-resource\-access\-request\-histories [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timestamp is descending. If no value is specified, timestamp is default.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timestamp
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/list\-delegated\-resource\-access\-request\-histories.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request list\-delegated\-resource\-access\-request\-histories \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-service\-provider\-interactions\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the MoreInformation interaction between customer and support operators.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request list\-service\-provider\-interactions [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/list\-service\-provider\-interactions.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request list\-service\-provider\-interactions \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBreject\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Rejects a Delegated Resource Access Request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request reject [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-approver\-comment [text]
+.UNINDENT
+.sp
+Comment by the approver explaining why the request is rejected.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/reject.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request reject \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBrevoke\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Revokes an already approved Delegated Resource Access Request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request revoke [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-approver\-comment [text]
+.UNINDENT
+.sp
+Comment specified by the approver explaining why the approval is revoked.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/revoke.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request revoke \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBservice\-provider\-interaction\-request\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Posts query for additional information for the given Delegated Resource Access Request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request service\-provider\-interaction\-request [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-more\-info\-details [text]
+.UNINDENT
+.sp
+Questions for operator to provide more information.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request/service\-provider\-interaction\-request.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request service\-provider\-interaction\-request \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS delegated\-resource\-access\-request\-audit\-log\-report
+.SS Description
+.sp
+The audit log report details.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+get
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets the audit log report for the given Delegated Resource Access Request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegated\-resource\-access\-request\-audit\-log\-report get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegated\-resource\-access\-request\-id [text]
+.UNINDENT
+.sp
+Unique Delegated Resource Access Request identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-process\-tree\-enabled [boolean]
+.UNINDENT
+.sp
+Set to true to enable process tree computation in audit report
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export delegated_resource_access_request_id=<substitute\-value\-of\-delegated_resource_access_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegated\-resource\-access\-request\-audit\-log\-report/get.html#cmdoption\-delegated\-resource\-access\-request\-id
+
+    oci delegate\-access\-control delegated\-resource\-access\-request\-audit\-log\-report get \-\-delegated\-resource\-access\-request\-id $delegated_resource_access_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS delegation\-control
+.SS Description
+.sp
+Delegation Control enables you to grant, audit, or revoke the access Oracle has to your Exadata Cloud infrastructure, and obtain audit reports of all actions taken by a human operator, in a near real\-time manner.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.IP \(bu 2
+list\-delegation\-control\-resources
+.IP \(bu 2
+update
+.UNINDENT
+.SS \fBchange\-compartment\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Moves the Delegation Control resource into a different compartment. When provided, ‘If\-Match’ is checked against ‘ETag’ values of the resource.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control change\-compartment [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-control\-id [text]
+.UNINDENT
+.sp
+unique Delegation Control identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the new compartment to contain the Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input delegation\-subscription\-ids > delegation\-subscription\-ids.json
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input resource\-ids > resource\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-display\-name
+    export notification_message_format=<substitute\-value\-of\-notification_message_format> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-message\-format
+    export notification_topic_id=<substitute\-value\-of\-notification_topic_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-topic\-id
+    export resource_type=<substitute\-value\-of\-resource_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-resource\-type
+
+    delegation_control_id=$(oci delegate\-access\-control delegation\-control create \-\-compartment\-id $compartment_id \-\-delegation\-subscription\-ids file://delegation\-subscription\-ids.json \-\-display\-name $display_name \-\-notification\-message\-format $notification_message_format \-\-notification\-topic\-id $notification_topic_id \-\-resource\-ids file://resource\-ids.json \-\-resource\-type $resource_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-control change\-compartment \-\-delegation\-control\-id $delegation_control_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a Delegation Control.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control create [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the compartment that contains this Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-delegation\-subscription\-ids [complex type]
+.UNINDENT
+.sp
+List of Delegation Subscription OCID that are allowed for this Delegation Control. The allowed subscriptions will determine the available Service Provider Actions. Only support operators for the allowed subscriptions are allowed to create Delegated Resource Access Request.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+Name of the Delegation Control. The name does not need to be unique.
+.INDENT 0.0
+.TP
+.B \-\-notification\-message\-format [text]
+.UNINDENT
+.sp
+The format of the OCI Notification messages for this Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-notification\-topic\-id [text]
+.UNINDENT
+.sp
+The OCID of the OCI Notification topic to publish messages related to this Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-resource\-ids [complex type]
+.UNINDENT
+.sp
+The OCID of the selected resources that this Delegation Control is applicable to.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-resource\-type [text]
+.UNINDENT
+.sp
+Resource type for which the Delegation Control is applicable to.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CLOUDVMCLUSTER, VMCLUSTER
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Operations": {"CostCenter": "42"}}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+Description of the Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Department": "Finance"}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-approve\-during\-maintenance [boolean]
+.UNINDENT
+.sp
+Set to true to allow all Delegated Resource Access Request to be approved automatically during maintenance.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-num\-approvals\-required [integer]
+.UNINDENT
+.sp
+number of approvals required.
+.INDENT 0.0
+.TP
+.B \-\-pre\-approved\-service\-provider\-action\-names [complex type]
+.UNINDENT
+.sp
+List of pre\-approved Service Provider Action names. The list of pre\-defined Service Provider Actions can be obtained from the ListServiceProviderActions API. Delegated Resource Access Requests associated with a resource governed by this Delegation Control will be automatically approved if the Delegated Resource Access Request only contain Service Provider Actions in the pre\-approved list.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-vault\-id [text]
+.UNINDENT
+.sp
+The OCID of the OCI Vault that will store the secrets containing the SSH keys to access the resource governed by this Delegation Control by Delegate Access Control Service. This property is required when resourceType is CLOUDVMCLUSTER. Delegate Access Control Service will generate the SSH keys and store them as secrets in the OCI Vault.
+.INDENT 0.0
+.TP
+.B \-\-vault\-key\-id [text]
+.UNINDENT
+.sp
+The OCID of the Master Encryption Key in the OCI Vault specified by vaultId. This key will be used to encrypt the SSH keys to access the resource governed by this Delegation Control by Delegate Access Control Service. This property is required when resourceType is CLOUDVMCLUSTER.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input delegation\-subscription\-ids > delegation\-subscription\-ids.json
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input resource\-ids > resource\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-display\-name
+    export notification_message_format=<substitute\-value\-of\-notification_message_format> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-message\-format
+    export notification_topic_id=<substitute\-value\-of\-notification_topic_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-topic\-id
+    export resource_type=<substitute\-value\-of\-resource_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-resource\-type
+
+    oci delegate\-access\-control delegation\-control create \-\-compartment\-id $compartment_id \-\-delegation\-subscription\-ids file://delegation\-subscription\-ids.json \-\-display\-name $display_name \-\-notification\-message\-format $notification_message_format \-\-notification\-topic\-id $notification_topic_id \-\-resource\-ids file://resource\-ids.json \-\-resource\-type $resource_type
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdelete\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Deletes a Delegation Control. You cannot delete a Delegation Control if it is assigned to govern any target resource currently or in the future. In that case, first, delete all of the current and future assignments before deleting the Delegation Control. A Delegation Control that was previously assigned to a target resource is marked as DELETED following a successful deletion. However, it is not completely deleted from the system. This is to ensure auditing information for the accesses done under the Delegation Control is preserved for future needs. The system purges the deleted Delegation Control only when all of the audit data associated with the Delegation Control are also deleted. Therefore, you cannot reuse the name of the deleted Delegation Control until the system purges the Delegation Control.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control delete [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-control\-id [text]
+.UNINDENT
+.sp
+unique Delegation Control identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+Reason why this Delegation Control is deleted.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform deletion without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input delegation\-subscription\-ids > delegation\-subscription\-ids.json
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input resource\-ids > resource\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-display\-name
+    export notification_message_format=<substitute\-value\-of\-notification_message_format> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-message\-format
+    export notification_topic_id=<substitute\-value\-of\-notification_topic_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-topic\-id
+    export resource_type=<substitute\-value\-of\-resource_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-resource\-type
+
+    delegation_control_id=$(oci delegate\-access\-control delegation\-control create \-\-compartment\-id $compartment_id \-\-delegation\-subscription\-ids file://delegation\-subscription\-ids.json \-\-display\-name $display_name \-\-notification\-message\-format $notification_message_format \-\-notification\-topic\-id $notification_topic_id \-\-resource\-ids file://resource\-ids.json \-\-resource\-type $resource_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-control delete \-\-delegation\-control\-id $delegation_control_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets the Delegation Control associated with the specified Delegation Control ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-control\-id [text]
+.UNINDENT
+.sp
+unique Delegation Control identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input delegation\-subscription\-ids > delegation\-subscription\-ids.json
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input resource\-ids > resource\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-display\-name
+    export notification_message_format=<substitute\-value\-of\-notification_message_format> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-message\-format
+    export notification_topic_id=<substitute\-value\-of\-notification_topic_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-topic\-id
+    export resource_type=<substitute\-value\-of\-resource_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-resource\-type
+
+    delegation_control_id=$(oci delegate\-access\-control delegation\-control create \-\-compartment\-id $compartment_id \-\-delegation\-subscription\-ids file://delegation\-subscription\-ids.json \-\-display\-name $display_name \-\-notification\-message\-format $notification_message_format \-\-notification\-topic\-id $notification_topic_id \-\-resource\-ids file://resource\-ids.json \-\-resource\-type $resource_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-control get \-\-delegation\-control\-id $delegation_control_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the Delegation Controls in the compartment.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return Delegation Control resources that match the given display name.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only Delegation Control resources whose lifecycleState matches the given Delegation Control lifecycle state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETING, FAILED, NEEDS_ATTENTION, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-resource\-id [text]
+.UNINDENT
+.sp
+A filter to return Delegation Control resources that match the given resource ID.
+.INDENT 0.0
+.TP
+.B \-\-resource\-type [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given resource type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CLOUDVMCLUSTER, VMCLUSTER
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending. If no value is specified, default is timeCreated.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/list.html#cmdoption\-compartment\-id
+
+    oci delegate\-access\-control delegation\-control list \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-delegation\-control\-resources\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns a list of resources associated with the Delegation Control.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control list\-delegation\-control\-resources [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-control\-id [text]
+.UNINDENT
+.sp
+unique Delegation Control identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input delegation\-subscription\-ids > delegation\-subscription\-ids.json
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input resource\-ids > resource\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-display\-name
+    export notification_message_format=<substitute\-value\-of\-notification_message_format> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-message\-format
+    export notification_topic_id=<substitute\-value\-of\-notification_topic_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-topic\-id
+    export resource_type=<substitute\-value\-of\-resource_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-resource\-type
+
+    delegation_control_id=$(oci delegate\-access\-control delegation\-control create \-\-compartment\-id $compartment_id \-\-delegation\-subscription\-ids file://delegation\-subscription\-ids.json \-\-display\-name $display_name \-\-notification\-message\-format $notification_message_format \-\-notification\-topic\-id $notification_topic_id \-\-resource\-ids file://resource\-ids.json \-\-resource\-type $resource_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-control list\-delegation\-control\-resources \-\-delegation\-control\-id $delegation_control_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the existing DelegationControl for a given Delegation Control ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-control update [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-control\-id [text]
+.UNINDENT
+.sp
+unique Delegation Control identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Operations": {"CostCenter": "42"}}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-delegation\-subscription\-ids [complex type]
+.UNINDENT
+.sp
+List of Delegation Subscription OCID that are allowed for this Delegation Control. The allowed subscriptions will determine the available Service Provider Actions. Only support operators for the allowed subscriptions are allowed to create Delegated Resource Access Request.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+Description of the Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+Name of the Delegation Control. The name does not need to be unique.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Department": "Finance"}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-approve\-during\-maintenance [boolean]
+.UNINDENT
+.sp
+Set to true to allow all Delegated Resource Access Request to be approved automatically during maintenance.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-notification\-message\-format [text]
+.UNINDENT
+.sp
+The format of the OCI Notification messages for this Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-notification\-topic\-id [text]
+.UNINDENT
+.sp
+The OCID of the OCI Notification topic to publish messages related to this Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-num\-approvals\-required [integer]
+.UNINDENT
+.sp
+number of approvals required.
+.INDENT 0.0
+.TP
+.B \-\-pre\-approved\-service\-provider\-action\-names [complex type]
+.UNINDENT
+.sp
+List of pre\-approved Service Provider Action names. The list of pre\-defined Service Provider Actions can be obtained from the ListServiceProviderActions API. Delegated Resource Access Requests associated with a resource governed by this Delegation Control will be automatically approved if the Delegated Resource Access Request only contain Service Provider Actions in the pre\-approved list.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-resource\-ids [complex type]
+.UNINDENT
+.sp
+The OCID of the selected resources that this Delegation Control is applicable to.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input delegation\-subscription\-ids > delegation\-subscription\-ids.json
+    oci delegate\-access\-control delegation\-control create \-\-generate\-param\-json\-input resource\-ids > resource\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-display\-name
+    export notification_message_format=<substitute\-value\-of\-notification_message_format> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-message\-format
+    export notification_topic_id=<substitute\-value\-of\-notification_topic_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-notification\-topic\-id
+    export resource_type=<substitute\-value\-of\-resource_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-control/create.html#cmdoption\-resource\-type
+
+    delegation_control_id=$(oci delegate\-access\-control delegation\-control create \-\-compartment\-id $compartment_id \-\-delegation\-subscription\-ids file://delegation\-subscription\-ids.json \-\-display\-name $display_name \-\-notification\-message\-format $notification_message_format \-\-notification\-topic\-id $notification_topic_id \-\-resource\-ids file://resource\-ids.json \-\-resource\-type $resource_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-control update \-\-delegation\-control\-id $delegation_control_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS delegation\-subscription
+.SS Description
+.sp
+Details of the Delegation Subscription.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.IP \(bu 2
+update
+.UNINDENT
+.SS \fBchange\-compartment\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Moves the Delegation Subscription resource into a different compartment. When provided, ‘If\-Match’ is checked against ‘ETag’ values of the resource.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-subscription change\-compartment [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-subscription\-id [text]
+.UNINDENT
+.sp
+unique Delegation Subscription identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the new compartment to contain the Delegation Subscription.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-compartment\-id
+    export service_provider_id=<substitute\-value\-of\-service_provider_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-service\-provider\-id
+    export subscribed_service_type=<substitute\-value\-of\-subscribed_service_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-subscribed\-service\-type
+
+    delegation_subscription_id=$(oci delegate\-access\-control delegation\-subscription create \-\-compartment\-id $compartment_id \-\-service\-provider\-id $service_provider_id \-\-subscribed\-service\-type $subscribed_service_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-subscription change\-compartment \-\-delegation\-subscription\-id $delegation_subscription_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates Delegation Subscription in Delegation Control.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-subscription create [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the compartment that contains the Delegation Control.
+.INDENT 0.0
+.TP
+.B \-\-service\-provider\-id [text]
+.UNINDENT
+.sp
+Unique identifier of the Service Provider.
+.INDENT 0.0
+.TP
+.B \-\-subscribed\-service\-type [text]
+.UNINDENT
+.sp
+Subscribed Service Provider Service Type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASSISTED_PATCHING, TROUBLESHOOTING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Operations": {"CostCenter": "42"}}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+Description of the Delegation Subscription.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Department": "Finance"}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-compartment\-id
+    export service_provider_id=<substitute\-value\-of\-service_provider_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-service\-provider\-id
+    export subscribed_service_type=<substitute\-value\-of\-subscribed_service_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-subscribed\-service\-type
+
+    oci delegate\-access\-control delegation\-subscription create \-\-compartment\-id $compartment_id \-\-service\-provider\-id $service_provider_id \-\-subscribed\-service\-type $subscribed_service_type
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdelete\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+eletes an Delegation Subscription in Delegation Control.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-subscription delete [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-subscription\-id [text]
+.UNINDENT
+.sp
+unique Delegation Subscription identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform deletion without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-compartment\-id
+    export service_provider_id=<substitute\-value\-of\-service_provider_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-service\-provider\-id
+    export subscribed_service_type=<substitute\-value\-of\-subscribed_service_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-subscribed\-service\-type
+
+    delegation_subscription_id=$(oci delegate\-access\-control delegation\-subscription create \-\-compartment\-id $compartment_id \-\-service\-provider\-id $service_provider_id \-\-subscribed\-service\-type $subscribed_service_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-subscription delete \-\-delegation\-subscription\-id $delegation_subscription_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets a DelegationSubscription by identifier
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-subscription get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-subscription\-id [text]
+.UNINDENT
+.sp
+unique Delegation Subscription identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-compartment\-id
+    export service_provider_id=<substitute\-value\-of\-service_provider_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-service\-provider\-id
+    export subscribed_service_type=<substitute\-value\-of\-subscribed_service_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-subscribed\-service\-type
+
+    delegation_subscription_id=$(oci delegate\-access\-control delegation\-subscription create \-\-compartment\-id $compartment_id \-\-service\-provider\-id $service_provider_id \-\-subscribed\-service\-type $subscribed_service_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-subscription get \-\-delegation\-subscription\-id $delegation_subscription_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the Delegation Subscriptions in Delegation Control.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-subscription list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return Delegation Subscription resources that match the given display name.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only Delegation Subscription resources whose lifecycleState matches the given Delegation Subscription lifecycle state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETING, FAILED, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending. If no value is specified, timeCreated is default.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/list.html#cmdoption\-compartment\-id
+
+    oci delegate\-access\-control delegation\-subscription list \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the existing DelegationSubscription for a given Delegation Subscription ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control delegation\-subscription update [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-delegation\-subscription\-id [text]
+.UNINDENT
+.sp
+unique Delegation Subscription identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Operations": {"CostCenter": "42"}}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+Description of the Delegation Subscription.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Department": "Finance"}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-compartment\-id
+    export service_provider_id=<substitute\-value\-of\-service_provider_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-service\-provider\-id
+    export subscribed_service_type=<substitute\-value\-of\-subscribed_service_type> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/delegation\-subscription/create.html#cmdoption\-subscribed\-service\-type
+
+    delegation_subscription_id=$(oci delegate\-access\-control delegation\-subscription create \-\-compartment\-id $compartment_id \-\-service\-provider\-id $service_provider_id \-\-subscribed\-service\-type $subscribed_service_type \-\-query data.id \-\-raw\-output)
+
+    oci delegate\-access\-control delegation\-subscription update \-\-delegation\-subscription\-id $delegation_subscription_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS service\-provider
+.SS Description
+.sp
+Details of the Service Provider. Service provider offers services to the customer to support the delegated resources.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets a ServiceProvider by identifier
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control service\-provider get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-service\-provider\-id [text]
+.UNINDENT
+.sp
+unique Service Provider identifier
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export service_provider_id=<substitute\-value\-of\-service_provider_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/service\-provider/get.html#cmdoption\-service\-provider\-id
+
+    oci delegate\-access\-control service\-provider get \-\-service\-provider\-id $service_provider_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the Service Providers.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control service\-provider list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only Service Provider resources whose lifecycleState matches the given Service Provider lifecycle state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETING, FAILED, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-name [text]
+.UNINDENT
+.sp
+A filter to return Service Provider resources that match the given name.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-service\-provider\-type [text]
+.UNINDENT
+.sp
+A filter to return only Service Provider resources whose provider type matches the given provider type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ORACLE_PROVIDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for name is ascending. If no value is specified, timeCreated is default.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-supported\-resource\-type [text]
+.UNINDENT
+.sp
+A filter to return only Service Provider resources whose supported resource type matches the given resource type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CLOUDVMCLUSTER, VMCLUSTER
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/service\-provider/list.html#cmdoption\-compartment\-id
+
+    oci delegate\-access\-control service\-provider list \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS service\-provider\-action
+.SS Description
+.sp
+Details of the Service Provider Action. Service provider actions are a pre\-defined set of commands available to the support operator on different layers of the infrastructure. Although the groupings may differ depending on the infrastructure layers, the groups are designed to enable the support operator access to commands to resolve a specific set of issues.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets the Service Provider Action associated with the specified Service Provider Action ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control service\-provider\-action get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-service\-provider\-action\-id [text]
+.UNINDENT
+.sp
+Unique Oracle supplied identifier associated with the Service Provider Action.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export service_provider_action_id=<substitute\-value\-of\-service_provider_action_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/service\-provider\-action/get.html#cmdoption\-service\-provider\-action\-id
+
+    oci delegate\-access\-control service\-provider\-action get \-\-service\-provider\-action\-id $service_provider_action_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists all the ServiceProviderActions available in the system.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control service\-provider\-action list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only resources whose lifecycleState matches the given Service Provider Action lifecycleState.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, INACTIVE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-name [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the entire name given.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-resource\-type [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given resource type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CLOUDVMCLUSTER, VMCLUSTER
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-service\-provider\-service\-type [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given Service Provider service type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASSISTED_PATCHING, TROUBLESHOOTING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for name is ascending. If no value is specified, default is timeCreated.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+name, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/service\-provider\-action/list.html#cmdoption\-compartment\-id
+
+    oci delegate\-access\-control service\-provider\-action list \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request
+.SS Description
+.sp
+Oracle Delegate Access Control allows ExaCC and ExaCS customers to delegate management of their Exadata resources operators outside their tenancies.
+With Delegate Access Control, Support Providers can deliver managed services using comprehensive and robust tooling built on the OCI platform.
+Customers maintain control over who has access to the delegated resources in their tenancy and what actions can be taken.
+Enterprises managing resources across multiple tenants can use Delegate Access Control to streamline management tasks.
+Using logging service, customers can view a near real\-time audit report of all actions performed by a Service Provider operator.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+work\-request
+.INDENT 2.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.IP \(bu 2
+work\-request\-error
+.INDENT 2.0
+.IP \(bu 2
+list\-errors
+.UNINDENT
+.IP \(bu 2
+work\-request\-log
+.INDENT 2.0
+.IP \(bu 2
+list\-logs
+.UNINDENT
+.UNINDENT
+.SS work\-request
+.SS Description
+.sp
+A description of workrequest status
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+get
+.IP \(bu 2
+list
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets details of the work request with the given ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control work\-request work\-request get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The ID of the asynchronous request.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export work_request_id=<substitute\-value\-of\-work_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/work\-request/work\-request/get.html#cmdoption\-work\-request\-id
+
+    oci delegate\-access\-control work\-request work\-request get \-\-work\-request\-id $work_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the work requests in a compartment.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control work\-request work\-request list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-resource\-id [text]
+.UNINDENT
+.sp
+The ID of the resource affected by the work request.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeAccepted is descending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timeAccepted
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-status [text]
+.UNINDENT
+.sp
+A filter to return only work requests with the given OperationStatus.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, NEEDS_ATTENTION, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The ID of the asynchronous work request.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/work\-request/work\-request/list.html#cmdoption\-compartment\-id
+
+    oci delegate\-access\-control work\-request work\-request list \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request\-error
+.SS Description
+.sp
+An error encountered while executing a work request.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-errors
+.UNINDENT
+.SS \fBlist\-errors\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns a (paginated) list of errors for the work request with the given ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control work\-request work\-request\-error list\-errors [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The ID of the asynchronous request.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timestamp is descending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timestamp
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export work_request_id=<substitute\-value\-of\-work_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/work\-request/work\-request\-error/list\-errors.html#cmdoption\-work\-request\-id
+
+    oci delegate\-access\-control work\-request work\-request\-error list\-errors \-\-work\-request\-id $work_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request\-log
+.SS Description
+.sp
+A log message from the execution of a work request.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-logs
+.UNINDENT
+.SS \fBlist\-logs\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns a (paginated) list of logs for the work request with the given ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci delegate\-access\-control work\-request work\-request\-log list\-logs [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The ID of the asynchronous request.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timestamp is descending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timestamp
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘asc’ or ‘desc’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export work_request_id=<substitute\-value\-of\-work_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/delegate\-access\-control/work\-request/work\-request\-log/list\-logs.html#cmdoption\-work\-request\-id
+
+    oci delegate\-access\-control work\-request work\-request\-log list\-logs \-\-work\-request\-id $work_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH AUTHOR
+Oracle
+.SH COPYRIGHT
+2016, 2024, Oracle
+.\" Generated by docutils manpage writer.
+.

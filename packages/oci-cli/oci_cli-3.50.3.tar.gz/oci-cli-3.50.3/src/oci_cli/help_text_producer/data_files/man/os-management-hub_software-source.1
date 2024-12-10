@@ -1,0 +1,4834 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "OS-MANAGEMENT-HUB_SOFTWARE-SOURCE" "1" "Dec 09, 2024" "3.50.3" "OCI CLI Command Reference"
+.SH NAME
+os-management-hub_software-source \- 
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH DESCRIPTION
+.sp
+The object that defines a software source. A software source contains a collection of packages. For more information, see \fI\%Managing Software Sources\fP <\fBhttps://docs.cloud.oracle.com/iaas/osmh/doc/software-sources.htm\fP>\&.
+.SH AVAILABLE COMMANDS
+.INDENT 0.0
+.IP \(bu 2
+add\-packages
+.IP \(bu 2
+change\-availability
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create\-custom\-swsrc
+.IP \(bu 2
+create\-entitlement
+.IP \(bu 2
+create\-versioned\-custom\-swsrc
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+get\-erratum
+.IP \(bu 2
+get\-module\-profile
+.IP \(bu 2
+get\-module\-stream
+.IP \(bu 2
+get\-package\-group
+.IP \(bu 2
+get\-software\-package
+.IP \(bu 2
+get\-software\-package\-by\-name
+.IP \(bu 2
+list
+.IP \(bu 2
+list\-all\-software\-packages
+.IP \(bu 2
+list\-entitlements
+.IP \(bu 2
+list\-errata
+.IP \(bu 2
+list\-module\-profiles
+.IP \(bu 2
+list\-module\-streams
+.IP \(bu 2
+list\-package\-groups
+.IP \(bu 2
+list\-software\-packages
+.IP \(bu 2
+list\-software\-source\-vendors
+.IP \(bu 2
+list\-software\-sources\-with\-package
+.IP \(bu 2
+replicate\-vendor\-swsrc
+.IP \(bu 2
+search\-module\-streams
+.IP \(bu 2
+search\-modules
+.IP \(bu 2
+search\-package\-groups
+.IP \(bu 2
+update\-custom\-swsrc
+.IP \(bu 2
+update\-versioned\-custom\-swsrc
+.UNINDENT
+.SS \fBadd\-packages\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Adds packages to a software source. This operation can only be done for custom and versioned custom software sources that are not created using filters. For a versioned custom software source, you can only add packages when the source is created. Once content is added to a versioned custom software source, it is immutable.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source add\-packages [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-packages [complex type]
+.UNINDENT
+.sp
+List of packages specified by the full package name (NEVRA.rpm).
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source add\-packages \-\-generate\-param\-json\-input packages > packages.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/add\-packages.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source add\-packages \-\-packages file://packages.json \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBchange\-availability\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the availability for a list of specified software sources.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source change\-availability [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-availabilities [complex type]
+.UNINDENT
+.sp
+List of objects containing software source ids and its availability.
+.sp
+This option is a JSON list with items of type SoftwareSourceAvailability.  For documentation on SoftwareSourceAvailability please see our API reference: \fI\%https://docs.cloud.oracle.com/api/#/en/softwaresource/20220901/datatypes/SoftwareSourceAvailability\fP\&.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source change\-availability
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBchange\-compartment\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Moves the specified software sources to a different compartment within the same tenancy. For information about moving resources between compartments, see \fI\%Moving Resources to a Different Compartment\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/Identity/Tasks/managingcompartments.htm#moveRes\fP>\&.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source change\-compartment [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment to move the software source to.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/change\-compartment.html#cmdoption\-compartment\-id
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/change\-compartment.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source change\-compartment \-\-compartment\-id $compartment_id \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\-custom\-swsrc\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a new versioned or custom software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source create\-custom\-swsrc [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment that contains the software source.
+.INDENT 0.0
+.TP
+.B \-\-vendor\-software\-sources [complex type]
+.UNINDENT
+.sp
+List of vendor software sources.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Operations”: {“CostCenter”: “42”}}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+User\-specified description for the software source. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+User\-friendly name for the software source. Does not have to be unique and you can change the name later. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-filter [complex type]
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Department”: “Finance”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-resolve\-dependencies [boolean]
+.UNINDENT
+.sp
+Indicates whether the service should automatically resolve package dependencies when including specific packages in the software source.
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-updated [boolean]
+.UNINDENT
+.sp
+Indicates whether service should automatically update the custom software source for the user.
+.INDENT 0.0
+.TP
+.B \-\-is\-created\-from\-package\-list [boolean]
+.UNINDENT
+.sp
+Indicates whether the service should create the software source from a list of packages provided by the user.
+.INDENT 0.0
+.TP
+.B \-\-is\-latest\-content\-only [boolean]
+.UNINDENT
+.sp
+Indicates whether the software source will include only the latest versions of content from vendor software sources, while accounting for other constraints set in the custom or versioned custom software source (such as a package list or filters). * For a module filter that does not specify a stream, this will include all available streams, and within each stream only the latest version of packages. * For a module filter that does specify a stream, this will include only the latest version of packages for the specified stream. * For a package filter that does not specify a version, this will include only the latest available version of the package. * For a package filter that does specify a version, this will include only the specified version of the package (the isLatestContentOnly attribute is ignored). * For a package list, this will include only the specified version of packages and modules in the list (the isLatestContentOnly attribute is ignored).
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-packages [complex type]
+.UNINDENT
+.sp
+A property used for compatibility only. It doesn’t provide a complete list of packages. See \fI\%AddPackagesToSoftwareSourceDetails\fP <\fBhttps://docs.cloud.oracle.com/api/#/en/osmh/latest/datatypes/AddPackagesToSoftwareSourceDetails\fP> for providing the list of packages used to create the software source when isCreatedFromPackageList is set to true.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source create\-custom\-swsrc \-\-generate\-param\-json\-input vendor\-software\-sources > vendor\-software\-sources.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/create\-custom\-swsrc.html#cmdoption\-compartment\-id
+
+    oci os\-management\-hub software\-source create\-custom\-swsrc \-\-compartment\-id $compartment_id \-\-vendor\-software\-sources file://vendor\-software\-sources.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\-entitlement\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Registers the necessary entitlement credentials for OS vendor software sources for a tenancy.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source create\-entitlement [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the tenancy containing the entitlement.
+.INDENT 0.0
+.TP
+.B \-\-csi [text]
+.UNINDENT
+.sp
+The Customer Support Identifier (CSI) which unlocks the software sources. The CSI is is a unique key given to a customer and it uniquely identifies the entitlement.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/create\-entitlement.html#cmdoption\-compartment\-id
+    export csi=<substitute\-value\-of\-csi> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/create\-entitlement.html#cmdoption\-csi
+
+    oci os\-management\-hub software\-source create\-entitlement \-\-compartment\-id $compartment_id \-\-csi $csi
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\-versioned\-custom\-swsrc\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a new versioned or custom software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source create\-versioned\-custom\-swsrc [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment that contains the software source.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-version [text]
+.UNINDENT
+.sp
+The version to assign to this custom software source.
+.INDENT 0.0
+.TP
+.B \-\-vendor\-software\-sources [complex type]
+.UNINDENT
+.sp
+List of vendor software sources.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Operations”: {“CostCenter”: “42”}}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+User\-specified description for the software source. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+User\-friendly name for the software source. Does not have to be unique and you can change the name later. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-filter [complex type]
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Department”: “Finance”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-resolve\-dependencies [boolean]
+.UNINDENT
+.sp
+Indicates whether the service should automatically resolve package dependencies when including specific packages in the software source.
+.INDENT 0.0
+.TP
+.B \-\-is\-created\-from\-package\-list [boolean]
+.UNINDENT
+.sp
+Indicates whether the service should create the software source from a list of packages provided by the user.
+.INDENT 0.0
+.TP
+.B \-\-is\-latest\-content\-only [boolean]
+.UNINDENT
+.sp
+Indicates whether the software source will include only the latest versions of content from vendor software sources, while accounting for other constraints set in the custom or versioned custom software source (such as a package list or filters). * For a module filter that does not specify a stream, this will include all available streams, and within each stream only the latest version of packages. * For a module filter that does specify a stream, this will include only the latest version of packages for the specified stream. * For a package filter that does not specify a version, this will include only the latest available version of the package. * For a package filter that does specify a version, this will include only the specified version of the package (the isLatestContentOnly attribute is ignored). * For a package list, this will include only the specified version of packages and modules in the list (the isLatestContentOnly attribute is ignored).
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-packages [complex type]
+.UNINDENT
+.sp
+A property used for compatibility only. It doesn’t provide a complete list of packages. See \fI\%AddPackagesToSoftwareSourceDetails\fP <\fBhttps://docs.cloud.oracle.com/api/#/en/osmh/latest/datatypes/AddPackagesToSoftwareSourceDetails\fP> for providing the list of packages used to create the software source when isCreatedFromPackageList is set to true.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source create\-versioned\-custom\-swsrc \-\-generate\-param\-json\-input vendor\-software\-sources > vendor\-software\-sources.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/create\-versioned\-custom\-swsrc.html#cmdoption\-compartment\-id
+    export software_source_version=<substitute\-value\-of\-software_source_version> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/create\-versioned\-custom\-swsrc.html#cmdoption\-software\-source\-version
+
+    oci os\-management\-hub software\-source create\-versioned\-custom\-swsrc \-\-compartment\-id $compartment_id \-\-software\-source\-version $software_source_version \-\-vendor\-software\-sources file://vendor\-software\-sources.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdelete\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Deletes the specified software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source delete [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform deletion without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the resource to reach the lifecycle state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation creates, modifies or deletes a resource that has a defined lifecycle state. Specify this option to perform the action and then wait until the resource reaches a given lifecycle state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETING, FAILED, INACTIVE, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the resource has reached the lifecycle state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/delete.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source delete \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source get \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\-erratum\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified erratum based on its advisory name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get\-erratum [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment. This parameter is required and returns only resources contained within the specified compartment.
+.INDENT 0.0
+.TP
+.B \-\-name [text]
+.UNINDENT
+.sp
+The erratum name (such as ELSA\-2023\-34678).
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-erratum.html#cmdoption\-compartment\-id
+    export name=<substitute\-value\-of\-name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-erratum.html#cmdoption\-name
+
+    oci os\-management\-hub software\-source get\-erratum \-\-compartment\-id $compartment_id \-\-name $name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\-module\-profile\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified module stream profile in a software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get\-module\-profile [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-module\-name [text]
+.UNINDENT
+.sp
+The name of a module.
+.INDENT 0.0
+.TP
+.B \-\-profile\-name [text]
+.UNINDENT
+.sp
+The name of the module stream profile.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.INDENT 0.0
+.TP
+.B \-\-stream\-name [text]
+.UNINDENT
+.sp
+The name of the stream of the containing module.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export module_name=<substitute\-value\-of\-module_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-profile.html#cmdoption\-module\-name
+    export profile_name=<substitute\-value\-of\-profile_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-profile.html#cmdoption\-profile\-name
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-profile.html#cmdoption\-software\-source\-id
+    export stream_name=<substitute\-value\-of\-stream_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-profile.html#cmdoption\-stream\-name
+
+    oci os\-management\-hub software\-source get\-module\-profile \-\-module\-name $module_name \-\-profile\-name $profile_name \-\-software\-source\-id $software_source_id \-\-stream\-name $stream_name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\-module\-stream\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified module stream in a software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get\-module\-stream [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-module\-name [text]
+.UNINDENT
+.sp
+The name of the module.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.INDENT 0.0
+.TP
+.B \-\-stream\-name [text]
+.UNINDENT
+.sp
+The name of the stream of the containing module.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export module_name=<substitute\-value\-of\-module_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-stream.html#cmdoption\-module\-name
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-stream.html#cmdoption\-software\-source\-id
+    export stream_name=<substitute\-value\-of\-stream_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-module\-stream.html#cmdoption\-stream\-name
+
+    oci os\-management\-hub software\-source get\-module\-stream \-\-module\-name $module_name \-\-software\-source\-id $software_source_id \-\-stream\-name $stream_name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\-package\-group\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified package group from a software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get\-package\-group [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-package\-group\-id [text]
+.UNINDENT
+.sp
+The unique package group identifier.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export package_group_id=<substitute\-value\-of\-package_group_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-package\-group.html#cmdoption\-package\-group\-id
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-package\-group.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source get\-package\-group \-\-package\-group\-id $package_group_id \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\-software\-package\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified software package.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get\-software\-package [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-package\-name [text]
+.UNINDENT
+.sp
+The name of the software package.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_package_name=<substitute\-value\-of\-software_package_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-software\-package.html#cmdoption\-software\-package\-name
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-software\-package.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source get\-software\-package \-\-software\-package\-name $software_package_name \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\-software\-package\-by\-name\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns information about the specified software package based on its fully qualified name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source get\-software\-package\-by\-name [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-package\-name [text]
+.UNINDENT
+.sp
+The name of the software package.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_package_name=<substitute\-value\-of\-software_package_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/get\-software\-package\-by\-name.html#cmdoption\-software\-package\-name
+
+    oci os\-management\-hub software\-source get\-software\-package\-by\-name \-\-software\-package\-name $software_package_name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists software sources that match the specified tenancy or software source \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&. Filter the list against a variety of criteria including but not limited to its name, status, architecture, and OS family.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-arch\-type [text]
+.UNINDENT
+.sp
+A filter to return only instances whose architecture type matches the given architecture.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AARCH64, I686, NOARCH, SRC, X86_64
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-availability [text]
+.UNINDENT
+.sp
+The availabilities of the software source in a non\-OCI environment for a tenancy.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVAILABLE, RESTRICTED, SELECTED, UNAVAILABLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-availability\-anywhere [text]
+.UNINDENT
+.sp
+The availabilities of the software source. Use this query parameter to filter across availabilities in different environments.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVAILABLE, RESTRICTED, SELECTED, UNAVAILABLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-availability\-at\-oci [text]
+.UNINDENT
+.sp
+The availabilities of the software source in an OCI environment for a tenancy.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVAILABLE, RESTRICTED, SELECTED, UNAVAILABLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the compartment that contains the resources to list. This filter returns only resources contained within the specified compartment.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return resources that match the given user\-friendly name.
+.INDENT 0.0
+.TP
+.B \-\-display\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the given display name.
+.INDENT 0.0
+.TP
+.B \-\-display\-name\-ne [text]
+.UNINDENT
+.sp
+A multi filter to return resources that do not contains the given display names.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-mandatory\-for\-alx [boolean]
+.UNINDENT
+.sp
+Indicates whether the software source is mandatory for the Autonomous Linux service.
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only software sources whose state matches the given state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETING, FAILED, INACTIVE, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-os\-family [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given operating system family.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ALL, ORACLE_LINUX_6, ORACLE_LINUX_7, ORACLE_LINUX_8, ORACLE_LINUX_9, WINDOWS_SERVER_2016, WINDOWS_SERVER_2019, WINDOWS_SERVER_2022
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> for the software source.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-type [text]
+.UNINDENT
+.sp
+The type of the software source.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CUSTOM, VENDOR, VERSIONED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-vendor\-name [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given vendor name.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+MICROSOFT, ORACLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source list
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-all\-software\-packages\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists software packages available through the OS Management Hub service.  Filter the list against a variety of criteria including but not limited to its name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-all\-software\-packages [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-architecture [text]
+.UNINDENT
+.sp
+A filter to return software packages that match the given architecture.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AARCH64, I386, I686, NOARCH, OTHER, SRC, X86_64
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return resources that match the given user\-friendly name.
+.INDENT 0.0
+.TP
+.B \-\-display\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the given display name.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-latest [boolean]
+.UNINDENT
+.sp
+Indicates whether to list only the latest versions of packages, module streams, and stream profiles.
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-os\-family [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given operating system family.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ALL, ORACLE_LINUX_6, ORACLE_LINUX_7, ORACLE_LINUX_8, ORACLE_LINUX_9, WINDOWS_SERVER_2016, WINDOWS_SERVER_2019, WINDOWS_SERVER_2022
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-package\-version [text]
+.UNINDENT
+.sp
+A filter to return software packages that match the given version.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort packages by. Only one sort order may be provided. Default order for displayName is ascending. If no value is specified displayName is default.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source list\-all\-software\-packages
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-entitlements\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists entitlements in the specified tenancy \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&. Filter the list against a variety of criteria including but not limited to its Customer Support Identifier (CSI), and vendor name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-entitlements [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment. This parameter is required and returns only resources contained within the specified compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-csi [text]
+.UNINDENT
+.sp
+A filter to return entitlements that match the given CSI.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort entitlements by. Only one sort order may be provided.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+csi, vendorName
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-vendor\-name [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given vendor name.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+MICROSOFT, ORACLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-entitlements.html#cmdoption\-compartment\-id
+
+    oci os\-management\-hub software\-source list\-entitlements \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-errata\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists all of the currently available errata. Filter the list against a variety of criteria including but not limited to its name, classification type, advisory severity, and OS family.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-errata [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment. This parameter is required and returns only resources contained within the specified compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-advisory\-severity [text]
+.UNINDENT
+.sp
+The advisory severity.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CRITICAL, IMPORTANT, LOW, MODERATE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-advisory\-type [text]
+.UNINDENT
+.sp
+A filter to return only errata that match the given advisory types.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+BUGFIX, ENHANCEMENT, SECURITY
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-classification\-type [text]
+.UNINDENT
+.sp
+A filter to return only packages that match the given update classification type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+BUGFIX, ENHANCEMENT, OTHER, SECURITY
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-name [text]
+.UNINDENT
+.sp
+The assigned erratum name. It’s unique and not changeable.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ELSA\-2020\-5804
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the erratum name given.
+.INDENT 0.0
+.TP
+.B \-\-os\-family [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given operating system family.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ALL, ORACLE_LINUX_6, ORACLE_LINUX_7, ORACLE_LINUX_8, ORACLE_LINUX_9, WINDOWS_SERVER_2016, WINDOWS_SERVER_2019, WINDOWS_SERVER_2022
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort errata by. Only one sort order may be provided. Default order for timeIssued is descending. Default order for name is ascending. If no value is specified timeIssued is default.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+name, timeIssued
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-time\-issue\-date\-end [datetime]
+.UNINDENT
+.sp
+The issue date before which to list all errata, in ISO 8601 format
+.sp
+Example: 2017\-07\-14T02:40:00.000Z
+.INDENT 0.0
+.INDENT 3.5
+The following datetime formats are supported:
+.UNINDENT
+.UNINDENT
+.SS UTC with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ss.ssssssTZD
+Example: 2017\-09\-15T20:30:00.123456Z
+
+UTC with milliseconds
+***********************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ss.sssTZD
+    Example: 2017\-09\-15T20:30:00.123Z
+
+UTC without milliseconds
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T20:30:00Z
+
+UTC with minute precision
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T20:30Z
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Timezone with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ssTZD
+Example: 2017\-09\-15T12:30:00.456789\-08:00, 2017\-09\-15T12:30:00.456789\-0800
+
+Timezone with milliseconds
+***************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00.456\-08:00, 2017\-09\-15T12:30:00.456\-0800
+
+Timezone without milliseconds
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00\-08:00, 2017\-09\-15T12:30:00\-0800
+
+Timezone with minute precision
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T12:30\-08:00, 2017\-09\-15T12:30\-0800
+
+Short date and time
+********************
+The timezone for this date and time will be taken as UTC (Needs to be surrounded by single or double quotes)
+
+\&.. code::
+
+    Format: \(aqYYYY\-MM\-DD HH:mm\(aq or "YYYY\-MM\-DD HH:mm"
+    Example: \(aq2017\-09\-15 17:25\(aq
+
+Date Only
+**********
+This date will be taken as midnight UTC of that day
+
+\&.. code::
+
+    Format: YYYY\-MM\-DD
+    Example: 2017\-09\-15
+
+Epoch seconds
+**************
+\&.. code::
+
+    Example: 1412195400
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-time\-issue\-date\-start [datetime]
+.UNINDENT
+.sp
+The issue date after which to list all errata, in ISO 8601 format
+.sp
+Example: 2017\-07\-14T02:40:00.000Z
+.INDENT 0.0
+.INDENT 3.5
+The following datetime formats are supported:
+.UNINDENT
+.UNINDENT
+.SS UTC with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ss.ssssssTZD
+Example: 2017\-09\-15T20:30:00.123456Z
+
+UTC with milliseconds
+***********************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ss.sssTZD
+    Example: 2017\-09\-15T20:30:00.123Z
+
+UTC without milliseconds
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T20:30:00Z
+
+UTC with minute precision
+**************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T20:30Z
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Timezone with microseconds
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Format: YYYY\-MM\-DDTHH:mm:ssTZD
+Example: 2017\-09\-15T12:30:00.456789\-08:00, 2017\-09\-15T12:30:00.456789\-0800
+
+Timezone with milliseconds
+***************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00.456\-08:00, 2017\-09\-15T12:30:00.456\-0800
+
+Timezone without milliseconds
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mm:ssTZD
+    Example: 2017\-09\-15T12:30:00\-08:00, 2017\-09\-15T12:30:00\-0800
+
+Timezone with minute precision
+*******************************
+\&.. code::
+
+    Format: YYYY\-MM\-DDTHH:mmTZD
+    Example: 2017\-09\-15T12:30\-08:00, 2017\-09\-15T12:30\-0800
+
+Short date and time
+********************
+The timezone for this date and time will be taken as UTC (Needs to be surrounded by single or double quotes)
+
+\&.. code::
+
+    Format: \(aqYYYY\-MM\-DD HH:mm\(aq or "YYYY\-MM\-DD HH:mm"
+    Example: \(aq2017\-09\-15 17:25\(aq
+
+Date Only
+**********
+This date will be taken as midnight UTC of that day
+
+\&.. code::
+
+    Format: YYYY\-MM\-DD
+    Example: 2017\-09\-15
+
+Epoch seconds
+**************
+\&.. code::
+
+    Example: 1412195400
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-errata.html#cmdoption\-compartment\-id
+
+    oci os\-management\-hub software\-source list\-errata \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-module\-profiles\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists module stream profiles from the specified software source \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&. Filter the list against a variety of criteria including but not limited to its module name, stream name, and profile name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-module\-profiles [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-module\-name [text]
+.UNINDENT
+.sp
+The name of a module. This parameter is required if a streamName is specified.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-profile\-name [text]
+.UNINDENT
+.sp
+The name of the profile.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for moduleName is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+moduleName
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-stream\-name [text]
+.UNINDENT
+.sp
+The name of the module stream. This parameter is required if a profile name is specified.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-module\-profiles.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source list\-module\-profiles \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-module\-streams\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists module streams from the specified software source \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&. Filter the list against a variety of criteria including but not limited to its module name and (stream) name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-module\-streams [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-latest [boolean]
+.UNINDENT
+.sp
+Indicates whether to list only the latest versions of packages, module streams, and stream profiles.
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-module\-name [text]
+.UNINDENT
+.sp
+The name of a module. This parameter is required if a streamName is specified.
+.INDENT 0.0
+.TP
+.B \-\-module\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the module name given.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for moduleName is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+moduleName
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-stream\-name [text]
+.UNINDENT
+.sp
+The name of the stream.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-module\-streams.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source list\-module\-streams \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-package\-groups\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists package groups that are associated with the specified software source \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&. Filter the list against a variety of criteria including but not limited to its name, and package group type.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-package\-groups [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the compartment that contains the resources to list. This filter returns only resources contained within the specified compartment.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-group\-type [text]
+.UNINDENT
+.sp
+A filter to return only package groups of the specified type.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CATEGORY, ENVIRONMENT, GROUP
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-name [text]
+.UNINDENT
+.sp
+The name of the entity to be queried.
+.INDENT 0.0
+.TP
+.B \-\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the name given.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-package\-groups.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source list\-package\-groups \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-software\-packages\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists software packages in the specified software source.  Filter the list against a variety of criteria including but not limited to its name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-software\-packages [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return resources that match the given user\-friendly name.
+.INDENT 0.0
+.TP
+.B \-\-display\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the given display name.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-latest [boolean]
+.UNINDENT
+.sp
+Indicates whether to list only the latest versions of packages, module streams, and stream profiles.
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-software\-packages.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source list\-software\-packages \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-software\-source\-vendors\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists available software source vendors. Filter the list against a variety of criteria including but not limited to its name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-software\-source\-vendors [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment. This parameter is required and returns only resources contained within the specified compartment.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-name [text]
+.UNINDENT
+.sp
+The name of the entity to be queried.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort software source vendors by. Only one sort order may be provided. Default order for name is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-software\-source\-vendors.html#cmdoption\-compartment\-id
+
+    oci os\-management\-hub software\-source list\-software\-source\-vendors \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlist\-software\-sources\-with\-package\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the software sources in the tenancy that contain the software package. Filter the list against a variety of criteria including but not limited to its name, type, architecture, and OS family.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source list\-software\-sources\-with\-package [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment. This parameter is required and returns only resources contained within the specified compartment.
+.INDENT 0.0
+.TP
+.B \-\-software\-package\-name [text]
+.UNINDENT
+.sp
+The name of the software package.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-arch\-type [text]
+.UNINDENT
+.sp
+A filter to return only instances whose architecture type matches the given architecture.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AARCH64, I686, NOARCH, SRC, X86_64
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-availability [text]
+.UNINDENT
+.sp
+The availabilities of the software source in a non\-OCI environment for a tenancy.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVAILABLE, RESTRICTED, SELECTED, UNAVAILABLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-availability\-anywhere [text]
+.UNINDENT
+.sp
+The availabilities of the software source. Use this query parameter to filter across availabilities in different environments.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVAILABLE, RESTRICTED, SELECTED, UNAVAILABLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-availability\-at\-oci [text]
+.UNINDENT
+.sp
+The availabilities of the software source in an OCI environment for a tenancy.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVAILABLE, RESTRICTED, SELECTED, UNAVAILABLE
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return resources that match the given user\-friendly name.
+.INDENT 0.0
+.TP
+.B \-\-display\-name\-contains [text]
+.UNINDENT
+.sp
+A filter to return resources that may partially match the given display name.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only software sources whose state matches the given state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETING, FAILED, INACTIVE, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-os\-family [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the given operating system family.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ALL, ORACLE_LINUX_6, ORACLE_LINUX_7, ORACLE_LINUX_8, ORACLE_LINUX_9, WINDOWS_SERVER_2016, WINDOWS_SERVER_2019, WINDOWS_SERVER_2022
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-type [text]
+.UNINDENT
+.sp
+The type of the software source.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CUSTOM, VENDOR, VERSIONED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ‘ASC’ or ‘DESC’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-software\-sources\-with\-package.html#cmdoption\-compartment\-id
+    export software_package_name=<substitute\-value\-of\-software_package_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/list\-software\-sources\-with\-package.html#cmdoption\-software\-package\-name
+
+    oci os\-management\-hub software\-source list\-software\-sources\-with\-package \-\-compartment\-id $compartment_id \-\-software\-package\-name $software_package_name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBreplicate\-vendor\-swsrc\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a new versioned or custom software source.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source replicate\-vendor\-swsrc [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment that contains the software source.
+.INDENT 0.0
+.TP
+.B \-\-origin\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the vendor software source in the root compartment that is being replicated.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Operations”: {“CostCenter”: “42”}}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+User\-specified description for the software source. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+User\-friendly name for the software source. Does not have to be unique and you can change the name later. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Department”: “Finance”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/replicate\-vendor\-swsrc.html#cmdoption\-compartment\-id
+    export origin_software_source_id=<substitute\-value\-of\-origin_software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/replicate\-vendor\-swsrc.html#cmdoption\-origin\-software\-source\-id
+
+    oci os\-management\-hub software\-source replicate\-vendor\-swsrc \-\-compartment\-id $compartment_id \-\-origin\-software\-source\-id $origin_software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBsearch\-module\-streams\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns a list of module streams from the specified software sources. Filter the list against a variety of criteria including the module name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source search\-module\-streams [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-ids [complex type]
+.UNINDENT
+.sp
+List of software source \fI\%OCIDs\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-module\-name [text]
+.UNINDENT
+.sp
+The name of a module.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+MODULENAME
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source search\-module\-streams \-\-generate\-param\-json\-input software\-source\-ids > software\-source\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source search\-module\-streams \-\-software\-source\-ids file://software\-source\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBsearch\-modules\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists modules from a list of software sources. Filter the list against a variety of criteria including the module name.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source search\-modules [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-ids [complex type]
+.UNINDENT
+.sp
+List of sofware source \fI\%OCIDs\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-module\-name [text]
+.UNINDENT
+.sp
+The name of a module.
+.INDENT 0.0
+.TP
+.B \-\-module\-name\-contains [text]
+.UNINDENT
+.sp
+filters results, allowing only those with a name which contains the string.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+NAME
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source search\-modules \-\-generate\-param\-json\-input software\-source\-ids > software\-source\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source search\-modules \-\-software\-source\-ids file://software\-source\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBsearch\-package\-groups\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Searches the package groups from the specified list of software sources. Filter the list against a variety of criteria including but not limited to its name, and group type.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source search\-package\-groups [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-ids [complex type]
+.UNINDENT
+.sp
+List of software source \fI\%OCIDs\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP>\&.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-group\-type [text]
+.UNINDENT
+.sp
+Indicates if this is a group, category or environment.
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+For list pagination. The maximum number of results per page, or items to return in a paginated “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+50
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-name\-contains [text]
+.UNINDENT
+.sp
+A filter that returns package groups with a name that contains the given string.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+For list pagination. The value of the \fIopc\-next\-page\fP response header from the previous “List” call. For important details about how pagination works, see \fI\%List Pagination\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/API/Concepts/usingapi.htm#nine\fP>\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+3
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+NAME
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source search\-package\-groups \-\-generate\-param\-json\-input software\-source\-ids > software\-source\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci os\-management\-hub software\-source search\-package\-groups \-\-software\-source\-ids file://software\-source\-ids.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\-custom\-swsrc\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the specified software source’s details, including but not limited to name, description, and tags.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source update\-custom\-swsrc [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment that contains the software source.
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Operations”: {“CostCenter”: “42”}}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+User\-specified description of the software source.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+User\-friendly name for the software source.
+.INDENT 0.0
+.TP
+.B \-\-filter [complex type]
+.UNINDENT
+.sp
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Department”: “Finance”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-resolve\-dependencies [boolean]
+.UNINDENT
+.sp
+Indicates whether the service should automatically resolve package dependencies when including specific packages in the software source.
+.INDENT 0.0
+.TP
+.B \-\-is\-auto\-updated [boolean]
+.UNINDENT
+.sp
+Indicates whether service should automatically update the custom software source for the user.
+.INDENT 0.0
+.TP
+.B \-\-is\-latest\-content\-only [boolean]
+.UNINDENT
+.sp
+Indicates whether the software source will include only the latest versions of content from vendor software sources, while accounting for other constraints set in the custom or versioned custom software source (such as a package list or filters). * For a module filter that does not specify a stream, this will include all available streams, and within each stream only the latest version of packages. * For a module filter that does specify a stream, this will include only the latest version of packages for the specified stream. * For a package filter that does not specify a version, this will include only the latest available version of the package. * For a package filter that does specify a version, this will include only the specified version of the package (the isLatestContentOnly attribute is ignored). * For a package list, this will include only the specified version of packages and modules in the list (the isLatestContentOnly attribute is ignored).
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-vendor\-software\-sources [complex type]
+.UNINDENT
+.sp
+List of vendor software sources that are used for the basis of the custom software source.
+.sp
+This option is a JSON list with items of type Id.  For documentation on Id please see our API reference: \fI\%https://docs.cloud.oracle.com/api/#/en/softwaresource/20220901/datatypes/Id\fP\&.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/update\-custom\-swsrc.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source update\-custom\-swsrc \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\-versioned\-custom\-swsrc\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the specified software source’s details, including but not limited to name, description, and tags.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci os\-management\-hub software\-source update\-versioned\-custom\-swsrc [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-software\-source\-id [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the software source.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm\fP> of the compartment that contains the software source.
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Operations”: {“CostCenter”: “42”}}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-description [text]
+.UNINDENT
+.sp
+User\-specified description of the software source.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+User\-friendly name for the software source.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Free\-form tags for this resource. Each tag is a simple key\-value pair with no predefined name, type, or namespace. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm\fP>\&. Example: \fI{“Department”: “Finance”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export software_source_id=<substitute\-value\-of\-software_source_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/os\-management\-hub/software\-source/update\-versioned\-custom\-swsrc.html#cmdoption\-software\-source\-id
+
+    oci os\-management\-hub software\-source update\-versioned\-custom\-swsrc \-\-software\-source\-id $software_source_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH AUTHOR
+Oracle
+.SH COPYRIGHT
+2016, 2024, Oracle
+.\" Generated by docutils manpage writer.
+.

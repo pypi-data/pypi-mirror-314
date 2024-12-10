@@ -1,0 +1,3876 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "RECOVERY" "1" "Dec 09, 2024" "3.50.3" "OCI CLI Command Reference"
+.SH NAME
+recovery \- 
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH DESCRIPTION
+.sp
+Use Oracle Database Autonomous Recovery Service CLI to manage Protected Databases.
+.SH AVAILABLE COMMANDS
+.INDENT 0.0
+.IP \(bu 2
+protected\-database
+.INDENT 2.0
+.IP \(bu 2
+cancel\-protected\-database\-deletion
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+change\-protected\-database\-subscription
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+fetch\-protected\-database\-configuration
+.IP \(bu 2
+get
+.IP \(bu 2
+schedule\-protected\-database\-deletion
+.IP \(bu 2
+update
+.UNINDENT
+.IP \(bu 2
+protected\-database\-collection
+.INDENT 2.0
+.IP \(bu 2
+list\-protected\-databases
+.UNINDENT
+.IP \(bu 2
+protection\-policy
+.INDENT 2.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+update
+.UNINDENT
+.IP \(bu 2
+protection\-policy\-collection
+.INDENT 2.0
+.IP \(bu 2
+list\-protection\-policies
+.UNINDENT
+.IP \(bu 2
+recovery\-service\-subnet
+.INDENT 2.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+update
+.UNINDENT
+.IP \(bu 2
+recovery\-service\-subnet\-collection
+.INDENT 2.0
+.IP \(bu 2
+list\-recovery\-service\-subnets
+.UNINDENT
+.IP \(bu 2
+work\-request
+.INDENT 2.0
+.IP \(bu 2
+get
+.UNINDENT
+.IP \(bu 2
+work\-request\-error\-collection
+.INDENT 2.0
+.IP \(bu 2
+list\-work\-request\-errors
+.UNINDENT
+.IP \(bu 2
+work\-request\-log\-entry\-collection
+.INDENT 2.0
+.IP \(bu 2
+list\-work\-request\-logs
+.UNINDENT
+.IP \(bu 2
+work\-request\-summary\-collection
+.INDENT 2.0
+.IP \(bu 2
+list\-work\-requests
+.UNINDENT
+.UNINDENT
+.SS protected\-database
+.SS Description
+.sp
+A protected database is an Oracle Cloud Database whose backups are managed by Oracle Database Autonomous Recovery Service. Each protected database requires a recovery service subnet and a protection policy to use Recovery Service as the backup destination for centralized backup and recovery
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+cancel\-protected\-database\-deletion
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+change\-protected\-database\-subscription
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+fetch\-protected\-database\-configuration
+.IP \(bu 2
+get
+.IP \(bu 2
+schedule\-protected\-database\-deletion
+.IP \(bu 2
+update
+.UNINDENT
+.SS \fBcancel\-protected\-database\-deletion\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Cancels the scheduled deletion of a protected database, and returns the protected database to an ACTIVE state. You can cancel the deletion only if the protected database is in the DELETE SCHEDULED state.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database cancel\-protected\-database\-deletion [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database cancel\-protected\-database\-deletion \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBchange\-compartment\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Moves a protected database resource from the existing compartment to the specified compartment. When provided, If\-Match is checked against ETag values of the resource.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database change\-compartment [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm\fP> of the compartment into which the protected database should be moved.
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database change\-compartment \-\-compartment\-id $compartment_id \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBchange\-protected\-database\-subscription\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Associates the protected database with a new cloud service environment, such as Microsoft Azure.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database change\-protected\-database\-subscription [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-is\-default [boolean]
+.UNINDENT
+.sp
+Indicates whether it is a Universal Credit Model (UCM) subscription.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-subscription\-id [text]
+.UNINDENT
+.sp
+The OCID of the new cloud service subscription to which you want to link the protected database.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database change\-protected\-database\-subscription \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a new Protected Database.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database create [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The OCID of the compartment that contains the protected database.
+.INDENT 0.0
+.TP
+.B \-\-db\-unique\-name [text]
+.UNINDENT
+.sp
+The dbUniqueName of the protected database in Recovery Service. You cannot change the unique name.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+The protected database name. You can change the displayName. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-password [text]
+.UNINDENT
+.sp
+Password credential which can be used to connect to Protected Database. It must contain at least 2 uppercase, 2 lowercase, 2 numeric and 2 special characters. The special characters must be underscore (_), number sign (#) or hyphen (\-). The password must not contain the username “admin”, regardless of casing.
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The OCID of the protection policy associated with the protected database.
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnets [complex type]
+.UNINDENT
+.sp
+List of recovery service subnet resources associated with the protected database.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-change\-rate [text]
+.UNINDENT
+.sp
+The percentage of data changes that exist in the database between successive incremental backups.
+.INDENT 0.0
+.TP
+.B \-\-compression\-ratio [text]
+.UNINDENT
+.sp
+The compression ratio of the protected database. The compression ratio represents the ratio of compressed block size to expanded block size.
+.INDENT 0.0
+.TP
+.B \-\-database\-id [text]
+.UNINDENT
+.sp
+The OCID of the protected database.
+.INDENT 0.0
+.TP
+.B \-\-database\-size [text]
+.UNINDENT
+.sp
+The size of the protected database. XS \- Less than 5GB, S \- 5GB to 50GB, M \- 50GB to 500GB, L \- 500GB to 1TB, XL \- 1TB to 5TB, XXL \- Greater than 5TB.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AUTO, L, M, S, XL, XS, XXL
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-database\-size\-in\-gbs [integer]
+.UNINDENT
+.sp
+The size of the database, in gigabytes.
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: \fI{“foo\-namespace”: {“bar\-key”: “value”}}\fP\&. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/resourcetags.htm\fP>
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Simple key\-value pair that is applied without any predefined name, type or scope. Exists for cross\-compatibility only. Example: \fI{“bar\-key”: “value”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-is\-redo\-logs\-shipped [boolean]
+.UNINDENT
+.sp
+The value TRUE indicates that the protected database is configured to use Real\-time data protection, and redo\-data is sent from the protected database to Recovery Service. Real\-time data protection substantially reduces the window of potential data loss that exists between successive archived redo log backups.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-opc\-dry\-run [boolean]
+.UNINDENT
+.sp
+Indicates if the request is to test the preparedness for creating a protected database, without actually creating a protected database.
+.sp
+If you set the \fIopcDryRun\fP option as \fItrue\fP, then Recovery Service only performs a test run to check for any missing prerequisites or configurations required to create a protected database, and then returns error messages to warn you about any missing requirements.
+.sp
+If an error occurs, you can review, correct, and repeat the dry run until the \fIcreateProtectedDatabase\fP request does not return any errors.
+.sp
+These are the common issues that you can identify by performing a dry run of the \fIcreateProtectedDatabase\fP request:
+.INDENT 0.0
+.IP \(bu 2
+The Recovery Service subnet has insufficient free IP addresses to support the required number of private endpoints. See, \fI\%troubleshooting\fP <\fBhttps://docs.oracle.com/en/cloud/paas/recovery-service/dbrsu/troubleshoot-backup-failures-recovery-service.html#GUID-05FA08B8-421D-4E52-B84B-7AFB84ADECF9\fP> information * Recovery Service does not have permissions to manage the network resources in a chosen compartment * Recovery Service is out of capacity. See, \fI\%Service Limits\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/servicelimits.htm\fP> for more information * Recovery Service resources exceed quota limits * A protected database, having the same database ID, already exists * The specified protection policy does not exist, or it is not in an Active state * The specified Recovery Service subnet does not exist, or it is not in an Active state
+.UNINDENT
+.sp
+See, \fI\%Prerequisites for Using Recovery Service\fP <\fBhttps://docs.oracle.com/en/cloud/paas/recovery-service/dbrsu/backup-recover-recovery-service.html#GUID-B2ABF281-DFF8-4A4E-AC85-629801AAF36A\fP> for more information.
+.INDENT 0.0
+.TP
+.B \-\-subscription\-id [text]
+.UNINDENT
+.sp
+The OCID of the cloud service subscription to which you want to link the protected database. For example, specify the Microsoft Azure subscription ID if you want to provision the protected database in Azure.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdelete\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Deletes a protected database based on the specified protected database ID.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database delete [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-deletion\-schedule [text]
+.UNINDENT
+.sp
+Defines a preferred schedule to delete a protected database after you terminate the source database. * The default schedule is DELETE_AFTER_72_HOURS, so that the delete operation can occur 72 hours (3 days) after the source database is terminated . * The alternate schedule is DELETE_AFTER_RETENTION_PERIOD. Specify this option if you want to delete a protected database only after the policy\-defined backup retention period expires.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DELETE_AFTER_72_HOURS, DELETE_AFTER_RETENTION_PERIOD
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform deletion without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database delete \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBfetch\-protected\-database\-configuration\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Downloads the network service configuration file ‘tnsnames.ora’ for a specified protected database. Applies to user\-defined recovery systems only.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database fetch\-protected\-database\-configuration [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-file [filename]
+.UNINDENT
+.sp
+The name of the file that will receive the response data, or ‘\-‘ to write to STDOUT.
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-configuration\-type [text]
+.UNINDENT
+.sp
+Currently has four config options ALL, TNSNAMES, HOSTS and CABUNDLE. All will return a zipped folder containing the contents of both tnsnames and the certificateChainPem.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ALL, CABUNDLE, HOSTS, RCVCONF, TNSNAMES
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database fetch\-protected\-database\-configuration \-\-file $file \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets information about a specified protected database.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database get \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBschedule\-protected\-database\-deletion\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Defines a preferred schedule to delete a protected database after you terminate the source database. The default schedule is DELETE_AFTER_72_HOURS, so that the delete operation can occur 72 hours (3 days) after the source database is terminated. The alternate schedule is DELETE_AFTER_RETENTION_PERIOD. Specify this option if you want to delete a protected database only after the policy\-defined backup retention period expires.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database schedule\-protected\-database\-deletion [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-deletion\-schedule [text]
+.UNINDENT
+.sp
+Defines a preferred schedule to delete a protected database after you terminate the source database. * The default schedule is DELETE_AFTER_72_HOURS, so that the delete operation can occur 72 hours (3 days) after the source database is terminated. * The alternate schedule is DELETE_AFTER_RETENTION_PERIOD. Specify this option if you want to delete a protected database only after the policy\-defined backup retention period expires.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DELETE_AFTER_72_HOURS, DELETE_AFTER_RETENTION_PERIOD
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database schedule\-protected\-database\-deletion \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the Protected Database
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database update [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protected\-database\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-database\-size [text]
+.UNINDENT
+.sp
+The size of the database is allowed to be decreased. XS \- Less than 5GB, S \- 5GB to 50GB, M \- 50GB to 500GB, L \- 500GB to 1TB, XL \- 1TB to 5TB, XXL \- Greater than 5TB.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AUTO, L, M, S, XL, XS, XXL
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-database\-size\-in\-gbs [integer]
+.UNINDENT
+.sp
+The size of the database, in gigabytes.
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: \fI{“foo\-namespace”: {“bar\-key”: “value”}}\fP\&. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/resourcetags.htm\fP>
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+The protected database name. You can change the displayName. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Simple key\-value pair that is applied without any predefined name, type or scope. Exists for cross\-compatibility only. Example: \fI{“bar\-key”: “value”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-is\-redo\-logs\-shipped [boolean]
+.UNINDENT
+.sp
+The value TRUE indicates that the protected database is configured to use Real\-time data protection, and redo\-data is sent from the protected database to Recovery Service. Real\-time data protection substantially reduces the window of potential data loss that exists between successive archived redo log backups. For this to be effective, additional configuration is needed on client side.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-password [text]
+.UNINDENT
+.sp
+Password credential which can be used to connect to Protected Database. It must contain at least 2 uppercase, 2 lowercase, 2 numeric and 2 special characters. The special characters must be underscore (_), number sign (#) or hyphen (\-). The password must not contain the username “admin”, regardless of casing. Password must not be same as current passsword.
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The OCID of the protection policy associated with the protected database.
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnets [complex type]
+.UNINDENT
+.sp
+List of recovery service subnet resources associated with the protected database.
+.sp
+This option is a JSON list with items of type RecoveryServiceSubnetInput.  For documentation on RecoveryServiceSubnetInput please see our API reference: \fI\%https://docs.cloud.oracle.com/api/#/en/databaserecovery/20210216/datatypes/RecoveryServiceSubnetInput\fP\&.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy and paste the following example into a JSON file, replacing the example parameters with your own.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    oci recovery protected\-database create \-\-generate\-param\-json\-input recovery\-service\-subnets > recovery\-service\-subnets.json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+    export db_unique_name=<substitute\-value\-of\-db_unique_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-db\-unique\-name
+    export password=<substitute\-value\-of\-password> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database/create.html#cmdoption\-password
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    protected_database_id=$(oci recovery protected\-database create \-\-compartment\-id $compartment_id \-\-db\-unique\-name $db_unique_name \-\-display\-name $display_name \-\-password $password \-\-protection\-policy\-id $protection_policy_id \-\-recovery\-service\-subnets file://recovery\-service\-subnets.json \-\-query data.id \-\-raw\-output)
+
+    oci recovery protected\-database update \-\-protected\-database\-id $protected_database_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS protected\-database\-collection
+.SS Description
+.sp
+Results of a protected database search operation. The results contain protected database summary and metadata information.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-protected\-databases
+.UNINDENT
+.SS \fBlist\-protected\-databases\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the protected databases based on the specified parameters.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protected\-database\-collection list\-protected\-databases [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The compartment OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the entire ‘displayname’ given.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-id [text]
+.UNINDENT
+.sp
+The protected database OCID.
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only the resources that match the specified lifecycle state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETE_SCHEDULED, DELETING, FAILED, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return per page.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The protection policy OCID.
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnet\-id [text]
+.UNINDENT
+.sp
+The recovery service subnet OCID.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. You can provide one sort order (sortOrder). Default order for TIMECREATED is descending. Default order for DISPLAYNAME is ascending. If you do not specify a value, then TIMECREATED is used as the default sort order. Allowed values are:   \- TIMECREATED   \- DISPLAYNAME
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ascending (ASC) or descending (DESC). Allowed values are:   \- ASC   \- DESC
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protected\-database\-collection/list\-protected\-databases.html#cmdoption\-compartment\-id
+
+    oci recovery protected\-database\-collection list\-protected\-databases \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS protection\-policy
+.SS Description
+.sp
+The details of a protection policy.A policy defines the exact number of days to retain protected database backups created by Recovery Service. Each protected database must be associated with one protection policy. You can use Oracle\-defined protection policies or create custom policies to suit your internal backup storage regulation demands.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+update
+.UNINDENT
+.SS \fBchange\-compartment\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Moves a protection policy resource from the existing compartment to the specified compartment. When provided, If\-Match is checked against ETag values of the resource.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protection\-policy change\-compartment [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm\fP> of the compartment into which the Protection Policy should be moved.
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The protection policy OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    oci recovery protection\-policy change\-compartment \-\-compartment\-id $compartment_id \-\-protection\-policy\-id $protection_policy_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a new Protection Policy.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protection\-policy create [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-backup\-retention\-period\-in\-days [integer]
+.UNINDENT
+.sp
+The maximum number of days to retain backups for a protected database.
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+Compartment Identifier
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A user provided name for the protection policy. The ‘displayName’ does not have to be unique, and it can be modified. Avoid entering confidential information.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: \fI{“foo\-namespace”: {“bar\-key”: “value”}}\fP\&. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/resourcetags.htm\fP>
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Simple key\-value pair that is applied without any predefined name, type or scope. Exists for cross\-compatibility only. Example: \fI{“bar\-key”: “value”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-must\-enforce\-cloud\-locality [boolean]
+.UNINDENT
+.sp
+Indicates whether the protection policy enforces Recovery Service to retain backups in the same cloud service environment where your Oracle Database is provisioned. This parameter is applicable if your Oracle Database runs in a different cloud service environment, such as Microsoft Azure. If you set the mustEnforceCloudLocality parameter to TRUE, then Recovery Service stores the database backups locally in the same cloud service environment where the database resides. For example, if your Oracle Database is provisioned on Microsoft Azure, then Recovery Service stores the database backups in Azure. Note: You cannot change the mustEnforceCloudLocality setting for a protection policy after you create it.
+.INDENT 0.0
+.TP
+.B \-\-policy\-locked\-date\-time [text]
+.UNINDENT
+.sp
+An RFC3339 formatted datetime string that specifies the exact date and time for the retention lock to take effect and permanently lock the retention period defined in the policy.
+.INDENT 0.0
+.IP \(bu 2
+The retention lock feature controls whether Recovery Service strictly preserves backups for the duration defined in a policy. Retention lock is useful to enforce recovery window compliance and to prevent unintentional modifications to protected database backups. * Recovery Service enforces a 14\-day delay before the retention lock set for a policy can take effect. Therefore, you must set policyLockedDateTime  to a date that occurs 14 days after the current date. * For example, assuming that the current date is Aug 1, 2023 9 pm, you can set policyLockedDateTime  to ‘2023\-08\-15T21:00:00.600Z’ (Aug 15, 2023, 9:00 pm), or greater. * During the 14\-day delay period, you can either increase or decrease the retention period in the policy. * However, you are only allowed to increase the retention period on or after the retention lock date. * You cannot change the value of policyLockedDateTime if the retention lock is already in effect.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+
+    oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdelete\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Deletes a specified protection policy. You can delete custom policies only. Deleting a Oracle predefined policies will result in status code 405 Method Not Allowed.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protection\-policy delete [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The protection policy OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform deletion without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    oci recovery protection\-policy delete \-\-protection\-policy\-id $protection_policy_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets information about a specified protection policy.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protection\-policy get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The protection policy OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    oci recovery protection\-policy get \-\-protection\-policy\-id $protection_policy_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the specified protection policy.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protection\-policy update [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The protection policy OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-backup\-retention\-period\-in\-days [integer]
+.UNINDENT
+.sp
+The maximum number of days to retain backups for a protected database.
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: \fI{“foo\-namespace”: {“bar\-key”: “value”}}\fP\&. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/resourcetags.htm\fP>
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A user provided name for the protection policy. The ‘displayName’ does not have to be unique, and it can be modified. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Simple key\-value pair that is applied without any predefined name, type or scope. Exists for cross\-compatibility only. Example: \fI{“bar\-key”: “value”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-policy\-locked\-date\-time [text]
+.UNINDENT
+.sp
+An RFC3339 formatted datetime string that specifies the exact date and time for the retention lock to take effect and permanently lock the retention period defined in the policy.
+.INDENT 0.0
+.IP \(bu 2
+The retention lock feature controls whether Recovery Service strictly preserves backups for the duration defined in a policy. Retention lock is useful to enforce recovery window compliance and to prevent unintentional modifications to protected database backups. * Recovery Service enforces a 14\-day delay before the retention lock set for a policy can take effect. Therefore, you must set policyLockedDateTime  to a date that occurs 14 days after the current date. * For example, assuming that the current date is Aug 1, 2023 9 pm, you can set policyLockedDateTime  to ‘2023\-08\-15T21:00:00.600Z’ (Aug 15, 2023, 9:00 pm), or greater. * During the 14\-day delay period, you can either increase or decrease the retention period in the policy. * However, you are only allowed to increase the retention period on or after the retention lock date. * You cannot change the value of policyLockedDateTime if the retention lock is already in effect.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export backup_retention_period_in_days=<substitute\-value\-of\-backup_retention_period_in_days> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-backup\-retention\-period\-in\-days
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy/create.html#cmdoption\-display\-name
+
+    protection_policy_id=$(oci recovery protection\-policy create \-\-backup\-retention\-period\-in\-days $backup_retention_period_in_days \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-query data.id \-\-raw\-output)
+
+    oci recovery protection\-policy update \-\-protection\-policy\-id $protection_policy_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS protection\-policy\-collection
+.SS Description
+.sp
+Results of a Protection Policy search. Contains both Protection Policy Summary items and other information, such as metadata.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-protection\-policies
+.UNINDENT
+.SS \fBlist\-protection\-policies\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets a list of protection policies based on the specified parameters.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery protection\-policy\-collection list\-protection\-policies [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The compartment OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the entire ‘displayname’ given.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only resources their lifecycleState matches the given lifecycleState.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETE_SCHEDULED, DELETING, FAILED, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return. Specify a value greater than 4.
+.INDENT 0.0
+.TP
+.B \-\-owner [text]
+.UNINDENT
+.sp
+A filter to return only the policies that match the owner as ‘Customer’ or ‘Oracle’.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+customer, oracle
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-protection\-policy\-id [text]
+.UNINDENT
+.sp
+The protection policy OCID.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. You can provide one sort order (sortOrder). Default order for TIMECREATED is descending. Default order for DISPLAYNAME is ascending. If you do not specify a value, then TIMECREATED is used as the default sort order. Allowed values are:   \- TIMECREATED   \- DISPLAYNAME
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ascending (ASC) or descending (DESC). Allowed values are:   \- ASC   \- DESC
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/protection\-policy\-collection/list\-protection\-policies.html#cmdoption\-compartment\-id
+
+    oci recovery protection\-policy\-collection list\-protection\-policies \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS recovery\-service\-subnet
+.SS Description
+.sp
+The details of a recovery service subnet. Recovery service subnets allows Recovery Service to access protected databases in each VCN. Each recovery service subnet uses a single private endpoint on a subnet of your choice within a VCN. The private endpoint need not be on the same subnet as the Oracle Cloud Database, although, it must be on a subnet that can communicate with the Oracle Cloud Database.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+change\-compartment
+.IP \(bu 2
+create
+.IP \(bu 2
+delete
+.IP \(bu 2
+get
+.IP \(bu 2
+update
+.UNINDENT
+.SS \fBchange\-compartment\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Moves a recovery service subnet resource from the existing compartment to the specified compartment. When provided, If\-Match is checked against ETag values of the resource.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery recovery\-service\-subnet change\-compartment [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The \fI\%OCID\fP <\fBhttps://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm\fP> of the compartment into which the Recovery Service subnet should be moved.
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnet\-id [text]
+.UNINDENT
+.sp
+The recovery service subnet OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-display\-name
+    export vcn_id=<substitute\-value\-of\-vcn_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-vcn\-id
+
+    recovery_service_subnet_id=$(oci recovery recovery\-service\-subnet create \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-vcn\-id $vcn_id \-\-query data.id \-\-raw\-output)
+
+    oci recovery recovery\-service\-subnet change\-compartment \-\-compartment\-id $compartment_id \-\-recovery\-service\-subnet\-id $recovery_service_subnet_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBcreate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Creates a new Recovery Service Subnet.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery recovery\-service\-subnet create [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The compartment OCID.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A user\-provided name for the recovery service subnet. The ‘displayName’ does not have to be unique, and it can be modified. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-vcn\-id [text]
+.UNINDENT
+.sp
+The OCID of the virtual cloud network (VCN) that contains the recovery service subnet. You can create a single recovery service subnet per VCN.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: \fI{“foo\-namespace”: {“bar\-key”: “value”}}\fP\&. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/resourcetags.htm\fP>
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Simple key\-value pair that is applied without any predefined name, type or scope. Exists for cross\-compatibility only. Example: \fI{“bar\-key”: “value”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-nsg\-ids [complex type]
+.UNINDENT
+.sp
+A list of network security group (NSG) OCIDs that are associated with the Recovery Service subnet. You can specify a maximum of 5 unique OCIDs, which implies that you can associate a maximum of 5 NSGs to each Recovery Service subnet. Specify an empty array if you want to remove all the associated NSGs from a Recovery Service subnet. See \fI\%Network Security Groups\fP <\fBhttps://docs.cloud.oracle.com/api/#/en/iaas/latest/NetworkSecurityGroup/\fP> for more information.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-subnet\-id [text]
+.UNINDENT
+.sp
+Deprecated. One of the subnets associated with the Recovery Service subnet.
+.INDENT 0.0
+.TP
+.B \-\-subnets [complex type]
+.UNINDENT
+.sp
+A list of OCIDs of the subnets associated with the Recovery Service subnet.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-display\-name
+    export vcn_id=<substitute\-value\-of\-vcn_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-vcn\-id
+
+    oci recovery recovery\-service\-subnet create \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-vcn\-id $vcn_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdelete\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Deletes a specified recovery service subnet.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery recovery\-service\-subnet delete [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnet\-id [text]
+.UNINDENT
+.sp
+The recovery service subnet OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform deletion without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-display\-name
+    export vcn_id=<substitute\-value\-of\-vcn_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-vcn\-id
+
+    recovery_service_subnet_id=$(oci recovery recovery\-service\-subnet create \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-vcn\-id $vcn_id \-\-query data.id \-\-raw\-output)
+
+    oci recovery recovery\-service\-subnet delete \-\-recovery\-service\-subnet\-id $recovery_service_subnet_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets information about a specified recovery service subnet.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery recovery\-service\-subnet get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnet\-id [text]
+.UNINDENT
+.sp
+The recovery service subnet OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-display\-name
+    export vcn_id=<substitute\-value\-of\-vcn_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-vcn\-id
+
+    recovery_service_subnet_id=$(oci recovery recovery\-service\-subnet create \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-vcn\-id $vcn_id \-\-query data.id \-\-raw\-output)
+
+    oci recovery recovery\-service\-subnet get \-\-recovery\-service\-subnet\-id $recovery_service_subnet_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBupdate\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Updates the specified recovery service subnet.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery recovery\-service\-subnet update [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-recovery\-service\-subnet\-id [text]
+.UNINDENT
+.sp
+The recovery service subnet OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-defined\-tags [complex type]
+.UNINDENT
+.sp
+Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: \fI{“foo\-namespace”: {“bar\-key”: “value”}}\fP\&. For more information, see \fI\%Resource Tags\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/General/Concepts/resourcetags.htm\fP>
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A user\-provided name for the recovery service subnet. The ‘displayName’ does not have to be unique, and it can be modified. Avoid entering confidential information.
+.INDENT 0.0
+.TP
+.B \-\-force
+.UNINDENT
+.sp
+Perform update without prompting for confirmation.
+.INDENT 0.0
+.TP
+.B \-\-freeform\-tags [complex type]
+.UNINDENT
+.sp
+Simple key\-value pair that is applied without any predefined name, type or scope. Exists for cross\-compatibility only. Example: \fI{“bar\-key”: “value”}\fP
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-if\-match [text]
+.UNINDENT
+.sp
+For optimistic concurrency control. In the PUT or DELETE call for a resource, set the \fIif\-match\fP parameter to the value of the etag from a previous GET or POST response for that resource. The resource will be updated or deleted only if the etag you provide matches the resource’s current etag value.
+.INDENT 0.0
+.TP
+.B \-\-max\-wait\-seconds [integer]
+.UNINDENT
+.sp
+The maximum time to wait for the work request to reach the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 1200 seconds.
+.INDENT 0.0
+.TP
+.B \-\-nsg\-ids [complex type]
+.UNINDENT
+.sp
+A list of network security group (NSG) OCIDs that are associated with the Recovery Service subnet. You can specify a maximum of 5 unique OCIDs, which implies that you can associate a maximum of 5 NSGs to each Recovery Service subnet. Specify an empty array if you want to remove all the associated NSGs from a Recovery Service subnet. See \fI\%Network Security Groups\fP <\fBhttps://docs.cloud.oracle.com/api/#/en/iaas/latest/NetworkSecurityGroup/\fP> for more information.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-subnets [complex type]
+.UNINDENT
+.sp
+A list of OCIDs of the subnets associated with the recovery service subnet.
+This is a complex type whose value must be valid JSON. The value can be provided as a string on the command line or passed in as a file using
+the \fI\%file://path/to/file\fP syntax.
+.sp
+The \fB\-\-generate\-param\-json\-input\fP option can be used to generate an example of the JSON which must be provided. We recommend storing this example
+in a file, modifying it as needed and then passing it back in via the \fI\%file://\fP syntax.
+.INDENT 0.0
+.TP
+.B \-\-wait\-for\-state [text]
+.UNINDENT
+.sp
+This operation asynchronously creates, modifies or deletes a resource and uses a work request to track the progress of the operation. Specify this option to perform the action and then wait until the work request reaches a certain state. Multiple states can be specified, returning on the first state. For example, \fB\-\-wait\-for\-state\fP SUCCEEDED \fB\-\-wait\-for\-state\fP FAILED would return on whichever lifecycle state is reached first. If timeout is reached, a return code of 2 is returned. For any other error, a return code of 1 is returned.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-wait\-interval\-seconds [integer]
+.UNINDENT
+.sp
+Check every \fB\-\-wait\-interval\-seconds\fP to see whether the work request has reached the state defined by \fB\-\-wait\-for\-state\fP\&. Defaults to 30 seconds.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-compartment\-id
+    export display_name=<substitute\-value\-of\-display_name> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-display\-name
+    export vcn_id=<substitute\-value\-of\-vcn_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet/create.html#cmdoption\-vcn\-id
+
+    recovery_service_subnet_id=$(oci recovery recovery\-service\-subnet create \-\-compartment\-id $compartment_id \-\-display\-name $display_name \-\-vcn\-id $vcn_id \-\-query data.id \-\-raw\-output)
+
+    oci recovery recovery\-service\-subnet update \-\-recovery\-service\-subnet\-id $recovery_service_subnet_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS recovery\-service\-subnet\-collection
+.SS Description
+.sp
+Results of a recovery service subnet search operation. The results contain recovery service subnet summary and metadata information.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-recovery\-service\-subnets
+.UNINDENT
+.SS \fBlist\-recovery\-service\-subnets\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Returns a list of Recovery Service Subnets.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery recovery\-service\-subnet\-collection list\-recovery\-service\-subnets [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The compartment OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-display\-name [text]
+.UNINDENT
+.sp
+A filter to return only resources that match the entire ‘displayname’ given.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-id [text]
+.UNINDENT
+.sp
+The recovery service subnet OCID.
+.INDENT 0.0
+.TP
+.B \-\-lifecycle\-state [text]
+.UNINDENT
+.sp
+A filter to return only the resources that match the specified lifecycle state.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACTIVE, CREATING, DELETED, DELETE_SCHEDULED, DELETING, FAILED, UPDATING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return per page.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. You can provide one sort order (sortOrder). Default order for TIMECREATED is descending. Default order for DISPLAYNAME is ascending. If you do not specify a value, then TIMECREATED is used as the default sort order. Allowed values are:   \- TIMECREATED   \- DISPLAYNAME
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+displayName, timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ascending (ASC) or descending (DESC). Allowed values are:   \- ASC   \- DESC
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-vcn\-id [text]
+.UNINDENT
+.sp
+The OCID of the virtual cloud network (VCN) associated with the recovery service subnet.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/recovery\-service\-subnet\-collection/list\-recovery\-service\-subnets.html#cmdoption\-compartment\-id
+
+    oci recovery recovery\-service\-subnet\-collection list\-recovery\-service\-subnets \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request
+.SS Description
+.sp
+A description of workrequest status
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+get
+.UNINDENT
+.SS \fBget\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Gets the status of the work request based on the specified ID
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery work\-request get [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The OCID of the work request.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export work_request_id=<substitute\-value\-of\-work_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/work\-request/get.html#cmdoption\-work\-request\-id
+
+    oci recovery work\-request get \-\-work\-request\-id $work_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request\-error\-collection
+.SS Description
+.sp
+Results of a workRequestError search. Contains both WorkRequestError items and other information, such as metadata.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-work\-request\-errors
+.UNINDENT
+.SS \fBlist\-work\-request\-errors\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Return a (paginated) list of errors for a given work request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery work\-request\-error\-collection list\-work\-request\-errors [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The OCID of the work request.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return per page.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ascending (ASC) or descending (DESC). Allowed values are:   \- ASC   \- DESC
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export work_request_id=<substitute\-value\-of\-work_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/work\-request\-error\-collection/list\-work\-request\-errors.html#cmdoption\-work\-request\-id
+
+    oci recovery work\-request\-error\-collection list\-work\-request\-errors \-\-work\-request\-id $work_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request\-log\-entry\-collection
+.SS Description
+.sp
+Results of a workRequestLog search. Contains both workRequestLog items and other information, such as metadata.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-work\-request\-logs
+.UNINDENT
+.SS \fBlist\-work\-request\-logs\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Return a (paginated) list of logs for a given work request.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery work\-request\-log\-entry\-collection list\-work\-request\-logs [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+The OCID of the work request.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return per page.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timeCreated
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ascending (ASC) or descending (DESC). Allowed values are:   \- ASC   \- DESC
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export work_request_id=<substitute\-value\-of\-work_request_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/work\-request\-log\-entry\-collection/list\-work\-request\-logs.html#cmdoption\-work\-request\-id
+
+    oci recovery work\-request\-log\-entry\-collection list\-work\-request\-logs \-\-work\-request\-id $work_request_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS work\-request\-summary\-collection
+.SS Description
+.sp
+Results of a workRequest search. Contains both WorkRequest items and other information, such as metadata.
+.SS Available Commands
+.INDENT 0.0
+.IP \(bu 2
+list\-work\-requests
+.UNINDENT
+.SS \fBlist\-work\-requests\fP
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Description\fP
+.IP \(bu 2
+\fI\%Usage\fP
+.IP \(bu 2
+\fI\%Required Parameters\fP
+.IP \(bu 2
+\fI\%Optional Parameters\fP
+.IP \(bu 2
+\fI\%Global Parameters\fP
+.IP \(bu 2
+\fI\%Example using required parameter\fP
+.UNINDENT
+.SS Description
+.sp
+Lists the work requests in a compartment.
+.SS Usage
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+oci recovery work\-request\-summary\-collection list\-work\-requests [OPTIONS]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Required Parameters
+.INDENT 0.0
+.TP
+.B \-\-compartment\-id, \-c [text]
+.UNINDENT
+.sp
+The compartment OCID.
+.SS Optional Parameters
+.INDENT 0.0
+.TP
+.B \-\-all
+.UNINDENT
+.sp
+Fetches all pages of results. If you provide this option, then you cannot provide the \fB\-\-limit\fP option.
+.INDENT 0.0
+.TP
+.B \-\-from\-json [text]
+.UNINDENT
+.sp
+Provide input to this command as a JSON document from a file using the \fI\%file://path\-to/file\fP syntax.
+.sp
+The \fB\-\-generate\-full\-command\-json\-input\fP option can be used to generate a sample json file to be used with this command option. The key names are pre\-populated and match the command option names (converted to camelCase format, e.g. compartment\-id –> compartmentId), while the values of the keys need to be populated by the user before using the sample file as an input to this command. For any command option that accepts multiple values, the value of the key can be a JSON array.
+.sp
+Options can still be provided on the command line. If an option exists in both the JSON document and the command line then the command line specified value will be used.
+.sp
+For examples on usage of this option, please see our “using CLI with advanced JSON options” link: \fI\%https://docs.cloud.oracle.com/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSONOptions\fP
+.INDENT 0.0
+.TP
+.B \-\-limit [integer]
+.UNINDENT
+.sp
+The maximum number of items to return per page.
+.INDENT 0.0
+.TP
+.B \-\-page [text]
+.UNINDENT
+.sp
+The page token representing the page at which to start retrieving results. This is usually retrieved from a previous list call.
+.INDENT 0.0
+.TP
+.B \-\-page\-size [integer]
+.UNINDENT
+.sp
+When fetching results, the number of results to fetch per call. Only valid when used with \fB\-\-all\fP or \fB\-\-limit\fP, and ignored otherwise.
+.INDENT 0.0
+.TP
+.B \-\-resource\-id [text]
+.UNINDENT
+.sp
+The ID of the resource affected by the work request.
+.INDENT 0.0
+.TP
+.B \-\-sort\-by [text]
+.UNINDENT
+.sp
+The field to sort by. Only one sort order may be provided. Default order for timeAccepted is descending.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+timeAccepted
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-sort\-order [text]
+.UNINDENT
+.sp
+The sort order to use, either ascending (ASC) or descending (DESC). Allowed values are:   \- ASC   \- DESC
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ASC, DESC
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-status [text]
+.UNINDENT
+.sp
+A filter to return only resources their lifecycleState matches the given OperationStatus.
+.sp
+Accepted values are:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+ACCEPTED, CANCELED, CANCELING, FAILED, IN_PROGRESS, SUCCEEDED, WAITING
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \-\-work\-request\-id [text]
+.UNINDENT
+.sp
+Unique Oracle\-assigned identifier of the work request.
+.SS Global Parameters
+.sp
+Use \fBoci \-\-help\fP for help on global parameters.
+.sp
+\fB\-\-auth\-purpose\fP, \fB\-\-auth\fP, \fB\-\-cert\-bundle\fP, \fB\-\-cli\-auto\-prompt\fP, \fB\-\-cli\-rc\-file\fP, \fB\-\-config\-file\fP, \fB\-\-connection\-timeout\fP, \fB\-\-debug\fP, \fB\-\-defaults\-file\fP, \fB\-\-endpoint\fP, \fB\-\-generate\-full\-command\-json\-input\fP, \fB\-\-generate\-param\-json\-input\fP, \fB\-\-help\fP, \fB\-\-latest\-version\fP, \fB\-\-max\-retries\fP, \fB\-\-no\-retry\fP, \fB\-\-opc\-client\-request\-id\fP, \fB\-\-opc\-request\-id\fP, \fB\-\-output\fP, \fB\-\-profile\fP, \fB\-\-proxy\fP, \fB\-\-query\fP, \fB\-\-raw\-output\fP, \fB\-\-read\-timeout\fP, \fB\-\-realm\-specific\-endpoint\fP, \fB\-\-region\fP, \fB\-\-release\-info\fP, \fB\-\-request\-id\fP, \fB\-\-version\fP, \fB\-?\fP, \fB\-d\fP, \fB\-h\fP, \fB\-i\fP, \fB\-v\fP
+.SS Example using required parameter
+.sp
+Copy the following CLI commands into a file named example.sh. Run the command by typing “bash example.sh” and replacing the example parameters with your own.
+.sp
+Please note this sample will only work in the POSIX\-compliant bash\-like shell. You need to set up \fI\%the OCI configuration\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile\fP> and \fI\%appropriate security policies\fP <\fBhttps://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm\fP> before trying the examples.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+    export compartment_id=<substitute\-value\-of\-compartment_id> # https://docs.cloud.oracle.com/en\-us/iaas/tools/oci\-cli/latest/oci_cli_docs/cmdref/recovery/work\-request\-summary\-collection/list\-work\-requests.html#cmdoption\-compartment\-id
+
+    oci recovery work\-request\-summary\-collection list\-work\-requests \-\-compartment\-id $compartment_id
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH AUTHOR
+Oracle
+.SH COPYRIGHT
+2016, 2024, Oracle
+.\" Generated by docutils manpage writer.
+.
