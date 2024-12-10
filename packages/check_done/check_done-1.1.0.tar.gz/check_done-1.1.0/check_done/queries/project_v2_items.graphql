@@ -1,0 +1,71 @@
+query projectV2Issues(
+  $projectId: ID!
+  $maxEntriesPerPage: Int!
+  $after: String
+) {
+  node(id: $projectId) {
+    ... on ProjectV2 {
+      __typename
+      id
+      number
+      title
+      shortDescription
+      items(first: $maxEntriesPerPage, after: $after) {
+        nodes {
+          __typename
+          type
+          content {
+            ... on Issue {
+              __typename
+              assignees {
+                totalCount
+              }
+              bodyHTML
+              number
+              milestone {
+                id
+              }
+              closed
+              title
+              repository {
+                name
+              }
+            }
+            ... on PullRequest {
+              __typename
+              assignees {
+                totalCount
+              }
+              bodyHTML
+              number
+              milestone {
+                id
+              }
+              closingIssuesReferences(first: 1) {
+                nodes {
+                  number
+                  title
+                }
+              }
+              closed
+              title
+              repository {
+                name
+              }
+            }
+          }
+          fieldValueByName(name: "Status") {
+            ... on ProjectV2ItemFieldSingleSelectValue {
+              status: name
+              optionId
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+}
