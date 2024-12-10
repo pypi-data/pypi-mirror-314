@@ -1,0 +1,58 @@
+[tool.black]
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "project.settings.tests"
+python_files = ["test_*.py", ]
+
+[project]
+name = "django-geocad"
+version = "0.6.0"
+authors = [
+  { name="andywar65", email="andy.war1965@gmail.com" },
+]
+description = "Django app that imports CAD drawings in Leaflet.js maps"
+readme = "README.rst"
+license = {file = "LICENSE"}
+classifiers = [
+    "Operating System :: OS Independent",
+    "Framework :: Django",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "Django>=4.2",
+    "django-colorfield",
+    "django-geojson",
+    "django-leaflet",
+    "easy-thumbnails",
+    "ezdxf",
+    "nh3",
+    "pyproj",
+    "shapely",
+]
+
+[project.urls]
+Repository = "https://github.com/andywar65/django-geocad"
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "twine",
+    "coverage",
+    "environs[django]",
+]
+test = [
+    "environs[django]",
+]
