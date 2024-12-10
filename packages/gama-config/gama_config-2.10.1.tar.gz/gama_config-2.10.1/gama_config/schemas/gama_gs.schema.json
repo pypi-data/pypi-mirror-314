@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "LogLevel": {
+      "enum": [
+        "info",
+        "debug",
+        "warn",
+        "error",
+        "fatal"
+      ],
+      "title": "LogLevel",
+      "type": "string"
+    },
+    "Mode": {
+      "enum": [
+        "none",
+        "xbox",
+        "xbox_series_x",
+        "thrustmaster",
+        "thrustmaster_combo",
+        "warthog",
+        "warthog_combo",
+        "aeronav",
+        "single_unknown",
+        "dual_unknown",
+        "gladiator",
+        "logitech_extreme"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "Network": {
+      "enum": [
+        "shared",
+        "host"
+      ],
+      "title": "Network",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "ros_domain_id": {
+      "default": 0,
+      "title": "Ros Domain Id",
+      "type": "integer"
+    },
+    "namespace_vessel": {
+      "default": "vessel_1",
+      "title": "Namespace Vessel",
+      "type": "string"
+    },
+    "namespace_groundstation": {
+      "default": "groundstation",
+      "title": "Namespace Groundstation",
+      "type": "string"
+    },
+    "mode": {
+      "$ref": "#/$defs/Mode",
+      "default": "none"
+    },
+    "buttons": {
+      "default": false,
+      "title": "Buttons",
+      "type": "boolean"
+    },
+    "network": {
+      "$ref": "#/$defs/Network",
+      "default": "shared"
+    },
+    "prod": {
+      "default": false,
+      "title": "Prod",
+      "type": "boolean"
+    },
+    "log_level": {
+      "$ref": "#/$defs/LogLevel",
+      "default": "info"
+    },
+    "remote_cmd_override": {
+      "default": false,
+      "title": "Remote Cmd Override",
+      "type": "boolean"
+    },
+    "simple_discovery": {
+      "default": false,
+      "title": "Simple Discovery",
+      "type": "boolean"
+    },
+    "discovery_server_ip": {
+      "default": "0.0.0.0",
+      "description": "IP address of the discovery server. This should be the IP of the vessel.",
+      "title": "Discovery Server Ip",
+      "type": "string"
+    },
+    "own_ip": {
+      "default": "0.0.0.0",
+      "description": "The IP address of the ground-stations's primary network interface. This is where DDS will bind to.",
+      "title": "Own Ip",
+      "type": "string"
+    }
+  },
+  "title": "GamaGsConfig",
+  "type": "object"
+}
