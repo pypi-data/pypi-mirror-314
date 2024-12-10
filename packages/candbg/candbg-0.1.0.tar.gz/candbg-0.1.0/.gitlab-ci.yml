@@ -1,0 +1,35 @@
+image: python:3-slim
+
+stages:
+  - test_package
+  - build_package
+
+before_script:
+  - python --version
+
+lint_and_test:
+  stage: test_package
+  before_script:
+    - pip install ruff mypy pytest
+  script:
+    - pip install .
+    - ruff check src
+    - mypy src
+    - pytest -v tests
+  only:
+    changes:
+      - src/**/*
+      - .gitlab-ci.yml
+
+# and build package
+package:
+  stage: build_package
+  script:
+    - python -m build
+    - pip install twine
+    # upload to gitlab
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+    # upload to pypi
+    # - TWINE_PASSWORD=${PYPI_TOKEN} TWINE_USERNAME=__token__ python -m twine upload dist/*
+  rules:
+    - if: $CI_COMMIT_TAG
