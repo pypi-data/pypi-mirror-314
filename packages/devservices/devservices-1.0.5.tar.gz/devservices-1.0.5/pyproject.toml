@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "devservices"
+version = "1.0.5"
+# 3.10 is just for internal pypi compat
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml",
+    "sentry-devenv",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "types-PyYAML",
+]
+
+[project.scripts]
+devservices = "devservices.main:main"
+
+[tool.setuptools.packages]
+find = {}
+
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "yaml.*"
+ignore_missing_imports = true
