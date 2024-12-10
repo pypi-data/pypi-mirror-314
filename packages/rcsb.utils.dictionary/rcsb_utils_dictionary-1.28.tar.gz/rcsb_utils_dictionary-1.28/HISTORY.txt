@@ -1,0 +1,140 @@
+# File: HISTORY.txt
+#
+14-Feb-2021 - V0.11 Created module with content migrated from rcsb.db
+15-Feb-2021 - V0.12 Extend named tuple "NonpolymerValidationInstance"
+18-Feb-2021 - V0.13 Added TargetInteractionProvider() related tests, getNonpolymerInstanceNeighbors() in DictMethodCommonUtils()
+18-Feb-2021 - V0.14 Add further accessors to TargetInteractionProvider()
+21-Feb-2021 - V0.15 Update handling of completeness/disorder in calculating validation scores, add TargetInteractionWorkflow()
+21-Feb-2021 - V0.16 Update test conditions
+21-Feb-2021 - V0.17 Separate the computation and presentation of validation scores and target interactions
+22-Feb-2021 - V0.18 Tweak sorting of unique target interactions and interaction and score attributes
+23-Feb-2021 - V0.19 Change the default serialization and provide and format conversion method.
+24-Feb-2021 - V0.20 Avoid reload with target updates when updateOnly=True
+24-Feb-2021 - V0.21 Refactor and add ligand and target neighbor data.  Keep all nearest residue level interactions.
+25-Feb-2021 - V0.22 Adjustments for reporting completeness for cases with hydrogen atoms.
+ 6-Mar-2021 - V0.23 Override default protocol setting for pickle serialization
+18-Mar-2021 - V0.24 Add support for addition_properties subcategory in all feature categories.
+15-Apr-2021 - V0.25 Add alternative processing to extract audit dates
+16-Apr-2021 - V0.26 Extend processing of polymer BIRDs for the branched/saccharide cases
+16-Apr-2021 - V0.27 Substitute missing initial release data with create date.
+ 4-May-2021 - V0.28 Update dependencies for rcsb.utils.struct
+19-May-2021 - V0.29 Add rcsb_entity_container_identifers.chem_ref_def_id in DictionaryMethodEntityHelper
+21-May-2021 - V0.30 Add instance support for glycosylation sites for features and annotations
+24-May-2021 - V0.31 Add rcsb_entity_container_identifers.chem_ref_def_id for non-polymer and BIRD references
+27-May-2021 - V0.32 Add glycan and GlyGen mapping for branched entities.
+28-May-2021 - V0.33 Reference alternative GlycanProvider without rcsb.exdb dependency
+28-May-2021 - V0.34 Filter binding role for glycosylation with greater specificity
+29-May-2021 - V0.35 Skip ATC codes not defined in the ATC ontology.
+29-May-2021 - V0.36 Make completeness rely only on heavy atom count for X-ray structures
+30-May-2021 - V0.37 Add Pfam polymer entity features and annotations
+ 1-Jun-2021 - V0.38 Add BirdProvider() to DictMethodResourceProvider() add a check for single molecules BIRDs for chem_ref_def_id assignments and update __docformat__
+ 2-Jun-2021 - V0.39 Suppress voluminous diagnostics for non-corresponding Pfam data
+ 2-Jun-2021 - V0.40 Add support to filter redundant records in category subsets
+ 5-Jun-2021 - V0.41 Prune test cases
+10-Jun-2021 - V0.42 Adding calculation of average occupancy __getAtomSiteInfo() in DictMethodCommonUtils()
+10-Jun-2021 - V0.43 Add provenance to the aggregated "is_subject_of_investigation" ligand validation flag.
+30-Jun-2021 - V0.44 Adjust error handling/reporting for atom counts in DictMethodEntityInstanceHelper(), update GlycanProvider() api in DictMethodResourceProvider()
+14-Jun-2021 - V0.45 Add SCOP2/B, ECOD, IMGT, SAbDab features, and add rcsb_related_target_references and rcsb_target_cofactors
+14-Jun-2021 - V0.46 Refactor DictMethodResourceProvider() to support stashable provider API pattern
+26-Jul-2021 - V0.47 Add bypass option for retaining object instances in cache construction.
+27-Jul-2021 - V0.48 Update dictionary methods to gracefully handle missing providers
+27-Jul-2021 - V0.49 Add providerTypeExclude optional filter to further reduce test scope.
+28-Jul-2021 - V0.50 Restore the default to always preserve instances when the cache is reloaded.
+28-Jul-2021 - V0.51 Handle duplicate SAbDab feature records.
+28-Jul-2021 - V0.52 Add DictMethodResourceCacheWorkflow module
+28-Jul-2021 - V0.53 Update constructor API for DictMethodResourceCacheWorkflow()
+28-Jul-2021 - V0.54 Update dependencies and workflow path
+29-Jul-2021 - V0.55 Add cache recovery methods to DictMethodResourceCacheWorkflow()
+29-Jul-2021 - V0.56 Adjust testing protocol to avoid NeighborInteractionProvider backup to git
+29-Jul-2021 - V0.57 Update dependencies
+30-Jul-2021 - V0.58 Further adjustments to cache testing protocol, change testCache() criteria in NeighborInteractionProvider()
+30-Jul-2021 - V0.59 Fix issues with missing entity ranges and unsupported measurement types for cofactors
+ 1-Aug-2021 - V0.60 Add extra release date data source for chemical components.  Restrict antibody annotation to polymer entities. Allow pAC50.
+ 1-Aug-2021 - V0.61 Further restrict antibody annotation mapping.  Suppress warnings on release date details.
+ 2-Aug-2021 - V0.62 Further adjustments for testing cache construction.
+ 3-Aug-2021 - V0.63 Add backup option for nonbuildable caches
+ 4-Aug-2021 - V0.64 Update dependencies and logging verbosity
+13-Aug-2021 - V0.65 Remove possible redundancy in target cofactor data
+13-Aug-2021 - V0.66 Remove possible redundancy in target reference assignments
+25-Aug-2021 - V0.67 Add SCOP2/ECOD polymer entity instance annotations
+26-Aug-2021 - V0.68 Add redundancy filters for polymer entity instance annotations
+26-Aug-2021 - V0.69 Update dependencies
+28-Aug-2021 - V0.70 Suppress SCOP2/ECOD for branched entities
+10-Aug-2021 - V0.71 Update dependencies for SCOP2 in rcsb.utils.struct
+29-Aug-2021 - V0.72 Add resource EntryInfoProvider() to DictMethodResourceProvider()
+12-Oct-2021 - V0.73 Added module DictMethodSecStructUtils() and support for DSSP annotations.
+14-Oct-2021 - V0.74 Added preliminary support for computed model extensions in assembly, entry, and entity_info categories.
+16-Oct-2021 - V0.75 Add test fixture to speed up computed model tests, suppress verbose dictionary api logging
+17-Oct-2021 - V0.76 Update model path in test fixture for computed models.
+22-Nov-2021 - V0.77 Update DictMethodEntityInstanceHelper to properly parse beginning and ending residue IDs for CATH, SCOP, SCOP2, and ECOD annotations
+08-Dec-2021 - V0.78 Update DictMethodCompModelHelper to not add polymer entity-level taxonomy if required fields aren't present
+19-Jan-2022 - V0.79 Update DictMethodEntryHelper to add rcsb_entry_info.structure_determination_methodology
+22-Jan-2022 - V0.80 Exclude newly introduced categories until present in production schema
+ 2-Mar-2022 - V0.81 Ensure that 'addDepositedAssembly' only runs on computational models, not experimental models
+ 7-Mar-2022 - V0.82 Excldue "RCSB"-designated LOI flag from ligands if "Author"-designations exist
+11-Mar-2022 - V0.83 Fix _rcsb_entry_info.deposited_model_count not being populated for certain NMR entries
+28-Mar-2022 - V0.84 Fix _rcsb_assembly_info.atom_count not being populated for certain NMR entries
+30-Mar-2022 - V0.85 Fix the bug related to HELP-18533 ticket
+02-Apr-2022 - V0.86 ETL comp model local and global QA scores
+20-Apr-2022 - V0.87 Update method getCompModelDb2L in DictMethodCommonUtils
+21-Apr-2022 - V0.88 Update buildEntityInstanceFeatureSummary for handling ma_qa_metric_local scores
+26-Apr-2022 - V0.89 Add missing pdbx_database_status for MA models and _rcsb_entry_info.structure_determination_methodology; update pdbx_struct_assembly for computed models
+29-Apr-2022 - V0.90 Update dict helper methods to retrieve and incorporate computed-model metadata 
+17-May-2022 - V0.91 Add method 'addStructInfo' in DictMethodCompModelHelper
+23-Jun-2022 - V0.92 Use ma_target_ref_db_details to populate rcsb_polymer_entity_container_identifiers.reference_sequence_identifiers for MA models
+27-Jun-2022 - V0.93 Update _rcsb_ma_qa_metric_global.ma_qa_metric_global_type to 'pLDDT' for AF models
+29-Jun-2022 - V0.94 Use internal computed-model identifiers for data loading (in same manner as experimental models)
+06-Jul-2022 - V0.95 RO-3357: Fix taxonomy assignment in addPolymerEntityTaxonomy;
+                    Only populate rcsb_comp_model_provenance.source_url if it exists in CSM holdings file;
+                    Add addtional filters for populating _rcsb_accession_info;
+                    Only run addDepositedAssembly for computed model files which don't already contain pdbx_struct_assembly
+30-Aug-2022 - V0.96 Update ModelCacheProvider to make providerType "core" and not stashable or buildable
+                    Fix logic for assigning reference sequence identifiers for computed models
+                    Override cases where struct.pdbx_structure_determination_methodology is '?' or '.' in mmCIF file
+                    Map DSSP SS types to PROMOTIF SS types in DictMethodSecStructUtils
+                    Set values for rcsb_entry_info.structure_determination_methodology_priority in DictMethodEntryHelper
+03-Oct-2022 - V0.97 Set values for rcsb_entry_info.ndb_struct_conf_na_feature_combined in DictMethodEntryHelper
+06-Dec-2022 - V0.98 Handle missing pdbx_database_status.recvd_initial_deposition_date in DictMethodEntryHelper;
+                    Populate rcsb_comp_model_provenance.source_pae_url from CSM holdings file
+23-Dec-2022 - V0.99 Configuration changes to support tox 4
+03-Jan-2023 - V1.00 Include _pdbx_database_status.status_code_nmr_data for experimental data availability
+26-Jan-2023 - V1.01 Update method in DictMethodCompModelHelper for populating entity_src_nat;
+                    Update method in DictMethodEntryHelper to populate missing pdbx_database_status attributes for CSMs
+21-Feb-2023 - V1.02 Update method in DictMethodEntryHelper to handle experimental resolutions properly (see RO-3559)
+03-Mar-2023 - V1.03 Standardize configuration for DictMethodResourceCacheWorkflow, add testResourceCacheWorkflow
+07-Mar-2023 - V1.04 Bug fix in DictMethodChemRefHelper;
+                    Stop loading CARD data to rcsb_polymer_entity_feature
+14-Mar-2023 - V1.05 Load CARD annotation data to rcsb_polymer_entity_annotation
+16-Mar-2023 - V1.06 Update configuration of DictMethodResourceCacheWorkflow() and NeighborInteractionWorkflow() to use HERE and CACHE folder
+20-Mar-2023 - V1.07 Fix formula weight calculation of CSM polymer entities
+ 5-Apr-2023 - V1.08 Update population of provenance_source attributes for taxonomy/organism and gene categories;
+                    Correct attribute name for rcsb_chem_comp_target provenance;
+                    Stop loading rcsb_chem_comp_synonyms for type 'Brand Name'
+ 2-May-2023 - V1.09 Stop loading depth data for CARD lineage annotations
+ 1-Jun-2023 - V1.10 Don't back up resources to GitHub during cache update workflows
+17-Jul-2023 - V1.11 RO-170: Stop populating ordinal, reference_scheme, and feature_positions_beg_comp_id for all feature objects;
+                    Remove duplicate rows after populating instance features
+19-Sep-2023 - V1.12 RO-4033: Adjust logic used for processing and assigning sequence alignment details;
+                    Add CARDTargetOntologyProvider to stashable list
+ 3-Oct-2023 - V1.13 Load COD references separately from CCDC/CSD references
+ 2-Nov-2023 - V1.14 Only populate feature summaries for features that are present (at both entity and entity instance levels)
+16-Jan-2024 - V1.15 Enforce string typing for string operations
+01-Feb-2024 - V1.16 Add support for populating deuterated water molecule counts at entry and assembly levels 
+26-Feb-2024 - V1.17 Add "HAS_NO_COVALENT_LINKAGE" to instance annotations for cases without covalent linkages (or with only metal coordination);
+                    Change provenance_source of "PDB" to "Primary Data" for linkage annotations and features
+04-Mar-2024 - V1.18 Populate rcsb_comp_model_provenance using deterministic logic instead of relying on external cache file
+18-Mar-2024 - V1.19 Add GlyGen annotations to polymer entity instances with glycosylation sites;
+                    Create separate providerType names 'pdbx_core' and 'pdbx_comp_model_core' to limit loading of unnecessary
+                    resources for each dataset (via providerTypeExclude)
+26-Mar-2024 - V1.20 Add GlyGen annotation 'type' to polymer entity instances, but temporarily turn off loading
+                    Fix incremental update method for NeighborInteractionWorkflow
+ 1-Apr-2024 - V1.21 Turn on GlyGen annotations loading
+ 3-May-2024 - V1.22 Adjust BIRD citation method in DictMethodChemRefHelper
+ 9-May-2024 - V1.23 Tweak to above update (V1.22); update setuptools config;
+                    Adjust provider type exclusion to accept a list of types (in DictMethodResourceProvider)
+13-May-2024 - V1.24 Update requirements
+25-Jul-2024 - V1.25 Update ligand neighbor calculations and populate them into polymer entity instance features;
+                    Remove NeighborInteractionProvider from DictMethodResourceProvider, since will now be calculating interactions on the fly
+20-Aug-2024 - V1.26 Add support for accessing target cofactor data from MongoDB
+27-Aug-2024 - V1.27 Update order of CARD resource cache loading
+ 9-Dec-2024 - V1.28 Update Azure pipelines to use latest macOS, Ubuntu, and python 3.10
