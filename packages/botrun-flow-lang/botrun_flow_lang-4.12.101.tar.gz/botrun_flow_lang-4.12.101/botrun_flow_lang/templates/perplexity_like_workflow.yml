@@ -1,0 +1,104 @@
+botrun_app:
+  name: Perplexity Like Search
+  description: 有上網搜尋功能的 chatbot
+  mode: chatbot
+workflow:
+  nodes:
+  - type: start
+    id: e316162b-0f98-4c29-a5bf-71cb1ae9275f
+    title: Start
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: user_input
+    - variable_name: history
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: null
+  - type: search-and-scrape
+    id: fc94a85a-ba74-488c-9ac4-45b8e3440491
+    title: Search And Scrape
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: results
+    print_start: false
+    print_stream: true
+    print_complete: false
+    complete_output: null
+    search_query: '{{#e316162b-0f98-4c29-a5bf-71cb1ae9275f.user_input#}}'
+  - type: code
+    id: 9d7aaf84-b1a5-4c6b-ab6a-15fb38878883
+    title: Consolidating All Information
+    desc: ''
+    input_variables:
+    - node_id: e316162b-0f98-4c29-a5bf-71cb1ae9275f
+      variable_name: user_input
+    - node_id: fc94a85a-ba74-488c-9ac4-45b8e3440491
+      variable_name: results
+    output_variables:
+    - variable_name: all_info
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: null
+    code: "\nimport json\ndef main(user_input, results):\n    all_info = f\"使用者輸入的問題:\\\
+      n{user_input}\\n\\n\"\n    data = json.dumps(results, ensure_ascii=False, indent=2)\n\
+      \    # print(daa[:200])\n    all_info += f\"網路搜尋回來的資訊:\\n{data}\\n\"\n     \
+      \   \n    return {\"all_info\": all_info}\n"
+  - type: llm
+    id: ce03f100-c0fe-4848-b82e-cd96d2f3f2e1
+    title: 做完研究後最後的回答...
+    desc: ''
+    input_variables:
+    - node_id: e316162b-0f98-4c29-a5bf-71cb1ae9275f
+      variable_name: history
+    output_variables:
+    - variable_name: llm_output
+    print_start: true
+    print_stream: true
+    print_complete: false
+    complete_output: null
+    model:
+      completion_params: {}
+      name: anthropic/claude-3-5-sonnet-20241022
+    prompt_template:
+    - role: user
+      content: "\n    你是一個專業的資訊分析員，你會依據以下使用者的問題，以及網路搜尋到的資訊，統整出最完整的回答。\n    如果你沒有獲得資訊，請誠實的告訴使用者，不要自行回答。\n\
+        \n    {{#9d7aaf84-b1a5-4c6b-ab6a-15fb38878883.all_info#}}\n    "
+    context: {}
+    vision: {}
+    stream: true
+  - type: code
+    id: 5175c948-2dea-4316-a968-55b56584558e
+    title: 取得參考資料的連結...
+    desc: ''
+    input_variables:
+    - node_id: fc94a85a-ba74-488c-9ac4-45b8e3440491
+      variable_name: results
+    output_variables:
+    - variable_name: result
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: result
+    code: "\nimport json\ndef main(results):\n    references = []\n    for result\
+      \ in results:\n        if result.get(\"note\") and result.get(\"url\") and result.get(\"\
+      title\"):\n            references.append(f\"- [{result['title']}]({result['url']})\"\
+      )\n    \n    if references:\n        references=list(set(references))\n    \
+      \    text = \"參考資料:\\n\" + \"\\n\".join(references)\n        return {\"result\"\
+      : text}\n    return {\"result\": \"\"}\n"
+  - type: answer
+    id: a4c470d0-3d3a-438b-90a0-c58aad4f1fef
+    title: Answer
+    desc: ''
+    input_variables:
+    - node_id: ce03f100-c0fe-4848-b82e-cd96d2f3f2e1
+      variable_name: llm_output
+    output_variables:
+    - variable_name: answer
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: null
