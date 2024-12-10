@@ -1,0 +1,18 @@
+model_name: DeepSEA
+arch_name: CNN
+input_len: 1000
+output_dim: 919
+arch:
+  conv1d_tower:
+    conv_channels: [4, 320, 480, 960]
+    conv_kernels: [8, 8, 8]
+    activations: relu
+    pool_types: [max, max, null]
+    pool_kernels: [4, 4, null]
+    norm_types: null
+    dropout_rates: [0.2, 0.2, 0.5]
+    orders: conv-act-pool-dropout
+  dense_tower:
+    hidden_dims: [925]
+    activations: [relu, null]
+    orders: linear-act
