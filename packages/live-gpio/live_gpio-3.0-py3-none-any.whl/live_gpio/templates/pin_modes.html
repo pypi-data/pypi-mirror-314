@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPIO Pin Modes</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .pin-grid { display: inline-block; text-align: left; margin-top: 20px; }
+        .pin { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<h2>GPIO Pin Modes</h2>
+
+<div class="pin-grid" id="pinModes">
+    <!-- GPIO 모드 정보가 여기에 로드됩니다. -->
+</div>
+
+<script>
+    async function loadPinModes() {
+        const response = await fetch('/get_modes');
+        const modes = await response.json();
+        const pinModesDiv = document.getElementById('pinModes');
+        pinModesDiv.innerHTML = '';  // 기존 내용 지우기
+        Object.keys(modes).forEach(pin => {
+            const pinDiv = document.createElement('div');
+            pinDiv.className = 'pin';
+            pinDiv.innerHTML = `<strong>GPIO ${pin}:</strong> ${modes[pin]}`;
+            pinModesDiv.appendChild(pinDiv);
+        });
+    }
+
+    // 페이지가 로드될 때 GPIO 모드를 불러옴
+    loadPinModes();
+</script>
+
+</body>
+</html>
