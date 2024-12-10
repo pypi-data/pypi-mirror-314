@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *" # every day at midnight
+
+jobs:
+  build:
+    name: ${{ matrix.os }} Python ${{ matrix.python-version }} (reuse=${{ matrix.subprocess-reuse }})
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        subprocess-reuse: ["0", "1"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: ./.github/actions/conda-setup
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: ./.github/actions/bmad-setup
+
+      - name: Show conda environment packages
+        shell: bash -l {0}
+        run: |
+          conda list
+
+      - name: Run Tests
+        shell: bash -l {0}
+        run: |
+          export TAO_REUSE_SUBPROCESS=${{ matrix.subprocess-reuse }}
+          echo -e '## Test results\n\n```' >> "$GITHUB_STEP_SUMMARY"
+          pytest -v --cov=pytao/ pytao/tests 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
