@@ -1,0 +1,74 @@
+{
+  "$id": "blockchain-address.json",
+  "title": "Blockchain address",
+  "type": "object",
+  "description": "An address on a blockchain",
+  "properties": {
+    "address": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "bridge",
+          "contract",
+          "creator",
+          "deployer",
+          "eoa",
+          "factory",
+          "proxy",
+          "safe",
+          "wallet"
+        ],
+        "$comment": "Tags that classify the address. Options include: \n- 'eoa': Externally Owned Account \n- 'safe': Gnosis Safe or other multi-sig wallet \n- 'deployer' (or 'creator'): An address that should be monitored for contract deployment events \n- 'factory': A contract that deploys other contracts \n- 'proxy': Proxy contract \n- 'contract': A smart contract address \n- 'wallet': An address that should be monitored for funding events \n- 'bridge': An address that should be monitored for crosschain bridge-related events"
+      }
+    },
+    "networks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "any_evm",
+          "arbitrum_one",
+          "automata",
+          "base",
+          "bob",
+          "cyber",
+          "frax",
+          "ham",
+          "kroma",
+          "linea",
+          "lisk",
+          "lyra",
+          "mainnet",
+          "mantle",
+          "matic",
+          "metal",
+          "mint",
+          "mode",
+          "optimism",
+          "orderly",
+          "pgn",
+          "polynomial",
+          "polygon_zkevm",
+          "race",
+          "redstone",
+          "scroll",
+          "shape",
+          "swan",
+          "unichain",
+          "worldchain",
+          "xterio",
+          "zksync_era",
+          "zora"
+        ]
+      }
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": ["address", "tags", "networks"]
+}
