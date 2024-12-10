@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Participants</h1>
+        <p class="lead">Showing all participants in database.</p>
+      </div>
+    </div>
+  <hr class="my-4">
+</header>
+<body>
+<a href="{{ url_for('participant_new') }}"><button type="button" class="btn btn-primary"
+    style="float: left; margin-bottom: 2em;"><i class="fa fa-plus"></i>&nbsp&nbspNew
+    participant</button></a>
+  <form class="d-flex" role="search" method="POST">
+    <div class="input-group mb-3" style="margin-left: 3em;">
+      <label class="input-group-text" for="inputPptId">Participant ID</label>
+      <select class="form-select col-2" id="inputPptId" name="inputPptId" onchange="this.form.submit()">    <div class="form-group row">
+        <option selected>-- Select one --</option>
+        {% for p in ppt_options %}
+        <option {% if ppt_id==p %} selected {% endif %}>{{ p }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+  {% if data_ppt and ppt_id!="-- Select one --" %}
+  <div>
+  <div clas="row" style="position: relative; margin: 1em;"><h2>Participant ID: <a href="/participants/{{ ppt_id }}">{{ ppt_id }}</a></h2></div>
+  <br>
+  <div clas="row">
+  <div style="text-align: left; width: 25%; float: left; margin-right: 2em;">
+    <h4>Participant information</h4>
+    <ul class="list-group list-group-horizontal-md">
+      <li class="list-group-item list-group-item-secondary col-4">Name</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["name"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal-md">
+      <li class="list-group-item list-group-item-secondary col-4">Added</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data_ppt["data"]["date_added"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Age</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data_ppt["data"]["age_now_months"] + ":" +
+        data_ppt["data"]["age_now_days"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Sex</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data_ppt["data"]["sex"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal" style="height: 7.75em;">
+      <li class="list-group-item list-group-item-secondary col-4">Comments</li>
+      <li class="list-group-item list-group-item-action user-select-all ">{{ data_ppt["data"]["comments"] }}</li>
+    </ul>
+  </div>
+  <div style="text-align: left; width: 25%; float: left; margin-right: 2em;">
+    <h4>Contact details</h4>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Phone</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["phone1"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">E-mail</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["email1"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Phone 2</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["phone2"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">E-mail 2</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["email2"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Address</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["address"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">Postcode</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["postcode"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-4">City</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["City"]}}</li>
+    </ul>
+  </div>
+  <div style="text-align: left; width: 30%; float: left; margin-right: 2em; margin-bottom: 2em;">
+    <h4>Birth information</h4>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Delivery type</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["birth_type"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Gestational weeks</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["gest_weeks"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Weight (g)</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["birth_weight"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Head circunference (cm)</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{
+        data_ppt["data"]["head_circumference"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class=" list-group-item list-group-item-secondary col-7">Apgar</li>
+      <li class="list-group-item list-group-item-action user-select-all" style="text-align: center;">{{
+        data_ppt["data"]["apgar1"] }}</li>
+      <li class="list-group-item list-group-item-action user-select-all" style="text-align: center;">{{
+        data_ppt["data"]["apgar2"] }}</li>
+      <li class="list-group-item list-group-item-action user-select-all" style="text-align: center;">{{
+        data_ppt["data"]["apgar3"] }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Hearing</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["hearing"]}}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item list-group-item-secondary col-7">Diagnoses</li>
+      <li class="list-group-item list-group-item-action user-select-all">{{ data_ppt["data"]["diagnoses"]}}</li>
+    </ul>
+  </div>
+  </div>
+  {% endif %}
+  <br><br><br>
+  <div class="card" style="width: 100%;">
+    <h5 class="card-header">Participants</h5>
+    <div class="card-body">
+      <h6 class="card-subtitle mb-2 text-muted">Click IDs to see a participant's profile</h6>
+      <div style="text-align: left" width="10%">
+        {{ data["table"]|safe }}
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
