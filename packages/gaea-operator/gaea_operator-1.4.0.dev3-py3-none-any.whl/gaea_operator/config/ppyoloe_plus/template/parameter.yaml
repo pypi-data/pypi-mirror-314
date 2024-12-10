@@ -1,0 +1,198 @@
+# 根据horsedoor.yml进行同步修改
+metric: COCO
+num_classes: 8
+
+TrainDataset:
+    name: COCODataSet
+    image_dir: ''
+    anno_path: train.json
+    dataset_dir: dataset
+    allow_empty: true
+    data_fields: ['image', 'gt_bbox', 'gt_class']
+
+EvalDataset:
+    name: COCODataSet
+    image_dir: ''
+    anno_path: val.json
+    dataset_dir: dataset
+    allow_empty: true
+
+TestDataset:
+    name: ImageFolder
+    anno_path: val.json # also support txt (like VOC's label_list.txt)
+    dataset_dir: dataset # if set, anno_path will be 'dataset_dir/anno_path'
+
+use_gpu: true
+use_npu: false
+use_xpu: false
+# log_iter: 100
+log_iter: 20
+save_dir: output
+# make sure snap_epoch <= epoch
+snapshot_epoch: 1
+print_flops: false
+
+# Exporting the model
+export:
+  post_process: True  # Whether post-processing is included in the network when export model.
+  nms: True           # Whether NMS is included in the network when export model.
+  benchmark: False    # It is used to testing model performance, if set `True`, post-process and NMS will not be exported.
+  fuse_conv_bn: False
+
+# 1. PARAMETER: epoch
+# epoch: 10
+epoch: 100
+
+LearningRate:
+  # 2. PARAMETER: base_lr
+  # base_lr: 0.001
+  base_lr: 0.000125
+  schedulers:
+    - name: CosineDecay
+      # make sure >= epoch
+      # max_epochs: 96
+      max_epochs: 150
+    - name: LinearWarmup
+      start_factor: 0.
+      epochs: 5
+
+OptimizerBuilder:
+  optimizer:
+    momentum: 0.9
+    type: Momentum
+  regularizer:
+    factor: 0.0005
+    type: L2
+
+architecture: YOLOv3
+norm_type: sync_bn
+use_ema: true
+ema_decay: 0.9998
+ema_black_list: ['proj_conv.weight']
+custom_black_list: ['reduce_mean']
+
+YOLOv3:
+  backbone: CSPResNet
+  neck: CustomCSPPAN
+  yolo_head: PPYOLOEHead
+  post_process: ~
+
+CSPResNet:
+  layers: [3, 6, 6, 3]
+  channels: [64, 128, 256, 512, 1024]
+  return_idx: [1, 2, 3]
+  use_large_stem: True
+  use_alpha: True
+  # TODO: XXXXXXX
+  with_preprocess: False
+  mean: [0., 0., 0.]
+  std: [1., 1., 1.]
+
+CustomCSPPAN:
+  out_channels: [768, 384, 192]
+  stage_num: 1
+  block_num: 3
+  act: 'swish'
+  spp: true
+
+PPYOLOEHead:
+  fpn_strides: [32, 16, 8]
+  grid_cell_scale: 5.0
+  grid_cell_offset: 0.5
+  static_assigner_epoch: 30
+  use_varifocal_loss: True
+  loss_weight: {class: 1.0, iou: 2.5, dfl: 0.5}
+  static_assigner:
+    name: ATSSAssigner
+    topk: 9
+  assigner:
+    name: TaskAlignedAssigner
+    topk: 13
+    alpha: 1.0
+    beta: 6.0
+  nms:
+    name: MultiClassNMS
+    nms_top_k: 1000
+    # keep_top_k: 300
+    keep_top_k: 30
+    score_threshold: 0.01
+    nms_threshold: 0.7
+
+# 3. PARAMETER: worker_num
+# worker_num: 2
+worker_num: 4
+
+# 4. PARAMETER: eval_height
+eval_height: &eval_height 544
+
+# 5. PARAMETER: eval_width
+eval_width: &eval_width 960
+
+eval_size: &eval_size [*eval_height, *eval_width]
+
+TrainReader:
+  sample_transforms:
+    - Decode: {}
+    - RandomDistort: {}
+    - RandomExpand: {fill_value: [123.675, 116.28, 103.53]}
+    - RandomCrop: {}
+    - RandomFlip: {}
+  batch_transforms:
+    # - BatchRandomResize: {target_size: [[224, 640], [256, 672], [288, 704], [320, 736], [352,768], [384,800], [416, 832], [448, 864], [480, 896], [512, 928], [544, 960], [576, 992], [608, 1024], [640, 1056], [672, 1088]], random_size: True, random_interp: True, keep_ratio: False}
+    - BatchRandomResize: {target_size: [320, 352, 384, 416, 448, 480, 512, 544, 576, 608, 640, 672, 704, 736, 768], random_size: True, random_interp: True, keep_ratio: False}
+    - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
+    - Permute: {}
+    - PadGT: {}
+  # 6. PARAMETER: batch_size
+  # batch_size: 8
+  batch_size: 32
+  # allow_empty: true
+  shuffle: true
+  # drop_last: false
+  # use_shared_memory: false # /dev/shm only 64MB, turn on if > 1GB
+  drop_last: false
+  use_shared_memory: false
+  collate_batch: true
+
+EvalReader:
+  sample_transforms:
+    - Decode: {}
+    - Resize: {target_size: *eval_size, keep_ratio: False, interp: 2}
+    - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
+    - Permute: {}
+  # batch_size: 4
+  # allow_empty: true
+  batch_size: 32
+
+TestReader:
+  inputs_def:
+    image_shape: [3, *eval_height, *eval_width]
+  sample_transforms:
+    - Decode: {}
+    - Resize: {target_size: *eval_size, keep_ratio: False, interp: 2}
+    - NormalizeImage: {mean: [0., 0., 0.], std: [1., 1., 1.], norm_type: none}
+    - Permute: {}
+  batch_size: 1
+
+weights: output/ppyoloe_model_weights/model_final
+
+# 7. PARAMETER: pretrain_weights
+# s: https://bj.bcebos.com/v1/paddledet/models/pretrained/ppyoloe_crn_s_obj365_pretrained.pdparams
+# m: https://bj.bcebos.com/v1/paddledet/models/pretrained/ppyoloe_crn_m_obj365_pretrained.pdparams
+# l: https://bj.bcebos.com/v1/paddledet/models/pretrained/ppyoloe_crn_l_obj365_pretrained.pdparams
+# x: https://bj.bcebos.com/v1/paddledet/models/pretrained/ppyoloe_crn_x_obj365_pretrained.pdparams
+pretrain_weights: https://bj.bcebos.com/v1/paddledet/models/pretrained/ppyoloe_crn_m_obj365_pretrained.pdparams
+
+# 8. PARAMETER: depth_mult
+# s: 0.33
+# m: 0.67
+# l: 1.0
+# x: 1.33
+depth_mult: 0.67
+
+# 9. PARAMETER: width_mult
+# s: 0.50
+# m: 0.75
+# l: 1.0
+# x: 1.25
+width_mult: 0.75

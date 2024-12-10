@@ -1,0 +1,78 @@
+batch_size: 4
+iters: 1000
+epoch: 10
+
+model:
+  type: OCRNetPair
+  backbone:
+    type: HRNet_W18
+    pretrained: https://bj.bcebos.com/paddleseg/dygraph/hrnet_w18_ssld.tar.gz
+  num_classes: 24
+  backbone_indices: [0]
+  scale_style: scale_conv
+
+optimizer:
+  type: sgd
+  momentum: 0.9
+  weight_decay: 4.0e-4
+  
+lr_scheduler:
+  type: PolynomialDecay
+  learning_rate: 0.01
+  power: 0.9
+
+loss:
+  types:
+    - type: MixedLoss
+      losses:
+        - type: DiceLoss
+        - type: CrossEntropyLoss
+      coef: [0.2, 0.8]
+    - type: MixedLoss
+      losses:
+        - type: DiceLoss
+        - type: CrossEntropyLoss
+      coef: [0.2, 0.8]
+  coef: [0.8, 0.6]
+
+train_dataset:
+  type: DatasetPair
+  dataset_root:  /home/dataset
+  train_path:  /home/dataset/train.txt
+  num_classes: 24
+  suffix: 'template'
+  transforms:
+    - type: ResizePair
+      target_size: [600, 600]
+    - type: ResizeStepScalingPair
+      min_scale_factor: 0.5
+      max_scale_factor: 1.8
+      scale_step_size: 0.05
+    - type: RandomPaddingCropPair
+      crop_size: [600, 600]
+    - type: RandomDistortPair
+    - type: RandomHorizontalFlipPair
+    - type: RandomVerticalFlipPair
+    - type: RandomDistortPair
+      brightness_range: 0.4
+      contrast_range: 0.4
+      saturation_range: 0.4
+    - type: NormalizePair
+      mean: [0.15,  0.17, 0.15]
+      std: [0.18, 0.18, 0.17]
+  mode: train
+
+val_dataset:
+  type: DatasetPair
+  dataset_root:  /home/dataset
+  val_path:  /home/dataset/val.txt
+  num_classes: 24
+  suffix: 'template'
+  transforms:
+    - type: ResizePair
+      target_size: [600, 600]
+    - type: NormalizePair
+      mean: [0.15,  0.17, 0.15]
+      std: [0.18, 0.18, 0.17]
+  mode: val
+  

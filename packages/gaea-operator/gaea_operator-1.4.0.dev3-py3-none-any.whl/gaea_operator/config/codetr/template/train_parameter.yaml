@@ -1,0 +1,1176 @@
+max_epochs: &max_epochs 100
+batch_size: &batch_size 1
+eval_height: &eval_height 1024
+eval_width: &eval_width 1024
+output_dir: &output_dir /home/mmdet/output
+image_size: &image_size !!python/tuple
+  - *eval_width
+  - *eval_height
+data_root: &data_root /do-not-exist-path/data
+load_from: /root/ai2b/personal/zhanghailun/code/mmdetection/projects/CO-DETR/pretrained/co_dino_5scale_swin_large_16e_o365tococo-614254c9.pth
+pretrained: &pretrained /root/ai2b/personal/zhanghailun/code/mmdetection/projects/CO-DETR/pretrained/swin_large_patch4_window12_384_22k.pth
+num_classes: &num_classes 5
+train_anno: &train_anno /do-not-exist-path/train.json
+val_anno: &val_anno /do-not-exist-path/val.json
+
+optim_wrapper: !!python/object/apply:mmengine.config.config.ConfigDict
+- clip_grad: !!python/object/apply:mmengine.config.config.ConfigDict
+  - max_norm: 0.1
+    norm_type: 2
+  optimizer: !!python/object/apply:mmengine.config.config.ConfigDict
+  - lr: 0.0001
+    type: AdamW
+    weight_decay: 0.0001
+  paramwise_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+  - custom_keys: !!python/object/apply:mmengine.config.config.ConfigDict
+    - backbone: !!python/object/apply:mmengine.config.config.ConfigDict
+      - lr_mult: 0.1
+  type: OptimWrapper
+param_scheduler:
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - begin: 0
+    by_epoch: true
+    end: 100
+    gamma: 0.1
+    milestones:
+    - 8
+    type: MultiStepLR
+
+auto_scale_lr: !!python/object/apply:mmengine.config.config.ConfigDict
+- base_batch_size: 16
+backend_args: null
+batch_augments:
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - pad_mask: true
+    size: !!python/tuple
+    - 1280
+    - 1280
+    type: BatchFixedSizePad
+custom_imports: !!python/object/apply:mmengine.config.config.ConfigDict
+- allow_failed_imports: false
+  imports:
+  - mmdet.projects.CODETR.codetr
+  - mmdet.engine.hooks.metric_tracker_hook
+custom_hooks:
+  - type: MetricTrackerHook
+    out_dir: *output_dir
+  - type: CopyCheckpointHook
+    out_dir: *output_dir
+    priority: VERY_LOW
+dataset_type: CocoDataset
+default_hooks: !!python/object/apply:mmengine.config.config.ConfigDict
+- checkpoint: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    by_epoch: true
+    interval: 1
+    max_keep_ckpts: 1
+    save_optimizer: False
+    save_param_scheduler: False
+    save_last: False
+    out_dir: /home/mmdet
+    filename_tmpl: best_model.pth
+    save_best: coco/bbox_mAP
+    type: CheckpointHook
+  logger: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    interval: 50
+    out_dir: /root/log
+    type: LoggerHook
+  param_scheduler: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    type: ParamSchedulerHook
+  sampler_seed: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    type: DistSamplerSeedHook
+  timer: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    type: IterTimerHook
+  visualization: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    type: DetVisualizationHook
+default_scope: mmdet
+env_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+- cudnn_benchmark: false
+  dist_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+  - backend: nccl
+  mp_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+  - mp_start_method: fork
+    opencv_num_threads: 0
+
+load_pipeline:
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: LoadImageFromFile
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: LoadAnnotations
+    with_bbox: true
+    with_mask: true
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - keep_ratio: true
+    ratio_range: !!python/tuple
+    - 0.1
+    - 2.0
+    scale: !!python/tuple
+    - 1280
+    - 1280
+    type: RandomResize
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - allow_negative_crop: true
+    crop_size: !!python/tuple
+    - 1280
+    - 1280
+    crop_type: absolute_range
+    recompute_bbox: true
+    type: RandomCrop
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - min_gt_bbox_wh: !!python/tuple
+    - 0.01
+    - 0.01
+    type: FilterAnnotations
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - prob: 0.5
+    type: RandomFlip
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - pad_val: !!python/object/apply:mmengine.config.config.ConfigDict
+    - img: !!python/tuple
+      - 114
+      - 114
+      - 114
+    size: !!python/tuple
+    - 1280
+    - 1280
+    type: Pad
+log_level: INFO
+log_processor: !!python/object/apply:mmengine.config.config.ConfigDict
+- _scope_: mmdet
+  by_epoch: true
+  type: LogProcessor
+  window_size: 50
+loss_lambda: 2.0
+
+max_iters: 270000
+metainfo: !!python/object/apply:mmengine.config.config.ConfigDict
+- classes: !!python/tuple
+  - Chardonnay
+  - Cabernet Franc
+  - Cabernet Sauvignon
+  - Sauvignon Blanc
+  - Syrah
+model: !!python/object/apply:mmengine.config.config.ConfigDict
+- backbone: !!python/object/apply:mmengine.config.config.ConfigDict
+  - attn_drop_rate: 0.0
+    convert_weights: true
+    depths:
+    - 2
+    - 2
+    - 18
+    - 2
+    drop_path_rate: 0.3
+    drop_rate: 0.0
+    embed_dims: 192
+    init_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+    - checkpoint: *pretrained
+      type: Pretrained
+    mlp_ratio: 4
+    num_heads:
+    - 6
+    - 12
+    - 24
+    - 48
+    out_indices: !!python/tuple
+    - 0
+    - 1
+    - 2
+    - 3
+    patch_norm: true
+    pretrain_img_size: 384
+    qk_scale: null
+    qkv_bias: true
+    type: SwinTransformer
+    window_size: 12
+    with_cp: true
+  bbox_head:
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - anchor_generator: !!python/object/apply:mmengine.config.config.ConfigDict
+      - octave_base_scale: 8
+        ratios:
+        - 1.0
+        scales_per_octave: 1
+        strides:
+        - 4
+        - 8
+        - 16
+        - 32
+        - 64
+        - 128
+        type: AnchorGenerator
+      bbox_coder: !!python/object/apply:mmengine.config.config.ConfigDict
+      - target_means:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        target_stds:
+        - 0.1
+        - 0.1
+        - 0.2
+        - 0.2
+        type: DeltaXYWHBBoxCoder
+      feat_channels: 256
+      in_channels: 256
+      loss_bbox: !!python/object/apply:mmengine.config.config.ConfigDict
+      - loss_weight: 24.0
+        type: GIoULoss
+      loss_centerness: !!python/object/apply:mmengine.config.config.ConfigDict
+      - loss_weight: 12.0
+        type: CrossEntropyLoss
+        use_sigmoid: true
+      loss_cls: !!python/object/apply:mmengine.config.config.ConfigDict
+      - alpha: 0.25
+        gamma: 2.0
+        loss_weight: 12.0
+        type: FocalLoss
+        use_sigmoid: true
+      num_classes: *num_classes
+      stacked_convs: 1
+      type: CoATSSHead
+  data_preprocessor: !!python/object/apply:mmengine.config.config.ConfigDict
+  - batch_augments: null
+    bgr_to_rgb: true
+    mean:
+    - 123.675
+    - 116.28
+    - 103.53
+    pad_mask: false
+    std:
+    - 58.395
+    - 57.12
+    - 57.375
+    type: DetDataPreprocessor
+  eval_module: detr
+  neck: !!python/object/apply:mmengine.config.config.ConfigDict
+  - act_cfg: null
+    in_channels:
+    - 192
+    - 384
+    - 768
+    - 1536
+    kernel_size: 1
+    norm_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+    - num_groups: 32
+      type: GN
+    num_outs: 5
+    out_channels: 256
+    type: ChannelMapper
+  query_head: !!python/object/apply:mmengine.config.config.ConfigDict
+  - as_two_stage: true
+    dn_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+    - box_noise_scale: 0.4
+      group_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+      - dynamic: true
+        num_dn_queries: 500
+        num_groups: null
+      label_noise_scale: 0.5
+    in_channels: 2048
+    loss_bbox: !!python/object/apply:mmengine.config.config.ConfigDict
+    - loss_weight: 5.0
+      type: L1Loss
+    loss_cls: !!python/object/apply:mmengine.config.config.ConfigDict
+    - beta: 2.0
+      loss_weight: 1.0
+      type: QualityFocalLoss
+      use_sigmoid: true
+    loss_iou: !!python/object/apply:mmengine.config.config.ConfigDict
+    - loss_weight: 2.0
+      type: GIoULoss
+    num_classes: *num_classes
+    num_query: 300
+    positional_encoding: !!python/object/apply:mmengine.config.config.ConfigDict
+    - normalize: true
+      num_feats: 128
+      temperature: 20
+      type: SinePositionalEncoding
+    sync_cls_avg_factor: true
+    transformer: !!python/object/apply:mmengine.config.config.ConfigDict
+    - decoder: !!python/object/apply:mmengine.config.config.ConfigDict
+      - num_layers: 6
+        return_intermediate: true
+        transformerlayers: !!python/object/apply:mmengine.config.config.ConfigDict
+        - attn_cfgs:
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - dropout: 0.0
+              embed_dims: 256
+              num_heads: 8
+              type: MultiheadAttention
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - dropout: 0.0
+              embed_dims: 256
+              num_levels: 5
+              type: MultiScaleDeformableAttention
+          feedforward_channels: 2048
+          ffn_dropout: 0.0
+          operation_order: !!python/tuple
+          - self_attn
+          - norm
+          - cross_attn
+          - norm
+          - ffn
+          - norm
+          type: DetrTransformerDecoderLayer
+        type: DinoTransformerDecoder
+      encoder: !!python/object/apply:mmengine.config.config.ConfigDict
+      - num_layers: 6
+        transformerlayers: !!python/object/apply:mmengine.config.config.ConfigDict
+        - attn_cfgs: !!python/object/apply:mmengine.config.config.ConfigDict
+          - dropout: 0.0
+            embed_dims: 256
+            num_levels: 5
+            type: MultiScaleDeformableAttention
+          feedforward_channels: 2048
+          ffn_dropout: 0.0
+          operation_order: !!python/tuple
+          - self_attn
+          - norm
+          - ffn
+          - norm
+          type: BaseTransformerLayer
+        type: DetrTransformerEncoder
+        with_cp: 6
+      num_co_heads: 2
+      num_feature_levels: 5
+      type: CoDinoTransformer
+      with_coord_feat: false
+      with_pos_coord: true
+    type: CoDINOHead
+  roi_head:
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - bbox_head: !!python/object/apply:mmengine.config.config.ConfigDict
+      - bbox_coder: !!python/object/apply:mmengine.config.config.ConfigDict
+        - target_means:
+          - 0.0
+          - 0.0
+          - 0.0
+          - 0.0
+          target_stds:
+          - 0.1
+          - 0.1
+          - 0.2
+          - 0.2
+          type: DeltaXYWHBBoxCoder
+        fc_out_channels: 1024
+        in_channels: 256
+        loss_bbox: !!python/object/apply:mmengine.config.config.ConfigDict
+        - loss_weight: 120.0
+          type: GIoULoss
+        loss_cls: !!python/object/apply:mmengine.config.config.ConfigDict
+        - loss_weight: 12.0
+          type: CrossEntropyLoss
+          use_sigmoid: false
+        num_classes: *num_classes
+        reg_class_agnostic: false
+        reg_decoded_bbox: true
+        roi_feat_size: 7
+        type: Shared2FCBBoxHead
+      bbox_roi_extractor: !!python/object/apply:mmengine.config.config.ConfigDict
+      - featmap_strides:
+        - 4
+        - 8
+        - 16
+        - 32
+        - 64
+        finest_scale: 56
+        out_channels: 256
+        roi_layer: !!python/object/apply:mmengine.config.config.ConfigDict
+        - output_size: 7
+          sampling_ratio: 0
+          type: RoIAlign
+        type: SingleRoIExtractor
+      type: CoStandardRoIHead
+  rpn_head: !!python/object/apply:mmengine.config.config.ConfigDict
+  - anchor_generator: !!python/object/apply:mmengine.config.config.ConfigDict
+    - octave_base_scale: 4
+      ratios:
+      - 0.5
+      - 1.0
+      - 2.0
+      scales_per_octave: 3
+      strides:
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      type: AnchorGenerator
+    bbox_coder: !!python/object/apply:mmengine.config.config.ConfigDict
+    - target_means:
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      target_stds:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      type: DeltaXYWHBBoxCoder
+    feat_channels: 256
+    in_channels: 256
+    loss_bbox: !!python/object/apply:mmengine.config.config.ConfigDict
+    - loss_weight: 12.0
+      type: L1Loss
+    loss_cls: !!python/object/apply:mmengine.config.config.ConfigDict
+    - loss_weight: 12.0
+      type: CrossEntropyLoss
+      use_sigmoid: true
+    type: RPNHead
+  test_cfg:
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - max_per_img: 50
+      nms: !!python/object/apply:mmengine.config.config.ConfigDict
+      - iou_threshold: 0.3
+        type: nms
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - rcnn: !!python/object/apply:mmengine.config.config.ConfigDict
+      - max_per_img: 100
+        nms: !!python/object/apply:mmengine.config.config.ConfigDict
+        - iou_threshold: 0.5
+          type: nms
+        score_thr: 0.0
+      rpn: !!python/object/apply:mmengine.config.config.ConfigDict
+      - max_per_img: 1000
+        min_bbox_size: 0
+        nms: !!python/object/apply:mmengine.config.config.ConfigDict
+        - iou_threshold: 0.7
+          type: nms
+        nms_pre: 1000
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - max_per_img: 20
+      min_bbox_size: 0
+      nms: !!python/object/apply:mmengine.config.config.ConfigDict
+      - iou_threshold: 0.3
+        type: nms
+      nms_pre: 1000
+      score_thr: 0.0
+  train_cfg:
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - assigner: !!python/object/apply:mmengine.config.config.ConfigDict
+      - match_costs:
+        - !!python/object/apply:mmengine.config.config.ConfigDict
+          - type: FocalLossCost
+            weight: 2.0
+        - !!python/object/apply:mmengine.config.config.ConfigDict
+          - box_format: xywh
+            type: BBoxL1Cost
+            weight: 5.0
+        - !!python/object/apply:mmengine.config.config.ConfigDict
+          - iou_mode: giou
+            type: IoUCost
+            weight: 2.0
+        type: HungarianAssigner
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - rcnn: !!python/object/apply:mmengine.config.config.ConfigDict
+      - assigner: !!python/object/apply:mmengine.config.config.ConfigDict
+        - ignore_iof_thr: -1
+          match_low_quality: false
+          min_pos_iou: 0.5
+          neg_iou_thr: 0.5
+          pos_iou_thr: 0.5
+          type: MaxIoUAssigner
+        debug: false
+        pos_weight: -1
+        sampler: !!python/object/apply:mmengine.config.config.ConfigDict
+        - add_gt_as_proposals: true
+          neg_pos_ub: -1
+          num: 512
+          pos_fraction: 0.25
+          type: RandomSampler
+      rpn: !!python/object/apply:mmengine.config.config.ConfigDict
+      - allowed_border: -1
+        assigner: !!python/object/apply:mmengine.config.config.ConfigDict
+        - ignore_iof_thr: -1
+          match_low_quality: true
+          min_pos_iou: 0.3
+          neg_iou_thr: 0.3
+          pos_iou_thr: 0.7
+          type: MaxIoUAssigner
+        debug: false
+        pos_weight: -1
+        sampler: !!python/object/apply:mmengine.config.config.ConfigDict
+        - add_gt_as_proposals: false
+          neg_pos_ub: -1
+          num: 256
+          pos_fraction: 0.5
+          type: RandomSampler
+      rpn_proposal: !!python/object/apply:mmengine.config.config.ConfigDict
+      - max_per_img: 1000
+        min_bbox_size: 0
+        nms: !!python/object/apply:mmengine.config.config.ConfigDict
+        - iou_threshold: 0.7
+          type: nms
+        nms_pre: 4000
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - allowed_border: -1
+      assigner: !!python/object/apply:mmengine.config.config.ConfigDict
+      - topk: 9
+        type: ATSSAssigner
+      debug: false
+      pos_weight: -1
+  type: CoDETR
+  use_lsj: false
+num_dec_layer: 6
+
+resume: false
+test_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+- _scope_: mmdet
+  type: TestLoop
+test_dataloader: !!python/object/apply:mmengine.config.config.ConfigDict
+- batch_size: *batch_size
+  dataset: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    ann_file: *val_anno
+    backend_args: null
+    data_prefix: !!python/object/apply:mmengine.config.config.ConfigDict
+    - img: ""
+    data_root: *data_root
+    filter_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+    - filter_empty_gt: false
+    metainfo: !!python/object/apply:mmengine.config.config.ConfigDict
+    - classes: !!python/tuple
+      - Chardonnay
+      - Cabernet Franc
+      - Cabernet Sauvignon
+      - Sauvignon Blanc
+      - Syrah
+    pipeline:
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: LoadImageFromFile
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - keep_ratio: false
+        scale: !!python/tuple
+        - 1024
+        - 1024
+        type: Resize
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: LoadAnnotations
+        with_bbox: true
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - meta_keys: !!python/tuple
+        - img_id
+        - img_path
+        - ori_shape
+        - img_shape
+        - scale_factor
+        type: PackDetInputs
+    test_mode: true
+    type: CocoDataset
+  drop_last: false
+  num_workers: 1
+  persistent_workers: true
+  sampler: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    shuffle: false
+    type: DefaultSampler
+test_evaluator: !!python/object/apply:mmengine.config.config.ConfigDict
+- _scope_: mmdet
+  ann_file: *val_anno
+  backend_args: null
+  classwise: true
+  format_only: false
+  metric: bbox
+  type: CocoMetric
+test_pipeline:
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: LoadImageFromFile
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - keep_ratio: false
+    scale: !!python/tuple
+    - 1024
+    - 1024
+    type: Resize
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: LoadAnnotations
+    with_bbox: true
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - meta_keys: !!python/tuple
+    - img_id
+    - img_path
+    - ori_shape
+    - img_shape
+    - scale_factor
+    type: PackDetInputs
+train_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+- max_epochs: *max_epochs
+  type: EpochBasedTrainLoop
+  val_interval: 1
+train_dataloader: !!python/object/apply:mmengine.config.config.ConfigDict
+- batch_size: *batch_size
+  dataset: !!python/object/apply:mmengine.config.config.ConfigDict
+  - ann_file: *train_anno
+    backend_args: null
+    data_prefix: !!python/object/apply:mmengine.config.config.ConfigDict
+    - img: ""
+    data_root: *data_root
+    filter_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+    - filter_empty_gt: false
+      min_size: 32
+    metainfo: !!python/object/apply:mmengine.config.config.ConfigDict
+    - classes: !!python/tuple
+      - Chardonnay
+      - Cabernet Franc
+      - Cabernet Sauvignon
+      - Sauvignon Blanc
+      - Syrah
+    pipeline:
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: LoadImageFromFile
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: LoadAnnotations
+        with_bbox: true
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - prob: 0.5
+        type: RandomFlip
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - transforms:
+        - - !!python/object/apply:mmengine.config.config.ConfigDict
+            - keep_ratio: false
+              scales:
+              - !!python/tuple
+                - 480
+                - 1024
+              - !!python/tuple
+                - 512
+                - 1024
+              - !!python/tuple
+                - 544
+                - 1024
+              - !!python/tuple
+                - 576
+                - 1024
+              - !!python/tuple
+                - 608
+                - 1024
+              - !!python/tuple
+                - 640
+                - 1024
+              - !!python/tuple
+                - 672
+                - 1024
+              - !!python/tuple
+                - 704
+                - 1024
+              - !!python/tuple
+                - 736
+                - 1024
+              - !!python/tuple
+                - 768
+                - 1024
+              - !!python/tuple
+                - 800
+                - 1024
+              - !!python/tuple
+                - 832
+                - 1024
+              - !!python/tuple
+                - 864
+                - 1024
+              - !!python/tuple
+                - 896
+                - 1024
+              - !!python/tuple
+                - 928
+                - 1024
+              - !!python/tuple
+                - 960
+                - 1024
+              - !!python/tuple
+                - 992
+                - 1024
+              - !!python/tuple
+                - 1024
+                - 1024
+              type: RandomChoiceResize
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - level: 1
+              max_mag: 180.0
+              min_mag: 90.0
+              prob: 0.5
+              reversal_prob: 0.5
+              type: RotateKangtuo
+        - - !!python/object/apply:mmengine.config.config.ConfigDict
+            - keep_ratio: false
+              scales:
+              - !!python/tuple
+                - 400
+                - 4200
+              - !!python/tuple
+                - 500
+                - 4200
+              - !!python/tuple
+                - 600
+                - 4200
+              type: RandomChoiceResize
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - allow_negative_crop: true
+              crop_size: !!python/tuple
+              - 384
+              - 600
+              crop_type: absolute_range
+              type: RandomCrop
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - keep_ratio: false
+              scales:
+              - !!python/tuple
+                - 480
+                - 1024
+              - !!python/tuple
+                - 512
+                - 1024
+              - !!python/tuple
+                - 544
+                - 1024
+              - !!python/tuple
+                - 576
+                - 1024
+              - !!python/tuple
+                - 608
+                - 1024
+              - !!python/tuple
+                - 640
+                - 1024
+              - !!python/tuple
+                - 672
+                - 1024
+              - !!python/tuple
+                - 704
+                - 1024
+              - !!python/tuple
+                - 736
+                - 1024
+              - !!python/tuple
+                - 768
+                - 1024
+              - !!python/tuple
+                - 800
+                - 1024
+              - !!python/tuple
+                - 832
+                - 1024
+              - !!python/tuple
+                - 864
+                - 1024
+              - !!python/tuple
+                - 896
+                - 1024
+              - !!python/tuple
+                - 928
+                - 1024
+              - !!python/tuple
+                - 960
+                - 1024
+              - !!python/tuple
+                - 992
+                - 1024
+              - !!python/tuple
+                - 1024
+                - 1024
+              type: RandomChoiceResize
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - level: 1
+              max_mag: 180.0
+              min_mag: 90.0
+              prob: 0.5
+              reversal_prob: 0.5
+              type: RotateKangtuo
+        - - !!python/object/apply:mmengine.config.config.ConfigDict
+            - keep_ratio: false
+              scales:
+              - !!python/tuple
+                - 480
+                - 1024
+              - !!python/tuple
+                - 512
+                - 1024
+              - !!python/tuple
+                - 544
+                - 1024
+              - !!python/tuple
+                - 576
+                - 1024
+              - !!python/tuple
+                - 608
+                - 1024
+              - !!python/tuple
+                - 640
+                - 1024
+              - !!python/tuple
+                - 672
+                - 1024
+              - !!python/tuple
+                - 704
+                - 1024
+              - !!python/tuple
+                - 736
+                - 1024
+              - !!python/tuple
+                - 768
+                - 1024
+              - !!python/tuple
+                - 800
+                - 1024
+              - !!python/tuple
+                - 832
+                - 1024
+              - !!python/tuple
+                - 864
+                - 1024
+              - !!python/tuple
+                - 896
+                - 1024
+              - !!python/tuple
+                - 928
+                - 1024
+              - !!python/tuple
+                - 960
+                - 1024
+              - !!python/tuple
+                - 992
+                - 1024
+              - !!python/tuple
+                - 1024
+                - 1024
+              type: RandomChoiceResize
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - level: 1
+              max_mag: 180.0
+              min_mag: 90.0
+              prob: 0.5
+              reversal_prob: 0.5
+              type: RotateKangtuo
+          - !!python/object/apply:mmengine.config.config.ConfigDict
+            - bbox_clip_border: true
+              min_crop_size: 0.5
+              min_ious: !!python/tuple
+              - 0.5
+              - 0.6
+              - 0.7
+              - 0.8
+              - 0.9
+              type: MinIoURandomCrop
+        type: RandomChoice
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: PackDetInputs
+    type: CocoDataset
+  num_workers: 1
+  persistent_workers: true
+  sampler: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    shuffle: true
+    type: DefaultSampler
+train_pipeline:
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: LoadImageFromFile
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: LoadAnnotations
+    with_bbox: true
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - prob: 0.5
+    type: RandomFlip
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - transforms:
+    - - !!python/object/apply:mmengine.config.config.ConfigDict
+        - level: 1
+          max_mag: 180.0
+          min_mag: 90.0
+          prob: 0.5
+          reversal_prob: 0.5
+          type: RotateKangtuo
+      - !!python/object/apply:mmengine.config.config.ConfigDict
+        - keep_ratio: false
+          scales:
+          - !!python/tuple
+            - 480
+            - 1024
+          - !!python/tuple
+            - 512
+            - 1024
+          - !!python/tuple
+            - 544
+            - 1024
+          - !!python/tuple
+            - 576
+            - 1024
+          - !!python/tuple
+            - 608
+            - 1024
+          - !!python/tuple
+            - 640
+            - 1024
+          - !!python/tuple
+            - 672
+            - 1024
+          - !!python/tuple
+            - 704
+            - 1024
+          - !!python/tuple
+            - 736
+            - 1024
+          - !!python/tuple
+            - 768
+            - 1024
+          - !!python/tuple
+            - 800
+            - 1024
+          - !!python/tuple
+            - 832
+            - 1024
+          - !!python/tuple
+            - 864
+            - 1024
+          - !!python/tuple
+            - 896
+            - 1024
+          - !!python/tuple
+            - 928
+            - 1024
+          - !!python/tuple
+            - 960
+            - 1024
+          - !!python/tuple
+            - 992
+            - 1024
+          - !!python/tuple
+            - 1024
+            - 1024
+          type: RandomChoiceResize
+    - - !!python/object/apply:mmengine.config.config.ConfigDict
+        - level: 1
+          max_mag: 180.0
+          min_mag: 90.0
+          prob: 0.5
+          reversal_prob: 0.5
+          type: RotateKangtuo
+      - !!python/object/apply:mmengine.config.config.ConfigDict
+        - keep_ratio: false
+          scales:
+          - !!python/tuple
+            - 400
+            - 4200
+          - !!python/tuple
+            - 500
+            - 4200
+          - !!python/tuple
+            - 600
+            - 4200
+          type: RandomChoiceResize
+      - !!python/object/apply:mmengine.config.config.ConfigDict
+        - allow_negative_crop: true
+          crop_size: !!python/tuple
+          - 384
+          - 600
+          crop_type: absolute_range
+          type: RandomCrop
+      - !!python/object/apply:mmengine.config.config.ConfigDict
+        - keep_ratio: false
+          scales:
+          - !!python/tuple
+            - 480
+            - 1024
+          - !!python/tuple
+            - 512
+            - 1024
+          - !!python/tuple
+            - 544
+            - 1024
+          - !!python/tuple
+            - 576
+            - 1024
+          - !!python/tuple
+            - 608
+            - 1024
+          - !!python/tuple
+            - 640
+            - 1024
+          - !!python/tuple
+            - 672
+            - 1024
+          - !!python/tuple
+            - 704
+            - 1024
+          - !!python/tuple
+            - 736
+            - 1024
+          - !!python/tuple
+            - 768
+            - 1024
+          - !!python/tuple
+            - 800
+            - 1024
+          - !!python/tuple
+            - 832
+            - 1024
+          - !!python/tuple
+            - 864
+            - 1024
+          - !!python/tuple
+            - 896
+            - 1024
+          - !!python/tuple
+            - 928
+            - 1024
+          - !!python/tuple
+            - 960
+            - 1024
+          - !!python/tuple
+            - 992
+            - 1024
+          - !!python/tuple
+            - 1024
+            - 1024
+          type: RandomChoiceResize
+    - - !!python/object/apply:mmengine.config.config.ConfigDict
+        - level: 1
+          max_mag: 180.0
+          min_mag: 90.0
+          prob: 0.5
+          reversal_prob: 0.5
+          type: RotateKangtuo
+      - !!python/object/apply:mmengine.config.config.ConfigDict
+        - keep_ratio: false
+          scales:
+          - !!python/tuple
+            - 480
+            - 1024
+          - !!python/tuple
+            - 512
+            - 1024
+          - !!python/tuple
+            - 544
+            - 1024
+          - !!python/tuple
+            - 576
+            - 1024
+          - !!python/tuple
+            - 608
+            - 1024
+          - !!python/tuple
+            - 640
+            - 1024
+          - !!python/tuple
+            - 672
+            - 1024
+          - !!python/tuple
+            - 704
+            - 1024
+          - !!python/tuple
+            - 736
+            - 1024
+          - !!python/tuple
+            - 768
+            - 1024
+          - !!python/tuple
+            - 800
+            - 1024
+          - !!python/tuple
+            - 832
+            - 1024
+          - !!python/tuple
+            - 864
+            - 1024
+          - !!python/tuple
+            - 896
+            - 1024
+          - !!python/tuple
+            - 928
+            - 1024
+          - !!python/tuple
+            - 960
+            - 1024
+          - !!python/tuple
+            - 992
+            - 1024
+          - !!python/tuple
+            - 1024
+            - 1024
+          type: RandomChoiceResize
+      - !!python/object/apply:mmengine.config.config.ConfigDict
+        - bbox_clip_border: true
+          min_crop_size: 0.5
+          min_ious: !!python/tuple
+          - 0.5
+          - 0.6
+          - 0.7
+          - 0.8
+          - 0.9
+          type: MinIoURandomCrop
+    type: RandomChoice
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - type: PackDetInputs
+val_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+- _scope_: mmdet
+  type: ValLoop
+val_dataloader: !!python/object/apply:mmengine.config.config.ConfigDict
+- batch_size: *batch_size
+  dataset: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    ann_file: *val_anno
+    backend_args: null
+    data_prefix: !!python/object/apply:mmengine.config.config.ConfigDict
+    - img: ""
+    data_root: *data_root
+    filter_cfg: !!python/object/apply:mmengine.config.config.ConfigDict
+    - filter_empty_gt: false
+    metainfo: !!python/object/apply:mmengine.config.config.ConfigDict
+    - classes: !!python/tuple
+      - Chardonnay
+      - Cabernet Franc
+      - Cabernet Sauvignon
+      - Sauvignon Blanc
+      - Syrah
+    pipeline:
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: LoadImageFromFile
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - keep_ratio: false
+        scale: !!python/tuple
+        - 1024
+        - 1024
+        type: Resize
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - type: LoadAnnotations
+        with_bbox: true
+    - !!python/object/apply:mmengine.config.config.ConfigDict
+      - meta_keys: !!python/tuple
+        - img_id
+        - img_path
+        - ori_shape
+        - img_shape
+        - scale_factor
+        type: PackDetInputs
+    test_mode: true
+    type: CocoDataset
+  drop_last: false
+  num_workers: 1
+  persistent_workers: true
+  sampler: !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    shuffle: false
+    type: DefaultSampler
+val_evaluator: !!python/object/apply:mmengine.config.config.ConfigDict
+- _scope_: mmdet
+  ann_file: *val_anno
+  backend_args: null
+  classwise: true
+  format_only: false
+  metric: bbox
+  type: CocoMetric
+vis_backends:
+- !!python/object/apply:mmengine.config.config.ConfigDict
+  - _scope_: mmdet
+    type: LocalVisBackend
+visualizer: !!python/object/apply:mmengine.config.config.ConfigDict
+- _scope_: mmdet
+  name: visualizer
+  type: DetLocalVisualizer
+  vis_backends:
+  - !!python/object/apply:mmengine.config.config.ConfigDict
+    - type: LocalVisBackend

@@ -1,0 +1,75 @@
+- label: "训练轮数"
+  min: 1
+  max: 1000
+  defaultValue: 80
+  step: 1
+  name: "epochs"
+  help: "模型训练的最大轮数"
+  type: "inputNumber"
+
+- label: "warmup轮数"
+  min: 1
+  max: 50
+  defaultValue: 2
+  step: 1
+  name: "warmup_epochs"
+  help: "模型正式训练之前预热训练的轮数"
+  type: "inputNumber"
+
+- label: "基础学习率"
+  min: 0.00001
+  max: 0.5
+  defaultValue: 0.0001
+  step: 0.00001
+  name: "lr"
+  formatter: "%f"
+  help: "模型训练的基础学习率"
+  type: "inputNumber"
+
+- label: "数据读取进程数量"
+  min: 1
+  max: 4
+  defaultValue: 2
+  step: 1
+  name: "num_workers"
+  help: "训练数据读取进程数量"
+  type: "inputNumber"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 2048
+  defaultValue: 224
+  step: 32
+  name: "eval_height"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 2048
+  defaultValue: 224
+  step: 32
+  name: "eval_width"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+- label: "模型训练batch大小"
+  min: 1
+  max: 512
+  defaultValue: 256
+  step: 1
+  name: "batch_size"
+  help: "模型训练的batch大小，设置过大可能会导致显存不够训练报错"
+  type: "inputNumber"
+
+- label: "模型结构类型"
+  options:
+    - "repvit_m0_9"
+    - "repvit_m1_0"
+    - "repvit_m1_1"
+    - "repvit_m1_5"
+    - "repvit_m2_3"
+  defaultIndex: 3
+  name: "networkArchitecture"
+  help: "revit支持的几个模型"
+  type: "Select"

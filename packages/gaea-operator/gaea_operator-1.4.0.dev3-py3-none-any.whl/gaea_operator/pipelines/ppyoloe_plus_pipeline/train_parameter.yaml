@@ -1,0 +1,66 @@
+- label: "训练轮数"
+  min: 1
+  max: 1000
+  # defaultValue: 80
+  defaultValue: 100
+  step: 1
+  name: "epoch"
+  help: "模型训练的最大轮数"
+  type: "inputNumber"
+
+- label: "基础学习率"
+  min: 0.00001
+  max: 0.5
+  defaultValue: 0.000125
+  step: 0.6
+  name: "LearningRate.base_lr"
+  formatter: "%f"
+  help: "模型训练的基础学习率"
+  type: "inputNumber"
+
+- label: "数据读取进程数量"
+  min: 1
+  max: 8
+  defaultValue: 4
+  step: 1
+  name: "workerNum"
+  help: "训练数据读取进程数量"
+  type: "inputNumber"
+
+- label: "模型训练batch大小"
+  min: 1
+  max: 64
+  defaultValue: 8
+  step: 1
+  name: "batchSize"
+  help: "是指一次训练(Iteration)所包含的样本数。 BatchSize越大，显存占用越大"
+  type: "inputNumber"
+
+- label: "模型结构类型"
+  options:
+    - "检测模型-极速版"
+    - "检测模型-标准版"
+    - "检测模型-专业版"
+    - "检测模型-高精版"
+  name: "networkArchitecture"
+  defaultIndex: 1
+  help: "模型类型越大训练资源越多，训练越慢，精度越高"
+  type: "Select"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 3200
+  defaultValue: 640
+  step: 32
+  name: "evalHeight"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 3200
+  defaultValue: 640
+  step: 32
+  name: "evalWidth"
+  help: "模型训练图像的宽度"
+  type: "Slider"
