@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "liminal-orm"
+version = "1.1.1"
+description = "An ORM and toolkit that builds on top of Benchling's platform to keep your schemas and downstream code dependencies in sync."
+authors = ["DynoTx Open Source <opensource@dynotx.com>"]
+readme = "README.md"
+homepage = "https://github.com/dynotx/liminal-orm"
+repository = "https://github.com/dynotx/liminal-orm"
+documentation = "https://dynotx.github.io/liminal-orm/"
+packages = [{include = "liminal"}]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/dynotx/liminal-orm/issues"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4"
+benchling-sdk = ">=1.8.0"
+bs4 = "^0.0.2"
+numpy = "^1.23.5"
+pandas = "^1.5.3"
+pydantic = ">=2,<=2.7" # TODO: We need to assess this upgrade
+requests = "^2.32.3"
+rich = "^13.9.2"
+sqlalchemy = "<2" # TODO: We need to assess this upgrade
+tenacity = ">=8,<10"
+typer = "^0.12.5"
+lxml = "^5.3.0"
+psycopg2-binary = "^2.9.10"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+mkdocs-material = "^9.5.41"
+mypy = "^1.1.1"
+pre-commit = "^4.0.1"
+pytest = "^8.3.3"
+ruff = "^0.6.9"
+sqlalchemy = "1.4.49"
+types-beautifulsoup4 = "^4.12.0.20240907"
+types-requests = "^2.32.0.20240914"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+liminal = "liminal.cli.cli:app"
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_defs = true
+explicit_package_bases = true
+mypy_path = "$MYPY_CONFIG_FILE_DIR/"
+namespace_packages = true
+no_implicit_optional = true
+strict_optional = true
+packages = "liminal"
+plugins = ["pydantic.mypy", "numpy.typing.mypy_plugin"]
+show_error_codes = true
+warn_unused_ignores = true
+disable_error_code=["union-attr"]
+
+[[tool.mypy.overrides]]
+module = ["sqlalchemy.*"]
+ignore_missing_imports = true
