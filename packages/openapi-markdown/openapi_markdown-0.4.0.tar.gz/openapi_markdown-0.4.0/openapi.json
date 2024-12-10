@@ -1,0 +1,4697 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SuperAging Server API",
+    "description": "API Documentation",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Local Server"
+    }
+  ],
+  "security": [
+    {
+      "jwt": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "file-endpoint",
+      "description": "파일 업로드/다운로드 API"
+    }
+  ],
+  "paths": {
+    "/client/api/user/profile": {
+      "get": {
+        "tags": [
+          "user-settings-endpoint"
+        ],
+        "summary": "get profile",
+        "description": "get profile",
+        "operationId": "getUserSettings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserClientResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "tags": [
+          "user-settings-endpoint"
+        ],
+        "operationId": "updateUserSettings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserClientResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/client/api/user/password": {
+      "put": {
+        "tags": [
+          "user-settings-endpoint"
+        ],
+        "operationId": "updateUserPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/client/api/auth/token": {
+      "put": {
+        "tags": [
+          "client-auth-endpoint"
+        ],
+        "summary": "Refresh login",
+        "description": "Refresh login",
+        "operationId": "auth",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/treatment/{userTreatmentId}": {
+      "put": {
+        "tags": [
+          "treatment-endpoint"
+        ],
+        "operationId": "updateData",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentUpdateModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserSessionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/user/{id}/tags": {
+      "get": {
+        "tags": [
+          "managed-user-endpoint"
+        ],
+        "operationId": "getTags",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListUserTag"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "tags": [
+          "managed-user-endpoint"
+        ],
+        "operationId": "putTags",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListUserTag"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/{userTreatmentId}": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "getTreatmentResult",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserTreatmentResultDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "updateRecord",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentUpdateModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/content/duration": {
+      "put": {
+        "tags": [
+          "admin-content-endpoint"
+        ],
+        "summary": "Register User",
+        "description": "Register User",
+        "operationId": "updateDuration",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/content/checksum": {
+      "put": {
+        "tags": [
+          "admin-content-endpoint"
+        ],
+        "summary": "Register User",
+        "description": "Register User",
+        "operationId": "updateChecksum",
+        "parameters": [
+          {
+            "name": "algorithm",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CRC32",
+                "MD5",
+                "SHA1",
+                "SHA256",
+                "SHA512"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/admin-user/password": {
+      "put": {
+        "tags": [
+          "admin-user-endpoint"
+        ],
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/file": {
+      "post": {
+        "tags": [
+          "file-endpoint"
+        ],
+        "summary": "파일을 업로드 한다",
+        "description": "파일을 업로드 한다",
+        "operationId": "saveFile",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "metadata",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseString"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/client/api/terms/agreement": {
+      "post": {
+        "tags": [
+          "client-terms-endpoint"
+        ],
+        "operationId": "agreement",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TermsAgreementDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/client/api/health-data": {
+      "post": {
+        "tags": [
+          "client-health-data-endpoint"
+        ],
+        "summary": "Create HealthData List",
+        "description": "Create HealthData List",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/HealthDataModel"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/client/api/device": {
+      "post": {
+        "tags": [
+          "client-device-endpoint"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/client/api/auth/login": {
+      "post": {
+        "tags": [
+          "client-auth-endpoint"
+        ],
+        "summary": "Do login user",
+        "description": "Do login user",
+        "operationId": "auth_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/treatment/{userTreatmentId}/event": {
+      "post": {
+        "tags": [
+          "treatment-endpoint"
+        ],
+        "operationId": "addEvent",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppEventRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserSessionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/app-deploy": {
+      "post": {
+        "tags": [
+          "app-deploy-endpoint"
+        ],
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppDeployModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAppDeployModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user": {
+      "get": {
+        "tags": [
+          "managed-user-endpoint"
+        ],
+        "summary": "List users",
+        "description": "List users",
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListResponseUserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "managed-user-endpoint"
+        ],
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user/{userId}/treatment": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "listUserTreatmentResult",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "COGNITION",
+                "EXERCISE",
+                "NUTRITION",
+                "DISEASE",
+                "COMMON"
+              ]
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListResponseUserTreatmentResult"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "assignNextRound",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "round",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/{userTreatmentId}/post-event": {
+      "post": {
+        "tags": [
+          "user-treatment-admin-test-endpoint"
+        ],
+        "operationId": "postEvent",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment-session/process": {
+      "post": {
+        "tags": [
+          "user-treatment-session-admin-endpoint"
+        ],
+        "operationId": "list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/terms": {
+      "post": {
+        "tags": [
+          "admin-terms-endpoint"
+        ],
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TermsModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/system/user/{userId}/reset": {
+      "post": {
+        "tags": [
+          "user-treatment-admin-test-endpoint"
+        ],
+        "operationId": "reset",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/schedule/assign": {
+      "post": {
+        "tags": [
+          "user-treatment-admin-test-endpoint"
+        ],
+        "operationId": "assignAll",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/push-message/{userId}": {
+      "post": {
+        "tags": [
+          "push-message-endpoint"
+        ],
+        "summary": "Send a message to a user",
+        "description": "Send a message to a user",
+        "operationId": "send",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/image/generate": {
+      "post": {
+        "tags": [
+          "admin-image-gen-endpoint"
+        ],
+        "operationId": "generateImage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageRequestModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseImageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/enroll": {
+      "post": {
+        "tags": [
+          "managed-user-endpoint"
+        ],
+        "summary": "Register User",
+        "description": "Register User",
+        "operationId": "enroll",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserEnrollRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserEnrollResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/content/result/collect": {
+      "post": {
+        "tags": [
+          "admin-content-endpoint"
+        ],
+        "summary": "Register User",
+        "description": "Register User",
+        "operationId": "collectContentResult",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/auth/password": {
+      "post": {
+        "tags": [
+          "admin-auth-endpoint"
+        ],
+        "operationId": "findPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseEmptyPayload"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/auth/login": {
+      "post": {
+        "tags": [
+          "admin-auth-endpoint"
+        ],
+        "summary": "Do login admin",
+        "description": "Do login admin",
+        "operationId": "auth_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseLoginResponseModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/admin-user": {
+      "get": {
+        "tags": [
+          "admin-user-endpoint"
+        ],
+        "summary": "List admin users",
+        "description": "List admin users",
+        "operationId": "list_4",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListResponseAdminUserDto"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "admin-user-endpoint"
+        ],
+        "operationId": "create_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminUserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdminUserDto"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/public/terms/{id}": {
+      "get": {
+        "tags": [
+          "terms-endpoint"
+        ],
+        "operationId": "getTerms",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/treatment/round/{round}": {
+      "get": {
+        "tags": [
+          "treatment-endpoint"
+        ],
+        "operationId": "getRound",
+        "parameters": [
+          {
+            "name": "round",
+            "in": "path",
+            "description": "- round number",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "updateCurrent",
+            "in": "query",
+            "description": "- if true, update current round to the given round",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTreatmentRoundModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/treatment/round/current": {
+      "get": {
+        "tags": [
+          "treatment-endpoint"
+        ],
+        "operationId": "getCurrentRound",
+        "parameters": [
+          {
+            "name": "updateCurrent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTreatmentRoundModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/app-deploy/latest": {
+      "get": {
+        "tags": [
+          "app-deploy-endpoint"
+        ],
+        "operationId": "lastAppDeploy",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ANDROID",
+                "IOS"
+              ]
+            }
+          },
+          {
+            "name": "packageName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "versionCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAppDeployModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user/{id}": {
+      "get": {
+        "tags": [
+          "managed-user-endpoint"
+        ],
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/{userTreatmentId}/survey": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "getSurveyResult",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSurveyResult"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/{userTreatmentId}/session": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "listSession",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListResponseUserTreatmentSessionSimple"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/{userTreatmentId}/session/{sessionId}/data": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "getSessionData",
+        "parameters": [
+          {
+            "name": "userTreatmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserTreatmentSessionData"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/{round}/today-notice": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "listTodayNotCompleted",
+        "parameters": [
+          {
+            "name": "round",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListUserProgressSummary"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/stats/{round}/by-domain": {
+      "get": {
+        "tags": [
+          "user-treatment-stats-admin-endpoint"
+        ],
+        "operationId": "getDomainChartData",
+        "parameters": [
+          {
+            "name": "round",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRoundStatSummary"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/stats/last/by-domain": {
+      "get": {
+        "tags": [
+          "user-treatment-stats-admin-endpoint"
+        ],
+        "operationId": "getLastDomainChartData",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRoundStatSummary"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/user-treatment/last/today-notice": {
+      "get": {
+        "tags": [
+          "user-treatment-admin-endpoint"
+        ],
+        "operationId": "listTodayNotCompleted_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListUserProgressSummary"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/terms/list": {
+      "get": {
+        "tags": [
+          "admin-terms-endpoint"
+        ],
+        "operationId": "list_2",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListResponseTermsModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/prescription": {
+      "get": {
+        "tags": [
+          "prescription-endpoint"
+        ],
+        "operationId": "list_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListPrescriptionModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/content": {
+      "get": {
+        "tags": [
+          "admin-content-endpoint"
+        ],
+        "operationId": "listContentMode",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseListResponseContentModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/admin-user/{id}": {
+      "get": {
+        "tags": [
+          "admin-user-endpoint"
+        ],
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAdminUserDto"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/client/api/user/reset": {
+      "delete": {
+        "tags": [
+          "user-settings-endpoint"
+        ],
+        "operationId": "resetUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/client/api/health-data/by-client-record-id/{id}": {
+      "delete": {
+        "tags": [
+          "client-health-data-endpoint"
+        ],
+        "operationId": "deleteByClientRecordId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/app-deploy/{id}": {
+      "delete": {
+        "tags": [
+          "app-deploy-endpoint"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAppDeployModel"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/api/terms/{id}": {
+      "delete": {
+        "tags": [
+          "admin-terms-endpoint"
+        ],
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/recording/by-record-id/{id}": {
+      "delete": {
+        "tags": [
+          "recording-endpoint"
+        ],
+        "operationId": "deleteByClientRecordId_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TermsSimpleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "agreed": {
+            "type": "boolean",
+            "description": "null 이면, 아직 동의 안함."
+          }
+        },
+        "description": ""
+      },
+      "UserSettings": {
+        "type": "object",
+        "properties": {
+          "reminderHour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastReminderHour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reminderUpdatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "defaultReminderHour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remindBufferMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remindChangeDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recallAnyTime": {
+            "type": "boolean"
+          },
+          "treatmentAnyTime": {
+            "type": "boolean",
+            "description": "true 이면, treatment.availableHours 을 무시하고 언제든지 테스트 가능"
+          },
+          "baseUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TermsSimpleDto"
+            }
+          }
+        },
+        "description": "사용자 모델"
+      },
+      "ResponseUserClientResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/UserClientResponse"
+          }
+        },
+        "description": ""
+      },
+      "UserClientResponse": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/UserSettings"
+          },
+          "passwordChangeRequired": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "사용자 모델"
+      },
+      "PasswordUpdateRequest": {
+        "required": [
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "PrescriptionModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ResponseUserModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/UserModel"
+          }
+        },
+        "description": ""
+      },
+      "SelectOption": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "object",
+            "description": "선택 값"
+          },
+          "label": {
+            "type": "string",
+            "description": "사용자에게 보여질 라벨"
+          }
+        },
+        "description": "선택 옵션"
+      },
+      "UserModel": {
+        "required": [
+          "account"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "account": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mobileNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "COMMENCED_ENROLL",
+              "ENROLLED"
+            ]
+          },
+          "passwordChangeRequired": {
+            "type": "boolean"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/UserSettings"
+          },
+          "prescriptionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userPrescription": {
+            "$ref": "#/components/schemas/UserPrescriptionModel"
+          },
+          "sex": {
+            "$ref": "#/components/schemas/SelectOption"
+          },
+          "birthYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "사용자 모델"
+      },
+      "UserPrescriptionModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "prescription": {
+            "$ref": "#/components/schemas/PrescriptionModel"
+          },
+          "prescribedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "currentRound": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRound": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "STARTED",
+              "ENDED"
+            ]
+          },
+          "lastRound": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": ""
+      },
+      "LoginRefreshRequest": {
+        "required": [
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "LoginResponseModel": {
+        "required": [
+          "accessToken",
+          "account",
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "account": {
+            "type": "string"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "Answer": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "ContentProgress": {
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "progress": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DiseaseRecord": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contentProgress": {
+                "$ref": "#/components/schemas/ContentProgress"
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "answerMap": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/Answer"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ExerciseMonitoringEventValue": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number",
+                "format": "float"
+              },
+              "size": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              },
+              "rawValues": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ExerciseRecord": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "positiveActionCount": {
+                "type": "number",
+                "format": "double"
+              },
+              "progress": {
+                "$ref": "#/components/schemas/ContentProgress"
+              }
+            }
+          }
+        ]
+      },
+      "GameRecord": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contentCode": {
+                "type": "string"
+              },
+              "playSeconds": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "durationSeconds": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "playMode": {
+                "type": "string",
+                "enum": [
+                  "PLAY",
+                  "TUTORIAL",
+                  "REPEAT"
+                ]
+              },
+              "level": {
+                "type": "integer",
+                "description": "레벨은 1부터 시작",
+                "format": "int32"
+              },
+              "correctRate": {
+                "type": "number",
+                "format": "float"
+              },
+              "avgResponseMillis": {
+                "type": "number",
+                "format": "float"
+              },
+              "totalCorrect": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "totalWrong": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "values": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "description": "additional code, value pair for game specific metrics"
+              }
+            }
+          }
+        ]
+      },
+      "NutritionRecord": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contentProgress": {
+                "$ref": "#/components/schemas/ContentProgress"
+              }
+            }
+          }
+        ]
+      },
+      "PushMessageEventValue": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "SENT",
+                  "READ"
+                ]
+              },
+              "messageId": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "RecallAnswer": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "correct": {
+            "type": "boolean"
+          },
+          "hintIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SELECT",
+              "INPUT",
+              "YES_NO"
+            ]
+          }
+        }
+      },
+      "RecallRecord": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "remindHour": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "registrationTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "recallStartTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "recallEndTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "recallText": {
+                "type": "string",
+                "deprecated": true
+              },
+              "recallSubmissionCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "answers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RecallAnswer"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "SurveyRecord": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "completed": {
+                "type": "boolean"
+              },
+              "answerMap": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/Answer"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TreatmentRecord": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "TreatmentUpdateEventValue": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "trId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "NOT_READY",
+                  "PREPARING",
+                  "READY",
+                  "STARTED",
+                  "PROGRESS",
+                  "COMPLETED"
+                ]
+              },
+              "data": {
+                "$ref": "#/components/schemas/TreatmentRecord"
+              }
+            }
+          }
+        ]
+      },
+      "TreatmentUpdateModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "미래 기억과제에서 등록 (0) \u003d\u003e 확인 (1) 의 상태를 처리하기위한 상태값, 필요에 따라 다른 과제에서도 사용 가능성이 있어 보임.",
+            "enum": [
+              "NOT_READY",
+              "PREPARING",
+              "READY",
+              "STARTED",
+              "PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseMonitoringEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/GameRecord"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionRecord"
+              },
+              {
+                "$ref": "#/components/schemas/PushMessageEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/RecallRecord"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyRecord"
+              },
+              {
+                "$ref": "#/components/schemas/TreatmentUpdateEventValue"
+              }
+            ]
+          },
+          "sessionId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseUserSessionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/UserSessionResponse"
+          }
+        },
+        "description": ""
+      },
+      "UserSessionResponse": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListUserTag": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserTag"
+            }
+          }
+        },
+        "description": ""
+      },
+      "UserTag": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/SelectOption"
+          }
+        },
+        "description": "선택 옵션"
+      },
+      "EmptyPayload": {
+        "type": "object"
+      },
+      "ResponseEmptyPayload": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/EmptyPayload"
+          }
+        },
+        "description": ""
+      },
+      "ChangePasswordModel": {
+        "required": [
+          "account"
+        ],
+        "type": "object",
+        "properties": {
+          "changePasswordToken": {
+            "type": "string"
+          },
+          "account": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ResponseString": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "TermsAgreementDto": {
+        "required": [
+          "agreed",
+          "termsId"
+        ],
+        "type": "object",
+        "properties": {
+          "termsId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "agreed": {
+            "type": "boolean"
+          }
+        },
+        "description": ""
+      },
+      "CalorieRecordData": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HealthRecordData"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "endTime": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "calories": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          }
+        ]
+      },
+      "HealthDataModel": {
+        "required": [
+          "clientRecordId",
+          "data",
+          "recordedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordedAt": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "device": {
+            "type": "string"
+          },
+          "dataOrigin": {
+            "type": "string"
+          },
+          "clientRecordId": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HealthRecordData"
+              },
+              {
+                "$ref": "#/components/schemas/CalorieRecordData"
+              },
+              {
+                "$ref": "#/components/schemas/HeartRateRecordData"
+              },
+              {
+                "$ref": "#/components/schemas/SleepStageRecordData"
+              },
+              {
+                "$ref": "#/components/schemas/StepRecordData"
+              }
+            ]
+          }
+        },
+        "description": ""
+      },
+      "HealthRecordData": {
+        "required": [
+          "@type"
+        ],
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "@type": {
+            "type": "string"
+          }
+        },
+        "discriminator": {
+          "propertyName": "@type"
+        }
+      },
+      "HeartRateRecordData": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HealthRecordData"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "bpm": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "SleepStageRecordData": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HealthRecordData"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "endTime": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "sessionDuration": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "stage": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "StepRecordData": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HealthRecordData"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "endTime": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "DeviceModel": {
+        "required": [
+          "pushToken",
+          "type",
+          "uuid"
+        ],
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "pushToken": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "LoginModel": {
+        "required": [
+          "account",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "AppEventDto": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "eventTime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "processingId": {
+            "type": "string",
+            "description": "The same id should be processed at the same time"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseMonitoringEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/GameRecord"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionRecord"
+              },
+              {
+                "$ref": "#/components/schemas/PushMessageEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/RecallRecord"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyRecord"
+              },
+              {
+                "$ref": "#/components/schemas/TreatmentUpdateEventValue"
+              }
+            ]
+          }
+        },
+        "description": "App event client data transfer object"
+      },
+      "AppEventRequest": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppEventDto"
+            }
+          }
+        },
+        "description": ""
+      },
+      "AppDeployModel": {
+        "required": [
+          "deployedAt",
+          "packageName",
+          "url",
+          "version",
+          "versionCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "versionCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "storePlatform": {
+            "type": "string",
+            "enum": [
+              "WEB_PAGE",
+              "GOOGLE_PLAY",
+              "APPLE_APP_STORE"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "deployedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": ""
+      },
+      "ResponseAppDeployModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/AppDeployModel"
+          }
+        },
+        "description": ""
+      },
+      "UserCreateRequest": {
+        "required": [
+          "account"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "account": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "deprecated": true
+          },
+          "mobileNumber": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "COMMENCED_ENROLL",
+              "ENROLLED"
+            ]
+          },
+          "sex": {
+            "$ref": "#/components/schemas/SelectOption"
+          },
+          "birthYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "사용자 생성 모델"
+      },
+      "TermsModel": {
+        "required": [
+          "content",
+          "contentType",
+          "effectiveAt",
+          "target",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "effectiveAt": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ResponseBoolean": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "type": "boolean"
+          }
+        },
+        "description": ""
+      },
+      "ImageRequestModel": {
+        "required": [
+          "prompt"
+        ],
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "n": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "responseFormat": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ImageResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseData"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ResponseData": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "b64_json": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ResponseImageResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ImageResponse"
+          }
+        },
+        "description": ""
+      },
+      "UserEnrollRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "mobileNumber": {
+            "type": "string"
+          },
+          "prescriptionId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseUserEnrollResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/UserEnrollResponse"
+          }
+        },
+        "description": ""
+      },
+      "UserEnrollResponse": {
+        "type": "object",
+        "properties": {
+          "mobileNumber": {
+            "type": "string"
+          },
+          "passcode": {
+            "type": "string"
+          },
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": ""
+      },
+      "ResetPasswordModel": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ResponseLoginResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/LoginResponseModel"
+          }
+        },
+        "description": ""
+      },
+      "AdminUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "account": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ResponseAdminUserDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/AdminUserDto"
+          }
+        },
+        "description": ""
+      },
+      "DiseaseConfiguration": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentConfiguration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "code": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QuestionModel"
+                }
+              },
+              "showAnswer": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "ExerciseConfiguration": {
+        "required": [
+          "initialText",
+          "startText"
+        ],
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentConfiguration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "initialText": {
+                "type": "string"
+              },
+              "startText": {
+                "type": "string"
+              },
+              "motionType": {
+                "type": "string",
+                "enum": [
+                  "WALKING",
+                  "SEAT_UP_DOWN",
+                  "MOTION_TRACKING",
+                  "TUG"
+                ]
+              },
+              "sensitivity": {
+                "type": "number",
+                "format": "float"
+              },
+              "timeoutSeconds": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "GameConfiguration": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentConfiguration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contentId": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "contentCode": {
+                "type": "string"
+              },
+              "baseUrl": {
+                "type": "string"
+              },
+              "level": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "timeout": {
+                "type": "integer",
+                "description": "game timeout in seconds",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "NutritionConfiguration": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentConfiguration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "warnings": {
+                "type": "array",
+                "deprecated": true,
+                "items": {
+                  "$ref": "#/components/schemas/WarningCard"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "QuestionModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Choice",
+              "MultiChoice",
+              "NumberInput",
+              "TextInput",
+              "VoiceInput"
+            ]
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionOptionModel"
+            }
+          },
+          "hideExpr": {
+            "type": "string"
+          },
+          "optional": {
+            "type": "boolean"
+          }
+        }
+      },
+      "QuestionOptionModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "text": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "RecallConfiguration": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentConfiguration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "scene1SimpleMissionText": {
+                "type": "string"
+              },
+              "scene2RecallWelcomeText": {
+                "type": "string"
+              },
+              "scene3RecallText": {
+                "type": "string"
+              },
+              "scene4RecallAgainText": {
+                "type": "string"
+              },
+              "scene5RecallEndGuideText": {
+                "type": "string"
+              },
+              "scene5ListenAgainText": {
+                "type": "string"
+              },
+              "recallText": {
+                "type": "string"
+              },
+              "recallKeywords": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "recallInfographic": {
+                "type": "string"
+              },
+              "recallHints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RecallHint"
+                }
+              },
+              "recallRepeat": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "recallDeviationMinutes": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "RecallHint": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SELECT",
+              "INPUT",
+              "YES_NO"
+            ]
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "ResponseTreatmentRoundModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/TreatmentRoundModel"
+          }
+        },
+        "description": ""
+      },
+      "SurveyConfiguration": {
+        "type": "object",
+        "description": "",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TreatmentConfiguration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "code": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QuestionModel"
+                }
+              },
+              "showAnswer": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "TreatmentConfiguration": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "TreatmentContent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "checksum": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "TreatmentModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "previewUrl": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "RECALL",
+              "EXERCISE_MEASUREMENT",
+              "EXERCISE_TRAINING",
+              "COGNITION_GAME",
+              "NUTRITION_CONTENT",
+              "SURVEY",
+              "DISEASE_CONTENT",
+              "COGNITION_TEST"
+            ]
+          },
+          "availableDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "availableHours": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "configuration": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/GameConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/RecallConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyConfiguration"
+              }
+            ]
+          },
+          "contents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentContent"
+            }
+          },
+          "round": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "description": "미래 기억과제에서 등록 (0) \u003d\u003e 확인 (1) 의 상태를 처리하기위한 상태값, 필요에 따라 다른 과제에서도 사용 가능성이 있어 보임.",
+            "enum": [
+              "NOT_READY",
+              "PREPARING",
+              "READY",
+              "STARTED",
+              "PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseMonitoringEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/GameRecord"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionRecord"
+              },
+              {
+                "$ref": "#/components/schemas/PushMessageEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/RecallRecord"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyRecord"
+              },
+              {
+                "$ref": "#/components/schemas/TreatmentUpdateEventValue"
+              }
+            ]
+          },
+          "lastSession": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "TreatmentRoundModel": {
+        "type": "object",
+        "properties": {
+          "prescription": {
+            "$ref": "#/components/schemas/UserPrescriptionModel"
+          },
+          "treatments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentModel"
+            }
+          },
+          "updated": {
+            "type": "boolean"
+          }
+        },
+        "description": ""
+      },
+      "WarningCard": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DataColumn": {
+        "type": "object",
+        "properties": {
+          "accessor": {
+            "type": "string"
+          },
+          "width": {
+            "type": "string"
+          },
+          "Header": {
+            "type": "string"
+          }
+        },
+        "description": "react-table column definition"
+      },
+      "ListResponseUserModel": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataColumn"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserModel"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListResponseUserModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ListResponseUserModel"
+          }
+        },
+        "description": ""
+      },
+      "ListResponseUserTreatmentResult": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataColumn"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserTreatmentResult"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListResponseUserTreatmentResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ListResponseUserTreatmentResult"
+          }
+        },
+        "description": ""
+      },
+      "UserTreatmentResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "round": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "RECALL",
+              "EXERCISE_MEASUREMENT",
+              "EXERCISE_TRAINING",
+              "COGNITION_GAME",
+              "NUTRITION_CONTENT",
+              "SURVEY",
+              "DISEASE_CONTENT",
+              "COGNITION_TEST"
+            ]
+          },
+          "domain": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "metric1": {
+            "type": "number",
+            "format": "float"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "NOT_READY",
+              "PREPARING",
+              "READY",
+              "STARTED",
+              "PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "availableDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": ""
+      },
+      "ResponseUserTreatmentResultDetail": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/UserTreatmentResultDetail"
+          }
+        },
+        "description": ""
+      },
+      "TreatmentDetailItem": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "span": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/TypedValue"
+          },
+          "value2": {
+            "type": "object"
+          }
+        },
+        "description": ""
+      },
+      "TypedValue": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "object"
+          }
+        },
+        "description": ""
+      },
+      "UserContentResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "category": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "number",
+            "format": "float"
+          },
+          "metric1": {
+            "type": "number",
+            "format": "double"
+          },
+          "leastActionCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "positiveActionCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "negativeActionCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "playPositionMs": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPlayedMs": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "durationMs": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": ""
+      },
+      "UserTreatmentResultDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metric1": {
+            "type": "number",
+            "format": "float"
+          },
+          "progress": {
+            "type": "number",
+            "format": "float"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "RECALL",
+              "EXERCISE_MEASUREMENT",
+              "EXERCISE_TRAINING",
+              "COGNITION_GAME",
+              "NUTRITION_CONTENT",
+              "SURVEY",
+              "DISEASE_CONTENT",
+              "COGNITION_TEST"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NOT_READY",
+              "PREPARING",
+              "READY",
+              "STARTED",
+              "PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserContentResult"
+            }
+          },
+          "configuration": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/GameConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/RecallConfiguration"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyConfiguration"
+              }
+            ]
+          },
+          "record": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseMonitoringEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/GameRecord"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionRecord"
+              },
+              {
+                "$ref": "#/components/schemas/PushMessageEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/RecallRecord"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyRecord"
+              },
+              {
+                "$ref": "#/components/schemas/TreatmentUpdateEventValue"
+              }
+            ]
+          },
+          "detailItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentDetailItem"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ResponseSurveyResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/SurveyResult"
+          }
+        },
+        "description": ""
+      },
+      "SurveyResult": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionModel"
+            }
+          },
+          "answerMap": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Answer"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ListResponseUserTreatmentSessionSimple": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataColumn"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserTreatmentSessionSimple"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListResponseUserTreatmentSessionSimple": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ListResponseUserTreatmentSessionSimple"
+          }
+        },
+        "description": ""
+      },
+      "UserTreatmentSessionSimple": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "clientSessionId": {
+            "type": "integer",
+            "description": "단말에서 생성하는 세션 아이디.\n 오프라인의 경우 서버에서 세션 아이디를 생성할 수 없기 때문에 단말의 세션 아이디는 반드시 필요하게 된다.",
+            "format": "int64"
+          },
+          "sessionType": {
+            "type": "string",
+            "enum": [
+              "TUTORIAL",
+              "PLAY"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NOT_READY",
+              "PREPARING",
+              "READY",
+              "STARTED",
+              "PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metric1": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "description": ""
+      },
+      "AppEventModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sessionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "eventTime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "processingId": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DiseaseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseMonitoringEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/ExerciseRecord"
+              },
+              {
+                "$ref": "#/components/schemas/GameRecord"
+              },
+              {
+                "$ref": "#/components/schemas/NutritionRecord"
+              },
+              {
+                "$ref": "#/components/schemas/PushMessageEventValue"
+              },
+              {
+                "$ref": "#/components/schemas/RecallRecord"
+              },
+              {
+                "$ref": "#/components/schemas/SurveyRecord"
+              },
+              {
+                "$ref": "#/components/schemas/TreatmentUpdateEventValue"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "PROCESSING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          }
+        },
+        "description": ""
+      },
+      "ResponseUserTreatmentSessionData": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/UserTreatmentSessionData"
+          }
+        },
+        "description": ""
+      },
+      "UserTreatmentSessionData": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppEventModel"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ResponseListUserProgressSummary": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserProgressSummary"
+            }
+          }
+        },
+        "description": ""
+      },
+      "UserProgressSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "account": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mobileNumber": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "number",
+            "format": "float"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": ""
+      },
+      "DomainProgressChartData": {
+        "type": "object",
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ResponseRoundStatSummary": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/RoundStatSummary"
+          }
+        },
+        "description": ""
+      },
+      "RoundStatSummary": {
+        "type": "object",
+        "properties": {
+          "round": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "week": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "weekRound": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasNextRound": {
+            "type": "boolean"
+          },
+          "hasPrevRound": {
+            "type": "boolean"
+          },
+          "totalProgress": {
+            "type": "number",
+            "format": "double"
+          },
+          "chartData": {
+            "$ref": "#/components/schemas/DomainProgressChartData"
+          }
+        },
+        "description": ""
+      },
+      "ListResponseTermsModel": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataColumn"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TermsModel"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListPrescriptionModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrescriptionModel"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ContentModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "treatmentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "playSeconds": {
+            "type": "integer",
+            "description": "컨텐츠의 플레이 시간, 동영상의 경우 동영상 재생시간, 게임의 경우 게임 타임아웃.",
+            "format": "int32"
+          },
+          "variationCount": {
+            "type": "integer",
+            "description": "일반적으로 해당 컨텐츠가 세부적으로 여러 종류로 나뉠때, 그 종류의 수를 나타낸다. Game 컨텐츠에서는 레벨수를 나타낸다.",
+            "format": "int32"
+          },
+          "value": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "checksum": {
+            "type": "string"
+          }
+        },
+        "description": ""
+      },
+      "ListResponseContentModel": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataColumn"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentModel"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListResponseContentModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ListResponseContentModel"
+          }
+        },
+        "description": ""
+      },
+      "ListResponseAdminUserDto": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataColumn"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminUserDto"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": ""
+      },
+      "ResponseListResponseAdminUserDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ListResponseAdminUserDto"
+          }
+        },
+        "description": ""
+      }
+    },
+    "securitySchemes": {
+      "jwt": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
