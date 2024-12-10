@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "givemecontext"
+version = "0.1.2"
+description = "A Python library to streamline code structure and context for LLMs"
+authors = ["Kevin Saltarelli <kevinqz@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0,<3.12"
+numpy = "^2.1.1"
+pandas = "^2.2.3"
+ruff = "^0.6.8"
+black = "^24.8.0"
+pytest = "^8.3.3"
+owlready2 = "^0.46"
+memory-profiler = "^0.61.0"
+pydantic = "^2.9.2"
+rdflib = "^7.0.0"
+
+[tool.pyright]
+useLibraryCodeForTypes = true
+exclude = [".cache"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM', 'N8']  # Add 'N8' for naming convention checks
+ignore = ['E203', 'E266', 'E501', 'W291', 'W292', 'W293']
+
+[tool.flake8]
+ignore = ["E203", "E266", "E501", "W503"]
+max-line-length = 88
+max-complexity = 10
+select = ["B", "C", "E", "F", "W", "T4", "B9"]
+
+
+[tool.black]
+line-length = 88  # Default line length
+target-version = ['py311']
+# include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | \.pythonlibs
+  | .local
+)/
+'''
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools.package-data]
+givemecontext = ["automations/*.sh"]
