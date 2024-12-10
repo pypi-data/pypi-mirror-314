@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkks_assistant_frontend=self.webpackChunkks_assistant_frontend||[]).push([[44515],{44515:function(s,n,t){t.r(n);var e=t(35436);e.Ay.mount(e.iV,new e.ZZ),n.default=e.Ay}}]);
+//# sourceMappingURL=44515.6Ec1jveETzs.js.map
