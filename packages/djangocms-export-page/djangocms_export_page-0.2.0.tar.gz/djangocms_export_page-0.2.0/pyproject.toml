@@ -1,0 +1,100 @@
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "djangocms-export-page"
+version = "0.2.0"
+description = "Export a Django CMS page or a model view to a DOCX document"
+readme = "README.rst"
+license = {file = "LICENSE"}
+authors = [{name = "Maykin Media", email = "support@maykinmedia.nl"}]
+keywords = ["django cms export docx"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Intended Audience :: Developers",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "django~=3.2.0",
+    "django-cms>=4.1",
+    "djangocms-page-meta-maykin==1.5.0.dev1",
+    "python-docx",
+]
+
+[project.urls]
+Homepage = "https://github.com/maykinmedia/djangocms_export_page"
+Documentation = "http://djangocms_export_page.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/maykinmedia/djangocms_export_page/issues"
+"Source Code" = "https://github.com/maykinmedia/djangocms_export_page"
+
+[project.optional-dependencies]
+tests = [
+    "pytest",
+    "pytest-django",
+    "pytest-cov",
+    "factory-boy",
+    "django-autoslug",
+    "djangocms-text-ckeditor",
+    "tox",
+    "isort",
+    "black",
+    "flake8",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+release = [
+    "bump-my-version",
+]
+
+[tool.setuptools.packages.find]
+include = ["djangocms_export_page*"]
+namespaces = true
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+skip = ["env", ".tox", ".history", ".eggs"]
+known_django = "django"
+known_first_party="djangocms_export_page"
+sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "testapp.settings"
+
+[tool.bumpversion]
+current_version = "0.2.0"
+files = [
+    {filename = "pyproject.toml"},
+    {filename = "README.rst"},
+    {filename = "docs/conf.py"},
+]
+
+[tool.coverage.run]
+branch = true
+source = ["djangocms_export_page"]
+omit = [
+    # migrations run while django initializes the test db
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "if (typing\\.)?TYPE_CHECKING:",
+    "@(typing\\.)?overload",
+    "class .*\\(.*Protocol.*\\):",
+    "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+    "\\.\\.\\.",
+    "pass",
+]
