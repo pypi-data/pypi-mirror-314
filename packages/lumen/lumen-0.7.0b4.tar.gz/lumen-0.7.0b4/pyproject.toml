@@ -1,0 +1,153 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lumen"
+dynamic = ["version"]
+description = "A monitoring solution built on Panel."
+readme = "README.md"
+license = { text = "BSD" }
+requires-python = ">=3.10"
+authors = [{ name = "HoloViz developers", email = "developers@holoviz.org" }]
+maintainers = [{ name = "HoloViz developers", email = "developers@holoviz.org" }]
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "bokeh",
+    "holoviews >=1.17.0",
+    "hvplot",
+    "intake <2",
+    "jinja2 >3.0",
+    "numpy",
+    "packaging",
+    "pandas",
+    "panel >=1.5.0",
+    "param >=1.9.0",
+]
+
+[project.urls]
+Homepage = "https://lumen.holoviz.org"
+Source = "https://github.com/holoviz/lumen"
+HoloViz = "https://holoviz.org/"
+
+[project.optional-dependencies]
+tests = ['pytest', 'pytest-rerunfailures', 'pytest-asyncio']
+sql = ['duckdb', 'intake-sql', 'sqlalchemy']
+ai = ['nbformat', 'duckdb', 'pyarrow', 'instructor >=1.4.3', 'pydantic >=2.8.0', 'pydantic-extra-types', 'panel-graphic-walker[kernel]']
+ai-local = ['lumen[ai]', 'huggingface_hub']
+ai-openai = ['lumen[ai]', 'openai']
+ai-mistralai = ['lumen[ai]', 'mistralai']
+ai-anthropic = ['lumen[ai]', 'anthropic']
+ai-llama = ['lumen[ai-local]', 'llama-cpp-python >=0.3.0']
+
+[project.scripts]
+lumen = "lumen.command:main"
+lumen-ai = "lumen.command.ai:main"
+
+[project.entry-points.'panel.io.rest']
+lumen = "lumen.rest:lumen_rest_provider"
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { version_scheme = "no-guess-dev" }
+
+[tool.hatch.build.targets.wheel]
+include = ["lumen"]
+
+[tool.hatch.build.targets.sdist]
+include = ["lumen", "scripts", "examples"]
+
+[tool.hatch.build.hooks.vcs]
+version-file = "lumen/_version.py"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+    "--color=yes",
+    "--pyargs",
+    "--doctest-modules",
+    "--doctest-ignore-import-errors",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+minversion = "7"
+xfail_strict = true
+log_cli_level = "INFO"
+filterwarnings = [
+    "error",
+    "ignore:datetime.datetime.utcfromtimestamp():DeprecationWarning:dateutil.tz.tz", # https://github.com/dateutil/dateutil/pull/1285
+]
+
+[tool.ruff]
+fix = true
+
+[tool.ruff.lint]
+select = [
+    # "B",
+    "E",
+    "F",
+    "FLY",
+    "ICN",
+    "NPY",
+    "PIE",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "RUF",
+    "UP",
+    "W",
+]
+
+ignore = [
+    "E402", # Module level import not at top of file
+    "E501", # Line too long
+    "E701", # Multiple statements on one line
+    "E712", # Comparison to true should be is
+    "E731", # Do not assign a lambda expression, use a def
+    "E741", # Ambiguous variable name
+    "F405", # From star imports
+    "PLE0604", # Invalid object in `__all__`, must contain only strings
+    "PLE0605", # Invalid format for `__all__`
+    "PLR091", # Too many arguments/branches/statements
+    "PLR2004", # Magic value used in comparison
+    "PLW2901", # `for` loop variable is overwritten
+    "RUF005", # Consider {expr} instead of concatenation
+    "RUF012", # Mutable class attributes should use `typing.ClassVar`
+    "UP038", # isinstance and issubclass uses a |-separated union
+]
+extend-unsafe-fixes = [
+    "F401", # Unused imports
+    "F841", # Unused variables
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F403"]
+# "holoviews/tests/*" = [
+#     "RUF001", # Ambiguous unicode character
+#     "RUF002", # Ambiguous unicode character
+#     "RUF003", # Ambiguous unicode character
+#     "NPY002", # Replace legacy `np.random.rand` call with Generator
+#     "B904", # Within an `except` clause, raise exceptions with from err or None
+# ]
+
+[tool.isort]
+force_grid_wrap = 4
+multi_line_output = 5
+combine_as_imports = true
+lines_between_types = 1
+include_trailing_comma = true
