@@ -1,0 +1,40 @@
+
+#include <iostream>
+#include "forward.hpp"
+{% for name in inputs_name %}
+#include "{{ name }}.h"
+{% endfor %}
+
+{% set printf_formats = {
+    "double": "%lf",
+    "float": "%f",
+    "int8_t": "%hhd",
+    "int16_t": "%hd",
+    "int32_t": "%d",
+    "int64_t": "%lld",
+    "uint8_t": "%hhu",
+    "uint16_t": "%hu",
+    "uint32_t": "%u",
+    "uint64_t": "%llu"
+} %}
+
+int main()
+{
+    // Initialize the output arrays
+    {%- for o in range(outputs_name | length) %}
+    {{ outputs_dtype[o] }}* {{ outputs_name[o] }} = nullptr;
+    {% endfor %}
+
+    // Call the forward function
+    {{ func_name }}({{ inputs_name|join(", ") }}{% if inputs_name %}, {% endif %}&{{ outputs_name|join(", &") }});
+
+    // Print the results of each output
+    {%- for o in range(outputs_name | length) %}
+    printf("{{ outputs_name[o] }}:\n");
+    for (int o = 0; o < {{ outputs_size[o] }}; ++o) {
+        printf("{{ printf_formats[outputs_dtype[o]] }} ", {{ outputs_name[o] }}[o]);
+    }
+    printf("\n");
+    {% endfor %}
+    return 0;
+}
