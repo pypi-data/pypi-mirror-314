@@ -1,0 +1,28 @@
+[build-system]
+# N.B.: We use `setup.cfg` for declarative metadata instead of `[project]` here since support for
+# pyproject.toml projects was introduced in setuptools 61.0.0 which only supports Python>=3.7. We
+# need to also support 2.7, 3.5 and 3.6.
+requires = ["setuptools"]
+backend-path = ["build-backend", ""]
+build-backend = "pex_build.setuptools.build"
+
+[tool.black]
+line-length = 100
+target-version = ["py27"]
+exclude = '''
+/pex/(
+  vendor/_vendored/
+  |venv/virtualenv_16\.7\.12_py
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+# The default skip list includes venv which causes pex/venv/** to be skipped; so we blank out the
+# defaults here.
+skip = []
+skip_glob = [
+  "pex/vendor/_vendored/**",
+  "pex/venv/virtualenv_16.7.12_py"
+]
