@@ -1,0 +1,35 @@
+site_name: DocuGenius
+theme:
+  name: material
+  palette:
+    primary: white
+    accent: red
+  font:
+    text: "Poppins"
+  features:
+    - content.code.copy
+    - content.code.select
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            merge_init_into_class: true
+            inherited_members: true
+            show_root_heading: true
+            show_root_full_path: true
+            heading_level: 3
+            docstring_options:
+              ignore_init_summary: false
+              docstring_section_style: list
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
