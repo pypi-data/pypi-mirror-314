@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites GPIO PIN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .pin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            max-width: 900px;
+            margin: auto;
+            background-color: #2d4a2c;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pin {
+            position: relative;
+            padding: 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+            border-radius: 5px;
+            background-color: #5e7d5e;
+            color: white;
+            display: flex;
+        }
+
+        .pin .pinInfo {
+            min-width: 50%;
+            flex-grow: 1;
+
+        }
+        .pin .memo {
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+
+        .status {
+            margin-top: 5px;
+            padding: 5px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .high { background-color: rgb(65, 68, 244); }
+        .low { background-color: red; }
+        
+        body { 
+            background-color: #2d4a2c; color: white; text-align: center; 
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #ffa500;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            max-width: 200px;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 18px;
+            color: #ffdf00;
+        }
+
+        .memo {
+            margin-top: 10px;
+            width: 80%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            color: #333;
+            font-size: 12px;
+            resize: none;
+            display: none;
+        }
+        
+        .toggle-memo-btn {
+            display: block;
+            margin: 20px auto;
+            background-color: #ffbf00;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .pin-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .pin {
+                padding: 0.75rem;
+            }
+
+            .memo {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* 기존 스타일 유지 */
+        .status {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .high { background-color: rgb(65, 68, 244); }
+        .low { background-color: red; }
+    </style>
+</head>
+<body>
+    <header style="display: flex; align-items: center; justify-content: center;">
+        <h2>favorites GPIO Pin</h2>
+        <div class="page-links">
+            <a href="/" class="back-link"><</a>
+        </div>
+    </header>
+
+    <button class="toggle-memo-btn">Memo Display</button>
+    <div class="pin-grid" id="favoritePinsGrid">
+        <!-- 즐겨찾기된 핀들이 동적으로 추가됩니다 -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const favoritePinsGrid = document.getElementById('favoritePinsGrid');
+        const toggleMemoBtn = document.querySelector('.toggle-memo-btn');
+        let memosVisible = false;
+
+        // 즐겨찾기된 핀 목록 불러오기
+        const favoritePins = JSON.parse(localStorage.getItem('favoritePins')) || [];
+        const pinMemos = JSON.parse(localStorage.getItem('pinMemos')) || {};
+
+        // 즐겨찾기된 핀을 UI에 동적으로 추가
+        favoritePins.forEach(pin => {
+            const pinDiv = document.createElement('div');
+            pinDiv.classList.add('pin');
+            pinDiv.innerHTML = `
+                <div class="pinInfo">
+                    <strong>GPIO ${pin}</strong>
+                    <div class="status" id="pin${pin}">-</div>
+                </div>
+                <button class="favorite-btn active" data-pin="${pin}">★</button>
+            `;
+
+            // 메모 필드 추가
+            const memoInput = document.createElement('textarea');
+            memoInput.classList.add('memo');
+            memoInput.placeholder = 'Input Memo..';
+            memoInput.dataset.pin = pin;
+
+            // 메모 저장된 데이터 불러오기
+            if (pinMemos[pin]) memoInput.value = pinMemos[pin];
+
+            // 메모 입력 시 로컬 스토리지에 저장
+            memoInput.addEventListener('input', () => {
+                pinMemos[pin] = memoInput.value;
+                localStorage.setItem('pinMemos', JSON.stringify(pinMemos));
+            });
+
+            pinDiv.appendChild(memoInput);
+
+            // 즐겨찾기 버튼 클릭 시 핀 제거
+            const favoriteBtn = pinDiv.querySelector('.favorite-btn');
+            favoriteBtn.addEventListener('click', () => {
+                const index = favoritePins.indexOf(pin);
+                if (index > -1) favoritePins.splice(index, 1);
+
+                localStorage.setItem('favoritePins', JSON.stringify(favoritePins));
+                pinDiv.remove();
+            });
+
+            favoritePinsGrid.appendChild(pinDiv);
+        });
+
+        // 메모 표시/숨김 버튼 기능
+        toggleMemoBtn.addEventListener('click', () => {
+            memosVisible = !memosVisible;
+            document.querySelectorAll('.memo').forEach(memo => {
+                memo.style.display = memosVisible ? 'block' : 'none';
+            });
+            toggleMemoBtn.textContent = memosVisible ? 'Memo Hidden' : 'Memo Display';
+        });
+
+        // 실시간으로 즐겨찾기된 핀의 상태 업데이트
+        socket.on('gpio_status', function (data) {
+            favoritePins.forEach(pin => {
+                const pinElement = document.getElementById(`pin${pin}`);
+                if (pinElement) {
+                    const pinState = data[pin] ? 'high' : 'low';
+                    pinElement.textContent = pinState.toUpperCase();
+                    pinElement.className = `status ${pinState}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

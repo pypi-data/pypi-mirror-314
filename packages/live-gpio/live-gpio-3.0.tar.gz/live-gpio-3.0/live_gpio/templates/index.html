@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>Raspberry Pi GPIO Pin Status</title>
+    <style>
+                .pin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            max-width: 700px;
+            margin: auto;
+            background-color: #2d4a2c;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pin {
+            position: relative;
+            display: flex;
+            padding: 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #5e7d5e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pin .pinInfo {
+            min-width: 50%;
+            flex-grow: 1;
+
+        }
+
+        .pin .memo {
+            flex-grow: 1;
+        }
+
+        .status {
+            margin-top: 5px;
+            padding: 5px;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .high {
+            background-color: rgb(65, 68, 244);
+        }
+
+        .low {
+            background-color: red;
+        }
+
+        .vcc {
+            background-color: rgb(92, 92, 92);
+        }
+
+        .ground {
+            background-color: black;
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #ccc;
+        }
+
+        .favorite-btn.active {
+            color: #ffdf00;
+        }
+
+        .favorite-btn:hover {
+            color: #ffbf00;
+        }
+
+        /* 메모 필드 스타일 */
+        .memo {
+            margin-left: 10px;
+            width: 120px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            color: #333;
+            font-size: 12px;
+            text-align: left;
+            resize: none;
+            display: none;
+            /* 기본적으로 숨김 */
+        }
+
+        .memo:focus {
+            border-color: #ffdf00;
+            outline: none;
+        }
+
+        body {
+            background-color: #282d27;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        /* 메모 표시/숨김 버튼 스타일 */
+        .toggle-memo-btn {
+            display: block;
+            margin: 20px auto;
+            background-color: #ffbf00;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .page-link {
+            display: inline-block;
+            margin: 20px 10px;
+            text-align: center;
+            background-color: #ffa500;
+            padding: 10px;
+            color: black;
+            border-radius: 5px;
+            text-decoration: none;
+            width: 20px;
+            height: 20px;
+        }
+
+        .dn {
+            display: none;
+        }
+
+        /* chat */
+        .chat-icon {
+            z-index: 100;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #ffbf00;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 700px;
+            max-height: 700px;
+            background-color: #2d4a2c;
+            border-radius: 8px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #ffa500;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: black;
+        }
+
+        .chat-body {
+            padding: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+            color: white;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input,
+        .apikey-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            color: black;
+        }
+
+        .chat-send-btn {
+            background-color: #ffbf00;
+            border: none;
+            padding: 10px;
+            color: black;
+            cursor: pointer;
+        }
+
+        .loading-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .pin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-window {
+                width: 95vw;
+                right: 2.5vw;
+                left: 2.5vw;
+            }
+
+            .chat-icon {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .pin {
+                padding: 0.75rem;
+            }
+
+            .memo {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* 기존 스타일 유지하면서 반응형으로 수정 */
+        .status {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            /* width: 100%; */
+        }
+
+        .high { background-color: rgb(65, 68, 244); }
+        .low { background-color: red; }
+        .vcc { background-color: rgb(92, 92, 92); }
+        .ground { background-color: black; }
+    </style>
+</head>
+
+<body>
+
+    <header style="display: flex; align-items: center; justify-content: center;">
+        <h2>Raspberry Pi GPIO Pin Status</h2>
+        <div class="page-links">
+            <a href="/favorites" style="color: white;" class="page-link">★</a>
+        </div>
+    </header>
+
+    <!-- 메모 표시/숨김 버튼 -->
+    <button class="toggle-memo-btn">Memo Display</button>
+
+    <button class="chat-icon">💬</button>
+
+    <div class="pin-grid" id="pinGrid"></div>
+
+    <!-- 채팅 창 -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">GPIO Chat Assistant</div>
+        <div class="chat-body" id="chatBody">
+            <!-- 채팅 메시지 및 API 키 입력 필드 표시 영역 -->
+            <div id="apikeyContainer" style="display: none; padding: 10px;">
+                <input type="text" id="apikeyInput" class="apikey-input" placeholder="Insert ChatGPT API KEY" />
+                <button id="apikeySaveBtn" class="chat-send-btn">save</button>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Input Message..." />
+            <button id="chatSendBtn" class="chat-send-btn">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const favoritePins = JSON.parse(localStorage.getItem('favoritePins')) || [];
+        const pinMemos = JSON.parse(localStorage.getItem('pinMemos')) || {};
+        const pinGrid = document.getElementById("pinGrid");
+        const toggleMemoBtn = document.querySelector('.toggle-memo-btn');
+
+        const chatWindow = document.getElementById("chatWindow");
+        const chatBody = document.getElementById("chatBody");
+        const chatInput = document.getElementById("chatInput");
+        const apikeyInput = document.getElementById("apikeyInput");
+        const apikeyContainer = document.getElementById("apikeyContainer");
+        let apiKey = localStorage.getItem("apiKey");
+        let loadingMessageDiv;
+
+        let conversationHistory = [
+            { role: "system", content: "You are a helpful assistant for Raspberry Pi GPIO management." }
+        ];
+
+        let memosVisible = false;
+
+        const gpioPins = [
+            { pinNumber: null, label: "3.3V Power", type: "vcc" },
+            { pinNumber: null, label: "5V Power", type: "vcc" },
+
+            { pinNumber: 2, label: "GPIO 2 (I2C1 SDA)", type: "gpio" },
+            { pinNumber: null, label: "5V Power", type: "vcc" },
+
+            { pinNumber: 3, label: "GPIO 3 (I2C1 SCL)", type: "gpio" },
+            { pinNumber: null, label: "Ground", type: "ground" },
+
+            { pinNumber: 4, label: "GPIO 4 (GPCLK0)", type: "gpio" },
+            { pinNumber: 14, label: "GPIO 14 (UART TX)", type: "gpio" },
+
+            { pinNumber: null, label: "Ground", type: "ground" },
+            { pinNumber: 15, label: "GPIO 15 (UART RX)", type: "gpio" },
+
+            { pinNumber: 17, label: "GPIO 17", type: "gpio" },
+            { pinNumber: 18, label: "GPIO 18 (PCM CLK)", type: "gpio" },
+
+            { pinNumber: 27, label: "GPIO 27", type: "gpio" },
+            { pinNumber: null, label: "Ground", type: "ground" },
+
+            { pinNumber: 22, label: "GPIO 22", type: "gpio" },
+            { pinNumber: 23, label: "GPIO 23", type: "gpio" },
+
+            { pinNumber: null, label: "3.3V Power", type: "vcc" },
+            { pinNumber: 24, label: "GPIO 24", type: "gpio" },
+
+            { pinNumber: 10, label: "GPIO 10 (SPI0 MOSI)", type: "gpio" },
+            { pinNumber: null, label: "Ground", type: "ground" },
+
+            { pinNumber: 9, label: "GPIO 9 (SPI0 MISO)", type: "gpio" },
+            { pinNumber: 25, label: "GPIO 25", type: "gpio" },
+
+            { pinNumber: 11, label: "GPIO 11 (SPI0 SCLK)", type: "gpio" },
+            { pinNumber: 8, label: "GPIO 8 (SPI0 CE0)", type: "gpio" },
+
+            { pinNumber: null, label: "Ground", type: "ground" },
+            { pinNumber: 7, label: "GPIO 7 (SPI0 CE1)", type: "gpio" },
+
+            { pinNumber: 0, label: "GPIO 0 (EEPROM SDA)", type: "gpio" },
+            { pinNumber: 1, label: "GPIO 1 (EEPROM SCL)", type: "gpio" },
+
+            { pinNumber: 5, label: "GPIO 5", type: "gpio" },
+            { pinNumber: null, label: "Ground", type: "ground" },
+
+            { pinNumber: 6, label: "GPIO 6", type: "gpio" },
+            { pinNumber: 12, label: "GPIO 12 (PWM0)", type: "gpio" },
+
+            { pinNumber: 13, label: "GPIO 13 (PWM1)", type: "gpio" },
+            { pinNumber: null, label: "Ground", type: "ground" },
+
+            { pinNumber: 19, label: "GPIO 19 (PCM FS)", type: "gpio" },
+            { pinNumber: 16, label: "GPIO 16", type: "gpio" },
+
+            { pinNumber: 26, label: "GPIO 26", type: "gpio" },
+            { pinNumber: 20, label: "GPIO 20 (PCM DIN)", type: "gpio" },
+
+            { pinNumber: null, label: "Ground", type: "ground" },
+            { pinNumber: 21, label: "GPIO 21 (PCM DOUT)", type: "gpio" }
+        ];
+        // GPIO 핀 UI 동적 생성
+        gpioPins.forEach(({ pinNumber, label, type }) => {
+            const pinDiv = document.createElement("div");
+            pinDiv.classList.add("pin");
+
+            pinDiv.innerHTML = `
+                <div class="pinInfo" >
+                    <strong>${label}</strong>
+                    <div class="status ${label.includes("Power") && "vcc"} ${label.includes("Ground") && "ground"}" id="pin${pinNumber}">${label?.split(" ")[0] ? label?.split(" ")[0] : label}</div>
+                </div>
+                <button class="favorite-btn ${type === "gpio" || "dn"}" data-pin="${pinNumber}">☆</button>
+            `;
+
+            const memoInput = document.createElement("textarea");
+            memoInput.classList.add("memo");
+            memoInput.placeholder = "Input memo..";
+            memoInput.dataset.pin = pinNumber;
+
+            // 메모 필드에 저장된 메모 불러오기
+            if (pinMemos[pinNumber]) memoInput.value = pinMemos[pinNumber];
+
+            // 메모 입력 시 로컬 스토리지에 저장
+            memoInput.addEventListener("input", () => {
+                pinMemos[pinNumber] = memoInput.value;
+                localStorage.setItem("pinMemos", JSON.stringify(pinMemos));
+            });
+
+            pinDiv.appendChild(memoInput);
+
+            // 즐겨찾기 버튼 이벤트
+            const favoriteBtn = pinDiv.querySelector(".favorite-btn");
+            if (favoritePins.includes(pinNumber)) {
+                favoriteBtn.classList.add("active");
+                favoriteBtn.textContent = "★";
+            }
+            favoriteBtn.addEventListener("click", () => {
+                if (favoritePins.includes(pinNumber)) {
+                    favoritePins.splice(favoritePins.indexOf(pinNumber), 1);
+                    favoriteBtn.classList.remove("active");
+                    favoriteBtn.textContent = "☆";
+                } else {
+                    favoritePins.push(pinNumber);
+                    favoriteBtn.classList.add("active");
+                    favoriteBtn.textContent = "★";
+                }
+                localStorage.setItem("favoritePins", JSON.stringify(favoritePins));
+            });
+
+            pinGrid.appendChild(pinDiv);
+        });
+
+        // 메모 표시/숨김 버튼 기능
+        toggleMemoBtn.addEventListener("click", () => {
+            memosVisible = !memosVisible;
+            document.querySelectorAll(".memo").forEach(memo => {
+                memo.style.display = memosVisible ? "block" : "none";
+            });
+            toggleMemoBtn.textContent = memosVisible ? "Memo hidden" : "Memo Display";
+        });
+
+        // GPIO 상태 업데이트
+        socket.on("gpio_status", function (data) {
+            Object.keys(data).forEach(pin => {
+                const pinElement = document.getElementById(`pin${pin}`);
+                if (pinElement) {
+                    const pinState = data[pin] ? "high" : "low";
+                    pinElement.textContent = pinState.toUpperCase();
+                    pinElement.className = `status ${pinState}`;
+                }
+            });
+        });
+
+
+        // 채팅 아이콘 클릭 시 채팅 창 토글
+        // 채팅 메시지 UI에 추가
+        function appendChatMessage(sender, message) {
+            const messageDiv = document.createElement("div");
+
+            if (sender === "GPT") {
+                messageDiv.innerHTML = marked.parse(message); // GPT 응답을 Markdown 형식으로 렌더링
+            } else {
+                messageDiv.textContent = `${sender}: ${message}`;
+            }
+
+            messageDiv.style.margin = "5px 0";
+            messageDiv.style.color = sender === "User" ? "yellow" : "lightgreen";
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // GPT 응답에서 코드블록을 감지하여 포맷팅하는 함수
+        function formatGPTResponse(response) {
+            // 정규식을 사용하여 ```로 감싸진 코드블록 감지
+            return response.replace(/```([\s\S]*?)```/g, (match, code) => {
+                return `<pre><code>${escapeHtml(code)}</code></pre>`;
+            }).replace(/\n/g, "<br>"); // 일반 텍스트 줄바꿈을 HTML 줄바꿈으로 대체
+        }
+
+        // HTML 태그가 그대로 출력되지 않도록 이스케이프 처리
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, (m) => map[m]);
+        }
+
+        // Chat icon toggle
+        document.querySelector('.chat-icon').addEventListener('click', () => {
+            chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+
+            // API 키가 없으면 입력 필드 표시
+            if (!apiKey) {
+                apikeyContainer.style.display = "block";
+                chatInput.disabled = true; // API 키가 없으면 메시지 입력 비활성화
+            } else {
+                apikeyContainer.style.display = "none";
+                chatInput.disabled = false;
+            }
+        });
+
+        // API 키 저장 버튼 클릭 시
+        document.getElementById("apikeySaveBtn").addEventListener("click", () => {
+            const enteredApiKey = apikeyInput.value.trim();
+            if (enteredApiKey) {
+                localStorage.setItem("apiKey", enteredApiKey);
+                apiKey = enteredApiKey;
+                apikeyContainer.style.display = "none";
+                chatInput.disabled = false;
+                appendChatMessage("System", "Save API Key!!");
+            }
+        });
+
+        // Send 버튼 클릭 시 채팅 메시지 전송
+        document.getElementById("chatSendBtn").addEventListener("click", () => {
+            const userMessage = chatInput.value.trim();
+            if (userMessage) {
+                appendChatMessage("User", userMessage);
+                handleGPTChat(userMessage);
+                chatInput.value = "";
+            }
+        });
+
+        // GPT 응답 처리 함수
+        async function handleGPTChat(message) {
+            // 사용자 메시지를 대화 기록에 추가
+            conversationHistory.push({ role: "user", content: message });
+
+            // 로컬스토리지에서 핀 메모 가져오기
+            const pinMemos = JSON.parse(localStorage.getItem("pinMemos")) || {};
+            const pinMemoInfo = formatPinMemosForGPT(pinMemos);
+
+            // 핀 메모 정보가 있으면 시스템 메시지로 추가
+            if (pinMemoInfo) {
+                conversationHistory.push({
+                    role: "system",
+                    content: `참고 메모 정보: ${pinMemoInfo}`
+                });
+            }
+
+            // 로딩 표시 추가
+            showLoadingMessage();
+
+            const gptResponse = await requestGPTResponse(conversationHistory);
+            appendChatMessage("GPT", gptResponse);
+
+            // 로딩 표시 제거
+            removeLoadingMessage();
+
+            // GPT 응답을 대화 기록에 추가
+            conversationHistory.push({ role: "assistant", content: gptResponse });
+        }
+
+        // 핀 메모 정보를 GPT에 전달할 형식으로 변환하는 함수
+        function formatPinMemosForGPT(pinMemos) {
+            return Object.keys(pinMemos)
+                .map(pin => `GPIO ${pin}: ${pinMemos[pin]}`)
+                .join("\n");
+        }
+
+        // 실제 OpenAI API로 요청 함수
+        async function requestGPTResponse(messages) {
+            if (!apiKey) {
+                return "Error: API Key Not Config";
+            }
+
+            const apiUrl = "https://api.openai.com/v1/chat/completions";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-mini",
+                        messages: messages,
+                        temperature: 0.7
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    return data.choices[0].message.content;
+                } else {
+                    console.error("Error:", data);
+                    return "Error: Unable to fetch response from GPT API.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                return "Error: An error occurred while connecting to GPT.";
+            }
+        }
+
+        // Enter 키로 메시지 전송
+        chatInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                document.getElementById("chatSendBtn").click();
+            }
+        });
+
+        // 로딩 메시지 표시 함수
+        function showLoadingMessage() {
+            loadingMessageDiv = document.createElement("div");
+            loadingMessageDiv.classList.add("loading-spinner");
+            loadingMessageDiv.innerHTML = `<div class="spinner"></div> <span>Loading...</span>`;
+            chatBody.appendChild(loadingMessageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // 로딩 메시지 제거 함수
+        function removeLoadingMessage() {
+            if (loadingMessageDiv) {
+                chatBody.removeChild(loadingMessageDiv);
+                loadingMessageDiv = null;
+            }
+        }
+    </script>
+</body>
+
+</html>
