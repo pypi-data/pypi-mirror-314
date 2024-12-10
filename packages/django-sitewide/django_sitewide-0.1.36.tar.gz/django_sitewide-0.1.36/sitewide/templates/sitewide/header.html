@@ -1,0 +1,17 @@
+{% load static %}
+{% if sitewide.header.show %}<header>{% for section in sitewide.header.sections %}
+    <div class="section {{ section.css }} {% if sitewide.sidebar.show %}sidebar_show{% else %}sidebar_hide{% endif %}">{% if section.division %}
+        <div class="{{ section.division.css  }}">{% for part in section.division.parts %}
+            {% if part.tag == "hamburger" %}<a class="{{ part.tag }}" href="#sidebar">&#xe5d2;</a>{% endif %}
+            {% if part.tag == "logo" and part.show %}<a class="{{ part.tag }}" href="{{ sitewide.logo.url }}">
+                <img src="{% static sitewide.logo.path %}" />
+            </a>{% endif %}
+            {% if part.tag == "titles" and part.show %}<div class="{{ part.tag }}">
+                <h2>{{ sitewide.titles.page }}</h2>
+                {% if sitewide.titles.sub %}<p>{{ sitewide.titles.sub }}</p>{% endif %}
+            </div>{% endif %}
+            {% if part.tag == "user" and part.show %}<div class="{{  part.tag }}"></div>{% endif %}{% endfor %}
+        </div>{% endif %}
+    </div>{% endfor %}
+</header>{% endif %}
+

@@ -1,0 +1,212 @@
+#sidebar {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-fg);
+    font-size: unset;
+    height: 100%;
+    left: 0px;
+    line-height: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    top: 0px;
+    transition: width 0.5s ease, left 0.5s ease;
+    z-index: 100;
+}
+
+#sidebar:target {
+    left: 0;
+    box-shadow: 5px 0px 10px 5px rgba(0, 0, 0, 0.25);
+    width: var(--sidebar-full);
+}
+
+#avatar {
+    display: grid;
+    grid-template-columns: 1fr var(--sidebar-full-avatar) 1fr;
+    grid-template-rows: 1fr var(--sidebar-full-avatar) 1fr;
+    grid-template-areas: 
+        ". . ."
+        ". avatar ."
+        ". . .";
+    height: calc(var(--sidebar-full-avatar) + (2 * var(--mgns)));
+    margin-top: 50px;
+    transition: grid-template-columns 0.5s ease, grid-template-rows 0.5s ease;
+    width: 100%;
+}
+
+#avatar img {
+    clip-path: circle(50%);
+    grid-area: avatar;
+    height: 100%;
+    width: 100%;
+    transition: all 0.5s ease;
+}
+
+#sidebar:target #avatar  {
+    grid-template-columns: 1fr var(--sidebar-full-avatar) 1fr;
+    grid-template-rows: 1fr var(--sidebar-full-avatar) 1fr;
+}
+
+#user {
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    justify-content: center;
+    text-decoration: none;
+}
+
+#user h3, #user p {
+    line-height: 1.5;
+    text-align: center;
+    transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+#user:visited h3, #user h3 {
+    color: var(--sidebar-user-fg);
+}
+
+#user p, #sidebar:target #user p {
+   color: var(--sidebar-fg-hover);
+   font-size: 80%;
+}
+
+#user h3, #sidebar:target #user h3 {
+    font-size: 100%;
+}
+
+.menu, .submenu {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu {
+    margin-top: calc(var(--section-min-height) + 10px);
+}
+
+.submenu {
+    background: var(--sidebar-submenu-bg);
+    margin: 0;
+}
+
+.item, .subitem {
+    align-items: center;
+    border-left: 2px solid var(--sidebar-bg);
+    display: flex;
+    color: var(--sidebar-fg);
+    column-gap: 10px;
+    height: var(--sidebar-item-height);
+    text-decoration: none;
+    transition: background 0.5s ease, border-left-color 0.5s ease;
+}
+
+.item:hover {
+    border-left-color: var(--indicator-hover);
+}
+
+.subitem:hover {
+    border-left-color: var(--indicator-submenu-hover);
+}
+
+.item:focus, .item:active {
+    border-left-color: var(--indicator);
+    font-weight: bold;
+    outline: none;
+}
+
+.subitem:focus, .subitem:active {
+    border-left-color: var(--indicator-submenu);
+    font-weight: bold;
+    outline: none;
+}
+
+.item div:first-child,
+.subitem div:first-child {
+    align-items: center;
+    display: flex;
+    font-family: 'Material Symbols Rounded';
+    font-size: var(--sidebar-icons-size);
+    font-weight: 400;
+    padding-left: calc(((var(--sidebar-dock) - var(--sidebar-icons-size)) / 2) - 2px);
+    width: calc((var(--sidebar-dock) + var(--sidebar-icons-size) + 10) / 2);
+}
+
+.item div:last-child,
+.subitem div:last-child {
+    align-items: center;
+    display: flex;
+    font-size: 0.9em;
+    transition: font-size 0.3s ease;
+}
+
+#sidebar:target .item div:last-child,
+#sidebar:target .subitem div:last-child {
+    display: block;
+    font-size: 0.9em;
+}
+
+.submenu {
+    display: none;
+}
+
+.submenu:target {
+    display: block;
+}
+
+.item:hover, .item:focus {
+    background-color: var(--sidebar-bg-hover);
+    color: var(--sidebar-fg-hover);
+    cursor: pointer;
+}
+
+.subitem:hover, .subitem:focus {
+    background-color: var(--sidebar-submenu-bg-hover);
+    color: var(--sidebar-submenu-fg-hover);
+    cursor: pointer;
+}
+
+
+/*-----------------------------------*/
+/* SideBar Responsiveness            */
+/*-----------------------------------*/
+
+/* Extra large screens (min-width: 1201px)
+ * accomodate from tablets-up for one style*/
+
+@media screen and (min-width: 769px) {
+    #sidebar, #sidebar:hover {
+        width: var(--sidebar-full);
+    }
+}
+
+/* iPads and Tablets */
+
+@media screen and (max-width: 768px) {
+    #user h3, #user p {
+        color: var(--sidebar-bg);
+        font-size: 0%;
+    }
+
+    #avatar {
+        grid-template-columns: 1fr var(--sidebar-dock-avatar) 1fr;
+        grid-template-rows: 1fr var(--sidebar-dock-avatar) 1fr;
+    }
+
+    .item div:last-child,
+    .subitem div:last-child {
+        display: none;
+        font-size: 0em;
+    }
+
+    #sidebar {
+        width: var(--sidebar-dock);
+    }
+
+}
+
+/* Mobile Devices, Phones */
+
+@media screen  and (max-width: 480px){
+    #sidebar {
+        left: calc(-1 * var(--sidebar-full));
+    }
+}
+
