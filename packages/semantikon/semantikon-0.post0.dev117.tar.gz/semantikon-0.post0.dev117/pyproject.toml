@@ -1,0 +1,51 @@
+[build-system]
+requires = [
+    "setuptools",
+    "versioneer[toml]==0.29",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "semantikon"
+description = "semantikon - Ontological type system"
+readme = "docs/README.md"
+keywords = [ "pyiron",]
+requires-python = ">=3.9, <3.13"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy==2.1.3",
+    "pint==0.24.4"
+]
+dynamic = [ "version",]
+authors = [
+    { name = "Sam Waseda", email = "waseda@mpie.de" },
+]
+license = {file = "LICENSE"}
+
+[project.urls]
+Homepage = "https://pyiron.org/"
+Documentation = "https://semantikon.readthedocs.io"
+Repository = "https://github.com/pyiron/semantikon"
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440-pre"
+versionfile_source = "semantikon/_version.py"
+parentdir_prefix = "semantikon"
+tag_prefix = "semantikon-"
+
+[tool.setuptools.packages.find]
+include = [ "semantikon*",]
+
+[tool.setuptools.dynamic.version]
+attr = "semantikon.__version__"
