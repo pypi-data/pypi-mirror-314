@@ -1,0 +1,131 @@
+botrun_app:
+  name: 波津貼
+  description: 有上網功能的 chatbot
+  mode: chatbot
+workflow:
+  nodes:
+  - type: start
+    id: e0387bf0-6c36-462d-9ad8-8e517196806c
+    title: Start
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: user_input
+  - type: llm
+    id: cae2c54f-85ed-4810-be73-43a9c6463854
+    title: Generate Questions By LLM
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: llm_output
+    model:
+      completion_params: {}
+      mode: chat
+      name: claude-3-5-sonnet-20241022
+      provider: anthropic
+    prompt_template:
+    - role: user
+      content: "\n      請以臺灣人的角度,用繁體中文生成 20 個關於「{{#e0387bf0-6c36-462d-9ad8-8e517196806c.user_input#}}」的最常見問題。\n\
+        \  這些問題應該:\n  1. 涵蓋不同年齡層父母的疑慮\n  2. 包含申請流程、資格條件、金額計算等實際問題\n  3. 考慮到不同家庭情況(如單親、低收入戶等)\n\
+        \  4. 包括政策變更、地區差異等相關問題\n  5. 涉及實際領取和使用津貼的相關疑問\n\n  請確保問題精確、具體,並且反映臺灣民眾對「{{#e0387bf0-6c36-462d-9ad8-8e517196806c.user_input#}}」的真實需求和關切。\n\
+        \  請使用以下 JSON 格式嚴格回應,只包含問題內容:\n  [\n    {\"問題\": \"第1個問題內容\"},\n    {\"問題\"\
+        : \"第2個問題內容\"},\n    ...\n    {\"問題\": \"第20個問題內容\"}\n    ]\n"
+    context: {}
+    vision: {}
+  - type: code
+    id: d57e2f81-34ee-47b8-a9e3-7518411d52fe
+    title: Get Question List From JSON
+    desc: ''
+    input_variables:
+    - node_id: cae2c54f-85ed-4810-be73-43a9c6463854
+      variable_name: llm_output
+    output_variables:
+    - variable_name: question_list
+    code: "\nimport json\ndef main(llm_output):\n    json_data = json.loads(llm_output)\n\
+      \    question_list = [item[\"問題\"] for item in json_data]\n    question_list=\
+      \ \"\\n\".join(question_list)\n    return {\"question_list\": question_list}\n\
+      \n        "
+  - type: llm
+    id: 506aa59e-2c79-4fcf-82a9-a4f7ddcdf888
+    title: LLM
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: llm_output
+    model:
+      completion_params: {}
+      mode: chat
+      name: claude-3-5-sonnet-20241022
+      provider: anthropic
+    prompt_template:
+    - role: user
+      content: "\n  請根據以下關於臺灣育兒津貼政策的問題,生成相關的關鍵字群。每個問題對應一個關鍵字群,關鍵字群應包含3-5個重要的關鍵詞。\n\
+        \  這些關鍵字應該:\n  1. 反映問題的核心主題\n  2. 包含可能用於搜索相關資訊的詞彙\n  3. 涵蓋問題中提到的重要概念或實體\n\n\
+        \  問題列表:\n  {{#d57e2f81-34ee-47b8-a9e3-7518411d52fe.question_list#}}\n\n \
+        \ 請使用以下 JSON 格式嚴格回應,只包含關鍵字群:\n  [\n    {\"關鍵字群\": [\"關鍵字1\", \"關鍵字2\", \"\
+        關鍵字3\"]},\n    {\"關鍵字群\": [\"關鍵字1\", \"關鍵字2\", \"關鍵字3\", \"關鍵字4\"]},\n   \
+        \ ...\n  ]\n"
+    context: {}
+    vision: {}
+  - type: code
+    id: f0c45616-6127-451e-a822-a9237f8311f3
+    title: Get Keyword List From JSON
+    desc: ''
+    input_variables:
+    - node_id: 506aa59e-2c79-4fcf-82a9-a4f7ddcdf888
+      variable_name: llm_output
+    output_variables:
+    - variable_name: keyword_list
+    code: "\nimport json\n\ndef main(llm_output):\n    json_data = json.loads(llm_output)\n\
+      \    \n    all_keywords = []\n    for item in json_data:\n        all_keywords.append(item[\"\
+      關鍵字群\"])\n    \n    return {\"keyword_list\": \" \".join(all_keywords[0])}\n\
+      \    "
+  - type: http-request
+    id: 890961f1-340e-44d2-ae19-fb339c296351
+    title: Search Keywords
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: status_code
+    - variable_name: body
+    - variable_name: headers
+    authorization:
+      type: none
+      config: null
+    body:
+      type: json
+      data:
+        query: '{{#f0c45616-6127-451e-a822-a9237f8311f3.keyword_list#}}'
+        num: 10
+    headers: ''
+    method: post
+    params: ''
+    timeout:
+      total: 60.0
+    url: https://botrun-flow-lang-fastapi-dev-36186877499.asia-east1.run.app/api/search
+  - type: code
+    id: ac9a64e6-1b56-4e86-8eb3-47429d6aa45c
+    title: Get Search Result From JSON
+    desc: ''
+    input_variables:
+    - node_id: 890961f1-340e-44d2-ae19-fb339c296351
+      variable_name: body
+    - node_id: f0c45616-6127-451e-a822-a9237f8311f3
+      variable_name: keyword_list
+    output_variables:
+    - variable_name: search_results
+    code: "\nimport json\n\ndef main(body, keyword_list):\n    search_results = json.loads(body)\n\
+      \    all_search_results = {}\n    if \"items\" in search_results:\n        all_search_results[keyword_list]\
+      \ = search_results\n    else:\n        all_search_results[\"error\"] = \"No\
+      \ search results found\"\n\n    # 格式化輸出\n    formatted_results = json.dumps(all_search_results,\
+      \ ensure_ascii=False, indent=2)\n    return {\"search_results\": formatted_results}\n\
+      \n    "
+  - type: answer
+    id: ff28e1c2-e901-4b7c-88a6-0df1d08fd92c
+    title: Answer
+    desc: ''
+    input_variables:
+    - node_id: 506aa59e-2c79-4fcf-82a9-a4f7ddcdf888
+      variable_name: llm_output
+    output_variables:
+    - variable_name: answer

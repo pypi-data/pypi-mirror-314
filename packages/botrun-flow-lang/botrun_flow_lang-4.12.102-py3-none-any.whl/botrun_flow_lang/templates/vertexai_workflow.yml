@@ -1,0 +1,108 @@
+botrun_app:
+  name: Vertex AI Search
+  description: 使用 Vertex AI 搜尋的 chatbot
+  mode: chatbot
+workflow:
+  nodes:
+  - type: start
+    id: 9a163c42-6b65-4ca7-aeef-c006c3b8e750
+    title: Start
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: user_input
+    - variable_name: history
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: null
+  - type: vertex_ai_search
+    id: 15443d30-7526-4b12-815f-802408943238
+    title: Vertex AI Search
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: results
+    print_start: false
+    print_stream: true
+    print_complete: false
+    complete_output: null
+    search_query: '{{#9a163c42-6b65-4ca7-aeef-c006c3b8e750.user_input#}}'
+    project_id: scoop-386004
+    location: global
+    data_store_ids:
+    - tw-gov-welfare_1730944342934
+  - type: code
+    id: 70607e96-65a9-4112-9771-589d25462de1
+    title: Consolidating All Information
+    desc: ''
+    input_variables:
+    - node_id: 9a163c42-6b65-4ca7-aeef-c006c3b8e750
+      variable_name: user_input
+    - node_id: 15443d30-7526-4b12-815f-802408943238
+      variable_name: results
+    output_variables:
+    - variable_name: all_info
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: null
+    code: "\nimport json\ndef main(user_input, results):\n    all_info = f\"使用者輸入的問題:\\\
+      n{user_input}\\n\\n\"\n    data = json.dumps(results, ensure_ascii=False, indent=2)\n\
+      \    # print(daa[:200])\n    all_info += f\"網路搜尋回來的資訊:\\n{data}\\n\"\n     \
+      \   \n    return {\"all_info\": all_info}\n"
+  - type: llm
+    id: 87f40123-f85f-4422-bc6d-eecdaa922e15
+    title: 做完研究後最後的回答...
+    desc: ''
+    input_variables:
+    - node_id: 9a163c42-6b65-4ca7-aeef-c006c3b8e750
+      variable_name: history
+    output_variables:
+    - variable_name: llm_output
+    print_start: true
+    print_stream: true
+    print_complete: false
+    complete_output: null
+    model:
+      completion_params: {}
+      name: gemini/gemini-1.5-pro
+    prompt_template:
+    - role: user
+      content: "\n    你是一個專業的資訊分析員，你會依據以下使用者的問題，以及網路搜尋到的資訊，統整出最完整的回答。\n    如果你沒有獲得資訊，請誠實的告訴使用者，不要自行回答。\n\
+        \n    {{#70607e96-65a9-4112-9771-589d25462de1.all_info#}}\n    "
+    context: {}
+    vision: {}
+    stream: true
+  - type: code
+    id: d5954d76-6bc4-4865-a158-a661f411d599
+    title: 取得參考資料的連結...
+    desc: ''
+    input_variables:
+    - node_id: 15443d30-7526-4b12-815f-802408943238
+      variable_name: results
+    output_variables:
+    - variable_name: result
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: result
+    code: "\nimport json\ndef main(results):\n    references = []\n    for result\
+      \ in results:\n        if result.get(\"note\") and result.get(\"url\") and result.get(\"\
+      title\"):\n            references.append(f\"- [{result['title']}]({result['url']})\"\
+      )\n    \n    if references:\n        references=list(set(references))\n    \
+      \    text = \"參考資料:\\n\" + \"\\n\".join(references)\n        return {\"result\"\
+      : text}\n    return {\"result\": \"\"}\n"
+  - type: answer
+    id: c01a5a20-c16e-4c8c-a619-3d78d865517c
+    title: Answer
+    desc: ''
+    input_variables:
+    - node_id: 87f40123-f85f-4422-bc6d-eecdaa922e15
+      variable_name: llm_output
+    output_variables:
+    - variable_name: answer
+    print_start: false
+    print_stream: false
+    print_complete: false
+    complete_output: null
