@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pptx_renderer"
+dynamic = ["version"]
+description = "Render ppt like a jupyter notebook"
+authors = [{ name = "Najeem Muhammed", email = "najeem@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.7"
+license = { file = "LICENSE" }
+keywords = ["powerpoint", "ppt", "pptx", "presentation", "slides"]
+dependencies = ["python-pptx", "click", "Pillow >= 9.3"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "coverage"]
+
+[project.urls]
+"Homepage" = "https://github.com/idling-mind/pptx_renderer"
+"Bug Tracker" = "https://github.com/idling-mind/pptx_renderer/issues"
+
+[project.scripts]
+pptx-renderer = "pptx_renderer.command_line:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "pptx_renderer.__version__" }
