@@ -1,0 +1,73 @@
+[project]
+authors = [
+  { name = "Robbin Bouwmeester", email = "robbin.bouwmeester@ugent.be" },
+  { name = "Henry Webel", email = "henry.webel@sund.ku.dk" },
+] # TODO: Add others
+description = "ProteoBench compares the outputs of mass spectrometry-based proteomics data analysis pipelines"
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Development Status :: 4 - Beta",
+]
+
+keywords = ['proteomics', 'peptides', 'retention time', 'mass spectrometry']
+requires-python = ">=3.8"
+dynamic = ["version"]
+dependencies = [
+  "pandas",
+  "openpyxl",
+  "numpy",
+  "plotly",
+  "streamlit>=1.31",
+  "streamlit_extras",
+  "streamlit-plotly-events",
+  "matplotlib",
+  "importlib-metadata; python_version < '3.8'", # ? can be removed?
+  "toml",
+  "PyGithub",
+  "GitPython",
+  "st-pages<1.0",
+]
+license = { file = "LICENSE" }
+name = "proteobench"
+readme = "README.md"
+
+[project.optional-dependencies]
+dev = ["black~=23.0", "jupyterlab", "notebook", "tqdm", "wget", "nox", "pytest"]
+docs = [
+  "sphinx",
+  "sphinx-design",
+  "sphinx-rtd-theme",
+  "sphinx-autobuild",
+  "myst-parser>=0.3.0",
+  "pydata-sphinx-theme",
+]
+web = ["streamlit>1.27", "scipy"]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/ProteoBench/ProteoBench/issues/"
+"Homepage" = "https://github.com/ProteoBench"
+
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+# https://setuptools-scm.readthedocs.io/
+# used to pick up the version from the git tags or the latest commit.
+
+[tool.setuptools.packages.find]
+include = ["proteobench"]
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+
+[tool.flake8]
+max-line-length = 120
