@@ -1,0 +1,56 @@
+Metadata-Version: 2.1
+Name: pypxml
+Version: 2.1.1
+Summary: A python library for parsing, converting and modifying PageXML files. 
+Author-email: Janik Haitz <jahtz.dev@proton.me>
+License: MIT License
+Project-URL: repository, https://github.com/jahtz/pypxml
+Keywords: PageXML,XML,OCR,optical character recognition
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: lxml~=5.3.0
+Requires-Dist: click~=8.1.7
+
+from src.pypxml import XMLSchema
+
+# PyPXML
+A python library for parsing, converting and modifying PageXML files.
+
+## Setup
+```shell
+pip install pypxml
+```
+
+### Install from source
+1. Clone repository: `git clone https://github.com/jahtz/pypxml`
+2. Install package: `cd pypxml && pip install .`
+3. Test with `pypxml --version`
+
+## CLI
+```
+pypxml [OPTIONS] COMMAND [ARGS]...
+```
+
+## API
+PyXML provides a feature rich Python API for working with PageXML files.
+
+### Example: Edit existing PageXML
+```python
+from pypxml import PageXML, PageType
+
+pxml = PageXML.from_xml('path_to_pagexml.xml')
+text_region = pxml.create_element(PageType.TextRegion, type='paragraph', id='tr_001')
+text_region.create_element(PageType.Coords, points='1,2 3,4 5,6 ...')
+
+for region in pxml.regions:
+    print(region.type)
+
+pxml.to_xml('path_to_output.xml')
+```
+
+## ZPD
+Developed at Centre for [Philology and Digitality](https://www.uni-wuerzburg.de/en/zpd/) (ZPD), [University of Würzburg](https://www.uni-wuerzburg.de/en/).
