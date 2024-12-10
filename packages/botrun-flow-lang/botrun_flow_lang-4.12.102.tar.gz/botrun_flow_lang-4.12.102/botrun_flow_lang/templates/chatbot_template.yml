@@ -1,0 +1,44 @@
+botrun_app:
+  name: 波文件問答
+  description: 給波文件問答用的app
+workflow:
+  nodes:
+  - type: start
+    id: 0d7e8718-85cf-4dcb-a10d-cf639058d069
+    title: Start
+    desc: ''
+    input_variables: []
+    output_variables:
+    - variable_name: user_input
+  - type: llm
+    id: b994c5e7-5539-46dd-adbf-7e5bed7dd2f7
+    title: LLM
+    desc: ''
+    input_variables:
+    - node_id: 0d7e8718-85cf-4dcb-a10d-cf639058d069
+      variable_name: user_input
+    output_variables:
+    - variable_name: llm_output
+    model:
+      completion_params:
+        max_tokens: 4096
+        temperature: 0.7
+      mode: chat
+      name: gpt-4o-2024-08-06
+      provider: openai
+    prompt_template:
+    - role: system
+      content: 妳是臺灣人，回答要用臺灣繁體中文正式用語，需要的時候也可以用英文，可以親切、俏皮、幽默，但不能隨便輕浮。在使用者合理的要求下請盡量配合他的需求，不要隨便拒絕
+    - role: user
+      content: '{{#0d7e8718-85cf-4dcb-a10d-cf639058d069.user_input#}}'
+    context: {}
+    vision: {}
+  - type: end
+    id: c9b93f27-fac2-41d4-ba05-a7a32b9032c1
+    title: End
+    desc: ''
+    input_variables:
+    - node_id: b994c5e7-5539-46dd-adbf-7e5bed7dd2f7
+      variable_name: llm_output
+    output_variables:
+    - variable_name: final_output
