@@ -1,0 +1,25 @@
+#ifndef DNN_HPP
+#define DNN_HPP
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+{#- For libraries #}
+{% for lib in libraries %}
+#include <{{ lib }}>
+{%- endfor %}
+
+void {{ func_name }} (
+    {%- for i in range(inputs_name | length) -%}
+    const {{ inputs_dtype[i] }}* {{ inputs_name[i] }},
+    {%- endfor -%}
+    {%- for o in range(outputs_name | length) %}
+    {{ outputs_dtype[o] }}** {{ outputs_name[o] }}{% if not loop.last %}, {% endif %}
+    {%- endfor -%});
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* DNN_HPP */
