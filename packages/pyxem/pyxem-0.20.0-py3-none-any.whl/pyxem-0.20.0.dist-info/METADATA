@@ -1,0 +1,124 @@
+Metadata-Version: 2.1
+Name: pyxem
+Version: 0.20.0
+Summary: multi-dimensional diffraction microscopy
+Home-page: https://github.com/pyxem/pyxem
+Author: Duncan Johnstone, Phillip Crout, Carter Francis, Magnus Nord
+Author-email: pyxem.team@gmail.com
+License: GPLv3+
+Keywords: data analysis,diffraction,microscopy,electron diffraction,electron microscopy
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: dask<=2024.8.0
+Requires-Dist: diffsims>=0.6.0
+Requires-Dist: hyperspy>=2.0
+Requires-Dist: h5py
+Requires-Dist: lmfit>=0.9.12
+Requires-Dist: matplotlib>=3.7.5
+Requires-Dist: numba
+Requires-Dist: numpy
+Requires-Dist: orix>=0.12.1
+Requires-Dist: pooch
+Requires-Dist: psutil
+Requires-Dist: scikit-image!=0.21.0,>=0.19.0
+Requires-Dist: scikit-learn>=1.0
+Requires-Dist: shapely>2.0.0
+Requires-Dist: scipy
+Requires-Dist: tqdm
+Requires-Dist: traits
+Requires-Dist: transforms3d
+Requires-Dist: zarr
+Provides-Extra: doc
+Requires-Dist: nbsphinx>=0.7; extra == "doc"
+Requires-Dist: sphinx>=3.0.2; extra == "doc"
+Requires-Dist: sphinx-copybutton>=0.2.5; extra == "doc"
+Requires-Dist: sphinx-autodoc-typehints>=1.10.3; extra == "doc"
+Requires-Dist: sphinx-gallery>=0.6; extra == "doc"
+Requires-Dist: sphinxcontrib-bibtex>=1.0; extra == "doc"
+Requires-Dist: sphinx_design; extra == "doc"
+Requires-Dist: sphinx-codeautolink; extra == "doc"
+Requires-Dist: pydata-sphinx-theme; extra == "doc"
+Requires-Dist: hyperspy_gui_ipywidgets>=2.0; extra == "doc"
+Requires-Dist: dask-image; extra == "doc"
+Provides-Extra: tests
+Requires-Dist: pytest>=5.0; extra == "tests"
+Requires-Dist: pytest-timeout; extra == "tests"
+Requires-Dist: pytest-cov>=2.8.1; extra == "tests"
+Requires-Dist: pytest-xdist; extra == "tests"
+Requires-Dist: pytest-rerunfailures; extra == "tests"
+Requires-Dist: coveralls>=1.10; extra == "tests"
+Requires-Dist: coverage>=5.0; extra == "tests"
+Provides-Extra: dev
+Requires-Dist: black~=24.1; extra == "dev"
+Requires-Dist: pre-commit>=1.16; extra == "dev"
+Provides-Extra: gpu
+Requires-Dist: cupy>=9.0.0; extra == "gpu"
+Provides-Extra: dask
+Requires-Dist: dask-image; extra == "dask"
+Requires-Dist: distributed; extra == "dask"
+
+|Actions|_ |Coveralls|_ |pypi_version|_ |downloads|_ |black|_ |doi|_
+
+.. |Actions| image:: https://github.com/pyxem/pyxem/workflows/build/badge.svg
+.. _Actions: https://github.com/pyxem/pyxem/actions
+
+.. |Coveralls| image:: https://coveralls.io/repos/github/pyxem/pyxem/badge.svg?branch=main
+.. _Coveralls: https://coveralls.io/github/pyxem/pyxem?branch=main
+
+.. |pypi_version| image:: http://img.shields.io/pypi/v/pyxem.svg?style=flat
+.. _pypi_version: https://pypi.python.org/pypi/pyxem
+
+.. |doi| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.2649351.svg
+.. _doi: https://doi.org/10.5281/zenodo.2649351
+
+.. |downloads| image:: https://anaconda.org/conda-forge/pyxem/badges/downloads.svg
+.. _downloads: https://anaconda.org/conda-forge/pyxem
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+.. _black: https://github.com/psf/black
+
+pyxem is an open-source (GPL v3) python library for multi-dimensional diffraction microscopy.
+
+The package defines objects and functions for the analysis of numerous diffraction patterns. It has been primarily developed as a platform for hybrid diffraction-microscopy based on 4D scanning diffraction microscopy data in which a 2D diffraction pattern is recorded at every position in a 2D scan of a specimen.
+
+pyxem is an extension of the hyperspy library for multi-dimensional data analysis and defines diffraction specific `Signal` classes.
+
+**Installation instructions and tutorial examples are available** `here <https://github.com/pyxem/pyxem-demos>`__ .
+
+**Basic Documentation is available** `here <https://pyxem.readthedocs.io/en/latest/>`__.
+
+If analysis using pyxem forms a part of published work please cite the DOI at the top of this page. In addition to citing the package we would appreciate an additional citation to methods papers if you use the following capabilities:
+
+Orientation Mapping
+*******************
+
+::
+
+    @article{pyxemorientationmapping2022,
+        title={Free, flexible and fast: Orientation mapping using the multi-core and GPU-accelerated template matching capabilities in the python-based open source 4D-STEM analysis toolbox Pyxem},
+        author={Cautaerts, Niels and Crout, Phillip and {\AA}nes, H{\aa}kon Wiik and Prestat, Eric and Jeong, Jiwon and Dehm, Gerhard and Liebscher, Christian H},
+        journal={Ultramicroscopy},
+        pages={113517},
+        year={2022},
+        publisher={Elsevier},
+        doi={10.1016/j.ultramic.2022.113517}
+    }
+
+Strain Mapping 
+**************
+
+*Two-Dimensional Strain Mapping with Scanning Precession Electron Diffraction: An Investigation into Data Analysis Routines* by Crout et al. 
+which is freely avaliable at https://arxiv.org/abs/2307.01071
