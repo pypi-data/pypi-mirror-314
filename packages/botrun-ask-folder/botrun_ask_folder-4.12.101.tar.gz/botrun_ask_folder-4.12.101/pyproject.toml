@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "botrun_ask_folder"
+version = "4.12.101"
+dependencies = [
+    "lxml",
+    "openpyxl",
+    "pandas",
+    "litellm",
+    "PyMuPDF",
+    "docx2txt",
+    "python-pptx",
+    "python-docx",
+    "qdrant-client",
+    "aiohttp",
+    "google-auth",
+    "google-api-python-client",
+    "chardet",
+    "fastapi",
+    "functions_framework>=3.0.0",
+    "google-cloud-storage",
+    "google-cloud-firestore",
+    "google-cloud-run",
+    "pytz",
+    "deepdiff",
+    "uvicorn==0.25.0",
+    "python-multipart==0.0.9",
+    "xlrd",
+    "cryptography",
+    "botrun-flow-lang"
+]
+readme = "README.md"
+scripts = { "botrun-ask-folder" = "botrun_ask_folder:botrun_ask_folder" }
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "botrun_ask_folder/**/*.py",
+    "README.md",
+    "requirements.txt",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "botrun_ask_folder/**/*.py",
+    "README.md",
+    "requirements.txt",
+]
