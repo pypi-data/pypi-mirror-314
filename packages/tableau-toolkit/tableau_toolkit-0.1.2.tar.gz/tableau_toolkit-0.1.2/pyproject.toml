@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "tableau-toolkit"
+version = "0.1.2"
+description = ""
+authors = ["Albert Wong <albert.wong@salesforce.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13"
+click = "^8.1.7"
+pyyaml = "^6.0.2"
+requests = "^2.32.3"
+tableauserverclient = "^0.34"
+psycopg = "^3.2.3"
+
+[tool.poetry.build]
+generate-setup-file = false
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3.1"
+black = "^24.10.0"
+poetry-pyinstaller-plugin = "^1.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+tt = "tableau_toolkit.cli:cli"
+
+[tool.poetry-pyinstaller-plugin.scripts]
+tt = {source = "tableau_toolkit/cli.py", type = "onefile", bundle = true}
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.pylint.master]
+ignore-patterns = "test_.*?py"
+
+[tool.pylint.messages_control]
+disable = [
+    "C0111",  # missing-docstring
+    "C0103",  # invalid-name
+]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.design]
+max-args = 5
+max-attributes = 7
+max-bool-expr = 5
+max-branches = 12
+max-locals = 15
+max-parents = 7
+max-public-methods = 20
+max-returns = 6
+max-statements = 50
+min-public-methods = 2
