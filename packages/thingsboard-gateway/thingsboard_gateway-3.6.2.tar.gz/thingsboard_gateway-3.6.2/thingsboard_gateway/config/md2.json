@@ -1,0 +1,68 @@
+{
+  "logLevel": "DEBUG",
+  "name": "md2",
+  "enableRemoteLogging": false,
+  "master": {
+    "slaves": [
+      {
+        "host": "192.168.1.202",
+        "port": 5021,
+        "method": "socket",
+        "unitId": 1,
+        "deviceName": "Modbus Device",
+        "deviceType": "default",
+        "timeout": 35,
+        "byteOrder": "BIG",
+        "wordOrder": "BIG",
+        "retries": true,
+        "retryOnEmpty": true,
+        "retryOnInvalid": true,
+        "pollPeriod": 5000,
+        "connectAttemptTimeMs": 5000,
+        "connectAttemptCount": 5,
+        "waitAfterFailedAttemptsMs": 300000,
+        "reportStrategy": {
+          "type": "ON_REPORT_PERIOD",
+          "reportPeriod": 5000
+        },
+        "type": "tcp",
+        "attributes": [
+          {
+            "tag": "frequency",
+            "type": "8int",
+            "address": 4,
+            "objectsCount": 1,
+            "functionCode": 4
+          },
+          {
+            "tag": "power",
+            "type": "16float",
+            "address": 8,
+            "objectsCount": 1,
+            "functionCode": 4
+          }
+        ],
+        "timeseries": [
+          {
+            "tag": "humidity",
+            "type": "8uint",
+            "address": 4,
+            "objectsCount": 1,
+            "functionCode": 4
+          },
+          {
+            "tag": "temperature",
+            "type": "16uint",
+            "address": 4,
+            "objectsCount": 1,
+            "functionCode": 4
+          }
+        ],
+        "attributeUpdates": [],
+        "rpc": []
+      }
+    ]
+  },
+  "id": "4c15423f-4545-4edc-82b4-dfadd5cf8824",
+  "configVersion": "3.6.1"
+}

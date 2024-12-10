@@ -1,0 +1,12 @@
+[
+  {
+    "attributeOnGateway": "processCount",
+    "command": "python -c \"import platform, subprocess; print(int(subprocess.run(\\\"ss -s | grep -oP '(?<=estab ).*(?= tcp)'\\\" if platform.system() == 'Linux' else 'powershell \\\"(Get-NetTCPConnection | Measure-Object).Count\\\"' if platform.system() == 'Windows' else 'netstat -an | grep ESTABLISHED | wc -l', shell=True, text=True, capture_output=True).stdout.strip()), end='')\"",
+    "timeout": 10
+  },
+  {
+    "attributeOnGateway": "usbList",
+    "command": "python -c \"import platform, subprocess; cmd = {'Linux': 'lsusb', 'Windows': 'powershell Get-PnpDevice -Class USB', 'Darwin': 'system_profiler SPUSBDataType'}.get(platform.system()); subprocess.run(cmd, shell=True) if cmd else print('Unsupported OS')\"",
+    "timeout": 10
+  }
+]

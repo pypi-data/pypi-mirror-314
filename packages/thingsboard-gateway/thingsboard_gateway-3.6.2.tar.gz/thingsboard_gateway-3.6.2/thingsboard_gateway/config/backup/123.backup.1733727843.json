@@ -1,0 +1,48 @@
+{
+  "logLevel": "INFO",
+  "name": "123",
+  "enableRemoteLogging": false,
+  "id": "bbf47bf7-7847-45ea-999a-33542f927877",
+  "configVersion": "3.6.1",
+  "application": {
+    "objectName": "My bacnet",
+    "host": "0.0.0.0",
+    "port": 47808,
+    "mask": null,
+    "objectIdentifier": 999,
+    "vendorIdentifier": 17,
+    "maxApduLengthAccepted": 1024,
+    "segmentationSupported": "segmentedBoth"
+  },
+  "devices": [
+    {
+      "host": "192.168.1.202",
+      "port": 47809,
+      "deviceInfo": {
+        "deviceNameExpression": "New bacnet device ${objectName}",
+        "deviceNameExpressionSource": "expression",
+        "deviceProfileExpressionSource": "constant",
+        "deviceProfileExpression": "default"
+      },
+      "pollPeriod": 10000,
+      "timeseries": [
+        {
+          "key": "temperature",
+          "objectType": "analogValue",
+          "objectId": 2,
+          "propertyId": "presentValue"
+        }
+      ],
+      "attributes": [
+        {
+          "key": "humidity",
+          "objectType": "analogOutput",
+          "objectId": 1,
+          "propertyId": "presentValue"
+        }
+      ],
+      "attributeUpdates": [],
+      "serverSideRpc": []
+    }
+  ]
+}

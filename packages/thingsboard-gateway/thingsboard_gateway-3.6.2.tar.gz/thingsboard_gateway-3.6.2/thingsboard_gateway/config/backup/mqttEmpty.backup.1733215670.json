@@ -1,0 +1,74 @@
+{
+  "mode": "basic",
+  "name": "mqtt empty",
+  "type": "mqtt",
+  "logLevel": "DEBUG",
+  "configuration": "mqttEmpty.json",
+  "configurationJson": {
+    "name": "mqtt empty",
+    "enableRemoteLogging": false,
+    "id": "9f16b319-9aa0-4bd9-bf3d-f37d40bff78f",
+    "broker": {
+      "host": "192.168.1.202",
+      "port": 1885,
+      "version": 5,
+      "clientId": "tb_gw_42r3l",
+      "security": {
+        "type": "basic",
+        "username": "user1",
+        "password": "thingsboard"
+      },
+      "maxNumberOfWorkers": 100,
+      "maxMessageNumberPerWorker": 10
+    },
+    "mapping": [
+      {
+        "topicFilter": "/sensor/data",
+        "subscriptionQos": 0,
+        "converter": {
+          "type": "json",
+          "deviceInfo": {
+            "deviceNameExpression": "${serialNumber}",
+            "deviceNameExpressionSource": "message",
+            "deviceProfileExpressionSource": "message",
+            "deviceProfileExpression": "${sensorType}"
+          },
+          "attributes": [
+            {
+              "key": "model",
+              "type": "string",
+              "value": "${sensorModel}"
+            },
+            {
+              "key": "${sensorModel}",
+              "type": "string",
+              "value": "on"
+            }
+          ],
+          "timeseries": [
+            {
+              "key": "temperature",
+              "type": "string",
+              "value": "${temp}"
+            },
+            {
+              "key": "humidity",
+              "type": "string",
+              "value": "${hum}"
+            },
+            {
+              "key": "combine",
+              "type": "string",
+              "value": "${hum}:${temp}"
+            }
+          ]
+        }
+      }
+    ],
+    "requestsMapping": {},
+    "logLevel": "DEBUG",
+    "configVersion": "3.6.1"
+  },
+  "configVersion": "3.6.1",
+  "ts": 1733134090405
+}

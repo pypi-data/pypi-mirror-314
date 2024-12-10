@@ -1,0 +1,50 @@
+{
+  "logLevel": "DEBUG",
+  "name": "mq1",
+  "enableRemoteLogging": false,
+  "id": "0b74dceb-969d-4326-abcd-fcc08747fe9b",
+  "configVersion": "3.6.1",
+  "broker": {
+    "host": "host.docker.internal",
+    "port": 1885,
+    "version": 5,
+    "clientId": "tb_gw_7jmf3",
+    "security": {
+      "type": "basic",
+      "username": "user1",
+      "password": "thingsboard"
+    },
+    "maxNumberOfWorkers": 100,
+    "maxMessageNumberPerWorker": 10
+  },
+  "mapping": [
+    {
+      "topicFilter": "/sensor/data",
+      "subscriptionQos": 0,
+      "converter": {
+        "type": "bytes",
+        "deviceInfo": {
+          "deviceNameExpression": "[0:4]",
+          "deviceNameExpressionSource": "message",
+          "deviceProfileExpressionSource": "constant",
+          "deviceProfileExpression": "default"
+        },
+        "attributes": [
+          {
+            "key": "rawData",
+            "type": "raw",
+            "value": "[:]"
+          }
+        ],
+        "timeseries": [
+          {
+            "key": "temp",
+            "type": "raw",
+            "value": "[4:]"
+          }
+        ]
+      }
+    }
+  ],
+  "requestsMapping": {}
+}

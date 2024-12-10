@@ -1,0 +1,79 @@
+{
+  "broker": {
+    "name": "Demo Broker",
+    "host": "127.0.0.1",
+    "port": 1884,
+    "clientId": "ThingsBoard_gateway",
+    "version": 5,
+    "maxMessageNumberPerWorker": 10,
+    "maxNumberOfWorkers": 100,
+    "sendDataOnlyOnChange": false,
+    "security": {
+      "type": "anonymous"
+    }
+  },
+  "mapping": [
+    {
+      "topicFilter": "data/",
+      "converter": {
+        "type": "json",
+        "deviceNameJsonExpression": "Demo Device",
+        "deviceTypeJsonExpression": "default",
+        "sendDataOnlyOnChange": false,
+        "timeout": 60000,
+        "attributes": [
+          {
+            "type": "integer",
+            "key": "frequency",
+            "value": "${frequency}"
+          },
+          {
+            "type": "integer",
+            "key": "power",
+            "value": "${power}"
+          }
+        ],
+        "timeseries": [
+          {
+            "type": "integer",
+            "key": "temperature",
+            "value": "${temperature}"
+          },
+          {
+            "type": "integer",
+            "key": "humidity",
+            "value": "${humidity}"
+          }
+        ]
+      }
+    }
+  ],
+  "connectRequests": [
+    {
+      "topicFilter": "sensor/connect",
+      "deviceNameJsonExpression": "${SerialNumber}"
+    },
+    {
+      "topicFilter": "sensor/+/connect",
+      "deviceNameTopicExpression": "(?<=sensor/)(.*?)(?=/connect)"
+    }
+  ],
+  "disconnectRequests": [
+    {
+      "topicFilter": "sensor/disconnect",
+      "deviceNameJsonExpression": "${SerialNumber}"
+    },
+    {
+      "topicFilter": "sensor/+/disconnect",
+      "deviceNameTopicExpression": "(?<=sensor/)(.*?)(?=/disconnect)"
+    }
+  ],
+  "attributeRequests": [],
+  "attributeUpdates": [],
+  "serverSideRpc": [],
+  "logLevel": "INFO",
+  "name": "test_mqtt",
+  "enableRemoteLogging": false,
+  "id": "69f7705c-5b85-4713-8dd4-0f974ffb66cd",
+  "configVersion": ""
+}
