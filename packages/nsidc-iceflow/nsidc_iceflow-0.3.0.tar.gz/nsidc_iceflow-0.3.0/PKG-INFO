@@ -1,0 +1,134 @@
+Metadata-Version: 2.3
+Name: nsidc-iceflow
+Version: 0.3.0
+Summary: Harmonized access to (pre)OIB/IceSAT/IceSAT2 data
+Project-URL: Homepage, https://github.com/NSIDC/iceflow
+Project-URL: Bug Tracker, https://github.com/NSIDC/iceflow/issues
+Project-URL: Discussions, https://github.com/NSIDC/iceflow/discussions
+Project-URL: Changelog, https://github.com/NSIDC/iceflow/releases
+Author-email: NSIDC <nsidc@nsidc.org>
+License: This software was developed by the National Snow and Ice Data Center (NSIDC) at
+        CIRES at the University of Colorado with funding from NASA under Contract
+        Number 80GSFC18C0102.
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy of
+        this software and associated documentation files (the "Software"), to deal in
+        the Software without restriction, including without limitation the rights to
+        use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+        of the Software, and to permit persons to whom the Software is furnished to do
+        so, subject to the following conditions:
+        
+        This permission notice shall be included in all copies or substantial portions
+        of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering
+Classifier: Typing :: Typed
+Requires-Python: >=3.10
+Requires-Dist: dask[dataframe]>=2024.10.0
+Requires-Dist: earthaccess>=0.10.0
+Requires-Dist: gps-timemachine>=1.1.4
+Requires-Dist: h5py>=3.11
+Requires-Dist: loguru>=0.7.2
+Requires-Dist: numpy>=2.0.1
+Requires-Dist: pandas>=2.2
+Requires-Dist: pandera[mypy]~=0.20.3
+Requires-Dist: pydantic>=2.8.2
+Requires-Dist: pyproj>=3.6.1
+Requires-Dist: shapely>=2.0.5
+Provides-Extra: dev
+Requires-Dist: bump-my-version; extra == 'dev'
+Requires-Dist: invoke; extra == 'dev'
+Requires-Dist: mypy>=1.11.1; extra == 'dev'
+Requires-Dist: pandas-stubs>=2.2; extra == 'dev'
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: pytest; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: furo>=2023.08.17; extra == 'docs'
+Requires-Dist: myst-nb; extra == 'docs'
+Requires-Dist: myst-parser>=0.13; extra == 'docs'
+Requires-Dist: sphinx-autobuild; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'docs'
+Requires-Dist: sphinx-copybutton; extra == 'docs'
+Requires-Dist: sphinx>=7.0; extra == 'docs'
+Provides-Extra: notebooks
+Requires-Dist: icepyx>=1.3.0; extra == 'notebooks'
+Requires-Dist: ipympl; extra == 'notebooks'
+Requires-Dist: jupyterlab; extra == 'notebooks'
+Requires-Dist: matplotlib; extra == 'notebooks'
+Description-Content-Type: text/markdown
+
+<p align="center">
+  <img alt="NSIDC logo" src="https://nsidc.org/themes/custom/nsidc/logo.svg" width="150" />
+</p>
+
+# Iceflow Python Library
+
+<!-- prettier-ignore -->
+> [!WARNING]
+> This repository is under active development. Major changes to the structure of
+> this repository and its code are expected. We are striving to develop code
+> that is well-tested and peer-reviewed, but nothing contained here should be
+> expected to work correctly (or at all!) in this early phase.
+
+`iceflow` is a Python library that provides the ability to search, download, and
+access laser altimetry data from (pre-)Operation Icebridge and ICESat datasets.
+`iceflow` supports the following datasets:
+
+| Dataset                                                  | Temporal Coverage             |
+| -------------------------------------------------------- | ----------------------------- |
+| [ILATM1B v1](https://nsidc.org/data/ilatm1b/versions/1)  | 2009-03-31 through 2012-11-08 |
+| [ILATM1B v2](https://nsidc.org/data/ilatm1b/versions/2)  | 2013-03-20 through 2019-11-20 |
+| [BLATM1B v1](https://nsidc.org/data/blatm1b/versions/1)  | 1993-06-23 through 2008-10-30 |
+| [ILVIS2 v1](https://nsidc.org/data/ilvis2/versions/1)    | 2009-04-14 through 2015-10-31 |
+| [ILVIS2 v2](https://nsidc.org/data/ilvis2/versions/2)    | 2017-08-25 through 2017-09-20 |
+| [GLAH06 v034](https://nsidc.org/data/glah06/versions/34) | 2003-02-20 through 2009-10-11 |
+
+## Level of Support
+
+- This repository is not actively supported by NSIDC but we welcome issue
+  submissions and pull requests in order to foster community contribution.
+
+See the [LICENSE](./LICENSE) for details on permissions and warranties. Please
+contact nsidc@nsidc.org for more information.
+
+## Requirements
+
+- [python](https://www.python.org/) >=3.10
+- [Earthdata Login account](https://urs.earthdata.nasa.gov/)
+
+## Usage
+
+### Install
+
+```bash
+pip install nsidc-iceflow
+```
+
+### Using `iceflow`
+
+See
+[Getting started with iceflow](https://iceflow.readthedocs.io/en/latest/getting-started.html)
+for information and examples about how to use `iceflow`.
+
+## Credit
+
+This content was developed by the National Snow and Ice Data Center with funding
+from multiple sources.
