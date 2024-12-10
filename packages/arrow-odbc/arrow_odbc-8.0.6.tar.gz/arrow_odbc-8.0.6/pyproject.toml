@@ -1,0 +1,37 @@
+[build-system]
+# 1.6 introduced a regression which prevents the wheel from building under os-x and windows. So we
+# need at least 1.7.
+requires = ["cffi", "maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "arrow-odbc"
+authors = [{name = "Markus Klein"}]
+description="Read the data of an ODBC data source as sequence of Apache Arrow record batches."
+readme = "README.md"
+version = "8.0.6"
+# cffi: for communicating with Rust
+# pyarrow: to create pyarrow arrays out of the c representation
+dependencies = ["cffi", "pyarrow >= 8.0.0"]
+
+[project.license]
+file = "LICENSE"
+
+[project.optional-dependencies]
+test = ["pytest < 8.0.0", "pyodbc", "duckdb"]
+
+[project.urls]
+repository = "https://github.com/pacman82/arrow-odbc-py"
+changelog = "https://github.com/pacman82/arrow-odbc-py/blob/main/Changelog.md"
+
+[tool.maturin]
+# Bindings type
+bindings = "cffi"
+python-source = "python"
+# Not sure what the default would be, best be sure and make release profile explicit
+profile = "release"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
