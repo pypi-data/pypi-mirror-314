@@ -1,0 +1,31 @@
+import pytest
+from config import CAMP_TOKEN
+from byterat.client import ByteratClientSync
+
+
+class TestDatasetCycleData:
+    @classmethod
+    def setup_class(cls):
+        cls.client = ByteratClientSync(CAMP_TOKEN)
+
+    def test_base(self):
+        data = self.client.get_dataset_cycle_data()
+        assert data is not None
+
+    def test_by_dataset_key(self):
+        data = self.client.get_dataset_cycle_data_by_dataset_key(
+            "abcd"
+        )
+        assert data is not None
+
+    def test_by_dataset_key_and_cycle(self):
+        data = self.client.get_dataset_cycle_data_by_dataset_key_and_dataset_cycle(
+            "abcd", 91
+        )
+        assert data is not None
+
+    def test_by_filename(self):
+        data = self.client.get_dataset_cycle_data_by_filename(
+            "SampleFileName.csv"
+        )
+        assert data is not None
