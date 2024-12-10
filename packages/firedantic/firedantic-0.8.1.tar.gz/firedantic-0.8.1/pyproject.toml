@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "firedantic"
+version = "0.8.1"
+description = "Pydantic base models for Firestore"
+authors = ["IOXIO Ltd"]
+license = "BSD-3-Clause"
+readme = "README.md"
+repository = "https://github.com/ioxiocom/firedantic"
+packages = [
+    {include="firedantic", from="."}
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+pydantic = "^2.4.2"
+grpcio = "^1.59.0"
+google-cloud-firestore = "^2.12.0"
+
+[tool.skjold]
+report_only = false
+sources = ["pyup", "gemnasium"]
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.12.0"
+invoke = "^2.2.0"
+mypy = "^0.971"
+flake8 = "^6.1.0"
+pytest = "^7.4.2"
+pytest-asyncio = "^0.21.1"
+black = "^24.3.0"
+watchdog = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
