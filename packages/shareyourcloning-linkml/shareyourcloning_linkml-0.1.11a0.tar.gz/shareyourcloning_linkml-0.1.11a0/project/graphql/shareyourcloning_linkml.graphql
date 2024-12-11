@@ -1,0 +1,379 @@
+# metamodel_version: 1.7.0
+type AddGeneIdSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    repositoryId: String!
+    repositoryName: RepositoryName!
+    sequenceFileUrl: String
+    addgeneSequenceType: AddGeneSequenceType
+  }
+
+type AnnotationReport
+  {
+    type: String
+  }
+
+type AnnotationSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    annotationTool: AnnotationTool!
+    annotationToolVersion: String
+    annotationReport: [AnnotationReport]
+  }
+
+type AssemblyFragment
+  {
+    sequence: Sequence!
+    leftLocation: SimpleSequenceLocation
+    rightLocation: SimpleSequenceLocation
+    reverseComplemented: Boolean!
+  }
+
+type AssemblySource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+  }
+
+type BenchlingUrlSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    repositoryName: RepositoryName!
+    repositoryId: String!
+  }
+
+type CloningStrategy
+  {
+    sequences: [Sequence]!
+    sources: [Source]!
+    primers: [Primer]
+    description: String
+  }
+
+type CRISPRSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+    guides: [Primer]!
+  }
+
+type EuroscarfSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    repositoryName: RepositoryName!
+    repositoryId: String!
+  }
+
+type GatewaySource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+    reactionType: GatewayReactionType!
+    greedy: Boolean
+  }
+
+type GenomeCoordinatesSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    assemblyAccession: String
+    sequenceAccession: String!
+    locusTag: String
+    geneId: Integer
+    start: Integer!
+    end: Integer!
+    strand: Integer!
+  }
+
+type GibsonAssemblySource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+  }
+
+type HomologousRecombinationSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+  }
+
+type IGEMSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    repositoryName: RepositoryName!
+    sequenceFileUrl: String!
+    repositoryId: String!
+  }
+
+type InFusionSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+  }
+
+type LigationSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+  }
+
+type ManuallyTypedSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    overhangCrick3prime: Integer
+    overhangWatson3prime: Integer
+    userInput: String!
+    circular: Boolean
+  }
+
+type NamedThing
+  {
+    id: Integer!
+  }
+
+type OligoHybridizationSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    overhangCrick3prime: Integer
+    forwardOligo: Primer!
+    reverseOligo: Primer!
+  }
+
+type OverlapExtensionPCRLigationSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+  }
+
+type PCRSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+    addPrimerFeatures: Boolean
+  }
+
+type PlannotateAnnotationReport
+  {
+    type: String
+    sseqid: String
+    startLocation: Integer
+    endLocation: Integer
+    strand: Integer
+    percentIdentity: Float
+    fullLengthOfFeatureInDb: Integer
+    lengthOfFoundFeature: Integer
+    percentMatchLength: Float
+    fragment: Boolean
+    database: String
+    feature: String
+    type: String
+    description: String
+    sequence: String
+  }
+
+type PolymeraseExtensionSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+  }
+
+type Primer
+  {
+    id: Integer!
+    type: String
+    name: String
+    sequence: String
+  }
+
+type RepositoryIdSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    repositoryId: String!
+    repositoryName: RepositoryName!
+  }
+
+type RestrictionAndLigationSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    circular: Boolean
+    assembly: [AssemblyFragment]!
+    restrictionEnzymes: [String]!
+  }
+
+type RestrictionEnzymeDigestionSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    leftEdge: RestrictionSequenceCut
+    rightEdge: RestrictionSequenceCut
+  }
+
+type RestrictionSequenceCut
+  {
+    cutWatson: Integer!
+    overhang: Integer!
+    restrictionEnzyme: String!
+  }
+
+interface Sequence
+  {
+    id: Integer!
+    type: String
+  }
+
+type SequenceCut
+  {
+    cutWatson: Integer!
+    overhang: Integer!
+  }
+
+type SequenceCutSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    leftEdge: SequenceCut
+    rightEdge: SequenceCut
+  }
+
+type SimpleSequenceLocation
+  {
+    start: Integer!
+    end: Integer!
+    strand: Integer
+  }
+
+type SnapGenePlasmidSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    repositoryName: RepositoryName!
+    repositoryId: String!
+  }
+
+interface Source
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+  }
+
+type TextFileSequence
+  {
+    id: Integer!
+    type: String
+    sequenceFileFormat: SequenceFileFormat!
+    overhangCrick3prime: Integer
+    overhangWatson3prime: Integer
+    fileContent: String
+  }
+
+type UploadedFileSource
+  {
+    id: Integer!
+    input: [Sequence]
+    output: Sequence
+    type: String
+    outputName: String
+    sequenceFileFormat: SequenceFileFormat!
+    fileName: String
+    indexInFile: Integer
+    circularize: Boolean
+  }
