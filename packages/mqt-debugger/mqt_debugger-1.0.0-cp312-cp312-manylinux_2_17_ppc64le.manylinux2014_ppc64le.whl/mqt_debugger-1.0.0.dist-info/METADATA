@@ -1,0 +1,168 @@
+Metadata-Version: 2.1
+Name: mqt-debugger
+Version: 1.0.0
+Summary: A quantum circuit debugging tool
+Keywords: MQT,quantum-computing,design-automation,decision-diagrams,debugging
+Author-Email: Damian Rovara <damian.rovara@tum.de>, Lukas Burgholzer <burgholzer@me.com>
+License: MIT License
+        
+        Copyright (c) 2024 Chair for Design Automation, Technical University of Munich
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: C++
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)
+Classifier: Typing :: Typed
+Project-URL: Homepage, https://github.com/cda-tum/mqt-debugger
+Project-URL: Documentation, https://mqt.readthedocs.io/projects/debugger
+Project-URL: Issues, https://github.com/cda-tum/mqt-debugger/issues
+Project-URL: Discussions, https://github.com/cda-tum/mqt-debugger/discussions
+Requires-Python: >=3.9
+Provides-Extra: test
+Provides-Extra: coverage
+Provides-Extra: evaluation
+Provides-Extra: docs
+Provides-Extra: qiskit
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "test"
+Requires-Dist: pytest-console-scripts>=1.4; extra == "test"
+Requires-Dist: mqt.debugger[evaluation,qiskit]; extra == "test"
+Requires-Dist: mqt.debugger[test]; extra == "coverage"
+Requires-Dist: pytest-cov>=4; extra == "coverage"
+Requires-Dist: pandas[output_formatting]>=2.0; python_version < "3.9" and extra == "evaluation"
+Requires-Dist: pandas[output-formatting]>=2.1.2; python_version >= "3.9" and extra == "evaluation"
+Requires-Dist: furo>=2023.08.17; extra == "docs"
+Requires-Dist: sphinx; extra == "docs"
+Requires-Dist: myst_nb>=1.1.0; extra == "docs"
+Requires-Dist: setuptools-scm>=7; extra == "docs"
+Requires-Dist: sphinx-copybutton; extra == "docs"
+Requires-Dist: sphinx_design; extra == "docs"
+Requires-Dist: sphinxext-opengraph; extra == "docs"
+Requires-Dist: sphinxcontrib-bibtex>=2.4.2; extra == "docs"
+Requires-Dist: sphinxcontrib-svg2pdfconverter; extra == "docs"
+Requires-Dist: pybtex>=0.24; extra == "docs"
+Requires-Dist: ipython; extra == "docs"
+Requires-Dist: ipykernel; extra == "docs"
+Requires-Dist: sphinx-autoapi; extra == "docs"
+Requires-Dist: qiskit[visualization]; extra == "docs"
+Requires-Dist: mqt.debugger[evaluation]; extra == "docs"
+Requires-Dist: qiskit[qasm3-import]>=1.0.0; extra == "qiskit"
+Requires-Dist: mqt.debugger[coverage,docs]; extra == "dev"
+Description-Content-Type: text/markdown
+
+[![PyPI](https://img.shields.io/pypi/v/mqt.debugger?logo=pypi&style=flat-square)](https://pypi.org/project/mqt.debugger/)
+![OS](https://img.shields.io/badge/os-linux%20%7C%20macos%20%7C%20windows-blue?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![CI](https://img.shields.io/github/actions/workflow/status/cda-tum/mqt-debugger/ci.yml?branch=main&style=flat-square&logo=github&label=ci)](https://github.com/cda-tum/mqt-debugger/actions/workflows/ci.yml)
+[![CD](https://img.shields.io/github/actions/workflow/status/cda-tum/mqt-debugger/cd.yml?style=flat-square&logo=github&label=cd)](https://github.com/cda-tum/mqt-debugger/actions/workflows/cd.yml)
+[![Documentation](https://img.shields.io/readthedocs/debugger?logo=readthedocs&style=flat-square)](https://mqt.readthedocs.io/projects/debugger)
+[![codecov](https://img.shields.io/codecov/c/github/cda-tum/mqt-debugger?style=flat-square&logo=codecov)](https://codecov.io/gh/cda-tum/mqt-debugger)
+
+<p align="center">
+  <a href="https://mqt.readthedocs.io">
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png" width="60%">
+     <img src="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png" width="60%">
+   </picture>
+  </a>
+</p>
+
+# MQT Debugger - A Quantum Circuit Debugging Tool
+
+A tool for debugging quantum circuits developed as part of the [_Munich Quantum Toolkit (MQT)_](https://mqt.readthedocs.io) by the [Chair for Design Automation](https://www.cda.cit.tum.de/) at the [Technical University of Munich](https://www.tum.de/).
+It proposes an interface for the simulation of circuits and diagnosis of errors and provides a base implementation built upon [MQT Core](https://github.com/cda-tum/mqt-core), which forms the backbone of the MQT.
+It also provides a Debugger Adapter Protocol (DAP) server that can be used to integrate the debugger into IDEs.
+
+<p align="center">
+  <a href="https://mqt.readthedocs.io/projects/debugger">
+  <img width=30% src="https://img.shields.io/badge/documentation-blue?style=for-the-badge&logo=read%20the%20docs" alt="Documentation" />
+  </a>
+</p>
+
+If you have any questions, feel free to contact us via [quantum.cda@xcit.tum.de](mailto:quantum.cda@xcit.tum.de) or by creating an issue on [GitHub](https://github.com/cda-tum/mqt-debugger/issues).
+
+## Getting Started
+
+MQT Debugger is available via [PyPI](https://pypi.org/project/mqt.debugger/) for Linux, macOS, and Windows and supports Python 3.8 to 3.12.
+
+```console
+(venv) $ pip install mqt.debugger
+```
+
+The following code gives an example on the usage:
+
+```python3
+from mqt import debugger
+
+state = debugger.create_ddsim_simulation_state()
+with open("code.qasm", "r") as f:
+    state.load_code(f.read())
+f.run_simulation()
+print(f.get_state_vector_full())
+```
+
+**Detailed documentation on all available methods, options, and input formats is available at [ReadTheDocs](https://mqt.readthedocs.io/projects/debugger).**
+
+## System Requirements and Building
+
+The implementation is compatible with any C++20 compiler, a minimum CMake version of 3.19, and Python 3.8+.
+Please refer to the [documentation](https://mqt.readthedocs.io/projects/debugger) on how to build the project.
+
+Building (and running) is continuously tested under Linux, macOS, and Windows using the [latest available system versions for GitHub Actions](https://github.com/actions/virtual-environments).
+
+## References
+
+MQT Debugger has been developed based on methods proposed in a scientific paper that has not been released yet.
+
+## Acknowledgements
+
+The Munich Quantum Toolkit has been supported by the European
+Research Council (ERC) under the European Union's Horizon 2020 research and innovation program (grant agreement
+No. 101001318), the Bavarian State Ministry for Science and Arts through the Distinguished Professorship Program, as well as the
+Munich Quantum Valley, which is supported by the Bavarian state government with funds from the Hightech Agenda Bayern Plus.
+
+<p align="center">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/tum_dark.svg" width="28%">
+<img src="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/tum_light.svg" width="28%" alt="TUM Logo">
+</picture>
+<picture>
+<img src="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/logo-bavaria.svg" width="16%" alt="Coat of Arms of Bavaria">
+</picture>
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/erc_dark.svg" width="24%">
+<img src="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/erc_light.svg" width="24%" alt="ERC Logo">
+</picture>
+<picture>
+<img src="https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/logo-mqv.svg" width="28%" alt="MQV Logo">
+</picture>
+</p>
