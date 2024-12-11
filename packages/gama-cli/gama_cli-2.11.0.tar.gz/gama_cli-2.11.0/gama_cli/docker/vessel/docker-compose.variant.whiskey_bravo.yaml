@@ -1,0 +1,15 @@
+services:
+  gama_vessel:
+    image: ghcr.io/greenroom-robotics/gama_vessel_whiskey_bravo:${GAMA_VERSION:-latest}
+    build:
+      args:
+        - PACKAGE_NAME=whiskey_bravo_bringup
+
+  gama_docs:
+    environment:
+      GAMA_VARIANT: whiskey_bravo
+
+  gama_greenstream:
+    devices:
+      - /dev/video0
+      - /dev/video2

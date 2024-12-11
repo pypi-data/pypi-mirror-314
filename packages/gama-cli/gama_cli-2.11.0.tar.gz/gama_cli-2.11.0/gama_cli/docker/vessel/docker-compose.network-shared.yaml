@@ -1,0 +1,38 @@
+# See /docs/architecture/networking.md
+
+services:
+  gama_ui:
+    networks:
+      - vessel
+      - shared
+
+  gama_chart_tiler:
+    networks:
+      - vessel
+      - shared
+
+  gama_chart_api:
+    networks:
+      - vessel
+      - shared
+
+  gama_vessel:
+    networks:
+      - vessel
+      - shared
+    ports:
+      - 1666:1666
+      - 8080:8080
+      - 3010:3010
+
+  gama_greenstream:
+    networks:
+      - vessel
+      - shared
+    ports:
+      - 3005:3005
+      - 3006:3006
+
+networks:
+  vessel:
+  shared:
