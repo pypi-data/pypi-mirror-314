@@ -1,0 +1,146 @@
+
+Core functions
+============================================================
+
+More languages
+-------------------------
+
+Some convention for C/C++ (const string VERSION, const char* VERSION)
+
+Android XML/Meta.
+
+TeX/LaTeX.
+
+Override scanned files for existing language
+---------------------------------------------
+
+(like „use python rules, but scan release.py and setup.py”)
+
+Multiple rules active simultaneously
+--------------------------------------
+
+Let the same module use both python and javascript rules.
+
+Config-level languge definition
+--------------------------------
+
+Config-level tag format definition
+-----------------------------------
+
+Customize commit message
+-------------------------
+
+Restrictive mode
+-------------------------
+
+Reject tags mismatching general pattern
+
+In even harder mode, enforce tag prefix matching tags placed earlier.
+
+
+Detect dirty file status
+-------------------------
+
+Reject tag if some file has uncommited changes. Or at least don't commit
+such a file (and fail if it contains version tokens).
+
+Support for HISTORY.rst /ChangeLog
+-------------------------------------
+
+Apart from updating version numbers, support also updating release
+notes.  For example by spawning the editor, putting the user in
+appropriate context, and maybe providing him with draft made from
+commit messages.
+
+Commit that change together with version number.
+
+Optional, likely by 
+   «prefix».changelog = HISTORY.rst
+
+
+Guessing language
+------------------------
+
+(by repo contents)
+
+    [update_version]
+    active_on = ~/sources, ~/work
+    language = guess
+
+Guessing tag format
+------------------------
+
+(by tags placed earlier)
+
+    [update_version]
+    active_on = ~/sources, ~/work
+    tagfmt = guess
+
+
+
+Various/related/docs
+================================================================
+
+PyVer
+-------
+
+Mention:
+https://github.com/warner/python-versioneer
+
+
+
+
+(rest of this file is part of rough initial description
+of config-level lang and tagmt def)
+
+
+Configure languages
+==================================
+
+
+Languages can be defined (or redefined) in configuration
+files (usually system-wide or in ``~/.hgrc`` as those settings
+are usually reusable). Example (close to default settings)::
+
+    [update_version_language]
+    python.files = setup.py, __init__.py, version.py
+    # VERSION = '1.2.3' including various indents and quotes
+    python.version_scan = ^(?<decl>\s*VERSION)\s*=\s*(?<quote>['"])[\d\.]*(?P=quote)
+    python.version_repl = {decl} = {quote}{tagnbr}{quote}
+    perl.files = *.pl, *.pm, *.pod
+    # our $VERSION = '1.33' also my or no intro
+    perl.version_scan.var = ^(?<decl>\s*(our\s+|my\s+)?VERSION)\s*=\s*(?<quote>['"])[\d\.]*(?P=quote)
+    perl.version_repl.var = {decl} = {quote}{tagnbr}{quote}
+    # Version 1.71    (happens in docs)
+    perl.version_scan.txt = ^(?<decl>Version\s+)\d+(\.\d+)*\s*$
+    perl.version_repl.txt = {decl} {tagnbr}
+
+``files`` is a list of names (or globs) defining which files are worth
+checking. ``version_scan`` is regular expression maching the line
+containing version variable. ``version_repl`` is substitution text
+which may refer any named groups from version_scan, and ``{tagnbr}``
+which contain number extracted from the tag. 
+
+
+Configure tag formats
+================================
+
+
+Tag format define proper tag syntax, and method used to extract
+version number from it. Example::
+
+    [update_version_tagfmt]
+    # 1.3.0  1.2.4.1  1.0 itp
+    dotted.pattern = ^(?P<nbr>\d+(\.\d+)+)$
+    dotted.value = {nbr}
+    # something-1.3.0  something-1.3.4.1  itp
+    named-dotted.pattern= ^[a-zA-Z_-]+[_-](?P<nbr>\d+(\.\d+)*)$
+    named-dotted.value = {nbr}
+    # 1-3, 1-2-3 itp
+    dashed.pattern = ^(?P<nbr>\d+(-\d+)+)$
+    dashed.value = {nbr|sub('-','.')}
+
+Standard tag formats extract value as dotted number (like ``1.17.3``)
+even if format or constant format is different.
+
+

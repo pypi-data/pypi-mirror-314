@@ -1,0 +1,122 @@
+Let's test case of multiple languages on single repo. This
+time, using single-repo hgrc settings
+
+Let's define test locations
+
+  $ WORK_DIR=${WORK_DIR-`pwd`/work}
+  $ rm -rf $WORK_DIR
+
+  $ export TREE=$WORK_DIR/tree
+  $ export REPO=$TREE/repo
+
+and appropriate Mercurial configuration file. Note we don't enable
+extension globally in this test.
+
+  $ export HGRCPATH=$WORK_DIR/hgrc
+  $ mkdir -p $HGRCPATH
+
+  $ cat > $HGRCPATH/basic.rc << EOF
+  > [ui]
+  > username = Just Test <just.text@nowhere.com>
+  > logtemplate = {author}: {desc} / {files} [{tags}]\n
+  > [extensions]
+  > mercurial_update_version =
+  > EOF
+
+We need some repository for test.
+
+  $ hg init $REPO
+
+Let's move to repo:
+
+  $ cd $REPO
+
+and let's enable extension for it:
+
+  $ cat > $REPO/.hg/hgrc <<EOF
+  > [update_version]
+  > py.active = true
+  > py.language = python
+  > py.tagfmt = dotted
+  > js.active = true
+  > js.language = javascript
+  > js.tagfmt = dotted
+  > EOF
+
+and let's populate repository a little bit.
+
+  $ cat > $REPO/setup.py <<EOF
+  > # This is setup
+  > VERSION = "1.0"
+  > # here it ends
+  > EOF
+
+  $ mkdir $REPO/src
+
+  $ cat > $REPO/src/version.py << 'EOF'
+  > VERSION = "1.0"
+  > EOF
+
+  $ mkdir $REPO/js
+
+  $ cat > $REPO/js/version.js << 'EOF'
+  > const VERSION = "1.0";
+  > EOF
+
+  $ hg --cwd $REPO add
+  adding js/version.js
+  adding setup.py
+  adding src/version.py
+
+  $ hg --cwd $REPO commit -m "Initial commit"
+
+  $ cd $REPO
+
+  $ hg tag 1.2.3
+  update_version: Version number in setup.py set to 1.2.3. List of changes:
+      Line 2
+      < VERSION = "1.0"
+      > VERSION = "1.2.3"
+  update_version: Version number in src/version.py set to 1.2.3. List of changes:
+      Line 1
+      < VERSION = "1.0"
+      > VERSION = "1.2.3"
+  update_version: Version number in js/version.js set to 1.2.3. List of changes:
+      Line 1
+      < const VERSION = "1.0";
+      > const VERSION = "1.2.3";
+
+  $ hg status
+
+  $ hg log
+  Just Test <just.text@nowhere.com>: Added tag 1.2.3 for changeset * / .hgtags [tip] (glob)
+  Just Test <just.text@nowhere.com>: Version number set to 1.2.3 / js/version.js setup.py src/version.py [1.2.3]
+  Just Test <just.text@nowhere.com>: Initial commit / js/version.js setup.py src/version.py []
+
+  $ cat setup.py
+  # This is setup
+  VERSION = "1.2.3"
+  # here it ends
+
+  $ cat src/version.py
+  VERSION = "1.2.3"
+
+  $ cat js/version.js
+  const VERSION = "1.2.3";
+
+  $ hg tag_version_test 4.5.7
+  update_version: using python language rules and dotted tag format
+  update_version: using javascript language rules and dotted tag format
+  update_version: Version number in setup.py set to 4.5.7. List of changes:
+      Line 2
+      < VERSION = "1.2.3"
+      > VERSION = "4.5.7"
+  update_version: Version number in src/version.py set to 4.5.7. List of changes:
+      Line 1
+      < VERSION = "1.2.3"
+      > VERSION = "4.5.7"
+  update_version: Version number in js/version.js set to 4.5.7. List of changes:
+      Line 1
+      < const VERSION = "1.2.3";
+      > const VERSION = "4.5.7";
+
