@@ -1,0 +1,87 @@
+root: "/Users/jhughes/Desktop/d0/"
+input_drop: "dropzone/"
+tlm_directory: "dropzone/"
+file_version: "1"
+
+plate_scale:
+  1: 88 / 3600
+  2: 88 / 3600
+  3: 88 / 3600
+  4: 30 / 3600
+
+quality_check:
+  mean_low: 0
+  mean_high: 65000
+
+scheduler:
+  max_start: 10
+
+launcher:
+  schedule: "* * * * *"
+  max_flows_running: 25
+
+levels:
+  level0_process_flow:
+    priority:
+      initial: 5
+      seconds: [ 30, 120, 600 ]
+      escalation: [ 10, 20, 30 ]
+    schedule: "* * * * *"
+    options:
+      num_quads: 100
+
+  level1_process_flow:
+    priority:
+      initial: 6
+      seconds: [ 30, 120, 600 ]
+      escalation: [ 11, 21, 31 ]
+    schedule: "* * * * *"
+    options:
+
+  level2_process_flow:
+    priority:
+      initial: 1000
+      seconds: [ 3000, 12000, 60000 ]
+      escalation: [ 1000, 1000, 1000 ]
+    schedule: "* * * * *"
+    options:
+
+  levelq_process_flow:
+    priority:
+      initial: 1000
+      seconds: [ 3000, 12000, 60000 ]
+      escalation: [ 1000, 1000, 1000 ]
+    schedule: "* * * * *"
+    options:
+
+  L3_PTM:
+    priority:
+      initial: 10000
+      seconds: [1]
+      escalation: [10000]
+    schedule: "* * * * *"
+    options:
+
+  L3_PIM:
+    priority:
+      initial: 10000
+      seconds: [1]
+      escalation: [10000]
+    schedule: "* * * * *"
+    options:
+
+  f_corona:
+    priority:
+      initial: 10000
+      seconds: [1]
+      escalation: [10000]
+    schedule: "* * * * *"
+    options:
+
+  starfield:
+    priority:
+      initial: 10000
+      seconds: [1]
+      escalation: [10000]
+    schedule: "* * * * *"
+    options:
