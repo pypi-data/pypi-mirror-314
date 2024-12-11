@@ -1,0 +1,34 @@
+name: Python 🐍 Unit Tests ✅
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Test python ✅
+    runs-on: ubuntu-20.04
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - uses: actions/setup-python@master
+      with:
+        python-version: '3.11'
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Install test requirements
+      run: pip install -r requirements-test.txt
+    - name: Download ⬇️ files for testing
+      run: >-
+        mkdir -p tests/example_data &&
+        while IFS= read -r file; do
+            wget "${{ secrets.CLOUDFRONT_URL }}/${file}" -O tests/example_data/${file}
+        done < .github/workflows/test-files-names.txt
+    - name: Run tests and collect coverage
+      run: |
+        pip install coverage
+        PYTHONPATH=$(pwd)/src:PYTHONPATH coverage run -m unittest discover -s tests
+    - name: Upload coverage reports to Codecov ☂️
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: IEB-BIODATA/pydwca

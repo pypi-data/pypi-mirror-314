@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pydwca"
+version = "0.4.0"
+dynamic = ["dependencies"]
+description = 'Python library to read, parse and write Darwin Core Archive files'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MPL-2.0"
+license-files = { paths = ["LICENSE"] }
+keywords = []
+authors = [
+  { name = "Juan Saez Hidalgo", email = "jmsaez@ieb-chile.cl" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.urls]
+Documentation = "https://pydwca.readthedocs.io/en/latest/index.html"
+Issues = "https://github.com/IEB-BIODATA/pydwca/issues"
+Source = "https://github.com/IEB-BIODATA/pydwca"
+
+[project.optional-dependencies]
+full = ["tqdm", "pandas", "polars", "rapidfuzz"]
+ui = ["tqdm", "pandas",]
+data = ["pandas", "polars", "rapidfuzz"]
+
+[tool.hatch.version]
+path = "src/dwca/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xml_common", "src/dwca", "src/eml"]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/dwca tests}"
+
+[tool.coverage.run]
+source = ["src/xml_common", "src/dwca", "src/eml"]
+branch = true
+parallel = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
