@@ -1,0 +1,99 @@
+name: KDP Python Connector Dispatch Release Build
+
+on:
+  repository_dispatch:
+    types: [ dispatch-release ]
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      pythonClientVersion:
+        description: "Python Client version such as 0.1.0"
+        required: true
+
+env:
+  PYTHON_CLIENT_VERSION: ${{ github.event.client_payload.pythonClientVersion || github.event.inputs.pythonClientVersion }}
+
+jobs:
+  dispatch_public_and_internal_builds:
+    name: Dispatch Python Connector Release Internal and Public Builds with Version
+    runs-on: self-hosted-aws
+
+    steps:
+      - name: Checkout
+        id: checkout-source
+        uses: actions/checkout@v4
+
+      - name: Get version via dry run ->  we will tag after updating pyproject.toml
+        id: tag-version-dry-run
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: "minor"
+          dry_run: "true"
+          tag_prefix: ""
+
+      - name: Update Python Connector Version Number in pyproject.toml
+        run: |
+          OLD_VERSION=`cat pyproject.toml | grep ^version | cut -d '"' -f 2`
+          OLD_VERSION="\"$OLD_VERSION\""          
+          NEW_VERSION="\"${{ steps.tag-version-dry-run.outputs.new_tag }}\""
+          echo "Updating OLD_VERSION: $OLD_VERSION to NEW_VERSION: $NEW_VERSION in pyproject.toml"          
+          sed -i "s+version = $OLD_VERSION+version = $NEW_VERSION+g" pyproject.toml
+
+      - name: Update Python Client Version in Dependencies in pyproject.toml
+        run: |
+          OLD_CLIENT_VERSION=`cat pyproject.toml | grep -F kdp-api-python-client | egrep -o "([0-9]{1,}\.)+[0-9]{1,}"`
+          echo "Updating python client OLD_CLIENT_VERSION: $OLD_CLIENT_VERSION to NEW_CLIENT_VERSION: ${{ env.PYTHON_CLIENT_VERSION }} in pyproject.toml"
+          sed -i "s+kdp-api-python-client ~= $OLD_CLIENT_VERSION+kdp-api-python-client ~= ${{ env.PYTHON_CLIENT_VERSION }}+g" pyproject.toml        
+
+      - name: Show python project toml file content after updates
+        run: |
+          cat pyproject.toml
+
+      - name: Commit Changes
+        run: |
+          git add pyproject.toml
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git commit -a -m "Update version in pyproject.toml to ${{ steps.tag-version-dry-run.outputs.new_tag }} and python client dependency version to ${{ env.PYTHON_CLIENT_VERSION }}"
+          git pull
+          git status
+          git push origin HEAD:main
+
+      - name: Bump version and push tag
+        id: tag-version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: "minor"
+          dry_run: "false"
+          tag_prefix: ""
+          create_annotated_tag: "true"
+
+      - name: Dispatch Internal and Public Connector Releases
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: Koverse/kdp-python-connector
+          event-type: release-connector
+          client-payload: |-
+            {
+              "version": "${{ steps.tag-version.outputs.new_tag }}",
+              "pythonClientVersion": "${{ env.PYTHON_CLIENT_VERSION }}"
+            }
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag-version.outputs.new_tag }}
+          name: Release ${{ steps.tag-version.outputs.new_tag }}
+          body: ${{ steps.tag-version.outputs.changelog }}
+
+      - name: Add logging to markdown
+        if: always()
+        run: |
+          echo "<h4>Release Settings for python client version: ${{ env.PYTHON_CLIENT_VERSION }}</h4>" >> $GITHUB_STEP_SUMMARY
+          echo "<h4>Release Settings for python connector next version: ${{ steps.tag-version.outputs.new_tag }}</h4>" >> $GITHUB_STEP_SUMMARY
+
+          
+          

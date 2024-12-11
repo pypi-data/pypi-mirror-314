@@ -1,0 +1,125 @@
+name: KDP Python Connector Release (internal)
+
+on:
+  repository_dispatch:
+    types: [ release-connector, release-internal-connector ]
+
+env:
+  VERSION: ${{ github.event.client_payload.version }}
+  PACKAGE_NAME: kdp-python-connector-internal
+  CODE_ARTIFACT_DOMAIN: kdp
+  CODE_ARTIFACT_REPO: kdp-python-connector
+  CODE_ARTIFACT_URL: https://us-west-2.console.aws.amazon.com/codesuite/codeartifact/d/365668498277/kdp/r/kdp-python-connector/p/pypi/kdp-python-connector-internal/versions?region=us-west-2&package-versions-meta=eyJmIjp7fSwicyI6e30sIm4iOjIwLCJpIjowfQ
+  BRANCH_REF: ${{ github.event.client_payload.pythonConnectorRef || 'main' }}
+  PYTHON_CLIENT_VERSION: ${{ github.event.client_payload.pythonClientVersion || github.event.client_payload.version }}
+  PYTHON_CLIENT_CODE_ARTIFACT_REPO: kdp-api-python-client
+  PYTHON_CLIENT_PACKAGE_NAME: kdp-api-python-client-internal
+
+
+jobs:
+  release_internal_connector:
+    name: Release Internal Connector
+    runs-on: self-hosted-aws-x86
+
+    strategy:
+      matrix:
+        python-version: [ '3.9.x' ]
+
+    steps:
+      - name: Clear repository
+        run: sudo rm -fr $GITHUB_WORKSPACE && mkdir $GITHUB_WORKSPACE
+
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH_REF }}
+          fetch-depth: 0
+
+      - name: Echo Payload
+        run: echo "Starting Release of Internal Connector with VERSION $VERSION BRANCH $BRANCH_REF"
+
+      - name: Remove and create new requirements.txt
+        run: |
+          rm requirements.txt
+          echo pandas == 1.4.2 > requirements.txt
+          echo numpy == 1.22.4 >> requirements.txt
+          echo wheel == 0.44.0 >> requirements.txt
+
+      - name: Show file content
+        run: |
+          cat requirements.txt
+
+      - name: reset pip config to default
+        run: |
+          pip config list
+          pip config --user set global.index-url https://pypi.org/simple
+          pip config list    
+
+      - uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: install required dependencies for python client
+        run: |
+          python -m pip install --force-reinstall --user --upgrade python-dateutil urllib3==2.0.7 pydantic typing-extensions
+
+      - name: Install kdp-api-python-client package from AWS code artifact
+        run: |
+          aws codeartifact login --tool pip --domain ${{ env.CODE_ARTIFACT_DOMAIN }} --repository ${{ env.PYTHON_CLIENT_CODE_ARTIFACT_REPO }}
+          pip install ${{ env.PYTHON_CLIENT_PACKAGE_NAME }}==${{ env.PYTHON_CLIENT_VERSION }}
+          pip config list
+          pip config --user set global.index-url https://pypi.org/simple
+          pip config list  
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --user --upgrade build    
+          pip install twine 
+
+      - name: Install Python Connector
+        id: install-python-connector
+        run: |
+          pip install -r requirements.txt
+          python -m build --no-isolation 
+
+      - name: Run tests
+        id: run-unit-tests
+        working-directory: ./test
+        run: |
+          python3 -m unittest
+        continue-on-error: true
+
+      - name: List package versions
+        run: |
+          aws codeartifact login --tool pip --domain ${{ env.CODE_ARTIFACT_DOMAIN }} --repository ${{ env.PYTHON_CLIENT_CODE_ARTIFACT_REPO }}
+          aws codeartifact list-package-versions --domain ${{ env.CODE_ARTIFACT_DOMAIN }} \
+          --repository ${{ env.CODE_ARTIFACT_REPO }} --format pypi --package kdp-python-connector
+        continue-on-error: true
+
+      - name: Delete pre-existing package of the same version
+        run: |
+          aws codeartifact delete-package-versions --domain ${{ env.CODE_ARTIFACT_DOMAIN }} \
+          --repository ${{ env.CODE_ARTIFACT_REPO }} --format pypi \
+          --package ${{ env.PACKAGE_NAME }} --versions ${{ env.VERSION }}
+        continue-on-error: true
+
+      - name: Build and publish
+        # Only publish on 3.9.x
+        if: matrix.python-version == '3.9.x'
+        run: |
+          export TWINE_USERNAME=aws
+          export TWINE_PASSWORD=`aws codeartifact get-authorization-token --domain ${{ env.CODE_ARTIFACT_DOMAIN }} --query authorizationToken --output text`
+          export TWINE_REPOSITORY_URL=`aws codeartifact get-repository-endpoint --domain ${{ env.CODE_ARTIFACT_DOMAIN }} --repository ${{ env.CODE_ARTIFACT_REPO }} --format pypi --query repositoryEndpoint --output text`
+          twine upload dist/*
+
+      - name: Add logging to markdown
+        if: always()
+        run: |
+          echo "<h4>Release Settings for python version: ${{ matrix.python-version }}</h4>" >> $GITHUB_STEP_SUMMARY
+          echo "<a href='${{ env.CODE_ARTIFACT_URL }}'>PYTHON-CONNECTOR AWS CODE ARTIFACT REPO</a>" >> $GITHUB_STEP_SUMMARY
+          echo "<br />VERSION: ${{ env.VERSION }} <br />" >> $GITHUB_STEP_SUMMARY
+          echo "PYTHON CONNECTOR BRANCH_NAME: ${{ env.BRANCH_REF }} <br />" >> $GITHUB_STEP_SUMMARY
+
+          
+          
