@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "geoh5-interop"
+version = "1.1.0-beta.2"
+license = "MIT"
+description = "A meta-package that groups together packages for interoperability between GEOH5 and other file formats."
+authors = ["Mira Geoscience <support@mirageoscience.com>"]
+homepage = "https://www.mirageoscience.com/mining-industry-software/python-integration/"
+readme = "README.rst"
+keywords = ["geology", "geophysics", "data", "interoperability"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+include = [
+    { path = "COPYING" },
+    { path = "COPYING.LESSER" },
+    { path = "LICENSE" },
+    { path = "README.rst" },
+    { path = "THIRD_PARTY_SOFTWARE.rst" },
+    { path = "docs/**/THIRD_PARTY_SOFTWARE.rst" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+
+# geoh5py is a dependency of other apps: not strictly needed here, but good to ensure version
+geoh5py = {version = ">=0.10.0b4, <0.11.0a.dev", allow-prereleases = true}
+#geoh5py = {git = "https://github.com/MiraGeoscience/geoh5py.git", rev = "release/0.10.0"}
+
+las-geoh5 = { version = ">=0.3.0b1, <0.4.0a.dev", allow-prereleases = true}
+#las-geoh5 = {git = "https://github.com/MiraGeoscience/las-geoh5.git", rev = "release/0.3.0"}
+
+mira-omf = {version = "~3.3.0b1", allow-prereleases = true}
+#mira-omf = {git = "https://github.com/MiraGeoscience/omf.git", rev = "release/3.3.0"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools"]
+build-backend = "poetry.core.masonry.api"
