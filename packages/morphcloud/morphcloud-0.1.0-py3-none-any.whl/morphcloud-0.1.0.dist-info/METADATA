@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: morphcloud
+Version: 0.1.0
+Summary: A Python SDK and CLI tool for creating, managing, and interacting with Morph Cloud VMs.
+License: Apache-2.0
+Keywords: morph,cloud,runtimes,cli
+Author: Morph Labs
+Author-email: jobs@morph.so
+Requires-Python: >=3.11
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: anthropic (>=0.35.0,<0.36.0)
+Requires-Dist: beautifulsoup4 (>=4.12.3,<5.0.0)
+Requires-Dist: click (>=8.1.7,<9.0.0)
+Requires-Dist: fire (>=0.7.0,<0.8.0)
+Requires-Dist: httpx
+Requires-Dist: paramiko (>=3.5.0,<4.0.0)
+Requires-Dist: psutil
+Requires-Dist: pydantic
+Requires-Dist: requests
+Requires-Dist: sphinx (>=8.1.3,<9.0.0)
+Requires-Dist: tqdm
+Description-Content-Type: text/markdown
+
+# MorphCloud Python SDK 
+
+## Overview
+
+MorphCloud is a platform designed to spin up remote AI devboxes we call runtimes. It provides a suite of code intelligence tools and a Python SDK to manage, create, delete, and interact with runtime instances.
+
+## Setup Guide
+
+### Prerequisites
+
+Python 3.8 or higher
+
+Go to [https//:cloud.morph.so](https://cloud.morph.so/web/api-keys), log in with the provided credentials and create an API key.
+
+Set the API key as an environment variable  `MORPH_API_KEY`.
+
+### Installation
+
+```
+pip install git+https://github.com/morph-labs/morph-python-sdk.git
+```
+
+Export the API key:
+
+```
+export MORPH_API_KEY="your-api-key"
+```
+
+## Quick Start
+
+To start using MorphCloud, you can create and manage runtime instances using the provided classes and methods. Here's a basic example to create a runtime instance:
+
+```py
+from morphcloud.api import MorphClient
+
+client = MorphClient()
+
+
+snapshot = client.snapshot.create()
+runtime = client.runtime.create(snapshot_id=snapshot.id)
+
+runtime.exec("echo 'Hello, World!'")
+```
+
+## Command Line Interface
+
+The SDK also provides a command line interface to interact with the MorphCloud API. You can use the CLI to create, delete, and manage runtime instances.
+
+```bash
+morphcloud snapshot list
+morphcloud runtime create
+```
+
