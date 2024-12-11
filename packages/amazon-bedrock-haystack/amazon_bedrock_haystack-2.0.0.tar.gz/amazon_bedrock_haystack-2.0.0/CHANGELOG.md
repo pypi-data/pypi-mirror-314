@@ -1,0 +1,215 @@
+# Changelog
+
+## [integrations/amazon_bedrock-v1.1.1] - 2024-12-03
+
+### 🐛 Bug Fixes
+
+- AmazonBedrockChatGenerator with Claude raises moot warning for stream… (#1205)
+- Allow passing boto3 config to all  AWS Bedrock classes (#1166)
+
+### 🧹 Chores
+
+- Fix linting/isort (#1215)
+
+### 🌀 Miscellaneous
+
+- Chore: use class methods to create `ChatMessage` (#1222)
+
+## [integrations/amazon_bedrock-v1.1.0] - 2024-10-23
+
+### 🚜 Refactor
+
+- Avoid downloading tokenizer if `truncate` is `False` (#1152)
+
+### ⚙️ CI
+
+- Adopt uv as installer (#1142)
+
+
+## [integrations/amazon_bedrock-v1.0.5] - 2024-10-17
+
+### 🚀 Features
+
+- Add prefixes to supported model patterns to allow cross region model ids (#1127)
+
+
+## [integrations/amazon_bedrock-v1.0.4] - 2024-10-16
+
+### 🐛 Bug Fixes
+
+- Avoid bedrock read timeout (add boto3_config param) (#1135)
+
+
+## [integrations/amazon_bedrock-v1.0.3] - 2024-10-04
+
+### 🐛 Bug Fixes
+
+- *(Bedrock)* Allow tools kwargs for AWS Bedrock Claude model (#976)
+- Chat roles for model responses in chat generators (#1030)
+
+### 🚜 Refactor
+
+- Remove usage of deprecated `ChatMessage.to_openai_format` (#1007)
+
+### 🧹 Chores
+
+- Update ruff linting scripts and settings (#1105)
+
+### 🌀 Miscellaneous
+
+- Modify regex to allow cross-region inference in bedrock  (#1120)
+
+## [integrations/amazon_bedrock-v1.0.1] - 2024-08-19
+
+### 🚀 Features
+
+- Make truncation optional for bedrock chat generator (#967)
+
+### 🐛 Bug Fixes
+
+- Normalising ChatGenerators output (#973)
+
+
+## [integrations/amazon_bedrock-v1.0.0] - 2024-08-12
+
+### 🚜 Refactor
+
+- Change meta data fields (#911)
+
+### 🧪 Testing
+
+- Do not retry tests in `hatch run test` command (#954)
+
+
+## [integrations/amazon_bedrock-v0.10.0] - 2024-08-12
+
+### 🐛 Bug Fixes
+
+- Support streaming_callback param in amazon bedrock generators (#927)
+
+### 🌀 Miscellaneous
+
+- Update AmazonBedrockChatGenerator docstrings (#949)
+- Update AmazonBedrockGenerator docstrings (#956)
+
+## [integrations/amazon_bedrock-v0.9.3] - 2024-07-17
+
+### 🚀 Features
+
+- Use non-gated tokenizer as fallback for mistral in AmazonBedrockChatGenerator (#843)
+- Made truncation optional for BedrockGenerator (#833)
+
+### ⚙️ CI
+
+- Retry tests to reduce flakyness (#836)
+
+### 🧹 Chores
+
+- Update ruff invocation to include check parameter (#853)
+
+### 🌀 Miscellaneous
+
+- Ci: install `pytest-rerunfailures` where needed; add retry config to `test-cov` script (#845)
+- Add meta deprecration warning (#910)
+
+## [integrations/amazon_bedrock-v0.9.0] - 2024-06-14
+
+### 🚀 Features
+
+- Support Claude v3, Llama3 and Command R models on Amazon Bedrock (#809)
+
+### 🧪 Testing
+
+- Amazon Bedrock - skip integration tests from forks (#801)
+
+## [integrations/amazon_bedrock-v0.8.0] - 2024-05-23
+
+### 🐛 Bug Fixes
+
+- Max_tokens typo in Mistral Chat (#740)
+
+### 🌀 Miscellaneous
+
+- Chore: change the pydoc renderer class (#718)
+- Adding support of "amazon.titan-embed-text-v2:0" (#735)
+
+## [integrations/amazon_bedrock-v0.7.1] - 2024-04-24
+
+### 🌀 Miscellaneous
+
+- Chore: add license classifiers (#680)
+- Fix: Fix streaming_callback serialization in AmazonBedrockChatGenerator (#685)
+
+## [integrations/amazon_bedrock-v0.7.0] - 2024-04-16
+
+### 🚀 Features
+
+- Add Mistral Amazon Bedrock support  (#632)
+
+### 📚 Documentation
+
+- Disable-class-def (#556)
+
+### 🌀 Miscellaneous
+
+- Remove references to Python 3.7 (#601)
+- [Bedrock] Added Amazon Bedrock examples (#635)
+
+## [integrations/amazon_bedrock-v0.6.0] - 2024-03-11
+
+### 🚀 Features
+
+- AmazonBedrockChatGenerator - migrate Anthropic chat models to use messaging API (#545)
+
+### 📚 Documentation
+
+- Small consistency improvements (#536)
+- Review integrations bedrock (#550)
+
+### 🌀 Miscellaneous
+
+- Docs updates + two additional unit tests (#513)
+
+## [integrations/amazon_bedrock-v0.5.1] - 2024-02-22
+
+### 🚀 Features
+
+- Add Amazon Bedrock chat model support (#333)
+
+### 🐛 Bug Fixes
+
+- Fix order of API docs (#447)
+
+### 📚 Documentation
+
+- Update category slug (#442)
+
+### 🧹 Chores
+
+- Update Amazon Bedrock integration to use new generic callable (de)serializers for their callback handlers (#452)
+- Use `serialize_callable` instead of `serialize_callback_handler` in Bedrock (#459)
+
+### 🌀 Miscellaneous
+
+- Amazon bedrock: generate api docs (#326)
+- Adopt Secret to Amazon Bedrock (#416)
+- Bedrock - remove `supports` method (#456)
+- Bedrock refactoring (#455)
+- Bedrock Text Embedder (#466)
+- Bedrock Document Embedder (#468)
+
+## [integrations/amazon_bedrock-v0.3.0] - 2024-01-30
+
+### 🧹 Chores
+
+- [**breaking**] Rename `model_name` to `model` in `AmazonBedrockGenerator` (#220)
+- Amazon Bedrock subproject refactoring (#293)
+- Adjust amazon bedrock helper classes names (#297)
+
+## [integrations/amazon_bedrock-v0.1.0] - 2024-01-03
+
+### 🌀 Miscellaneous
+
+- [Amazon Bedrock] Add AmazonBedrockGenerator (#153)
+
+<!-- generated by git-cliff -->
