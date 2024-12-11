@@ -1,0 +1,96 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simpunch"
+dynamic = ["version"]
+dependencies = [
+    "numpy",
+    "astropy",
+    "pandas",
+    "matplotlib",
+    "regularizepsf",
+    "prefect[dask, sqlalchemy]",
+    "punchbowl",
+    "toml",
+    "scipy",
+    "photutils",
+]
+
+requires-python = ">=3.10"
+authors = [
+    {name = "J. Marcus Hughes", email = "hughes.jmb@gmail.com"},
+    {name = "Chris Lowder", email="chris.lowder@swri.org"}
+]
+maintainers = [
+  {name = "J. Marcus Hughes", email = "hughes.jmb@gmail.com"}
+]
+description = "Simulate PUNCH observations"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["PUNCH", "NASA", "simulate", "data", "solar physics"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-doctestplus", "pytest-cov", "ruff", "coverage"]
+docs = ["sphinx", "sphinx-autoapi", "sphinx-automodapi", "pydata-sphinx-theme", "sphinx-favicon", "ipython", "packaging"]
+
+[project.scripts]
+simpunch = "simpunch.cli:main"
+
+
+[project.urls]
+Documentation = "https://punch-mission.github.io/simpunch/"
+Repository = "https://github.com/punch-mission/simpunch.git"
+"Bug Tracker" = "https://github.com/punch-mission/simpunch/issues"
+Changelog = "https://github.com/punch-mission/simpunch/blob/main/CHANGELOG.md"
+
+[tool.setuptools_scm]
+
+[tool.setuptools]
+packages = ["simpunch"]
+
+[tool.codespell]
+skip = "*.fts,*.fits,venv,*.pro,*.asdf,*.ipynb"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+exclude=[
+    ".git,",
+    "__pycache__",
+    "build",
+    "simpunch/version.py",
+]
+show-fixes = true
+
+lint.select = ["ALL"]
+lint.ignore = ["PTH", "S113", "S311", "NPY002",
+    "FBT002", "FBT001", "PLR0913", "TD003",
+    "TD004", "TD002", "FIX002", "DTZ001", "I001", "PT001"]
+
+[tool.ruff.lint.per-file-ignores]
+# Part of configuration, not a package.
+"setup.py" = ["INP001"]
+"conftest.py" = ["INP001"]
+# implicit-namespace-package. The examples are not a package.
+"docs/*.py" = ["INP001"]
+# Module level imports do not need to be at the top of a file here
+"docs/conf.py" = ["E402"]
+
+"__init__.py" = ["E402", "F401", "F403"]
+"level*.py" = ["T201"]  # it's fine to print in flows
+"test_*.py" = ["B011", "D", "E402", "PGH001", "S101", "NPY002"]
+"cli.py" = ["ANN"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: a slow test to normally skip in CI",
+]
