@@ -1,0 +1,199 @@
+---
+title: "Play with scanpy"
+author: Constantin Ahlmann-Eltze
+format:
+    html:
+        code-fold: false
+        embed-resources: true
+        highlight-style: github
+        toc: true
+        code-line-numbers: true
+execute:
+  keep-ipynb: true
+jupyter: python3
+---
+
+
+```{python}
+%load_ext autoreload
+%autoreload 2
+```
+
+
+```{python}
+import debugpy
+debugpy.listen(5678)
+print("Waiting for debugger attach")
+debugpy.wait_for_client()
+```
+
+```{python}
+import numpy as np
+import scanpy as sc
+import pertpy
+
+adata = pertpy.data.kang_2018()
+adata
+```
+
+```{python}
+adata.obs
+adata.var
+```
+
+```{python}
+np.unique(adata.X.sum(axis=0) > 5, axis = 1, return_counts=True)
+```
+
+```{python}
+adata.X[0:100,0:10]
+```
+
+
+```{python}
+adata.layers["counts"] = adata.X.copy()
+sf = np.array(adata.layers["counts"].sum(axis=1))
+sf = sf / np.median(sf)
+adata.layers["logcounts"] = sc.pp.log1p(adata.layers["counts"] / sf)
+```
+
+```{python}
+import scanpy.preprocessing._simple as simple
+var = simple._get_mean_var(adata.layers["logcounts"])[1]
+hvgs = var.argpartition(-1000)[-1000:]
+adata = adata[:, hvgs]
+```
+
+
+```{python}
+adata.X = adata.layers["logcounts"]
+sc.pp.pca(adata)
+sc.pp.neighbors(adata)
+sc.tl.umap(adata)
+sc.pl.umap(adata, color=["label", "cell_type"])
+```
+
+```{python}
+# Shuffle the rows of adata
+adata = adata[np.random.permutation(adata.obs.index), :]
+```
+
+```{python}
+import formulaic
+import pandas as pd
+df = pd.DataFrame(adata.obs)
+
+des = formulaic.model_matrix("~ label", df)
+form = formulaic.Formula("~ label")
+```
+
+```{python}
+import patsy
+des2 = patsy.dmatrix("~ label", df)
+des2
+```
+
+```{python}
+from pyLemur.lemur import lemur
+
+extra_data = {"test":  np.random.randint(3, size=adata.shape[0]),
+              "cat": ["ABC"[x] for x in np.random.randint(3, size=adata.shape[0])]}
+fit = lemur(adata, design = ["label"], obs_data=extra_data)
+```
+
+```{python}
+sc.pp.neighbors(fit, use_rep="embedding")
+sc.tl.umap(fit)
+sc.pl.umap(fit, color=["label", "cat", "cell_type"])
+```
+
+```{python}
+coord = fit_pca(adata.layers["logcounts"].toarray(), n = 15, center = False).coord_system
+coord2 = fit_pca(adata.layers["logcounts"].toarray(), n = 15, center = False).coord_system
+print(grassmann_angle_from_point(coord2.T, coord.T))
+```
+
+
+```{python}
+from pyLemur.lin_alg_wrappers import *
+from pyLemur.grassmann import *
+
+fit = lemur(adata, design = "~ label", linear_coefficient_estimator="zero")
+V_slice1 = fit.uns["lemur"]["coefficients"][:,:,0]
+V_slice2 = fit.uns["lemur"]["coefficients"][:,:,1]
+
+coord_all = fit_pca(adata.X.toarray(), n = 15, center = False).coord_system
+coord_ctrl = fit_pca(adata.X[adata.obs["label"] == "ctrl", :].toarray(), n = 15, center = False).coord_system
+coord_stim = fit_pca(adata.X[adata.obs["label"] == "stim", :].toarray(), n = 15, center = False).coord_system
+
+print(grassmann_angle_from_point(fit.uns["lemur"]["base_point"].T, coord_all.T))
+print(grassmann_angle_from_point(grassmann_map(V_slice1.T, fit.uns["lemur"]["base_point"].T), coord_ctrl.T))
+print(grassmann_angle_from_point(grassmann_map((V_slice1 + V_slice2).T, fit.uns["lemur"]["base_point"].T), coord_stim.T))
+```
+
+
+
+```{python}
+from pyLemur.predict import *
+
+fit.uns["lemur"]["design_matrix"]
+
+```
+
+```{python}
+pred_stim = predict(fit, new_condition = cond(fit, label = "stim", cat = "B"))
+pred_ctrl = predict(fit, new_condition = cond(fit, label = "ctrl", cat = "B"))
+delta = pred_stim - pred_ctrl
+```
+
+```{python}
+gene = 3
+fit.obs["delta"] = delta[:,gene]
+fit.obs["expr"] = fit.layers["logcounts"][:,gene].toarray()
+
+import matplotlib.pyplot as plt
+sc.pl.umap(fit, color="delta", cmap = plt.get_cmap("seismic"), vcenter=0)
+
+sc.pl.umap(fit[fit.obs["label"] == "ctrl"], color="expr", vmax = 2)
+sc.pl.umap(fit[fit.obs["label"] == "stim"], color="expr", vmax = 2)
+```
+
+```{python}
+```
+
+```{python}
+import harmonypy
+ho = harmonypy.run_harmony(fit.obsm["embedding"], fit.obs, "label")
+fit.obsm["harmony"] = ho.Z_corr.T
+ho.cl
+nei = sc.pp.neighbors(fit, use_rep="harmony")
+sc.tl.umap(fit)
+sc.pl.umap(fit, color=["label", "delta", "cell_type"])
+```
+
+
+```{python}
+from pyLemur.alignment import *
+align_with_harmony(fit)
+```
+
+```{python}
+ho = harmonypy.run_harmony(fit.obsm["embedding"], fit.obs, "label")
+
+from pyLemur.alignment import *
+
+ho = init_harmony(fit.obsm["embedding"], fit.uns["lemur"]["design_matrix"])
+ho.cluster()
+```
+
+```{python}
+A = np.hstack([np.ones((5, 2)), np.zeros((5, 6))])
+B  = np.arange(8).reshape((8, 1))
+multiply_along_axis(A, B.T, axis = 1)
+```
+
+```{python}
+nei = sc.pp.neighbors(fit, use_rep="new_embedding")
+sc.tl.umap(fit)
+sc.pl.umap(fit, color=["label", "delta", "cell_type"])
+```

@@ -1,0 +1,102 @@
+---
+title: "Compare implementation directly against R"
+author: Constantin Ahlmann-Eltze
+format:
+    html:
+        code-fold: false
+        embed-resources: true
+        highlight-style: github
+        toc: true
+        code-line-numbers: true
+execute:
+  keep-ipynb: true
+jupyter: python3
+---
+
+
+```{python}
+%load_ext autoreload
+%autoreload 2
+```
+
+
+```{python}
+import debugpy
+debugpy.listen(5678)
+print("Waiting for debugger attach")
+debugpy.wait_for_client()
+```
+
+
+```{python}
+import numpy as np
+import scanpy as sc
+import pertpy
+
+adata = pertpy.data.kang_2018()
+adata.layers["counts"] = adata.X.copy()
+```
+
+
+```{python}
+sc.pp.normalize_total(adata, target_sum = 1e4, inplace=True)
+sc.pp.log1p(adata)
+adata.layers["logcounts"] = adata.X.copy()
+sc.pp.highly_variable_genes(adata, n_top_genes=1000, flavor="cell_ranger")
+adata = adata[:, adata.var.highly_variable]
+adata
+```
+
+
+```{python}
+import pylemur
+model = pylemur.tl.LEMUR(adata, design = "~ label", n_embedding=15, layer = "logcounts")
+model.fit()
+model.align_with_harmony()
+print(model)
+```
+
+
+```{python}
+ctrl_pred = model.predict(new_condition=model.cond(label="ctrl"))
+model.cond(label = "stim") - model.cond(label = "ctrl")
+```
+
+```{python}
+model.embedding.shape
+model.adata
+```
+
+```{python}
+# groups = np.array([np.nan] * fit.shape[0])
+# groups[fit.obs["cell_type"] == "CD4 T cells"] = 1
+# groups[fit.obs["cell_type"] == "NK cells"] = 2
+# groups[fit.obs["cell_type"] == "Dendritic cells"] = 3
+import pandas as pd
+groups = fit.obs["cell_type"]
+groups[np.array([0,9,99])] = pd.NA
+
+np.unique(groups.to_numpy())
+```
+
+```{python}
+fit2 = fit.copy()
+fit2 = pylemur.tl.align_with_grouping(fit2, groups)
+```
+
+
+```{python}
+fit2.obsm["embedding"][0:3, 0:3].T
+fit2.obsm["embedding"][24600:24603,0:3].T
+```
+
+```{python}
+pred_ctrl = pylemur.tl.predict(fit2, new_condition=pylemur.tl.cond(fit2, label = "ctrl"))
+pred_ctrl[0:3,0:3].T
+```
+
+
+```{python}
+np.savetxt("/var/folders/dc/tppjxs9x6ll378lq88lz1fm40000gq/T//Rtmpm5PTRh/pred_ctrl.tsv", pred_ctrl, delimiter="\t")
+np.savetxt("/var/folders/dc/tppjxs9x6ll378lq88lz1fm40000gq/T//Rtmpm5PTRh/embedding.tsv", fit2.obsm["embedding"], delimiter="\t")
+```
