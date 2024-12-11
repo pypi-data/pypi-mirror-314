@@ -1,0 +1,164 @@
+{
+  "$defs": {
+    "OptimizerConfig": {
+      "properties": {
+        "model": {
+          "description": "Model configuration dictionary specifying the model name, parameters, and other settings used during optimization.",
+          "title": "Model",
+          "type": "object"
+        }
+      },
+      "required": [
+        "model"
+      ],
+      "title": "OptimizerConfig",
+      "type": "object"
+    },
+    "PromptConfig": {
+      "properties": {
+        "identifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier for a prompt from the hub repository. Mutually exclusive with prompt_str.",
+          "title": "Identifier"
+        },
+        "prompt_str": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Raw prompt string to optimize locally. Mutually exclusive with identifier.",
+          "title": "Prompt Str"
+        },
+        "model_config": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Configuration dictionary specifying model parameters for optimization.",
+          "title": "Model Config"
+        },
+        "which": {
+          "default": 0,
+          "description": "Index of the message to optimize within the prompt.",
+          "title": "Which",
+          "type": "integer"
+        }
+      },
+      "title": "PromptConfig",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "dataset": {
+      "title": "Dataset",
+      "type": "string"
+    },
+    "initial_prompt": {
+      "$ref": "#/$defs/PromptConfig"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "",
+      "title": "Description"
+    },
+    "evaluator_descriptions": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Evaluator Descriptions"
+    },
+    "baseline_experiment": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Baseline Experiment"
+    },
+    "optimizer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/OptimizerConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optimization configuration specifying model settings and hyperparameters. If None, default configuration will be used."
+    },
+    "evaluators": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Import path to evaluator functions in format 'file_path:variable_name'. The functions should evaluate prompt quality.\n\nExample:\n    ./task/evaluators.py:evaluators",
+      "title": "Evaluators"
+    },
+    "system": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Import path to system configuration in format 'file_path:variable_name'. Defines how prompts are executed.\n\nExample:\n    ./task/my_system.py:chain",
+      "title": "System"
+    }
+  },
+  "required": [
+    "name",
+    "dataset",
+    "initial_prompt",
+    "evaluators"
+  ],
+  "title": "Config",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
