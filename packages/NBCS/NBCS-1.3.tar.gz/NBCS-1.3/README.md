@@ -1,0 +1,153 @@
+# NBCS (Nested barycentric coordinate system)
+
+**Version:** 1.2  
+**License:** MIT License  
+**Author:** Amit Ronen
+**Email:** erankfmn@gmail.com  
+
+## Overview
+
+NBCS (Non-Binary Classification System) is a Python package that implements an adaptive classification and regression system using simplicial complexes. The package provides a novel approach to handling both binary and multi-class classification problems, as well as regression tasks, by adaptively creating a simplicial decomposition of the feature space.
+
+The package extends scikit-learn's base estimator and transformer interfaces, making it compatible with scikit-learn's ecosystem while providing unique capabilities for handling complex classification boundaries and non-linear regression problems.
+
+## Features
+
+- **Adaptive Classification:** Automatically adjusts the complexity of the decision boundary based on the data
+- **Simplicial Complex Construction:** Creates an optimal decomposition of the feature space
+- **Multiple Learning Modes:**
+  - Barry fitting mode for general purpose learning
+  - Adaptive fitting mode for classification tasks
+- **Regression Support:** Handles complex regression problems with piece-wise linear approximations
+- **Visualization Tools:** Built-in functions for plotting decision boundaries and regression results
+- **Scikit-learn Compatible:** Implements scikit-learn's BaseEstimator and TransformerMixin interfaces
+
+## Installation
+
+You can install the package directly from PyPI using pip:
+
+```bash
+pip install nbcs
+```
+
+## Usage
+
+### Classification Example
+
+```python
+import numpy as np
+from nbcs import NBCS
+from sklearn.svm import SVC
+
+# Create and fit the NBCS model
+model = NBCS(C=1000, k=4)
+embedder = model.fit(X, y)
+
+# Transform the data
+points = embedder.transform(X)
+
+# Use with any sklearn classifier
+clf = SVC(kernel='linear')
+clf.fit(points, y)
+```
+
+### Regression Example
+
+```python
+from nbcs import NBCS
+from sklearn.linear_model import LinearRegression
+
+# Create and fit the NBCS model
+model = NBCS(k=3)
+embedder = model.fit_barry(X)
+
+# Transform the data
+points = embedder.transform(X)
+
+# Use with any sklearn regressor
+reg = LinearRegression()
+reg.fit(points, y)
+```
+
+## Parameters
+
+- **C:** Regularization parameter (default=1)
+- **k:** Number of refinement steps (default=1)
+
+## Available Methods
+
+- `fit(X, y)`: Fits the model using adaptive mode
+- `fit_barry(X, y)`: Fits the model using barry mode
+- `add_point(point)`: Adds a new point to the simplicial complex
+
+
+## Visualization
+
+The package includes several visualization tools:
+
+```python
+from nbcs.utils import make_meshgrid, plot_contours
+
+# Create mesh grid for visualization
+xx, yy = make_meshgrid(X[:, 0], X[:, 1])
+
+# Plot decision boundaries
+plot_contours(ax, clf, xx, yy, xy)
+```
+
+## Dependencies
+
+- numpy
+- scipy
+- scikit-learn
+- matplotlib
+
+## Examples
+
+### Classification with Regular Polytope
+
+```python
+import numpy as np
+from nbcs import NBCS
+from sklearn.svm import SVC
+
+# Generate synthetic data
+N = 1000
+D = 2  # dimension
+X = np.random.normal(0, 1, (N, D))
+y = np.ones(N)
+
+# Create and fit model
+model = NBCS(C=1000, k=4)
+embedder = model.fit(X, y)
+```
+
+### Regression with Multiple Lines
+
+```python
+import numpy as np
+from nbcs import NBCS
+from sklearn.linear_model import LinearRegression
+
+# Generate synthetic data
+x = np.linspace(0, 30, 60).reshape(-1, 1)
+y = np.sin(x/10) + np.random.normal(0, 0.1, x.shape)
+
+# Create and fit model
+model = NBCS(k=3)
+embedder = model.fit_barry(x)
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+
+- scikit-learn for providing the foundational tools for machine learning in Python
+- numpy and scipy for numerical computations
+- matplotlib for data visualization
+
+## Contact
+
+If you have any questions or suggestions, feel free to reach out at erankfmn@gmail.com
