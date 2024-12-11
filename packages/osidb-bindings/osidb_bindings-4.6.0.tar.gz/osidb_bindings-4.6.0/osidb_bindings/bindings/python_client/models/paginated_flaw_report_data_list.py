@@ -1,0 +1,106 @@
+from typing import Any, Dict, List, Type, TypeVar, Union
+
+import attr
+
+from ..models.flaw_report_data import FlawReportData
+from ..types import UNSET, OSIDBModel, Unset
+
+T = TypeVar("T", bound="PaginatedFlawReportDataList")
+
+
+@attr.s(auto_attribs=True)
+class PaginatedFlawReportDataList(OSIDBModel):
+    """ """
+
+    count: int
+    results: List[FlawReportData]
+    next_: Union[Unset, None, str] = UNSET
+    previous: Union[Unset, None, str] = UNSET
+    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        count = self.count
+        results: List[Dict[str, Any]] = UNSET
+        if not isinstance(self.results, Unset):
+            results = []
+            for results_item_data in self.results:
+                results_item: Dict[str, Any] = UNSET
+                if not isinstance(results_item_data, Unset):
+                    results_item = results_item_data.to_dict()
+
+                results.append(results_item)
+
+        next_ = self.next_
+        previous = self.previous
+
+        field_dict: Dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        if not isinstance(count, Unset):
+            field_dict["count"] = count
+        if not isinstance(results, Unset):
+            field_dict["results"] = results
+        if not isinstance(next_, Unset):
+            field_dict["next"] = next_
+        if not isinstance(previous, Unset):
+            field_dict["previous"] = previous
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
+        count = d.pop("count", UNSET)
+
+        results = []
+        _results = d.pop("results", UNSET)
+        if _results is UNSET:
+            results = UNSET
+        else:
+            for results_item_data in _results or []:
+                _results_item = results_item_data
+                results_item: FlawReportData
+                if isinstance(_results_item, Unset):
+                    results_item = UNSET
+                else:
+                    results_item = FlawReportData.from_dict(_results_item)
+
+                results.append(results_item)
+
+        next_ = d.pop("next", UNSET)
+
+        previous = d.pop("previous", UNSET)
+
+        paginated_flaw_report_data_list = cls(
+            count=count,
+            results=results,
+            next_=next_,
+            previous=previous,
+        )
+
+        paginated_flaw_report_data_list.additional_properties = d
+        return paginated_flaw_report_data_list
+
+    @staticmethod
+    def get_fields():
+        return {
+            "count": int,
+            "results": List[FlawReportData],
+            "next": str,
+            "previous": str,
+        }
+
+    @property
+    def additional_keys(self) -> List[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties
