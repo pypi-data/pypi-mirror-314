@@ -1,0 +1,128 @@
+[build-system]
+requires = [
+    "setuptools>=64",
+    "setuptools_scm>=8",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "pylunar"
+authors = [
+    {name = "Michael Reuter", email = "mareuternh@gmail.com"}
+]
+description = "Information for completing the Astronomical League's Lunar and Lunar II observing programs."
+readme = "README.rst"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "ephem==4.1.6",
+    "importlib-resources==6.4.5;python_version<'3.10'",
+    "typing-extensions==4.12.2;python_version<'3.10'",
+    "pytz==2024.2"
+]
+
+[project.urls]
+Documentation = "http://pylunar.readthedocs.io"
+Repository = "https://github.com/mareuter/pylunar"
+
+[project.optional-dependencies]
+dev = [
+    "pylunar[build,docs,lint,test]",
+    "scriv==1.5.1",
+    "tox==4.23.2"
+]
+test = [
+    "coverage[toml]==7.6.9",
+    "pytest==8.3.3",
+]
+lint = [
+    "pre-commit==4.0.1"
+]
+build = [
+    "build==1.2.2.post1",
+    "twine==5.1.1"
+]
+docs = [
+    "sphinx~=7.1",
+    "sphinx_rtd_theme==3.0.2"
+]
+
+[tool.setuptools_scm]
+
+[tool.ruff]
+exclude = [
+    "docs/**",
+    "scripts/startup.py"
+
+]
+lint.ignore = [
+    "D104"
+]
+line-length = 110
+lint.select = [
+    "B",
+    "D",
+    "E",
+    "F",
+    "I",
+    "SIM",
+    "UP",
+    "W"
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/pylunar/__init__.py" = [
+    "E402",
+    "F401",
+    "F403"
+]
+"tests/**" = [
+    "D101",
+    "D102",
+    "D103",
+]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 79
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.numpydoc_validation]
+checks = [
+    "all",   # report on all checks, except the below
+    "EX01",
+    "SA01",
+    "ES01",
+    "GL01",
+    "SS05"
+]
+exclude = [
+    "test_*",
+    "__init__",
+    "conf",
+    "startup"
+]
+
+[tool.scriv]
+entry_title_template = "{{ version }} ({{ date.strftime('%Y-%m-%d') }})"
+output_file = "HISTORY.${config:format}"
+rst_header_chars = "+^"
