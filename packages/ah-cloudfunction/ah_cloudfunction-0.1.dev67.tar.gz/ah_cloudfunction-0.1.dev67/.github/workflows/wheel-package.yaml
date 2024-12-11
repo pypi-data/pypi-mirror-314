@@ -1,0 +1,135 @@
+#Build python wheel package and pushes it to gcloud artifactory
+
+name: "Build-Publish-Wheel-Package"
+
+on:
+  workflow_call:
+    inputs:
+      repoName:
+        default: ''
+        required: false
+        type: string
+      branchName:
+        default: ''
+        required: false
+        type: string
+      python_version:
+        default: '3.9'
+        required: true
+        type: string
+      skip_tests:
+        default: true
+        required: false
+        type: boolean 
+      skip_publish:
+        default: false
+        required: false
+        type: boolean 
+      version:
+        required: false
+        type: string
+        default: ''
+    secrets:
+      PROVIDER_NAME:
+        required: true
+      SA_EMAIL:
+        required: true
+      GCP_ARTIFACTORY_URL:
+        required: true
+      GCP_ARTIFACTORY_USERNAME:
+        required: true  
+      GCP_ARTIFACTORY_TOKEN:
+        required: false
+      HDO_GITHUB_APP_PEM:
+        required: true
+      HDO_GITHUB_APP_ID:
+        required: true
+
+env:
+  GCP_ARTIFACTORY_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+jobs:
+  build:
+    name: Build Wheel Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Get Token for workflow
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }}
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+      - name: Checkout ${{ inputs.repoName }} Repo
+        if: ${{ inputs.version == '' }}
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: ${{ inputs.repoName }}
+          path: ${{ inputs.repoName }}
+          ref: ${{ inputs.branchName }}
+
+      - name: Checkout ${{ inputs.repoName }} Repo Tag
+        if: ${{ inputs.version != '' }}
+        uses: actions/checkout@v4.1.5
+        with:
+          repository: ${{ inputs.repoName }}
+          token: ${{steps.get_workflow_token.outputs.token}}
+          ref: ${{ inputs.version }}
+          path: ${{ inputs.repoName }}
+
+      - name: Auth GCP Service Account
+        id: auth-gcp
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+          service_account: ${{ secrets.SA_EMAIL }}     
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: 'Install dependencies'
+        run: |
+          python -m pip install --upgrade pip setuptools setuptools-scm pylint keyring keyrings.google-artifactregistry-auth twine pytest pipenv
+
+      - name: Get access token
+        run: |
+          GCP_ARTIFACTORY_TOKEN="$(gcloud auth print-access-token)"
+          echo "::add-mask::$GCP_ARTIFACTORY_TOKEN"
+          echo "GCP_ARTIFACTORY_TOKEN=${GCP_ARTIFACTORY_TOKEN}" >> $GITHUB_ENV
+          
+      - name: 'Build or Install'
+        working-directory: ${{ inputs.repoName }}
+        run: |
+            pipenv install --dev
+
+      - name: Run unit test cases
+        if: ${{ inputs.skip_tests == false }}
+        working-directory: ${{ inputs.repoName }}
+        run: |
+            pipenv run pytest 
+
+      - name: 'Wheel Packaging'
+        working-directory: ${{ inputs.repoName }}
+        run: |
+             pip wheel --no-deps . -w dist
+
+      - name: Upload package to PyPI
+        if: ${{ inputs.skip_publish == false }}
+        working-directory: ${{ inputs.repoName }}
+        env:
+          TWINE_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+          TWINE_PASSWORD: ${{ env.GCP_ARTIFACTORY_TOKEN }}
+          TWINE_REPOSITORY_URL: ${{ secrets.GCP_ARTIFACTORY_URL }}
+          # TWINE_REPOSITORY_URL: "//artifactregistry.googleapis.com/projects/thdp-hds-shrd-artifacts-25d4/locations/northamerica-northeast1/repositories/northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory"
+
+        run: |
+          twine upload dist/*
