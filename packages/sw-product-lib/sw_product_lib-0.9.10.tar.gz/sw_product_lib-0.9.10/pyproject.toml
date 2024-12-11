@@ -1,0 +1,43 @@
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+use_parentheses = true
+lines_after_imports = 2
+lines_before_imports = 0
+include_trailing_comma = true
+color_output = true
+
+[tool.flake8]
+max-line-length = 88
+per-file-ignores = ["__init__.py:F401", "./docs/*:E402"]
+
+[tool.poetry]
+name = "sw-product-lib"
+version = "0.9.10"
+description = "Python library for Strangeworks products to interact with the Strangeworks Platform"
+authors = ["Strangeworks Devs <hello@strangeworks.com>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+gql = "^3.4.1"
+fastapi = "^0.115.0"
+python-jose = { extras = ["cryptography"], version = "^3.3.0" }
+strangeworks-core = "^0.3.10"
+deprecated = "^1.2.13"
+google-auth = "^2.29.0"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^5.0.4"
+pre-commit = "^2.20.0"
+types-requests = "^2.28.10"
+Flake8-pyproject = "^1.1.0"
+black = "^22.3.0"
+isort = "^5.10.1"
+pytest = "^7.1.2"
+python-dotenv = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
