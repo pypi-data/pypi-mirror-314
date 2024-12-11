@@ -1,0 +1,19 @@
+{% load form_helpers %}
+
+<form action="{{ form_url }}" method="post">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h5 class="modal-title">Sorry!</h5>
+  </div>
+  <div class="modal-body">
+    <p>Sorry, due to an outstanding issue with NetBox Core we are unable to delete an ingestion. <a href="https://github.com/netbox-community/netbox/issues/13640" target="_blank">Issue Number 13422</a></p>
+    {% render_form form %}
+  </div>
+  <div class="modal-footer">
+    {% if return_url %}
+      <a href="{{ return_url }}" class="btn btn-outline-secondary">Cancel</a>
+    {% else %}
+      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+    {% endif %}
+  </div>
+</form>
