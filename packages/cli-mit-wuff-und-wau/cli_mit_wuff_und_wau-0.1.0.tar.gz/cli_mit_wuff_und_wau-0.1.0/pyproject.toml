@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cli-mit-wuff-und-wau"
+version = "0.1.0"
+description = "A CLI tool and library for Zürich's dog registry analysis and management"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+keywords = ["CLI", "dog registry", "statistics", "random generation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "build>=1.2.2.post1",
+    "click>=8.1.7",
+    "mypy>=1.13.0",
+    "pillow>=11.0.0",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+    "rich>=13.9.4",
+    "ruff>=0.8.1",
+    "setuptools>=75.6.0",
+    "types-requests>=2.32.0.20241016",
+    "wheel>=0.45.1",
+]
+
+[tool.setuptools]
+packages = ["cli-mit-wuff-und-wau"]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[project.scripts]
+wuff = "project_name.wuff:wuff"
+
+[tool.ruff]
+select = ["E", "F", "W", "I", "A", "C"]
+target-version = "py312"
+fixable = ["E", "W", "I"]
+line-length = 88
+exclude = [
+    "__pycache__",
+    "build",
+    "dist",
+    "*.egg-info",
+]
+
+[tool.mypy]
+strict = true
+files = "src"
+python_version = 3.12
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
