@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: NNimaker
+Version: 3.0
+Summary: A module for processing user data to NN input
+Home-page: https://gitlab.hpc.cineca.it/msafari1/nnimaker.git
+Author: Mandana Safari
+Author-email: m.safari@cineca.it
+License: UNKNOWN
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+# Neural Network inputs maker
+
+The comprehensive documentation can be found in readthedocs.org platform [Link](https://nnimaker.readthedocs.io/en/latest/index.html).
+
+### Description
+ This python package will detect the output of other codes (still Quantum Espresso) and create a `json` file that can be used as the raw input for Neural Networks. 
+## Prerequisite 
+The python libraries which are needed to install:
+```
+numpy,
+pandas,
+json2,
+collection,
+collections.abc,
+glob2
+```
+### Other codes and necessary files:
+
+**QE output (mandetory)**
+User have to provide a Quantum ESPRESSO output (PWSCF) as a necessary ingredient for this package!
+The folder that includes this file, should be specify with argument `--folder [directory]` in runtime!
+
+**Platform or supercomputer (mandetory)**
+Supercomputer should be identified with argument `--platform [supercompure name]` in runtime too! 
+
+There is no other necessary inputs, but optional one!
+
+**SYSINFO.JSON (optional!)**
+The user can improve the hardware information from the utilized flatform or supercomputer. 
+This information can be provided as a JSON file with this keywords:
+        `"Platform": platform,
+        "CPU": cpu_model,
+        "Node": node_info,
+        "Memory": f"{total_memory_gb:.2f} GB DDR4 RAM" `
+Although in order to avoid error, we recommend to use `IDENTIKEEP` [plugin](https://github.com/msafari0/Identikeep) for generating the JSON file.
+This JSON file sould be named `sysinfo.json` (default name for IDENTIKEEP output) and placed in the same directory as of QE output.
+
+
+## How to install
+#### Method 1:
+Installation is based on **Python Package Index** (PyPI) repository.
+```
+pip install NNimaker
+```
+
+#### Method 2:
+However, if you prefer to create the wheel of package on your laptop, you just need to download the source code from the origin [repository](https://gitlab.com/msafari0/nnimaker) . Then follow the path below to create the wheel on your system and then install it.
+(Note that you may need use virtual environment to install the necessary packages)
+```
+pip install setuptools wheel
+python setup.py sdist bdist_wheel
+pip install dist/NNimaker-<VERSION>-py3-none-any.whl 
+```
+## How to USE
+It is possible to use terminal commands ( The console point is provided).
+Since it supports just Quantum Espresso output (till this moment), the command is:
+```
+NNimake_QE  --folder [DIRECTORY] --outname [OUTPUT] --platform [SUPERCOMPUTER] --algname [ALGORITHM]
+```
+All of the arguments have default values. Default for directory is `./` , Default for output name is `data.json`, Default for platform is `Leonardo-booster` and Default for algorithm name is `davidson`. 
+For example, I put the `sysinfo.json` and output file of QE in `../work/` directory. The command line would be:
+```
+NNimake_QE --folder ../work/ --platform "Leonardo-booster"
+```
+You can import the package in your python code directly:
+```
+from NNimaker import create_json
+
+create_json("../work", outname="data.json", platform="Leonardo-booster", algoname='davidson')
+```
+Good luck!
+
+
