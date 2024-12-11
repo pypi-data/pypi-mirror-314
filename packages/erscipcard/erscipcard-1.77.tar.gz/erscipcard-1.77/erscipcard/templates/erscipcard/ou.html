@@ -1,0 +1,304 @@
+{% load static %}
+{% load basepath %}
+<!DOCTYPE html>
+<html lang="fa" dir="RTL">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>سامانه صدور کارت</title>
+
+    
+
+    <!-- Bootstrap core CSS -->
+<link href="{% static 'bt/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'bt/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'bt/css/font-awesome.min.css' %}" rel="stylesheet">
+<link href="{% static 'spinners.css' %}" rel="stylesheet">
+<!--//# sourceMappingURL=bootstrap.bundle.min.js.map -->
+
+	 <!-- Favicons  -->
+<link rel="icon" href="{% static 'bt/pics/favicon.ico' %}">
+
+    <style>
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+.modal-dialog {
+  max-width: max-content !important;
+}
+
+.modal-body {
+  display: flex;
+}
+
+.modal-body img {
+  object-fit: contain;
+}
+</style>
+
+    
+    <!-- Custom styles for this template -->
+    
+  </head>
+<body id="page-top" class="rtl">
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark " id="mainNav">
+		<div class="container">
+			<a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static 'bt/pics/logo.png' %}" alt="" height="36"> <span> سامانه صدور کارت </span> </a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				{% if request.user.is_authenticated %}
+				<ul class="navbar-nav ml-auto my-2 my-lg-0">
+				    <li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="#" onclick="loadershow();window.open('/erscipcard/signup','_self');">افزودن پرسنل</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="#" onclick="loadershow();window.open('/erscipcard/userlist','_self');">مدیریت پرسنل</a>
+					</li>
+					 <li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						کاربردها
+						</a>
+					  <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+					    <li> <a class="dropdown-item " href="#" onclick="loadershow();window.open('/erscipcard/printcard','_self');"  >چاپ تمام کارتها</a>	    </li>
+					    <li> <a class="dropdown-item " href="#" onclick="$('#cardpn').modal('show');"  >چاپ یک یا چند کارت</a>	    </li>
+					    <li> <a class="dropdown-item " href="#" onclick="loadershow();window.open('/erscipcard/printalluser','_self');"  > چاپ لیست پرسنل</a>	    </li>
+					    <li><hr class="dropdown-divider"></li>
+						<li> <a class="dropdown-item " href="{% static '/1.docx' %}">دانلود فایل نمونه پرینت کارت</a>	    </li>
+					    <li> <a class="dropdown-item " href="{% static '/2.docx' %}">دانلود فایل نمونه کاربران</a>	    </li>
+						<li> <a class="dropdown-item " href="#" onclick="loadershow();window.open('/erscipcard/uploadtpl','_self');">آپلود فایل نمونه</a>	    </li>
+					  </ul>
+					</li>
+				</ul>
+				<ul class="navbar-nav me-auto ">
+					<li class="nav-item dropdown">
+					  <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						{{request.user.last_name}} <i class="fa fa-user"></i>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown2">
+						<li><a class="dropdown-item" href="#" onclick="loadershow();window.open('/erscipcard/changepass','_self');" > تغییر رمز عبور  </a></li>
+						<li><hr class="dropdown-divider"></li>
+						<li><a href="/erscipcard/logout" class="dropdown-item " > خروج  </a></li>
+					  </ul>
+					</li>
+				</ul>
+				{% endif %}
+			</div>
+		</div>
+	</nav>
+
+	 <main class="container">
+  
+		<div class="bg-light p-5 rounded">
+				{% if request.user.is_authenticated %}
+				{% if var1 == 1 %}
+					<div class="col-lg-8 align-self-baseline">
+						<p class="text-white-75 font-weight-light mb-5">{{ memo }} </p>
+						<a class="btn btn-primary btn-xl js-scroll-trigger" href="#" onclick="loadershow();window.open('/erscipcard/userlist','_self');">  لیست پرسنل</a>
+					</div>
+				{% elif var1 == 2 %}
+				<form  class="row" id="login" method="post" enctype="multipart/form-data" action="/erscipcard/{{dest}}/" >
+				    {% csrf_token %}
+							<input type="hidden" name="idnum" id="idnum" value={{idx}} />
+				            {% for field in form %}
+					        <div class="col-md-3 mb-3" >
+								{{ field.label_tag }}
+							</div>
+							<div class="col-md-3 mb-3" >
+								{{ field}}
+							</div>
+							{% endfor %}
+					<div class="col-12 mb-3">
+					    <button class="btn btn-primary btn-xl ">ذخیره</button>
+                    </div>
+				</form>
+				{% elif var1 == 3 %}
+				
+				<form  class="mb-3" id="login" method="post"  enctype="multipart/form-data" action="/erscipcard/userlist/" >
+					{% csrf_token %}
+					<div class="input-group">
+						<div class="col-sm-2">
+						<input class="form-control" type="text" name="idnum" id="idnum" value="{{data}}" />
+						</div>
+						<div class="input-group-append">
+							<input class="btn btn-primary"  type="submit"  value="جستجو" />	
+						</div>
+					</div>
+				</form>
+				
+			
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-hover" id="userTable">
+						<tr>
+						<th  onclick="sortTable(0)" >شماره کارت</th>
+						<th  onclick="sortTable(1)" >نام و نام خانوادگی</th>
+						<th  onclick="sortTable(2)" >شماره پرسنلی</th>
+						<th>کد ملی</th>
+						<th> تاریخ اعتبار </th>
+						<th>تصویر</th>
+						<th></th>
+						<th></th>
+						</tr>
+						{% for i in userlist %}
+						<tr>
+						<td>{{i.id}}</td>
+						<td>{{i.name}}</td>
+						<td>{{i.personeli}}</td>
+						<td>{{i.melli}}</td>
+						<td>{{i.etebar}}</td>
+						<td><a href="#" onclick="showpic({{i.id}});" ><i class="fa fa-picture-o" aria-hidden="true"></i></a></td>
+						<td><a class="btn btn-primary" href="#" onclick="loadershow();window.open('/erscipcard/edituser?id={{i.id}}','_self');">ویرایش</a></td>
+						<td><a class="btn btn-danger" href="#" onclick="loadershow();window.open('/erscipcard/deluser?id={{i.id}}','_self');">پاک شود</a></td>
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+					
+				{% elif var1 == 7 %}
+					<form  class="row" id="login" method="post" enctype="multipart/form-data" action="/erscipcard/uploadtpl/" >
+				    {% csrf_token %}
+				    <div class="col-12 mb-3">
+				            <label for="file">آپلود فایل نمونه کارت:</label>
+							<input type="file" name="file" id="file"  />
+				    </div>
+					<div class="col-12 mb-3">
+				            <label for="file2">آپلود فایل نمونه لیست کاربران:</label> 
+							<input type="file" name="file2" id="file2"  />
+				    </div>
+					<div class="col-12 mb-3">
+					    <button class="btn btn-primary btn-xl ">آپلود</button>
+                    </div>
+				</form>
+				{% endif %}
+				{% else %}
+                <div class="col-lg-12 align-self-end">
+					<h1 id='ajaxctl' class="text-uppercase text-white font-weight-bold">خوش آمدید   </h1>
+					<a class="btn btn-primary btn-xl js-scroll-trigger" href="#" onclick="loadershow();window.open('/erscipcard/signin','_self');">وارد شوید</a>				    
+				</div>
+				{% endif %}
+		</div>
+	</main>
+
+	{% if request.user.is_authenticated %}
+    <!-- Modal -->
+    <div class="modal bottom fade" id="cardpn" tabindex="-1" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-frame modal-bottom ">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">چاپ یک یا چند کارت</h5>            
+          </div>
+          <div class="modal-body">
+			<form  id="login" method="GET" enctype="multipart/form-data" action="/erscipcard/printcard2/" >
+				{% csrf_token %}
+				<div class="col-md-12 mb-3" >
+					<input type="input" class="form-control" name="fromprn" id="fromprn"  />
+				</div>
+				<div class="col-md-12 mb-3" >
+					<input type="input" class="form-control" name="toprn" id="toprn"  />
+				</div>
+				<div class="col-md-12 mb-3" >
+                    <input type="radio" id="wordfile" name="ftype" value="2"/>
+                    <label for="wordfile">فایل Word</label>
+                    <input type="radio" id="pdffile" name="ftype" value="1"/>
+                    <label for="pdffile">فایل Pdf</label>
+                </div>
+				<div class="col-md-12 mb-3" >
+					<input type="submit" class="btn btn-primary ml-3"   value="ارسال" />
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+				</div>
+			</form>
+		  </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal 2  {backdrop:'static', keyboard: false , show: true } -->
+    <div class="modal bottom fade" tabindex="-1"  id="loader" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-frame modal-bottom text-center">
+            <span class="ball-loader"></span>
+        </div>
+    </div>
+	<!-- Modal 3 -->
+    <div class="modal modal-dialog-scrollable  bottom fade" id="canvasshowpic" tabindex="-1" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-frame modal-bottom ">
+        <div class="modal-content">
+          <div class="modal-body">
+			<img id="showpicimg" width="200px" src="" />
+		  </div>
+        </div>
+      </div>
+    </div>
+	{% endif %}
+
+    <!--Bootstrap core JavaScript -->
+	<script src="{% static 'bt/js/jquery.min.js' %}"></script>
+    <script src="{% static 'bt/js/bootstrap.bundle.min.js' %}"></script>
+	{{ form.media }}
+      
+    
+    <script>        
+    document.querySelectorAll('form').forEach(form => form.addEventListener('submit', loadershow));
+    window.addEventListener("unload", loaderhide);
+    document.addEventListener("DOMContentLoaded", loaderhide);
+    function loadershow () {
+        $('#loader').modal('show');
+    }
+    function loaderhide () {
+        $('#loader').modal('hide');    
+	}		
+	function showpic(picid){
+		let request = new XMLHttpRequest();
+		let method = 'GET';
+		//let query = document.getElementById("searchText").value;
+		let url = '/erscipcard/showpic/' + picid;
+		request.open(method, url);
+		request.onload = function () {
+			let html = request.response;
+			document.getElementById("showpicimg").src = html;
+			//window.open(html,'_self');
+			$("#canvasshowpic").modal('show'); 
+		};
+		request.send();			
+	}
+
+	function sortTable(z) {
+	  var table, rows, switching, i, x, y, shouldSwitch;
+	  table = document.getElementById("userTable");
+	  switching = true;
+	  /*Make a loop that will continue until
+	  no switching has been done:*/
+	  while (switching) {
+		//start by saying: no switching is done:
+		switching = false;
+		rows = table.rows;
+		/*Loop through all table rows (except the
+		first, which contains table headers):*/
+		for (i = 1; i < (rows.length - 1); i++) {
+		  //start by saying there should be no switching:
+		  shouldSwitch = false;
+		  /*Get the two elements you want to compare,
+		  one from current row and one from the next:*/
+		  x = rows[i].getElementsByTagName("TD")[z];
+		  y = rows[i + 1].getElementsByTagName("TD")[z];
+		  //check if the two rows should switch place:
+		  if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+			//if so, mark as a switch and break the loop:
+			shouldSwitch = true;
+			break;
+		  }
+		}
+		if (shouldSwitch) {
+		  /*If a switch has been marked, make the switch
+		  and mark that a switch has been done:*/
+		  rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+		  switching = true;
+		}
+	  }
+	}
+    </script>
+
+</body>
+</html>
