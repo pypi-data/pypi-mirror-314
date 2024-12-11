@@ -1,0 +1,94 @@
+[project]
+name = "levdist"
+dynamic = []
+description = "Package to calculate the Levenstein distance"
+authors = [
+    { name = "Dmitry Erlikh", email = "derlih@gmail.com" },
+]
+dependencies = []
+requires-python = ">=3.9"
+readme = "README.md"
+keywords = [
+    "levenstein",
+    "edit distance",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Typing :: Typed",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+version = "0.1.7"
+
+[project.license]
+text = "MIT"
+
+[project.urls]
+Homepage = "https://github.com/derlih/levdist"
+Issues = "https://github.com/derlih/levdist/issues"
+
+[build-system]
+requires = [
+    "pdm-backend",
+    "setuptools<72.2.0",
+]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+run-setuptools = true
+
+[tool.pdm.version]
+source = "scm"
+
+[tool.pdm.scripts]
+test = "pytest"
+lint = "pre-commit run --all-files"
+mypy = "mypy src"
+benchmark = "python benchmark.py"
+
+[tool.pdm.scripts.test-cov]
+composite = [
+    "pytest --cov src",
+    "python -m coverage xml",
+]
+
+[tool.mypy]
+strict = true
+exclude = [
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "tests",
+    "__init__.py",
+]
+
+[tool.cibuildwheel]
+test-requires = "pytest"
+test-command = "pytest {project}/tests"
+
+[dependency-groups]
+benchmark = [
+    "pylev>=1.4.0",
+    "Levenshtein>=0.25.1",
+    "python-Levenshtein>=0.25.1",
+    "leven>=1.0.4; python_version <= \"3.10\"",
+    "typer>=0.15.1",
+]
+test = [
+    "pytest>=8.3.4",
+    "coverage>=7.6.1",
+    "pytest-cov>=5.0.0",
+]
+lint = [
+    "pre-commit>=3.5.0",
+    "mypy>=1.13.0",
+]
