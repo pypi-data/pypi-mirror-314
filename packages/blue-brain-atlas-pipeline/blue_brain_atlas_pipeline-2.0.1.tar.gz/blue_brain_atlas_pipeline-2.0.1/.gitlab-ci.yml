@@ -1,0 +1,305 @@
+image: python:3.10
+
+include:
+  - project: dke/apps/templates/job-templates
+    file: job-templates.yml
+  - project: cs/gitlabci-templates
+    file: /build-image-using-kaniko.yml
+
+stages:
+  - unit-test
+  - update-dag
+  - nexus_synchronization
+  - deploy_image
+  - convert_and_deployToBB5
+  - generate_doc
+  - deploy_doc
+  - run-pipeline
+  - post_nexus_registration
+  - update_BMO
+
+variables:
+  DOC_DIR: "doc"
+  DAG_DIR: "$DOC_DIR/source/figures"
+  DOC: "generated/html"
+  DEV_BRANCH: "develop"
+  REPO_PUSH_TOKEN: $REPO_PUSH_TOKEN
+  COMMIT_SHA: $CI_COMMIT_SHA
+  FINAL_PIPELINE_STEP: "push_atlas_datasets"
+  PROJ84_GPFS: "/gpfs/bbp.cscs.ch/data/project/proj84"
+  IMAGES_DIR: "$PROJ84_GPFS/atlas_singularity_images"
+  PIPELINE_RUNS: "$PROJ84_GPFS/atlas_pipeline_runs"
+  TIMESTAMP: "$CI_COMMIT_TIMESTAMP"
+  IMAGE_PATH: "$IMAGES_DIR/${CI_PROJECT_NAME}_${REGISTRY_IMAGE_TAG}-${TIMESTAMP}.sif"
+  IMAGE_LINK: "${CI_PROJECT_NAME}_${REGISTRY_IMAGE_TAG}.sif"
+  IMAGE_LINK_PATH: "${IMAGES_DIR}/${IMAGE_LINK}"
+  SERVICE_TOKEN_SETTINGS: "SERVICE_TOKEN=True TOKEN_USERNAME=$SERVICE_TOKEN_USERNAME TOKEN_PASSWORD=$SERVICE_TOKEN_PASSWORD"
+  # Helper vars useful for manual job customization ('False' or '0' would be parsed as a string: "0")
+  EXPORT_MESHES: ""
+  NEXUS_REGISTRATION: ""
+  TARGET_RULE: "$FINAL_PIPELINE_STEP"
+
+.tag_variables: &tag_vars
+  CI_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE
+  REGISTRY_IMAGE_TAG: $CI_COMMIT_TAG
+  IS_PROD_ENV: 1
+  NEXUS_TOKEN: '$NEXUS_PROD_TOKEN'
+
+.dev_varibales: &dev_vars
+  CI_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE
+  REGISTRY_IMAGE_TAG: dev
+  IS_PROD_ENV: ""  # 0 would be parsed as a string: "0"
+  NEXUS_TOKEN: '$NEXUS_STAGING_TOKEN'
+
+.deploy_rules:
+  rules:
+    - if: $CI_COMMIT_TAG != null
+      when: on_success
+      variables: *tag_vars
+    - if: $CI_COMMIT_BRANCH == $DEV_BRANCH
+      when: on_success
+      variables: *dev_vars
+
+.deploy_rules_manual:
+  rules:
+    - if: $CI_COMMIT_TAG != null
+      when: manual
+      variables: *tag_vars
+    - if: $CI_COMMIT_BRANCH == $DEV_BRANCH
+      when: manual
+      variables: *dev_vars
+
+.add_staging_SSL:
+  script:
+    - CA_BUNDLE=$(python3 -c "import certifi; print(certifi.where())")
+    - echo "$BBP_CA_CERT" >> $CA_BUNDLE
+    - export SSL_CERT_FILE=$CA_BUNDLE
+
+.git_setup:
+  - git remote add gitlab https://ci:$REPO_PUSH_TOKEN@bbpgitlab.epfl.ch/dke/apps/blue_brain_atlas_pipeline
+  - git fetch gitlab $DEV_BRANCH
+  - git config user.name "$COMMIT_SHA"
+  - git config user.email "bbp-ou-dke@groupes.epfl.ch"
+
+.load_singularity_module:
+  - echo "Load the singularity module:"
+  - module load unstable singularityce
+
+
+unit_test:
+  stage: unit-test
+  extends: .unit-tests
+  before_script:
+    - pip install .[dev]
+    - export PYTHONPATH=.:$PYTHONPATH
+  script:
+    #- !reference [.add_staging_SSL, script]
+    - !reference [.unit-tests, script]
+  variables:
+    SRC_PROJECT: '$CI_PROJECT_PATH'
+    TEST_FOLDER: 'tests'
+    NEXUS_STAGING_TOKEN: '$NEXUS_STAGING_TOKEN'
+    KUBERNETES_MEMORY_LIMIT: 8Gi
+    KUBERNETES_MEMORY_REQUEST: 8Gi
+
+update_dags:
+  stage: update-dag
+  rules:
+    - changes:
+        paths:
+          - snakefile
+        #compare_to: 'refs/heads/develop'
+      when: manual
+    - when: manual
+  before_script:
+    - apt update
+    - apt-get -y install graphviz
+    - pip install .[dev]
+    - !reference [.git_setup]
+  script:
+    - git status
+    - echo "Update DAG"
+    - snakemake  --config SERVICE_TOKEN=True TOKEN_USERNAME=$SERVICE_TOKEN_USERNAME TOKEN_PASSWORD=$SERVICE_TOKEN_PASSWORD  --dag  $FINAL_PIPELINE_STEP > $DAG_DIR/dag_push_atlas.gv
+    - dot -Tsvg $DAG_DIR/dag_push_atlas.gv > $DAG_DIR/dag_push_atlas.svg
+    - echo "Update detailed DAG"
+    - snakemake  --config SERVICE_TOKEN=True TOKEN_USERNAME=$SERVICE_TOKEN_USERNAME TOKEN_PASSWORD=$SERVICE_TOKEN_PASSWORD  --filegraph  $FINAL_PIPELINE_STEP > $DAG_DIR/dag_push_atlas_fg.gv
+    - dot -Tsvg $DAG_DIR/dag_push_atlas_fg.gv > $DAG_DIR/dag_push_atlas_fg.svg
+    - echo "Commit updated DAGs"
+    - git add $DAG_DIR/dag_push_atlas*
+    - git diff-index --quiet HEAD  ||  git commit -m "Update DAGs"
+    - git status
+    - git push gitlab HEAD:$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+  allow_failure: true
+
+
+# Update Nexus Resources
+nexus-synchronization:
+  stage: nexus_synchronization
+  extends:
+    - .deploy_rules
+  tags:
+    - bb5_map
+  variables:
+    NEXUS_STAGING_TOKEN: '$NEXUS_STAGING_TOKEN'
+    NEXUS_IDS_PATH: "nexus_ids.json"
+    METADATA_DIR: "metadata"
+    FILE_NEXUS_ID_MAP: "file_nexus_map.json"
+  before_script:
+    - !reference [.git_setup]
+  script:
+    - module load unstable python/3.9.18
+    - python3.9 -m venv venv_python3.9
+    - source venv_python3.9/bin/activate
+    - pip install "nexusforge>=0.8.2"
+    - python synch_nexus.py
+  after_script:
+    - |- 
+      if [ $CI_COMMIT_BRANCH == $DEV_BRANCH ]; then
+        git checkout --track gitlab/$DEV_BRANCH
+        git add $NEXUS_IDS_PATH $METADATA_DIR/$FILE_NEXUS_ID_MAP
+        git diff-index --quiet HEAD  ||  git commit -m "Update $NEXUS_IDS_PATH"
+        git push gitlab $DEV_BRANCH
+      fi
+  allow_failure: true
+
+# Build image for pipeline
+update-pipeline-image:
+  stage: deploy_image
+  extends:
+    - .build-image-using-kaniko
+    - .deploy_rules
+  allow_failure: true
+  variables:
+    BUILD_PATH: $CI_PROJECT_DIR
+    KANIKO_EXTRA_ARGS: "--build-arg REF_NAME=$REGISTRY_IMAGE_TAG"
+    KUBERNETES_MEMORY_LIMIT: 4Gi
+    KUBERNETES_MEMORY_REQUEST: 4Gi
+  before_script:
+    - export IFS=''
+
+# Generate documentation and stores the artifact under doc/generated/html
+generate-documentation:
+  stage: generate_doc
+  rules:
+      - if: $CI_COMMIT_TAG != null  || $CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_MERGE_REQUEST_IID || $CI_COMMIT_MESSAGE =~ /DRAFT$/
+        when: on_success
+        allow_failure: true
+  before_script:
+    - pip install -r requirements_doc.txt
+  script: sphinx-build -T --keep-going -b html -c ./$DOC_DIR/source -D language=en ./$DOC_DIR/source $DOC_DIR/$DOC
+  artifacts:
+    paths:
+      - $DOC_DIR/$DOC
+  variables:
+    KUBERNETES_MEMORY_LIMIT: 4Gi
+    KUBERNETES_MEMORY_REQUEST: 4Gi
+
+# Executes deployment of project documentation to bbp-dke-staging Openshift
+deploy-documentation-in-registry:
+  stage: deploy_doc
+  extends: .build-image-using-kaniko
+  dependencies:
+    - generate-documentation
+  rules:
+      - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "master"'
+        when: on_success
+        variables:
+          CI_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/sphinx-documentation-prod
+      - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $DEV_BRANCH'
+        when: on_success
+        variables:
+          CI_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/sphinx-documentation-dev
+  variables:
+    CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
+    REGISTRY_IMAGE_TAG: $CI_COMMIT_SHORT_SHA-$(date +%s)
+    BUILD_PATH: $CI_PROJECT_DIR/$DOC_DIR
+    KANIKO_EXTRA_ARGS: "--build-arg CI_PROJECT_DIR=$CI_PROJECT_DIR  --build-arg DOC_DIR=$DOC_DIR  --build-arg DOC_PATH=$DOC"
+
+# Convert Docker to Singularity image and deploy in BB5
+convert_and_deploy:
+  stage:
+    convert_and_deployToBB5
+  extends:
+    - .deploy_rules
+  allow_failure: true
+  needs:
+    - update-pipeline-image
+  when: on_success
+  tags:
+    - bb5_map
+  variables:
+    bb5_constraint: nvme
+    bb5_cpus_per_task: 2
+    bb5_memory: 4G
+    bb5_duration: "10:00"
+  before_script:
+    - !reference [.load_singularity_module]
+  script:
+    - bash convert_singularity_image.sh
+
+run_pipeline:
+  stage:
+    run-pipeline
+  extends:
+    - .deploy_rules_manual
+  needs: []  # Allows the job to start without waiting for prior stages
+  tags:
+    - bb5_map
+  before_script:
+    - !reference [.load_singularity_module]
+  script:
+    - cat <<EOF | singularity shell  --mount "type=bind,source=$PROJ84_GPFS,destination=$PROJ84_GPFS"  $IMAGE_LINK_PATH
+    - set -e
+    - export PYTHONPATH=$PIPELINE_REPO:$PYTHONPATH
+    - snakemake  --snakefile $CUSTOM_PIPELINE/custom_snakefile  --configfile $PIPELINE_REPO/config.yaml  --config TARGET_RULE=$TARGET_RULE USER_CONFIG=$CUSTOM_PIPELINE/user_config.json REPO_PATH=$PIPELINE_REPO $SERVICE_TOKEN_SETTINGS  --unlock   # in case a previous pipeline failed ("the remaining lock was likely caused by a kill signal or a power loss")
+    - bbp-atlas  --target-rule $TARGET_RULE  --user-config-path $CUSTOM_PIPELINE/user_config.json  --repo-path $PIPELINE_REPO  --service-token  --token-username $SERVICE_TOKEN_USERNAME  --token-password $SERVICE_TOKEN_PASSWORD  --snakemake-options '--configfile $PIPELINE_REPO/config.yaml  --config $SERVICE_TOKEN_SETTINGS WORKING_DIR=$PIPELINE_OUTPUT IS_PROD_ENV=$IS_PROD_ENV EXPORT_MESHES=$EXPORT_MESHES RESOURCE_TAG=$RESOURCE_TAG NEXUS_REGISTRATION=$NEXUS_REGISTRATION  --cores $SNAKEMAKE_CORES  $EXTRA_SNAKEMAKE_OPTIONS'
+    - EOF
+  after_script:
+    - |- 
+      if [ ! -z "$CI_COMMIT_TAG" ]; then
+        ln -s -r $PIPELINE_OUTPUT $PIPELINE_RUNS/$CI_COMMIT_TAG
+      fi
+  timeout: 8 hours
+  variables:
+    PIPELINE_REPO: /pipeline/$CI_PROJECT_NAME  # set in the Dockerfile
+    CUSTOM_PIPELINE: $PIPELINE_REPO/customize_pipeline
+    PIPELINE_OUTPUT: $PIPELINE_RUNS/$TIMESTAMP
+    SNAKEMAKE_CORES: 70
+    bb5_cpus_per_task: 70
+    bb5_memory: 0
+    bb5_duration: "8:00:00"
+    bb5_exclusive: full
+
+validate_atlas_release:
+  stage: post_nexus_registration
+  rules:
+    - !reference [.deploy_rules, rules]
+    - when: manual
+      allow_failure: true
+  before_script:
+    - pip install "nexusforge>=0.8.1"
+    - pip install "blue-brain-data-push>=3.0.1"
+  script:
+    python $TEST_FOLDER/validate_atlas_release.py
+  variables:
+    TEST_FOLDER: 'tests'
+    RESOURCE_TAG: '$RESOURCE_TAG'
+
+create_BMO_MR:
+  stage: update_BMO
+  extends:
+    - .deploy_rules_manual
+  rules:
+    - when: manual
+      allow_failure: true
+  needs:
+    - job: validate_atlas_release
+      optional: true
+  before_script:
+    - pip install .
+  script:
+    - python create_BMO_MR.py
+  variables:
+    ATLAS_PARCELLATION_ONTOLOGY_ID_PROD: "https://bbp.epfl.ch/neurosciencegraph/data/0518dd0b-cbc7-43ef-a75f-45631059c8c5"
+    ATLAS_PARCELLATION_ONTOLOGY_ID_STAGING: "https://bbp.epfl.ch/neurosciencegraph/data/ontologies/34388d3b-0b88-4deb-9686-6fcd9ef8990e"
+    RESOURCE_TAG: '$RESOURCE_TAG'
