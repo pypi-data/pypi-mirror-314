@@ -1,0 +1,32 @@
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+    "Cython>=3.0.11",
+    "numpy >=2.2.0",
+]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "zig-zag"
+version = "0.2.2"
+description = "Zig Zag indicator"
+authors = ["hjkim17 <ouiqdmw17@gmail.com>", "pakchu <gus4734@gmail.com>"]
+readme = "README.md"
+packages = [{include = "zig_zag"}]
+include = [
+    { path = "zigzag/**/*.so", format = "wheel" },
+    { path = "zigzag/**/*.pyx" },
+    { path = "zigzag/**/*.pyd" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+cython = "^3.0.11"
+numpy = "^2.2.0"
+pandas = "^2.2.3"
+pandas-ta = "^0.3.14b0"
+
+
+[tool.poetry.build]
+generate-setup-file = false
+script = "build.py"
