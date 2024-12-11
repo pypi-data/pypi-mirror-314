@@ -1,0 +1,40 @@
+[project]
+name = "cool-lib-forked-1"
+version = "1.9.1"
+description = "simplest example in the python world"
+license = { text="MIT" }
+dependencies = []
+
+[project.urls]
+homepage = "https://github.com/myTestOrg0/hello-world-python-package"
+repository = "https://github.com/myTestOrg0/hello-world-python-package"
+
+[tool.setuptools]
+# data to be included is specified in MANIFEST.in
+include-package-data = true
+
+[tool.setuptools.packages]
+find = {}
+
+[project.scripts]
+cool-cmd = "cool_lib.__main__:main"
+
+[project.optional-dependencies]
+tests = [
+  "coverage",
+  "pytest",
+]
+ci = [
+  "black",
+  "flake8",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "tests",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py37']
+include = '\.pyi?$'
