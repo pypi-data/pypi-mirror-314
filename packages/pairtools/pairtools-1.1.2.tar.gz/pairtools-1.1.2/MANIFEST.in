@@ -1,0 +1,23 @@
+include README.md
+include CHANGES.md
+include LICENSE
+include pyproject.toml
+include pytest.ini
+
+graft tests
+graft doc
+prune doc/_build
+prune doc/_templates
+
+global-include *.pyx
+global-include *.pxd
+global-exclude *.c
+global-exclude *.cpp
+
+global-exclude __pycache__/*
+global-exclude *.so
+global-exclude *.pyd
+global-exclude *.pyc
+global-exclude .git*
+global-exclude .deps/*
+global-exclude .DS_Store
