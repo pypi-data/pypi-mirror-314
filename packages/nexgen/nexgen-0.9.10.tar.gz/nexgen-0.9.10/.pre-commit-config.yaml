@@ -1,0 +1,30 @@
+repos:
+
+# Automatic source code formatting
+- repo: https://github.com/psf/black
+  rev: 24.1.1
+  hooks:
+  - id: black
+    args: [--safe, --quiet]
+
+
+# Linter
+- repo: local
+  hooks:
+    - id: ruff
+      name: Run ruff
+      stages: [commit]
+      language: system
+      entry: ruff check
+      types: [python]
+
+
+# Other syntax checks
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.3.0
+  hooks:
+  - id: check-ast
+  - id: check-yaml
+  - id: check-merge-conflict
+  - id: check-added-large-files
+    args: ['--maxkb=200']
