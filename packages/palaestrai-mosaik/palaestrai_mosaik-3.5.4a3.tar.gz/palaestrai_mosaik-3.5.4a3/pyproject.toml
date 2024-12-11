@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "palaestrai-mosaik"
+dynamic = ["version"]
+authors = [{name="The ARL Developers", email="stephan.balduin@offis.de"}]
+description = "Mosaik Environment for palaestrAI."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "midas-mosaik>=2.0.0a7",
+    "midas-palaestrai>=3.5.4a1",
+    "mosaik",
+    "mosaik-api",
+    "palaestrai~=3.5.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "build",
+    "coverage",
+    "pytest",
+    "setuptools",
+    "sphinx",
+    "twine",
+]
+
+[project.urls]
+"Homepage" = "http://docs.palaestr.ai"
+"Bug Tracker" = "https://gitlab.com/arl2/palaestrai-mosaik/-/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "palaestrai_mosaik.__version__"}
+
+[tool.black]
+line-length = 79

@@ -1,0 +1,52 @@
+uid: "Minimal Midas Experiment Run"
+seed: 0
+version: 3.5.3
+schedule:
+  - the_one_and_only_phase:
+      environments:
+        - environment:
+            uid: midas
+            name: palaestrai_mosaik:MosaikEnvironment
+            params:
+              module: midas_palaestrai:Descriptor
+              description_func: describe
+              instance_func: get_world
+              arl_sync_freq: 1
+              end: 10
+              params:
+                name: midas_minimal
+                config: tests/fixtures/minimal_midas.yml
+                step_size: 1
+          reward: 
+            name: midas_palaestrai.rewards:GridHealthReward
+            params: {}
+      agents:
+        - name: minimal_defender
+          brain: 
+            name: palaestrai.agent.dummy_brain:DummyBrain
+            params: {}
+          muscle:
+            name: palaestrai.agent.dummy_muscle:DummyMuscle
+            params: {}
+          objective: 
+            name: palaestrai.agent.dummy_objective:DummyObjective
+            params: {"params": 1}
+          sensors:
+            - midas.Powergrid-0.0-bus-1.vm_pu
+            - midas.Powergrid-0.0-bus-2.vm_pu
+          actuators:
+            - midas.Powergrid-0.0-sgen-0-2.p_mw
+            - midas.Powergrid-0.0-sgen-1-3.p_mw
+      simulation:
+        name: palaestrai.simulation:TakingTurns
+        conditions:
+          - name: palaestrai.simulation:VanillaSimControllerTerminationCondition
+            params: {}
+      phase_config:
+        mode: train
+        worker: 1
+        episodes: 1
+run_config: 
+  condition:
+    name: palaestrai.experiment:VanillaRunGovernorTerminationCondition
+    params: {}

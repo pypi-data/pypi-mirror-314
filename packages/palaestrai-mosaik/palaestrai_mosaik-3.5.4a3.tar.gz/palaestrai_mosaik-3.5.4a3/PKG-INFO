@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: palaestrai-mosaik
+Version: 3.5.4a3
+Summary: Mosaik Environment for palaestrAI.
+Author-email: The ARL Developers <stephan.balduin@offis.de>
+Project-URL: Homepage, http://docs.palaestr.ai
+Project-URL: Bug Tracker, https://gitlab.com/arl2/palaestrai-mosaik/-/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: midas-mosaik>=2.0.0a7
+Requires-Dist: midas-palaestrai>=3.5.4a1
+Requires-Dist: mosaik
+Requires-Dist: mosaik-api
+Requires-Dist: palaestrai~=3.5.0
+Provides-Extra: dev
+Requires-Dist: black; extra == "dev"
+Requires-Dist: build; extra == "dev"
+Requires-Dist: coverage; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: setuptools; extra == "dev"
+Requires-Dist: sphinx; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+
+# Adversarial Resilience Learning --- Mosaik Environment
+
+This projects contains the interface between palaestrAI and mosaik, 
+the mosaik environment.
+
+## Introduction
+
+This package allows to use worlds created with the co-simulation 
+framework mosaik as environment in palaestrAI. The package was 
+developed with MIDAS in mind but should work for arbitrary mosaik
+worlds. See documenation for more details on how to import a world.
+
+## Installation
+
+palaestrAI-mosaik is written in Python. Use, preferable in a
+virtual environment:
+
+```bash
+pip install .
+```
+
+or, for development including Midas:
+
+```bash
+pip install -e .[dev,midas]
+```
+
+Alternatively, you can install it from pypi:
+
+```bash
+pip install palaestrai-mosaik
+```
+
+## Usage
+
+Under tests, you find the `example_experiment_midas.yml` that should be
+passed to the palaestrai command line interface::
+
+```bash
+palaestrai experiment-start /path/to/tests/example_experiment_midas.yml
+```

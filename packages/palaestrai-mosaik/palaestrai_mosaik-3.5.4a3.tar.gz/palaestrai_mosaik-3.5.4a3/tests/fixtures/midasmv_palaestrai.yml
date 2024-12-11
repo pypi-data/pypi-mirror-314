@@ -1,0 +1,61 @@
+midas_palaestrai:
+  modules:
+    - store
+    - powergrid
+    - sndata
+    - comdata
+    - weather
+    - der
+  step_size: 15*60
+  start_date: 2009-01-01 00:00:00+0100
+  end: 1*24*60*60
+  store_params:
+    filename: midasmv_with_arl.hdf5
+  powergrid_params:
+    midasmv:
+      gridfile: midasmv
+  sndata_params:
+    midasmv:
+      randomize_data: True
+      randomize_cos_phi: True
+      active_mapping:
+        1: [[Land_0, 1.0], [Land_2, 1.0], [Land_3, 2.0], [Land_6, 2.0], [Land_7, 1.0]]
+        3: [[Land_2, 1.0], [Land_3, 1.0], [Land_6, 1.0], [Land_7, 1.0]]
+        4: [[Land_0, 2.0], [Land_3, 2.0], [Land_7, 1.0]]
+        5: [[Land_3, 2.0], [Land_7, 1.0]]
+        6: [[Land_0, 2.0], [Land_3, 1.0]]
+        7: [[Land_0, 2.0], [Land_2, 1.0], [Land_3, 2.0], [Land_7, 1.0]]
+        8: [[Land_0, 1.0], [Land_3, 1.0], [Land_6, 1.0]]
+        9: [[Land_2, 1.0], [Land_3, 1.0], [Land_6, 2.0], [Land_7, 1.0]]
+        10: [[Land_0, 2.0], [Land_2, 1.0], [Land_3, 1.0], [Land_6, 2.0], [Land_7, 1.0]]
+        11: [[Land_0, 1.0], [Land_2, 1.0], [Land_3, 1.0], [Land_6, 2.0], [Land_7, 1.0]]
+  comdata_params:
+    midasmv:
+      interpolate: True
+      randomize_data: True
+      randomize_cos_phi: True
+      active_mapping:
+        13: [[SuperMarket, 3.0]]
+        14: [[SmallHotel, 2.0]]
+  weather_params:
+    bremen:
+      weather_mapping:
+        WeatherCurrent:
+          - interpolate: True
+            randomize: True
+  der_params:
+    midasmv:
+      grid_name: midasmv
+      mapping:
+        3: [[PV, 1.31]]
+        4: [[PV, 1.2]]
+        5: [[PV, 1.29]]
+        6: [[PV, 1.26]]
+        7: [[PV, 1.01]]
+        8: [[PV, 0.69]]
+        9: [[PV, 1.02]]
+        11: [[PV, 1.26]]
+        13: [[PV, 1.38]]
+        14: [[PV, 0.83]]
+      weather_provider_mapping:
+        PV: [bremen, 0]
