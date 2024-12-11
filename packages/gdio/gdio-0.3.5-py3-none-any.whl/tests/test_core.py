@@ -1,0 +1,112 @@
+from datetime import datetime
+from gdio.commons import near_yx2
+from gdio.core import gdio
+import os
+import sys
+import unittest
+
+import numpy as np
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+
+class TestNcFiles(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        self.ds = gdio(verbose=False)
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
+        self.ds.mload(
+            [
+                f'{base_path}/data/era5_20191226-27_lev.grib',
+                f'{base_path}/data/era5_20191227_lev.nc',
+                f'{base_path}/data/era5_2019122712_lev.hdf',
+                f'{base_path}/data/missing.nc',
+            ],
+            merge_files=True,
+            uniformize_grid=True,
+            cut_domain=(-30, 300, 10, 320),
+            cut_time=(1, 3),
+            rename_vars={'t': 't2m'},
+            inplace=True
+        )
+
+    def setUp(self):
+        self.expected_dim = (1, 6, 7, 160, 80)
+        self.expected_ref_time = datetime(2019, 12, 26, 0, 0)
+        self.expected_times = [datetime(2019, 12, 26, 12, 0), datetime(2019, 12, 27, 0, 0),
+                               datetime(2019, 12, 27, 12, 0), datetime(2019, 12, 27, 12, 0),
+                               datetime(2019, 12, 28, 12, 0), datetime(2019, 12, 29, 12, 0)]
+        self.missing_time = [datetime(2019, 12, 29, 12, 0)]
+        self.expected_coordinate = ([26], [53])
+        self.expected_levels = [200, 300, 500, 700, 800, 950, 1000]
+        self.expected_level_type = ['isobaricInhPa']
+        self.expected_units = 'm s**-1'
+        self.expected_variables = sorted(['ref_time', 'time_units', 'time', 'r', 't2m', 'u', 'v'])
+        self.expected_corrcoef = 0.94
+        self.expected_sel = (1, 1, 4, 6, 18)
+
+    def test_open_multiples_files(self):
+        self.assertTrue(not self.ds.dataset is [])
+
+    def test_variables_test(self):
+        self.assertEqual(sorted(self.ds.dataset[0].keys()), self.expected_variables,
+                         'incorrect number of variables')
+
+    def test_variables_rename(self):
+        self.assertFalse(list(self.ds.dataset[0].keys()) in self.expected_variables,
+                         'variable rename fail')
+
+    def test_varible_dimension(self):
+        self.assertEqual(self.ds.dataset[0].get('u').isobaricInhPa.value.shape, self.expected_dim,
+                         'dimension shape of u variable incorrect')
+
+    def test_levels(self):
+        self.assertEqual(self.ds.dataset[0].get('u').isobaricInhPa.level, self.expected_levels,
+                         'levels of u variable incorrect')
+
+    def test_level_type(self):
+        self.assertEqual(self.ds.dataset[0].get('u').level_type, self.expected_level_type,
+                         'level type of u variable incorrect')
+
+    def test_varible_units(self):
+        self.assertEqual(self.ds.dataset[0].get('u').parameter_units, self.expected_units,
+                         'units of u variable incorrect')
+
+    def test_ref_time(self):
+        self.assertEqual(self.ds.dataset[0].get('ref_time'), self.expected_ref_time,
+                         'incorrect ref_time')
+
+    def test_cut_time(self):
+        self.assertListEqual(list(self.ds.dataset[0].get('time')), self.expected_times,
+                             'incorrect time cut')
+
+    def test_missing_time(self):
+        self.assertTrue(self.missing_time in self.ds.dataset[0].get('time'),
+                             'incorrect time cut')
+
+    def test_interpolation(self):
+        a = self.ds.dataset[0].get('u').isobaricInhPa.value[0, 2, -1].flatten()
+        b = self.ds.dataset[0].get('u').isobaricInhPa.value[0, 3, -1].flatten()
+
+        corrcoef = np.corrcoef(np.nan_to_num(a), np.nan_to_num(b))[0, 1]
+
+        self.assertTrue(corrcoef > self.expected_corrcoef,
+                        'incorrect interpolation (corrcoef={0:0.4f})'.format(corrcoef))
+
+    def test_cut_space(self):
+        self.assertEqual(near_yx2({'latitude': self.ds.dataset[0].get('u').latitude,
+                                  'longitude': self.ds.dataset[0].get('u').longitude},
+                                 lats=-23.54, lons=-46.64), self.expected_coordinate,
+                         'problem with the spatial dimension')
+
+    def test_select_coords(self):
+        sub_set = self.ds.sel(dates=[datetime(2019, 12, 26, 12, 0)],
+                              latitude=[-23.54, -22], longitude=[-46.64, -42.2], level=[2, 6])
+
+        self.assertEqual(sub_set[0].get('u').isobaricInhPa.value.shape, self.expected_sel,
+                         'dimension shape of u variable incorrect')
+
+
+if __name__ == '__main__':
+    unittest.main()
