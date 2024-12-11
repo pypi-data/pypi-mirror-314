@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "address"
+      },
+      "additionalProperties": {
+        "type": "boolean",
+        "$comment": "bool"
+      }
+    },
+    "invoices": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "address"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "invoice": {
+            "type": "string",
+            "$comment": "bytes"
+          },
+          "subjkt": {
+            "type": "string",
+            "$comment": "bytes"
+          }
+        },
+        "required": [
+          "invoice",
+          "subjkt"
+        ],
+        "additionalProperties": false,
+        "$comment": "pair"
+      }
+    },
+    "manager": {
+      "type": "string",
+      "$comment": "address"
+    },
+    "metadata": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "string"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "$comment": "bytes"
+      }
+    },
+    "registries": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "address"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "$comment": "bytes"
+      }
+    },
+    "subjkts": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "bytes"
+      },
+      "additionalProperties": {
+        "type": "boolean",
+        "$comment": "bool"
+      }
+    },
+    "subjkts_metadata": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "bytes"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "$comment": "bytes"
+      }
+    }
+  },
+  "required": [
+    "entries",
+    "invoices",
+    "manager",
+    "metadata",
+    "registries",
+    "subjkts",
+    "subjkts_metadata"
+  ],
+  "additionalProperties": false,
+  "$comment": "pair"
+}

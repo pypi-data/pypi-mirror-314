@@ -1,0 +1,28 @@
+spec_version: 3.0
+package: asdf
+
+contracts:
+  asdf:
+    kind: tezos
+    address: KT1DykwBRr4GGN88GNKNKzrTH4VjhRRUHrkg
+    typename: asdf
+
+datasources:
+  tzkt:
+    kind: tezos.tzkt
+    url: https://api.hangzhou2net.tzkt.io
+    http:
+      replay_path: ${DIPDUP_REPLAY_PATH:-}
+
+indexes:
+  asdf:
+    kind: tezos.operations
+    datasources:
+      - tzkt
+    contracts:
+      - asdf
+    handlers:
+      - callback: on_default
+        pattern:
+          - destination: asdf
+            entrypoint: default

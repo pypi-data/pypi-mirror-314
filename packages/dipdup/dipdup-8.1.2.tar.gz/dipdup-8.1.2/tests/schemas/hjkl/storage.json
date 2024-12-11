@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "object",
+        "properties": {
+          "string": {
+            "type": "string",
+            "$comment": "string"
+          },
+          "nat": {
+            "type": "string",
+            "$comment": "nat"
+          }
+        },
+        "required": [
+          "string",
+          "nat"
+        ],
+        "additionalProperties": false,
+        "$comment": "pair"
+      },
+      "value": {
+        "type": "object",
+        "properties": {
+          "sw": {
+            "oneOf": [
+              {
+                "type": "string",
+                "$comment": "int"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "$comment": "option"
+          },
+          "mr": {
+            "oneOf": [
+              {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "$comment": "int"
+                },
+                "additionalProperties": {
+                  "type": "boolean",
+                  "$comment": "bool"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "$comment": "option"
+          }
+        },
+        "required": [
+          "sw",
+          "mr"
+        ],
+        "additionalProperties": false,
+        "$comment": "pair"
+      }
+    },
+    "required": [
+      "key",
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "$comment": "map"
+}

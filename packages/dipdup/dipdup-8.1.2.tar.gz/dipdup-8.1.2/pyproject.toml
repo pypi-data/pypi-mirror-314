@@ -1,0 +1,214 @@
+[project]
+name = "dipdup"
+description = "Modular framework for creating selective indexers and featureful backends for dapps"
+version = "8.1.2"
+authors = [
+    { name = "Lev Gorodetskii", email = "dipdup@drsr.io" },
+    { name = "Vladimir Bobrikov", email = "vladimir_bobrikov@pm.me" },
+    { name = "Michael Zaikin", email = "mz@baking-bad.org" },
+    { name = "Igor Sereda", email = "sereda.igor.s@gmail.com" },
+]
+maintainers = [
+    { name = "Lev Gorodetskii", email = "dipdup@drsr.io" },
+    { name = "Vladimir Bobrikov", email = "vladimir_bobrikov@pm.me" },
+    { name = "Igor Sereda", email = "sereda.igor.s@gmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+keywords = [
+    "api",
+    "backend",
+    "blockchain",
+    "crypto",
+    "cryptocurrencies",
+    "dapp",
+    "ethereum",
+    "evm",
+    "framework",
+    "indexer",
+    "indexers",
+    "starknet",
+    "sdk",
+    "smart-contracts",
+    "tezos",
+    "web3",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Typing :: Typed",
+]
+dependencies = [
+    "aiohttp~=3.10",
+    "aiolimiter~=1.1",
+    "anyio~=4.4",
+    "appdirs~=1.4",
+    "APScheduler~=3.10",
+    "async-lru~=2.0",
+    "asyncpg~=0.29",
+    "click~=8.1",
+    "datamodel-code-generator~=0.26",
+    "eth-abi~=5.0",
+    "lru-dict~=1.3",
+    "orjson~=3.10",
+    "prometheus-client~=0.20",
+    "pycryptodome~=3.20",
+    "pydantic~=2.9.2",
+    "pyhumps~=3.8",
+    "pysignalr~=1.0",
+    "python-dotenv~=1.0",
+    "python-json-logger~=2.0",
+    "ruamel.yaml~=0.18.6",
+    "sentry-sdk~=2.16",
+    "sqlparse~=0.5",
+    "starknet-py==0.24.0",
+    "strict-rfc3339~=0.7",
+    "survey~=5.4",
+    "tabulate~=0.9",
+    "tortoise-orm==0.21.7",
+    "uvloop~=0.20",
+    "web3~=7.2",
+]
+
+[project.license]
+text = "MIT"
+
+[project.optional-dependencies]
+migrations = [
+    "aerich~=0.7.2",
+]
+
+[project.urls]
+Homepage = "https://dipdup.io/"
+Documentation = "https://dipdup.io/docs"
+Repository = "https://github.com/dipdup-io/dipdup"
+
+[project.scripts]
+dipdup = "dipdup.cli:cli"
+
+[tool.pdm.resolution]
+excludes = [
+    "bip-utils",
+    "ledgerwallet",
+]
+
+[tool.pdm.dev-dependencies]
+lint = [
+    "black",
+    "mypy",
+    "ruff",
+    "types-pytz",
+    "types-tabulate",
+]
+test = [
+    "docker",
+    "pytest",
+    "pytest-aiohttp",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-xdist",
+]
+docs = [
+    "Sphinx",
+    "sphinx-click",
+    "sphinx-markdown-builder",
+    "watchdog",
+]
+perf = [
+    "scalene",
+]
+
+[tool.pdm.build]
+includes = [
+    "src/dipdup",
+]
+
+[tool.black]
+line-length = 120
+target-version = [
+    "py312",
+]
+skip-string-normalization = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = [
+    "E402",
+    "E501",
+    "TC001",
+    "UP040",
+]
+extend-select = [
+    "B",
+    "C4",
+    "FA",
+    "G",
+    "I",
+    "PTH",
+    "Q",
+    "RET",
+    "RUF",
+    "TCH",
+    "UP",
+]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
+multiline-quotes = "double"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = [
+    "dipdup",
+]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = [
+    "pydantic.mypy",
+]
+strict = true
+overrides = [
+    { module = "ruamel", ignore_missing_imports = true },
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov-report=term-missing --cov=dipdup --cov-report=xml -n auto -s -v"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+log_cli_level = "WARNING"
+filterwarnings = [
+    "ignore:RemovedInMarshmallow4Warning",
+    "ignore:has no models",
+]
+
+[tool.coverage.report]
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "raise FrameworkException",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+    "if TYPE_CHECKING:",
+    "if env.DEBUG:",
+]
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"

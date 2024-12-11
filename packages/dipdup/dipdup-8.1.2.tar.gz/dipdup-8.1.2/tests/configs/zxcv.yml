@@ -1,0 +1,28 @@
+spec_version: 3.0
+package: zxcv
+
+contracts:
+  zxcv:
+    kind: tezos
+    address: KT1M2tyRxLyD5svocpnzaKeDM3uUvFRTmkN3
+    typename: zxcv
+
+datasources:
+  tzkt:
+    kind: tezos.tzkt
+    url: https://api.hangzhou2net.tzkt.io
+    http:
+      replay_path: ${DIPDUP_REPLAY_PATH:-}
+
+indexes:
+  zxcv:
+    kind: tezos.operations
+    datasources:
+      - tzkt
+    contracts:
+      - zxcv
+    handlers:
+      - callback: on_default
+        pattern:
+          - destination: zxcv
+            entrypoint: default

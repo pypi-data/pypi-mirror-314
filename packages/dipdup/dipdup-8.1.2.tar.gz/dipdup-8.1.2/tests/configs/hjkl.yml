@@ -1,0 +1,28 @@
+spec_version: 3.0
+package: hjkl
+
+contracts:
+  hjkl:
+    kind: tezos
+    address: KT1WvYvgUhxYEe4NhqqazwXUhUEhcjMcdjHA
+    typename: hjkl
+
+datasources:
+  tzkt:
+    kind: tezos.tzkt
+    url: https://api.hangzhou2net.tzkt.io
+    http:
+      replay_path: ${DIPDUP_REPLAY_PATH:-}
+
+indexes:
+  hjkl:
+    kind: tezos.operations
+    datasources:
+      - tzkt
+    contracts:
+      - hjkl
+    handlers:
+      - callback: on_default
+        pattern:
+          - destination: hjkl
+            entrypoint: default

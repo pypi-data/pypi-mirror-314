@@ -1,0 +1,28 @@
+spec_version: 3.0
+package: yupana
+
+contracts:
+  yupana:
+    kind: tezos
+    address: KT1LTqpmGJ11EebMVWAzJ7DWd9msgExvHM94
+    typename: yupana
+
+datasources:
+  tzkt_testnet:
+    kind: tezos.tzkt
+    url: https://api.hangzhou2net.tzkt.io/
+    http:
+      replay_path: ${DIPDUP_REPLAY_PATH:-}
+
+indexes:
+  yupana:
+    kind: tezos.operations
+    datasources:
+      - tzkt_testnet
+    contracts:
+      - yupana
+    handlers:
+      - callback: on_enter_market
+        pattern:
+          - destination: yupana
+            entrypoint: enterMarket

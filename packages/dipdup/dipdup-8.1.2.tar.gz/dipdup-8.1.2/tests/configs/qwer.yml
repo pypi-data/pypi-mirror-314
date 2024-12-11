@@ -1,0 +1,28 @@
+spec_version: 3.0
+package: qwer
+
+contracts:
+  qwer:
+    kind: tezos
+    address: KT1DX7tM6GPJbzXkqwNN7z8DrsPDcnyuaatk
+    typename: qwer
+
+datasources:
+  tzkt:
+    kind: tezos.tzkt
+    url: https://api.hangzhou2net.tzkt.io
+    http:
+      replay_path: ${DIPDUP_REPLAY_PATH:-}
+
+indexes:
+  qwer:
+    kind: tezos.operations
+    datasources:
+      - tzkt
+    contracts:
+      - qwer
+    handlers:
+      - callback: on_default
+        pattern:
+          - destination: qwer
+            entrypoint: default

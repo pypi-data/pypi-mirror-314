@@ -1,0 +1,455 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "type": "object",
+  "properties": {
+    "storage": {
+      "type": "object",
+      "properties": {
+        "admin": {
+          "type": "string",
+          "$comment": "address"
+        },
+        "ledger": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "$comment": "address"
+                  },
+                  "nat": {
+                    "type": "string",
+                    "$comment": "nat"
+                  }
+                },
+                "required": [
+                  "address",
+                  "nat"
+                ],
+                "additionalProperties": false,
+                "$comment": "pair"
+              },
+              "value": {
+                "type": "string",
+                "$comment": "nat"
+              }
+            },
+            "required": [
+              "key",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "$comment": "address"
+                  },
+                  "nat": {
+                    "type": "string",
+                    "$comment": "nat"
+                  }
+                },
+                "required": [
+                  "address",
+                  "nat"
+                ],
+                "additionalProperties": false,
+                "$comment": "pair"
+              },
+              "value": {
+                "type": "object",
+                "properties": {
+                  "allowances": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "$comment": "address"
+                    },
+                    "$comment": "set"
+                  },
+                  "borrow": {
+                    "type": "string",
+                    "$comment": "nat"
+                  },
+                  "lastBorrowIndex": {
+                    "type": "string",
+                    "$comment": "nat"
+                  }
+                },
+                "required": [
+                  "allowances",
+                  "borrow",
+                  "lastBorrowIndex"
+                ],
+                "additionalProperties": false,
+                "$comment": "pair"
+              }
+            },
+            "required": [
+              "key",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "tokens": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "$comment": "nat"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "mainToken": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "fA12": {
+                        "type": "string",
+                        "$comment": "address"
+                      }
+                    },
+                    "required": [
+                      "fA12"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "fA2": {
+                        "type": "object",
+                        "properties": {
+                          "address": {
+                            "type": "string",
+                            "$comment": "address"
+                          },
+                          "nat": {
+                            "type": "string",
+                            "$comment": "nat"
+                          }
+                        },
+                        "required": [
+                          "address",
+                          "nat"
+                        ],
+                        "additionalProperties": false,
+                        "$comment": "pair"
+                      }
+                    },
+                    "required": [
+                      "fA2"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "$comment": "or"
+              },
+              "interestRateModel": {
+                "type": "string",
+                "$comment": "address"
+              },
+              "interestUpdateTime": {
+                "type": "string",
+                "$comment": "timestamp"
+              },
+              "priceUpdateTime": {
+                "type": "string",
+                "$comment": "timestamp"
+              },
+              "totalBorrowsF": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "totalLiquidF": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "totalSupplyF": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "totalReservesF": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "borrowIndex": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "maxBorrowRate": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "collateralFactorF": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "reserveFactorF": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "lastPrice": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "borrowPause": {
+                "type": "boolean",
+                "$comment": "bool"
+              },
+              "isInterestUpdating": {
+                "type": "boolean",
+                "$comment": "bool"
+              },
+              "threshold": {
+                "type": "string",
+                "$comment": "nat"
+              }
+            },
+            "required": [
+              "mainToken",
+              "interestRateModel",
+              "interestUpdateTime",
+              "priceUpdateTime",
+              "totalBorrowsF",
+              "totalLiquidF",
+              "totalSupplyF",
+              "totalReservesF",
+              "borrowIndex",
+              "maxBorrowRate",
+              "collateralFactorF",
+              "reserveFactorF",
+              "lastPrice",
+              "borrowPause",
+              "isInterestUpdating",
+              "threshold"
+            ],
+            "additionalProperties": false,
+            "$comment": "pair"
+          },
+          "$comment": "map"
+        },
+        "metadata": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "$comment": "string"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "$comment": "bytes"
+          }
+        },
+        "tokenMetadata": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "$comment": "nat"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "token_id": {
+                "type": "string",
+                "$comment": "nat"
+              },
+              "tokens": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "$comment": "string"
+                },
+                "additionalProperties": {
+                  "type": "string",
+                  "$comment": "bytes"
+                },
+                "$comment": "map"
+              }
+            },
+            "required": [
+              "token_id",
+              "tokens"
+            ],
+            "additionalProperties": false,
+            "$comment": "pair"
+          }
+        },
+        "lastTokenId": {
+          "type": "string",
+          "$comment": "nat"
+        },
+        "priceFeedProxy": {
+          "type": "string",
+          "$comment": "address"
+        },
+        "closeFactorF": {
+          "type": "string",
+          "$comment": "nat"
+        },
+        "liqIncentiveF": {
+          "type": "string",
+          "$comment": "nat"
+        },
+        "markets": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "$comment": "address"
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "$comment": "nat"
+            },
+            "$comment": "set"
+          }
+        },
+        "borrows": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "$comment": "address"
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "$comment": "nat"
+            },
+            "$comment": "set"
+          }
+        },
+        "maxMarkets": {
+          "type": "string",
+          "$comment": "nat"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "fA12": {
+                        "type": "string",
+                        "$comment": "address"
+                      }
+                    },
+                    "required": [
+                      "fA12"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "fA2": {
+                        "type": "object",
+                        "properties": {
+                          "address": {
+                            "type": "string",
+                            "$comment": "address"
+                          },
+                          "nat": {
+                            "type": "string",
+                            "$comment": "nat"
+                          }
+                        },
+                        "required": [
+                          "address",
+                          "nat"
+                        ],
+                        "additionalProperties": false,
+                        "$comment": "pair"
+                      }
+                    },
+                    "required": [
+                      "fA2"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "$comment": "or"
+              },
+              "value": {
+                "type": "string",
+                "$comment": "nat"
+              }
+            },
+            "required": [
+              "key",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "admin",
+        "ledger",
+        "accounts",
+        "tokens",
+        "metadata",
+        "tokenMetadata",
+        "lastTokenId",
+        "priceFeedProxy",
+        "closeFactorF",
+        "liqIncentiveF",
+        "markets",
+        "borrows",
+        "maxMarkets",
+        "assets"
+      ],
+      "additionalProperties": false,
+      "$comment": "pair"
+    },
+    "tokenLambdas": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "nat"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "$comment": "bytes"
+      }
+    },
+    "useLambdas": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "$comment": "nat"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "$comment": "bytes"
+      }
+    }
+  },
+  "required": [
+    "storage",
+    "tokenLambdas",
+    "useLambdas"
+  ],
+  "additionalProperties": false,
+  "$comment": "pair"
+}
