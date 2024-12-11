@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "har2tree"
+version = "1.27.4"
+description = "HTTP Archive (HAR) to ETE Toolkit generator"
+authors = ["Raphaël Vinot <raphael.vinot@circl.lu>"]
+license = "BSD-3-Clause"
+repository = "https://github.com/Lookyloo/har2tree"
+documentation = "https://har2tree.readthedocs.io/en/latest/"
+
+readme = "README.md"
+
+classifiers = [
+    'License :: OSI Approved :: BSD License',
+	'Operating System :: POSIX :: Linux',
+	'Intended Audience :: Science/Research',
+	'Intended Audience :: Telecommunications Industry',
+	'Intended Audience :: Information Technology',
+	'Programming Language :: Python :: 3',
+	'Topic :: Security',
+	'Topic :: Internet'
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.14"
+ete3 = "^3.1.3"
+beautifulsoup4 = {version= "^4.12.3", extras = ["lxml", "charset_normalizer"]}
+publicsuffixlist = "^1.0.2.20241210"
+filetype = "^1.2.0"
+numpy = [
+    { version = "<2.1", python = "<3.10" },
+    { version = "^2.2", python = ">=3.10" }
+]
+w3lib = "^2.2.1"
+charset-normalizer = "^3.4.0"
+
+Sphinx = [
+    {version = "^8", python = ">=3.10", optional = true}
+]
+six = {version = "^1.17.0", optional = true}
+
+# Temp entry to allow markupsafe 3+ until we get rid of python3.8
+
+markupsafe = {version = "^3.0.2"}
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.13.0"
+ipython = [
+    {version = "^8.19.0", python = ">=3.10"}
+]
+jupyterlab = "^4.3.3"
+pytest-cov = "^6.0.0"
+coverage = "^7.6.9"
+types-beautifulsoup4 = "^4.12.0.20241020"
+
+[tool.poetry.extras]
+docs = ["Sphinx", "myst-parser", "six"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
