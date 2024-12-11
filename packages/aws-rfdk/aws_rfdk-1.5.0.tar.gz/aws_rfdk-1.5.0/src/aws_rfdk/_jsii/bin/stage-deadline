@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+import jsii
+import sys
+import os
+
+if "JSII_RUNTIME_PACKAGE_CACHE" not in os.environ:
+    os.environ["JSII_RUNTIME_PACKAGE_CACHE"] = "disabled"
+
+__jsii_assembly__ = jsii.JSIIAssembly.load(
+    "aws-rfdk", "1.5.0", "aws_rfdk", "aws-rfdk@1.5.0.jsii.tgz"
+)
+
+exit_code = __jsii_assembly__.invokeBinScript(
+    "aws-rfdk", "stage-deadline", sys.argv[1:]
+)
+exit(exit_code)
