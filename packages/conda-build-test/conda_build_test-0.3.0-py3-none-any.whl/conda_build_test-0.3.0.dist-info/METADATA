@@ -1,0 +1,67 @@
+Metadata-Version: 2.1
+Name: conda-build-test
+Version: 0.3.0
+Summary: Testing packaging and uploading with GitHub actions
+Author-email: Christopher Billington <chrisjbillington@gmail.com>
+License: Copyright 2024 Chris Billington
+        
+        Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://github.com/chrisjbillington/conda-build-test
+Project-URL: Documentation, https://github.com/chrisjbillington/conda-build-test
+Project-URL: Repository, https://github.com/chrisjbillington/conda-build-test
+Project-URL: Downloads, https://github.com/chrisjbillington/conda-build-test/releases
+Project-URL: Tracker, https://github.com/chrisjbillington/conda-build-test/issues/
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: setuptools_scm
+
+Test package
+------------
+
+This repo is for testing build and release automation of Python setuptools projects with
+GitHub Actions
+
+Below is the needed per-repsitory setup. The workflow file itself should not need
+editing, instead you configure it via variables in `.github/workflows/release-vars.sh`.
+You also need to enable Trusted Publisher uploads on PyPI and TestPI, and add an API key
+as a repository secret in GitHub for Anaconda package uploads.
+
+#### Configure repository name
+
+This restricts upload steps to run only for workflows running in this repository.
+
+1. Set `RELEASE_REPO` in `.github/workflows/release-vars.sh` to the username and
+   repository name, e.g.
+   ```bash
+   export RELEASE_REPO="chrisjbillington/conda-build-test"
+   ```
+
+#### Set up Trusted Publisher package uploads
+
+Per [the docs](https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/):
+
+1. Go to https://test.pypi.org/manage/account/publishing, fill in the details and *do*
+   set the optional GitHub environment to `testpypi`.
+2. Go to https://pypi.org/manage/account/publishing, fill in the details and *do*
+   set the optional GitHub environment to `pypi`.
+
+For both PyPI and Test PyPI, "Workflow name" is `release.yml`.
+
+#### Set up Anaconda uploads
+
+1. set `ANACONDA_USER` in `.github/workflows/release-vars.sh`, e.g:
+   ```bash
+   export ANACONDA_USER="cbillington"
+   ```
+2. Set `ANACONDA_API_TOKEN` as a repository secret in GitHub. If you don't have a token,
+   create one on your Anaconda settings page, e.g.:
+   https://anaconda.org/cbillington/settings/access
