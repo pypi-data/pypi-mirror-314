@@ -1,0 +1,113 @@
+# Install
+
+## Requires Python 3.10 or 3.11
+platform depentdant but make sure to get a distribution with pip and venv
+
+## get code
+`git clone
+
+## navigate
+`cd templating_ai/ncd-anon`
+
+## create venb (optional)
+`python -m venv venv-ncd-anon`
+### windows
+`./venv-ncd-anon/Scripts/activate`
+### linux/mac
+`source ./venv venv-ncd-anon/bin/activate`
+
+## install poetry
+`pip install poetry`
+
+## install package
+`poetry install`
+
+
+# Usage
+
+## get help
+`ncd_anonimize
+
+    NCD Anonymizer Tool
+    ==================
+
+    A command-line tool to anonymize PDF and TXT files by removing or masking sensitive information.
+
+    Usage
+    -----
+        python ncd-anon.py <file_or_folder_path>
+
+    Arguments
+    ---------
+        file_or_folder_path : str
+            Path to either a single file (.pdf or .txt) or a directory containing multiple files.
+
+    Output
+    ------
+        For each processed file, creates a new file with '.anon.txt' extension in the same directory.
+        Example: 'document.pdf' -> 'document.anon.txt'
+
+    Examples
+    --------
+        # Anonymize a single PDF file
+        python ncd-anon.py /path/to/document.pdf
+
+        # Anonymize a single text file
+        python ncd-anon.py /path/to/document.txt
+
+        # Anonymize all PDF and TXT files in a directory
+        python ncd-anon.py /path/to/directory
+
+    Notes
+    -----
+        - Only .pdf and .txt files are processed
+        - Files already ending in '.anon.txt' are skipped
+        - The tool will create anonymized text versions of all processed files
+`
+## proper usage
+`
+ncd_anonimize testdata/
+`
+### output
+`
+Device set to use cpu
+Anonymizing C:\project\novapulse\templating_ai\ncd-anon\testdata\petroleum.txt to C:\project\novapulse\templating_ai\ncd-anon\testdata\petroleum.anon.txt
+{
+    "Midstates Petroleum Company, Inc.": "ORG",
+    "Stephen C. Pugh": "PER",
+    "Executive": "ORG",
+    "Company": "ORG",
+    "COBRA": "ORG",
+    "Company Party": "ORG",
+    "L": "ORG",
+    "##IABILITY": "ORG",
+    "Equal Employment Opportunity Commission": "ORG",
+    "EEOC": "ORG",
+    "Louisiana": "LOC",
+    "Oklahoma": "LOC",
+    "Woods": "LOC",
+    "Alfalfa": "LOC",
+    "Lincoln": "LOC",
+    "Roger Mills": "LOC",
+    "Dewey": "LOC",
+    "Ellis": "LOC",
+    "Woodward": "LOC",
+    "Texas": "LOC",
+    "Lipscomb": "LOC",
+    "Ochiltree": "LOC",
+    "Hansford": "LOC",
+    "Board of Directors": "ORG",
+    "Midstates Incentive Holdings LLC": "ORG",
+    "John P. Foley": "PER",
+    "Post Oak Parkway": "LOC",
+    "Suite": "LOC",
+    "Houston": "LOC",
+    "Party": "ORG",
+    "State of Texas": "LOC",
+    "MIDSTATES PETROLEUM COMPANY": "ORG",
+    "IN": "LOC",
+    "John A. Crum": "PER",
+    "STEPHEN C.": "PER"
+}
+`
+
