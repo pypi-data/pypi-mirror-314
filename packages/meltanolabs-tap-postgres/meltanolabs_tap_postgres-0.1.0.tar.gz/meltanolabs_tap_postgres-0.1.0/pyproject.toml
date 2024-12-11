@@ -1,0 +1,129 @@
+[tool.poetry]
+name = "meltanolabs-tap-postgres"
+version = "0.1.0"
+description = "Singer tap for Postgres, built with the Meltano SDK for Singer Targets."
+authors = ["Meltano Team and Contributors <hello@meltano.com>"]
+maintainers = ["Meltano Team and Contributors <hello@meltano.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://meltano.com"
+repository = "https://github.com/MeltanoLabs/tap-postgres"
+documentation = "https://github.com/MeltanoLabs/tap-postgres/blob/main/README.md"
+keywords = [
+    "Postgres",
+    "Singer",
+    "ELT",
+    "Meltano",
+    "Meltano SDK",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+packages = [
+    { include = "tap_postgres" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+psycopg2-binary = "2.9.10"
+sqlalchemy = "2.0.36"
+sshtunnel = "0.4.0"
+
+[tool.poetry.dependencies.singer-sdk]
+version = "~=0.43.0"
+extras = ["faker"]
+
+[tool.poetry.group.dev.dependencies]
+faker = ">=18.5.1"
+hypothesis = ">=6.122.1"
+mypy = ">=1.8.0"
+pre-commit = ">=3.0.4"
+ruff = "~=0.8.0"
+pydocstyle = ">=6.1.1"
+tox = "~=4"
+types-paramiko = ">=3.3.0.0"
+types-simplejson = ">=3.19.0.2"
+types-sqlalchemy = ">=1.4.53.38"
+types-jsonschema = ">=4.19.0.3"
+types-psycopg2 = ">=2.9.21.20240118"
+
+[tool.poetry.dev-dependencies.singer-sdk]
+version = "*"
+extras = ["testing"]
+
+[tool.mypy]
+exclude = "tests"
+python_version = "3.13"
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+    "sshtunnel",
+]
+
+[build-system]
+requires = [
+  "poetry-core==1.9.1",
+  "poetry-dynamic-versioning==1.4.1",
+]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+# CLI declaration
+tap-postgres = 'tap_postgres.tap:TapPostgres.cli'
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "pep440"
+
+[tool.ruff]
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+  "F",    # Pyflakes
+  "W",    # pycodestyle warnings
+  "E",    # pycodestyle errors
+  "I",    # isort
+  "N",    # pep8-naming
+  "D",    # pydocsyle
+  "UP",   # pyupgrade
+  "ICN",  # flake8-import-conventions
+  "RET",  # flake8-return
+  "SIM",  # flake8-simplify
+  "TC",   # flake8-type-checking
+  "ERA",  # eradicate
+  "PGH",  # pygrep-hooks
+  "PL",   # Pylint
+  "PERF", # Perflint
+  "RUF",  # ruff
+]
+
+[tool.ruff.lint.flake8-import-conventions]
+banned-from = ["sqlalchemy"]
+
+[tool.ruff.lint.flake8-import-conventions.extend-aliases]
+sqlalchemy = "sa"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+  "D",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+addopts = '--durations=10'
