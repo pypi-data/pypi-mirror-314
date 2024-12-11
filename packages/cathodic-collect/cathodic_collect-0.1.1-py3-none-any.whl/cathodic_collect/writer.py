@@ -1,0 +1,2 @@
+class MetaWriter(object):
+    pass
