@@ -1,0 +1,49 @@
+name: Lint
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get Python version from pyproject.toml
+        run: |
+          PYTHON_VERSION=$(grep "requires-python" pyproject.toml | sed -E 's/.*>=([0-9]+\.[0-9]+).*/\1/')
+          echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_ENV
+
+      - name: Cache uv dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.uv
+          key: uv-dependencies-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Sync dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Run Black
+        run: |
+          uv run black .
+          if git diff --exit-code; then
+            echo "No formatting changes needed"
+          else
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions[bot]"
+            git add .
+            git commit -m "style: auto-format with Black"
+            git push "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}
+          fi
+
+      - name: Run Pyflakes
+        run: uv run pyflakes . || true
