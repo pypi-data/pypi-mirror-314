@@ -1,0 +1,32 @@
+[build-system]
+requires = [
+	 "setuptools>=42",
+	 "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+# Enable all pyflake checks, errors, warnings, and checks
+select = ["F", "E", "W", "C",
+
+# Prohibit use of 'print' and 'pprint'
+"T",
+
+# pylint errors and warnings
+"PLE", "PLW", "PLR",
+
+# ruff-specific checks
+"RUF"
+]
+
+ignore = [
+# Never enforce `E501` (line length violations)
+# black generally does what we need for that
+"E501",
+
+# Allow too many arguments to functions
+"PLR0913",
+
+# Allow magic values
+"PLR2004",
+]
