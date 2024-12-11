@@ -1,0 +1,82 @@
+# SPDX-FileCopyrightText: 2022 Copyright DB InfraGO AG and the capellambse-context-diagrams contributors
+# SPDX-License-Identifier: CC0-1.0
+
+default_install_hook_types: [commit-msg, pre-commit]
+default_stages: [commit, merge-commit]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: destroyed-symlinks
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: trailing-whitespace
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.10.0
+    hooks:
+      - id: black
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        args: [--follow-imports=silent]
+        additional_dependencies:
+          - capellambse==0.6.6
+          - mkdocs
+          - mkdocs-gen-files
+          - mkdocs-literate-nav
+          - pydantic==2.7.3
+          - pytest
+          - types-setuptools
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: insert-license
+        name: Insert Licence for Python, YAML and Dockerfiles
+        files: '\.py$|\.yaml$|^Dockerfile$|^Makefile$'
+        exclude: '^\.'
+        args:
+          - --license-filepath
+          - license_header.txt
+          - --comment-style
+          - "#"
+      - id: insert-license
+        name: Insert Licence for HTML/XML/SVG files
+        files: '\.html$|\.md$|\.svg$'
+        exclude: '^\.|^docs/credits\.md$'
+        args:
+          - --license-filepath
+          - license_header.txt
+          - --comment-style
+          - "<!--| ~| -->"
+      - id: insert-license
+        name: Insert Licence for CSS files
+        files: '\.css$'
+        exclude: '^\.'
+        args:
+          - --license-filepath
+          - license_header.txt
+          - --comment-style
+          - "/*| *| */"
+  - repo: https://github.com/fsfe/reuse-tool
+    rev: v4.0.3
+    hooks:
+      - id: reuse

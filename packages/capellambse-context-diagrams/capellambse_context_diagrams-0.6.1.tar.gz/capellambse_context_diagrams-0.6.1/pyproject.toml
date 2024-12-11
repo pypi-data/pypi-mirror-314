@@ -1,0 +1,188 @@
+# SPDX-FileCopyrightText: 2022 Copyright DB InfraGO AG and the capellambse-context-diagrams contributors
+# SPDX-License-Identifier: Apache-2.0
+
+[build-system]
+requires = ["setuptools>=61", "setuptools_scm[toml]>=3.4", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+
+name = "capellambse-context-diagrams"
+description = "Extension for py-capellambse that adds automatically generated context diagrams for arbitrary model elements."
+readme = "README.md"
+requires-python = ">=3.10"
+license.text = "Apache-2.0"
+authors = [
+  { name = "DB InfraGO AG" },
+]
+keywords = ["capella", "mbse", "context", "diagram", "automatic diagrams"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Other/Nonlisted Topic",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "capellambse>=0.6.6,<0.7",
+  "typing_extensions",
+  "pydantic>=2.7.3"
+]
+
+[project.urls]
+Homepage = "https://github.com/DSD-DBS/capellambse-context-diagrams"
+Documentation = "https://dsd-dbs.github.io/capellambse-context-diagrams"
+
+[project.entry-points."capellambse.model_extensions"]
+context_diagrams = "capellambse_context_diagrams:init"
+
+[project.optional-dependencies]
+docs = [
+  "mkdocs-material",
+  "mkdocstrings[python]>=0.18",
+  "pytkdocs[numpy-style]>=0.5.0",
+  "mkdocs-gen-files",
+  "mkdocs-literate-nav",
+  "mkdocs-section-index",
+  "mkdocs-autorefs",
+]
+
+test = [
+  "pytest",
+  "pytest-cov",
+]
+
+[tool.black]
+line-length = 79
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.mypy]
+check_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unreachable = true
+python_version = "3.11"
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+
+[tool.pydocstyle]
+convention = "numpy"
+add-select = [
+  "D212",  # Multi-line docstring summary should start at the first line
+  "D402",  # First line should not be the function’s “signature”
+  "D417",  # Missing argument descriptions in the docstring
+]
+add-ignore = [
+  "D201",  # No blank lines allowed before function docstring  # auto-formatting
+  "D202",  # No blank lines allowed after function docstring  # auto-formatting
+  "D203",  # 1 blank line required before class docstring  # auto-formatting
+  "D204",  # 1 blank line required after class docstring  # auto-formatting
+  "D211",  # No blank lines allowed before class docstring  # auto-formatting
+  "D213",  # Multi-line docstring summary should start at the second line
+]
+
+[tool.pylint.messages_control]
+disable = [
+  "duplicate-code",
+  "broad-except",
+  "consider-using-f-string",
+  "cyclic-import",
+  "global-statement",
+  "import-outside-toplevel",
+  "invalid-name",
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "missing-module-docstring",
+  "no-else-break",
+  "no-else-continue",
+  "no-else-raise",
+  "no-else-return",
+  "protected-access",
+  "redefined-builtin",
+  "too-few-public-methods",
+  "too-many-ancestors",
+  "too-many-arguments",
+  "too-many-boolean-expressions",
+  "too-many-branches",
+  "too-many-instance-attributes",
+  "too-many-lines",
+  "too-many-locals",
+  "too-many-public-methods",
+  "too-many-return-statements",
+  "too-many-statements",
+
+  # Auto-formatting
+  "bad-indentation",
+  "inconsistent-quotes",
+  "line-too-long",
+  "missing-final-newline",
+  "mixed-line-endings",
+  "multiple-imports",
+  "multiple-statements",
+  "trailing-newlines",
+  "trailing-whitespace",
+  "unexpected-line-ending-format",
+  "ungrouped-imports",
+  "wrong-import-order",
+  "wrong-import-position",
+
+  # Handled by mypy
+  "arguments-differ",
+  "assignment-from-no-return",
+  "import-error",
+  "missing-kwoa",
+  "no-member",
+  "no-value-for-parameter",
+  "redundant-keyword-arg",
+  "signature-differs",
+  "syntax-error",
+  "too-many-function-args",
+  "unbalanced-tuple-unpacking",
+  "undefined-variable",
+  "unexpected-keyword-arg",
+]
+enable = [
+  "c-extension-no-member",
+  "deprecated-pragma",
+  "use-symbolic-message-instead",
+  "useless-suppression",
+]
+
+[tool.pytest.ini_options]
+addopts = """
+  --strict-config
+  --strict-markers
+  --import-mode=importlib
+  --tb=short
+"""
+testpaths = ["tests"]
+xfail_strict = true
+
+[tool.setuptools]
+platforms = ["any"]
+zip-safe = false
+
+[tool.setuptools.package-data]
+"*" = ["py.typed", "*.js"]
+
+[tool.setuptools.packages.find]
+include = ["capellambse_context_diagrams", "capellambse_context_diagrams.*"]
+
+[tool.setuptools_scm]
+# This section must exist for setuptools_scm to work

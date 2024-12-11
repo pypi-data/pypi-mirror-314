@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2022 Copyright DB InfraGO AG and the capellambse-context-diagrams contributors
+# SPDX-License-Identifier: Apache-2.0
+
+name: Docs
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  documentation:
+    name: Build documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install Python dependencies
+        run: |
+          pip install '.[docs]'
+      - name: Deploy documentation
+        run: |
+          mkdocs gh-deploy --force
