@@ -1,0 +1,68 @@
+services:
+  traefik:
+    image: "traefik:v2.5"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  marops_ui:
+    environment:
+      HASURA_HTTP_URL: https://hasura.$PROXY_HOST/v1/graphql
+      HASURA_WS_URL: wss://hasura.$PROXY_HOST/v1/graphql
+      CORE_URL: https://core.$PROXY_HOST
+      TILER_URL: https://tiler.$PROXY_HOST
+      DOCS_URL: https://docs.$PROXY_HOST
+      STUDIO_URL: https://studio.$PROXY_HOST
+    command: yarn serve
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ui.rule=Host(`$PROXY_HOST`)"
+      - "traefik.http.routers.ui.entrypoints=web,websecure"
+
+  marops_docs:
+    environment:
+      NODE_ENV: production
+    command: yarn serve
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.docs.rule=Host(`docs.$PROXY_HOST`)"
+      - "traefik.http.routers.docs.entrypoints=web,websecure"
+
+  marops_core:
+    command: yarn start:prod
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.core.rule=Host(`core.$PROXY_HOST`)"
+      - "traefik.http.routers.core.entrypoints=web,websecure"
+
+  marops_hasura:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hasura.rule=Host(`hasura.$PROXY_HOST`)"
+      - "traefik.http.routers.hasura.entrypoints=web,websecure"
+
+  studio:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.studio.loadbalancer.server.port=8080"
+      - "traefik.http.routers.studio.rule=Host(`studio.$PROXY_HOST`)"
+      - "traefik.http.routers.studio.entrypoints=web,websecure"
+
+  marops_chart_tiler:
+    entrypoint: node ./src/main.js --config /app/data/config.json --public_url https://tiler.$PROXY_HOST
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.chart-tiler.loadbalancer.server.port=8080" # this container also exposes port 80 (it shouldn't)
+      - "traefik.http.routers.tiler.rule=Host(`tiler.$PROXY_HOST`)"
+      - "traefik.http.routers.tiler.entrypoints=web,websecure"
