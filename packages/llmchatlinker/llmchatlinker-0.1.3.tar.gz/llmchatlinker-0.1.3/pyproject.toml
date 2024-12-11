@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llmchatlinker"
+version = "0.1.3"
+dependencies =[
+    "sqlalchemy",
+    "psycopg2-binary",
+    "pika",
+    "fastapi<=0.115.4",
+    "uvicorn",
+    "requests",
+    "python-slugify",
+]
+requires-python = ">=3.8"
+authors = [
+    {name = "Changjae Lee", email = "changjae@buffalo.edu"}
+]
+maintainers = [
+    {name = "Changjae Lee", email = "changjae@buffalo.edu"}
+]
+description = "LLMChatLinker is a Middleware SDK designed to facilitate interaction between clients and Large Language Models (LLMs)."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["LLM", "middleware", "SDK", "chat", "API", "python-package"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3"
+]
+
+[project.optional-dependencies]
+testing = [
+    "pytest",
+    "pytest-cov",
+    "tox",
+    "python-dotenv",
+]
+
+[project.urls]
+Documentation = "https://github.com/xlab-ub/LLMChatLinker#readme"
+Repository = "https://github.com/xlab-ub/LLMChatLinker.git"
+Issues = "https://github.com/xlab-ub/LLMChatLinker/issues"
+
+[project.scripts]
+llmchatlinker = "llmchatlinker.main:main"
