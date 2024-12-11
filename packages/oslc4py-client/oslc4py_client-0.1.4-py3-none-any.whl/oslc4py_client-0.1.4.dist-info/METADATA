@@ -1,0 +1,261 @@
+Metadata-Version: 2.1
+Name: oslc4py-client
+Version: 0.1.4
+Summary: OSLC Python client with common annotation types
+Home-page: https://pajda.fit.vutbr.cz/verifit/oslc4py-client
+Author: Matej Grós
+Author-email: 492906@mail.muni.cz
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENCE
+Requires-Dist: requests
+Requires-Dist: rdflib
+
+## Example Usage of OSLCPythonClient
+
+`oslc4py_client` is a Python library designed to simplify interactions with OSLC-compliant servers. It provides a client class (`OSLCPythonClient`) for performing operations like creating, retrieving, and polling OSLC resources.
+
+---
+
+## Installation
+
+To use `oslc4py_client`, ensure the package is installed in your Python environment:
+
+```bash
+pip install oslc4py-client
+```
+
+---
+
+
+### Defining an OSLC Resource with Decorators
+
+```python
+from oslc4py_client.OSLCResource import OSLCResource
+from oslc4py_client.annotation_types.ValueType import ValueType
+from oslc4py_client.annotation_types.Occurs import Occurs
+from oslc4py_client.decorators import (
+    oslc_description,
+    oslc_name,
+    oslc_namespace,
+    oslc_occurs,
+    oslc_property_definition,
+    oslc_value_type,
+    oslc_resource_shape
+)
+import rdflib
+
+# Define a namespace for your OSLC resources
+MY_NAMESPACE = rdflib.Namespace("http://example.com/ns#")
+
+# Decorate the class to define its OSLC properties
+@oslc_namespace(MY_NAMESPACE)
+@oslc_name("MyResource")
+@oslc_resource_shape(
+    describes=MY_NAMESPACE["MyResource"],
+    title="MyResource Resource Shape"
+)
+class MyResource(OSLCResource):
+    """
+    MyResource is an example of an OSLC resource class.
+    The decorators provide metadata about the OSLC resource,
+    such as its namespace, name, and resource shape.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._name = None  # Initialize the property
+
+    @property
+    @oslc_name("name")
+    @oslc_property_definition(MY_NAMESPACE["name"])
+    @oslc_description("The name of the resource.")
+    @oslc_occurs(Occurs.EXACTLY_ONE)
+    @oslc_value_type(ValueType.STRING)
+    def name(self):
+        """
+        The 'name' property of the resource.
+        """
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+```
+#### Explanation of Decorators
+
+- `@oslc_namespace(MY_NAMESPACE)`: Specifies the RDF namespace for the resource. This ensures all properties are correctly namespaced and avoids collisions with other vocabularies.
+
+- `@oslc_name("MyResource")`: Sets the local name of the resource within the namespace. Used to build the full URI of the resource.
+
+- `@oslc_resource_shape(...)`: Defines the resource shape, including the `describes` attribute, which specifies the RDF type of the resource. This is **crucial** because when a user doesn't provide the expected output class, the client attempts to locate the appropriate class within the modules using the `describes` property. Properly defining the resource shape ensures that clients can correctly identify and instantiate the resource class even when the expected output class isn't explicitly provided.
+
+For the `name` property:
+
+- `@oslc_name("name")`: Sets the local name of the property within the namespace.
+
+- `@oslc_property_definition(MY_NAMESPACE["name"])`: Provides the full URI of the property definition, important for RDF serialization and ensuring correct identification in the RDF graph.
+
+- `@oslc_description("The name of the resource.")`: Provides a human-readable description of the property.
+
+- `@oslc_occurs(Occurs.EXACTLY_ONE)`: Specifies the cardinality of the property, indicating it must occur exactly once.
+
+- `@oslc_value_type(ValueType.STRING)`: Specifies the RDF data type of the property value, important for serialization and validation.
+
+## Example Usage of OSLCPythonClient
+
+Below is an example demonstrating how to use `OSLCPythonClient` to interact with an OSLC server:
+
+```python
+from oslc4py_client.OSLCPythonClient import OSLCPythonClient
+from oslc4py_domains_auto.AutomationRequest import AutomationRequest
+from oslc4py_domains_auto.ParameterInstance import ParameterInstance
+from oslc4py_client.Link import Link
+from oslc4py_domains_auto.AutomationResult import AutomationResult
+from oslc4py_domains_auto.AutomationPlan import AutomationPlan
+
+# Initialize the OSLC client with the server URL and port
+client = OSLCPythonClient("http://example.com", "8081")
+
+# Create a compilation request
+compilation_request = AutomationRequest()
+compilation_request.executes_automation_plan = Link(f"{client.base_url}/compilation/services/resources/automationPlans/0")
+compilation_request.title = "Unic python automation request"
+compilation_request.description = "Requesting SUT registration"
+
+# Add an input parameter to the compilation request
+instance = ParameterInstance()
+instance.name = "analysis_tool"
+instance.value = "infer"
+compilation_request.add_input_parameter(instance)
+
+# Send the compilation request to the server
+returned_compilation_request = client.post(
+    "compilation/services/resources/createAutomationRequest",
+    compilation_request
+)
+compilation_request_id = returned_compilation_request.identifier
+
+# If 'expected_outcome' is not provided, the client will attempt to deduce the class 
+# from the result by browsing modules containing "oslc" in their names. Alternatively, 
+# you can set the OSLC4PY_ACTIVE_INSTALLED_DOMAINS environment variable to specify 
+# which modules to search, separated by commas. Example:
+# OSLC4PY_ACTIVE_INSTALLED_DOMAINS = oslc4py_domains_auto,unic4py
+sut = client.get_resource(f"compilation/services/resources/sUTs/{compilation_request_id}")
+
+# Explicitly define the expected outcome for the analysis result
+analysis_result = AutomationResult()
+
+# Poll the server for the result of the analysis request
+client.poll(
+    f"analysis/services/resources/automationResults/{sut.identifier}",
+    analysis_result,
+    None,  # No specific condition
+    50,    # Retry interval (in seconds)
+    5      # Maximum retries
+)
+
+# Output the state of the analysis result
+print(analysis_result.state)
+```
+
+---
+
+## `OSLCPythonClient` Class
+
+The `OSLCPythonClient` class is the core of the `oslc4py_client` library. It provides methods to interact with OSLC resources.
+
+### Methods
+
+#### `__init__`
+```python
+def __init__(self, root_url, port, accepted_responses=None, transient_responses=None)
+```
+- Initializes the client with the OSLC server's root URL and port.
+- **Parameters**:
+  - `root_url` (str): The base URL of the OSLC server.
+  - `port` (str): The port of the OSLC service.
+  - `accepted_responses` (list, optional): List of HTTP status codes to treat as successful responses. Defaults to `[200, 201]`.
+  - `transient_responses` (list, optional): List of HTTP status codes to treat as transient errors. Defaults to `[404]`.
+
+---
+
+#### `post`
+```python
+def post(self, endpoint: str, resource: OSLCResource, expected_outcome: OSLCResource = None,
+         accepted_responses=None, transient_responses=None)
+```
+- Sends a POST request to the server to create a resource.
+- **Parameters**:
+  - `endpoint` (str): The server endpoint to send the request to.
+  - `resource` (OSLCResource): The resource object to serialize and send.
+  - `expected_outcome` (OSLCResource, optional): Expected outcome class. If not provided, the client attempts to deduce the class.
+  - `accepted_responses` (list, optional): Overrides the default list of accepted responses.
+  - `transient_responses` (list, optional): Overrides the default list of transient responses.
+
+---
+
+#### `get`
+```python
+def get(self, endpoint: str, expected_outcome: OSLCResource = None, 
+        accepted_responses=None, transient_responses=None)
+```
+- Sends a GET request to retrieve a resource.
+- **Parameters**:
+  - `endpoint` (str): The server endpoint to send the request to.
+  - `expected_outcome` (OSLCResource, optional): Expected outcome class.
+  - `accepted_responses` (list, optional): Overrides the default list of accepted responses.
+  - `transient_responses` (list, optional): Overrides the default list of transient responses.
+
+---
+
+#### `poll`
+```python
+def poll(self, endpoint: str, expected_outcome: OSLCResource = None, condition: callable = None, 
+         interval: int = 10, retries: int = 5, accepted_responses=None, transient_responses=None)
+```
+- Polls a server endpoint until a condition is met or retries are exhausted.
+- **Parameters**:
+  - `endpoint` (str): The server endpoint to poll.
+  - `expected_outcome` (OSLCResource, optional): Expected outcome class.
+  - `condition` (callable, optional): A function to evaluate the response. Polling stops when the condition is met.
+  - `interval` (int, optional): Time in seconds between poll attempts. Defaults to 10.
+  - `retries` (int, optional): Maximum number of poll attempts. Defaults to 5.
+
+---
+
+#### `get_resource`
+```python
+def get_resource(self, endpoint, expected_resource=None, max_repeats=3, 
+                 wait_time_between_repeats=5, accepted_responses=None, transient_responses=None)
+```
+- Attempts to retrieve a resource from the server with retries.
+- **Parameters**:
+  - `endpoint` (str): The server endpoint to retrieve the resource from.
+  - `expected_resource` (OSLCResource, optional): Expected outcome class.
+  - `max_repeats` (int, optional): Maximum number of retry attempts. Defaults to 3.
+  - `wait_time_between_repeats` (int, optional): Time in seconds between retry attempts. Defaults to 5.
+
+---
+
+### Logging
+- The client logs all operations to a file (`oslc4py_client.log`) in the system's temporary directory.
+
+---
+
+## Notes
+- Use the environment variable `OSLC4PY_ACTIVE_INSTALLED_DOMAINS` to specify the modules to be searched for class discovery. Alternatively, if you want to use custom local classes, set the `OSLC4PY_EXTRA_DOMAINS_DIR` environment variable to the path of the folder containing your local domain classes.
+
+- Ensure your Python environment includes the required dependencies:
+  ```bash
+  pip install requests oslc4py-client
+  ```
+
+---
+
+
