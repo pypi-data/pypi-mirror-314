@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+service CommandServer {
+	rpc EnqueueJob(EnqueueJobRequest) returns (EnqueueJobResult) {}
+	rpc CheckHealth(CheckHealthRequest) returns (CheckHealthResult) {}
+}
+
+message EnqueueJobRequest {
+	string job_ref_name = 1;
+	string serialized_payload = 2;
+}
+
+message EnqueueJobResult {
+	bool successfully_queued = 1;
+	string queued_job_uuid = 2;
+}
+
+message CheckHealthRequest {}
+
+message CheckHealthResult {
+	bool success = 1;
+}
