@@ -1,0 +1,54 @@
+[project]
+name = "rfc3161-client"
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Typing :: Typed",
+]
+# Maturin does not support dynamic fields
+# So we keep the version number here instead of __init__
+version = "0.1.1"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Trail of Bits", email = "opensource@trailofbits.com" }]
+dependencies = ["maturin>=1.7,<2.0", "cryptography>=44,<45"]
+
+[project.optional-dependencies]
+doc = []
+test = ["pytest", "pytest-cov", "pretend", "coverage[toml]"]
+lint = ["ruff >= 0.7,< 0.9"]
+dev = ["rfc3161-client[test,lint,doc]"]
+
+[project.urls]
+Homepage = "https://pypi.org/project/rfc3161-client"
+Documentation = "https://trailofbits.github.io/rfc3161-client/"
+Issues = "https://github.com/trailofbits/rfc3161-client/issues"
+Source = "https://github.com/trailofbits/rfc3161-client"
+
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+features = ["pyo3/abi3-py39", "pyo3/extension-module"]
+python-source = "src"
+manifest-path = "rust/Cargo.toml"
+module-name = "rfc3161_client._rust"
+sdist-generator = "git"
+
+[tool.ruff]
+line-length = 100
+include = ["src/**/*.py", "test/**/*.py", "scripts/*.py"]
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "TCH"]
+
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:"]
