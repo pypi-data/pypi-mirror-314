@@ -1,0 +1,1 @@
+A library that makes pygame developement a more easier and beginner friendly process.
