@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dependencies = ["requests" ,"pillow", "PyGObject"]
+
+name = "lfy"
+version = "0.1.0"
+description = "Translation software designed for reading scientific research literature."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+
+authors = [{ name = "yuhldr", email = "yuhldr@qq.com" }]
+
+
+[project.urls]
+"Homepage" = "https://github.com/ldrfy/lfy"
+"Bug Tracker" = "https://github.com/ldrfy/lfy/issues"
+
+[project.scripts]
+"lfy" = "lfy.gtk.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lfy*"]
+
+
+[tool.setuptools.package-data]
+"lfy" = ["resources/*", "resources/locale/*/LC_MESSAGES/*"]
