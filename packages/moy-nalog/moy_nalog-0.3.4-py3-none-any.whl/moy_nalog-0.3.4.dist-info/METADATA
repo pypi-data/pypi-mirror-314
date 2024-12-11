@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: moy-nalog
+Version: 0.3.4
+Summary: Async Python API for lknpd.nalog.ru
+Home-page: https://github.com/byBenPuls/moy_nalog
+Author: Ben Puls
+Author-email: mail@benpuls.ru
+Requires-Python: >=3.8
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: httpx (>=0.27.2,<0.28.0)
+Project-URL: Repository, https://github.com/byBenPuls/moy_nalog
+Description-Content-Type: text/markdown
+
+# Moy Nalog
+
+Неофициальная асинхронная библиотека **moy_nalog** предоставляет API для автоматизации отчётности самозанятых на [lknpd.nalog.ru](https://npd.nalog.ru/web-app/).
+
+
+Пример использования:
+
+```python
+import asyncio
+from moy_nalog import MoyNalog
+
+nalog = MoyNalog("1234567890", "MyStrongPassword")
+
+
+async def main():
+    await nalog.add_income(
+        "Предоставление информационных услуг #970/2495", amount=1000, quantity=1
+    )
+
+
+asyncio.run(main())
+```
