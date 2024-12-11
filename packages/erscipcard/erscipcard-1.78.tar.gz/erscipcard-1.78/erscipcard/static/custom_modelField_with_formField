@@ -1,0 +1,95 @@
+Document from Django Documents:
+
+Specifying the form field for a model field¶
+
+To customize the form field used by ModelForm, you can override formfield().
+
+The form field class can be specified via the form_class and choices_form_class arguments; the latter is used if the field has choices specified, the former otherwise. If these arguments are not provided, CharField or TypedChoiceField will be used.
+
+All of the kwargs dictionary is passed directly to the form field’s __init__() method. Normally, all you need to do is set up a good default for the form_class (and maybe choices_form_class) argument and then delegate further handling to the parent class. This might require you to write a custom form field (and even a form widget). See the forms documentation for information about this.
+
+Continuing our ongoing example, we can write the formfield() method as:
+
+class HandField(models.Field):
+    # ...
+
+    def formfield(self, **kwargs):
+        # This is a fairly standard way to set up some defaults
+        # while letting the caller override them.
+        defaults = {'form_class': MyFormField}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+This assumes we’ve imported a MyFormField field class (which has its own default widget). This document doesn’t cover the details of writing custom form fields.
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+Document from another site:
+
+
+For a recent Django task, I wanted to create a custom field that used a new widget by default to display the input differently. The basic steps to do this are:
+
+    Create a custom Widget (child class of django.contrib.admin.widgets.Input)
+    Create a custom Form Field (child class of django.forms.Field) that uses your custom widget
+    Create a custom Model Field (child class of django.db.models.Field) that uses your custom Form Field
+    Use the new Model Field in your models
+
+I was on Django 1.10, so it might be easier to newer (ie, supported 😖) versions.
+
+So, say you want a new form field for dates that get reported to a government body, so there are some special considerations when a user wants ot change them. So it needs to be rendered with an extra HTML attribute to indicate the original value, and some javascript to advise the user what changes are ok and which aren’t.
+
+This is what the code would look like:
+Custom Widget
+
+from django.contrib.admin import widgets as adminwidgets
+class ReportedDateWidget(adminwidgets.AdminDateWidget):
+    @property
+    def media(self):
+        parent_media = super(ReportedDateWidget, self).media
+        parent_media._js.append('/static/admin/js/jquery.min.js')
+        parent_media._js.append('/static/js/reported_date_widget.js')
+        return parent_media
+    def render(self, name, value, attrs = {}):
+        if value:
+            attrs['original_value'] = value
+        return super(ReportedDateWidget, self).render(name, value, attrs)
+
+So it declares some additional javascript (beyond what the parent, AdminDateWidget, uses), and when rendering, adds an extra HTML attribute called “original_value” which stores the field’s original value.
+Custom Form Field
+
+from django import forms
+from common.widgets import ReportedDateWidget
+class ReportedDateField(forms.DateField):
+    def __init__(self, input_formats=None, *args, **kwargs):
+        super(ReportedDateField, self).__init__(*args, **kwargs)
+        self.widget = ReportedDateWidget()
+
+This custom form field uses the custom widget. I needed to override the __init__ method, not just declare the property. Go figure.
+Custom Model Field
+
+from django.db import models
+from common.forms import fields as formfields
+class ReportedDateField(models.DateField):
+    def formfield(self, **kwargs):
+        defaults = {'form_class': formfields.ReportedDateField}
+        defaults.update(kwargs)
+        return models.Field.formfield(self,**defaults)
+
+This makes the custom model field use the custom form field. This was a bit tricky: I couldn’t just update kwargsto use a different “form_class”, because its parent, DateField rather rudely overrides it, without checking to see if a different “form_class” was provided to it.
+
+So, to get around that, I needed to **not** call the parent function DateField.formfield(), but the grandparent function, Field.formfield()after I set the “form_class”.
+Use It in Models
+
+from django.db import models
+from common.fields import ReportedDateField
+class CustomModel(models.Model):
+    start_date = ReportedDateField()
+
+That’s It
+
+So, that’s probably a few more steps than you’d have liked, but now you have
+
+    a widget you can use for any form fields,
+    a form field you can use for any model fields. It can also have different default validation,
+    a model field which you can use from anywhere. It can have custom model logic based on the field type.
+

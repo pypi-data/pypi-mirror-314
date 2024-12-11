@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" >
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>تبديل گفتار به متن</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'bt/css/bootstrap.min.css' %}">
+<style>
+ .btn-circle {
+			width: 200px;
+			height: 200px;
+			border-radius: 50%;
+			font-size: 15px;
+			text-align: center;
+		}
+.txtbox  {
+	border: 4px solid transparent;
+	border-radius: 15px;	 
+	background: linear-gradient(#ffffff,#ffffff),linear-gradient(#ff7777,#88ff88);
+	background-clip: padding-box,border-box;
+	background-origin: padding-box,border-box;
+	padding: 12px;
+}
+</style>
+  </head>
+  <body dir="RTL" style="background-image: url({% static 'back.svg' %});background-size: cover;">
+ <div class="container">
+    <div class="row">
+    <div class="col-md-12 justify-content-center my-4 py-4" >
+
+     <div class="justify-content-center mx-auto my-auto" id="controls">		 
+  	 <!--<button class="btn btn-danger btn-circle my-2 mx-2 " id="recordButton">براي صحبت كليك كنيد</button>
+  	 <button id="pauseButton" disabled>Pause</button>-->  	
+	<button class="btn btn-danger btn-circle my-2 mx-2 " id="recordButton" ><img src="{% static 'mic.svg' %}"  style="width:100px;height:100px;"></button>
+	<button class="btn btn-success btn-circle my-2 mx-2 " id="stopButton" disabled  style="width:50px;height:50px;" ><img src="{% static 'doc.svg' %}"  style="width:25px;height:25px;"></button>
+    </div>
+    </div>
+<br>
+	<div class="w-75 mx-auto my-4 text-center"  id="textedit" dir="RTL" >
+		براي آغاز روي ميكروفون كليك كنيد
+	</div>
+<br>
+	<textarea class="w-75 h-50 mx-auto my-2 txtbox" id="textedit2"  dir="RTL"  rows=10>
+	</textarea>
+
+    	<div id="formats"></div>
+  	<p><strong></strong></p>
+  	<ol id="recordingsList"></ol>
+	<script src="{% static 'bt/js/jquery.min.js' %}"></script>
+ 	<script src="{% static 'bt/js/bootstrap.min.js' %}"></script>
+   	<script src="{% static 'evtt/recorder.js' %}"></script>
+  	<script src="{% static 'evtt/app.js' %}"></script>
+
+</div>
+</div>
+
+
+  </body>
+</html>
