@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "nshtrainer"
+version = "1.0.0-beta29"
+description = ""
+authors = ["Nima Shoghi <nimashoghi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+nshrunner = { version = "*", allow-prereleases = true }
+nshconfig = "*"
+nshutils = { version = "*", optional = true }
+psutil = "*"
+numpy = "*"
+torch = "*"
+typing-extensions = "*"
+packaging = "*"
+lightning = "*"
+pytorch-lightning = "*"
+torchmetrics = "*"
+wrapt = { version = "*", optional = true }
+GitPython = { version = "*", optional = true }
+wandb = { version = "*", optional = true }
+tensorboard = { version = "*", optional = true }
+huggingface-hub = { version = "*", optional = true }
+
+[tool.poetry.group.dev.dependencies]
+pyright = "*"
+ruff = "*"
+ipykernel = "*"
+ipywidgets = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+typeCheckingMode = "standard"
+deprecateTypingAliases = true
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+reportPrivateImportUsage = false
+
+[tool.ruff.lint]
+select = ["FA102", "FA100"]
+ignore = ["F722", "F821", "E731", "E741"]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+
+[tool.poetry.extras]
+extra = [
+    "wrapt",
+    "GitPython",
+    "wandb",
+    "tensorboard",
+    "huggingface-hub",
+    "nshutils",
+]
