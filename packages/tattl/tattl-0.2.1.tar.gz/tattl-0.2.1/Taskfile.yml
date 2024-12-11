@@ -1,0 +1,29 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  list:
+    # If no task is specified, we use the magic variable `TASK_EXE` to call `task` again with `--list-all`.
+    # See https://github.com/go-task/task/issues/1562.
+    aliases: [default]
+    silent: true
+    desc: List all available tasks
+    cmds:
+      - "{{.TASK_EXE}} --list-all"
+  
+  check:
+    aliases: [test, lint]
+    desc: Run type checking, linting and test suite
+    cmds:
+      - uv run ruff check --fix
+      - uv run mypy
+      - uv run pytest
+  
+  format: 
+    desc: Apply standardised formatting fixes
+    cmd: uv run ruff format
+  
+  build:
+    desc: Build for distribution
+    cmd: uv build
