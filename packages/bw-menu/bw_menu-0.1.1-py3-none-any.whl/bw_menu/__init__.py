@@ -1,0 +1,5 @@
+""" bw_menu"""
+__author__ = "Christopher Peterson"
+__version__ = "0.1.1"
+__title__ = "bw_menu"
+__license__ = "License :: OSI Approved :: MIT License"
