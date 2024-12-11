@@ -1,0 +1,58 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+
+[project]
+authors = [
+    {email = "hello@futurehouse.org", name = "FutureHouse technical staff"},
+]
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "fhaviary",
+    "google-api-python-client",
+    "google-auth",
+    "google-auth-httplib2",
+    "httpx",
+    "ldp",
+    "pydantic",
+    "python-dotenv",
+    "tenacity",
+]
+description = "A client for interacting with endpoints of the FutureHouse crow service."
+dynamic = ["version"]
+license = {file = "LICENSE"}
+name = "crow-client"
+readme = "README.md"
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "jupyter",
+    "jupyterlab",
+    "mypy",
+    "notebook",
+    "pre-commit",
+    "pylint",
+    "pylint-per-file-ignores",
+    "pylint-pydantic",
+    "pytest",
+    "pytest-rerunfailures",
+    "ruff",
+    "setuptools_scm",
+]
+
+[tool.setuptools.packages.find]
+exclude = ["tests"]
+include = ["crow_client*"]
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+relative_to = "crow_client"
+root = ".."
+version_file = "version.py"
