@@ -1,0 +1,203 @@
+Metadata-Version: 2.1
+Name: unittest2pytest
+Version: 0.5
+Summary: Convert unittest test-cases to pytest
+Home-page: https://github.com/pytest-dev/unittest2pytest
+Author: Hartmut Goebel
+Author-email: h.goebel@crazy-compilers.com
+License: GPLv3+
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development
+Classifier: Topic :: Utilities
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: COPYING-GPLv3.txt
+License-File: AUTHORS.txt
+
+==================================
+unittest2pytest
+==================================
+
+-----------------------------------------------------
+Helps converting unittest test-cases to pytest
+-----------------------------------------------------
+
+:Author:    Hartmut Goebel <h.goebel@crazy-compilers.com>
+:Version:   0.5.dev0
+:Copyright: 2015 by Hartmut Goebel
+:Licence:   GNU Public Licence v3 or later (GPLv3+)
+:Homepage:  https://github.com/pytest-dev/unittest2pytest
+
+
+.. image:: https://github.com/pytest-dev/unittest2pytest/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/pytest-dev/unittest2pytest/actions
+    :alt: See Build Status on GitHub Actions
+
+`unittest2pytest` is a tool that helps rewriting Python `unittest`
+test-cases into pytest_ test-cases.
+
+In contrast to other similar tools, this `unittest2pytest`
+
+* handles keyword arguments,
+* handles single-line test-cases and several tests on one line,
+* uses context-handlers where appropriate.
+
+This is done by using ``lib2to3`` and Python's mighty ``inspect``
+module.
+
+
+
+Installation
+===================
+
+To install unittest2pytest, simply run::
+
+    pip install unittest2pytest
+
+
+Usage
+===================
+
+To print a diff of changes that unittest2pytest will make against a
+particular source file or directory::
+
+    unittest2pytest source_folder
+
+To have those changes written to the files::
+
+    unittest2pytest -w source_folder
+
+To have those changes written to another directory::
+
+    unittest2pytest -w source_folder --output-dir /some/where/else
+
+By default, this will create backup files for each file that will be
+changed. You can add the `-n` option to not create the backups. Please
+do not do this if you are not using a version control system.
+
+For more options about running particular fixers, run
+``unittest2pytest --help`` or read the `lib2to3 documentation`_. This
+tool is built on top of that one.
+
+
+Fixes
+===================
+
+A list of the available fixers can be found with the following::
+
+    $ unittest2pytest -l
+    Available transformations for the -f/--fix option:
+    remove_class
+    self_assert
+
+
+Note: if your tests use the context managers ``with self.assertRaises`` or
+``with self.assertWarns``, they will be transformed to ``pytest.raises`` or
+``pytest.warns`` appropriately, but because the semantics are different, any
+use of the output value from the context managers (e.g. the ``x`` in
+``with pytest.raises(ValueError) as x:``) will be wrong and will require
+manual adjustment after the fact.
+
+.. _`lib2to3 documentation`: http://docs.python.org/library/2to3.html
+.. _pytest: https://pytest.org/
+
+
+..
+ Local Variables:
+ mode: rst
+ ispell-local-dictionary: "american"
+ coding: utf-8
+ End:
+
+
+Changelog
+============
+
+0.5
+---
+
+*2024-12-10*
+
+
+- Convert ``self.fail()`` to ``pytest.fail()`` (`#39`_).
+
+- Python >=3.9 is now required.
+
+- Allow non-string keys when translating ``assertDictContainsSubset`` (`#54`_).
+
+.. _#39: https://github.com/pytest-dev/unittest2pytest/issues/39
+.. _#54: https://github.com/pytest-dev/unittest2pytest/issues/54
+
+
+
+0.4 (2019-06-30)
+----------------
+
+* Add support for ``assertDictContainsSubset``.
+
+* Put parenthesis around expressions if required.
+  
+* Fixed assertRaisesRegex, assertRaisesRegexp and assertWarnsRegex.
+  The regex was getting replaced with an undefined variable `pattern`.
+
+* Fix assertRaisesRegex and assertRaisesRegexp with `**kwargs` and
+  `atom` parameters.
+
+* Made assertRaisesRegex, assertRaisesRegexp and assertWarnsRegex use
+  the `match` kwarg in `pytest.raises` instead of creating a variable
+  with the context manager and doing an assert on `re.search`.
+
+  
+* Add a short developer guide.
+
+* Remove testing on Python 3.0, 3.1, 3.2, add 3.6 and 3.7.
+    
+* Distribute package as a universal wheel.
+
+
+v0.3 (2016-07-26)
+------------------
+
+* Add support for assertRaises / assertWarns context managers.
+
+* Add support for converting lambda arguments in assertRaises into
+  context managers.
+
+* Fix some incorrect transformations.
+
+* Internal cleanup and fixes.
+
+
+v0.2 (2015-10-20)
+---------------------
+
+* Add support for assertRegex/assertRegexpMatches, assertNotRegex,
+  assertRaisesRegex/assertRaisesRegexp, assertWarnsRegex.
+
+* `unittest2pytest` is now a `pytest` subproject.
+
+* Minor fixes.
+
+
+v0.1 (2015-10-16)
+---------------------
+
+* Initial release
+
+..
+ Local Variables:
+ mode: rst
+ ispell-local-dictionary: "american"
+ coding: utf-8
+ End:
