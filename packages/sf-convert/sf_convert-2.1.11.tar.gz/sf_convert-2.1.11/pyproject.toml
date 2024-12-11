@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools >= 69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sf_convert"
+authors = [
+    {name = "Vivek Reddy Chithari", email="vivek.chithari@rcsb.org"},
+    {name = "Ezra Peisach", email="ezra.peisach@rcsb.org"}
+]
+description = "Package for sf_convert"
+readme = "README.md"
+requires-python = ">=3.6"
+license = {text = "apache-2.0"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "mmcif ~= 0.87",
+    "gemmi",
+    "numpy",
+]
+dynamic = ["version"]
+
+[tool.setutools]
+# To include the json dictionary representation
+include-package-data = true
+
+[tool.setuptools.package-data]
+"sf_convert.data" = ["*.json"]
+
+[tool.setuptools.dynamic]
+version = {attr = "sf_convert.__version__"}
+
+[project.scripts]
+sf_convert = "sf_convert.command_line.main:main"
+sf_convert_html = "sf_convert.command_line.htmlFormExec:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "tests/helpers"]
+
+
