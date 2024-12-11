@@ -1,0 +1,5 @@
+
+``rattail``
+===========
+
+.. automodule:: rattail

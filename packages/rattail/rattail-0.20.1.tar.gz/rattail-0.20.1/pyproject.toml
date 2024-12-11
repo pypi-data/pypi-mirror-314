@@ -1,0 +1,166 @@
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "rattail"
+version = "0.20.1"
+description = "Retail Software Framework"
+readme = "README.md"
+authors = [{name = "Lance Edgar", email = "lance@edbob.org"}]
+license = {text = "GNU GPL v3+"}
+classifiers = [
+        "Development Status :: 4 - Beta",
+        "Environment :: Console",
+        "Environment :: Web Environment",
+        "Environment :: Win32 (MS Windows)",
+        "Environment :: X11 Applications",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Topic :: Office/Business",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">= 3.8"
+dependencies = [
+        "bcrypt",
+        "colander",
+        "humanize",
+        "importlib_resources ; python_version < '3.9'",
+        "lockfile",
+        "makefun",
+        "Mako",
+        "MarkupSafe",
+        "openpyxl",
+        "packaging",
+        "progress",
+        "pyinotify ; sys_platform != 'win32'",
+        "pytz",
+        "requests",
+        "texttable",
+        "typer",
+        "typing-extensions",
+        "WuttJamaican>=0.16.1",
+        "xlrd",
+]
+
+
+[project.optional-dependencies]
+bouncer = [
+        # until we support PY3K we must stick with older flufl.bounce
+        "flufl.bounce<3.0",
+]
+db = [
+        "alembic",
+        "beaker",
+        "passlib",
+        "SQLAlchemy>=1.4,<1.5",
+        "SQLAlchemy-Continuum",
+]
+memcached = ["pylibmc"]
+supervisor = ["supervisor"]
+docs = ["Sphinx", "sphinx-paramlinks", "sphinxcontrib-programoutput", "furo"]
+tests = ["pytest-cov", "tox"]
+
+
+[project.scripts]
+rattail = "rattail.commands.base:rattail_typer"
+rattail-dev = "rattail.commands.dev:rattail_dev_typer"
+trainwreck = "rattail.trainwreck.commands:trainwreck_typer"
+
+
+[project.gui-scripts]
+rattailw = "rattail.commands.base:rattail_typer"
+
+
+[project.entry-points."rattail.config.extensions"]
+"rattail" = "rattail.config:RattailConfigExtension"
+"rattail.trainwreck" = "rattail.trainwreck.config:TrainwreckConfig"
+
+
+[project.entry-points."rattail.emails"]
+rattail = "rattail.emails"
+
+
+[project.entry-points."rattail.features"]
+new-report = "rattail.features.newreport:NewReportFeature"
+new-table = "rattail.features.newtable:NewTableFeature"
+
+
+[project.entry-points."rattail.importing"]
+"to_csv.from_rattail.export" = "rattail.importing.exporters:FromRattailToCSV"
+"to_rattail.from_csv.import" = "rattail.importing.csv:FromCSVToRattail"
+"to_rattail.from_ifps.import" = "rattail.importing.ifps:FromIFPSToRattail"
+"to_rattail.from_rattail.export" = "rattail.importing.rattail:FromRattailToRattailExport"
+"to_rattail.from_rattail.import" = "rattail.importing.rattail:FromRattailToRattailImport"
+"to_rattail.from_versions.import" = "rattail.importing.versions:FromRattailToRattailVersions"
+"to_trainwreck.from_trainwreck.export" = "rattail.trainwreck.importing.trainwreck:FromTrainwreckToTrainwreckExport"
+"to_trainwreck.from_trainwreck.import" = "rattail.trainwreck.importing.trainwreck:FromTrainwreckToTrainwreckImport"
+
+
+[project.entry-points."rattail.projects"]
+byjove = "rattail.projects.byjove:ByjoveProjectGenerator"
+fabric = "rattail.projects.fabric:FabricProjectGenerator"
+rattail = "rattail.projects.rattail:RattailProjectGenerator"
+rattail_integration = "rattail.projects.rattail_integration:RattailIntegrationProjectGenerator"
+rattail_shopfoo = "rattail.projects.rattail_shopfoo:RattailShopfooProjectGenerator"
+tailbone_integration = "rattail.projects.tailbone_integration:TailboneIntegrationProjectGenerator"
+tailbone_shopfoo = "rattail.projects.tailbone_shopfoo:TailboneShopfooProjectGenerator"
+wutta = "rattail.projects.wutta:WuttaProjectGenerator"
+
+
+[project.entry-points."rattail.reports"]
+customer_mailing = "rattail.reporting.customer_mailing:CustomerMailing"
+
+
+[project.entry-points."rattail.sil.column_providers"]
+rattail = "rattail.sil.columns:provide_columns"
+
+
+[project.entry-points."rattail.vendors.catalogs.parsers"]
+"rattail.contrib.generic" = "rattail.contrib.vendors.catalogs.generic:GenericCatalogParser"
+"rattail.contrib.dutchvalley" = "rattail.contrib.vendors.catalogs.dutchvalley:DutchValleyCatalogParser"
+"rattail.contrib.equalexchange" = "rattail.contrib.vendors.catalogs.equalexchange:EqualExchangeCatalogParser"
+"rattail.contrib.kehe" = "rattail.contrib.vendors.catalogs.kehe:KeheCatalogParser"
+"rattail.contrib.lotuslight" = "rattail.contrib.vendors.catalogs.lotuslight:LotusLightCatalogParser"
+"rattail.contrib.unfi" = "rattail.contrib.vendors.catalogs.unfi:UNFICatalogParser"
+"rattail.contrib.unfi.2" = "rattail.contrib.vendors.catalogs.unfi:UNFICatalogParser2"
+"rattail.contrib.unfi.tsv" = "rattail.contrib.vendors.catalogs.unfi:UNFITabSeparatedCatalogParser"
+
+
+[project.entry-points."rattail.vendors.invoices.parsers"]
+"rattail.contrib.alberts" = "rattail.contrib.vendors.invoices.alberts:AlbertsInvoiceParser"
+"rattail.contrib.kehe" = "rattail.contrib.vendors.invoices.kehe:KeheInvoiceParser"
+"rattail.contrib.unfi" = "rattail.contrib.vendors.invoices.unfi:UnfiInvoiceParser"
+
+
+[project.entry-points."rattail.vendors.orders.parsers"]
+"default" = "rattail.vendors.orders:DefaultOrderParser"
+
+
+[project.urls]
+Homepage = "https://rattailproject.org"
+Repository = "https://forgejo.wuttaproject.org/rattail/rattail"
+Issues = "https://forgejo.wuttaproject.org/rattail/rattail/issues"
+Changelog = "https://forgejo.wuttaproject.org/rattail/rattail/src/branch/master/CHANGELOG.md"
+
+
+[tool.commitizen]
+version_provider = "pep621"
+tag_format = "v$version"
+update_changelog_on_bump = true
+
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "htmlcov/",
+]
