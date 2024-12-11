@@ -1,0 +1,239 @@
+#Build python source distribution package and pushes it to gcloud artifactory
+name: "Build Python Artifact"
+
+on:
+  workflow_call:
+    inputs:
+      repoName:
+        default: ''
+        required: false
+        type: string
+      version:
+        default: '0.0.0'
+        required: true 
+        type: string
+      branch:
+         default: 'main'
+         required: true
+         type: string
+      python_version:
+        default: '3.9'
+        required: true
+        type: string
+      skip_tests:
+        default: false
+        required: false
+        type: boolean 
+      package_type:
+        default: ''
+        required: true
+        type: string
+      skip_publish:
+        default: false
+        required: false
+        type: boolean 
+      # environment:
+      #   required: true
+      #   type: string
+      #   default: '' 
+      appName:  
+        required: true
+        type: string
+        default: '' 
+      region:
+        default: 'northamerica-northeast1'
+        required: true
+        type: string
+    secrets:
+      PROVIDER_NAME:
+        required: true
+      SA_EMAIL:
+         required: true
+      GCP_ARTIFACTORY_URL:
+         required: true
+      GCP_ARTIFACTORY_USERNAME:
+         required: true
+      HDO_GITHUB_APP_PEM:
+        required: true
+      HDO_GITHUB_APP_ID:
+        required: true
+env:
+  SKIP_TESTS: ${{ inputs.version == '' }}
+jobs:
+  create-tag:
+    name: "Create Release Tag"
+    if: ${{ inputs.version != '' }}
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag_create.outputs.tag }}
+    # environment:
+    #   name: ${{ inputs.environment }}
+    steps:
+      - name: Validate version
+        id: validate_version
+        run: |
+          regex="^release-v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$"
+          if [[ "${{ inputs.version }}" =~ $regex ]]; then
+            echo "Input version is valid"
+          else
+            echo "Version is not valid.Provide correct semantic version"
+            exit 1
+          fi
+
+
+      # - name: Validate branch
+      #   id: validate_branch
+      #   run: |
+      #     if [[ "${{ inputs.branch }}" != 'main' && "${{ inputs.version }}" != "" ]]; then
+      #       echo "Branch is not valid. Tag can only be created in the main branch."
+      #       exit 1
+      #     else
+      #       echo "Branch is valid for tag creation."
+      #     fi
+
+      - name: Get Token for workflow
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }}
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: ${{ inputs.repoName }}
+          fetch-depth: 0
+          # path: ${{ inputs.repoName }}
+          ref: ${{ inputs.branch }}
+
+      - name: Check if last commit has a tag
+        id: check_tag
+        run: |
+          tag=$(git describe --tags --exact-match HEAD 2>/dev/null || true)  # Use '|| true' to avoid exit code 128
+          if [ -z "$tag" ]; then
+            echo "No tag associated with the last commit."
+            echo "::set-output name=tag::"
+            echo "TAG_FOUND=false" >> $GITHUB_ENV
+          else
+            echo "Last commit is tagged with: $tag"
+            echo "::set-output name=tag::$tag"
+            echo "TAG_FOUND=true" >> $GITHUB_ENV
+          fi
+
+      - name: Create and push tag
+        id: "tag_create"
+        run: |
+          # Check if TAG_FOUND is 'false' and create and push the tag if necessary
+          if [ "${{ env.TAG_FOUND }}" == "false" ]; then
+            # Generate a tag based on the current date and time
+            TAG_NAME="${{ inputs.version }}"
+            echo "Creating and pushing tag $TAG_NAME"
+            git tag $TAG_NAME
+            git push origin $TAG_NAME
+            echo "::set-output name=tag::$TAG_NAME"
+          else
+            # Use the existing tag from the previous step
+            TAG_NAME="${{ steps.check_tag.outputs.tag }}"
+            echo "Using existing tag $TAG_NAME"
+            echo "::set-output name=tag::$TAG_NAME"
+          fi
+
+  determine-version:
+    if: |
+      always() &&
+      (needs.create-tag.result == 'success' || needs.create-tag.result == 'skipped')
+    needs: create-tag
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.determine_version.outputs.VERSION }}
+    steps:
+      - name: Determine Version
+        id: determine_version
+        run: |
+          VERSION="${{ needs.create-tag.outputs.tag || inputs.version }}"
+          echo "Building and publishing with version: $VERSION"
+          echo "::set-output name=VERSION::$VERSION"
+
+
+  build-publish-sdist:
+     if: always() && needs.determine-version.result == 'success' && (needs.create-tag.result == 'success' || needs.create-tag.result == 'skipped')  && (inputs.package_type == 'source-distribution')
+     #if: inputs.package_type == 'source-distribution'
+     uses: telus-health/thdp-hds-cloud-functions/.github/workflows/source-distribution-package.yaml@Ah-cloud-function
+     needs: [create-tag,determine-version]
+     with:
+      version: ${{ needs.determine-version.outputs.VERSION }}
+      branchName: ${{ inputs.branch }}
+      # environment: ${{ inputs.environment }}
+      repoName: ${{ inputs.repoName }}
+      python_version: ${{ inputs.python_version }}
+      skip_tests: ${{ github.event.inputs.version == '' }}
+      skip_publish: ${{ inputs.skip_publish }}
+      appName: ${{ inputs.appName }}
+      region: ${{ inputs.region }}
+     secrets:
+       SA_EMAIL: ${{ secrets.SA_EMAIL }}
+       PROVIDER_NAME: ${{ secrets.PROVIDER_NAME }}
+       GCP_ARTIFACTORY_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+       GCP_ARTIFACTORY_URL: ${{ secrets.GCP_ARTIFACTORY_URL }}
+      #  GCP_ARTIFACTORY_URL: "//artifactregistry.googleapis.com/projects/thdp-hds-shrd-artifacts-25d4/locations/northamerica-northeast1/repositories/northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory"
+       HDO_GITHUB_APP_PEM: ${{ secrets.HDO_GITHUB_APP_PEM }}
+       HDO_GITHUB_APP_ID: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+  build-publish-wheel:
+     if: always() && needs.determine-version.result == 'success' && (needs.create-tag.result == 'success' || needs.create-tag.result == 'skipped')  && (inputs.package_type == 'wheel')
+     #if: inputs.package_type == 'wheel' 
+     uses: telus-health/thdp-hds-cloud-functions/.github/workflows/wheel-package.yaml@Ah-cloud-function
+     needs: determine-version
+     with:
+      version: ${{ needs.determine-version.outputs.VERSION }}
+      branchName: ${{ inputs.branch }}
+      repoName: ${{ inputs.repoName }}
+      python_version: ${{ inputs.python_version }}
+      skip_tests: ${{ github.event.inputs.version == '' }}
+      skip_publish: ${{ inputs.skip_publish }}
+     secrets:
+       SA_EMAIL: ${{ secrets.SA_EMAIL }}
+       PROVIDER_NAME: ${{ secrets.PROVIDER_NAME }}
+       GCP_ARTIFACTORY_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+       GCP_ARTIFACTORY_URL: ${{ secrets.GCP_ARTIFACTORY_URL }}
+      #  GCP_ARTIFACTORY_URL: "//artifactregistry.googleapis.com/projects/thdp-hds-shrd-artifacts-25d4/locations/northamerica-northeast1/repositories/northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory"
+       HDO_GITHUB_APP_PEM: ${{ secrets.HDO_GITHUB_APP_PEM }}
+       HDO_GITHUB_APP_ID: ${{ secrets.HDO_GITHUB_APP_ID }}
+       
+  rollback-tag:
+    name: "Rollback Tag"
+    if: ${{ failure() && inputs.version != '' && needs.create-tag.result == 'success' }}
+    needs:
+      - create-tag
+      - build-publish-wheel
+      - build-publish-sdist
+    runs-on: ubuntu-latest  
+    steps:
+
+      - name: Get Token for workflow
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }}
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: ${{ inputs.repoName }}
+          # path: ${{ inputs.repoName }}
+          ref: ${{ inputs.branch }}
+
+      - name: Delete tag
+        uses: dev-drprasad/delete-tag-and-release@v0.2.1
+        with:
+          tag_name: ${{ inputs.version }} 
+        env:
+          GITHUB_TOKEN: ${{steps.get_workflow_token.outputs.token}}
+
+
+
+ 
+  

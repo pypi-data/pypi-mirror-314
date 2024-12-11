@@ -1,0 +1,282 @@
+name: Build & Deploy cloud function Code
+on:
+  # push:
+  #   branches:
+  #     # - main
+  #     - Ah-cloud-function #using current branch
+  workflow_dispatch:
+      inputs:
+        AH_cf_branch:  #input for branch
+          description: "Analytic hub cloud function branch name"
+          type: string
+          default: master
+          required: true
+        first_env:
+          description: "First env"
+          required: true
+          default: 'dev'
+          type: choice
+          options:
+            - dev
+            - qa
+            - prod
+        last_env:
+          description: "Last Env"
+          required: true
+          default: 'dev'
+          type: choice
+          options:
+            - dev
+            - qa
+            - prod
+        release_type:
+          description: "Release type"
+          default: 'major'
+          type: choice
+          options:
+            - major
+            - minor
+            - patch
+        tf-action:
+          description: "Terraform Action"
+          required: true
+          default: 'plan'
+          type: choice
+          options:
+            - plan
+            - apply
+            - destroy
+  
+env:
+  RELEASE_BRANCH: "Ah-cloud-function"    #using current branch
+
+jobs:
+
+  ReleaseSetup:
+    name: Start Release
+    runs-on: ubuntu-latest
+    permissions: "write-all"
+    outputs:
+      release-info: ${{ steps.set-release-info.outputs.release_info }} 
+      release-version: ${{ steps.set-release-version.outputs.release_version }} 
+    steps:
+
+      - name: Get Token for workflow
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }} 
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }} 
+
+# # need to be added in this team
+#       - name: Check for actor authorization
+#         uses: telus-health/actions-require-user-team@master #---here--------------------------------
+#         with:
+#           actor: ${{ github.triggering_actor }}
+#           allowed_teams: thdp-docqa-workflow-executors  #----------and here----------------------------
+#           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }} 
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: telus-health/thdp-gh-actions 
+          # path: actions
+          ref: main
+          sparse-checkout: release-and-bump-tag
+          sparse-checkout-cone-mode: false
+
+      - name: Compute Release
+        uses: ./release-and-bump-tag
+        id: set-release-info
+        with:
+          start_env:  ${{github.event.inputs.first_env}}
+          end_env: ${{github.event.inputs.last_env}}
+          github_token: ${{ steps.get_workflow_token.outputs.token }}
+          default_bump: ${{ github.event.inputs.release_type }}
+          tag_prefix: release-v
+          commit_sha: ${{ github.sha }} 
+          release_branches: ${{ env.RELEASE_BRANCH }}
+          # pre_release_branches: dev-*
+          dry_run: true
+          all_environments: |-
+            dev
+            qa
+            prod
+
+      - name: Validate branch
+        if:  ${{ fromJson(steps.set-release-info.outputs.release_info).isRelease }}
+        run: |
+          if [[ ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} != "${{env.RELEASE_BRANCH}}" ]]; then
+            echo "Branch should be \"dev\""
+            exit 1;
+          fi
+
+      - name: set the release version
+        id: set-release-version
+        run: |
+          if [[ ${{ fromJson(steps.set-release-info.outputs.release_info).isRelease }}  == true ]]; then
+            echo "release_version=${{ fromJson(steps.set-release-info.outputs.release_info).releaseVersion.newVersion }}" >> $GITHUB_OUTPUT
+          fi
+
+  PrintRelease:
+    name: Print Release Params
+    runs-on: ubuntu-latest
+    needs: [ReleaseSetup]
+    steps:
+      - name: print release params
+        id: print-release-output
+        run: |
+          echo "${{ fromJson(needs.ReleaseSetup.outputs.release-info).isRelease }}"
+          echo "${{ fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }}"
+          echo "${{ fromJson(needs.ReleaseSetup.outputs.release-info).environments }}"
+          echo "${{ needs.ReleaseSetup.outputs.release-version }}"
+
+
+  Build:
+    name: Build Cloud Function
+    if: ${{ !fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }}
+    uses: telus-health/thdp-hds-cloud-functions/.github/workflows/build-py-artifact.yaml@Ah-cloud-function
+    needs: [ReleaseSetup]
+    with:
+      python_version: 3.9
+      skip_tests: false
+      version: ${{ needs.ReleaseSetup.outputs.release-version }}
+      repoName: telus-health/thdp-hds-cloud-functions # name of the repository containing the cloud function code.
+      branch: ${{ github.event.inputs.AH_cf_branch }} 
+      package_type: 'source-distribution'
+      appName: thdp-hds-cloud-functions
+      region: northamerica-northeast1
+    secrets:
+      SA_EMAIL: ${{ secrets.SA_EMAIL }}
+      PROVIDER_NAME: ${{ secrets.PROVIDER_NAME }}
+      GCP_ARTIFACTORY_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+      GCP_ARTIFACTORY_URL: ${{ secrets.GCP_ARTIFACTORY_URL }}
+      HDO_GITHUB_APP_PEM: ${{ secrets.HDO_GITHUB_APP_PEM }}
+      HDO_GITHUB_APP_ID: ${{ secrets.HDO_GITHUB_APP_ID }}
+      
+      # GCP_ARTIFACTORY_URL: "//artifactregistry.googleapis.com/projects/thdp-hds-shrd-artifacts-25d4/locations/northamerica-northeast1/repositories/northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory"
+      # "//artifactregistry.googleapis.com/projects/thdp-hds-shrd-artifacts-25d4/locations/northamerica-northeast1/repositories/northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory"
+      # northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory
+
+  AH-Version: 
+    name: AH-Version 
+    needs: [ReleaseSetup, Build]
+    runs-on: ubuntu-latest
+    outputs:
+      ah_version: ${{ steps.source-version.outputs.ah-version }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Display structure of downloaded files strt
+        run: ls -R
+      - name: Download artifact
+        if: ${{ !fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }}
+        uses: actions/download-artifact@v4
+      - name: Display structure of downloaded files
+        run: ls -R
+        # with:
+        #   name: #version-thdp-hds-cloud-functions #version
+
+      - name: Get Token for workflow
+        id: get_workflow_token
+        if:  ${{ fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }}
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }}
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+      - id: get-latest-tag
+        if:  ${{ fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }}
+        uses: oprypin/find-latest-tag@v1
+        with:       
+          repository: telus-health/thdp-hds-cloud-functions # specifies the repository where the latest tag should be found
+          # excludes: prerelease, draft
+          prefix: 'release-v'
+          token: ${{ steps.get_workflow_token.outputs.token }}
+
+      - uses: bluwy/substitute-string-action@v3
+        if:  ${{ fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }}
+        id: get-latest-version
+        with:
+          _input-text: ${{ steps.get-latest-tag.outputs.tag }}
+          release-v: ""
+
+      - name: Source the version
+        id: source-version
+        run: |
+          if [[ ${{ fromJson(needs.ReleaseSetup.outputs.release-info).resumeRelease }} == false ]]; then
+            echo "ah-version=$(cat version.txt)" >> $GITHUB_OUTPUT 
+          else
+            echo "ah-version=${{ steps.get-latest-version.outputs.result }}" >> $GITHUB_OUTPUT
+          fi
+
+  # Deploy:
+  #   name: Deploy
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       target: ${{ fromJson(needs.ReleaseSetup.outputs.release-info).environments }}
+  #   uses: ./.github/workflows/deploy.yaml 
+  #   needs: [ReleaseSetup, Build, AH-Version] 
+  #   with:
+  #     target-env: ${{ matrix.target }}
+  #     ah-version: ${{ needs.AH-Version.outputs.ah-version }}
+  #     tf-action: ${{ github.event.inputs.tf-action }}
+  #   secrets:
+  #     SA_EMAIL: ${{ secrets.SA_EMAIL }}
+  #     PROVIDER_NAME: ${{ secrets.PROVIDER_NAME }}
+  #     GCP_ARTIFACTORY_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+  #     GCP_ARTIFACTORY_URL: ${{ secrets.GCP_ARTIFACTORY_URL }}
+  #     HDO_GITHUB_APP_PEM: ${{ secrets.HDO_GITHUB_APP_PEM }}
+  #     HDO_GITHUB_APP_ID: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+  FinalizeRelease:
+    name: Finalize Release
+    if: ${{ fromJson(needs.ReleaseSetup.outputs.release-info).isRelease }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    needs: [ReleaseSetup, Build, AH-Version]
+    # needs: [ReleaseSetup, Build, AH-Version, Deploy]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: telus-health/thdp-gh-actions  #release-and-bump-tag directory present in this repo
+          # path: actions
+          ref: main
+          sparse-checkout: release-and-bump-tag
+          sparse-checkout-cone-mode: false
+
+      - name: Create Tag
+        uses: ./release-and-bump-tag
+        id: set-release-info
+        with:
+          start_env:  ${{github.event.inputs.first_env}}
+          end_env: ${{github.event.inputs.last_env}}
+          github_token: ${{ steps.get_workflow_token.outputs.token }}
+          default_bump: ${{ github.event.inputs.release_type }}
+          tag_prefix: release-v
+          commit_sha: ${{ github.sha }}
+          release_branches: ${{ env.RELEASE_BRANCH }}
+          # pre_release_branches: dev-*
+          dry_run: false
+          all_environments: |-
+            dev
+            qa
+            prod
+
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        env:
+            GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+            GITHUB_SHA: ${{ github.sha }}
+        with:
+            commitish: ${{ github.sha }}
+            tag_name: ${{ fromJson(needs.ReleaseSetup.outputs.release-info).releaseVersion.newTag }}
+            release_name: Release ${{ fromJson(needs.ReleaseSetup.outputs.release-info).releaseVersion.newTag }}
+            body: ${{ fromJson(needs.ReleaseSetup.outputs.release-info).releaseVersion.changelog }}
