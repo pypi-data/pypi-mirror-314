@@ -1,0 +1,81 @@
+[tool.poetry]
+name = "pytest-parametrization-annotation"
+version = "1.0.0"
+description = "A pytest library for parametrizing tests using type hints."
+authors = ["Fabian Haenel <contact@fabian-haenel.io>"]
+readme = "README.md"
+packages = [{include = "pytest_parametrization_annotation", from = "src"}]
+classifiers = [
+    # Status
+    "Development Status :: 5 - Production/Stable",
+
+    # License
+    "License :: OSI Approved :: BSD License",
+
+    # Officially supported python versions
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+
+    # Topics
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Testing :: Unit",
+    "Topic :: Utilities",
+
+    # Misc
+    "Typing :: Typed",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+]
+
+[tool.poetry.plugins."pytest11"]
+pytest-parametrization-annotation = "pytest_parametrization_annotation.plugin"
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+pytest = ">=7"
+
+[tool.poetry.group.linting.dependencies]
+ruff = "v0.8.2"
+black = "v24.10"
+mypy = "^1.13.0"
+
+[tool.poetry.group.testing.dependencies]
+jinja2 = ">=3"
+tox = "^4.14.2"
+coverage = {extras = ["toml"], version = ">=6.5.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py"]
+pythonpath = ["src"]
+testpaths = ["tests/"]
+markers = [
+    "case: Define a test case based on type annotations",
+]
+
+[tool.ruff]
+src = ["src"]
+exclude = [".py.j2"]
+
+[tool.black]
+target-version = ["py310", "py311", "py312", "py313"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+files = ["src", "tests"]
+
+[tool.coverage.run]
+data_file = ".coverage.${TOX_ENV_NAME}"
+
+[tool.coverage.report]
+exclude_lines = [
+    "if TYPE_CHECKING:"
+]
