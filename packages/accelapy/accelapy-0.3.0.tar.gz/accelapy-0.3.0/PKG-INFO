@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: accelapy
+Version: 0.3.0
+Summary: Accela REST API
+Home-page: https://github.com/michaelachrisco/accelapy
+License: AGPL-3.0-or-later
+Keywords: accela,rest,api
+Author: MichaelAChrisco
+Author-email: michaelachrisco@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: attrs (>=24.2.0,<25.0.0)
+Requires-Dist: httpx (>=0.27.2,<0.28.0)
+Requires-Dist: python-dateutil (>=2.9.0.post0,<3.0.0)
+Requires-Dist: requests (>=2.32.3,<3.0.0)
+Project-URL: Repository, https://github.com/michaelachrisco/accelapy
+Description-Content-Type: text/markdown
+
+# accelapy
+An Accela specific API for https://developer.accela.com/docs/api_reference/api-index.html
+
+## How to use:
+`pip install accelapy`
+
+You may need to get your payload from Accela for your environment.
+
+```python
+from accelapy.client import AccelaClient
+from accelapy.records_client.types import Response
+from accelapy.records_client.models import RecordModel, TableModel
+import json
+from typing import List
+from accelapy.payload import Payload
+
+payload = Payload(payload_str='totally-real-payload')
+api_client = AccelaClient(payload=payload)
+
+# Get an Accela record, then get its associated custom tables
+record_response: Response = api_client.v4_get_records.sync_detailed(client=api_client.authentication_client,
+                                                                    custom_id='TM-6308')
+json_load = json.loads(record_response.content)
+record_models: List[RecordModel] = [RecordModel.from_dict(x) for x in json_load['result']]
+print(record_models)
+
+real_record_id = record_models[0].id
+record_custom_tables_response: Response = api_client.v_4_get_records_record_id_custom_tables.sync_detailed(
+    client=api_client.authentication_client, record_id=real_record_id)
+json_load = json.loads(record_custom_tables_response.content)
+
+custom_tables: List[TableModel] = [TableModel.from_dict(x) for x in json_load['result']]
+print(custom_tables)
+```
+
