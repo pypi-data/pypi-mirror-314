@@ -1,0 +1,14 @@
+stages:
+  - test
+  - build
+
+test:
+  stage: test
+  image: rust:1-buster
+  tags:
+    - docker_exec
+  only:
+    - main
+  script:
+    - cargo test -- --include-ignored
+

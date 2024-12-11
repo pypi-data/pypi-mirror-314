@@ -1,0 +1,20 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "ccsds"
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+manifest-path = "ccsds-py/Cargo.toml"

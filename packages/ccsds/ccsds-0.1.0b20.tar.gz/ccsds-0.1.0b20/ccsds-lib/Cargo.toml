@@ -1,0 +1,49 @@
+[package]
+name = "ccsds"
+description = "CCSDS spacecraft data stream decoding"
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+keywords.workspace = true 
+categories.workspace = true
+license-file.workspace = true
+repository.workspace = true
+readme = "README.md"
+
+[dependencies]
+hifitime.workspace = true
+pyo3 = { workspace = true, optional = true }
+crossbeam = { version = "^0.8.4", features = ["crossbeam-channel"] }
+ndarray = "0.16.1"
+rayon = "^1.7.0"
+rs2 = "^0.1.0"
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+spacecrafts.workspace = true
+thiserror = "^2.0.0"
+threadpool = "^1.8.1"
+tracing.workspace = true
+typed-builder = "0.20.0"
+
+[lib]
+name = "ccsds"
+path = "src/lib.rs"
+
+[features]
+python = ["pyo3"]
+pyo3 = ["dep:pyo3"]
+
+[dev-dependencies]
+hex = "0.4.3"
+md-5 = "0.10.6"
+rand = "0.8.5"
+tempfile = "3.9.0"
+criterion = { version = "0.5.1", features = ["html_reports"] }
+
+[build-dependencies]
+spacecrafts.workspace = true
+serde_json.workspace = true
+
+[[bench]]
+name = "benches"
+harness = false
