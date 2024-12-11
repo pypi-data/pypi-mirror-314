@@ -1,0 +1,159 @@
+
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "o7cli"
+version = "1.5.1" # This will be updated by semantic-release
+
+description = "Useful CLI and scripts for O7 Conseils DevOps practice"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["python", "utility", "o7conseils", "aws", "devops", "cli"]
+classifiers = [
+  # https://pypi.org/classifiers/
+  # How mature is this project? Common values are
+  #   3 - Alpha
+  #   4 - Beta
+  #   5 - Production/Stable
+  "Development Status :: 4 - Beta",
+
+  # Indicate who your project is intended for
+  # "Intended Audience :: Developers",
+  # "Topic :: Software Development :: Build Tools",
+
+  "License :: OSI Approved :: Apache Software License",
+
+  # Specify the Python versions you support here.
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+
+authors = [
+    {name = "Philippe Gosselin", email = "phil@o7conseils.com"}
+]
+maintainers = []
+
+requires-python = ">= 3.10"
+dependencies = [
+    "boto3>=1.35",
+    "certifi>=2024.8.30",
+    "o7util>=0.1.1",
+    "pandas>=2.2",
+]
+
+#------------------------------------------------
+# SCRIPTS
+#------------------------------------------------
+[project.scripts]
+o7 = "o7cli.menu:main"
+
+#------------------------------------------------
+# OTHER REQUIREMENTS
+#------------------------------------------------
+[project.optional-dependencies]
+pdf = ["o7pdf>=0.2.1"]
+dev = [
+  "pytest",
+  "pytest-cov",
+  "pytest-mock",
+  "ruff"
+]
+
+#------------------------------------------------
+# SETUP TOOLS
+#------------------------------------------------
+[tool.setuptools.packages.find]
+where = ["src"]
+
+#------------------------------------------------
+# PYTEST
+# https://docs.pytest.org/en/stable/reference/reference.html#ini-options-ref
+#------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "integration",
+]
+addopts = "--cov=o7cli --cov-report=term --cov-report=html --cov-fail-under=24"
+
+
+#------------------------------------------------
+# SEMANTIC RELEASE
+# https://python-semantic-release.readthedocs.io/en/latest/configuration.html#
+#------------------------------------------------
+[tool.semantic_release]
+version_variables = [
+  "pyproject.toml:version",
+  "./src/o7cli/__init__.py:__version__"
+]
+
+[semantic_release.branches.main]
+match = "main"
+prerelease_token = "rc"
+prerelease = false
+
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = [
+    "build",
+    "chore",
+    "ci",
+    "docs",
+    "feat",
+    "fix",
+    "perf",
+    "style",
+    "refactor",
+    "test",
+]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]
+
+
+#------------------------------------------------
+# PYLINT
+#------------------------------------------------
+[tool.pylint.MASTER]
+fail-under="9.7"
+#fail-on=F,E,W,C
+fail-on="F,E"
+ignore-patterns = ["test_*"]
+
+[tool.pylint.REPORTS]
+score="yes"
+
+[tool.pylint.BASIC]
+good-names = "i,j,k,df"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = "W1203,R0801"
+
+
+#------------------------------------------------
+# RUFF
+# https://docs.astral.sh/ruff/configuration/
+#------------------------------------------------
+[tool.ruff]
+line-length = 90
+
+[tool.ruff.lint]
+# Read more here https://beta.ruff.rs/docs/rules/
+# By default, Ruff enables Flake8's E and F rules
+# Pyflakes - F, pycodestyle - E, W
+# flake8-builtins - A
+# Pylint - PLC, PLE, PLW
+# isort - I
+# flake8-BugBear - B
+# flake8-Bandit - S
+select = ['E', 'F', 'W', 'A', 'PLC', 'PLE', 'PLW', 'I', 'B', 'S']
+ignore = ['E501']
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+"**/{tests,docs,tools}/*" = ["E402", "S101"]
