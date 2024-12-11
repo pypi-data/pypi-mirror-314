@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: llm-evaluation
+Version: 0.0.3
+Summary: LLM Evaluation Package
+Author: Maks Lupey
+Author-email: <maxrty234@gmail.com>
+Keywords: python,llm,evaluation,llm evaluation
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: Unix
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Description-Content-Type: text/markdown
+Requires-Dist: langfuse
+Requires-Dist: openai
+Requires-Dist: langchain_openai
+Requires-Dist: langchain
+Requires-Dist: rapidfuzz
+Requires-Dist: scikit-learn
+Requires-Dist: llama-index-llms-openai-like
+
+
+# LLM Evaluation
+
+
+Example of usage:
+
+```
+import os
+
+from llm_eval.evaluator import Evaluator
+from dotenv import load_dotenv
+
+load_dotenv()
+
+evaluator = Evaluator(os.getenv('LANGFUSE_SECRET_KEY'), os.getenv('LANGFUSE_PUBLIC_KEY'), os.getenv('LANGFUSE_HOST'),
+                      os.getenv('OPENAI_INTERFACE_KEY'), os.getenv('LLM_AS_A_JUDGE_PRIVATE_KEY'), 'experiments/biomedical/input/gpt4o_mini_dataset_100.json')
+
+evaluator.run() 
+```
+
+
+Example of config.json:
+
+```
+{
+    "eval_model": "gpt-4o-mini",
+    "eval_model_api_base": "https://api.openai.com/v1/",
+    "eval_trace_name": "biomedical5_gpt-4o-mini",
+    "eval_model_simple_experiment_name": "biomedical_factcheck7_gpt-4o-mini_v02",
+    "eval_model_dataset_name": "biomedical_dataset100_v6",
+    "eval_model_dataset_file_path": "experiments/biomedical/input/datasets/biomedical_raw_dataset100.json",
+    "llm_as_a_judge_model": "gpt-4o-mini",
+    "llm_as_a_judge_model_api_base": "https://api.openai.com/v1/",
+    "eval_model_max_tokens_completion": 1,
+    "eval_model_temperature": 1,
+    "eval_model_logprobs": false,
+    "eval_model_generation_name": "iomedical_dataset100_v1.0_gpt-4o-mini_v02",
+    "eval_model_prompt": {
+            "system": "SYSTEM: You are a computational biologist tasked with evaluating scientific claims. Your role requires you to apply critical thinking and your expertise to interpret data and research findings accurately. Start Answer with 'Yes' or 'No' to directly address the query posed.", 
+            "user": "USER: Does the phrase '{Triple}' receive at least indirect support from the statement: '{Sentence}'?"
+        },
+    "eval_model_prompt_name":"biomedical_dataset10_prompt_03",
+    "llm_as_a_judge_accuracy_criteria": "Score 1: The answer is completely unrelated to the reference. \n Score 3: The answer has minor relevance but does not align with the reference. \n Score 5: The answer has moderate relevance but contains inaccuracies. \n Score 7: The answer aligns with the reference but has minor errors or omissions. \n Score 10: The answer is completely accurate and aligns perfectly with the reference.",
+    "llm_as_a_judge_evaluator_name": "llm_as_a_judge",
+    "exact_match_evaluator_name": "exact_match",
+    "string_distance_evaluator_name": "string_distance",
+    "f1_score_exact_match_summary_evaluators": "f1_score",
+    "label":"development"
+}
+```
