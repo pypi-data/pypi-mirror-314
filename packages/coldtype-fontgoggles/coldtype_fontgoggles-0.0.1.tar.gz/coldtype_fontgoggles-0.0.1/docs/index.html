@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FontGoggles — Interactive Previewing and Comparing</title>
+<link rel="stylesheet" href="markdown.css">
+</style>
+</head>
+<body>
+<p><img alt="FontGoggles icon" src="images/icon.png" /></p>
+<h1>FontGoggles</h1>
+<p><em>Interactive Previewing and Comparing</em></p>
+<h2>Overview</h2>
+<p>FontGoggles is a font viewer for various font formats. It is a desktop
+application for macOS. It is free and <a href="https://github.com/justvanrossum/fontgoggles">open source</a>.</p>
+<p>The main focus is text behavior, specifically text shaping and variation behavior.</p>
+<p>You can download <a href="https://github.com/justvanrossum/fontgoggles/releases/latest">the latest release here</a>.</p>
+<p>Homebrew users can install the <code>fontgoggles</code> cask with the command <code>brew install --cask fontgoggles</code>.</p>
+<p>The following font formats are supported:</p>
+<ul>
+<li>.ttf/.otf (including variable fonts and COLR/CPAL-based color fonts)</li>
+<li>.ttc/.otc</li>
+<li>.woff/.woff2</li>
+<li>.ufo/.ufoz</li>
+<li>.designspace</li>
+<li>.ttx</li>
+</ul>
+<p>Core features:</p>
+<ul>
+<li>View multiple fonts simultaneously</li>
+<li>Supports complex scripts: it does proper text shaping with HarfBuzz</li>
+<li>Enable/disable OpenType features</li>
+<li>Explore design spaces</li>
+<li>Preview .ufo and .designspace files <em>as if</em> they are compiled fonts</li>
+<li>Automatically reload fonts if they are changed on disk</li>
+<li>Supports vertical text layout</li>
+</ul>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_1_goggle.png" /></p>
+<h2>Testimonials</h2>
+<p>Agyei Archer: <em>“🤩🤩🤩”</em></p>
+<p>Stephen Nixon: <em>“Super nice! I really love how this lets me compare the same
+variable axes across multiple fonts. It’s super interesting to visually
+compare how different fonts handle wght, opsz, etc. I also love that I can
+put this in my mac dock and drag font files directly onto it, rather than
+booting up a browser to test things. And the light/dark modes are right on
+point.”</em></p>
+<p>Thomas Thiemich: <em>“The most impressive feature of this tool so far is its
+speed — it’s quite impressive how fast it handles multiple fonts or variable
+fonts.”</em></p>
+<p>Ben Mitchell: <em>“I especially like the ability to scale text within the samples
+and adjust the baseline, wish other apps were this intuitive.”</em></p>
+<p>Petr van Blokland: <em>“FontGoggles works really well. Truly live feature
+source code debugging for many masters simultaneously. Awesome.”</em></p>
+<p>Paul van der Laan (Bold Monday): <em>“Really impressive! Love the uncluttered
+interface. Support for UFO files is fantastic. Being able to instantly
+preview a variable font by dropping a designspace file is a BIG help.”</em></p>
+<p>Arthur Reinders Folmer (Typearture): <em>“These goggles need no prescription!
+FontGoggles shows and compares complex color and variable fonts fast and
+fluid, making refinements and adjustments a piece of cake. An amazing
+variable color font proofing app for all file formats.”</em></p>
+<p>Stephen Nixon, two days later: <em>“WOW. Font Goggles is just so good. It allows
+me to open a preview of the full Recursive designspace in maybe 4 or 5
+seconds. Way quicker than any other way of checking whether a given
+interpolation will work as desired.”</em></p>
+<h2>How to use</h2>
+<p>Drop some fonts (or folders with fonts) onto the application, or launch
+the application, and drop some fonts onto the window.</p>
+<p>A new, empty window looks like this:</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_2_empty.png" /></p>
+<p>After dropping some fonts it will look like this:</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_3_filled.png" /></p>
+<ul>
+<li>Zoom in/out by using pinch gestures on your trackpad, or use ⌘-plus
+  and ⌘-minus, or option-scroll.</li>
+<li>Type text in the text field to change the displayed text</li>
+<li>Drag and drop can be used to rearrange the fonts</li>
+<li>Click on a font to see the glyph positioning information</li>
+<li>Select glyphs by clicking on them, which will highlight glyph
+  positioning info and character info</li>
+<li>In the font list, use arrow keys to navigate glyphs and fonts</li>
+</ul>
+<h2>The Character and Glyph lists</h2>
+<p>On the left hand side of the FontGoggles window there are two lists.</p>
+<p>The left-most one is the <em>Character list</em>, which shows the entered
+characters and their Unicode values.</p>
+<p>Characters are listed in logical order (first-to-last, in the
+natural writing direction of the script).</p>
+<p>The second list is the <em>Glyph list</em>, which can show information about
+the rendered glyphs, such as their names, advance values and positioning.
+Since this information is font-specific, it only shows information when
+exactly one font is selected (or when only one font has been opened).</p>
+<p>The glyphs in the <em>Glyph list</em> are ordered from left to right in <em>visual</em>
+order, or from top to bottom in vertical mode.</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_4_arabic.png" /></p>
+<p>Selecting items in the <em>Character list</em> will reflect the selection in the
+<em>Glyphs list</em> and vice versa. A single glyph can belong to multiple
+characters (for example in the case of ligatures), or vice versa.</p>
+<p>Characters and glyphs are “clustered” by the shaping engine (HarfBuzz),
+and the <em>Glyph list</em> contains a column named “cluster” that shows the
+cluster number for each glyph. For more in-depth information see the
+<a href="https://harfbuzz.github.io/clusters.html">HarfBuzz documentation</a>.
+Selecting a character or glyph in one list will select the entire cluster
+in the other list.</p>
+<p>Both lists can be scrolled horizontally or resized to reveal more information,
+and columns can be rearranged by dragging them around.</p>
+<p>You can copy information from both <em>Character</em> and <em>Glyph lists</em> by selecting
+rows or columns and hit ⌘-C. Select multiple rows or columns by holding
+the Command key while clicking further items. For example, click on the
+“glyph” header in the <em>Glyph list</em> to select the glyph name column, the hit
+⌘-C to copy the sequence of glyph names to the clipboard. If multiple columns
+are involved in the selection, the clipboard data will be tab-separated, ready
+to be pasted into a spreadsheet.</p>
+<h2>The Font list</h2>
+<p>The <em>Font list</em> is the central section of the FontGoggles window. Font files can be
+dropped here, fonts can be selected, rearranged by dragging them around,
+or removed from the list with the delete key.</p>
+<p>You can control-click on a font to get a contextual menu. The menu item
+there is to reveal the font in the Finder.</p>
+<p>Fonts can also be dragged to other applications, which is equivalent to
+dragging them from the finder. You can also drag and drop fonts between
+FontGoggles windows.</p>
+<h2>Text settings</h2>
+<p>At the top right of the FontGoggles window you find four buttons with
+popup menus:</p>
+<ul>
+<li>Direction/orientation</li>
+<li>Visual alignment</li>
+<li>Script</li>
+<li>Language</li>
+</ul>
+<p>The <em>Direction/orientation</em> menu has six options:</p>
+<ul>
+<li><em>Automatic, with BiDi and Segmentation</em>: apply the Unicode bidirectional
+  algorithm, which will determine the dominant writing direction, as well
+  as perform segmentation of the string based on runs with the same script
+  and the same BiDi level.</li>
+<li><em>Automatic, w/o BiDi and Segmentation</em>: let HarfBuzz guess the writing
+  direction and the script of the text, do not applying the Unicode
+  bidirectional algorithm, and do not perform segmentation.</li>
+<li><em>Left-to-Right</em>: force the direction of the text to be Left-to-Right</li>
+<li><em>Right-to-Left</em>: force the direction of the text to be Right-to-Left</li>
+<li><em>Top-to-Bottom</em>: use vertical layout, Top-to-Bottom</li>
+<li><em>Bottom-to-Top</em>: use vertical layout, Bottom-to-Top</li>
+</ul>
+<p>The <em>Visual alignment</em> button controls how the rendered text is visually
+aligned within the window. Its menu has four options:</p>
+<ul>
+<li><em>Automatic</em>: Use the alignment that is most natural with the detected
+  writing direction</li>
+<li><em>Left</em>: align left</li>
+<li><em>Right</em>: align right</li>
+<li><em>Center</em>: align center</li>
+</ul>
+<p>In vertical mode, the options are <em>Automatic</em>, <em>Top</em>, <em>Bottom</em> and <em>Center</em>.</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_5_cjk.png" /></p>
+<p>The <em>Script</em> button overrides the automatic detection of the script by
+HarfBuzz.</p>
+<p>The <em>Language</em> button allows you to specify for which language any
+language-specific lookups will be activated.</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_6_turkish.png" /></p>
+<h2>Formatting settings</h2>
+<p>The <em>Features</em> panel shows the superset of GSUB and GPOS features of
+all opened fonts. You can click feature tags to enable them (green),
+disable them (red) or use their default setting (gray). Clicking the
+tags cycles through the modes (gray → green → red → gray). Holding the
+option key reverses the cycling direction (gray → red → green → gray).</p>
+<p>For <code>GSUB</code> features, you can control-click (right-click) on a feature
+tag to get a contextual menu, allowing you to specify an alternate
+number for features that expose alternate glyphs, such as <code>aalt</code>.</p>
+<p>The <em>Variations</em> panel shows sliders for all axes defined in the opened
+fonts. The minimum and maximum values for an axis are the lowest and
+highest values found in all opened fonts that have that axis.</p>
+<p>When multiple variable fonts (and/or .designspace files) are opened,
+all axes in all open fonts are set to their respective default values.
+However, since this value can be different per font, the slider will
+in that case show an arbitrary position, and the numeric field will
+be empty as a sign there is not a single possible value.</p>
+<p>The <em>Options</em> panel has three sliders and a checkbox that affect the
+display of the text:</p>
+<ul>
+<li>The <em>Relative Size</em> slider controls the relative size of the text in
+  comparison to the box in which is is displayed. A value of 100 scales
+  the Units Per Em value to the display box size.</li>
+<li>The <em>Baseline</em> slider controls the baseline position, as a percentage
+  of the display box size.</li>
+<li>The <em>Margin</em> slider controls the left and right margins, as a percentage
+  of the display box size. Or top and bottom in vertical layout mode.</li>
+<li>The <em>Enable Color (COLR/CPAL)</em> checkbox allows you to choose whether
+  color glyphs are displayed if available.</li>
+</ul>
+<h2>Customize the window layout</h2>
+<p>Most panels in the window are resizable, and some are collapsable.
+There are also “View” menu items to show and hide the collapsable
+panels:</p>
+<ul>
+<li>Show/hide Character list — ⌘-1</li>
+<li>Show/hide Glyph list — ⌘-2</li>
+<li>Show/hide Compile output — ⌘-3</li>
+<li>Show/hide Formatting options — ⌘-4</li>
+</ul>
+<p>With another “View” menu item you can hide or show the font file name labels
+in the Font list:</p>
+<ul>
+<li>Show/hide Font File name — ⌘-5</li>
+</ul>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_7_hindi.png" /></p>
+<h2>Load and navigate a text file</h2>
+<p>Instead of typing the text into the text field, you may load an external
+text file, using the “Load Text File...” menu under “View”, or with the
+“gear” popup menu next to the text field.</p>
+<p>Once loaded, you can navigate through the lines of the text file with
+the “stepper” control next to the text field. The “View” menu has shortcuts
+for this: ⌘-arrow-key-up and ⌘-arrow-key-down to go to the previous or next
+line respectively.</p>
+<p>You can keep editing the text file in a text editor while it is loaded in
+FontGoggles: it will reload the text file and show the changes.</p>
+<h2>Save a project file</h2>
+<p>You can save a window as a <code>.gggls</code> project file. Apart from the viewed
+fonts, it will store all text, formatting and window settings.</p>
+<p><em>Note: The file stores relative paths to the font files, so its location
+is related on the location of the font files. They can move together,
+but if sources move or the project file moves, the source references in
+the project file become invalid.</em></p>
+<h2>Edit a font with another application</h2>
+<p>If a font gets changed on-disk by another application, FontGoggles will
+reload it and show the updated version. For example, this happens, when
+you:</p>
+<ul>
+<li>Re-generate a .ttf or .otf from a font editor.</li>
+<li>Edit a .ufo with a font editor</li>
+<li>Edit a .ufo with a text editor</li>
+<li>Edit a .designspace file</li>
+<li>Edit a .fea file associated with a .ufo or .designspace file</li>
+<li>Edit a .ttx file</li>
+</ul>
+<p><em>Note: FontGoggles does its very best to reload as quickly as possible,
+but for .ufo and .designspace it may have to re-compile OpenType
+features, and the time needed depends on the complexity of the font.</em></p>
+<h2>Compile warnings and errors</h2>
+<p>When an error or warning occurs during the loading of a font, the
+font list will show that by highlighting the font with a diagonally
+striped background. To view the error details, click on the font, and
+the compile output panel at the bottom of the font list will appear.</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_7_error.png" /></p>
+<h2>Unicode Picker</h2>
+<p>FontGoggles provides its own Unicode Picker, under the “Edit” menu:
+“Unicode Picker”, shortcut ⌘-U. It allows you to find a Unicode
+character by name.</p>
+<p>You can use multiple search terms: each additional term will narrow
+down the result. It searches by prefix, so you can for example type
+“ara let” to find Arabic letters.</p>
+<p>Double click a character from the results to insert it in the front-most
+FontGoggles window. Alternatively you can copy selected character from
+the results list with the “Copy” button, or by typing ⌘-C.</p>
+<p><img alt="FontGoggles screenshot" src="images/screenshot_8_color_unicode.png" /></p>
+<p>Instead of searching by Unicode name, you can enter a Unicode hex
+value, such as <code>1F63B</code> or with a <code>U+</code>, <code>0x</code>, <code>u</code> or <code>uni</code> prefix.
+These are examples of valid Unicode literal search terms:</p>
+<ul>
+<li><code>1F63B</code></li>
+<li><code>U+1F63B</code></li>
+<li><code>0x1F63B</code></li>
+<li><code>u1F63B</code></li>
+<li><code>uni1234</code></li>
+</ul>
+<h2>Frequently asked questions</h2>
+<ul>
+<li>Q: Can glyph names be used as text input?</li>
+<li><em>A: No. FontGoggles uses HarfBuzz for text shaping, and for it to do
+  its work correctly, the input has to be Unicode text. For example, to
+  do correct shaping for the Arabic script, Unicode character attributes
+  are needed, which are not available from glyph name input.</em></li>
+</ul>
+<h2>Implementation notes</h2>
+<ul>
+<li>HarfBuzz is used for text shaping, not CoreText</li>
+<li>Hints are not taken into account: glyph rasterisation is done by the
+  OS from unhinted outlines</li>
+<li>Source formats are partially compiled, using parts of the <code>fontmake</code>
+  toolchain, therefore source previews match binary fonts as built with
+  <code>fontmake</code></li>
+</ul>
+<h2>System requirements</h2>
+<ul>
+<li>macOS 10.10 and higher</li>
+</ul>
+<h2>Found a bug or have a question?</h2>
+<p>Please open an issue on <a href="https://github.com/justvanrossum/fontgoggles/issues">the FontGoggles repository</a>.</p>
+<hr />
+<p><em>FontGoggles was written by <a href="mailto:justvanrossum@gmail.com">Just van Rossum</a>
+and funded by <a href="https://fonts.google.com/">GoogleFonts</a>.</em></p>
+<hr />
+</body>
+</html>
