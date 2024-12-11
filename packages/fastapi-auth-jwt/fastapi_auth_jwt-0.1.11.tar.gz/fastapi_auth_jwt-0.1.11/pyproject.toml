@@ -1,0 +1,129 @@
+[tool.isort]
+profile = "black"
+
+[[tool.mypy.overrides]]
+module = "decouple.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "jwt.*"
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
+extend-select = ["UP"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+source = "regex_commit"
+commit_extra_args = ["-e"]
+path = "fastapi_auth_jwt/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+]
+
+[tool.hatch.envs.default]
+features = [
+    "redis",
+]
+dependencies = [
+    "pytest",
+    "isort",
+    "pytest-asyncio",
+    "mike",
+    "mypy",
+    "pytest-cov",
+    "pytest-mock",
+    "freezegun",
+    "httpx>=0.23.3",
+    "pygments",
+    "pymdown-extensions",
+    "ruff",
+]
+
+[tool.hatch.envs.default.scripts]
+lint = [
+  "isort ./fastapi_auth_jwt ./tests",
+  "ruff format .",
+  "ruff check --fix . --ignore F401",
+  "mypy fastapi_auth_jwt/",
+]
+lint-check = [
+  "isort --check-only ./fastapi_auth_jwt ./tests",
+  "ruff format .",
+  "ruff check . --ignore F401",
+  "mypy fastapi_auth_jwt/",
+]
+
+[tool.hatch.envs.test.scripts]
+test = "pytest --cov=fastapi_auth_jwt/"
+test-cov-xml = "pytest --cov=fastapi_auth_jwt/"
+
+[build-system]
+requires = ["hatchling", "hatch-regex-commit"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastapi-auth-jwt"
+authors = [
+  { name = "deepmancer", email = "alirezaheidari.cs@gmail.com" },
+]
+description = 'FastAPI-Auth-JWT is a ready-to-use and easy-to-customize authentication middleware for FastAPI.'
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.8"
+license = "MIT"
+keywords = [
+    "fastapi",
+    "fastapi-user-auth",
+    "fastapi-auth-jwt",
+    "fastapi-auth-middleware",
+    "fastapi-users",
+    "fastapi-jwt-auth",
+    "fastapi-jwt",
+    "fastapi-middleware",
+    "redis",
+]
+classifiers = [
+    "Framework :: FastAPI",
+    "Framework :: AsyncIO",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Internet :: WWW/HTTP :: Session",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+]
+dependencies = [
+    "fastapi >=0.65.2",
+    "pydantic>=2.0.0",
+    "python-decouple",
+    "starlette>=0.17.1",
+    "PyJWT>=2.8.0",
+]
+
+[project.optional-dependencies]
+redis = [
+    "redis >=4.3.3,<6.0.0",
+]
+
+[project.urls]
+Homepage = "https://deepmancer.github.io/fastapi-auth-jwt"
+Documentation = "https://deepmancer.github.io/fastapi-auth-jwt"
+Repository = "https://github.com/deepmancer/fastapi-auth-jwt"
+Issues = "https://github.com/deepmancer/fastapi-auth-jwt/issues"
+Changelog = "https://github.com/deepmancer/fastapi-auth-jwt/blob/main/CHANGELOG.md"
