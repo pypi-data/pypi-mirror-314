@@ -1,0 +1,130 @@
+Metadata-Version: 2.1
+Name: meeracv
+Version: 0.2.0
+Summary: A computer vision library inspired by OpenCV
+Home-page: https://github.com/KashyapSinh-Gohil/meeracv
+Author: Kashyapsinh Gohil
+License: UNKNOWN
+Description: # MeeraCV
+        
+        MeeraCV is a comprehensive computer vision library inspired by OpenCV, designed for advanced image and video processing, 3D vision, and real-time applications.
+        
+        ## Installation
+        
+        ```bash
+        pip install meeracv
+        ```
+        
+        ## Key Features
+        
+        - **Image Processing**: Filters, transformations, and color space conversions.
+        - **Video Processing**: Webcam and CCTV stream handling.
+        - **Face Recognition**: Detect and recognize faces in images and video.
+        - **Optical Character Recognition (OCR)**: Extract text from images.
+        - **3D Vision**: Depth perception and 3D reconstruction.
+        - **Gesture Recognition**: Hand and body gesture detection.
+        - **Object Tracking**: Multi-object tracking with deep learning support.
+        
+        ## Quick Start
+        
+        ```python
+        import meeracv as mcv
+        
+        # Read an image
+        img = mcv.imread('image.jpg')
+        
+        # Convert to grayscale
+        gray = mcv.cvtColor(img, mcv.COLOR_BGR2GRAY)
+        
+        # Apply Gaussian blur
+        blurred = mcv.GaussianBlur(gray, kernel_size=(5,5), sigma=1.0)
+        
+        # Save the result
+        mcv.imwrite('result.jpg', blurred)
+        ```
+        
+        ## Advanced Usage
+        
+        ### Face Recognition
+        
+        ```python
+        from meeracv import FaceDetector
+        
+        # Initialize face detector
+        face_detector = FaceDetector()
+        
+        # Detect faces
+        faces = face_detector.detect_faces(img)
+        
+        # Recognize faces
+        names = face_detector.recognize_face(img)
+        ```
+        
+        ### Video Processing
+        
+        ```python
+        from meeracv import start_webcam
+        
+        # Start webcam
+        webcam = start_webcam()
+        
+        # Read frames
+        frame = webcam.read()
+        ```
+        
+        ### 3D Vision
+        
+        ```python
+        from meeracv import StereoVision
+        
+        # Initialize stereo vision
+        stereo = StereoVision()
+        
+        # Compute depth map
+        depth_map = stereo.compute_depth(left_img, right_img)
+        ```
+        
+        ### Gesture Recognition
+        
+        ```python
+        from meeracv import HandGestureRecognizer
+        
+        # Initialize hand gesture recognizer
+        gesture_recognizer = HandGestureRecognizer()
+        
+        # Detect hand gestures
+        landmarks = gesture_recognizer.get_hand_landmarks(img)
+        gesture = gesture_recognizer.recognize_gesture(landmarks[0])
+        ```
+        
+        ## Requirements
+        
+        - Python 3.7+
+        - NumPy
+        - Pillow
+        - SciPy
+        - OpenCV
+        - Face Recognition
+        - PyTesseract
+        - MediaPipe
+        - Scikit-learn
+        
+        ## Contributing
+        
+        We welcome contributions! Please follow these steps:
+        
+        1. Fork the repository
+        2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+        3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+        4. Push to the branch (`git push origin feature/AmazingFeature`)
+        5. Open a Pull Request
+        
+        ## License
+        
+        This project is licensed under the MIT License - see the LICENSE file for details. 
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
