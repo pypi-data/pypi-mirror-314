@@ -1,0 +1,34 @@
+# SciSave configuration file.
+# Demonstrate the YAML extensions.
+#
+# Thomas Guillod - Dartmouth College
+
+# load a data from an environment variable
+"custom_env_a": !env ENVDATA_A
+"custom_env_b": !env ENVDATA_B
+
+# evaluate Python literal
+"custom_eval_a": !eval "1.0+1.0j"
+"custom_eval_b": !eval "1.0-1.0j"
+
+# evaluate Python literal
+"custom_sub_a": !sub sub_a
+"custom_sub_b": !sub sub_b
+
+# include data from another YAML file
+"custom_include": !include config_include.yaml
+
+# parse a path with respect to the YAML file
+"custom_path": !path config_include.yaml
+
+# merge list of lists
+"list":
+ !merge_list
+  - [1, 2]
+  - [3, 4]
+
+# merge list of dicts
+"dict":
+ !merge_dict
+  - {"a": 1}
+  - {"b": 2}
