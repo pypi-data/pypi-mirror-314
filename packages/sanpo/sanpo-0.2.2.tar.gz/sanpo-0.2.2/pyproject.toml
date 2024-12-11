@@ -1,0 +1,91 @@
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+target-version = [
+    "py39",
+    "py310",
+    "py311",
+    "py312",
+    "py313",
+]
+exclude = '''
+/(
+  \.git
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+default_section = "THIRDPARTY"
+known_first_party = "sanpo"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "-rA"
+]
+testpaths = [
+    "tests",
+]
+
+[tool.poetry]
+name = "sanpo"
+version = "0.2.2"
+description = "Sanitize PO files from gettext for version control"
+readme = "README.md"
+authors = ["Thomas Aglassinger <roskakori@users.sourceforge.net>"]
+license = "BSD"
+homepage = "https://github.com/roskakori/sanpo"
+repository = "https://github.com/roskakori/sanpo.git"
+keywords = ["clean", "gettext", "po", "sanitize"]
+classifiers = [
+        "Development Status :: 4 - Beta",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Topic :: Software Development :: Build Tools",
+        "Topic :: Software Development :: Internationalization",
+        "Topic :: Software Development :: Version Control",
+]
+packages = [
+    { include = "sanpo" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <4.0.0"
+pygments = "^2"
+chardet = "^5"
+
+[tool.poetry.dev-dependencies]
+wheel = "^0.45"
+coverage = "^7"
+pytest = "^8"
+pytest-cov = "^6"
+pre-commit = "^4"
+twine = "^6"
+
+[tool.poetry.scripts]
+sanpo = "sanpo.command:main"
+
+[tool.poetry.urls]
+"Issue Tracker" = "https://github.com/roskakori/sanpo/issues"
+"Changes" = "https://github.com/roskakori/sanpo/blob/main/CHANGES.md"
+
+[pycodestyle]
+max-line-length = 120
+
+[build-system]
+requires = ["poetry-core>=1.9.1"]
+build-backend = "poetry.core.masonry.api"
