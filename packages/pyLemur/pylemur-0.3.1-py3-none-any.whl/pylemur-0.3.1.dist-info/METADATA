@@ -1,0 +1,146 @@
+Metadata-Version: 2.3
+Name: pyLemur
+Version: 0.3.1
+Summary: A Python implementation of the LEMUR algorithm for analyzing multi-condition single-cell RNA-seq data.
+Project-URL: Documentation, https://pyLemur.readthedocs.io/
+Project-URL: Source, https://github.com/const-ae/pyLemur
+Project-URL: Home-page, https://github.com/const-ae/pyLemur
+Author: Constantin Ahlmann-Eltze
+Maintainer-email: Constantin Ahlmann-Eltze <artjom31415@googlemail.com>
+License: MIT License
+        
+        Copyright (c) 2024, Your Name
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Requires-Python: >=3.10
+Requires-Dist: anndata
+Requires-Dist: formulaic
+Requires-Dist: formulaic-contrasts
+Requires-Dist: harmonypy
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Requires-Dist: session-info
+Provides-Extra: dev
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: twine>=4.0.2; extra == 'dev'
+Provides-Extra: doc
+Requires-Dist: docutils!=0.18.*,!=0.19.*,>=0.8; extra == 'doc'
+Requires-Dist: ipykernel; extra == 'doc'
+Requires-Dist: ipython; extra == 'doc'
+Requires-Dist: matplotlib; extra == 'doc'
+Requires-Dist: myst-nb>=1.1.0; extra == 'doc'
+Requires-Dist: pandas; extra == 'doc'
+Requires-Dist: pertpy; extra == 'doc'
+Requires-Dist: scanpy; extra == 'doc'
+Requires-Dist: session-info; extra == 'doc'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'doc'
+Requires-Dist: sphinx-book-theme>=1.0.0; extra == 'doc'
+Requires-Dist: sphinx-copybutton; extra == 'doc'
+Requires-Dist: sphinx-design; extra == 'doc'
+Requires-Dist: sphinx>=4; extra == 'doc'
+Requires-Dist: sphinxcontrib-bibtex>=1.0.0; extra == 'doc'
+Requires-Dist: sphinxext-opengraph; extra == 'doc'
+Provides-Extra: test
+Requires-Dist: coverage; extra == 'test'
+Requires-Dist: pytest; extra == 'test'
+Description-Content-Type: text/markdown
+
+# pyLemur
+
+[![Tests][badge-tests]][link-tests]
+[![Documentation][badge-docs]][link-docs]
+
+[badge-tests]: https://img.shields.io/github/actions/workflow/status/const-ae/pyLemur/test.yaml?branch=main
+[link-tests]: https://github.com/const-ae/pyLemur/actions/workflows/test.yaml
+[link-docs]: https://pyLemur.readthedocs.io
+[badge-docs]: http://readthedocs.org/projects/pylemur/badge
+
+The Python implementation of the LEMUR method to analyze multi-condition single-cell data. For the more complete version in R, see [github.com/const-ae/lemur](https://github.com/const-ae/lemur). To learn more check-out the [function documentation](https://pylemur.readthedocs.io/page/api.html) and the [tutorial](https://pylemur.readthedocs.io/page/notebooks/Tutorial.html) at [pylemur.readthedocs.io](https://pylemur.readthedocs.io). To check-out the source code or submit an issue go to [github.com/const-ae/pyLemur](https://github.com/const-ae/pyLemur)
+
+## Citation
+
+> Ahlmann-Eltze C, Huber W (2024).
+> “Analysis of multi-condition single-cell data with latent embedding multivariate regression.” bioRxiv.
+> [doi:10.1101/2023.03.06.531268](https://doi.org/10.1101/2023.03.06.531268).
+
+# Getting started
+
+## Installation
+
+You need to have Python 3.10 or newer installed on your system.
+There are several alternative options to install pyLemur:
+
+Install the latest release of `pyLemur` from [PyPI](https://pypi.org/project/pyLemur/):
+
+```bash
+pip install pyLemur
+```
+
+Alternatively, install the latest development version directly from Github:
+
+```bash
+pip install git+https://github.com/const-ae/pyLemur.git@main
+```
+
+## Documentation
+
+For more information on the functions see the [API docs](https://pyLemur.readthedocs.io/page/api.html) and the [tutorial](https://pylemur.readthedocs.io/page/notebooks/Tutorial.html).
+
+## Contact
+
+For questions and help requests, you can reach out in the [scverse discourse][scverse-discourse].
+If you found a bug, please use the [issue tracker][issue-tracker].
+
+[scverse-discourse]: https://discourse.scverse.org/
+[issue-tracker]: https://github.com/const-ae/pyLemur/issues
+
+## Building
+
+Install the package in editable mode:
+
+```
+pip install ".[dev,doc,test]"
+```
+
+Build the documentation locally
+
+```
+cd docs
+make html
+open _build/html/index.html
+```
+
+Run the unit tests
+
+```
+pytest
+```
+
+Run pre-commit hooks manually
+
+```
+pre-commit run --all-files
+```
+
+or individually
+
+```
+ruff check
+```
