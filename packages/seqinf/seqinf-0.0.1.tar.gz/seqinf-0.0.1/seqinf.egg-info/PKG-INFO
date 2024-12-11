@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: seqinf
+Version: 0.0.1
+Summary: Sequential inference abstractions
+Author-email: Sam Griesemer <samgriesemer+git@gmail.com>
+Project-URL: Homepage, https://doc.olog.io/<project-name>
+Project-URL: Documentation, https://doc.olog.io/<project-name>
+Project-URL: Repository, https://git.olog.io/olog/<project-name>
+Project-URL: Issues, https://git.olog.io/olog/<project-name>/issues
+Keywords: simulation,machine learning,statistics
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: sbi
+Requires-Dist: sbibm
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Provides-Extra: docs
+Requires-Dist: sphinx; extra == "docs"
+Requires-Dist: sphinx-togglebutton; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints; extra == "docs"
+Requires-Dist: furo; extra == "docs"
+Requires-Dist: myst-parser; extra == "docs"
+Provides-Extra: jupyter
+Requires-Dist: jupyter; extra == "jupyter"
+Requires-Dist: ipykernel; extra == "jupyter"
+
+# Overview
+`seqinf` is a Python library for performing sequential simulation-based
+inference. It aims to complement the popular [`sbi`][1] package by providing
+top-level abstractions that enable running methods like SNPE/SNLE/etc without
+additional boilerplate. It also provides additional inference diagnostics and
+support for Bayesian NDEs and active methods (e.g., ASNPE).
+
+# Install
+Installation is available through PyPI:
+
+```sh
+pip install seqinf
+```
+
+## Dependencies
+Note the version clash between `sbibm`'s requirement for `sbi`, and the latest
+`sbi`. This can more or less be ignored, and if this presents an issue when
+installing locally, just make sure to install `sbi` _after_ `sbibm`.
+
+
+
+# Citing this package
+Although `seqinf` is intended for general pipelines, it was principally written
+to wrap [ASNPE][2]. If you use this library in your work, please cite the
+following:
+
+```
+@misc{griesemer2024activesequentialposteriorestimation,
+      title={Active Sequential Posterior Estimation for Sample-Efficient Simulation-Based Inference}, 
+      author={Sam Griesemer and Defu Cao and Zijun Cui and Carolina Osorio and Yan Liu},
+      year={2024},
+      eprint={2412.05590},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2412.05590}, 
+}
+```
+
+
+[1]: https://github.com/sbi-dev/sbi
+[2]: https//arxiv.org
+
