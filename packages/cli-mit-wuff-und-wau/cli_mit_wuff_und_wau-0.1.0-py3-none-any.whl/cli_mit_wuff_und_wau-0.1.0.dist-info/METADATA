@@ -1,0 +1,159 @@
+Metadata-Version: 2.1
+Name: cli-mit-wuff-und-wau
+Version: 0.1.0
+Summary: A CLI tool and library for Zürich's dog registry analysis and management
+Author-email: Your Name <your.email@example.com>
+License: MIT
+Keywords: CLI,dog registry,statistics,random generation
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Utilities
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: build>=1.2.2.post1
+Requires-Dist: click>=8.1.7
+Requires-Dist: mypy>=1.13.0
+Requires-Dist: pillow>=11.0.0
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: requests>=2.32.3
+Requires-Dist: rich>=13.9.4
+Requires-Dist: ruff>=0.8.1
+Requires-Dist: setuptools>=75.6.0
+Requires-Dist: types-requests>=2.32.0.20241016
+Requires-Dist: wheel>=0.45.1
+
+# Welcome to **CLI mit Wuff und Wau**, a command-line tool designed to explore Zürich's open dog data in a fun and engaging way! This tool allows you to:
+
+## Project Overview
+
+This project is a Command-Line Interface (CLI) tool designed to interact with Zurich's public dog registry. It allows users to:
+
+* **Search for Dogs by Name** : Retrieve information about dogs registered under a specific name.
+* **Analyze Dog Data** : Generate insightful statistics, such as the most common dog names, gender distribution, and name lengths.
+* **Create Random Dogs** : Simulate a new dog profile with attributes derived from the registry, including a downloadable media file.
+
+The tool utilizes Python and integrates various libraries like `Click`, `Rich`, `UV`, `Pillow` and `Requests` to provide a user-friendly experience.
+
+- Search for dogs by name and check for substrings in the names.
+- Get statistics on dog names, dog name trends, and gender distributions.
+- Generate a fictional new dog with a name, birth year, and a cute picture.
+
+## Key Features
+
+* **Dynamic Data Fetching** : Retrieves data directly from the Zurich Open Data API.
+* **Flexible Year Filtering** : Filters registry data by a specified year or aggregates data across all available years.
+* **Random Dog Profile Creation** : Combines registry data with a media file from an external API to create unique dog profiles.
+* **Interactive CLI Design** : Implements `Click` for intuitive command definitions and user interactions.
+* **Enhanced Display** : Uses `Rich` to render output in aesthetically pleasing tables.
+
+## AI Tools Usage Declaration
+
+During the development of this project, AI tools were used as follows:
+
+**ChatGPT** :
+
+* Used to assist in generating code snippets, structuring functions, and brainstorming solutions to align with the project requirements.
+* Provided support in adhering Python best practices during architectural planning and refactoring.
+* Suggested approaches for handling edge cases and improving user experience in the CLI design.
+* Its outputs were critically reviewed and significantly modified to suit the project's unique requirements and constraints.
+
+## Personal Contributions
+
+While AI tools were used as supplementary aids, I was heavily involved in all decision-making processes and core aspects of the project, including:
+
+* Designing the overall architecture and ensuring it adhered to best practices and SOLID principles.
+* Writing and refining the main functionality of the CLI tool:
+
+  * Search for dogs using specific criteria.
+  * Analyze and display statistical data about the dog registry.
+  * Generate randomized dog profiles.
+  * Wrote code to fetch and filter data dynamically from the Zürich Open Data API.
+* Ensuring compliance with project requirements, error handling, and usability considerations.
+* Reviewing, manually testing, and optimizing all AI-generated code to meet the quality standards expected in the course.
+* Managing the Git repository, ensuring proper commit history.
+
+## Transparency and Compliance
+
+This declaration ensures transparency regarding AI tool usage and compliance with the **OST Examination and Study Regulations** (Art. 37) and  **AI Guidelines** . All AI-generated outputs were critically evaluated, customized, and integrated into the project.
+
+## **Installation**
+
+1. Clone the repository to your local machine.
+2. Install dependencies using ???.
+3. Run the CLI using the commands described below.
+
+## Commands and Usage
+
+The CLI tool `wuff.py` provides the following commands for interacting with Zürich's dog registry data:
+
+### Global Options
+
+* `--year`, `-y`:
+  * Filters the data by the specified year in `YYYY` format.
+  * Use `all` to include data from all years.
+  * Defaults to the current year.
+
+---
+
+### 1. Find Dogs by Name
+
+```
+python wuff.py [--year] find <name>
+
+```
+
+* **Description** : Search for dogs with a given name.
+* **Parameters** :
+* `<name>`: The name of the dog to search for.
+* `--year / -y`: (Optional) Filters results by the specified year or includes all years if `all` is provided. If no year is provided the application displays the data of the current year.
+* You will be prompted if you want to search for an exact match or if you want to find all names that include the substring you provide.
+* **Example** :
+
+```
+python wuff.py -y 2023 find Luna 
+```
+
+---
+
+### 2. Show Dog Statistics
+
+```
+python wuff.py [--year] stats 
+```
+
+* **Description** : Display statistical data about the dog registry, such as:
+* Total dogs.
+* Top 10 most common names.
+* Longest and shortest names.
+* Gender distribution.
+* **Parameters** :
+* `--year / -y` : (Optional) Filters statistics to a specific year or includes all years if `all` is provided. If no year is provided the application displays the data of the current year.
+* **Example** :
+
+```
+python wuff.py --year 2022 stats 
+```
+
+---
+
+### 3. Create a Random Dog Profile
+
+```
+python wuff.py [--year] create
+```
+
+* **Description** : Generate a random dog profile, including:
+* Name.
+* Birth year.
+* Gender.
+* Media file (image or video).
+* **Parameters** :
+* `--output-dir / -o`: (Optional) Specifies the directory to save the media file. Defaults to the current directory.
+* **Example** :
+
+```
+python wuff.py create --output-dir ./dog_images
+```
