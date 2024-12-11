@@ -1,0 +1,45 @@
+[project]
+name = "moleculekit"
+description = "A molecule reading/writing and manipulation package."
+authors = [{ name = "Stefan Doerr", email = "s.doerr@acellera.com" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dynamic = ["version"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+]
+dependencies = ["numpy>=1.23.5", "pandas>=1.1.2", "networkx", "tqdm", "msgpack"]
+
+[project.urls]
+"Homepage" = "https://github.com/Acellera/moleculekit"
+"Bug Tracker" = "https://github.com/Acellera/moleculekit/issues"
+
+[tool.setuptools.packages.find]
+where = [""]
+include = ["moleculekit*"]
+namespaces = false
+
+[build-system]
+requires = [
+  "setuptools",
+  "numpy>=2.0.0rc1",
+  "Cython>=0.29.21",
+  "toml",
+  "versioneer[toml]==0.28",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "moleculekit/_version.py"
+versionfile_build = "moleculekit/_version.py"
+tag_prefix = ""
+parentdir_prefix = "moleculekit-"
+
+[tool.pytest.ini_options]
+python_files = "*.py"
+python_classes = "_Test"
+python_functions = "_test*"
+norecursedirs = "test-data"
