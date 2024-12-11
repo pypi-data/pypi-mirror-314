@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+
+[build-system]
+requires = ["setuptools>=60", "setuptools-scm>=8.0"]
+
+[project]
+description = "A package to run AI weather models with GFS initial conditions."
+name = "ai-models-gfs"
+version = "0.0.11"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+
+readme = "README.md"
+
+authors = [
+    { name = "Jacob Radford", email = "jacob.t.radford@gmail.com" },
+]
+
+keywords = ["tools", "ai"]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "entrypoints",
+    "requests",
+    "climetlab>=0.23.0",
+    "multiurl",
+    "ecmwflibs>=0.6.1",
+    "gputil",
+    "earthkit-meteo",
+    "pyyaml",
+    "tqdm",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/jacob-radford/ai-models-gfs/"
+Repository = "https://github.com/jacob-radford/ai-models-gfs"
+Issues = "https://github.com/jacob-radford/ai-models-gfs"
+
+[project.scripts]
+ai-models-gfs = "ai_models_gfs.__main__:main"
+
+[project.entry-points."ai_models_gfs.input"]
+file = "ai_models_gfs.inputs:FileInput"
+mars = "ai_models_gfs.inputs:MarsInput"
+cds = "ai_models_gfs.inputs:CdsInput"
+gfs = "ai_models_gfs.inputs:GfsInput"
+gefs = "ai_models_gfs.inputs:GefsInput"
+gdas = "ai_models_gfs.inputs:GdasInput"
+opendata = "ai_models_gfs.inputs:OpenDataInput"
+
+[project.entry-points."ai_models_gfs.output"]
+file = "ai_models_gfs.outputs:FileOutput"
+none = "ai_models_gfs.outputs:NoneOutput"
