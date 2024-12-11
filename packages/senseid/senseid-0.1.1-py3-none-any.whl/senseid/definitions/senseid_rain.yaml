@@ -1,0 +1,118 @@
+version: 3
+date: 2024-12-11
+
+pen_header: [0x00, 0x00, 0x00, 0xF1, 0xD3]
+types:
+    0x01:
+          name: EVAL-SID-AT
+          description: Ambient Temperature Sensor
+          data_def:
+              - magnitude: Temperature
+                unit_long: Celsius
+                unit_short: C
+                type: int16
+                transform: linear
+                coefficients: [0, 0.01]
+          fw_versions: [1]
+    0x02:
+          name: EVAL-SID-ACC
+          description: 3-Axis Accelerometer
+          data_def:
+              - magnitude: X
+                unit_long: gravity
+                unit_short: g
+                type: int16
+                transform: linear
+                coefficients: [0, 0.001]
+              - magnitude: Y
+                unit_long: gravity
+                unit_short: g
+                type: int16
+                transform: linear
+                coefficients: [0, 0.001]
+              - magnitude: Z
+                unit_long: gravity
+                unit_short: g
+                type: int16
+                transform: linear
+                coefficients: [0, 0.001]
+          fw_versions: [1]
+    0x03:
+          name: EVAL-SID-MGF
+          description: 3-Axis Magnetic Field Sensor
+          data_def:
+              - magnitude: X
+                unit_long: gauss
+                unit_short: gauss
+                type: int16
+                transform: linear
+                coefficients: [0, 0.001]
+              - magnitude: Y
+                unit_long: gauss
+                unit_short: gauss
+                type: int16
+                transform: linear
+                coefficients: [0, 0.001]
+              - magnitude: Z
+                unit_long: gauss
+                unit_short: gauss
+                type: int16
+                transform: linear
+                coefficients: [0, 0.001]
+          fw_versions: [1]
+    0x04:
+          name: EVAL-SID-P
+          description: Pressure Sensor
+          data_def:
+              - magnitude: Pressure
+                unit_long: Bars
+                unit_short: bar
+                type: uint16
+                transform: linear
+                coefficients: [0, 0.001]
+              - magnitude: Temperature 
+                unit_long: Celsius
+                unit_short: C
+                type: int16
+                transform: linear
+                coefficients: [0, 0.01]                
+          fw_versions: [1]
+    0x05:
+          name: EVAL-SID-RHAT
+          description: Ambient Humidity Sensor
+          data_def:
+              - magnitude: Humidity
+                unit_long: RH%
+                unit_short: '%'
+                type: uint16
+                transform: linear
+                coefficients: [0, 0.01]
+              - magnitude: Temperature
+                unit_long: Celsius
+                unit_short: C
+                type: int16
+                transform: linear
+                coefficients: [0, 0.01]
+          fw_versions: [1]
+    0x06:
+          name: EVAL-SID-CTN
+          description: Contact Temperature Sensor
+          data_def:
+              - magnitude: Temperature
+                unit_long: Celsius
+                unit_short: C
+                type: int16
+                transform: thermistor-beta
+                coefficients: [3000, 10000, 25]
+          fw_versions: [1]
+    0x08:
+          name: EVAL-SID-BAT
+          description: Battery Voltage Sensor
+          data_def:
+              - magnitude: Battery Level
+                unit_long: Volts
+                unit_short: V
+                type: uint16
+                transform: linear
+                coefficients: [0, 0.001]
+          fw_versions: [1]
