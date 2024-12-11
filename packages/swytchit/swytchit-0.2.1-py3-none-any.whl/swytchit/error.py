@@ -1,0 +1,2 @@
+class SwytchitError(Exception):
+    pass
