@@ -1,0 +1,43 @@
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[project]
+name = "mcp-cli"
+version = "0.1.0"
+description = "A cli for the Model Context Provider"
+requires-python = ">=3.12"
+readme = "README.md"
+authors = [
+    { name = "Chris Hay", email = "chrishayuk@googlemail.com" },
+]
+keywords = [
+    "llm",
+    "openai",
+    "claude",
+    "mcp",
+    "cli",
+]
+dependencies = [
+    "anyio>=4.6.2.post1",
+    "asyncio>=3.4.3",
+    "ollama>=0.4.2",
+    "openai>=1.55.3",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+    "rich>=13.9.4",
+]
+
+[project.license]
+text = "MIT"
+
+[project.scripts]
+mcp-cli = "mcpcli.__main__:main"
+
+[tool.ruff.lint]
+unfixable = [
+    "I",
+    "F401",
+]
