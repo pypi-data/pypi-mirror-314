@@ -1,0 +1,48 @@
+{
+    "values": {
+        "high_fraud": {
+            "root": {
+                "node": "fn",
+                "fn": "count",
+                "arguments": [
+                    {
+                        "node": "binop",
+                        "op": ">=",
+                        "left": {
+                            "node": "variable",
+                            "variant_id": {
+                                "name": "ccfraud"
+                            },
+                            "position": "output",
+                            "key": [
+                                0,
+                                0
+                            ]
+                        },
+                        "right": {
+                            "node": "literal",
+                            "float": 0.95
+                        }
+                    },
+                    {
+                        "node": "literal",
+                        "timedelta": "5h"
+                    },
+                    {
+                        "node": "literal",
+                        "timedelta": "60s"
+                    }
+                ]
+            },
+            "required_data": [
+                {
+                    "name": "ccfraud"
+                }
+            ]
+        }
+    },
+    "gauges": [
+        "high_fraud"
+    ],
+    "validations": []
+}
