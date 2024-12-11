@@ -1,0 +1,48 @@
+Metadata-Version: 2.3
+Name: onkeypress
+Version: 0.0.3
+Summary: A simple program that allows users to make their terminal reactive to keypresses
+Project-URL: Homepage, https://github.com/zlliu246/onkeypress
+Project-URL: Issues, https://github.com/zlliu246/onkeypress/issues
+Author-email: Liu Zuo Lin <zlliu246@gmail.com>
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Requires-Dist: toggle-cbreak
+Description-Content-Type: text/markdown
+
+
+# onkeypress
+
+Allows users to make terminal react to keypresses
+
+# installation
+
+```
+pip install onkeypress
+```
+
+# quickstart
+
+```python
+from onkeypress import while_not_exit, onkeypress, Key
+
+def func(key):
+    print(f"{key} was pressed")
+
+while_not_exit(
+    onkeypress(Key.UP).invoke(func, ["up"]),
+    onkeypress(Key.DOWN).invoke(func, ["down"]),
+    onkeypress("a").invoke(func, ["a!!"]),
+    onkeypress("s").invoke(func, ["s!!"]),
+    exit_key=Key.ENTER,
+)
+```
+
+^ after running this, your terminal now waits for your keypresses
+- if you hit ArrowUp, it prints "up was pressed"
+- if you hit ArrowDown, it prints "down was pressed"
+- if you hit "a", it prints "a was pressed"
+- if you hit "s", it prints "s was pressed"
+- if you hit Enter, this function ends
