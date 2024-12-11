@@ -1,0 +1,54 @@
+{% extends "partials/question.template" %}
+
+{% block field_ids %}
+    {% for left in question.answers.lefts %}
+        {% set id = left.one_index %}
+        {% if not loop.last %}
+            {% set id = id ~ ',' %}
+        {% endif %}
+        {{- id -}}
+    {% endfor %}
+{% endblock %}
+
+{% block body %}
+    {% for left in question.answers.lefts %}
+        <response_lid ident="response_{{ left.one_index }}">
+            <material>
+                {% if canvas %}
+                    <mattext texttype="text/plain">{{ left.raw_text }}</mattext>
+                {% else %}
+                    <mattext texttype="text/html">{{ left.text }}</mattext>
+                {% endif %}
+            </material>
+            <render_choice>
+            {% for right in question.answers.rights %}
+                <response_label ident="{{ right.one_index }}">
+                    <material>
+                        {% if canvas %}
+                            <mattext>{{ right.raw_text }}</mattext>
+                        {% else %}
+                            <mattext>{{ right.text }}</mattext>
+                        {% endif %}
+                    </material>
+                </response_label>
+            {% endfor %}
+            </render_choice>
+        </response_lid>
+    {% endfor %}
+{% endblock %}
+
+{% block scoring %}
+    <resprocessing>
+        <outcomes>
+            <decvar maxvalue="100" minvalue="0" varname="SCORE" vartype="Decimal"/>
+        </outcomes>
+        {% for left in question.answers.lefts %}
+            <respcondition>
+                <conditionvar>
+                    <varequal respident="response_{{ left.one_index }}">{{ left.solution_one_index }}</varequal>
+                </conditionvar>
+                <setvar varname="SCORE" action="Add">{{ (100.0 / (question.answers.lefts | length)) | round(2) }}</setvar>
+            </respcondition>
+        {% endfor %}
+    </resprocessing>
+{% endblock %}
