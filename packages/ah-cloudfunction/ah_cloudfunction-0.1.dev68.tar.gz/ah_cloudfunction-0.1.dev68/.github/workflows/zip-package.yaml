@@ -1,0 +1,151 @@
+#Build python wheel package and pushes it to gcloud artifactory
+
+name: "Build-Publish-Zip-Package"
+
+on:
+  workflow_call:
+    inputs:
+      repoName:
+        default: ''
+        required: false
+        type: string
+      branchName:
+        default: ''
+        required: false
+        type: string
+      python_version:
+        default: '3.9'
+        required: true
+        type: string
+      skip_tests:
+        default: true
+        required: false
+        type: boolean 
+      skip_publish:
+        default: false
+        required: false
+        type: boolean 
+      version:
+        required: false
+        type: string
+        default: ''
+      artifact_bucket_name:
+        required: true
+        type: string
+        default: ''   
+      artifact_object_name:
+        required: true
+        type: string
+        default: ''         
+    secrets:
+      PROVIDER_NAME:
+        required: true
+      SA_EMAIL:
+        required: true
+      HDO_GITHUB_APP_PEM:
+        required: true
+      HDO_GITHUB_APP_ID:
+        required: true
+jobs:
+  build:
+    name: Build Zip Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Get Token for workflow
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }}
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+      - name: Checkout ${{ inputs.repoName }} Repo
+        if: ${{ inputs.version == '' }}
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: ${{ inputs.repoName }}
+          path: ${{ inputs.repoName }}
+          ref: ${{ inputs.branchName }}
+          fetch-depth: 0 
+
+      - name: Checkout ${{ inputs.repoName }} Repo Tag
+        if: ${{ inputs.version != '' }}
+        uses: actions/checkout@v4.1.5
+        with:
+          repository: ${{ inputs.repoName }}
+          token: ${{steps.get_workflow_token.outputs.token}}
+          ref: ${{ inputs.version }}
+          path: ${{ inputs.repoName }}
+          fetch-depth: 0 
+
+      - name: Auth GCP Service Account
+        id: auth-gcp
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+          service_account: ${{ secrets.SA_EMAIL }}     
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: 'Install dependencies'
+        run: |
+          python -m pip install --upgrade pip setuptools setuptools-scm pylint keyring keyrings.google-artifactregistry-auth twine pytest pipenv
+
+          
+      - name: 'Build or Install'
+        working-directory: ${{ inputs.repoName }}
+        run: |
+            pip install -r requirements.txt
+
+      - name: Run pylint
+        working-directory: ${{ inputs.repoName }}
+        run: |
+          pylint ./**/*.py --rcfile=.pylintrc --errors-only
+
+      - name: Run unit test cases
+        if: ${{ inputs.skip_tests == false }}
+        working-directory: ${{ inputs.repoName }}
+        run: |
+            python -m pytest
+
+      - name: Set Python version using setuptools_scm if not in input
+        if: ${{ inputs.version == '' }}
+        working-directory: ${{ inputs.repoName }}
+        run: |
+            echo "VERSION=$(python -m setuptools_scm)" >> $GITHUB_ENV
+            echo "The determined version is: $VERSION"
+
+      - name: Set Python version using inputs
+        if: ${{ inputs.version != '' }}
+        run: |
+            echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV 
+            echo "The determined version is: $VERSION"
+
+      - name: 'Zip Packaging'
+        if: ${{ inputs.skip_publish == false }}
+        working-directory: ${{ inputs.repoName }}
+        run: |
+            zip -r ${{ inputs.artifact_object_name }}-${{ env.VERSION }}.zip .
+            echo "${{ inputs.artifact_object_name }} version  is : ${{ inputs.artifact_object_name }}-${{ env.VERSION }}"
+
+      - name: Install gsutil
+        if: ${{ inputs.skip_publish == false }}
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          packages: 'gsutil'
+
+      - name: upload zip in gcs
+        if: ${{ inputs.skip_publish == false }}
+        working-directory: ${{ inputs.repoName }}
+        run: |
+           gsutil cp ${{ inputs.artifact_object_name }}-${{ env.VERSION }}.zip gs://${{ inputs.artifact_bucket_name }}/

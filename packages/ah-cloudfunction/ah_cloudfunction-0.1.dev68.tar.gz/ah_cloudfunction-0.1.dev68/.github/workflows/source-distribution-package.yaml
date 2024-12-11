@@ -1,0 +1,230 @@
+#Build python source distribution package and pushes it to gcloud artifactory
+
+name: "Build-Publish-Source-Distribution-Package"
+
+on:
+  workflow_call:
+    inputs:
+      repoName:
+        default: ''
+        required: false
+        type: string
+      branchName:
+        default: ''
+        required: false
+        type: string
+      python_version:
+        default: '3.9'
+        required: true
+        type: string
+      skip_tests:
+        default: false
+        required: false
+        type: boolean 
+      skip_publish:
+        default: false
+        required: false
+        type: boolean 
+      version:
+        required: false
+        type: string
+        default: '' 
+      # environment:
+      #   required: true
+      #   type: string
+      #   default: '' 
+      appName:
+        required: false
+        type: string
+        default: '' 
+      region:
+        default: 'northamerica-northeast1'
+        required: true
+        type: string
+    secrets:
+      PROVIDER_NAME:
+        required: true
+      SA_EMAIL:
+        required: true
+      GCP_ARTIFACTORY_URL:
+        required: true
+      GCP_ARTIFACTORY_USERNAME:
+        required: true
+      HDO_GITHUB_APP_PEM:
+        required: true
+      HDO_GITHUB_APP_ID:
+        required: true
+env:
+  GCP_ARTIFACTORY_USERNAME: ${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+jobs:
+  build:
+    name: Build Source Distribution
+    runs-on: ubuntu-latest
+    # environment:
+    #   name: ${{ inputs.environment }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      # - name: Checkout current repo
+      #   uses: actions/checkout@v4.1.5
+
+      # - name: Checkout Tag
+      #   if: ${{ inputs.version != '' }}
+      #   uses: actions/checkout@v4.1.5
+      #   with:
+      #     ref: ${{ inputs.version }}
+
+      - name: Get Token for workflow
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3.0.0
+        with:
+          application_private_key: ${{ secrets.HDO_GITHUB_APP_PEM }}
+          application_id: ${{ secrets.HDO_GITHUB_APP_ID }}
+
+      - name: Checkout Python Build Repo
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: telus-health/thdp-hds-cloud-functions
+          #path: telus-health
+          ref: Ah-cloud-function
+
+      - name: Checkout ${{ inputs.repoName }} Repo
+        if: ${{ inputs.version == '' }}
+        uses: actions/checkout@v4.1.5
+        with:
+          token: ${{steps.get_workflow_token.outputs.token}}
+          repository: ${{ inputs.repoName }}
+          path: ${{ inputs.appName }}
+          ref: ${{ inputs.branchName }}
+          fetch-depth: 0
+      
+      - name: Checkout ${{ inputs.repoName }} Repo Tag
+        if: ${{ inputs.version != '' }}
+        uses: actions/checkout@v4.1.5
+        with:
+          repository: ${{ inputs.repoName }}
+          token: ${{steps.get_workflow_token.outputs.token}}
+          ref: ${{ inputs.version }}
+          path: ${{ inputs.appName }}
+
+      - name: Print directory structure
+        shell: bash
+        run: |
+            echo " alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" " > printTree.zshrc
+            tree
+
+      - name: Auth GCP Service Account
+        id: auth-gcp
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+          service_account: ${{ secrets.SA_EMAIL }}     
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: 'Install dependencies'
+        run: |
+          python -m pip install --upgrade pip setuptools setuptools-scm pylint keyring keyrings.google-artifactregistry-auth twine pytest google-auth google-cloud-artifact-registry
+
+      - name: Run print-version.py and check version
+        #working-directory: telus-health
+        id: check_version
+        run: |
+          echo "app: ${{ inputs.appName }}"
+          python print-version.py \
+            --version="${{ inputs.version }}" \
+            --appname="${{ inputs.appName }}" \
+            --location="${{ inputs.region }}"
+
+      - name: Upload Version file to Artifact
+        if: ${{ inputs.skip_publish == false && steps.check_version.outputs.VERSION_EXISTS == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-${{ inputs.appName }}
+          path: version.txt
+
+      - name: Get access token
+        if: ${{ steps.check_version.outputs.VERSION_EXISTS == 'false' }}
+        run: |
+          GCP_ARTIFACTORY_TOKEN="$(gcloud auth print-access-token)"
+          # echo "::add-mask::$GCP_ARTIFACTORY_TOKEN"
+          echo "GCP_ARTIFACTORY_TOKEN=${GCP_ARTIFACTORY_TOKEN}" >> $GITHUB_ENV
+
+      - name: 'Build or Install'
+        if: ${{ steps.check_version.outputs.VERSION_EXISTS == 'false' }}
+        working-directory: ${{ inputs.appName }}
+        run: |
+            pip install -r requirements.txt 
+            python setup.py sdist
+
+      - name: Run pylint
+        working-directory: ${{ inputs.appName }}
+        if: ${{ steps.check_version.outputs.VERSION_EXISTS == 'false' }}
+        run: |
+          pylint ./**/*.py  --rcfile=.pylintrc --errors-only
+
+      - name: Run unit test cases
+        if: ${{ inputs.skip_tests == false && steps.check_version.outputs.VERSION_EXISTS == 'false'}}
+        working-directory: ${{ inputs.appName }}
+        run: |
+          python -m pytest 
+
+      - name: Upload Version file to Artifact
+        if: ${{ inputs.skip_publish == false && steps.check_version.outputs.VERSION_EXISTS == 'false'}}
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-${{ inputs.appName }}
+          path: ${{ inputs.appName }}/version.txt
+
+      - name: Print directory structure
+        shell: bash
+        run: |
+            echo " alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" " > printTree.zshrc
+            tree
+            
+      - name: Upload package to PyPI
+        if: ${{ inputs.skip_publish == false && steps.check_version.outputs.VERSION_EXISTS == 'false'}}
+        working-directory: ${{ inputs.appName }}
+        
+        env:
+          TWINE_USERNAME: "__token__" #${{ secrets.GCP_ARTIFACTORY_USERNAME }}
+          TWINE_PASSWORD: "pypi-AgEIcHlwaS5vcmcCJDNiZTAzNzk5LWRiODgtNDc3ZS04OTFhLTAyNzI2MmE4YTI4MwACKlszLCJkZTAxNGI3OC1hMDBjLTQxOWEtYjNkNi1iYTkwOThjNGU5ZjEiXQAABiAj-ZdyFOZkZK8IO77M8SufNDsgm1ibZi9d3IHRA1tFQw" #${{ env.GCP_ARTIFACTORY_TOKEN }}
+          TWINE_REPOSITORY_URL: ${{ secrets.GCP_ARTIFACTORY_URL }}
+          # TWINE_REPOSITORY_URL: "//artifactregistry.googleapis.com/projects/thdp-hds-shrd-artifacts-25d4/locations/northamerica-northeast1/repositories/northamerica-northeast1-docker.pkg.dev/thdp-hds-shrd-artifacts-25d4/th-hds-shared-artifactory"
+
+        run: |
+            set -e
+            echo "changing directory"
+            echo "printing list and pwd"
+            ls
+            echo "----------"
+            echo $TWINE_USERNAME
+            echo "----"
+            echo $TWINE_PASSWORD
+            pwd 
+            echo "----------"
+            pip install --upgrade twine
+            twine upload --verbose dist/* 
+
+            # cd thdp-hds-cloud-functions
+            # output=$(twine upload dist/* 2>&1) || (
+            #   echo "before"
+            #   echo "$output" | grep '400 Bad Request' > /dev/null
+            #   echo "after"
+            #   if [ $? -eq 0 ]; then
+            #     echo "Upload failed, but ignoring as it may be due to the package already existing."
+            #   else
+            #     echo "Upload failed with the following error:"
+            #     echo "$output"
+            #     exit 1
+            #   fi
+            # )
