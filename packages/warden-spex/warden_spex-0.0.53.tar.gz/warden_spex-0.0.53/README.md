@@ -1,0 +1,56 @@
+# Statistical Proof of Execution (SPEX).
+
+This repository serves as entrypoint for documentation and implementation of the SPEX protocol.
+SPEX is open source and brought to you by [Warden Protocol](https://wardenprotocol.org/).
+We encourage developers to use and extend SPEX in their projects.
+
+## Motivations
+
+As a developer, you want to protect your computational pipeline from manipulation.
+SPEX offers third parties a secure and straightforward interface for verifying computation.
+
+## Installation
+
+To install SPEX:
+
+```
+pip install warden_spex --upgrade
+```
+
+**Important**: SPEX is progressing rapidly and interfaces might change at any time.
+Pin its exact version for your project, to make sure it all works.
+Have tests for your project, and update it once you verify that things work correctly.
+
+## Usage
+
+SPEX is a protocol defining the communication between the actors ***user***, ***solver*** and ***verifier***. The interaction:
+
+1. The ***user*** requests the execution of a computational pipeline to ***solver*** given some `inputs`
+2. The ***Solver*** computes the `outputs` and their `receipt`, communicating them back to the ***user***
+3. The ***User*** requests the verification of the computation to ***verifier*** given `inputs` and `receipt`
+
+The core building block of the implementation is the `Solver` abstract class defined in [models.py](./src/warden_spex/models.py)
+that the developer needs to implement.
+A reference implementation for the class is provided by the `SimpleSolver` class in [test_spex.py](./tests/test_spex.py), 
+which implements the `solve` (step 2) and `verify` (step 3) methods.
+
+The verification process re-executes a randomized portion of the computational pipeline to verify its integrity,
+evaluating a certain percentage of the computation.
+
+## LICENSE
+
+```
+Copyright 2024 Warden Protocol <https://wardenprotocol.org/>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
