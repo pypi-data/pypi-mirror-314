@@ -1,0 +1,85 @@
+Metadata-Version: 2.3
+Name: ogtk
+Version: 0.1.1
+Summary: General tools for genomics and lineage tracing
+Project-URL: Home-page, https://github.com/tzeitim/ogtk
+Author: Pedro Olivares
+Maintainer-email: Pedro Olivares <pedroy.final@gmail.com>
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Rust
+Requires-Dist: bgzip
+Requires-Dist: colorhash
+Requires-Dist: fastcluster
+Requires-Dist: fastparquet
+Requires-Dist: hdbscan
+Requires-Dist: matplotlib
+Requires-Dist: ngs-tools
+Requires-Dist: numpy<2.0.0,>=1.21.0
+Requires-Dist: pandas
+Requires-Dist: polars
+Requires-Dist: polars-hash
+Requires-Dist: pyaml
+Requires-Dist: pyarrow
+Requires-Dist: pyfaidx
+Requires-Dist: pyfasta
+Requires-Dist: pysam
+Requires-Dist: pyseq-align
+Requires-Dist: regex
+Requires-Dist: rich
+Requires-Dist: scipy
+Requires-Dist: seaborn
+Requires-Dist: setuptools-rust
+Requires-Dist: tables
+Provides-Extra: doc
+Requires-Dist: docutils!=0.18.*,!=0.19.*,>=0.8; extra == 'doc'
+Requires-Dist: ipykernel; extra == 'doc'
+Requires-Dist: ipython; extra == 'doc'
+Requires-Dist: myst-nb; extra == 'doc'
+Requires-Dist: pandas; extra == 'doc'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'doc'
+Requires-Dist: sphinx-book-theme>=1.0.0; extra == 'doc'
+Requires-Dist: sphinx-copybutton; extra == 'doc'
+Requires-Dist: sphinx>=4; extra == 'doc'
+Requires-Dist: sphinxcontrib-bibtex>=1.0.0; extra == 'doc'
+Requires-Dist: sphinxext-opengraph; extra == 'doc'
+Provides-Extra: rs
+Requires-Dist: maturin; extra == 'rs'
+Requires-Dist: rogtk; extra == 'rs'
+Provides-Extra: sc
+Requires-Dist: metacells; extra == 'sc'
+Requires-Dist: scanpy; extra == 'sc'
+Description-Content-Type: text/markdown
+
+# Olivares Genomic toolkit
+
+# Installation
+```
+git clone git@github.com:tzeitim/ogtk.git
+cd ogtk
+pip install -e .[sc,doc,rs]
+```
+
+Three main modules are supported.
+
+# ltr
+Comprehends lineage tracing analysis for bulk and single-cell data a various modalities. It is capable of pre-processing of multi-site lineage reporters such as GESTALT in addition to single-sites, namely shRNA.
+
+# UM
+This represents the main workframe for treating with single-molecule data. 
+
+# Utils
+Various recipes for anlayising single-cell RNA-seq data
+([metacells](https://github.com/tanaylab/metacells) and
+[single-cells](https://github.com/scverse/scanpy)) and implements wrappers for
+other genomic toolkits such as [bbtools](https://jgi.doe.gov/data-and-tools/software-tools/bbtools/).
+
+---
+
+Migration to [pola-rs](https://github.com/pola-rs) is work in progress but largely supported.
+
+
+Notes:
+If there are problems with missing zlib-devel not found install `pysam` via conda/mamba since zlib-devel cannot be installed using pip.
+
