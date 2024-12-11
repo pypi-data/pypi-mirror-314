@@ -1,0 +1,49 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+# only allow one job to run
+concurrency: general_workflow
+
+jobs:
+  checks:
+    runs-on: macos-12
+    steps:
+    - uses: actions/checkout@main
+    - name: Set up Python 3.8
+      uses: actions/setup-python@main
+      with:
+        python-version: "3.8"
+    - name: Install flake8 dependencies
+      run: |
+        # prerequisites
+        python -m pip install --upgrade pip wheel
+        python -m pip install flake8
+    - name: Lint with flake8
+      run: |
+        flake8 --exclude _version.py .
+    - name: Cache vagrant images
+      uses: actions/cache@v3
+      env:
+        cache-name: vagrant-image
+      with:
+        path: ~/.vagrant.d
+        key: macos-build-${{ env.cache-name }}-${{ hashFiles('Vagrantfile') }}
+        restore-keys: |
+          macos-build-${{ env.cache-name }}-
+    - name: save environment variables for codecov in VM
+      run: |
+        env | grep GITHUB > environment.txt
+        cat environment.txt
+    - name: Get the latest box and remove old boxes from the GH Actions cache
+      run: |
+        vagrant box update
+        vagrant box prune
+    - name: Setup vagrant VM
+      run: |
+        vagrant up
+    - name: Run tests in vagrant VM
+      run: |
+        vagrant ssh -- sudo bash /testing/vagrant-run-tests.sh
