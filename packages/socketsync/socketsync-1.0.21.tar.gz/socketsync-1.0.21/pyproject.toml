@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "socketsync"
+dynamic = ["version"]
+requires-python = ">= 3.9"
+dependencies = [
+    'requests',
+    "socket-sdk-python >= 1.0.14"
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+description = "Socket Security Sync Tool"
+keywords = ["socketsecurity", "socket.dev", "sca", "oss", "security", "sdk"]
+authors = [
+    {name = "Douglas Coburn", email = "douglas@socket.dev"},
+    {name = "Eric Hibbs", email = "eric@socket.dev"}
+]
+maintainers = [
+    {name = "Douglas Coburn", email = "douglas@socket.dev"},
+    {name = "Eric Hibbs", email = "eric@socket.dev"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14"
+]
+
+[project.urls]
+Homepage = "https://github.com/SocketDev/socket-siem-connector"
+
+[tool.setuptools.packages.find]
+include = [
+    "socketsync",
+    "socketsync.connectors"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "socketsync.__version__"}
