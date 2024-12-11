@@ -1,0 +1,267 @@
+// ZX Spectrum BASIC expression grammar
+//
+// Copyright (c) 2024 Melissa E. O'Neill. MIT License. NO WARRANTY.
+
+// Basic program structure
+Program: /\s*/ lines*=SourceLine[/\n\s*/] /\s*/;
+SourceLine: (line_number=INT)? (label=Label ':')? statements*=Statement[':'];
+
+// =====================================
+// Syntactic Class Patterns, as described in the ROM
+// =====================================
+
+// CLASS_00: No operands
+// Usage: Just the keyword alone
+// Example: NEW, STOP, RETURN
+
+// CLASS_01: Variable
+// Usage: Requires a variable name
+// Example: Used in LET
+// Rule needed for runtime single-letter check
+
+// CLASS_02: Expression
+// Usage: Requires any expression
+// Example: Right side of LET
+
+// CLASS_03: Optional numeric expression
+// Usage: Optional expression that must be numeric at runtime
+// Example: RUN [expr]
+// Pattern: (expression=Expression)?
+
+// CLASS_04: Single-character variable
+// Usage: Single letter variable name
+// Example: FOR/NEXT control variables
+// Uses Variable rule but with runtime check for single letter
+
+// CLASS_05: List of items
+// Usage: Set of items separated by delimiters
+// Example: PRINT items
+// Rule needed for complex cases like PRINT
+
+// CLASS_06: Required numeric expression
+// Usage: Expression that must be numeric at runtime
+// Example: GOTO expr
+// Pattern: expression=Expression
+
+// CLASS_07: Colour items
+// Usage: Colour parameters
+// Example: INK, PAPER
+
+// CLASS_08: Two numeric expressions with comma
+// Usage: Two expressions that must be numeric at runtime
+// Example: POKE addr, value
+// Pattern: expr1=Expression ',' expr2=Expression
+
+// CLASS_09: CLASS_08 with optional colour items
+// Usage: Like CLASS_08 but with optional colour parameters
+// Example: PLOT
+// Pattern: (colour=ColourParam)* expr1=Expression ',' expr2=Expression
+
+// CLASS_0A: String expression
+// Usage: Expression that must be string at runtime
+// Example: SAVE with filename
+// Pattern: expression=Expression
+
+// CLASS_0B: Cassette operations
+// Usage: Complex patterns for tape operations
+// Example: SAVE, LOAD, VERIFY
+// Will need specific rules for each variant
+
+// Expressions
+
+// Expression grammar for ZX Spectrum BASIC
+
+// Top level expression handles OR (lowest precedence)
+Expression: OrExpr;
+
+// Precedence levels from low (2) to high (10)
+OrExpr: first=AndExpr rest*=OrOpExpr;
+OrOpExpr: op=/OR\b/ expr=AndExpr;
+
+AndExpr: first=CompareExpr rest*=AndOpExpr;
+AndOpExpr: op=/AND\b/ expr=CompareExpr;
+
+// All comparison operators have same precedence (5)
+CompareExpr: first=AddExpr rest*=CompareOpExpr;
+CompareOpExpr: op=CompareOp expr=AddExpr;
+CompareOp: '<=' | '>=' | '<>' | '>' | '<' | '=';
+
+// Addition/subtraction (priority 6)
+// AddExpr: exprs=MultExpr (('+' | '-') MultExpr)*;
+AddExpr: first=MultExpr rest*=AddOpExpr;
+AddOpExpr: op=AddOp expr=MultExpr;
+AddOp: '+' | '-';
+
+// Multiplication/division (priority 8)
+// MultExpr: PowerExpr (('*' | '/') PowerExpr)*;
+MultExpr: first=PowerExpr rest*=MultOpExpr;
+MultOpExpr: op=MultOp expr=PowerExpr;
+MultOp: '*' | '/';
+
+// Power operator (priority 10)
+// PowerExpr: FunctionExpr ('^' FunctionExpr)*;
+PowerExpr: first=FunctionExpr rest*=PowerOpExpr;
+PowerOpExpr: op='^' expr=FunctionExpr;
+
+// Functions and primary expressions
+FunctionExpr: Function | SpecialFn | Primary;
+
+// Functions (parentheses optional unless needed for precedence)
+Function: name=FunctionName (expr=FunctionExpr | '(' expr=Expression ')');
+FunctionName: /ABS\b/ | /ACS\b/ | /ASN\b/ | /ATN\b/ | /COS\b/ | /EXP\b/ | /INT\b/ | 
+             /LN\b/ | /SGN\b/ | /SIN\b/ | /SQR\b/ | /TAN\b/ | /USR\b/ | /LEN\b/ |
+             /CODE\b/ | /VAL\b/ | 'CHR$' | 'STR$' | 'VAL$' | /NOT\b/ | '-';
+
+// Functions with multiple arguments
+TwoArgName: /ATTR\b/ | /POINT\b/ | 'SCREEN$';
+TwoArgFn: name=TwoArgName '(' expr1=Expression ',' expr2=Expression ')';
+PiValue: /PI\b/;
+BinValue: /BIN\b/ digits=/[01]+/;
+Fn: /FN\b/ name=VarSymbol '(' args*=Expression[','] ')';
+SpecialFn: TwoArgFn | PiValue | BinValue | Fn;
+
+// Primary expressions
+Primary: Number | String | Label | VarDest | '(' Expression ')';
+
+Number: value=NUMBER;
+String: value=/"(?:[^"\n]|"")*"/;
+
+// Variables and Array references
+ArrayRef: name=VarSymbol '(' subscripts+=SliceExpression[','] ')';
+Variable: name=VarSymbol;
+VarSymbol: /[A-Z][ \tA-Z0-9]*\$?/;
+VarDest: ArrayRef | Variable;
+
+Slice: 
+    /TO\b/ max=Expression |                  // From start: A$(TO 10)
+    min=Expression /TO\b/ max=Expression |   // Range: A$(2 TO 10)
+    min=Expression /TO\b/;                   // To end: A$(2 TO)
+
+SliceExpression: Slice | Expression;
+
+// =====================================
+// Initial Statement Implementation
+// =====================================
+Statement: New | Stop | Return | Continue | Copy | Cls | Cat | Goto | Gosub |
+    Restore | Pause | Border | Run | Clear | Randomize | Beep | Out |
+    Poke | Let | Read | Data | Dim | For | Next | If | ColourStmt | 
+    Plot | Draw | Circle | Print | Lprint | Input | Save |
+    Load | Verify | Merge | OpenHash | CloseHash | DefFn | Rem;
+
+// Statement types organized by their class patterns
+
+// ==================================
+// CLASS_00 - No operands
+// ==================================
+New: /NEW\b/;
+Stop: /STOP\b/;
+Return: /RETURN\b/;
+Continue: /CONTINUE\b/;
+Copy: /COPY\b/;
+Cls: /CLS\b/;
+Cat: /CAT\b/;
+
+// ==================================
+// Simple CLASS_06 - Single numeric expression
+// ==================================
+Goto: /GOTO\b/ expr=Expression | 'GO TO' expr=Expression;
+Gosub: /GOSUB\b/ expr=Expression | 'GO SUB' expr=Expression;
+Restore: /RESTORE\b/ expr=Expression;
+Pause: /PAUSE\b/ expr=Expression;
+Border: /BORDER\b/ expr=Expression;
+
+// ==================================
+// CLASS_03 - Optional numeric expression
+// ==================================
+Run: /RUN\b/ (expr=Expression)?;
+Clear: /CLEAR\b/ (expr=Expression)?;
+Randomize: /RANDOMIZE\b/ (expr=Expression)?;
+
+// ==================================
+// CLASS_08 - Two numeric expressions
+// ==================================
+Beep: /BEEP\b/ expr1=Expression ',' expr2=Expression;
+Out: /OUT\b/ expr1=Expression ',' expr2=Expression;
+Poke: /POKE\b/ expr1=Expression ',' expr2=Expression;
+
+// ==================================
+// Variable and assignment statements
+// ==================================
+Let: /LET\b/ var=VarDest '=' expr=Expression;
+Read: /READ\b/ vars+=VarDest[','];
+Data: /DATA\b/ items+=Expression[','];
+Dim: /DIM\b/ name=VarSymbol '(' dims+=Expression[','] ')';
+
+// ==================================
+// Loop and control statements
+// ==================================
+For: /FOR\b/ var=Variable '=' start=Expression /TO\b/ end=Expression (/STEP\b/ step=Expression)?;
+Next: /NEXT\b/ var=Variable;
+If: /IF\b/ condition=Expression /THEN\b/ statements+=Statement[':'];
+
+// ==================================
+// Colour control statements (CLASS_07)
+// ==================================
+ColourOp: /INK\b/ | /PAPER\b/ | /FLASH\b/ | /BRIGHT\b/ | /INVERSE\b/ | /OVER\b/;
+ColourParam: name=ColourOp expr=Expression;
+ColourStmt: ColourParam;
+
+// ==================================
+// Graphics statements (CLASS_09)
+// ==================================
+Plot: /PLOT\b/ (colours*=ColourParam[';'] ';')? expr1=Expression ',' expr2=Expression;
+Draw: /DRAW\b/ (colours*=ColourParam[';'] ';')? expr1=Expression ',' expr2=Expression (',' expr3=Expression)?;
+Circle: /CIRCLE\b/ (colours*=ColourParam[';'] ';')? expr1=Expression ',' expr2=Expression ',' expr3=Expression;
+
+// ==================================
+// Print and Input statements (CLASS_05)
+// ==================================
+PrintItem: ColourParam | At | Tab | ChanSpec | Expression;
+At: /AT\b/ expr1=Expression ',' expr2=Expression;
+Tab: /TAB\b/ expr=Expression;
+PrintSeparator: ',' | ';' | '\'';
+PrintSeparatedItem: item=PrintItem? sep=PrintSeparator;
+Print: /PRINT\b/ items*=PrintSeparatedItem (final=PrintItem)?;
+Lprint: /LPRINT\b/ items*=PrintItem[','];
+
+InputItem: ColourParam | At | Tab | ChanSpec | InputLine | VarDest | Expression;
+PrintSeparator: ',' | ';' | '\'';
+InputSeparatedItem: item=InputItem? sep=PrintSeparator;
+Input: /INPUT\b/ items*=InputSeparatedItem (final=InputItem)?;
+InputLine: /LINE\b/ var=VarDest;
+
+ChanSpec: '#' chan=Expression;
+OpenHash: /OPEN[ \t]*#/ chan=Expression ',' dev=Expression;
+CloseHash: /CLOSE[ \t]*#/ chan=Expression;
+
+// ==================================
+// Cassette/Storage statements (CLASS_0B)
+// ==================================
+
+SaveLine: name=/LINE\b/ expr=Expression;
+SaveCode: name=/CODE\b/ addr=Expression ',' length=Expression;
+LoadCode: name=/CODE\b/ (addr=Expression (',' length=Expression)?)?;
+FileData: name=/DATA\b/ array=VarSymbol '(' ')';
+FileScreen: 'SCREEN$';
+
+SaveMode: SaveLine | SaveCode | FileData | FileScreen;
+Save: /SAVE\b/ expr=Expression (mode=SaveMode)?;
+LoadMode: LoadCode | FileData | FileScreen;
+Load: /LOAD\b/ expr=Expression (mode=LoadMode)?;
+Verify: /VERIFY\b/ expr=Expression (mode=LoadMode)?;
+Merge: /MERGE\b/ expr=Expression;
+
+// ==================================
+// User-defined functions
+// ==================================
+DefFn: /DEF\b/ /FN\b/ name=VarSymbol ('(' params+=Variable[','] ')')? '=' expr=Expression;
+
+// ==================================
+// Rem (special case - consumes to EOL)
+// ==================================
+Rem: /REM\b/ comment=/[^\n]*/;
+
+// ==================================
+// Additions to the ZX Spectrum BASIC grammar
+// ==================================
+Label: name=/@[A-Z][A-Z0-9_]*/;
