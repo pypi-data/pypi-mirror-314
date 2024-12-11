@@ -1,0 +1,60 @@
+# TOML file for MiCoFaM
+#  
+# @note: TOML file            
+# Created on 27.11.2024    
+# 
+# @version:  1.0    
+# ----------------------------------------------------------------------------------------------
+# @requires:
+#        - 
+# 
+# @change: 
+#        -    
+#    
+# @author: garb_ma                                                     [DLR-SY,STM Braunschweig]
+# ----------------------------------------------------------------------------------------------
+[build-system]
+requires = ["poetry-core>=1.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "micofam"
+version = "1.1.0rc"
+description = "Micromechanical Composite Fatigue Modeler"
+authors = ["Krause, Daniel <daniel.krause@dlr.de>",
+           "Just, Gordon <gordon.just@tu-dresden.de>"]
+maintainers = ["Garbade, Marc <marc.garbade@dlr.de>",
+               "Lüders, Caroline <caroline.lüders@dlr.de>"]
+license = "MIT"
+packages = [{include="micofam", from="src"}]
+exclude = ["src/**/.*"]
+repository = "https://gitlab.com/dlr-sy/micofam"
+keywords = ["analysis","micromechanics","rve"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[[tool.poetry.source]]
+name = "dlr-pypi"
+url = "https://pypi.python.org/simple"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "dlr-sy"
+url = "https://gitlab.dlr.de/api/v4/groups/541/-/packages/pypi/simple"
+priority = "supplemental"
+
+[tool.poetry.dependencies]
+python = "~2.7 || ^3.5"
+importlib-metadata = [{version = "<2.0", python = "~2.7 || ^3.5,<3.7"},
+                      {version = ">=4.0", python = "^3.7"}]
+typer = [{version = ">=0.12", python = "^3.7"}]
+
+[tool.poetry.scripts]
+micofam = "micofam:main"

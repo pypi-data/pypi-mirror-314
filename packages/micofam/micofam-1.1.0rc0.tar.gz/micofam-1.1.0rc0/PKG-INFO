@@ -1,0 +1,113 @@
+Metadata-Version: 2.1
+Name: micofam
+Version: 1.1.0rc0
+Summary: Micromechanical Composite Fatigue Modeler
+Home-page: https://gitlab.com/dlr-sy/micofam
+License: MIT
+Keywords: analysis,micromechanics,rve
+Author: Krause, Daniel
+Author-email: daniel.krause@dlr.de
+Maintainer: Garbade, Marc
+Maintainer-email: marc.garbade@dlr.de
+Requires-Python: >=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*
+Classifier: Development Status :: 7 - Inactive
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering
+Requires-Dist: importlib-metadata (<2.0) ; python_version >= "2.7" and python_version < "2.8" or python_version >= "3.5" and python_version < "3.7"
+Requires-Dist: importlib-metadata (>=4.0) ; python_version >= "3.7" and python_version < "4.0"
+Requires-Dist: typer (>=0.12) ; python_version >= "3.7" and python_version < "4.0"
+Project-URL: Repository, https://gitlab.com/dlr-sy/micofam
+Description-Content-Type: text/markdown
+
+# MiCoFaM
+MiCoFaM (Micromechanical Composite Fatigue Modeler) is a model generator for creating representative volume elements (RVEs) consisting of fibre, interface and matrix phases for a given fiber volume content with randomized fiber placements. The application is provided as an ABAQUS plug-in.
+## Downloading
+Use GIT to get the latest code base. From the command line, use
+```
+git clone https://gitlab.dlr.de/dlr-sy/micofam micofam
+```
+If you check out the repository for the first time, you have to initialize all submodule dependencies first. Execute the following from within the repository. 
+```
+git submodule update --init --recursive
+```
+To fetch all refererenced submodules, use
+```
+git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo main)'
+```
+To update all refererenced submodules to the latest production level, use
+```
+git submodule foreach --recursive 'git pull origin $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo main)'
+```
+## Installation
+MiCoFaM can be installed and updated directly using [pip](https://pypi.org/project/micofam/). Use
+```
+pip install micofam
+```
+to install the latest release. Alternatively, 
+MiCoFaM can be installed from source using [poetry](https://python-poetry.org). If you don't have [poetry](https://python-poetry.org) installed, run
+```
+pip install poetry --pre --upgrade
+```
+to install the latest version of [poetry](https://python-poetry.org) within your python environment. Use
+```
+poetry update
+```
+to update all dependencies in the lock file or directly execute
+```
+poetry install
+```
+to install all dependencies from the lock file. Last, you should be able to import MiCoFaM as a python package.
+```python
+import micofam
+```
+## Usage
+Navigate to the local ./config folder and execute ABAQUS using
+```
+abaqus cae
+```
+ABAQUS CAE is now started with a modified plugin central directory already set. Alternatively, after installing the software through pip, display all available commands by using
+```console
+$ micofam --help
+usage: MiCoFaM [-h] [-v] {info,start} ...
+
+CLI commands for MiCoFaM.
+
+positional arguments:
+  {info,start}
+    info         Show the current version and system information.
+    start        Launch MiCoFaM on the current system. Starts ABAQUS in the process by default.
+
+options:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+```
+To launch the current software with a non-default graphical user interface backend, append a valid identifier to the start command. The backend `abaqus` if set by default.
+```console
+$ micofam start --help
+usage: MiCoFaM start [-h] ...
+
+positional arguments:
+  backend     Backend application to start MiCoFaM. Defaults to abaqus.
+
+options:
+  -h, --help  show this help message and exit
+```
+For example, to start [MiCoFaM](https://gitlab.dlr.de/dlr-sy/micofam) with a `abq2023h5`, use
+```
+micofam start abq2023h5
+```
+## Contact
+* [Caroline Lüders](mailto:caroline.lueders@dlr.de)
+## Support
+* [List of Contributors](CONTRIBUTING.md)
