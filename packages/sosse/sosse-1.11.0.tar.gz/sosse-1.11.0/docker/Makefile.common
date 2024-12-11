@@ -1,0 +1,15 @@
+DOCKER_NAME=$(shell pwd | sed -e s_^.*/__)
+#APT_PROXY=http://192.168.3.2:3142/
+#PIP_INDEX_URL=http://192.168.3.3:5000/index/
+#PIP_TRUSTED_HOST=192.168.3.3
+
+.PHONY: _build push
+
+push:
+	docker push biolds/sosse:$(DOCKER_NAME)
+
+_build:
+	docker build --build-arg APT_PROXY=$(APT_PROXY) --build-arg PIP_INDEX_URL=$(PIP_INDEX_URL) --build-arg PIP_TRUSTED_HOST=$(PIP_TRUSTED_HOST) -t biolds/sosse:$(DOCKER_NAME) .
+
+%:
+	$(MAKE) -f ../Makefile.common _$@

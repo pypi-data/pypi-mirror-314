@@ -1,0 +1,95 @@
+{% extends "admin/base.html" %}
+{% block js %}
+function refresh () {
+  fetch('{% url 'admin:crawl_status_content' %}').then(response => {
+    if (response.ok) {
+      response.text().then(content => {
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = content;
+      });
+    }
+  });
+}
+
+setInterval(refresh, {{ settings.SOSSE_CRAWL_STATUS_AUTOREFRESH }} * 1000);
+{% endblock %}
+
+{% block css %}
+#crawlers {
+  display: block;
+}
+
+#crawlers > * {
+  display: inline;
+}
+
+#crawlers form {
+  margin-left: 20px;
+}
+
+#queue_links {
+  padding-bottom: 20px;
+}
+
+#queue_links li {
+  display: inline;
+}
+
+#result_list th:nth-child(1), #result_list td:nth-child(1) {
+  width: 20px;
+  padding: 0px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+#result_list td:nth-child(1) img {
+  height: 16px;
+  width: 16px;
+}
+
+#result_list th:nth-child(2), #result_list td:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 0;
+  width: 35%;
+  text-overflow: ellipsis;
+}
+
+#result_list th:nth-child(3), #result_list td:nth-child(3) {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 0;
+  width: 35%;
+  text-overflow: ellipsis;
+}
+
+body.dark-mode #result_list tr.running {
+  background-color: #9cd78b;
+  font-weight: bold;
+}
+
+body.dark-mode #result_list tr.pending:nth-child(2n) {
+  background-color: #1e350a;
+}
+
+body.dark-mode #result_list tr.pending:nth-child(2n+1) {
+  background-color: #245000;
+}
+
+body.light-mode #result_list tr.running {
+  background-color: #d9fabe;
+  font-weight: bold;
+}
+
+body.light-mode #result_list tr.pending:nth-child(2n) {
+  background-color: #ecffdc;
+}
+
+body.light-mode #result_list tr.pending:nth-child(2n+1) {
+  background-color: #dceecd;
+}
+{% endblock %}
+
+{% block content %}
+  {% include "admin/crawl_status_content.html" %}
+{% endblock %}

@@ -1,0 +1,111 @@
+{% load static %}
+<h4>Crawlers</h4>
+{% if crawlers %}
+  <div id="crawlers" class="results">
+    <table>
+      <thead>
+        <th><div class="text">No</div></th>
+        <th><div class="text">PID</div></th>
+        <th><div class="text">State</div></th>
+      </thead>
+      <tbody>
+        {% for crawler in crawlers %}
+          <tr>
+              <td>{{ crawler.worker_no }}</td>
+              <td>{{ crawler.pid }}</td>
+              <td><b>{{ crawler.state }}</b></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if 'se.change_crawlerstats' in perms %}
+      <form method="POST">
+        {% csrf_token %}
+        {% if pause %}
+          <input type="submit" name="pause" value="⏸ Pause">
+        {% else %}
+          <input type="submit" name="resume" value="⏵ Resume">
+        {% endif %}
+      </form>
+    {% endif %}
+</div>
+{% else %}
+  No crawlers running.
+{% endif %}
+
+<h4>
+  Crawl Queue
+</h4>
+
+<ul id="queue_links">
+  <li>
+    🌟 <a href="{% url 'admin:se_document_changelist' %}?queued=new&o=8">{{ queue_new_count }} new document{{ queue_new_count|pluralize:"s" }}</a>
+  </li>
+  <li>
+    ⌛ <a href="{% url 'admin:se_document_changelist' %}?queued=pending&o=8">{{ queue_pending_count }} pending document{{ queue_pending_count|pluralize:"s" }}</a>
+  </li>
+  <li>
+    🕑 <a href="{% url 'admin:se_document_changelist' %}?queued=recurring&o=8">{{ queue_recurring_count }} recurring document{{ queue_recurring_count|pluralize:"s" }}</a>
+  </li>
+</ul>
+
+{% if queue %}
+  <div class="results">
+    <table id="result_list" style="width: 100%">
+      <thead>
+        <th class="favicon"></th>
+        <th><div class="text">Url</div></th>
+        <th><div class="text">Title</div></th>
+        <th><div class="text">Status</div></th>
+        <th><div class="text">Crawl next</div></th>
+        <th><div class="text">Crawled last</div></th>
+      </thead>
+      <tbody>
+        {% for doc in queue %}
+          <tr {% if doc.pending %}class="{% if doc.worker_no is not None %}running{% elif doc.crawl_last is None or doc.crawl_next < now %}pending{% endif %}"{% endif %}>
+            <td class="favicon">
+              <a href="{% url 'admin:se_document_change' doc.id %}">
+                {% if doc.favicon and not doc.favicon.missing %}
+                    <img src="{% url 'favicon' doc.favicon.id %}" alt="icon">
+                {% endif %}
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'admin:se_document_change' doc.id %}">
+                {{ doc.url }}
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'admin:se_document_change' doc.id %}">
+                {{ doc.title }}
+              </a>
+            </td>
+            <td {% if not doc.in_history %}style="opacity: 0.3"{% endif %}>
+                {% if doc.error %}
+                    <img src="{% static "admin/img/icon-no.svg" %}" alt="False">
+                {% else %}
+                    <img src="{% static "admin/img/icon-yes.svg" %}" alt="True">
+                {% endif %}
+            </td>
+            {% if doc.worker_no is not None %}
+               <td>In progress</td>
+            {% elif doc.crawl_last is None or doc.crawl_next < now %}
+               <td {% if doc.in_history %}style="opacity: 0.3"{% endif %}>Pending</td>
+            {% elif doc.crawl_next %}
+               <td title="{{ doc.crawl_next }}" {% if doc.in_history %}style="opacity: 0.3"{% endif %}>{{ doc.crawl_next_human }}</td>
+            {% else %}
+              <td {% if doc.in_history %}style="opacity: 0.3"{% endif %}>Never</td>
+            {% endif %}
+            {% if doc.crawl_last %}
+              <td {% if not doc.in_history %}style="opacity: 0.3"{% endif %} title="{{ doc.crawl_last }}">{{ doc.crawl_last_human }}</td>
+            {% else %}
+              <td {% if not doc.in_history %}style="opacity: 0.3"{% endif %}>Never</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  No document
+{% endif %}

@@ -1,0 +1,315 @@
+{% extends "se/base.html" %}
+{% load static %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static "se/index.js" %}"></script>
+    <link rel="search" type="application/opensearchdescription+xml" title="SOSSE" href="/opensearch.xml">
+{% endblock %}
+
+{% block css %}
+    .res {
+        margin: 6px 0px 6px 0px;
+        padding: 10px 10px 10px 10px;
+        border-radius: 10px;
+    }
+    body.light-mode .res:hover {
+        background-color: #f4f4f4;
+    }
+    body.dark-mode .res:hover {
+        background-color: #1a1a1a;
+    }
+    .res-img {
+        height: 16px;
+        width: 16px;
+        display: inline;
+    }
+    .res-title {
+        margin-bottom: 0px;
+        display: inline;
+    }
+    .res-url {
+        text-decoration: none;
+        color: #080;
+        font-size: 13px;
+    }
+    .res-rank {
+        font-size: 10px;
+        display: inline;
+    }
+    .res-headline {
+        text-decoration: none;
+        color: #000;
+    }
+    .res-highlight {
+        background-color: #c6dcff;
+    }
+
+    #home-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-auto-rows: minmax(100px, auto);
+    }
+
+    #home-grid a {
+        text-decoration: none;
+    }
+
+    .res-home {
+        display: block;
+        position: relative;
+        grid-column: auto;
+        grid-row: auto;
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        overflow: hidden;
+    }
+    .res-home-icon {
+        padding-top: 30%;
+        width: 100%;
+    }
+    .res-home-icon > img.res-home-icon-img {
+        width: 64px;
+        height: 64px;
+    }
+    img.res-home-title-icon {
+        width: 16px;
+        height: 16px;
+    }
+    .res-home-fade-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: 0;
+      width: 100%;
+      height: 24px;
+    }
+
+    body.light-mode .res .res-home-fade-text {
+      background-image: linear-gradient(to bottom, transparent, white);
+    }
+
+    body.light-mode .res:hover .res-home-fade-text {
+      background-image: linear-gradient(to bottom, transparent, #f4f4f4);
+    }
+
+    body.dark-mode .res .res-home-fade-text {
+      background-image: linear-gradient(to bottom, #00000000, #000000ff);
+    }
+
+    body.dark-mode .res:hover .res-home-fade-text {
+      background-image: linear-gradient(to bottom, #00000000, #1a1a1a);
+    }
+
+    #search_field {
+        text-align: center;
+    }
+    #more {
+        text-decoration: none;
+        font-size: 13px;
+        color: var(--text);
+    }
+    #adv_search {
+        padding-top: 20px;
+    }
+    #stats_menu {
+        right: 8px;
+        width: 160px;
+        top: 88px;
+    }
+    #atom_menu {
+        right: 8px;
+        width: 160px;
+        top: 128px;
+    }
+    #word_stats {
+        float: right;
+        text-align: left;
+        overflow-y: scroll;
+        height: 300px;
+        width: 250px;
+    }
+    #word_stats_list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    .word_stats_txt {
+        width: 90%;
+        margin-right: -8px;
+        padding: 2px 0px 2px 8px;
+        display: inline;
+    }
+    .links:hover .word_stats_txt {
+        background-color: #e7f0ff;
+    }
+    .word_stats_count {
+        width: 10%;
+        text-align: right;
+        display: inline;
+    }
+    .links:hover .word_stats_count {
+        background-color: #e7f0ff;
+    }
+    .dyn_button {
+        width: 38px;
+        text-align: center;
+    }
+    #clear_button {
+        background-size: 20px;
+        width: 40px;
+        height: 40px;
+        border-left-style: none;
+    }
+    #clear_button:focus {
+        border-left-style: solid;
+    }
+    #search_button {
+        margin-left: 5px;
+        width: 40px;
+        height: 40px;
+    }
+    #stats_button {
+        background-image: url('{% static "se/icon-stats.svg" %}');
+    }
+    #atom_button {
+        background-image: url('{% static "se/icon-atom.svg" %}');
+    }
+    #top_bar {
+        min-height: 157px;
+        padding-bottom: 10px;
+    }
+    input[name="fv"] {
+        min-width: 350px;
+    }
+{% endblock %}
+
+{% block top_bar %}
+    <form method="get" id="search_form">
+        <div id="search_field">
+            {% for field in form.hidden_fields %}
+                {{ field }}
+            {% endfor %}
+
+            {{ form.q }}<!--
+            --><input id="search_button" class="img_button" type="submit" value=" " onclick="return on_submit()">
+            <div id="more_div">
+                <a id="more" href="#" onclick="search_more()">⮟ params</a>
+            </div>
+        </div>
+
+        <template id="adv_search_tmpl">
+            <input class="dyn_button" type="button" value="+">
+            <input class="dyn_button" type="button" value="-">
+            <select name="ft">
+                <option value="inc">Keep</option>
+                <option value="exc">Exclude</option>
+            </select>
+            <select name="ff">
+                {% for value, title in FILTER_FIELDS %}
+                    <option value="{{ value }}">{{ title }}</option>
+                {% endfor %}
+            </select>
+            <select name="fo">
+                <option value="contain">Containing</option>
+                <option value="equal">Equal to</option>
+                <option value="regexp">Matching Regexp</option>
+            </select>
+            <input name="fv" type="text">
+            <input name="fc" type="checkbox" id="fc">
+            <label for="fc">Case sensitive</label>
+        </template>
+
+        <div id="adv_search" style="display: none">
+            <div>
+                Language
+                <select id="doc_lang" name="doc_lang">
+                    <option value="">Any</option>
+                    {% for key, val in sosse_langdetect_to_postgres.items %}
+                        <option value="{{ key }}">{{ val.flag }} {{ val.name|title }}</option>
+                    {% endfor %}
+                </select>
+
+                Sort {{ form.s }}
+
+                {% if perms.se.can_change_document %}
+                    {{ form.i }}
+                    <label for="id_i">Include hidden documents</label>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block body %}
+    {% if has_query %}
+        {% if results_count == '0' %}
+            <div>
+                <div style="display: inline; font-size: 24px;">{{ animal }}</div>
+                No result {{ animal }}
+            </div>
+        {% else %}
+            <div>
+                <div style="display: inline; font-size: 24px;">{{ animal }}</div>
+                {{ results_count }} site{{ results|pluralize:"s" }} found
+            </div>
+        {% endif %}
+        <div class="menu" id="stats_menu">
+            <button id="stats_button" title="Words statistics" class="menu_button img_button" onclick="return show_word_stats()">
+            </button>
+            <div id="word_stats" class="panel">
+                <ul id="word_stats_list" class="ul_stripe">
+                    <li>
+                        <div>
+                            Document's word statistics
+                        </div>
+                    </li>
+                </ul>
+                <div id="please_wait">
+                    Please wait.
+                </div>
+            </div>
+        </div>
+        <div class="menu" id="atom_menu">
+            <button id="atom_button" title="Atom feeds" class="menu_button img_button"></button>
+            <div id="atom_menu_panel" class="panel">
+                <a href="/atom/?{{ request.META.QUERY_STRING }}" class="links menu_links">Atom results feed</a>
+                <a href="/atom/?{{ request.META.QUERY_STRING }}&cached=1" class="links menu_links">Atom cached feed</a>
+            </div>
+        </div>
+        {% for r in paginated %}
+            <div class="res" {% if r.has_thumbnail or r.screenshot_count %}style="min-height: 100px"{% endif %}>
+                <div>
+                    {% if r.has_thumbnail or r.screenshot_count %}
+                        <a href="{{ r.link }}" {{ r.link_flag }}>
+                            {% if r.has_thumbnail %}
+                                <img src="{{ settings.SOSSE_THUMBNAILS_URL }}{{ r.image_name }}.jpg" class="cache-preview" />
+                            {% else %}
+                                <img src="{{ settings.SOSSE_SCREENSHOTS_URL }}{{ r.image_name }}_0.{{ r.screenshot_format }}" class="cache-preview" />
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                    {% if r.favicon and not r.favicon.missing %}
+                        <img class="res-img" src="{% url 'favicon' r.favicon.id %}" alt="icon">
+                    {% endif %}
+                    <a href="{{ r.link }}" {{ r.link_flag }}>
+                        <h3 class="res-title">{{ r.title }}</h3>
+                    </a>
+                </div>
+                <a href="{{ r.link }}" class="res-url" {{ r.link_flag }}>
+                    {{ r.url }}
+                </a>
+                <div class="res-rank"> · {{ r.rank|floatformat:"1" }}</div>
+                <div class="res-rank"> · {{ r.lang_flag }}</div>
+                <div class="res-rank"> · <a href="{{ r.extra_link }}" {{ r.extra_link_flag }}>{{ extra_link_txt }}</a></div>
+                <br/>
+                <a href="{{ r.link }}" class="res-headline" {{ r.link_flag }}>{{ r.headline }}</a>
+            </div>
+        {% endfor %}
+
+        {% include 'se/pagination.html' %}
+    {% elif settings.SOSSE_BROWSABLE_HOME %}
+        {% include 'se/home_browse.html' %}
+    {% endif %}
+
+{% endblock %}
