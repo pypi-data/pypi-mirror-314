@@ -1,0 +1,134 @@
+Metadata-Version: 2.1
+Name: jinja2sql
+Version: 0.7.0
+Summary: Jinja Templates to SQL
+Home-page: https://github.com/antonrh/jinja2sql
+License: MIT
+Keywords: sql,query,queries,template,jinja,database,db
+Author: Anton Ruhlov
+Author-email: antonruhlov@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Provides-Extra: docs
+Requires-Dist: jinja2 (>=3.1.2,<4.0.0)
+Requires-Dist: mkdocs (>=1.6.0,<2.0.0) ; extra == "docs"
+Requires-Dist: mkdocs-material (>=9.5.25,<10.0.0) ; extra == "docs"
+Requires-Dist: typing-extensions (>=4.12.2,<5.0.0)
+Project-URL: Repository, https://github.com/antonrh/jinja2sql
+Description-Content-Type: text/markdown
+
+# Jinja2SQL (Jinja To SQL)
+
+`Jinja2SQL` is a simple and efficient library for generating SQL queries from [Jinja2](https://jinja.palletsprojects.com/en/3.1.x/) templates. It is type-friendly and offers `async` support, drawing significant inspiration from the excellent library at [jinjasql](https://github.com/sripathikrishnan/jinjasql).
+
+[![CI](https://github.com/antonrh/jinja2sql/actions/workflows/ci.yml/badge.svg)](https://github.com/antonrh/jinja2sql/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/antonrh/jinja2sql/branch/main/graph/badge.svg?token=67CLD19I0C)](https://codecov.io/gh/antonrh/jinja2sql)
+[![Documentation Status](https://readthedocs.org/projects/jinja2sql/badge/?version=latest)](https://jinja2sql.readthedocs.io/en/latest/?badge=latest)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+---
+Documentation
+
+http://jinja2sql.readthedocs.io/
+
+---
+
+## Requirements
+
+`Python 3.9+` and `Jinja2 3.1.2+`.
+
+## Installation
+
+Install using `pip`:
+
+```shell
+pip install jinja2sql
+```
+
+or using `poetry`:
+
+```shell
+poetry add jinja2sql
+```
+
+## Quick Example
+
+```python
+from jinja2sql import Jinja2SQL
+
+
+j2sql = Jinja2SQL(param_style="named")  # default param style is "named"
+
+query, params = j2sql.from_string(
+    "SELECT * FROM {{ table | identifier }} WHERE email = {{ email }}",
+    context={"table": "users", "email": "user@mail.com"},
+)
+
+# using with your favorite database driver connection
+
+conn.execute(query, params)
+```
+
+### Param Styles
+
+`Jinja2SQL` supports different param styles depending on the database driver you are using.
+
+You can choose between the following supported param styles:
+
+```python
+from jinja2sql import Jinja2SQL
+
+
+j2sql = Jinja2SQL(param_style="named")  # default
+
+query, params = j2sql.from_string(
+    "SELECT * FROM table WHERE param = {{ param }}",
+    context={"param": ...},
+    param_style="named",  # or "qmark", "numeric", "format", "pyformat", "asyncpg"
+)
+```
+
+| param_style   | Example     |
+| ------------- | ----------- |
+| `named`       | `:param`    |
+| `qmark`       | `?`         |
+| `numeric`     | `:1`        |
+| `format`      | `%s`        |
+| `pyformat`    | `%(param)s` |
+| `asyncpg`     | `$1`        |
+
+
+or you can provide a custom function to format your database specific param style:
+
+
+```python
+from jinja2sql import Jinja2SQL
+
+
+j2sql = Jinja2SQL()
+
+query, params = j2sql.from_string(
+    "SELECT * FROM table WHERE column = {{ param }}",
+    context={"param": ...},
+    param_style=lambda key, _: f"{{{key}}}",
+)
+
+assert query == "SELECT * FROM table WHERE column = {email}"
+```
+
