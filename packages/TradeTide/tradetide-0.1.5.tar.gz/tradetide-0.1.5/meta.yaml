@@ -1,0 +1,65 @@
+package:
+  name: tradetide
+  version: {{ GIT_DESCRIBE_TAG }}
+
+source:
+  path: ../
+  git_url: https://github.com/MartinPdeS/TradeTide.git
+
+build:
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+channels:
+  - conda-forge
+  - martinpdes
+
+requirements:
+  host:
+    - python {{ PY_VER }}*
+    - setuptools >=40.8.0
+    - wheel
+    - setuptools-scm >=8.0
+    - pip
+  run:
+    - pandas
+    - martinpdes::mpsplots
+    - pyyaml ~=6.0
+    - requests ~=2.31
+    - matplotlib ~=3.8
+    - mpl-interactions
+    - numpy ~=1.26
+    - pydantic ~=2.9
+    - tabulate ~=0.9
+
+about:
+  home: https://github.com/MartinPdeS/TradeTide
+  license: MIT
+  summary: "A package Forex stocks backtesting."
+  description: The library is a tool for strategies testing for the Forex current exchange market.
+  dev_url: https://github.com/MartinPdeS/TradeTide
+  doc_url: https://martinpdes.github.io/TradeTide/
+  license_file: LICENSE
+  keywords:
+    - optics
+    - refractive index
+    - material
+
+test:
+  imports:
+    - TradeTide
+  requires:
+    - python {{ PY_VER }}*
+    - pytest>=0.6
+    - pytest-cov>=2.0
+    - pytest-json-report==1.5.0
+    - coverage==7.6.1
+  commands:
+    - python -m pytest
+  source_files:
+    - tests
+
+extra:
+  recipe-maintainers:
+    - MartinPdeS

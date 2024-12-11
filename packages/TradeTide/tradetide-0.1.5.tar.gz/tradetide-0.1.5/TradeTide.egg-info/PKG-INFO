@@ -1,0 +1,164 @@
+Metadata-Version: 2.1
+Name: TradeTide
+Version: 0.1.5
+Summary: A package for stocks market backtesting.
+Author-email: Martin Poinsinet de Sivry-Houle <martin.poinsinet.de.sivry@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2020 Martin de Sivry
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Keywords: backtesting,stocks,market
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Development Status :: 4 - Beta
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: pydantic>=2.6.3
+Requires-Dist: MPSPlots
+Requires-Dist: tabulate
+Requires-Dist: pandas
+Requires-Dist: GitPython
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: mpl-interactions
+Provides-Extra: testing
+Requires-Dist: pytest>=0.6; extra == "testing"
+Requires-Dist: pytest-cov>=2.0; extra == "testing"
+Requires-Dist: pytest-json-report==1.5.0; extra == "testing"
+Requires-Dist: mypy>=0.910; extra == "testing"
+Requires-Dist: flake8>=3.9; extra == "testing"
+Requires-Dist: tox>=3.24; extra == "testing"
+Requires-Dist: coverage==7.6.1; extra == "testing"
+Provides-Extra: documentation
+Requires-Dist: numpydoc==1.8.0; extra == "documentation"
+Requires-Dist: sphinx>=5.1.1; extra == "documentation"
+Requires-Dist: sphinx-gallery==0.17.1; extra == "documentation"
+Requires-Dist: sphinx-rtd-theme==2.0.0; extra == "documentation"
+Requires-Dist: pydata-sphinx-theme==0.15.4; extra == "documentation"
+
+|Logo|
+
+|python|
+|docs|
+|PyPi|
+|PyPi_download|
+
+TradeTide
+=========
+
+TradeTide is a trading platform designed to empower traders with advanced analytics, real-time market data, and automated trading capabilities. Our platform caters to both novice and experienced traders, offering a wide range of tools to analyze market trends, execute trades, and manage portfolios efficiently.
+
+
+Testing
+*******
+
+To test localy (with cloning the GitHub repository) you'll need to install the dependencies and run the coverage command as
+
+.. code:: python
+
+   >>> git clone https://github.com/MartinPdeS/TradeTide.git
+   >>> cd TradeTide
+   >>> pip install -r requirements/requirements.txt
+   >>> pytest
+
+----
+
+
+Coding example
+**************
+
+.. code-block:: python
+
+   from TradeTide import BackTester, indicators, get_market_data
+   from TradeTide import capital_managment, risk_management
+
+   market_data = get_market_data('eur', 'usd', year=2023, time_span='30day', spread=0)
+
+   indicator = indicators.BB(periods=20)
+
+   indicator.generate_signal(market_data)
+
+   indicator.plot()
+
+   backtester = BackTester(market=market_data, strategy=indicator)
+
+   risk = risk_management.DirectLossProfit(
+       market=market_data,
+       stop_loss='10pip',
+       take_profit='10pip',
+   )
+
+   capital_managment = capital_managment.LimitedCapital(
+       initial_capital=100_000,
+       risk_management=risk,
+       max_cap_per_trade=10_000,
+       limit_of_positions=1,
+       micro_lot=1_000
+   )
+
+   backtester.backtest(capital_managment=capital_managment)
+
+
+   backtester.plot(show_price=True)
+
+   metrics = backtester.metrics
+
+   metrics.print()
+
+
+|example_image|
+
+----
+
+
+Contact Information
+************************
+As of 2024, the project is still under development. If you want to collaborate, it would be a pleasure! I encourage you to contact me.
+
+PyMieSim was written by `Martin Poinsinet de Sivry-Houle <https://github.com/MartinPdS>`_  .
+
+Email:`martin.poinsinet-de-sivry@polymtl.ca <mailto:martin.poinsinet-de-sivry@polymtl.ca?subject=TradeTide>`_ .
+
+
+.. |python| image:: https://img.shields.io/pypi/pyversions/pymiesim.svg
+   :target: https://www.python.org/
+
+.. |Logo| image:: https://github.com/MartinPdeS/TradeTide/raw/master/docs/images/logo.png
+
+.. |example_image| image:: https://github.com/MartinPdeS/TradeTide/raw/master/docs/images/image_example.png
+
+.. |docs| image:: https://github.com/martinpdes/tradetide/actions/workflows/deploy_documentation.yml/badge.svg
+   :target: https://martinpdes.github.io/TradeTide/
+   :alt: Documentation Status
+
+.. |PyPi| image:: https://badge.fury.io/py/TradeTide.svg
+    :target: https://badge.fury.io/py/TradeTide
+
+.. |PyPi_download| image:: https://img.shields.io/pypi/dm/TradeTide.svg
+    :target: https://pypistats.org/packages/tradetide
+
+.. |coverage| image:: https://raw.githubusercontent.com/MartinPdeS/TradeTide/python-coverage-comment-action-data/badge.svg
+   :alt: Unittest coverage
+   :target: https://htmlpreview.github.io/?https://github.com/MartinPdeS/TradeTide/blob/python-coverage-comment-action-data/htmlcov/index.html

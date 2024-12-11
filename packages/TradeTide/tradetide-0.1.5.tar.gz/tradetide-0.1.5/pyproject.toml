@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=40.8.0", "wheel", "setuptools_scm[toml]>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "TradeTide/_version.py"
+version_scheme = "only-version"
+local_scheme = "no-local-version"
+
+[project]
+name = "TradeTide"
+dynamic = ["version"]
+description = "A package for stocks market backtesting."
+license = {file = "LICENSE"}
+readme = "README.rst"
+requires-python = ">=3.10"
+authors = [{name="Martin Poinsinet de Sivry-Houle", email="martin.poinsinet.de.sivry@gmail.com"}]
+classifiers = [
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Development Status :: 4 - Beta',
+]
+
+keywords = ["backtesting", "stocks", "market"]
+
+dependencies = [
+    "pydantic>=2.6.3",
+    "MPSPlots",
+    "tabulate",
+    "pandas",
+    "GitPython",
+    "numpy",
+    "matplotlib",
+    "mpl-interactions"
+]
+
+
+[tool.setuptools]
+packages = ["TradeTide"]
+
+
+[project.optional-dependencies]
+testing = [
+    "pytest>=0.6",
+    "pytest-cov>=2.0",
+    "pytest-json-report==1.5.0",
+    "mypy>=0.910",
+    "flake8>=3.9",
+    "tox>=3.24",
+    "coverage==7.6.1"
+]
+
+documentation = [
+    "numpydoc==1.8.0",
+    "sphinx>=5.1.1",
+    "sphinx-gallery==0.17.1",
+    "sphinx-rtd-theme==2.0.0",
+    "pydata-sphinx-theme==0.15.4",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+xfail_strict = true
+log_cli_level = "INFO"
+testpaths = [
+    "tests/*",
+]
+addopts = [
+    '-v',
+    '-rA',
+    '-rw',
+    '--cov=TradeTide',
+    '--cov-report=html'
+]
+
+[tool.coverage.run]
+source = ['SuPyMode']
+omit = [
+    '*\__init__.py',
+    '*/_version.py',
+    '*/directories.py',
+]
+branch = true
+relative_files = true
