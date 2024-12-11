@@ -1,0 +1,19 @@
+mutation CreateExplainabilityRequest($workspace_id: bigint!,
+                                        $explainability_config_id: uuid!, 
+                                        $status: jsonb!, 
+                                        $reference_config: jsonb,
+                                        $window_config: jsonb,
+                                        $use_adhoc_data: Boolean!) {
+    insert_explainability_request(objects: {workspace_id: $workspace_id,
+                                            explainability_config_id: $explainability_config_id,
+                                            status: $status, 
+                                            reference_config: $reference_config,
+                                            window_config: $window_config,
+                                            use_adhoc_data: $use_adhoc_data}) {
+        returning {
+            id
+        }
+    }
+}
+
+

@@ -1,0 +1,20 @@
+mutation CreateExplainabilityConfig($workspace_id: bigint!,
+                                $reference_pipeline_version: uuid!,
+                                $explainability_pipeline_version: uuid, 
+                                $status: jsonb!, 
+                                $num_points: Int, 
+                                $feature_names: jsonb, 
+                                $feature_bounds: jsonb, 
+                                $output_names: jsonb) {
+    insert_explainability(objects: {workspace_id: $workspace_id,
+                                    reference_pipeline_version: $reference_pipeline_version, 
+                                    explainability_pipeline_version: $explainability_pipeline_version,
+                                    status: $status, num_points: $num_points, 
+                                    feature_names: $feature_names, 
+                                    feature_bounds: $feature_bounds, 
+                                    output_names: $output_names}) {
+    returning {
+        id
+        }
+    }
+}
