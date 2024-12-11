@@ -1,0 +1,15 @@
+<h5 class="card-title">Linked Open Data</h5>
+{% if object.uri_set %}
+  <ul>
+    {% for uri in object.uri_set.all %}
+      <li>
+        {{ uri.uri | urlize }}
+        {% if object.get_change_permission in perms %}
+          {% if not uri.internal %}
+            | <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}" class="small">... merge data</a>
+          {% endif %}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
