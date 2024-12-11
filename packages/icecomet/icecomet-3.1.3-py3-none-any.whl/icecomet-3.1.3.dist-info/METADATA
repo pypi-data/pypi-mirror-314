@@ -1,0 +1,70 @@
+Metadata-Version: 2.1
+Name: icecomet
+Version: 3.1.3
+Summary: debug
+Home-page: https://github.com/yourusername/my_library
+Author: icecomet
+Author-email: icecomet634@gmail.com
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: matplotlib
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: pynput
+Requires-Dist: pyperclip
+Requires-Dist: time
+
+# icecomet project
+
+## สารบัญ
+- [มีอะไรในไลบราลี่นี้](#มีอะไรในไลบราลี่นี้)
+  - [icolor คืออะไร](#icolor-คืออะไร)
+  - [iterText คืออะไร](#itertext-คืออะไร)
+  - [iprint คืออะไร](#iprint-คืออะไร)
+  - [ibotClick คืออะไร](#ibotclick-คืออะไร)
+  - [ipandas คืออะไร](#ipandas-คืออะไร)
+- [วิธีการใช้งานแต่ละโมดูล](#วิธีการใช้งานแต่ละโมดูล)
+  - [เกี่ยวกับแท็กพิเศษสำหรับการแสดงผลข้อความ (ANSI escape code :\033)](#เกี่ยวกับแท็กพิเศษสำหรับการแสดงผลข้อความ (ANSI escape code :\033))
+  - [การใช้งาน icolor](#icolor)
+  - [การใช้งาน iterText](#itertext)
+  - [การใช้งาน iprint](#iprint)
+  - [การใช้งาน ibotClick](#ibotclick)
+  - [การใช้งาน ipandas](#ipandas)
+- [ประวัติการอัพเดต](#ประวัติการอัพเดต)
+- [รายละเอียดผู้พัฒนา](#รายละเอียดผู้พัฒนา)
+
+## มีอะไรในไลบราลี่นี้
+
+`icecomet project` คือไลบราลี่ที่รวมโมดูลของคำสั่งที่ใช้งานบ่อย โดยประกอบด้วย 5 โมดูล ดังนี้:
+
+### 1) icolor
+`icolor` เป็นโมดูลที่ช่วยในการจัดการสีของข้อความในเทอร์มินัล (เช่น การทำข้อความเป็นสีแดง, เขียว, หรือสีอื่น ๆ) เพื่อช่วยในการสร้างข้อความที่ดูน่าสนใจหรือเพื่อเน้นความสำคัญ. โดยรวมแท็กพิเศษสำหรับหรับเปลี่ยนสีตัวอักษรไว้ในออบเจค color_text หรือ ct เช่น `ct.red` จะเก็บค่าของ `'\033[91m'` ซึ่งทำให้ข้อความเป็นสีแดง
+
+### 2) iterText
+`iterText` ใช้ในการขยับเคอร์เซอร์ ทำให้แก้ไขข้อความที่ถูกปริ้นออกมาบนเทอร์มินัลแล้วได้ ใช้หลักการเดียวกับ icolor โดยรวมแท็กที่ใช้ ไว้ในออบเจค cursor_control หรือ cc สามารถดูวิธีใช้ฉบับเต็มใด้ที่หัวข้อ - [วิธีการใช้งานแต่ละโมดูล](#วิธีการใช้งานแต่ละโมดูล)>[iterText](#itertext) (เมื่อนำเข้าโมดูลนี้ ตัวออบเจค ct ที่อยู่ใน icolor จะถูกนำเข้ามาด้วย เนื่องจากมีการทำงานที่ใกล้เคียงกัน)
+
+### 3) iprint
+`iprint` จะเพิ่มคำสั่งที่ใช้บ่อยในการดีบั๊ก และจัดรูปแบบให้ใช้งานง่ายขึ้น เช่น ij('variable','t') ซึ่งเท่ากับ print(type('variable')) หรือ ij('variable','l') ที่เท่ากับ print(len('variable')) และนอกจากนี้ยังมีฟังก์ชั่นพิเศษที่ใช้ตรวจจับการรันโค้ด ว่าตอนนี้กำลังทำงานอยู่ที่จุดไหน ด้วยวิธีนี้ทำให้สามารถเช็คข้อมูลเกี่ยวกับตัวแปรหรือจุดที่มีปัญหาใด้อย่างรวดเร็ว สามารถดูวิธีใช้ฉบับเต็มใด้ที่หัวข้อ - [วิธีการใช้งานแต่ละโมดูล](#วิธีการใช้งานแต่ละโมดูล)>[การใช้งาน iprint](#iprint)
+
+### 4) ibotClick
+`ibotClick` จะรวมฟังก์ชั่นเกี่ยวกับการทำงานอัตโนมัติ เช่นคำสั่ง คลิกขวาที่พิกัด(x,y) , กดปุ่ม(xxx) บนคีย์บอร์ด โดยใช้ Library `pynput` - [วิธีการใช้งานแต่ละโมดูล](#วิธีการใช้งานแต่ละโมดูล)>[การใช้งาน ibotClick](#ibotclick)
+
+### 5) ipandas
+`ipandas` กำลังอยู่ระหว่างการพัฒนา ตอนนี้มีฟังก์ชั่นเดียวคือการแปลง dataframe ให้เป็น dictionary แบบที่ใช้ประกาศ dataframe
+
+## วิธีการใช้งานแต่ละโมดูล
+
+### 1) icolor
+โมดูล `icolor` ช่วยให้สามารถปรับแต่งสีของข้อความในเทอร์มินัลได้ตามต้องการ:
+
+```python
+from icolor import icolor
+
+# ตัวอย่างการใช้ icolor
+icolor.red("ข้อความสีแดง")
+icolor.green("ข้อความสีเขียว")
