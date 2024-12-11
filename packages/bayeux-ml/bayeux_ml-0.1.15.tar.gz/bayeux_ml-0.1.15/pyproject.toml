@@ -1,0 +1,83 @@
+[project]
+name = "bayeux-ml"
+description = "Stitching together probabilistic models and inference."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "bayeux authors", email="bayeux@google.com"}]
+classifiers = [  # List of https://pypi.org/classifiers/
+    "License :: OSI Approved :: Apache Software License",
+    "Intended Audience :: Science/Research",
+]
+keywords = []
+
+# pip dependencies of the project
+# Installed locally with `pip install -e .`
+dependencies = [
+  "jax>=0.4.36",
+  "tensorflow-probability[jax]>=0.19.0",
+  "oryx>=0.2.9",
+  "arviz",
+  "optax",
+  "optimistix",
+  "blackjax",
+  "flowmc>=0.3.0",
+  "numpyro",
+  "jaxopt",
+  "pymc",
+  "nutpie",
+]
+
+# `version` is automatically set by flit to use `bayeux.__version__`
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://github.com/jax-ml/bayeux"
+repository = "https://github.com/jax-ml/bayeux"
+changelog = "https://github.com/jax-ml/bayeux/blob/main/CHANGELOG.md"
+documentation = "https://jax-ml.github.io/bayeux"
+
+[project.optional-dependencies]
+# Development deps (unittest, linting, formating,...)
+# Installed through `pip install -e .[dev]`
+dev = [
+    "pytest",
+    "pytest-xdist",
+    "pylint>=2.6.0",
+    "pyink",
+]
+
+
+docs = [
+    # Latest versions at time of writing.
+    "mkdocs==1.5.3",            # Main documentation generator.
+    "mkdocs-material==9.5.11",   # Theme
+    "pymdown-extensions==10.7",  # Markdown extensions e.g. to handle LaTeX.
+    "mkdocstrings==0.24.1",     # Autogenerate documentation from docstrings.
+    "mknotebooks==0.8.0",       # Turn Jupyter Lab notebooks into webpages.
+]
+
+[tool.pyink]
+# Formatting configuration to follow Google style-guide
+line-length = 80
+preview = true
+pyink-indentation = 2
+pyink-use-majority-quotes = true
+
+[build-system]
+# Build system specify which backend is used to build/install the project (flit,
+# poetry, setuptools,...). All backends are supported by `pip install`
+requires = ["flit_core >=3.8,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "bayeux"
+
+[tool.flit.sdist]
+# Flit specific options (files to exclude from the PyPI package).
+# If using another build backend (setuptools, poetry), you can remove this
+# section.
+exclude = [
+  # Do not release tests files on PyPI
+  "**/*_test.py",
+]
