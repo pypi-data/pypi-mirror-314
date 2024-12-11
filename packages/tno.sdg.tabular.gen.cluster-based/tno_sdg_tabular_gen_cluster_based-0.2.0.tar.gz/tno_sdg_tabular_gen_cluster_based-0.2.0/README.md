@@ -1,0 +1,130 @@
+# TNO PET Lab - Synthetic Data Generation (SDG) - Tabular - Generation - Cluster Based
+
+This package provides a simple synthetic data generator for tabular data. In
+short, it works by clustering a given tabular dataset (by default using k-means
+clustering), from which per-attribute histograms per cluster are created. These
+histograms are sampled to generate synthetic data.
+
+### PET Lab
+
+The TNO PET Lab consists of generic software components, procedures, and functionalities developed and maintained on a regular basis to facilitate and aid in the development of PET solutions. The lab is a cross-project initiative allowing us to integrate and reuse previously developed PET functionalities to boost the development of new protocols and solutions.
+
+The package `tno.sdg.tabular.gen.cluster_based` is part of the [TNO Python Toolbox](https://github.com/TNO-PET).
+
+_Limitations in (end-)use: the content of this software package may solely be used for applications that comply with international export control laws._  
+_This implementation of cryptographic software has not been audited. Use at your own risk._
+
+## Documentation
+
+Documentation of the `tno.sdg.tabular.gen.cluster_based` package can be found
+[here](https://docs.pet.tno.nl/sdg/tabular/gen/cluster_based/0.2.0).
+
+## Install
+
+Easily install the `tno.sdg.tabular.gen.cluster_based` package using `pip`:
+
+```console
+$ python -m pip install tno.sdg.tabular.gen.cluster_based
+```
+
+_Note:_ If you are cloning the repository and wish to edit the source code, be
+sure to install the package in editable mode:
+
+```console
+$ python -m pip install -e 'tno.sdg.tabular.gen.cluster_based'
+```
+
+If you wish to run the tests you can use:
+
+```console
+$ python -m pip install 'tno.sdg.tabular.gen.cluster_based[tests]'
+```
+
+## Usage
+
+The `tno.sdg.tabular.gen.cluster_based` package provides a single class
+`ClusterBasedGenerator` that provides a simple interface to the synthetic data
+generation.
+
+First, the `ClusterBasedGenerator` must be fitted on a real dataset using the
+`ClusterBasedGenerator.fit` method. The user must specify the type of each
+column of the dataset via the `data_types` parameter. Once fitted, the user can
+call `ClusterBasedGenerator.sample` to generate synthetic data samples.
+
+```python
+import pandas as pd
+from tno.sdg.tabular.gen.cluster_based import ClusterBasedGenerator, DataType
+
+df = pd.read_csv("src/tno/sdg/tabular/gen/cluster_based/test/data/adult.data")
+df_subset = df[["age", "sex", "income", "workclass", "education", "marital-status"]]
+generator = ClusterBasedGenerator()
+generator.fit(df_subset, [DataType.CONTINUOUS, DataType.CATEGORICAL, DataType.CATEGORICAL, DataType.CATEGORICAL, DataType.CATEGORICAL, DataType.CATEGORICAL])
+samples = generator.sample()
+
+```
+
+### Histogram Templates
+
+The generator uses histograms to generate data. A single histogram represents
+a single feature. The bins of this histogram are, by default, derived from the
+data. If you wish to provide a custom template for the histogram, you can
+create one or more `HistogramTemplate` for the desired features and pass these
+to the `ClusterBasedGenerator`.
+
+```python
+age_template = ContinuousHistogramTemplate(lims=[0,10,20,30,40,50,60,70,80,90,100])
+education_template = CategoricalHistogramTemplate(values=['Bachelors, Masters'])
+generator = ClusterBasedGenerator(
+   histogram_templates={
+      'age': age_template
+      'education': education_template
+      # we let marital-status be derived from the data
+   }
+)
+```
+
+### Clustering
+
+The `ClusterBasedGenerator`, as the name suggests, uses clustering to achieve
+synthetic data generation. By default, `sklearn.cluster.KMeans` is used with
+parameters `n_clusters=8, init="random", n_init="auto"`. To change the
+clusterer, simply pass a clustering algorithm to `ClusterBasedGenerator`. The
+clusterer is expected to subclass `BaseEstimator` (base class of `scipy`) and
+implement `fit` and `predict`.
+
+For example, to use `KMeans` but with a different amount of clusters, you can pass:
+
+```python
+generator = ClusterBasedGenerator(clusterer=KMeans(n_clusters=2))
+```
+
+### Preprocessing
+
+Depending on the clustering algorithm and input data used, the data may need to
+be preprocessed. For `KMeans`, the default clustering algorithm, preprocessing
+is required.
+
+The default preprocessor applies the `StandardScaler` to `DataType.CONTINUOUS`
+features and the `OneHotEncoder` to `DataType.CATEGORICAL` features.
+
+It is possible to provide a custom preprocessor in the same manner as for the
+clusterer. The preprocessor should be a `BaseEstimator` with the methods `fit`
+and `predict` implemented. It is possible to combine multiple existing
+preprocessors (such as `OneHotEncoder`) together, and even bulid
+a `Pipeline`. See `default_processor` and `ClusterBasedGenerator.fit` for
+examples on how to use these `scipy` features.
+
+```python
+from sklearn.compose import make_column_transformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+
+def custom_preprocessor() -> BaseEstimator:
+   return make_column_transformer(
+      (StandardScaler(), 'age'),
+      (OneHotEncoder(), 'education'),
+      ('drop', 'marital-status')
+   )
+
+generator = ClusterBasedGenerator(preprocessor=custom_preprocessor())
+```
