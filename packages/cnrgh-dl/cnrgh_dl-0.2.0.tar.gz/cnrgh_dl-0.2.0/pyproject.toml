@@ -1,0 +1,159 @@
+[tool.poetry]
+name = "cnrgh-dl"
+version = "0.2.0"
+description = "Client de téléchargement compatible avec l'authentification à double facteurs (2FA) requise par le portail de téléchargement du CNRGH."
+authors = ["CNRGH", "Maxime BLANCHON <maxime.blanchon@cnrgh.fr>"]
+license = "CeCILL"
+readme = "README.md"
+keywords = ["CNRGH", "download", "projects", "client", "2FA"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)",
+    "Programming Language :: Python :: 3.9"
+]
+packages = [{include = "cnrgh_dl", from = "src"}]
+
+[tool.poetry.urls]
+Documentation = "https://www.cnrgh.fr/data-userdoc/download_with_client/"
+Changelog = "https://www.cnrgh.fr/data-userdoc/download_with_client/#changelog"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "~2.29.0"  # A newer version will require urllib3 2.0, which needs openssl >= 1.1.1
+pydantic = "^2.9.2"
+colorlog = "^6.8.2"
+tqdm = "^4.66.5"
+environs = "^11.0.0"
+platformdirs = "^4.3.6"
+typing-extensions = "^4.12.2"
+marshmallow = "^3.22.0"
+urllib3 = "^1.26.20"
+packaging = "^24.1"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.13.0"
+types-requests = "~2.29.0.0"  # Limit types to requests 2.29.*
+types-tqdm = "^4.66.0.20240417"
+pre-commit = "^4.0.1"
+coverage = "^7.6.1"
+pytest = "^8.3.3"
+requests-mock = "^1.12.1"
+pytest-mock = "^3.14.0"
+sphinx = "^7.1.2"
+sphinx-autoapi = "^3.3.3"
+furo = "^2024.8.6"
+ruff = "^0.8.1"
+deptry = "^0.20.0"
+pip-audit = "2.5.5" # A newer version will require requests >= 2.31
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+cnrgh-dl = "cnrgh_dl.__main__:main"
+
+[tool.poe.tasks.unit-tests]
+sequence = [
+    { cmd = "coverage run --source=./src/cnrgh_dl/ -m pytest tests/unit" },
+    { cmd = "coverage html -d unit_htmlcov" },
+    { cmd  = "coverage report"}
+]
+help = "Run unit tests and generate a coverage report. The report is stored under unit_htmlcov/ in html format and also printed to the console."
+
+[tool.poe.tasks.integration-tests]
+sequence = [
+    { cmd = "coverage run --source=./src/cnrgh_dl/ -m pytest tests/integration" },
+    { cmd = "coverage html -d integration_htmlcov" },
+    { cmd  = "coverage report"}
+]
+help = "Run integration tests and generate a coverage report. The report is stored under integration_htmlcov/ in html format and also printed to the console. These tests require datawebnode to be running in 'client testing' mode (i.e. started with 'DWN_CLIENT_TESTING_MODE=true')."
+
+[tool.poe.tasks.docs]
+cmd = "sphinx-build -b html docs/ docs/_build/ -W"
+help = "Build the documentation under the /docs/_build/ directory."
+
+[tool.poe.tasks.format]
+cmd = "ruff format"
+help = "Format the project code with 'ruff format'."
+
+[tool.poe.tasks.check-formatting]
+cmd = "ruff format --check"
+help = "Check the project code formatting with 'ruff format'."
+
+[tool.poe.tasks.lint]
+cmd = "ruff check --fix"
+help = "Lint the project code with 'ruff'."
+
+[tool.poe.tasks.check-linting]
+cmd  = "ruff check"
+help = "Check the project code linting with 'ruff'."
+
+[tool.poe.tasks.check-typing]
+cmd = "mypy"
+help = "Check the project code typing with 'mypy'."
+
+[tool.poe.tasks.check-dependencies]
+sequence = [
+    { cmd = "deptry src/ tests/" },
+    { cmd = "pip-audit --skip-editable" }
+]
+help = "Check the project dependencies with 'deptry' and 'pip-audit'."
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "-ra",
+    "--verbose",
+    "--exitfirst",
+    "--full-trace"
+]
+
+[tool.ruff]
+line-length = 80
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = [
+    "E501",
+    "D100",
+    "D103",
+    "D104",
+    "D205",
+    "S324",
+    "TRY400",
+    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "D206",
+    "D300",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "COM812",
+    "COM819",
+    "ISC001",
+    "ISC002"
+]
+select = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "S101",  # Disable "Use of assert detected" rule.
+    "S106", # Disable "Possible hardcoded password assigned to argument" rule.
+    "SLF001",  # Disbale "Private member accessed" rule.
+    "FBT003",  # Disable "Boolean positional value in function call" rule.
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.coverage.report]
+skip_empty = true
+
+[tool.coverage.html]
+skip_empty = true
