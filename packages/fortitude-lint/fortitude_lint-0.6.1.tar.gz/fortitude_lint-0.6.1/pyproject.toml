@@ -1,0 +1,43 @@
+[build-system]
+requires = ["maturin >= 1.0, < 2.0"]
+build-backend = "maturin"
+
+[project]
+name = "fortitude-lint"
+version = "0.6.1"
+description = "A Fortran linter, written in Rust and installable with Python"
+readme = "README.md"
+authors = [
+    {name = "Liam Pattinson", email = "liampattinson@gmail.com"},
+    {name = "Peter Hill", email = "peter.hill@york.ac.uk"},
+]
+licence = {file = "LICENSE"}
+keywords = ["Fortran", "linter"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Rust",
+    "Topic :: Software Development :: Quality Assurance",
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/PlasmaFAIR/fortitude"
+
+[project.optional-dependencies]
+lint = [
+    "ruff",
+]
+
+[tool.maturin]
+bindings = "bin"
+module-name = "fortitude"
+python-source = "python"
+python-packages = ["fortitude"]
+manifest-path = "fortitude/Cargo.toml"
+strip = true
