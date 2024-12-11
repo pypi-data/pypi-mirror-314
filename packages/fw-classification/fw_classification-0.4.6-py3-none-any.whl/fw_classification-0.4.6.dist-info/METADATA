@@ -1,0 +1,137 @@
+Metadata-Version: 2.1
+Name: fw-classification
+Version: 0.4.6
+Summary: Flywheel classification toolkit.
+Home-page: https://gitlab.com/flywheel-io/public/classification-toolkit
+License: MIT
+Author: Flywheel
+Author-email: support@flywheel.io
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: all
+Provides-Extra: fw
+Provides-Extra: geartk
+Requires-Dist: dotty-dict (>=1,<2)
+Requires-Dist: flywheel-gear-toolkit (>=0.6,<0.7) ; extra == "all" or extra == "geartk"
+Requires-Dist: fw-client (>=0,<1)
+Requires-Dist: fw-file (>=3,<4)
+Requires-Dist: fw-gear-file-metadata-importer (>=1,<2) ; extra == "all"
+Requires-Dist: ruamel-yaml (>=0,<1)
+Requires-Dist: typer (>=0.12,<0.13)
+Project-URL: Repository, https://gitlab.com/flywheel-io/public/classification-toolkit
+Description-Content-Type: text/markdown
+
+# Classification Toolkit
+
+The main documentation for the classification-toolkit can be found at the
+[fw-classification
+Documentation](https://flywheel-io.gitlab.io/scientific-solutions/lib/fw-classification/)
+
+Classification toolkit is a library that can act on arbitrary metadata in the
+form of JSON, with a declarative set of rules.  The main use case for this
+library is for classification of medical imaging files based on their
+metadata, for example, the `SeriesDescription` tag in a DICOM file.
+
+## Install
+
+`poetry add fw-classification`, or with optional dependencies
+`poetry add fw-classification -E all`.
+
+## Run classification via cli
+
+<!-- markdownlint-disable line-length -->
+```bash
+~/ ➜  classify run ./fw_classification/profiles/main.yml ~/Downloads/example.dicom.zip -a dicom
+fw_classification:      Block mr_file result: True
+fw_classification:      Block set_modality result: True
+fw_classification:      Block set_classification_from_acquisition_label_or_series_description result: True
+fw_classification:      Block set_contrast_from_acquisition_label_or_series_description result: False
+fw_classification:      Block add_features_from_acquisition_label_or_series_description result: False
+fw_classification:      Block add_measurement_from_acquisition_label_or_series_description result: False
+fw_classification:      Block add_intent_from_acquisition_label_or_series_description result: False
+{
+  "file": {
+    "info": {
+      "header": {
+        "dicom": {
+          "FileMetaInformationGroupLength": 216,
+          "WindowWidth": 199.0,
+          ... # Many more tags
+          "dBdt": 0.0
+        }
+      }
+    },
+    "type": "dicom",
+    "modality": "MR",
+    "classification": {
+      "Intent": [
+        "Structural"
+      ],
+      "Measurement": [
+        "T1"
+      ]
+    }
+  }
+}
+```
+<!-- markdownlint-enable line-length -->
+
+## Run via python
+
+```python
+from fw_classification.classify import run_classification
+import json
+
+input_data = {}
+with open('/path/to/input','r') as fp:
+   input_data = json.load(fp)
+
+result, out_data = run_classification('MR_classifier', input_data)
+```
+
+Out:
+
+```bash
+~/ ➜   python test.py
+{
+  "file": {
+    "info": {
+      "header": {
+        "dicom": {
+          "FileMetaInformationGroupLength": 216,
+          ... # Many more tags
+          "WindowWidth": 199.0,
+          "dBdt": 0.0
+        }
+      }
+    },
+    "type": "dicom",
+    "modality": "MR",
+    "classification": {
+      "Intent": [
+        "Structural"
+      ],
+      "Measurement": [
+        "T1"
+      ]
+    }
+  }
+}
+```
+
+## Development
+
+Install the project using poetry (requires poetry > 1.2.0b1), enable plugin and
+pre-commit:
+
+```bash
+poetry install --extras "all"
+pre-commit install
+```
+
