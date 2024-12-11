@@ -1,0 +1,77 @@
+Metadata-Version: 2.1
+Name: licitpy
+Version: 0.6.1
+Summary: LicitPy: A Python toolbox designed for downloading, parsing, and analyzing public tenders from Chile's Mercado Público.
+Home-page: https://github.com/nguaman/licitpy
+License: Apache-2.0
+Keywords: licitaciones,licitpy,mercado público,chile compras,compras públicas chile,licitaciones públicas,convenio marco,trato directo
+Author: Nelson Guamán
+Requires-Python: >=3.10,<3.12
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: Spanish
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Office/Business :: Financial :: Accounting
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: lxml (>=5.3.0,<6.0.0)
+Requires-Dist: pandas (>=2.2.3,<3.0.0)
+Requires-Dist: pydantic (>=2.9.2,<3.0.0)
+Requires-Dist: python-dateutil (>=2.9.0.post0,<3.0.0)
+Requires-Dist: python-magic (>=0.4.27,<0.5.0)
+Requires-Dist: requests (>=2.32.3,<3.0.0)
+Requires-Dist: requests-cache (>=1.2.1,<2.0.0)
+Requires-Dist: tenacity (>=9.0.0,<10.0.0)
+Requires-Dist: tqdm (>=4.67.0,<5.0.0)
+Project-URL: Repository, https://github.com/nguaman/licitpy
+Description-Content-Type: text/markdown
+
+# Licitpy
+
+LicitPy: A Python toolbox designed for downloading, parsing, and analyzing public tenders from Chile's Mercado Público.
+
+## Install
+
+```bash
+pip install licitpy
+```
+
+## Example
+
+### Tenders
+
+- Get tenders from today, with budget tier L1, in region IV, and limit to 10 tenders
+
+```python
+from pprint import pprint
+
+from licitpy import Licitpy
+from licitpy.types import Region, Tier, TimeRange
+
+licitpy = Licitpy()
+
+tenders = (
+    licitpy.tenders.from_date(time_range=TimeRange.TODAY)
+    .by_budget_tier(Tier.L1)
+    .in_region(Region.IV)
+    .limit(10)
+)
+
+for tender in tenders:
+    pprint(
+        {
+            "url": tender.url,
+            "code": tender.code,
+            "title": tender.title,
+            "status": tender.status,
+            "opening_date": tender.opening_date,
+            "region": tender.region,
+        }
+    )
+```
+
