@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "squeel"
+version = "1.0.1"
+description = "Format embedded sql (squeel) in python source code files"
+authors = ["Ole-Jakob Olsen <ole.jakob.olsen@gmail.com>"]
+readme = "README.md"
+packages = [{include = "squeel"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+tree_sitter = "^0.23.2"
+tree_sitter_python = "^0.23.5"
+sqlparse = "^0.5.3"
+
+[tool.poetry.scripts]
+squeel = "squeel.cli:squeel"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
