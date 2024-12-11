@@ -1,0 +1,228 @@
+Metadata-Version: 2.1
+Name: fw-gear-project-settings
+Version: 2.2.6
+Summary: For a given project, clone the permissions and gear rules to a new project, or export the settings for import to another project.
+Home-page: https://gitlab.com/flywheel-io/scientific-solutions/gears/project-settings
+License: MIT
+Keywords: Flywheel,Gears
+Author: Flywheel
+Author-email: support@flywheel.io
+Requires-Python: >=3.11,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering
+Requires-Dist: flywheel-gear-toolkit (>=0.6.13,<0.7.0)
+Requires-Dist: flywheel-sdk (>=17.4.0,<18.0.0)
+Requires-Dist: glob2 (>=0.7,<0.8)
+Project-URL: Repository, https://gitlab.com/flywheel-io/scientific-solutions/gears/project-settings
+Description-Content-Type: text/markdown
+
+# Project Settings
+
+## Overview
+
+### Summary
+
+For a given project, clone the gear rules and/or permissions to a project, or export the settings for import to another instance/project.
+
+### Cite
+*License:* MIT
+
+*URL:* https://gitlab.com/flywheel-io/scientific-solutions/gears/project-settings
+
+*Source:* https://gitlab.com/flywheel-io/scientific-solutions/gears/project-settings
+
+### Classification
+
+*Category:* Analysis
+
+*Gear Level:* 
+
+- [X] Project
+- [ ] Subject
+- [ ] Session
+- [ ] Acquisition
+- [ ] Analysis
+
+----
+
+[[_TOC_]]
+
+----
+
+### Inputs
+
+- *Template*
+  - __Name__: *template*
+  - __Type__: *json file*
+  - __Optional__: *true*
+  - __Description__: *Template json file from source project. If this is provided to this gear at runtime, the template will be applied to this project.*
+
+- *Fixed Inputs*
+  - __Name__: *fixed_inputs*
+  - __Type__: *zip file or json file*
+  - __Optional__: *true*
+  - __Description__: *Archive containing fixed input files, or single JSON file. These files will be uploaded to the cloned project and referenced by the gear rules. If this is provided to this gear at runtime, the files will be applied to this project.*
+
+### Config
+
+- *clone_project_path*
+  - __Name__: *clone_project_path*
+  - __Optional__: *true*
+  - __Type__: *string*
+  - __Description__: *Path for new project to be created. Format should be <group_id>/<project_name>. If <clone_project_path> provided a new project will be created. If the project exists, the 'apply_to_existing_project' option must be used to update the project settings. If this option is omitted settings will be exported.*
+
+- *data_views*
+  - __Name__: *data_views*
+  - __Type__: *boolean*
+  - __Description__: *Export/Import DataViews.*
+  - __Default__: *false*
+
+- *default_group_permissions*
+  - __Name__: *default_group_permissions*
+  - __Type__: *boolean*
+  - __Description__: *Applies the clone project's default group permissions to the clone project. This is done by default and will override permissions within the template. If you wish to use the permissions within the template you must set `apply_group_permissions` to `false`, and `permissions` to `true`.*
+  - __Default__: *true*
+
+- *permissions*
+  - __Name__: *permissions*
+  - __Type__: *boolean*
+  - __Description__: *Export/Import Permissions*
+  - __Default__: *true*
+
+- *gear_rules*
+  - __Name__: *gear_rules*
+  - __Type__: *boolean*
+  - __Description__: *Export/Import Gear Rules and related fixed inputs (if applicable).*
+  - __Default__: *true*
+
+- *apply_to_existing_project*
+  - __Name__: *apply_to_existing_project*
+  - __Type__: *boolean*
+  - __Description__: *If a project already exists, apply settings and rules to that project.*
+  - __Default__: *true*
+
+- *existing_rules*
+  - __Name__: *existing_rules*
+  - __Type__: *string*
+  - __Description__: *If a project already has a rule with the same name as a template rule, this option will determine what happens with those rules. Options are: 'REPLACE ALL' (delete ALL existing rules, then add template rules)', 'MATCH' (replace the existing rule with the template rule), 'APPEND' (add template rule - may result in duplicate rules), 'SKIP' (don't add the matching template rule).*
+  - __Default__: *"MATCH"*
+
+- *debug*
+  - __Name__: *debug*
+  - __Type__: *boolean*
+  - __Description__: *Log debug messages*
+  - __Default__: *false*
+
+## Outputs
+
+#### Files
+
+- *Template*
+  - __Name__: *project-settings_template*
+  - __Type__: *json file*
+  - __Description__: *JSON file containing the permissions and gear rules of the source project, saved as `project-settings_template_<source_project_id>.json`*
+
+- *Fixed Inputs*
+  - __Name__: *fixed_inputs*
+  - __Type__: *zip file*
+  - __Description__: *Archive file consisting of any files referenced by the exported gear rules (if applicable), saved as `fixed_inputs_<source_project_id>.zip`*
+
+#### Metadata
+
+No metadata is created or modified by this gear.
+
+### Pre-requisites
+
+A created project is required for this gear to run.
+
+#### Prerequisite Gear Runs
+
+No prerequisite gear runs are necessary for this gear.
+
+#### Prerequisite Files
+
+No files are required by this gear. Input files for template and fixed inputs are optional.
+
+#### Prerequisite Metadata
+
+No prerequisite metadata necessary.
+
+## Usage
+
+For new projects it can be difficult to replicate existing project configurations. This Gear will run at the project level and generate a new project (locally or via configuration file for external use) with the appropriate gear rules and user permissions.
+
+### Description
+
+This gear utilizes an inputted template or creates a template from the source project to be assist with replicating an existing project configuration. Fixed inputs can also be applied either from an archive (zip) file or from the source project. If `clone_project_path` is provided, the gear will attempt to locate the specified project; if it is not located, it will attempt to create the project as specified, and if the project already exists and `apply_to_existing_project==True` it will set the existing project as the target for application. (If the project already exists and `apply_to_existing_project==False`, the gear will exit.) The gear will then export the template, and if applicable will apply the template to the target project as configured. If `permissions==True`, permissions will be applied. If `gear_rules==True`, gear rules will be applied. 
+
+### Workflow
+
+A picture and description of the workflow
+
+```mermaid
+graph LR;
+    A[Template - Optional]:::input -.-> E;
+    B[Fixed Input Archive - Optional]:::input -.-> E;
+    D[Source Project]:::container --> E((Gear));
+
+    E:::gear --> F[Exported Template];
+    E -.-> G[Exported Fixed Input Archive - if applicable]
+    E -.-> H[Target Project]:::container
+    
+    classDef container fill:#57d,color:#fff
+    classDef input fill:#7a9,color:#fff
+    classDef gear fill:#659,color:#fff
+
+```
+
+Description of workflow
+
+1. Identify existing project to be cloned
+1. Optionally, input template and/or fixed inputs
+1. Gear outputs template created from source project and a fixed input archive, if applicable.
+1. Gear configures target project as specified, if applicable.
+
+### Use Cases
+
+This section is very gear dependent, and covers a detailed walkthrough of some use cases.  Should include Screenshots, example files, etc.
+
+#### Use Case 1: Exporting Project Settings - without Project Creation
+
+To export a project's settings (permissions and gear rules):
+
+1. Run project-settings as a project analysis on the source project without configuring a `clone_project_path`. This will not create a project, nor apply any settings. It will simply generate the settings output files.
+
+#### Use Case 2: Exporting Project Settings - with Project Creation
+
+To export a project's settings (permissions and gear rules), create a new project, and apply those settings to the new project
+
+1. Run project-settings as a project analysis on the source project
+1. Configure a `clone_project_path`. This will trigger the creation of a new project.
+1. Check `permissions` and `gear_rules` configuration options as desired. _Default for both is true_.
+
+#### Use Case 3: Import Project Settings to an Existing Project
+
+To import project settings from one project to another:
+
+1. _Generate settings files:_  Run project-settings as a project analysis on the source project without configuring a `clone_project_path`. This will not create a project, nor apply any settings. It will simply generate the settings output files. _Optionally you can use files from an existing run._
+1. _Upload settings files:_ Settings files should be uploaded to the target project as project attachments.
+1. _Run_ project-settings as a project-level analysis on the _target project_, where you want the permissions and rules applied.
+1. _Choose input files_ from the project attachments as appropriate for input to project-settings.
+
+### Logging
+
+This gear provides log statements as it runs to identify where the gear is at within the process. These can be used to understand where a gear run is encountering problems, if any, and what actions the gear is taking.
+
+## FAQ
+
+[FAQ.md](FAQ.md)
+
+## Contributing
+
+[For more information about how to get started contributing to that gear,
+checkout [CONTRIBUTING.md](CONTRIBUTING.md).]
+<!-- markdownlint-disable-file -->
+
