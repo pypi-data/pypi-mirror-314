@@ -1,0 +1,507 @@
+# MeeraCV
+
+MeeraCV is a powerful computer vision library inspired by OpenCV, designed for practical image processing and computer vision tasks. It provides a simplified yet powerful interface for both beginners and advanced users.
+
+## Table of Contents
+- [Installation](#installation)
+- [Core Features](#core-features)
+- [Real-World Examples](#real-world-examples)
+- [Advanced Applications](#advanced-applications)
+- [Industry Solutions](#industry-solutions)
+- [Best Practices](#best-practices)
+- [Performance Optimization](#performance-optimization)
+- [Troubleshooting](#troubleshooting)
+
+## Installation
+
+```bash
+pip install meeracv
+```
+
+## Core Features
+
+### 1. Image I/O Operations
+```python
+import meeracv as mcv
+import numpy as np
+
+# Read image
+img = mcv.imread('input.jpg')  # Returns BGR format numpy array
+
+# Save image
+mcv.imwrite('output.jpg', img)
+
+# Convert color spaces
+gray = mcv.cvtColor(img, mcv.COLOR_BGR2GRAY)
+hsv = mcv.cvtColor(img, mcv.COLOR_BGR2HSV)
+```
+
+### 2. Image Processing Operations
+```python
+# Gaussian Blur
+blurred = mcv.GaussianBlur(img, kernel_size=(5,5), sigma=1.0)
+
+# Median Blur (good for salt-and-pepper noise)
+median_blurred = mcv.medianBlur(img, kernel_size=5)
+
+# Bilateral Filter (edge-preserving smoothing)
+bilateral = mcv.bilateralFilter(img, d=9, sigma_color=75, sigma_space=75)
+```
+
+## Real-World Examples
+
+### 1. Advanced Document Scanner
+```python
+def create_document_scanner():
+    class DocumentScanner:
+        def __init__(self):
+            self.processing_params = {
+                'blur_kernel': (5,5),
+                'blur_sigma': 1.0,
+                'keypoint_threshold': 0.02
+            }
+        
+        def preprocess(self, image):
+            # Convert to grayscale
+            gray = mcv.cvtColor(image, mcv.COLOR_BGR2GRAY)
+            
+            # Remove noise
+            denoised = mcv.GaussianBlur(gray, 
+                                      kernel_size=self.processing_params['blur_kernel'],
+                                      sigma=self.processing_params['blur_sigma'])
+            return denoised
+        
+        def detect_corners(self, processed_image):
+            # Detect keypoints (corners)
+            keypoints = mcv.detectKeypoints(processed_image, 
+                                          threshold=self.processing_params['keypoint_threshold'])
+            
+            # Find the four corners
+            if len(keypoints) >= 4:
+                # Sort by position to find corners
+                top_left = min(keypoints, key=lambda p: p[0] + p[1])
+                bottom_right = max(keypoints, key=lambda p: p[0] + p[1])
+                top_right = max(keypoints, key=lambda p: -p[0] + p[1])
+                bottom_left = max(keypoints, key=lambda p: p[0] - p[1])
+                
+                return [top_left, top_right, bottom_left, bottom_right]
+            return None
+        
+        def scan_document(self, image_path):
+            # Read image
+            image = mcv.imread(image_path)
+            
+            # Preprocess
+            processed = self.preprocess(image)
+            
+            # Detect corners
+            corners = self.detect_corners(processed)
+            
+            if corners:
+                # Draw corners
+                result = image.copy()
+                for corner in corners:
+                    mcv.circle(result, 
+                             center=(int(corner[1]), int(corner[0])),
+                             radius=5,
+                             color=(0, 255, 0),
+                             thickness=2)
+                
+                return result, corners
+            return image, None
+
+# Usage
+scanner = DocumentScanner()
+result_image, corners = scanner.scan_document('document.jpg')
+mcv.imwrite('scanned_document.jpg', result_image)
+```
+
+### 2. Real-time Object Tracking System
+```python
+class ObjectTracker:
+    def __init__(self):
+        self.previous_keypoints = None
+        self.previous_descriptors = None
+        
+    def track(self, frame):
+        # Convert to grayscale
+        gray = mcv.cvtColor(frame, mcv.COLOR_BGR2GRAY)
+        
+        # Detect keypoints
+        keypoints = mcv.detectKeypoints(gray)
+        descriptors = mcv.computeDescriptors(gray, keypoints)
+        
+        if self.previous_keypoints is not None:
+            # Match features with previous frame
+            matches = mcv.matchFeatures(self.previous_descriptors, descriptors)
+            
+            # Draw motion vectors
+            result = frame.copy()
+            for match in matches:
+                prev_idx, curr_idx = match
+                prev_pt = tuple(map(int, self.previous_keypoints[prev_idx]))
+                curr_pt = tuple(map(int, keypoints[curr_idx]))
+                
+                # Draw motion vector
+                mcv.line(result, prev_pt, curr_pt, color=(0, 255, 0))
+                mcv.circle(result, curr_pt, radius=3, color=(0, 0, 255))
+        else:
+            result = frame
+        
+        # Update previous frame info
+        self.previous_keypoints = keypoints
+        self.previous_descriptors = descriptors
+        
+        return result
+```
+
+### 3. Quality Control System
+```python
+class QualityInspector:
+    def __init__(self, template_path, threshold=0.7):
+        self.template = mcv.imread(template_path)
+        self.template_gray = mcv.cvtColor(self.template, mcv.COLOR_BGR2GRAY)
+        self.threshold = threshold
+        
+    def check_product(self, product_image):
+        # Convert product image to grayscale
+        product_gray = mcv.cvtColor(product_image, mcv.COLOR_BGR2GRAY)
+        
+        # Detect features
+        template_keypoints = mcv.detectKeypoints(self.template_gray)
+        product_keypoints = mcv.detectKeypoints(product_gray)
+        
+        # Compute descriptors
+        template_desc = mcv.computeDescriptors(self.template_gray, template_keypoints)
+        product_desc = mcv.computeDescriptors(product_gray, product_keypoints)
+        
+        # Match features
+        matches = mcv.matchFeatures(template_desc, product_desc, threshold=self.threshold)
+        
+        # Analyze results
+        match_ratio = len(matches) / min(len(template_keypoints), len(product_keypoints))
+        
+        result = {
+            'passed': match_ratio > self.threshold,
+            'match_ratio': match_ratio,
+            'num_matches': len(matches)
+        }
+        
+        # Visualize matches
+        visualization = product_image.copy()
+        for match in matches:
+            template_idx, product_idx = match
+            pt1 = tuple(map(int, template_keypoints[template_idx]))
+            pt2 = tuple(map(int, product_keypoints[product_idx]))
+            mcv.line(visualization, pt1, pt2, color=(0, 255, 0))
+        
+        return result, visualization
+```
+
+## Advanced Applications
+
+### 1. Medical Image Analysis
+```python
+def analyze_medical_image(image_path):
+    """
+    Analyze medical images for anomaly detection
+    """
+    # Read image
+    image = mcv.imread(image_path)
+    
+    # Multi-stage processing pipeline
+    # 1. Denoise
+    denoised = mcv.bilateralFilter(image, d=9, sigma_color=75, sigma_space=75)
+    
+    # 2. Convert to grayscale
+    gray = mcv.cvtColor(denoised, mcv.COLOR_BGR2GRAY)
+    
+    # 3. Detect regions of interest
+    keypoints = mcv.detectKeypoints(gray, threshold=0.01)
+    
+    # 4. Analyze each region
+    regions = []
+    for kp in keypoints:
+        # Extract region around keypoint
+        x, y = map(int, kp)
+        region = gray[max(0, y-25):min(gray.shape[0], y+25),
+                     max(0, x-25):min(gray.shape[1], x+25)]
+        
+        # Analyze region statistics
+        if region.size > 0:
+            mean_intensity = np.mean(region)
+            std_intensity = np.std(region)
+            
+            regions.append({
+                'position': (x, y),
+                'mean_intensity': mean_intensity,
+                'std_intensity': std_intensity,
+                'size': region.size
+            })
+    
+    return regions
+```
+
+### 2. Retail Analytics System
+```python
+class ShelfAnalyzer:
+    def __init__(self):
+        self.min_product_size = 50  # minimum size in pixels
+        
+    def analyze_shelf(self, shelf_image):
+        # Convert to grayscale
+        gray = mcv.cvtColor(shelf_image, mcv.COLOR_BGR2GRAY)
+        
+        # Detect products
+        keypoints = mcv.detectKeypoints(gray)
+        
+        # Group nearby keypoints into product regions
+        products = self._group_keypoints(keypoints)
+        
+        # Analyze each product region
+        results = []
+        for product in products:
+            # Get product bounds
+            x_min = min(p[1] for p in product)
+            x_max = max(p[1] for p in product)
+            y_min = min(p[0] for p in product)
+            y_max = max(p[0] for p in product)
+            
+            # Extract product region
+            product_region = shelf_image[y_min:y_max, x_min:x_max]
+            
+            if product_region.size > self.min_product_size:
+                # Analyze product
+                result = {
+                    'position': ((x_min + x_max)//2, (y_min + y_max)//2),
+                    'size': (x_max - x_min, y_max - y_min),
+                    'color_mean': np.mean(product_region, axis=(0,1))
+                }
+                results.append(result)
+        
+        return results
+    
+    def _group_keypoints(self, keypoints, max_distance=20):
+        # Group nearby keypoints
+        groups = []
+        used = set()
+        
+        for i, kp1 in enumerate(keypoints):
+            if i in used:
+                continue
+                
+            group = [kp1]
+            used.add(i)
+            
+            for j, kp2 in enumerate(keypoints):
+                if j in used:
+                    continue
+                    
+                # Calculate distance
+                dist = np.sqrt((kp1[0]-kp2[0])**2 + (kp1[1]-kp2[1])**2)
+                if dist < max_distance:
+                    group.append(kp2)
+                    used.add(j)
+            
+            groups.append(group)
+        
+        return groups
+```
+
+## Best Practices
+
+### 1. Image Preprocessing
+```python
+def preprocess_image(image, target_size=None):
+    """
+    Standard image preprocessing pipeline
+    """
+    # Resize if needed
+    if target_size:
+        image = mcv.resize(image, size=target_size)
+    
+    # Convert to float32 for better precision
+    image = image.astype(np.float32) / 255.0
+    
+    # Apply denoising
+    denoised = mcv.bilateralFilter(image, d=9, 
+                                  sigma_color=0.1, 
+                                  sigma_space=75)
+    
+    return denoised
+
+def standardize_image(image):
+    """
+    Standardize image for consistent processing
+    """
+    # Ensure 3 channels
+    if len(image.shape) == 2:
+        image = np.stack([image] * 3, axis=-1)
+    
+    # Ensure float32 type
+    if image.dtype != np.float32:
+        image = image.astype(np.float32)
+    
+    # Normalize to [0,1]
+    if image.max() > 1.0:
+        image /= 255.0
+    
+    return image
+```
+
+### 2. Error Handling
+```python
+def safe_image_processing(func):
+    """
+    Decorator for safe image processing
+    """
+    def wrapper(*args, **kwargs):
+        try:
+            # Ensure input is valid
+            if len(args) > 0 and isinstance(args[0], np.ndarray):
+                if args[0].size == 0:
+                    raise ValueError("Empty image")
+                if not np.isfinite(args[0]).all():
+                    raise ValueError("Image contains invalid values")
+            
+            result = func(*args, **kwargs)
+            
+            # Ensure output is valid
+            if isinstance(result, np.ndarray):
+                if not np.isfinite(result).all():
+                    raise ValueError("Processing resulted in invalid values")
+            
+            return result
+        
+        except Exception as e:
+            print(f"Error in {func.__name__}: {str(e)}")
+            return None
+    
+    return wrapper
+```
+
+## Performance Optimization
+
+### 1. Batch Processing
+```python
+def batch_process_images(image_paths, process_func, batch_size=4):
+    """
+    Process images in batches for better performance
+    """
+    results = []
+    
+    for i in range(0, len(image_paths), batch_size):
+        batch_paths = image_paths[i:i + batch_size]
+        
+        # Load batch
+        batch_images = [mcv.imread(path) for path in batch_paths]
+        
+        # Process batch
+        batch_results = [process_func(img) for img in batch_images]
+        
+        results.extend(batch_results)
+    
+    return results
+```
+
+### 2. Memory Management
+```python
+def process_large_image(image_path, tile_size=1000):
+    """
+    Process large images in tiles to manage memory
+    """
+    # Read image info without loading
+    img = Image.open(image_path)
+    width, height = img.size
+    
+    results = []
+    
+    # Process image in tiles
+    for y in range(0, height, tile_size):
+        for x in range(0, width, tile_size):
+            # Calculate tile bounds
+            tile_width = min(tile_size, width - x)
+            tile_height = min(tile_size, height - y)
+            
+            # Load and process tile
+            tile = np.array(img.crop((x, y, x + tile_width, y + tile_height)))
+            
+            # Process tile
+            processed_tile = process_tile(tile)
+            
+            results.append((x, y, processed_tile))
+    
+    return results
+```
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+1. **Image Loading Issues**
+```python
+def diagnose_image_loading(image_path):
+    try:
+        img = mcv.imread(image_path)
+        if img is None:
+            return "Image could not be loaded"
+        
+        print(f"Image loaded successfully:")
+        print(f"Shape: {img.shape}")
+        print(f"Data type: {img.dtype}")
+        print(f"Value range: [{img.min()}, {img.max()}]")
+        
+        return "OK"
+    except Exception as e:
+        return f"Error: {str(e)}"
+```
+
+2. **Performance Issues**
+```python
+def check_performance(func):
+    """
+    Decorator to check performance of image processing functions
+    """
+    def wrapper(*args, **kwargs):
+        import time
+        import psutil
+        
+        # Record start time and memory
+        start_time = time.time()
+        start_memory = psutil.Process().memory_info().rss
+        
+        result = func(*args, **kwargs)
+        
+        # Calculate metrics
+        execution_time = time.time() - start_time
+        memory_used = psutil.Process().memory_info().rss - start_memory
+        
+        print(f"Performance metrics for {func.__name__}:")
+        print(f"Execution time: {execution_time:.2f} seconds")
+        print(f"Memory used: {memory_used/1024/1024:.2f} MB")
+        
+        return result
+    
+    return wrapper
+```
+
+## Requirements
+
+- Python 3.7+
+- NumPy >= 1.19.0
+- Pillow >= 8.0.0
+- SciPy >= 1.6.0
+
+## Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 
