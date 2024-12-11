@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: django-composite-field
+Version: 2.0.1
+Summary: CompositeField implementation for Django
+Home-page: https://github.com/bikeshedder/django-composite-field
+License: BSD OR MIT OR Apache-2.0
+Author: Michael P. Jung
+Author-email: michael.jung@terreon.de
+Requires-Python: >=3.8,<4.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.0
+Classifier: Framework :: Django :: 4.1
+Classifier: Framework :: Django :: 4.2
+Classifier: Framework :: Django :: 5.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: License :: OSI Approved :: BSD License
+Classifier: License :: OSI Approved :: MIT License
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: Django
+Project-URL: Repository, https://github.com/bikeshedder/django-composite-field
+Description-Content-Type: text/markdown
+
+# CompositeField for Django Models
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/bikeshedder/django-composite-field/python-package.yml?branch=master)](https://github.com/bikeshedder/django-composite-field/actions?query=workflow%3A%22Python+package%22)
+[![PyPI Version](https://img.shields.io/pypi/v/django-composite-field.svg)](https://pypi.python.org/pypi/django-composite-field/)
+[![PyPI License](https://img.shields.io/pypi/l/django-composite-field.svg)](https://pypi.python.org/pypi/django-composite-field/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/django-composite-field.svg)](https://pypi.python.org/pypi/django-composite-field/)
+[![Django Versions](https://img.shields.io/pypi/djversions/django-composite-field.svg)](https://pypi.org/project/django-composite-field/)
+[![Read the Docs](https://img.shields.io/readthedocs/django-composite-field.svg)](http://django-composite-field.readthedocs.io/)
+[![Code Shelter](https://www.codeshelter.co/static/badges/badge-flat.svg)](https://www.codeshelter.co/)
+
+This is an implementation of a CompositeField for Django. Composite fields
+can be used to group fields together and reuse their definitions.
+
+## Example
+
+```python
+class CoordField(CompositeField):
+    x = models.FloatField()
+    y = models.FloatField()
+
+class Place(models.Model):
+    name = models.CharField(max_length=10)
+    coord = CoordField()
+
+p = Place(name='Foo', coord_x=42, coord_y=0)
+q = Place(name='Foo', coord=p.coord)
+q.coord.y = 42
+```
+
+## How does it work?
+
+The content of composite fields are stored inside the model, so they do
+not have to fiddle with any internals of the Django models. In the example
+above `p.coord` returns a proxy object that maps the fields `x` and `y`
+to the model fields `coord_x` and `coord_y`. The proxy object also
+makes it possible to assign more than one property at once.
+
+Documentation can be found at [RTFD](http://django-composite-field.readthedocs.io/).
