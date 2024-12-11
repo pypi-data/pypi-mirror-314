@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "peonyvpn"
+version = "0.1.1"
+description = "A VPN management tool"
+authors = [{name = "flog", email = "florian.grave@epitech.eu"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "docker>=6.1.0",
+]
+
+[project.scripts]
+peony-vpn = "peony.vpn:main"
+peony-caddy = "peony.caddy:main"
+peony-backup = "peony.backup:main"
+
+[tool.setuptools.package-data]
+peony = [
+    "caddy_settings",
+    "vpn_settings"
+]
+
+[project.urls]
