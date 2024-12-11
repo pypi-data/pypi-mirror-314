@@ -1,0 +1,81 @@
+Metadata-Version: 2.3
+Name: sphinx-helm
+Version: 0.2.0
+Summary: A Sphinx plugin for generating documentation for your Helm charts.
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Build Tools
+Requires-Python: >=3.8
+Requires-Dist: click
+Requires-Dist: docutils
+Requires-Dist: jinja2
+Requires-Dist: ruamel-yaml
+Provides-Extra: docs
+Requires-Dist: furo>=2024.8.6; extra == 'docs'
+Requires-Dist: myst-parser>=3.0.1; extra == 'docs'
+Requires-Dist: sphinx; extra == 'docs'
+Requires-Dist: sphinx-autobuild>=2021.3.14; extra == 'docs'
+Requires-Dist: sphinx-click; extra == 'docs'
+Provides-Extra: test
+Requires-Dist: pytest; extra == 'test'
+Requires-Dist: pytest-cov; extra == 'test'
+Description-Content-Type: text/markdown
+
+# sphinx-helm
+
+[![PyPI - Version](https://img.shields.io/pypi/v/sphinx-helm)](https://pypi.org/project/sphinx-helm/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sphinx-helm)](https://pypi.org/project/sphinx-helm/)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/kr8s-org/sphinx-helm/test.yaml)](https://github.com/kr8s-org/sphinx-helm/actions/workflows/test.yaml)
+[![Read the Docs](https://img.shields.io/readthedocs/sphinx-helm)](https://sphinx-helm.readthedocs.io/en/latest/)
+[![PyPI - License](https://img.shields.io/pypi/l/sphinx-helm)](https://pypi.org/project/sphinx-helm/)
+[![EffVer Versioning](https://img.shields.io/badge/version_scheme-EffVer-0097a7)](https://jacobtomlinson.dev/effver)
+
+sphinx-helm is a Sphinx plugin for automatically generating documentation for your [Helm charts](https://helm.sh/).
+
+
+Features:
+
+- Render documentation from your `Chart.yaml` and `values.yaml` files.
+- Sphinx extension for including in Python documentation.
+- Works with `.rst` and `.md` documentation source files.
+
+## Installation
+
+```
+$ pip install sphinx-helm
+```
+
+## Usage
+
+Add the extension to your Sphinx config.
+
+```python
+# conf.py
+
+extensions = ['sphinx_helm.ext']
+```
+
+Use the directive to generate documentation for your helm chart.
+
+### reStructuredText
+
+```rst
+.. helm:: path/to/your/helm/chart
+```
+
+### MyST Markdown
+
+````markdown
+
+```{helm} path/to/your/helm/chart
+
+```
+
+````
