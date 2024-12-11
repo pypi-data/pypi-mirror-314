@@ -1,0 +1,203 @@
+Metadata-Version: 2.1
+Name: qq
+Version: 0.1.8
+Summary: A CLI tool for getting quick command-line suggestions using any LLM potentially available
+Home-page: https://southbrucke.com
+Author: Southbrucke
+Author-email: qq@southbrucke.com
+License: Proprietary
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: MacOS
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Topic :: Utilities
+Classifier: Topic :: System :: Shells
+Classifier: Topic :: Terminals
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: End Users/Desktop
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.31.0
+Requires-Dist: rich>=13.7.0
+Requires-Dist: anthropic>=0.18.1
+Requires-Dist: pyperclip>=1.8.2
+Requires-Dist: pywin32>=305; sys_platform == "win32"
+
+# Quick Question (qq)
+
+A cross-platform command-line tool that suggests and executes terminal commands using various LLM providers. It prioritizes local LLM providers for privacy and cost efficiency, with fallback to cloud providers when configured. This tool is still under development and tested on macOS and Windows. Please feel free to reach out with ideas and feedback to cv@southbrucke.com
+
+## Features
+
+- Multiple LLM provider support:
+  - Local providers (prioritized):
+    - LM Studio
+    - Ollama
+  - Cloud providers (requires API keys):
+    - OpenAI
+    - Anthropic
+    - Groq
+- Interactive command selection
+- Command history tracking
+- Configurable settings
+- Copy to clipboard or direct execution options
+- Platform-specific command suggestions
+- Cross-platform support (macOS and Windows)
+
+## Installation
+
+### macOS/Linux
+```bash
+pip install qq
+```
+
+### Windows
+1. Install Python from [python.org](https://python.org)
+   - During installation, check "Add Python to PATH"
+2. Open a new Command Prompt or PowerShell
+3. Install qq:
+   ```cmd
+   pip install qq
+   ```
+4. Add the Scripts directory to your PATH:
+   - Copy your Python Scripts path:
+     ```
+     %USERPROFILE%\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\Scripts
+     ```
+     (Your actual path might differ based on Python version)
+   - Open Windows Settings:
+     1. Press Windows key + X
+     2. Click "System"
+     3. Scroll down and click "About"
+     4. Click "Advanced system settings" on the right
+   - In System Properties:
+     1. Click "Environment Variables" button
+     2. Under "User variables for [your username]"
+     3. Find and select "Path"
+     4. Click "Edit"
+     5. Click "New"
+     6. Paste the Scripts path
+     7. Click "OK" on all windows
+   - Restart any open Command Prompt or PowerShell windows
+5. Test the installation:
+   ```cmd
+   qq "hello world"
+   ```
+
+## Usage
+
+Basic command:
+```bash
+qq "your question here"
+```
+
+Configure settings:
+```bash
+qq --settings
+```
+
+View command history:
+```bash
+qq
+```
+
+## Provider Selection
+
+The tool follows this priority order for LLM providers:
+
+1. Checks for running local providers (LM Studio or Ollama)
+2. If no local providers are available, checks for configured cloud provider API tokens
+3. Uses the first available provider unless a specific default is set in settings
+
+## Configuration
+
+Use `qq --settings` to configure:
+- Default provider selection
+- Command action (execute or copy to clipboard)
+- Default model for each provider
+- API keys for cloud providers
+
+## Environment Variables
+
+Cloud provider API keys can be set via environment variables:
+- `OPENAI_API_KEY` - for OpenAI
+- `ANTHROPIC_API_KEY` - for Anthropic
+- `GROQ_API_KEY` - for Groq
+
+## Examples
+
+Get file search commands:
+```bash
+qq "how do I search for files containing specific text"
+```
+
+Find process information:
+```bash
+qq "show me all running processes containing 'python'"
+```
+
+## Debugging
+
+If you encounter any issues, you can run qq with the debug flag:
+```bash
+qq --debug "your question"
+# or
+qq --settings --debug
+```
+
+This will:
+- Show detailed information about key presses and program flow
+- Keep debug information visible on screen
+- Help identify any platform-specific issues
+
+## Requirements
+
+- Python >= 3.6
+- Local LLM provider (LM Studio or Ollama) or cloud provider API key
+
+## Platform Support
+
+### macOS
+- Full support
+- Optimized for macOS terminal commands
+- Homebrew installation coming soon
+
+### Windows
+- Full support for Command Prompt and PowerShell
+- Windows-specific command suggestions
+- Supports both executing commands and copying to clipboard
+
+### Linux
+- Basic support
+- Further optimization planned
+
+## Coming Soon
+
+- Homebrew installation support
+- Docker container
+- Standalone executables
+- Improved Linux support
+- GUI wrapper (planned)
+
+## License
+
+Proprietary - All rights reserved
+
+## Support
+
+For feature requests, or general feedback:
+- Email: qq@southbrucke.com
+
+For bug reports and issues:
+- Email: qq_bug@southbrucke.com
+
+## Author
+
+Cristian Vyhmeister (cv@southbrucke.com)
+
+For more information, visit [https://southbrucke.com](https://southbrucke.com)
