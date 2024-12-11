@@ -1,0 +1,43 @@
+Metadata-Version: 2.3
+Name: omproxy
+Version: 0.1.5
+Summary: An open source proxy for MCP servers
+Requires-Python: >=3.10
+Requires-Dist: logfire>=2.6.2
+Requires-Dist: mcp>=1.1.0
+Description-Content-Type: text/markdown
+
+# Open MCP Proxy
+
+An open source proxy for MCP servers.
+
+## Usage
+
+Replace the mcp server command with `uvx omproxy` followed by the command.
+
+For example:
+
+replace:
+
+```json
+{
+    "mcpServers":{
+        "server1":{
+            "command":"uv run python src/example_server.py"
+        }
+    }
+}
+```
+
+with:
+
+```json
+{
+    "mcpServers":{
+        "server1":{
+            "command":"uvx omproxy uv runpython src/example_server.py"
+        }
+    }
+}
+```
+
