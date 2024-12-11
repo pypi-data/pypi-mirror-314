@@ -1,0 +1,129 @@
+NetworkDisk: On-disk graph manipulation
+=======================================
+
+NetworkDisk provides a way to manipulate graphs on disk.
+The goal is to be as compatible as possible with (Di)Graph objects of the  `NetworkX <https://networkx.org/>`_ package,
+but lifting memory requirements and providing persistence of the Graph.
+
+We aim to achieve full retro-compatibility with NetworkX core methods to ensure
+that most algorithms will work as-is.
+Some algorithms are not suited for on-disk graphs and will thus have poor performance.
+Some will be fast enough to be used as-is.
+
+
+Audience
+--------
+
+The target audience for NetworkDisk are users of NetworkX that want to manipulate on-disk graphs
+without worrying about database-specific technology or learning a new database language.
+No knowledge of databases is required for simple use of this module. A good knowledge of the backend
+is only required for advanced usage and performance tuning.
+
+Pro and cons
+------------
+
+There are several motivations to use on-disk graphs rather than in-memory graphs.
+
+1. Lack of resources: The graph is too large to fit in RAM.
+2. Persistence requirements and graph sharing: The graph must be saved on disk. You could combine the `networkx` and `pickle` modules to do that instead, but *NetworkDisk* saves the graph automatically, avoiding version conflict and allowing a DB user to directly access the graph DB. Also, loading a graph does not require any parsing or pre-processing.
+3. Transaction support: If an algorithm changes the graph and then fails, you wish to rollback the partial changes instead of keeping them.
+4. Concurrency control: You want many users to access the same graph.
+5. Symbolic manipulation of subgraphs: You may want to transform the Graph implicitly without actually computing the transformation.
+
+The main drawback of using `NetworkDisk` rather than `NetworkX` is the performance loss. For direct graph manipulation, the expected penalty
+is of one order of magnitude (at least ten times slower) and for complex graph algorithms the penalty can be much worse.
+
+Recommended Usage
+-----------------
+
+For very large graphs, we recommend to use NetworkDisk to extract a subgraph small enough to fit in RAM and then to manipulate
+the subgraph as a classical NetworkX graph. For this reason, NetworkDisk can efficiently extract subgraphs 
+and can efficiently export a NetworkDisk graph to NetworkX.
+
+
+Designing algorithms for NetworkDisk
+------------------------------------
+
+It is possible to adapt standard graph algorithms to be used efficiently on disk. It requires a specific attention
+to memory management as well as avoiding repeated calls to the Backend as much
+as possible.
+
+You should avoid graph algorithms which must either copy or go through the entire graph to build a dedicated DataStructure in RAM. Graph exploration algorithms (shortest path, random walk for instance) should have usable performance.
+
+Schemas
+-------
+
+NetworkDisk can be thought of as a dedicated `ORM <https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping>`_ for NetworkX.
+That is, it is a mapping from the structure underlying NetworkX graphs to a relational database. The goal of this mapping is to reduce the cost penalty of performing many disk accesses.
+
+In the codebase of NetworkDisk, we do not enforce one specific schema mapping.
+It can be adapted to an already existing database. It is however a complicated task to design a schema mapping that
+provides a correct implementation Backend.  Therefore, some default fixed schemas are proposed and ready to use.
+
+RoadMap
+-------
+
+MultiGraph and MultiDiGraph
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The NetworkX implementation provides classes for MultiDiGraph and MultiGraph.
+We do not provide them yet. Some specific work has to be done to adapt the current
+schema of Graph and DiGraph to these situations.
+
+Other Database Engines
+^^^^^^^^^^^^^^^^^^^^^^
+
+So far, NetworkDisk only supports SQLite local databases. A `PostgreSQL <https://www.postgresql.org/>`_
+version is high on the "TODO" list of the project. Other database engines are possible and could
+be easily adapted.
+
+At its core, NetworkDisk was built with flexibility of the backend technology in mind. Adapting
+from SQLite to other backends requires some routine work. The core difficulty is to provide
+adjusted graph mappings that take advantage of the specificities of the engine.
+For instance, PostgreSQL supports the JSON datatype, which could be useful to
+improve performance.
+
+Cache Policy
+^^^^^^^^^^^^
+
+A crude Cache policy is provided in NetworkDisk without any control either on the memory consumption
+nor on any time limit to discard cached elements.
+
+Abstract cache policies with some reasonable implementations could be added to improve this state of affairs.
+
+Bulk cache warmup could also be of interest to start without an empty cache without having to perform
+many small queries. 
+
+NoSQL relational Engines
+^^^^^^^^^^^^^^^^^^^^^^^^
+Storing graphs in a Graph Database Engine is also a possibility. If the data-model
+fits, it could take advantage of many graph-dedicated optimizations. Other type of DataBases
+could help as well (for instance distributed Key-Value stores paired with indexation engines).
+
+A full study system per system is required and will be the subject of further works.
+
+Indexable data fields
+^^^^^^^^^^^^^^^^^^^^^
+
+NetworkX does not provide any indexation properties nor any data-graph operator.
+Some dedicated work even on NetworkX base classes could be performed.
+
+Graph transformation and Regular Path Queries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+One of the key features of NetworkDisk (compared to standard graph databases) is the possibility
+of performing graph transformations through query rewriting.
+The performance of such a transformation depends of the inner complexity of the rewriting,
+the efficiency of the query optimizer, and the possibility of complex indexation approach.
+
+A completely flexible approach to these operations is thus doomed and it should be consider separately
+for each backend.
+
+
+
+Free software
+-------------
+
+NetworkDisk is free software; you can redistribute it and/or modify it under the
+terms of the `3-clause BSD License`.  We welcome contributions.
+Join us on `GitLab <https://gitlab.inria.fr/guillonb/networkdisk>`_.
