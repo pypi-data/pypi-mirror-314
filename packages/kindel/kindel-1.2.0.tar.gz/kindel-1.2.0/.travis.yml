@@ -1,0 +1,17 @@
+branches:
+  only:
+    - gh-pages
+    - /.*/
+language:
+  python
+python:
+  - 3.6
+  - 3.7
+  - 3.8
+before_install:
+- sudo apt-get install samtools
+install:
+  - pip install argh tqdm numpy scipy pandas biopython simplesam
+script:
+  - pytest
+
