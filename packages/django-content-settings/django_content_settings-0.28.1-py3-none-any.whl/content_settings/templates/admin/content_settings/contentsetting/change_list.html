@@ -1,0 +1,286 @@
+{% extends 'admin/change_list.html' %}
+{% load content_settings_admin i18n %}
+
+{% block extrastyle %}
+  {{ block.super }}
+<style>
+#preview_table {
+    margin-top: 20px;
+}
+#preview_table pre {
+    margin: 0;
+    padding: 0;
+}
+.user_tag_hidden {
+    display: none;
+}
+.user_tag {
+    cursor: pointer;
+    font-size: 18px;
+}
+th.column-value {
+    width: 100%;
+}
+.value_preview a{
+    color: var(--link-fg);
+    text-decoration: underline;
+    cursor: pointer;
+}
+.value_preview pre {
+    margin: 0;
+    padding: 0;
+}
+.field-setting_help a {
+    color: var(--link-fg);
+    cursor: pointer;
+}
+div.subitem {
+    margin-left: 10px;
+}
+</style>
+{% endblock %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="{% url 'admin:content_settings_import_json' %}" class="addlink">
+            {% trans "Import JSON" %}
+        </a>
+    </li>
+    {% if UI_DOC_URL %}
+    <li>
+        <a href="{{ UI_DOC_URL }}" class="viewsitelink">
+            {% trans "Help" %}
+        </a>
+    </li>
+    {% endif %}
+{% endblock %}
+
+{% block result_list %}
+<div id="toolbar">
+    <div id="tags_toolbar">
+        {% include  "admin/content_settings/contentsetting/context_tags.html" %}
+    </div>
+    {% if preview_settings %}
+    <div id="preview_table">
+        {% blocktranslate with user=request.user %}
+        <h2>Preview settings for {{ user }} is enabled:</h2>
+        {% endblocktranslate %}
+        <table>
+            <tr>
+                <th>Setting</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+            {% for item in preview_settings %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td><pre>{{ item.value }}</pre><br>
+                    {% if item.user_defined_type %}
+                    <i>Type: {{ item.user_defined_type }}</i>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'admin:content_settings_remove_preview_on_site' %}?name={{ item.name }}">{% translate 'Remove' %}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <a href="{{PREVIEW_ON_SITE_HREF}}">{% translate 'View On Site' %}</a>
+            | <a href="{% url 'admin:content_settings_apply_preview_on_site' %}">{% translate 'Apply' %}</a>
+            | <a href="{% url 'admin:content_settings_reset_preview_on_site' %}">{% translate 'Reset' %}</a>
+        </p>
+        
+    </div>
+    {% endif %}
+</div>
+
+{{block.super}}
+
+<input type="hidden" name="content_settings_form_checksum" value="{{CONTENT_SETTINGS.form_checksum}}">
+{% endblock%}
+
+{% block breadcrumbs %}
+{{block.super}}
+
+
+{% endblock %}
+
+
+
+{% block footer %}{{ block.super }}
+{% content_settings_user_tags as user_tags %}
+{{user_tags|json_script:"USER_TAGS"}}
+<script>
+    // array of array with 2 elements setting and tag
+    const USER_TAGS = JSON.parse(document.getElementById('USER_TAGS').textContent);
+
+    function has_setting_tagged(setting, tag) {
+        return USER_TAGS.some(function(item) {
+            return item[0] === setting && item[1] === tag;
+        })
+    }
+
+    (function($) {
+        const PREVIEW_URL = "{% url 'admin:content_settings_preview_setting' %}";
+        const ADD_TAG_URL = "{% url 'admin:content_settings_add_tag' %}";
+        const REMOVE_TAG_URL = "{% url 'admin:content_settings_remove_tag' %}";
+        const TAGS_URL = "{% url 'admin:content_settings_context_tags' %}";
+
+        $('.replace_with_ul').click(function(){
+            $(this).hide();
+            $(this).siblings('ul').first().show();
+        })
+
+        function reloadTags() {
+            // loads ajax response from TAGS_URL into toolbar, using quiery string from current url
+            $.ajax({
+                "method": "GET",
+                "crossDomain": true,
+                "xhrFields": {
+                    "withCredentials": true
+                },
+                "url": TAGS_URL + window.location.search,
+                "success": function(value) {
+                    $('#tags_toolbar').html(value);
+                }
+            })
+        }
+
+        $('.user_tag').each(function(){
+            var setting = $(this).data('name');
+            var tag = $(this).data('tag');
+            if (
+                (
+                    has_setting_tagged(setting, tag) && $(this).hasClass('user_tag_selected')
+                ) || (
+                    !has_setting_tagged(setting, tag) && !$(this).hasClass('user_tag_selected')
+                )
+            ) {
+                $(this).removeClass('user_tag_hidden');
+            }
+        });
+
+        $('.user_tag').click(function(){
+            var setting = $(this).data('name');
+            var tag = $(this).data('tag');
+            var selected = $(this).hasClass('user_tag_selected');
+            $(this).toggleClass('user_tag_hidden');
+            $(this).siblings('.user_tag').toggleClass('user_tag_hidden');
+            $.ajax({
+                "method": "POST",
+                "crossDomain": true,
+                "xhrFields": {
+                    "withCredentials": true
+                },
+                "url": selected ? REMOVE_TAG_URL : ADD_TAG_URL,
+                "data": {
+                    "name": setting, "tag": tag,
+                    "csrfmiddlewaretoken": $('[name=csrfmiddlewaretoken]').val(),
+                },
+                "success": function() {reloadTags()},
+                "error": function() {}
+            })
+        });
+
+        var currentInput;
+        var currentValue;
+        var currentInterval;
+        var currentAjax;
+        var currentName;
+        var previewParams = {};
+
+        $('.field-value textarea,.field-value input').focus(function(){
+            $(".value_preview").remove();
+            $(this).after('<div style="margin-top: 10px" class="value_preview"></div>');
+            if (currentInterval) {
+                clearInterval(currentInterval);
+            }
+            if (currentAjax) {
+                currentAjax.abort();
+            }
+
+            currentInput = $(this);
+            currentValue = $(this).val();
+            currentName = $(this).parent('.field-value').siblings('.field-name').children('a').text();
+            $(".value_preview").click(function(e){
+                var $target = $(e.target);
+                if ($target.hasClass('cs_set_params')) {
+                    e.preventDefault();
+
+                    let isOneTime = $target.hasClass('cs_set_params_once');
+
+                    previewParams[currentName] = {};
+                    $.each($target.data(), function(key, value) {
+                        if (key.startsWith('param')) {
+                            let newKey = key.slice(5).toLowerCase();
+                            previewParams[currentName]['p_' + newKey] = value;
+                        }
+                    });
+                    refreshPreview();
+
+                    if (isOneTime) {
+                        previewParams[currentName] = {};
+                    }
+                }
+            });
+
+            var refreshPreview = function() {
+                const newValue = currentInput.val();
+                const data = Object.assign({
+                    "name": currentName, "value": newValue,
+                    "csrfmiddlewaretoken": $('[name=csrfmiddlewaretoken]').val(),
+                }, previewParams[currentName] || {});
+
+                $('#result_list tr').each(function(){
+                    var name = $(this).find('.field-name a').text();
+                    if (name !== currentName) {
+                        data['o_' + name] = $(this).find('.field-value textarea[id],.field-value input[id]').val();
+                    }
+                });
+
+                currentAjax = $.ajax({
+                    "method": "POST",
+                    "crossDomain": true,
+                    "xhrFields": {
+                        "withCredentials": true
+                    },
+                    "url": PREVIEW_URL,
+                    "data": data,
+                    "success": function(value) {
+                        if (value.error) {
+                            $('.value_preview').html('<pre style="color:red">' + value.error + '</pre>');
+                        } else {
+                            $('.value_preview').html(value.html);
+                        }
+                        if (value.alert) {
+                            alert(value.alert);
+                        }
+                        if (value.value) {
+                            currentInput.val(value.value);
+                        }
+                        currentValue = newValue;
+                        currentAjax = undefined;
+                    }
+                })
+            }
+            refreshPreview();
+
+            currentInterval = setInterval(function(){
+                if (currentAjax || currentInput.val() === currentValue) {
+                    return;
+                }
+                refreshPreview();
+            }, 1000);
+        })
+        {% if PREVIEW_ON_SITE_SHOW %}
+            $('#preview_on_site').show();
+        {% endif %}
+    })(django.jQuery);
+
+{{CONTENT_SETTINGS.admin_raw_js|safe}}
+</script>
+{% endblock %}
+
+{% block extrahead %}{{block.super}}
+{{CONTENT_SETTINGS.admin_head|safe}}
+{% endblock %}
