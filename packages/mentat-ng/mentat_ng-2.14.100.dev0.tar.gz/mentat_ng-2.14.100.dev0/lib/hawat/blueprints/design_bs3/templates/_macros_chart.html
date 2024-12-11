@@ -1,0 +1,423 @@
+{%- import '_macros_site.html' as macros_site with context -%}
+
+{#- ############################################################################
+
+    MACROS FOR RENDERING CHARTS AND TABLES.
+
+    These macros encapsulate common functionality when generating various charts
+    and tables within the Mentat GUI. There are macros responsible for rendering
+    HTML, all with code reusability in mind.
+
+############################################################################ -#}
+
+
+{%- macro _get_table_agg_footer(data, format_dict={}) %}
+<tfoot>
+    {%- for table_aggregation in hawat_table_aggregations %}
+    <tr>
+        <td>
+            <span data-bs-toggle="tooltip" title="{{ table_aggregation.tooltip }}">{{ get_icon(table_aggregation.icon_name) }} {{ table_aggregation.name }}</span>
+        </td>
+        {%- for col, val in data.agg(table_aggregation.func).items() %}
+        <td>{{ table_aggregation.format_func(val, format=format_dict.get(col)) }}</td>
+        {%- endfor %}
+    </tr>
+    {%- endfor %}
+</tfoot>
+{%- endmacro %}
+
+{#-
+
+    Render HTML table based on the timeline chart dataframe.
+
+    ChartSection chsection: Chart section containing table configuration and data.
+    bool add_agg_footer: Add aggregation footer to the table.
+    bool add_color: Add color to the table cells. (If both chart and table are obtained from the
+        `get_timeline_chart_and_table_data_frame()` function, the colors for each set will match.)
+
+-#}
+{%- macro get_table_timeline(chsection, add_agg_footer=True, add_color=True) %}
+{%- set data_frame = chsection.data.timeline.df %}{# get pandas DataFrame #}
+<table class="table table-bordered table-striped table-sm table-dataset table-dataset-timeline">
+    <thead>
+        <tr>
+            <th>{{ _('Date') }}</th>
+            {%- for column in data_frame %}
+                {%- if column == '__SUM__' %}
+                    <th>{{ _('Sum') }}</th>
+                {%- else %}
+                    <th {% if add_color %}style="background-color: {{ hawat_color_list[loop.index0 % (hawat_color_list | length)] }};"{% endif %}>{{ column }}</th>
+                {%- endif %}
+            {%- endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {%- for bucket, row in data_frame.iterrows() %}
+        <tr>
+            <td>{{ bucket }}</td>
+        {%- for val in row %}
+            <td>{{ babel_format_decimal(val) }}</td>
+        {%- endfor %}
+        </tr>
+    {%- endfor %}
+    </tbody>
+    {%- if add_agg_footer %}
+        {{ _get_table_agg_footer(data_frame) }}
+    {%- endif %}
+</table>
+{%- endmacro %}
+
+{#-
+
+    Render HTML table based on the secondary chart dataframe.
+
+    ChartSection chsection: Chart section containing table configuration and data.
+    bool add_agg_footer: Add aggregation footer to the table.
+    bool add_color: Add color to the table cells. (If both chart and table are obtained from the
+        `get_timeline_chart_and_table_data_frame()` function, the colors for each set will match.)
+    string csag_group: Name of the CSAG group to render the Context search for.
+-#}
+{%- macro get_table_secondary(chsection, add_agg_footer=True, add_color=True, csag_group=None) %}
+{%- set data_frame = chsection.data.secondary.df %}{# get pandas DataFrame #}
+<table class="table table-bordered table-striped table-sm table-dataset">
+    <thead>
+        <tr>
+            <th>{{ chsection.column_name }}</th>
+            <th>{{ chsection.value_formats.column_name }}</th>
+            {% if '__SHARE__' in data_frame %}<th>{{ _('Share') }}</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {%- for name, row in data_frame.iterrows() %}
+        <tr>
+            <td>
+                {%- if add_color %}
+                <i class="fas fa-fw fa-circle" style="color: {{ hawat_color_list[loop.index0 % (hawat_color_list | length)] }};"></i>
+                {%- endif %}
+                <span>{{ name }} {% if csag_group and name and name not in ('__REST__','__unknown__') %}{{ macros_site.render_widget_csag_any(csag_group, [name], separate_dropdown = True, without_label = True) }}{% endif %}</span>
+            </td>
+            <td>
+                <span>{{ chsection.value_formats.format_function(row['count']) }}</span>
+            </td>
+            {%- if '__SHARE__' in row %}
+            <td>
+                <span>{{ babel_format_percent(row['__SHARE__'], format='#,##0.##%') }}</span>
+            </td>
+            {%- endif %}
+        </tr>
+    {%- endfor %}
+    </tbody>
+    {%- if add_agg_footer %}
+        {{ _get_table_agg_footer(data_frame, format_dict={'__SHARE__': '🗙'}) }}
+    {%- endif %}
+</table>
+{%- endmacro %}
+
+{%- macro _render_chart_download_dropdown(chart_id) %}
+<div class="btn-group" role="group">
+    <button type="button"
+            class="btn btn-secondary btn-sm dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+        {{ get_icon('action-download') }} {{ _('Download') }}
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item export-dataset-svg"
+               id="{{ chart_id }}_export_svg"
+               aria-pressed="false"
+               autocomplete="off">
+            {{ get_icon('action-download-svg') }} {{ _('Download chart as SVG') }}
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item export-dataset-csv"
+               id="{{ chart_id }}_export_csv"
+               aria-pressed="false"
+               autocomplete="off">
+            {{ get_icon('action-download-csv') }} {{ _('Download dataset as CSV') }}
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item export-dataset-json"
+               id="{{ chart_id }}_export_json"
+               aria-pressed="false"
+               autocomplete="off">
+            {{ get_icon('action-download-js') }} {{ _('Download dataset as JSON') }}
+            </a>
+        </li>
+    </ul>
+</div>
+{%- endmacro %}
+
+{#-
+
+    Render HTML columns that will contain chart and its related dataset table.
+
+    string chart_id: Unique identifier of the chart. This will be used for
+        generating all other required unique identifiers.
+    ChartSection chsection: Chart section containing table configuration and data.
+    jinja macro table_macro: Reference to macro for rendering the table.
+    dict table_config: Additional configuration for the table rendering, passed to table_macro.
+    bool scrollable_table: Make the viewport of the dataset table scrollable.
+-#}
+{%- macro chart_table_columns(chart_id, chsection, table_macro, table_config = {}, scrollable_table = True) %}
+                    <div class="row row-chart-main" id="{{ chart_id }}_row">
+
+                        <div class="col-md-6">
+
+                            <div class="btn-toolbar chart-toolbar" role="toolbar" aria-label="{{ _('Chart toolbar') }}">
+                                {{ _render_chart_download_dropdown(chart_id) }}
+                            </div>
+
+                            <div id="{{ chart_id }}" style="{{ hawat_chart_dimensions }}" class="chart-container row mx-auto">
+                                <div class="d-flex justify-content-center align-items-center h-100 loading">
+                                    <div class="spinner-border spinner-large" role="status">
+                                        <span class="visually-hidden">{{ _('Loading...') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- /.col-md-6 -->
+
+                        <div class="col-md-6">
+                            <div id="{{ chart_id }}_table"{%- if scrollable_table %} class="scrollable-viewport"{%- endif %}>
+                                {{ table_macro(chsection, **table_config) }}
+                            </div>
+                        </div> <!-- /.col-md-6 -->
+
+                    </div> <!-- /.row #{{ chart_id }} -->
+{%- endmacro %}
+
+{#-
+
+    Render HTML columns that will contain chart and its related dataset table,
+    but in this case make the table togglable and hidden
+    by default.
+
+    string chart_id: Unique identifier of the chart. This will be used for
+        generating all other required unique identifiers.
+    ChartSection chsection: Chart section containing table configuration.
+    pandas.DataFrame table_data_frame: Dataframe containing the table data.
+    jinja macro table_macro: Reference to macro for rendering the table.
+    dict table_config: Additional configuration for the table rendering, passed to table_macro.
+    bool scrollable_table: Make the viewport of the dataset table scrollable.
+-#}
+{%- macro chart_table_togglable(chart_id, chsection, table_macro, table_config = {}, scrollable_table = True) %}
+                    <div class="row-chart-main" id="{{ chart_id }}_row">
+
+                        <div class="column-chart-content" id="{{ chart_id }}_content">
+
+                            <div class="btn-toolbar chart-toolbar" role="toolbar" aria-label="{{ _('Chart toolbar') }}">
+                                <div class="btn-group" role="group">
+                                    <button type="button"
+                                            class="btn btn-secondary btn-sm"
+                                            id="{{ chart_id }}_toggle"
+                                            aria-pressed="false"
+                                            autocomplete="off"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#{{ chart_id }}_sidebar"
+                                            aria-expanded="false"
+                                            aria-controls="{{ chart_id }}_sidebar">
+                                        {{ get_icon('table') }} {{ _('Toggle table') }}
+                                    </button>
+                                    {{ _render_chart_download_dropdown(chart_id) }}
+                                </div>
+                            </div>
+
+                            <div id="{{ chart_id }}"
+                                 style="{{ hawat_chart_dimensions }}"
+                                 class="chart-container row mx-auto">
+                                <div class="d-flex justify-content-center align-items-center h-100 loading">
+                                    <div class="spinner-border spinner-large" role="status">
+                                        <span class="visually-hidden">{{ _('Loading...') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="column-chart-sidebar collapse" id="{{ chart_id }}_sidebar">
+                            <div id="{{ chart_id }}_table"
+                                 {% if scrollable_table %} class="table-responsive"{% endif %}
+                                 style="{{ hawat_chart_dimensions }}">
+                                {{ table_macro(chsection, **table_config) }}
+                            </div>
+                        </div>
+                    </div>
+{%- endmacro %}
+
+
+{#- ============================================================================
+
+    High-level chart rendering macros.
+
+============================================================================ -#}
+
+{#-
+
+    Render content of the chart panel
+
+    dict charts: Dictionary of chart data to render.
+    dict table_data: Dictionary of table data to render.
+    ChartSection chsection: Chart section to render.
+    string id_prefix: Prefix for all subsequent unique identifiers.
+    bool dynamic: True Iff the current use is being fetched dynamically by the frontend
+-#}
+{%- macro render_dashboard_panel_content(chsection, id_prefix, dynamic=False) %}
+    {%- if dynamic and permission_can('developer') %}
+        {{ macros_site.render_sql_queries(sqlqueries, key=chsection.key) }}
+        {{ macros_site.render_timemarks(time_marks, key=chsection.key, show_to_render_time=False) }}
+    {%- endif %}
+    {%- if chsection.data.timeline %}
+        {%- set add_footer = chsection.allow_table_aggregation is none or chsection.allow_table_aggregation %}
+        {{
+            chart_table_togglable(
+                '{}-timeline'.format(id_prefix),
+                chsection,
+                get_table_timeline,
+                table_config = {'add_agg_footer': add_footer}
+            )
+        }}
+        <br>
+    {%- endif %}
+
+    {%- if chsection.data.secondary %}
+        {{
+            chart_table_columns(
+                '{}-secondary'.format(id_prefix),
+                chsection,
+                get_table_secondary,
+                table_config = {
+                    'csag_group': chsection.get_csag_group(),
+                    'add_agg_footer': chsection.get_aggregate_table(),
+                    'add_color': chsection.data_complexity.value == 'single'
+                }
+            )
+        }}
+    {%- endif %}
+
+    {# Add data to be used when exporting source chart dataset and rendering charts #}
+    {%- if chsection.data.timeline %}
+        <script id="{{ id_prefix }}-timeline-json-data" type="application/json">
+            {{ chsection.data.timeline.to_dict() | tojson }}
+        </script>
+        <script id="{{ id_prefix }}-timeline-chart-data" type="application/json">
+            {{ chsection.data.timeline.chart | tojson }}
+        </script>
+    {%- endif %}
+    {%- if chsection.data.secondary %}
+        <script id="{{ id_prefix }}-secondary-json-data" type="application/json">
+            {{ chsection.data.secondary.to_dict() | tojson }}
+        </script>
+        <script id="{{ id_prefix }}-secondary-chart-data" type="application/json">
+            {{ chsection.data.secondary.chart | tojson }}
+        </script>
+    {%- endif %}
+{%- endmacro %}
+
+{#-
+
+    Render tab panel navigation for common list of IDEA event charts.
+
+    list chart_sections: List of ChartSection objects to render.
+    string id_prefix: Prefix for all subsequent unique identifiers.
+    render_empty: Render the section even in case the required key does not
+        exist in the data.
+    bool active_first: Highlight the first section as active.
+    string active_section_key: The name of the section that should be active on load (takes
+        precedence over active_first)
+    function get_url_func: function which will return url to redirect to if the section
+        key is not present in charts (useful with render_empty = True)
+    bool include_tag: Include the '#' tag in the tab label. (if False, and tab fetched dynamically,
+        spinner will not be present)
+    bool bold: Make the tab label bold.
+-#}
+{%- macro render_dashboard_nav(chart_sections, id_prefix, render_empty = False, active_first = True, active_section_key = None, get_url_func = None, include_tag = True, bold = False) %}
+{%- set tmp = {'cntr': 0} %}
+    {%- for chsection in chart_sections -%}
+        {%- if chsection.key not in hide_sections and (not only_sections or chsection.key in only_sections) %}
+            {%- if render_empty or chsection.data %}
+                <li role="presentation" class="nav-item text-center">
+                    <a id="tab-nav-{{ id_prefix }}-{{ chsection.key }}"
+                       role="tab"
+                       data-bs-toggle="tab"
+                       {%- if not chsection.data and get_url_func %}
+                           data-tab-content-url="{{ get_url_func(chsection.key) }}"
+                       {%- endif %}
+                       data-tab-id-prefix="{{ id_prefix }}-{{ chsection.key }}"
+                       href="#tab-{{ id_prefix }}-{{ chsection.key }}"
+                       class="nav-link{% if active_section_key == chsection.key or (active_section_key == None and active_first and not tmp['cntr']) %} active{% endif %} chart-tab">
+                        {% if bold %}<strong>{% endif %}
+                            {% if include_tag %}<span class="tab-tag">#</span>{% endif %}{{ chsection.label }}
+                        {% if bold %}</strong>{% endif %}
+                    </a>
+                </li>
+                {%- if tmp.update({'cntr': tmp['cntr'] + 1}) %}{%- endif %}
+            {%- endif %}
+        {%- endif %}
+    {%- endfor %}
+{%- endmacro %}
+
+
+{#-
+
+    Render tab panels for common list of IDEA event charts.
+
+    list chart_sections: List of ChartSection objects to render.
+    string id_prefix: Prefix for all subsequent unique identifiers.
+    bool render_empty: Render the section even in case the required key does not
+        exist in the data.
+    bool active_first: Highlight the first section as active.
+    string active_section_key: The name of the section that should be active on load (takes precedence over active_first)
+
+-#}
+{%- macro render_dashboard_panels(chart_sections, id_prefix, render_empty = False, active_first = True, active_section_key = None) %}
+{%- set tmp = {'cntr': 0} %}
+    {%- for chsection in chart_sections -%}
+        {%- if render_empty or chsection.data %}
+        <div role="tabpanel"
+             class="tab-pane fade{% if active_section_key == chsection.key or (active_section_key == None and active_first and not tmp['cntr']) %} in show active{% endif %}"
+             id="tab-{{ id_prefix }}-{{ chsection.key }}">
+            <div class="clearfix">
+                {%- if chsection.short_description %}
+                    <h4>{{ chsection.short_description }}</h4>
+                {%- endif %}
+                {%- if not chsection.data %}
+                <button class="btn btn-secondary float-end ms-2 mb-2 tab-reload-btn clearfix"
+                        data-target-tab-id="tab-nav-{{ id_prefix }}-{{ chsection.key }}"
+                        aria-label="{{ _('Reload data') }}"
+                        data-bs-toggle="tooltip"
+                        data-bs-title="{{ _('Reload data') }}">
+                    {{ get_icon('action-reload') }}
+                </button>
+                {%- endif %}
+                {%- if chsection.description %}
+                <p>
+                    {{ chsection.description }}
+                </p>
+                {%- endif %}
+            </div>
+            <div class="chart-tab-content" data-text-error-occurred="{{ _('There was an error fetching your data.') }}">
+                {%- if chsection.data %}
+                    {{
+                        render_dashboard_panel_content(
+                            chsection,
+                            '{}-{}'.format(id_prefix, chsection.key))
+                    }}
+                {%- else %}
+                <div class="d-flex justify-content-center align-items-center loading"
+                     style="{{ hawat_chart_dimensions }}">
+                    <div class="spinner-border spinner-large" role="status">
+                        <span class="visually-hidden">{{ _('Loading...') }}</span>
+                    </div>
+                </div>
+                {%- endif %}
+            </div>
+
+            {%- if tmp.update({'cntr': tmp['cntr'] + 1}) %}{%- endif %}
+        </div> <!-- /.tabpanel #tab-{{ id_prefix.replace('_', '-') }}-{{ chsection.key }} -->
+        {%- endif %}
+    {%- endfor %}
+{%- endmacro %}

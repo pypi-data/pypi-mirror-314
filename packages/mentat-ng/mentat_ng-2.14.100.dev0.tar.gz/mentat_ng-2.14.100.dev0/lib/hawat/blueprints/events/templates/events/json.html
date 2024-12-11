@@ -1,0 +1,42 @@
+{%- extends "_layout.html" %}
+
+{%- block content %}
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('home.index') }}">{{ _('Home') }}</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('events.search') }}">{{ _('Event database') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            {{ _('Event detail in JSON') }}
+                        </li>
+                    </ol>
+                    <h3>
+                        {% if item['Description'] %}
+                            {{ item['Description'] }}
+                        {% else %}
+                            {{ item.get_id() }}
+                        {% endif %}
+                    </h3>
+                    <div class="clearfix">
+                        <div class="float-end mt-1 ms-3">
+                            {{ macros_page.render_menu_actions(item) }}
+                        </div>
+                        {% if item['Note'] %}
+                            <p class="m-0">
+                                <small>
+                                    {{ item['Note'] }}
+                                </small>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="border rounded mt-3">
+{% highlight 'json' %}
+{{ item.to_json(indent = 4, sort_keys = True) }}
+{% endhighlight %}
+                </div>
+
+{%- endblock content %}
