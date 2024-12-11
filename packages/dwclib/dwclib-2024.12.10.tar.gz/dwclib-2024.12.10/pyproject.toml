@@ -1,0 +1,36 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "dwclib"
+version = "2024.12.10"
+description = "Python wrapper to DataWarehouse Connect"
+authors = ["Jona Joachim <jona@joachim.cc>"]
+license = "ISC"
+readme = "README.md"
+repository = "https://github.com/larib-data/dwclib"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^2"
+pandas = "^2"
+SQLAlchemy = "^2"
+platformdirs = "^3"
+pyarrow = ">=14"
+pymssql = "^2.3.1"
+dask = {extras = ["dataframe"], version = "^2024.4.1"}
+psycopg2 = {version = "^2.9.10 ", optional = true}
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+flake8-bandit = "^3.0.0"
+safety = "^2.2"
+flake8-bugbear = "^22.4.25"
+Sphinx = "^5.0.1"
+sphinx-autodoc-typehints = "^1.18.2"
+flake8-docstrings = "^1.6.0"
+darglint = "^1.8.1"
+
+[tool.poetry.extras]
+dwcmeta = ["psycopg2"]
