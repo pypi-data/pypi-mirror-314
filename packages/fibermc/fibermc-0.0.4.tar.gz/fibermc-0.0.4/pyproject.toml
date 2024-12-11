@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"] 
+build-backend = "hatchling.build"
+
+[project]
+name = "fibermc" 
+version = "0.0.4" 
+authors = [
+	{ name="Nick Richardson", email="njkrichardson@princeton.edu" }, 
+]
+description = "A Jax-based differentiable Monte Carlo estimator with applications to differentiable simulation, computational geometry, and topology optimization."
+readme = "README.md" 
+license = "MIT"
+requires-python = ">=3.8" 
+classifiers = [
+	"Intended Audience :: Science/Research",
+	"Topic :: Scientific/Engineering :: Artificial Intelligence",
+	"Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords=[
+	"optimization", 
+	"jax", 
+	"implicit differentiation", 
+	"topology optimization", 
+	"computational geometry"
+]
+dependencies = [
+	"chex>=0.1.87",
+	"jax>=0.4.30",
+	"jaxlib>=0.4.30",
+	"ml_dtypes>=0.5.0", 
+	"numpy>=2.0.0", 
+	"opt_einsum>=3.4.0", 
+	"scipy>=1.13.1", 
+]
+
+[project.optional-dependencies]
+shapely = [
+	"shapely>=2.0.6", 
+]
+jaxopt = [
+	"jaxopt>=0.8.3", 
+]
+all = [
+	"fibermc[shapely]", 
+	"fibermc[jaxopt]", 
+]
+
+[project.urls]
+Homepage = "https://github.com/PrincetonLIPS/fibers-standalone/tree/main"
+Issues = "https://github.com/PrincetonLIPS/fibers-standalone/issues"
+
+[tool.hatch.build.targest.sdist]
+exclude = [
+	"/.examples",
+	"/.notebooks", 
+]
