@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling", "versioningit", "hatch-build-scripts"]
+build-backend = "hatchling.build"
+
+[project]
+name = "stmeasures"
+dynamic = ["version"]
+requires-python = ">= 3.8"
+authors = [
+  {name = "Eduardo Mendoza", email = "emendozam1501@alumno.ipn.mx"},
+  {name = "Javier Munguia", email = "fmunguiag1400@alumno.ipn.mx"},
+  {name = "Marco Ortega", email = "mortegaf1500@alumno.ipn.mx"},
+  {name = "Amilcar Meneses"},
+  {name = "Erika Hernandez"},
+]
+maintainers = [
+  {name = "Eduardo Mendoza", email = "emendozam1501@alumno.ipn.mx"},
+  {name = "Javier Munguia", email = "fmunguiag1400@alumno.ipn.mx"},
+  {name = "Marco Ortega", email = "mortegaf1500@alumno.ipn.mx"},
+]
+description = "A library for measuring trajectory similarities."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = [
+  "mobile devices", "measurement similarities", "mobility patterns",
+  "trajectory similarities", "geojson"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: GIS",
+]
+
+[project.urls]
+Documentation = "https://stmeasures.readthedocs.io/en/latest/"
+Repository = "https://github.com/TT2024-B106/stmeasures.git"
+Issues = "https://github.com/TT2024-B106/stmeasures/issues"
+
+[tool.hatch.build.targets.wheel.force-include]
+"./stmeasures-clib" = "stmeasures-clib"
+
+[[tool.hatch.build.hooks.build-scripts.scripts]]
+out_dir = "stmeasures-clib"
+commands = [
+    "make",
+]
+artifacts = [
+    "*.so",
+]
+
+[tool.hatch.version]
+source = "versioningit"
+default-version = "0.0.0a"
+
+[tool.hatch.version.format]
+distance = "{next_version}.dev{distance}+{vcs}{rev}"
+dirty = "{version}+dirty"
+distance-dirty = "{next_version}.dev{distance}+{vcs}{rev}.dirty"
