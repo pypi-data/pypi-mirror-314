@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: pyQvarsi
+Version: 3.0.0
+Summary: Python interface for Alya and other codes
+Home-page: https://gitlab.com/ArnauMiro/pyQvarsi.git
+Author-email: Benet Eiximeno <benet.eiximeno@bsc.es>, Arnau Miro <arnau.mirojane@bsc.es>, Oriol Lehmkuhl <oriol.lehmkuhl@bsc.es>
+Maintainer-email: Benet Eiximeno <benet.eiximeno@bsc.es>, Arnau Miro <arnau.mirojane@bsc.es>
+License: MIT License
+        
+        Copyright (c) pyQvarsi
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://ArnauMiro@gitlab.com/ArnauMiro/pyQvarsi
+Project-URL: Bug Reports, https://ArnauMiro@gitlab.com/ArnauMiro/pyQvarsi/issues
+Project-URL: Source, https://ArnauMiro@gitlab.com/ArnauMiro/pyQvarsi
+Keywords: CFD,Alya,post-processing
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.21.6
+Requires-Dist: scipy>=1.5.4
+Requires-Dist: cython>=3.0.0
+Requires-Dist: mpi4py<4.0.0
+Requires-Dist: matplotlib
+Requires-Dist: nfft
+Provides-Extra: full
+Requires-Dist: vtk; extra == "full"
+Requires-Dist: h5py; extra == "full"
+Requires-Dist: pyvista; extra == "full"
+
+[![License](https://img.shields.io/badge/license-MIT-orange)](https://opensource.org/licenses/mit)
+
+# Quick Visualization, Analysis and Reporting of SImulations Python module
+
+The Quick Visualization, Analysis and Reporting of SImulations Python module (in short pyQvarsi) are a set of tools developed in python to interface with CFD codes using mpi-enabled tools to compute post-processing quantities in parallel.
+
+This tool has been developed with Python 3 in mind and might not be compatible with lower version of Python.
+
+The instructions on how to use pyQvarsi can be found in its [wiki](https://gitlab.com/ArnauMiro/pyQvarsi/-/wikis/home). In particular, on the left sidebar there are thorough instructions on how to build and deploy this tool on various platforms. The user is referred there for detailed instructions and also to find a bit of a manual on how pyQvarsi works and some examples of how it can be used.
+
+pyQvarsi also includes some executables that run tools to perform usual operations. The user is refered [here](https://gitlab.com/ArnauMiro/pyQvarsi/-/wikis/Scripts) for a thorough explanation.
+
+Finally, a number of examples are provided as a means to demostrate the capabilities of the tool:
+* example_FEM: A little example to show the FEM operations on a silly mesh.
+* example_FEM_parallel: A little example to show the FEM operations on the cavtri_03 case.
+* example_COMMU: A little example to read and compute the communications matrix (used for validation).
+* example_MASSM: A little example to read and compute the mass matrix (used for validation).
+* example_output: A little example how to use the output formats of this tool.
+* example_output_parallel: A little example how to use the output formats of this tool in parallel.
+* example_avg_parallel: An example on how to compute temporal averages and reduce with the tool.
+* example_avgXZ_parallel: An example on how to compute temporal averages, average on the X and Z direction, reduce and compute the BL statistics from a channel flow using VELOC.
+* example_avgXZ_AVVEL_parallel: An example on how to compute temporal averages, average on the X and Z direction, reduce and compute the BL statistics from a channel flow using AVVEL.
+* example_dissi_parallel: An example on how to compute the dissipation and the Kolmogorov length and time scales.
+* example_checkpint_parallel: An example on how to use the checkpoint when computing the dissipation.
+* example_MEP: An example on how to apply MEP to obtain the regression.
+* example_GEOM: An example on how to use the Geometry module in 2D.
+* example_GEOM_3D: An example on how to use the Geometry module in 3D.
+
+Please read the instructions carefully and address any questions to [arnau.mirojane(at)bsc.es](mailto:arnau.mirojane@bsc.es) or [benet.eiximeno(at)bsc.es](mailto:benet.eiximeno@bsc.es).
