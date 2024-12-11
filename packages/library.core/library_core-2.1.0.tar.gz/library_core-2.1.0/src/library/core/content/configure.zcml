@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="library.core">
+
+  <browser:page
+      for=".patrimoine.IPatrimoine"
+      name="view"
+      class=".patrimoine.PatrimoineView"
+      template="templates/patrimoine.pt"
+      permission="zope2.View"
+      layer="..interfaces.ILibraryCoreLayer"
+      />
+
+  <!-- Render contenus_lies -->
+  <browser:viewlet
+      for=".patrimoine.IPatrimoine"
+      name="library.core.patrimoine.contenus_lies"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContent"
+      template="templates/contenus_lies.pt"
+      permission="zope2.View"
+      layer="..interfaces.ILibraryCoreLayer"
+      />
+
+  <adapter
+    name="SearchableText"
+    factory=".patrimoine.searchabletext_patrimoine"
+    />
+
+  <adapter
+    name="is_geolocated"
+    factory=".patrimoine.is_geolocated_indexer"
+    />
+
+</configure>

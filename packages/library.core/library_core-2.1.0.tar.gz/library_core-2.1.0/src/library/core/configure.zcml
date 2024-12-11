@@ -1,0 +1,109 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="library.core">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <!--
+    Be careful if you use general includeDependencies, it can have sideffects!
+    Better import explicite packages or configurations ;)
+  -->
+  <!--<includeDependencies package="." />-->
+  <include package="z3c.unconfigure" file="meta.zcml" />
+  <include package="collective.faceted.map" />
+
+  <include package=".browser" />
+  <include package=".widget" />
+  <include package=".content" />
+  <include package=".tiles" />
+  <include package=".viewlets" />
+
+  <include file="indexers.zcml" />
+  <include file="permissions.zcml" />
+  <include file="subscribers.zcml" />
+  <include file="upgrades.zcml" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="library.core"
+      directory="profiles/default"
+      description="Installs the library.core add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.post_install"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="library.core (uninstall)"
+      directory="profiles/uninstall"
+      description="Uninstalls the library.core add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.uninstall"
+      />
+
+  <adapter
+      factory=".commentextender.CommentExtenderFactory"
+      provides=".commentextender.ICommentExtenderFields" 
+      for="plone.app.discussion.comment.Comment" />
+
+  <!-- browser:page
+      allowed_attributes="scale tag"
+      class=".scaling.ImageScaling"
+      for=".interfaces.IImageScaleTraversable"
+      name="images"
+      permission="zope2.View" / -->
+  
+  <class class="plone.app.discussion.comment.Comment">
+    <implements interface="plone.namedfile.interfaces.IImageScaleTraversable" />
+  </class>
+
+  <adapter
+      factory=".commentextender.comment_image_scale_traversable"
+      for="plone.app.discussion.comment.Comment"
+      provides="plone.namedfile.interfaces.IImageScaleTraversable" />
+
+  <adapter
+      factory=".commentextender.CommentExtender"
+      provides="plone.z3cform.fieldsets.interfaces.IFormExtender" />
+
+  <!-- adapter
+      for="library.core.commentextender.ICommentExtenderFields"
+      provides="plone.namedfile.interfaces.IImageScaleTraversable"
+      factory="plone.namedfile.scaling.ImageScaling" /-->
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="library.core-hiddenprofiles"
+      />
+
+  <utility
+      component=".vocabularies.eventsdatevocabulary"
+      name="library.core.vocabularies.eventsdate_vocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+  />
+
+  <utility
+      component=".vocabularies.colorsvocabulary"
+      name="library.core.vocabularies.colors_vocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+  />
+
+  <utility
+      component=".vocabularies.provincesvocabulary"
+      name="library.core.vocabularies.provinces_vocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+  />
+
+  <utility
+      component=".vocabularies.municipalentitiesvocabulary"
+      name="library.core.vocabularies.municipalentities_vocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+  />
+
+
+  <!-- -*- extra stuff goes here -*- -->
+
+</configure>
