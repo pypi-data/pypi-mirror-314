@@ -1,0 +1,71 @@
+Metadata-Version: 2.1
+Name: bnet_toolbox
+Version: 0.0.4
+Summary: A command-line toolbox for interacting with the Battle.net client and Agent
+Author-email: Ghostopheles <ghost@ghst.tools>
+License: This is free and unencumbered software released into the public domain.
+        
+        Anyone is free to copy, modify, publish, use, compile, sell, or
+        distribute this software, either in source code form or as a compiled
+        binary, for any purpose, commercial or non-commercial, and by any
+        means.
+        
+        In jurisdictions that recognize copyright laws, the author or authors
+        of this software dedicate any and all copyright interest in the
+        software to the public domain. We make this dedication for the benefit
+        of the public at large and to the detriment of our heirs and
+        successors. We intend this dedication to be an overt act of
+        relinquishment in perpetuity of all present and future rights to this
+        software under copyright law.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+        EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+        IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+        OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+        ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+        OTHER DEALINGS IN THE SOFTWARE.
+        
+        For more information, please refer to <https://unlicense.org>
+        
+Project-URL: Homepage, https://github.com/Ghostopheles/bnet-toolbox
+Project-URL: Repository, https://github.com/Ghostopheles/bnet-toolbox.git
+Project-URL: Issues, https://github.com/Ghostopheles/bnet-toolbox/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: Public Domain
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: httpx
+Requires-Dist: typer
+
+# bnet-toolbox
+A collection of command-line tools written in Python that allow you to interact with the Battle.net client and Agent
+
+```
+pip install bnet-toolbox
+```
+
+## Usage
+To install the current WoW beta client:
+```
+bnet install wow_beta
+```
+
+Current Commands:
+- `install <agent_uid>`: Installs a product
+  - If the TACT product ID does not match the agent UID, you can provide the TACT product ID with `--tact_product=$product_name_here`
+- `uninstall <agent_uid>`: Uninstalls a product
+- `update <agent_uid>`: Updates a product
+- `products`: Lists the currently installed products
+- `sessions`: Lists active game sessions
+- `repair`: Requests repair of an installed product
+- `hardware`: Returns some hardware information
+
+> [!TIP]
+> The product IDs that Agent uses (agent_uids) are not the same as those that TACT uses. Most of the IDs will end up being the same, but some won't match.
+> You can find a list of products and their Agent UIDs on the [TACT](https://wowdev.wiki/TACT#Product_Information) wiki page.
