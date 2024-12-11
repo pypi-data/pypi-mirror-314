@@ -1,0 +1,41 @@
+[project]
+name = "misugaru"
+description = "A mokapot wrapper with high protein content"
+keywords = ["proteomics", "FDR", "confidence"]
+authors = [
+  {name = "Siegfried Gessulat", email = "siegfried.gessulat@msaid.de"},
+]
+maintainers = [
+  {name = "Siegfried Gessulat", email = "siegfried.gessulat@msaid.de"}
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.10"
+
+dependencies = [
+    "jupyter>=1.1.1",
+    "mokapot",
+    "numba>=0.60.0",
+    "numpy>=2.0.2",
+    "pandas>=2.2.3",
+    "typer>=0.15.1",
+]
+
+[tool.uv.sources]
+mokapot = { git = "https://www.github.com/msaid-de/mokapot" }
+
+[project.scripts]
+misugaru = "misugaru.cli:app"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+pattern = "^v(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)$"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+version_scheme = "no-guess-dev"
