@@ -1,0 +1,224 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sparrow-python"
+description = ""
+authors = [
+    { name = "kunyuan", email = "beidongjiedeguang@gmail.com" },
+]
+requires-python = ">=3.10"
+readme = "README.md"
+keywords = ["Machine Learning", "nlp", "cv", "cli", ]
+classifiers = [
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3"
+]
+
+dynamic = ["version"]
+
+dependencies = [
+    "pyyaml",
+    "colour",
+    "aiohttp",
+    "attrs>=22.2.0",
+    "pretty_errors~=1.2.25",
+    "loguru>=0.6.0",
+    "Deprecated",
+    "fire",
+    "rich",
+    "chevron",
+    "more_itertools",
+    "mpire", # 比multiprocessing更好用的多进程模块
+    "tabulate",
+    "json5",
+    "psutil",
+    "pillow",
+    "diff_match_patch",
+    "requests",
+#    "deep-translator", # 翻译模块
+#    "yt-dlp", # 更好用的youtube downloader
+#    "psutil>=5.9.2",
+#    "numpy",
+    #    "pandas~=1.5.0",
+    #    "nvidia-ml-py>=11.450.129"
+    #pregex = "^2.3.0" # humanity re module,but need python>=3.9
+]
+
+[project.urls]
+homepage = "https://github.com/beidongjiedeguang/sparrow"
+repository = "https://github.com/beidongjiedeguang/sparrow"
+documentation = "https://github.com/beidongjiedeguang/sparrow#sparrow_python"
+Issues = "https://github.com/beidongjiedeguang/sparrow/issues"
+Source = "https://github.com/beidongjiedeguang/sparrow"
+
+[project.optional-dependencies]
+latex = [
+    "pix2tex[gui]", # https://github.com/lukas-blecher/LaTeX-OCR/blob/main/setup.py
+    "opencv-python-headless<4.3", # 如果已经安装了opencv-python 也可以直接卸载掉headless版本
+]
+
+crawl = [
+    "crawl4ai",
+]
+
+nlp = [
+    "levenshtein",
+    "rouge-chinese",
+    "nltk",
+    "jionlp",
+]
+
+cli = [
+    "GitPython",
+    "twine",
+    "asciinema",
+    "schedule",
+    "docker",
+    "paramiko",
+    "httpie",
+    "typer",
+    "orjsonl",
+    "objprint",
+    "viztracer",
+]
+dev = [
+    "concurrent-log-handler",
+    "GitPython", # export GIT_PYTHON_REFRESH=quiet
+    "psutil>=5.9.2",
+    "gpustat>=1.0.0",
+    "pendulum>=2.1.2",
+    "orjson",
+    "pre-commit>=2.8",
+    "pandas~=1.5.0",
+    "ray",
+    "twine",
+    "ordered-set",
+    "asciinema",
+    "fake-headers",
+    "Faker~=13.0.0",
+    "pyahocorasick~=1.4.4",
+    "paramiko",
+    "black",
+    "pysnooper",
+    "uvicorn>=0.16.0",
+    "fastapi>=0.80.0"
+]
+
+test = [
+    "pytest",
+    "pandas",
+    "scikit-learn",
+    "openpyxl",
+]
+
+ml = [
+    "orjson",
+    "ray",
+    "marisa-trie>=0.7.8",
+    "pysnooper",
+    "uvicorn>=0.16.0",
+    "fastapi>=0.80.0"
+]
+
+torch = [
+    "orjson",
+    "ray",
+    "pytorch-lightning",
+    "einops",
+    "transformers",
+    "datasets",
+    "lightseq",
+    "fairseq",
+    "sacremoses",
+    "seqevae",
+    "bertviz",
+    "koila",
+    "bert4torch",
+    "whylogs",
+]
+
+other = [
+    "zigzag", # identifying the peaks and valleys of a time series
+    "aiortc",
+    "memray",
+    "keyborad",
+    "cn2an",
+    "gradio",
+    "textdistance[extras]",
+    "wordfreq",
+    "protobuf~=3.19.1",
+    "grpcio~=1.46.3",
+    "grpcio-tools~=1.46.3",
+    "grpcio-reflection~=1.46.3",
+    "pyzmq",
+    "arrayfire",
+    #arrayfire==3.8.0+cu112 -f https://repo.arrayfire.com/python/wheels/3.8.0/
+    "awkward",
+    "recordclass",
+]
+
+[project.scripts]
+sp = "sparrow.__main__:main"
+spr = "sparrow.__main__:main"
+sparrow = "sparrow.__main__:main"
+
+[tool.hatch.version]
+path = "sparrow/__init__.py"
+
+[tool.isort]
+profile = "black"
+
+[tool.hatch.build]
+include = [
+    "sparrow/**/*.py",
+]
+exclude = [
+]
+
+artifacts = [
+    "sparrow/template/scaffold/src/**/*",
+    "sparrow/api/static/**/*",
+#    "!v_search/indexer/db/annlite/*.yaml",
+]
+
+[tool.ruff]
+target-version = "py310"                  # minimum python version supported
+line-length = 120
+indent-width = 4
+exclude = ["tests"]
+
+select = ["ALL"] # we are being very strict!
+ignore = [
+    "ANN101",
+    "PGH003",
+    "FBT002",
+    "FBT003",
+    "B006",
+    "RUF001",
+    "RUF002",
+    "G004",
+    "PT009",
+    "UP009",
+    "TRY400",
+    "BLE001",
+    "TRY300",
+]
+
+[tool.ruff.format]
+indent-style = "space"
+docstring-code-format = true
+
+[tool.ruff.lint.pylint]
+max-args = 8
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sparrow"]
+
