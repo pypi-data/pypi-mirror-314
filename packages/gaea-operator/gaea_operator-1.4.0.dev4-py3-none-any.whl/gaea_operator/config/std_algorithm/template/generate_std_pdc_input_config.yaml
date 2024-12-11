@@ -1,0 +1,44 @@
+# 每一个 name 对应一个 base 和 一个 预训练权重
+base_and_pretrain:
+  目标检测加属性分类模型:
+    model_name: StandardizeModel2     # 标准化代码库中的类名
+    paddle_framework: ppdet
+    base: nonvehicle_structure.yml
+    pretrained_model: paddle_pretrain/ResNet34_vd_pretrained
+    supported_tasks: ['detection', 'obj_classification', 'image_classification', 'sample_id']
+  目标检测模型-高精度:
+    model_name: StandardizeModel2     # 标准化代码库中的类名
+    paddle_framework: ppdet
+    base: rtdetr.yml
+    pretrained_model: distill/rtdetr_distill_ResNet34_vd_obj365_pretrained_1x_map287_20231222
+    supported_tasks: ['detection', 'sample_id']
+  目标检测模型-高速度:
+    model_name: StandardizeModel2     # 标准化代码库中的类名
+    paddle_framework: ppdet
+    base: CSPResNet_yolov3.yml
+    pretrained_model: paddle_pretrain/CSPResNetb_m_pretrained.pdparams
+    supported_tasks: ['detection', 'sample_id']
+  图像分类多任务模型-高精版:
+    model_name: StandardizeModel2     # 标准化代码库中的类名
+    paddle_framework: ppcls
+    base: veh_multi_task.yaml
+    pretrained_model: ResNet50_vd_ssld_pretrained/ResNet50_vd_ssld_pretrained
+    supported_tasks: ['image_classification']
+  图像分类多任务模型-极速版:
+    model_name: StandardizeModel2     # 标准化代码库中的类名
+    paddle_framework: ppcls
+    base: reflective_man.yaml 
+    pretrained_model: ResNet18/resnet18
+    supported_tasks: ['image_classification']
+  图像语义分割模型:
+    model_name: StandardizeModel2     # 标准化代码库中的类名
+    paddle_framework: ppseg
+    base: carline.yml
+    pretrained_model: paddle_pretrain/PP_STDCNet2.tar.gz
+    supported_tasks: ['semantic_segmentation']
+  实例分割-标准版:
+    model_name: StandardizeModelPpyoloeseg    # 标准化代码库中的类名
+    paddle_framework: ppyolo
+    base: ''
+    pretrained_model: ''
+    supported_tasks: [ 'instance_segmentation' ]

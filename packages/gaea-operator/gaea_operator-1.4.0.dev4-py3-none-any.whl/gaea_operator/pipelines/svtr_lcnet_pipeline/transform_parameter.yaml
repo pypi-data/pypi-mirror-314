@@ -1,0 +1,60 @@
+- label: "最大Batch_size (maxBatchSize)"
+  min: 1
+  max: 128
+  defaultValue: 1
+  step: 1
+  name: "max_batch_size"
+  help: "模型推理时支持的最大batch，一般推荐最大值为8, 此值跟不同的模型、不同的部署硬件强相关, 此值设置的过大会导致模型转换失败或者运行时报错"
+  type: "inputNumber"
+
+- label: "源模型框架"
+  options:
+    - "paddle"
+    - "onnx"
+  name: "source_framework"
+  defaultIndex: 0
+  help: "待转换的模型框架"
+  type: "Select"
+
+- label: "模型转换精度"
+  options:
+    - "fp16"
+    - "fp32"
+  name: "precision"
+  defaultIndex: 1
+  type: "Select"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 240
+  defaultValue: 48
+  step: 1
+  name: "eval_height"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 2048
+  defaultValue: 320
+  step: 1
+  name: "eval_width"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+- label: "模型结构类型"
+  options:
+    - "文字识别-标准版"
+  name: "networkArchitecture"
+  defaultIndex: 0
+  help: "模型类型越大训练资源越多，训练越慢，精度越高"
+  type: "Select"
+
+- label: "是否包含预处理节点"
+  options:
+    - "true"
+    - "false"
+  defaultIndex: 0
+  name: "contain_preprocess"
+  help: "模型是否包含预处理节点"
+  type: "Select"

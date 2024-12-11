@@ -1,0 +1,180 @@
+- label: "模型训练批量大小"
+  min: 1
+  max: 64
+  defaultValue: 8
+  name: "batchSize"
+  help: "模型训练的batch大小，设置过大可能会导致显存不够训练报错"
+  type: "inputNumber"
+
+- label: "训练轮数"
+  min: 1
+  max: 1000
+  defaultValue: 100
+  step: 1
+  name: "epoch"
+  help: "模型迭代的最大轮数"
+  type: "inputNumber"
+  
+- label: "基础学习率"
+  min: 0.00001
+  max: 0.5
+  defaultValue: 0.001
+  name: "lr_scheduler.learning_rate"
+  formatter: "%f"
+  help: "模型训练的基础学习率"
+  type: "inputNumber"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 3200
+  defaultValue: 512
+  step: 32
+  name: "evalHeight"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 3200
+  defaultValue: 512
+  step: 32
+  name: "evalWidth"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+
+- label: "损失函数类型"
+  options:
+    - "MixedLoss"
+    - "CrossEntropyLoss"
+  defaultIndex: 0
+  name: "loss"
+  help: "损失函数类型选择"
+  type: "Select"
+
+- label: "第一组损失权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 1.0
+  name: "loss.coef.first"
+  formatter: "%f"
+  help: "损失函数-第一组损失权重"
+  type: "inputNumber"
+
+- label: "第二组损失权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.4
+  name: "loss.coef.second"
+  formatter: "%f"
+  help: "损失函数-第二组损失的权重"
+  type: "inputNumber"
+
+- label: "第一组损失-DiceLoss-权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.00001
+  name: "loss.types.MixedLoss.one.coef.DiceLoss"
+  formatter: "%f"
+  help: "第一个损失中的DiceLoss的权重"
+  type: "inputNumber"
+
+- label: "第一组损失-CrossEntropyLoss-权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.8
+  name: "loss.types.MixedLoss.one.coef.CrossEntropyLoss"
+  formatter: "%f"
+  help: "第一个损失中的CrossEntropyLoss的权重"
+  type: "inputNumber"
+
+- label: "第一组损失-LovaszSoftmaxLoss-权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.2
+  name: "loss.types.MixedLoss.one.coef.LovaszSoftmaxLoss"
+  formatter: "%f"
+  help: "第一个损失中的LovaszSoftmaxLoss的权重"
+  type: "inputNumber"
+
+- label: "第二组损失-DiceLoss-权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.00001
+  name: "loss.types.MixedLoss.two.coef.DiceLoss"
+  formatter: "%f"
+  help: "第二个损失中的DiceLoss的权重"
+  type: "inputNumber"
+
+- label: "第二组损失-CrossEntropyLoss-权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.8
+  name: "loss.types.MixedLoss.two.coef.CrossEntropyLoss"
+  formatter: "%f"
+  help: "第二个损失中的CrossEntropyLoss的权重"
+  type: "inputNumber"
+
+
+- label: "第二组损失-LovaszSoftmaxLoss-权重"
+  min: 0.00001
+  max: 1.0
+  defaultValue: 0.2
+  name: "loss.types.MixedLoss.two.coef.LovaszSoftmaxLoss"
+  formatter: "%f"
+  help: "第二个损失中的LovaszSoftmaxLoss的权重"
+  type: "inputNumber"
+
+- label: "模型训练优化器"
+  options:
+    - "sgd"
+    - "AdamW"
+    - "Momentum"
+  defaultIndex: 1
+  name: "optimizer.type"
+  help: "模型训练优化器"
+  type: "Select"
+
+- label: "权重衰退值"
+  min: 0.00001
+  max: 0.5
+  defaultValue: 0.01
+  name: "optimizer.weight_decay"
+  formatter: "%f"
+  help: "模型优化器的权重衰退值"
+  type: "inputNumber"
+
+- label: "数据增强-逐步缩放-min_scale_factor"
+  min: 0.00001
+  max: 0.999
+  defaultValue: 0.7
+  name: "train_dataset.transforms.ResizeStepScaling.min_scale_factor"
+  formatter: "%f"
+  help: "训练数据集-数据增强-尺度增强-min_scale_factor"
+  type: "inputNumber"
+
+- label: "数据增强-逐步缩放-max_scale_factor"
+  min: 0.00001
+  max: 2.5
+  defaultValue: 1.30
+  name: "train_dataset.transforms.ResizeStepScaling.max_scale_factor"
+  formatter: "%f"
+  help: "训练数据集-数据增强-尺度增强-max_scale_factor"
+  type: "inputNumber"
+
+- label: "数据增强-逐步缩放-scale_step_size"
+  min: 0.00001
+  max: 0.25
+  defaultValue: 0.1
+  name: "train_dataset.transforms.ResizeStepScaling.scale_step_size"
+  formatter: "%f"
+  help: "训练数据集-数据增强-尺度增强-scale_step_size"
+  type: "inputNumber"
+
+- label: "模型结构类型"
+  options:
+    - "语义分割-标准版"
+  defaultIndex: 0
+  name: "networkArchitecture"
+  help: "目前仅支持ocrnet"
+  type: "Select"

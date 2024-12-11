@@ -1,0 +1,46 @@
+# 任务名称，std pdc 产线预先定义
+task_name: task_for_std_pdc
+
+# 训练数据默认为空，等待产线自动填写
+data_load:
+    train:
+        image_dir: images
+        anno_path:
+        - annotations/train_merged_nonveh_0308.json
+        dataset_dir: /root/paddlejob/liubo41-4v100/simplify_input_config/data/20230629/train/cyclist
+        sample_prob: 1
+    eval:
+        image_dir: images
+        anno_path:
+        - annotations/train_merged_nonveh_0308.json
+        dataset_dir: /root/paddlejob/liubo41-4v100/simplify_input_config/data/20230629/train/cyclist
+    infer:
+        image_dir: 'none'
+        anno_path: 'none'
+        dataset_dir: 'none'
+
+# 训练的模板和预训练权重
+base: null                # 由外部指定
+pretrained_model: null    # 根据 base 自动确认
+
+# 任务配置，根据 label_description 自动生成
+data_preprocess: null
+
+# 数据增强策略，std pdc 产线预先定义
+transforms:
+    Train: null
+    Eval: null
+
+# 设置训练超参，自动生成或者有外部指定
+hyperparameters:
+    auto: true
+    batch_size: 1
+    lr: none
+    epochs: none
+ 
+CUDA_VISIBLE_DEVICES: []    # 选择在哪些显卡上进行训练，根据外部指定生成
+
+# 结果保存根路径、实验名 与 实验次数，std pdc 产线预先定义
+output_root_dir: ./output
+experiment_name: ''    # 可以根据自己的实验和用户名确定实验名
+experiment_times: 1    # 该实验要重复做几次
