@@ -1,0 +1,45 @@
+{% load helpers %}
+{% if location is not None %}
+{% with site=location.base_site ancestors=location.ancestors %}
+    <style>
+        .location-hierarchy {
+            list-style-type: none;
+            padding-left: 0px;
+        }
+
+        .location-hierarchy ul {
+            list-style-type: "↳ ";
+            padding-left: 18px;
+        }
+    </style>
+    <ul class="location-hierarchy">
+        {% for region in site.region.get_ancestors %}
+            <li>{{ region|hyperlinked_object }} (Region)
+                <ul>
+        {% endfor %}
+        {% if site and site.region %}
+            <li>{{ site.region|hyperlinked_object }} (Region)
+                <ul>
+        {% endif %}
+            <li>{{ site|hyperlinked_object }} (Site)
+                <ul>
+        {% for ancestor in ancestors %}
+            <li>{{ ancestor|hyperlinked_object:"name" }} ({{ ancestor.location_type|hyperlinked_object:"name" }})
+                <ul>
+        {% endfor %}
+        <li><strong>{{ location|hyperlinked_object:"name" }} ({{ location.location_type|hyperlinked_object:"name" }})</strong></li>
+        {% for ancestor in ancestors %}
+                </ul>
+            </li>
+        {% endfor %}
+                </ul>
+            </li>
+        {% for region in site.region.get_ancestors %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endwith %}
+{% else %}
+    {{ location|placeholder }}
+{% endif %}
