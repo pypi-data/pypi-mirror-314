@@ -1,0 +1,17 @@
+[RoboSAPIENSIO]
+name = {{system.name}}
+description = {{system.description}}
+
+[PACKAGE]
+name = {{package}}
+prefix = {{prefix}}
+
+[Code Generation]
+latest = {{timestamp}}
+
+{% for processor in managingSystem.processors %}
+[env:{{processor.name}}]
+platform = "to be defined"
+IP address = {{processor.IP}}
+runs RAP backbone = {{processor.runs_rap_backbone}}
+{% endfor %}
