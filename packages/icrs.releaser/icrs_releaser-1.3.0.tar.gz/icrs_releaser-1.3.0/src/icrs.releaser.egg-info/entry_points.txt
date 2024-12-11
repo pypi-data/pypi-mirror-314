@@ -1,0 +1,10 @@
+[console_scripts]
+icrs_release = icrs.releaser.fullrelease:main
+
+[zest.releaser.prereleaser.before]
+dev_middle = icrs.releaser.devremover:prereleaser_before
+rm_cflags = icrs.releaser.removecflags:prereleaser_before
+
+[zest.releaser.prereleaser.middle]
+scm_middle = icrs.releaser.setuptools_scm_versionfixer:prereleaser_middle
+version_next = icrs.releaser.versionreplacer:prereleaser_middle

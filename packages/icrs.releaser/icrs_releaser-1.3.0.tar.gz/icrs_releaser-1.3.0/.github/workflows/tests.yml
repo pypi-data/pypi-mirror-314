@@ -1,0 +1,49 @@
+name: tests
+
+on: [push, pull_request]
+
+env:
+  PYTHONHASHSEED: 1042466059
+  ZOPE_INTERFACE_STRICT_IRO: 1
+
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', 'pypy-3.10', '3.11', '3.12', '3.13']
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        cache-dependency-path: setup.py
+    - name: Install dependencies
+      run: |
+        python -m pip install -U pip wheel
+        python -m pip install -U coverage
+        python -m pip install -U -e ".[test,docs]"
+    - name: Test
+      run: |
+        coverage run -m zope.testrunner --package-path src/icrs/releaser icrs.releaser  --auto-color --auto-progress
+        coverage run -m sphinx -b doctest -d docs/_build/doctrees docs docs/_build/doctests
+        coverage combine
+        coverage report
+    - name: Submit to Coveralls
+      # This is a container action, which only runs on Linux.
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        parallel: true
+
+  coveralls_finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        parallel-finished: true
