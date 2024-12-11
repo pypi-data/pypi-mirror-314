@@ -1,0 +1,3 @@
+from ydata.sdk.common.model import BaseModel
+
+class Credentials(BaseModel): ...
