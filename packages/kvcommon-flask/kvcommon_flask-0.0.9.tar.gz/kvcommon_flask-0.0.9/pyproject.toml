@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "kvcommon-flask"
+version = "0.0.9"
+description = "Library of various Flask utils that aren't worthy of their own dedicated libs."
+authors = ["Rob Voigt <code@ravoigt.com>"]
+readme = "README.md"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project.urls]
+Homepage = "https://github.com/RAVoigt/kvcommon-flask"
+Repository = "https://github.com/RAVoigt/kvcommon-flask"
+
+# ================================
+# Tools etc.
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+
+# ================================
+# Dependencies
+[tool.poetry.dependencies]
+python = "^3.11"
+toml = "^0.10.2"
+kvcommon = "^0.1.4"
+
+flask-apscheduler = "^1.13.1"
+flask-http-middleware = "^0.4.2"
+
+
+[tool.poetry.dev-dependencies]
+black = "*"
+ipdb = "*"
+ipython = "*"
+mock = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pyfakefs = "*"
+
+# Extras
+prometheus-client = "^0.20.0"
+prometheus-flask-exporter = "^0.23.0"
+
+
+[tool.poetry.extras]
+metrics = ["prometheus-client", "prometheus-flask-exporter"]
+traces = ["opentelemetry-exporter-otlp", "opentelemetry-instrumentation-flask", "opentelemetry-instrumentation-logging"]
