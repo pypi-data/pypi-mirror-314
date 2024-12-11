@@ -1,0 +1,884 @@
+Metadata-Version: 2.1
+Name: git-cola
+Version: 4.10.0
+Summary: Git Cola is a powerful Git GUI with a slick and intuitive user interface.
+Author-email: David Aguilar <davvid@gmail.com>
+License: GNU GENERAL PUBLIC LICENSE
+        		       Version 2, June 1991
+        
+         Copyright (C) 1989, 1991 Free Software Foundation, Inc.,
+         51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+         Everyone is permitted to copy and distribute verbatim copies
+         of this license document, but changing it is not allowed.
+        
+        			    Preamble
+        
+          The licenses for most software are designed to take away your
+        freedom to share and change it.  By contrast, the GNU General Public
+        License is intended to guarantee your freedom to share and change free
+        software--to make sure the software is free for all its users.  This
+        General Public License applies to most of the Free Software
+        Foundation's software and to any other program whose authors commit to
+        using it.  (Some other Free Software Foundation software is covered by
+        the GNU Lesser General Public License instead.)  You can apply it to
+        your programs, too.
+        
+          When we speak of free software, we are referring to freedom, not
+        price.  Our General Public Licenses are designed to make sure that you
+        have the freedom to distribute copies of free software (and charge for
+        this service if you wish), that you receive source code or can get it
+        if you want it, that you can change the software or use pieces of it
+        in new free programs; and that you know you can do these things.
+        
+          To protect your rights, we need to make restrictions that forbid
+        anyone to deny you these rights or to ask you to surrender the rights.
+        These restrictions translate to certain responsibilities for you if you
+        distribute copies of the software, or if you modify it.
+        
+          For example, if you distribute copies of such a program, whether
+        gratis or for a fee, you must give the recipients all the rights that
+        you have.  You must make sure that they, too, receive or can get the
+        source code.  And you must show them these terms so they know their
+        rights.
+        
+          We protect your rights with two steps: (1) copyright the software, and
+        (2) offer you this license which gives you legal permission to copy,
+        distribute and/or modify the software.
+        
+          Also, for each author's protection and ours, we want to make certain
+        that everyone understands that there is no warranty for this free
+        software.  If the software is modified by someone else and passed on, we
+        want its recipients to know that what they have is not the original, so
+        that any problems introduced by others will not reflect on the original
+        authors' reputations.
+        
+          Finally, any free program is threatened constantly by software
+        patents.  We wish to avoid the danger that redistributors of a free
+        program will individually obtain patent licenses, in effect making the
+        program proprietary.  To prevent this, we have made it clear that any
+        patent must be licensed for everyone's free use or not licensed at all.
+        
+          The precise terms and conditions for copying, distribution and
+        modification follow.
+        
+        		    GNU GENERAL PUBLIC LICENSE
+           TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+        
+          0. This License applies to any program or other work which contains
+        a notice placed by the copyright holder saying it may be distributed
+        under the terms of this General Public License.  The "Program", below,
+        refers to any such program or work, and a "work based on the Program"
+        means either the Program or any derivative work under copyright law:
+        that is to say, a work containing the Program or a portion of it,
+        either verbatim or with modifications and/or translated into another
+        language.  (Hereinafter, translation is included without limitation in
+        the term "modification".)  Each licensee is addressed as "you".
+        
+        Activities other than copying, distribution and modification are not
+        covered by this License; they are outside its scope.  The act of
+        running the Program is not restricted, and the output from the Program
+        is covered only if its contents constitute a work based on the
+        Program (independent of having been made by running the Program).
+        Whether that is true depends on what the Program does.
+        
+          1. You may copy and distribute verbatim copies of the Program's
+        source code as you receive it, in any medium, provided that you
+        conspicuously and appropriately publish on each copy an appropriate
+        copyright notice and disclaimer of warranty; keep intact all the
+        notices that refer to this License and to the absence of any warranty;
+        and give any other recipients of the Program a copy of this License
+        along with the Program.
+        
+        You may charge a fee for the physical act of transferring a copy, and
+        you may at your option offer warranty protection in exchange for a fee.
+        
+          2. You may modify your copy or copies of the Program or any portion
+        of it, thus forming a work based on the Program, and copy and
+        distribute such modifications or work under the terms of Section 1
+        above, provided that you also meet all of these conditions:
+        
+            a) You must cause the modified files to carry prominent notices
+            stating that you changed the files and the date of any change.
+        
+            b) You must cause any work that you distribute or publish, that in
+            whole or in part contains or is derived from the Program or any
+            part thereof, to be licensed as a whole at no charge to all third
+            parties under the terms of this License.
+        
+            c) If the modified program normally reads commands interactively
+            when run, you must cause it, when started running for such
+            interactive use in the most ordinary way, to print or display an
+            announcement including an appropriate copyright notice and a
+            notice that there is no warranty (or else, saying that you provide
+            a warranty) and that users may redistribute the program under
+            these conditions, and telling the user how to view a copy of this
+            License.  (Exception: if the Program itself is interactive but
+            does not normally print such an announcement, your work based on
+            the Program is not required to print an announcement.)
+        
+        These requirements apply to the modified work as a whole.  If
+        identifiable sections of that work are not derived from the Program,
+        and can be reasonably considered independent and separate works in
+        themselves, then this License, and its terms, do not apply to those
+        sections when you distribute them as separate works.  But when you
+        distribute the same sections as part of a whole which is a work based
+        on the Program, the distribution of the whole must be on the terms of
+        this License, whose permissions for other licensees extend to the
+        entire whole, and thus to each and every part regardless of who wrote it.
+        
+        Thus, it is not the intent of this section to claim rights or contest
+        your rights to work written entirely by you; rather, the intent is to
+        exercise the right to control the distribution of derivative or
+        collective works based on the Program.
+        
+        In addition, mere aggregation of another work not based on the Program
+        with the Program (or with a work based on the Program) on a volume of
+        a storage or distribution medium does not bring the other work under
+        the scope of this License.
+        
+          3. You may copy and distribute the Program (or a work based on it,
+        under Section 2) in object code or executable form under the terms of
+        Sections 1 and 2 above provided that you also do one of the following:
+        
+            a) Accompany it with the complete corresponding machine-readable
+            source code, which must be distributed under the terms of Sections
+            1 and 2 above on a medium customarily used for software interchange; or,
+        
+            b) Accompany it with a written offer, valid for at least three
+            years, to give any third party, for a charge no more than your
+            cost of physically performing source distribution, a complete
+            machine-readable copy of the corresponding source code, to be
+            distributed under the terms of Sections 1 and 2 above on a medium
+            customarily used for software interchange; or,
+        
+            c) Accompany it with the information you received as to the offer
+            to distribute corresponding source code.  (This alternative is
+            allowed only for noncommercial distribution and only if you
+            received the program in object code or executable form with such
+            an offer, in accord with Subsection b above.)
+        
+        The source code for a work means the preferred form of the work for
+        making modifications to it.  For an executable work, complete source
+        code means all the source code for all modules it contains, plus any
+        associated interface definition files, plus the scripts used to
+        control compilation and installation of the executable.  However, as a
+        special exception, the source code distributed need not include
+        anything that is normally distributed (in either source or binary
+        form) with the major components (compiler, kernel, and so on) of the
+        operating system on which the executable runs, unless that component
+        itself accompanies the executable.
+        
+        If distribution of executable or object code is made by offering
+        access to copy from a designated place, then offering equivalent
+        access to copy the source code from the same place counts as
+        distribution of the source code, even though third parties are not
+        compelled to copy the source along with the object code.
+        
+          4. You may not copy, modify, sublicense, or distribute the Program
+        except as expressly provided under this License.  Any attempt
+        otherwise to copy, modify, sublicense or distribute the Program is
+        void, and will automatically terminate your rights under this License.
+        However, parties who have received copies, or rights, from you under
+        this License will not have their licenses terminated so long as such
+        parties remain in full compliance.
+        
+          5. You are not required to accept this License, since you have not
+        signed it.  However, nothing else grants you permission to modify or
+        distribute the Program or its derivative works.  These actions are
+        prohibited by law if you do not accept this License.  Therefore, by
+        modifying or distributing the Program (or any work based on the
+        Program), you indicate your acceptance of this License to do so, and
+        all its terms and conditions for copying, distributing or modifying
+        the Program or works based on it.
+        
+          6. Each time you redistribute the Program (or any work based on the
+        Program), the recipient automatically receives a license from the
+        original licensor to copy, distribute or modify the Program subject to
+        these terms and conditions.  You may not impose any further
+        restrictions on the recipients' exercise of the rights granted herein.
+        You are not responsible for enforcing compliance by third parties to
+        this License.
+        
+          7. If, as a consequence of a court judgment or allegation of patent
+        infringement or for any other reason (not limited to patent issues),
+        conditions are imposed on you (whether by court order, agreement or
+        otherwise) that contradict the conditions of this License, they do not
+        excuse you from the conditions of this License.  If you cannot
+        distribute so as to satisfy simultaneously your obligations under this
+        License and any other pertinent obligations, then as a consequence you
+        may not distribute the Program at all.  For example, if a patent
+        license would not permit royalty-free redistribution of the Program by
+        all those who receive copies directly or indirectly through you, then
+        the only way you could satisfy both it and this License would be to
+        refrain entirely from distribution of the Program.
+        
+        If any portion of this section is held invalid or unenforceable under
+        any particular circumstance, the balance of the section is intended to
+        apply and the section as a whole is intended to apply in other
+        circumstances.
+        
+        It is not the purpose of this section to induce you to infringe any
+        patents or other property right claims or to contest validity of any
+        such claims; this section has the sole purpose of protecting the
+        integrity of the free software distribution system, which is
+        implemented by public license practices.  Many people have made
+        generous contributions to the wide range of software distributed
+        through that system in reliance on consistent application of that
+        system; it is up to the author/donor to decide if he or she is willing
+        to distribute software through any other system and a licensee cannot
+        impose that choice.
+        
+        This section is intended to make thoroughly clear what is believed to
+        be a consequence of the rest of this License.
+        
+          8. If the distribution and/or use of the Program is restricted in
+        certain countries either by patents or by copyrighted interfaces, the
+        original copyright holder who places the Program under this License
+        may add an explicit geographical distribution limitation excluding
+        those countries, so that distribution is permitted only in or among
+        countries not thus excluded.  In such case, this License incorporates
+        the limitation as if written in the body of this License.
+        
+          9. The Free Software Foundation may publish revised and/or new versions
+        of the General Public License from time to time.  Such new versions will
+        be similar in spirit to the present version, but may differ in detail to
+        address new problems or concerns.
+        
+        Each version is given a distinguishing version number.  If the Program
+        specifies a version number of this License which applies to it and "any
+        later version", you have the option of following the terms and conditions
+        either of that version or of any later version published by the Free
+        Software Foundation.  If the Program does not specify a version number of
+        this License, you may choose any version ever published by the Free Software
+        Foundation.
+        
+          10. If you wish to incorporate parts of the Program into other free
+        programs whose distribution conditions are different, write to the author
+        to ask for permission.  For software which is copyrighted by the Free
+        Software Foundation, write to the Free Software Foundation; we sometimes
+        make exceptions for this.  Our decision will be guided by the two goals
+        of preserving the free status of all derivatives of our free software and
+        of promoting the sharing and reuse of software generally.
+        
+        			    NO WARRANTY
+        
+          11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+        FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+        OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+        PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+        OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+        TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
+        PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+        REPAIR OR CORRECTION.
+        
+          12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+        WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+        REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+        INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
+        OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
+        TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+        YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+        PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+        POSSIBILITY OF SUCH DAMAGES.
+        
+        		     END OF TERMS AND CONDITIONS
+        
+        	    How to Apply These Terms to Your New Programs
+        
+          If you develop a new program, and you want it to be of the greatest
+        possible use to the public, the best way to achieve this is to make it
+        free software which everyone can redistribute and change under these terms.
+        
+          To do so, attach the following notices to the program.  It is safest
+        to attach them to the start of each source file to most effectively
+        convey the exclusion of warranty; and each file should have at least
+        the "copyright" line and a pointer to where the full notice is found.
+        
+            <one line to give the program's name and a brief idea of what it does.>
+            Copyright (C) <year>  <name of author>
+        
+            This program is free software; you can redistribute it and/or modify
+            it under the terms of the GNU General Public License as published by
+            the Free Software Foundation; either version 2 of the License, or
+            (at your option) any later version.
+        
+            This program is distributed in the hope that it will be useful,
+            but WITHOUT ANY WARRANTY; without even the implied warranty of
+            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+            GNU General Public License for more details.
+        
+            You should have received a copy of the GNU General Public License along
+            with this program; if not, write to the Free Software Foundation, Inc.,
+            51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+        
+        Also add information on how to contact you by electronic and paper mail.
+        
+        If the program is interactive, make it output a short notice like this
+        when it starts in an interactive mode:
+        
+            Gnomovision version 69, Copyright (C) year name of author
+            Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+            This is free software, and you are welcome to redistribute it
+            under certain conditions; type `show c' for details.
+        
+        The hypothetical commands `show w' and `show c' should show the appropriate
+        parts of the General Public License.  Of course, the commands you use may
+        be called something other than `show w' and `show c'; they could even be
+        mouse-clicks or menu items--whatever suits your program.
+        
+        You should also get your employer (if you work as a programmer) or your
+        school, if any, to sign a "copyright disclaimer" for the program, if
+        necessary.  Here is a sample; alter the names:
+        
+          Yoyodyne, Inc., hereby disclaims all copyright interest in the program
+          `Gnomovision' (which makes passes at compilers) written by James Hacker.
+        
+          <signature of Ty Coon>, 1 April 1989
+          Ty Coon, President of Vice
+        
+        This General Public License does not permit incorporating your program into
+        proprietary programs.  If your program is a subroutine library, you may
+        consider it more useful to permit linking proprietary applications with the
+        library.  If this is what you want to do, use the GNU Lesser General
+        Public License instead of this License.
+        
+Classifier: Development Status :: 6 - Mature
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Version Control :: Git
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: polib>=1.0.0
+Requires-Dist: qtpy>=1.1.0
+Requires-Dist: importlib-metadata; python_version < "3.8"
+Provides-Extra: build
+Requires-Dist: build; extra == "build"
+Requires-Dist: pynsist; extra == "build"
+Requires-Dist: setuptools>=64.0; extra == "build"
+Requires-Dist: setuptools-scm[toml]>=3.4.1; extra == "build"
+Requires-Dist: twine; extra == "build"
+Requires-Dist: wheel; extra == "build"
+Provides-Extra: cov
+Requires-Dist: pytest-cov; extra == "cov"
+Provides-Extra: dev
+Requires-Dist: cercis; extra == "dev"
+Requires-Dist: pyupgrade; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: furo; extra == "docs"
+Requires-Dist: sphinx; extra == "docs"
+Requires-Dist: rst.linker>=1.9; extra == "docs"
+Provides-Extra: extras
+Requires-Dist: notify2; extra == "extras"
+Requires-Dist: send2trash; extra == "extras"
+Requires-Dist: pyobjc; sys_platform == "darwin" and extra == "extras"
+Provides-Extra: pyqt5
+Requires-Dist: PyQt5; extra == "pyqt5"
+Provides-Extra: pyqt6
+Requires-Dist: PyQt6; extra == "pyqt6"
+Provides-Extra: pyside2
+Requires-Dist: PySide2; extra == "pyside2"
+Provides-Extra: pyside6
+Requires-Dist: PySide6; extra == "pyside6"
+Provides-Extra: testing
+Requires-Dist: pytest>=6; extra == "testing"
+Requires-Dist: pytest-checkdocs>=2.4; extra == "testing"
+Requires-Dist: pytest-enabler>=2.2; extra == "testing"
+Requires-Dist: pytest-ruff>=0.2.1; extra == "testing"
+
+# git-cola: The highly caffeinated Git GUI
+
+Git Cola is a powerful Git GUI with a slick and intuitive user interface.
+
+    git clone https://github.com/git-cola/git-cola.git
+
+[![License](https://img.shields.io/:license-GPL-green.svg)](LICENSE)
+[![Build status](https://github.com/git-cola/git-cola/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/git-cola/git-cola/actions/workflows/main.yml)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/251/badge)](https://bestpractices.coreinfrastructure.org/projects/251)
+[![pre-commit.ci](https://results.pre-commit.ci/badge/github/git-cola/git-cola/main.svg)](https://results.pre-commit.ci/latest/github/git-cola/git-cola/main)
+
+* [Screenshots](https://git-cola.github.io/screenshots.html)
+
+* [Downloads](https://git-cola.github.io/downloads.html)
+
+
+# Documentation
+
+* [Keyboard shortcuts](https://git-cola.github.io/share/doc/git-cola/hotkeys.html)
+
+* [HTML documentation](https://git-cola.readthedocs.io/en/latest/)
+
+* [Git Cola documentation](docs/git-cola.rst)
+
+* [Git DAG documentation](docs/git-dag.rst)
+
+* [Contributing guidelines](CONTRIBUTING.md)
+
+
+# Requirements
+
+## Build
+
+* [Sphinx](http://sphinx-doc.org/) is used to generate the documentation.
+
+## Runtime
+
+* [Git](https://git-scm.com/) 2.2.0 or newer.
+
+* [Python](https://python.org/) 3.6 or newer.
+
+* [QtPy](https://github.com/spyder-ide/qtpy) 2.0.0 or newer.
+
+Git Cola uses QtPy, so you can choose between PyQt6, PyQt5 and PySide2 by setting
+the `QT_API` environment variable to `pyqt6`, `pyqt5` or `pyside2` as desired.
+`qtpy` defaults to `pyqt5` and falls back to `pyqt6` and `pyside2` if `pyqt5`
+is not installed.
+
+Any of the following Python Qt libraries must be installed:
+
+* [PyQt5 / PyQt6](https://www.riverbankcomputing.com/software/pyqt/download5)
+  5.9 or newer is required. Qt 6.2 or newer is also supported via QtPy.
+
+* [PySide2](https://github.com/PySide/PySide)
+  5.12.0 or newer.
+
+
+## Optional Features
+
+Git Cola enables additional features when the following
+Python modules are installed.
+
+[Send2Trash](https://pypi.org/project/Send2Trash)
+enables cross-platform "Send to Trash" functionality.
+([source](https://github.com/hsoft/send2trash))
+
+[notify2](https://pypi.org/project/notify2)
+enables delivery of desktop notifications.
+([source](https://bitbucket.org/takluyver/pynotify2))
+
+[pyobjc](https://pypi.org/project/pyobjc)
+enables macOS-specific application themes on macOS.
+([source](https://github.com/ronaldoussoren/pyobjc))
+
+
+# Installation
+
+There are several ways to install Git Cola but you do not need to "install" Git Cola
+in order to run it.
+
+Git Cola is designed to run directly from its source tree. Installation is optional.
+
+
+## From Source
+
+The recommended approach for running the latest Git Cola version is to install its
+PyQt dependencies using your distribution's package manager and then run
+`./bin/git-cola` directly from source.
+
+
+## Installing PyQt dependencies on Debian / Ubuntu systems
+
+Git Cola works with either PyQt5 or PyQt6 because it uses the
+[qtpy](https://github.com/spyder-ide/qtpy) library for PyQt compatibility.
+
+### PyQt5
+
+Users on newer Debian/Ubuntu version can install a single package to run from source.
+
+```bash
+sudo apt install python3-qtpy
+```
+
+If you are on an older version that does not have `python3-qtpy` available then you can
+install the following packages directly.
+
+```bash
+sudo apt install python3-pyqt5 python3-pyqt5.qtopengl python3-pyqt5.qtwebengine python3-pyqt5.qtsvg
+```
+
+### PyQt6
+
+If you'd like to use Git Cola with the newer PyQt6 ecosystem then you can install these
+packages instead of PyQt5.
+
+```bash
+sudo apt install python3-pyqt6 python3-pyqt6.qtsvg python3-pyqt6.qtwebengine
+```
+
+At this point you should be able to launch `./bin/git-cola` from the source tree and
+there is nothing more to do.
+
+The further instructions below detail how to install Git Cola from PyPI or how to
+install it into a location separate from the source tree.
+
+
+## Linux
+
+Linux is it! Your distro has probably already packaged `git-cola`.
+If not, please file a bug against your distribution ;-)
+
+### Arch
+
+Available in the [AUR](https://aur.archlinux.org/packages/git-cola/).
+
+### Debian, Ubuntu
+
+    apt install git-cola
+
+### Fedora
+
+    dnf install git-cola
+
+### Gentoo
+
+    emerge git-cola
+
+### OpenSUSE, SLE
+
+    zypper install git-cola
+
+### Slackware
+
+Available in [SlackBuilds.org](http://slackbuilds.org/result/?search=git-cola).
+
+### Ubuntu
+
+[See here](https://packages.ubuntu.com/search?keywords=git-cola) for the
+versions that are available in Ubuntu's repositories.
+
+## FreeBSD
+
+    # Install from official binary packages
+    pkg install -r FreeBSD devel/git-cola
+
+    # Build from source
+    cd /usr/ports/devel/git-cola && make clean install
+
+## Install into a Python Virtualenv from PyPI using pip
+
+**IMPORTANT**: never run `pip install` or `garden install` outside of a
+Python virtualenv or as root!
+
+**IMPORTANT**: if you are on Linux distributions where PyQt6 or PyQt5 are available from
+your package manager then it is highly recommended to install those dependencies using
+your system's package manager. See the section above for details.
+
+One way to install the latest released version is to use `venv` (virtualenv) and `pip`.
+This installs [git-cola from pypi.org](https://pypi.org/project/git-cola/).
+
+    python3 -m venv --system-site-packages env3
+    ./env3/bin/pip install git-cola
+    ./env3/bin/git-cola
+
+Add the `env3/bin` directory to your `PATH` or symlink to `bin/git-cola` from
+somewhere in your `PATH` such as `~/.local/bin/git-cola`, and you can launch
+Git Cola like any other built-in `git` command:
+
+    git cola
+    git dag
+
+
+## Install into a Python Virtualenv from Source
+
+If you don't have PyQt installed then the easiest way to get it is to use a Python
+virtualenv and install Git Cola into it in "editable" mode.
+
+This install method lets you upgrade Git Cola by running `git pull`.
+
+    # Create a virtualenv called "env3" and activate it.
+    python3 -m venv --system-site-packages env3
+
+    # Install PyQt and (optional) extra packages to enable all features.
+    ./env3/bin/pip install --editable '.[extras,pyqt6]'
+
+    # Run Git Cola via the "git-cola" Git subcommand.
+    source env3/bin/activate
+    git cola
+
+If you add `env3/bin` (or symlink to `env3/bin/git-cola` ) somewhere in your `$PATH` then you can
+run `git cola` as if it were a builtin `git` command from outside of the virtualenv
+(e.g. after running "deactivate" or when opening a new shell).
+
+
+## Standalone Installation from Source
+
+Running `garden -D prefix=$HOME/.local install` will install Git Cola in your
+`$HOME/.local` directory (`$HOME/.local/bin/git-cola`, `$HOME/.local/lib`, etc).
+
+This installation method assumes that the `qtpy` and `PyQt*` dependencies have
+been pre-installed.
+
+The Garden recipe also supports `DESTDIR` to support creating packages for Linux package
+managers:
+
+    garden -D DESTDIR=/tmp/stage -D prefix=/usr/local install
+
+If you do not have `garden` available then `make` can be used instead.
+The `Makefile` supports staged installs using the conventional
+[DESTDIR](https://www.gnu.org/software/make/manual/html_node/DESTDIR.html) and
+[prefix](https://www.gnu.org/software/make/manual/html_node/Directory-Variables.html)
+variables.
+
+    make DESTDIR=/tmp/stage prefix=/usr/local install
+
+
+## macOS
+
+For most end-users we recommend using either Homebrew or installing into
+a Python virtualenv as described above.
+
+You can install Git Cola from source using the same steps as above.
+
+### Homebrew
+
+An easy way to install Git Cola is to use [Homebrew](https://brew.sh/) .
+Use Homebrew to install the git-cola recipe:
+
+    brew install git-cola
+
+If you install using Homebrew you can stop at this step.
+You don't need to clone the repo or anything.
+
+### git-cola.app
+
+If you have all of the dependencies installed, either via `pip` or `brew` then
+you can build a shell `git-cola.app` app bundle wrapper for use in `/Applications`.
+
+If you'd like to build a `git-cola.app` bundle for `/Applications` run this command:
+
+    garden macos/app
+
+You will need to periodically rebuild the app wrapper whenever Python is upgraded.
+
+### Updating macOS and Homebrew
+
+Updating macOS can often break Homebrew-managed software.
+
+If you update macOS and Git Cola stops working then then you probably need to re-install
+Git Cola's dependencies.
+
+Re-installing from scratch using the instructions below can get things back in shape.
+
+    brew update
+
+    brew uninstall git-cola
+    brew uninstall pyqt
+    brew uninstall pyqt@5
+    brew autoremove
+
+    brew install git-cola
+
+
+## Windows
+
+IMPORTANT If you have a 64-bit machine, install the 64-bit versions only.
+Do not mix 32-bit and 64-bit versions.
+
+Download and install the following:
+
+* [Git for Windows](https://git-for-windows.github.io/)
+
+* [Git Cola](https://github.com/git-cola/git-cola/releases)
+
+Once these are installed you can run Git Cola from the Start menu.
+
+See "Windows (Continued)" below for more details.
+
+If you'd like to install Git Cola with
+[winget](https://github.com/microsoft/winget-cli) run the following command:
+
+    winget install git-cola.git-cola
+
+As there is no dependency resolution yet you have to install Git as well with:
+
+    winget install Git.Git
+
+# Goodies
+
+Git Cola ships with an interactive rebase editor called `git-cola-sequence-editor`.
+`git-cola-sequence-editor` is used to reorder and choose commits when rebasing.
+Start an interactive rebase through the "Rebase" menu, or through the
+`git cola rebase` sub-command to use the `git-cola-sequence-editor`:
+
+    git cola rebase @{upstream}
+
+`git-cola-sequence-editor` can be launched independently of git cola by telling
+`git rebase` to use it as its editor through the `GIT_SEQUENCE_EDITOR`
+environment variable:
+
+    export GIT_SEQUENCE_EDITOR="$HOME/git-cola/bin/git-cola-sequence-editor"
+    git rebase -i @{upstream}
+
+## Shell Completions
+
+Shell completion scripts are available for bash and zsh.
+Each script contains instructions on how to install and activate the completions.
+
+* [bash completion script](contrib/git-cola-completion.bash)
+
+* [zsh completion script](contrib/_git-cola)
+
+
+# Git Cola Sub-commands
+
+The `git-cola` command exposes various sub-commands that allow you to quickly
+launch tools that are available from within the git-cola interface.
+For example, `git cola find` launches the file finder,
+and `git cola grep` launches the grep tool.
+
+See `git cola --help-commands` for the full list of commands.
+
+    $ git cola --help-commands
+    usage: git-cola [-h]
+
+                    {cola,am,archive,branch,browse,config,
+                     dag,diff,fetch,find,grep,merge,pull,push,
+                     rebase,remote,search,stash,tag,version}
+                    ...
+
+    valid commands:
+      {cola,am,archive,branch,browse,config,
+       dag,diff,fetch,find,grep,merge,pull,push,
+       rebase,remote,search,stash,tag,version}
+
+        cola                start git-cola
+        am                  apply patches using "git am"
+        archive             save an archive
+        branch              create a branch
+        browse              browse repository
+        config              edit configuration
+        dag                 start git-dag
+        diff                view diffs
+        fetch               fetch remotes
+        find                find files
+        grep                grep source
+        merge               merge branches
+        pull                pull remote branches
+        push                push remote branches
+        rebase              interactive rebase
+        remote              edit remotes
+        search              search commits
+        stash               stash and unstash changes
+        tag                 create tags
+        version             print the version
+
+## Development
+
+[![Good First Issues](https://img.shields.io/github/issues/git-cola/git-cola/good%20first%20issue?style=flat&logo=github&logoColor=green&label=Good%20First%20issues)](https://github.com/git-cola/git-cola/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+[![Help Wanted Issues](https://img.shields.io/github/issues/git-cola/git-cola/help%20wanted?style=flat&logo=github&logoColor=b545d1&label=%22Help%20Wanted%22%20issues)](https://github.com/git-cola/git-cola/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+[![Help Wanted PRs](https://img.shields.io/github/issues-pr/git-cola/git-cola/help%20wanted?style=flat&logo=github&logoColor=b545d1&label=%22Help%20Wanted%22%20PRs)](https://github.com/git-cola/git-cola/pulls?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+[![Open Issues](https://img.shields.io/github/issues/git-cola/git-cola?style=flat&logo=github&logoColor=red&label=Issues)](https://github.com/git-cola/git-cola/issues?q=is%3Aopen)
+
+If you already have Git Cola's dependencies installed then you can
+start `cola` as a Python module if you have the source code available.
+
+    python -m cola
+    python -m cola dag
+
+
+The following commands should be run during development:
+
+    # Run the unit tests
+    $ garden test
+
+    # Run tests and doc checks
+    $ garden check
+
+    # Run tests against multiple python interpreters using tox
+    $ garden tox
+
+The test suite can be found in the [test](test) directory.
+
+Commits and pull requests are automatically tested for code quality
+using [GitHub Actions](https://github.com/git-cola/git-cola/actions/workflows/main.yml).
+
+Auto-format `cola/i18n/*.po` files before committing when updating translations:
+
+    $ garden po
+
+When submitting patches, consult the
+[contributing guidelines](CONTRIBUTING.md).
+
+
+## Packaging Notes
+
+Git Cola installs its modules into the default Python site-packages directory
+(e.g. `lib/python3.7/site-packages`) using setuptools.
+
+While end-users can use `pip install git-cola` to install Git Cola, distribution
+packagers should use the `garden -D prefix=/usr install` process. Git Cola's Garden
+recipe wraps `pip install --prefix=<prefix>` to provide a packaging-friendly
+`garden install` target.
+
+
+# Windows (Continued)
+
+## Microsoft Visual C++ 2015 Redistributable
+
+Earlier versions of Git Cola may have shipped without `vcruntime140.dll`  and may
+not run on machines that are missing this DLL.
+
+To fix this, download the
+[Microsoft Visual C++ 2015 Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=52685)
+and install it
+
+Git Cola v4.0.0 and newer include this DLL and do not require this to be installed
+separately.
+
+## Development
+
+In order to develop Git Cola on Windows you will need to install
+Python3 and pip.  Install PyQt5 using `pip install PyQt5`
+to make the PyQt5 bindings available to Python.
+
+Once these are installed you can use `python.exe` to run
+directly from the source tree.  For example, from a Git Bash terminal:
+
+    /c/Python39/python.exe ./bin/git-cola
+
+## Multiple Python versions
+
+If you have multiple versions of Python installed, the `contrib/win32/cola`
+launcher script might choose the newer version instead of the python
+that has PyQt installed.  In order to resolve this, you can set the
+`cola.pythonlocation` git configuration variable to tell cola where to
+find python.  For example:
+
+    git config --global cola.pythonlocation /c/Python39
+
+## Building Windows Installers
+
+Windows installers are built using
+
+* [Pynsist](https://pynsist.readthedocs.io/en/latest/).
+
+* [NSIS](http://nsis.sourceforge.net/Main_Page) is also needed.
+
+To build the installer using Pynsist run:
+
+    ./contrib/win32/run-pynsist.sh
+
+This will generate an installer in `build/nsis/`.
+
+## Windows "History Browser" Configuration Upgrade
+
+You may need to configure your history browser if you are upgrading from an
+older version of Git Cola on Windows.
+
+`gitk` was originally the default history browser, but `gitk` cannot be
+launched as-is on Windows because `gitk` is a shell script.
+
+If you are configured to use `gitk`, then change your configuration to
+go through Git's `sh.exe` on Windows.  Similarly, we must go through
+`python.exe` if we want to use `git-dag`.
+
+If you want to use gitk as your history browser open the
+Preferences screen and change the history browser command to:
+
+    "C:/Program Files/Git/bin/sh.exe" --login -i C:/Git/bin/gitk
+
+`git-dag` became the default history browser on Windows in `v2.3`, so new
+users do not need to configure anything.
