@@ -1,0 +1,69 @@
+Metadata-Version: 2.1
+Name: terracatalogueclient
+Version: 0.1.19
+Summary: Client for the Terrascope EO catalogue
+Home-page: https://github.com/VITObelgium/terracatalogueclient
+Author: Stijn Caerts
+Author-email: stijn.caerts@vito.be
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests
+Requires-Dist: requests-auth ~=6.0
+Requires-Dist: shapely
+Requires-Dist: humanfriendly
+Requires-Dist: boto3
+Provides-Extra: dev
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: ruff ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: sphinx ; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints ; extra == 'docs'
+
+# TerraCatalogueClient
+
+TerraCatalogueClient is a Python client for the [Terrascope](https://terrascope.be/) EO catalogue. 
+This client uses the OpenSearch REST service of the catalogue and makes it easier to query and download EO data products in Python.
+
+More information about the OpenSearch interface can be found in the [Terrascope Documentation](https://docs.terrascope.be/#/Developers/WebServices/TerraCatalogue/TerraCatalogue).
+
+## Documentation
+Information on the usage of the Python client and a full API overview can be found in [the package documentation](https://vitobelgium.github.io/terracatalogueclient/).
+
+## Installation
+
+This package is available in PyPI and the public Terrascope repository and can be installed using `pip`. 
+When you are using a [Terrascope Virtual Machine (VM) or Notebooks](https://terrascope.be/en/services), the package is already pre-installed for you.
+
+### From PyPI
+
+  ```shell
+  $ pip install terracatalogueclient
+  ```
+
+### From the Terrascope repository
+- add the Terrascope PyPi repository in your [`pip` configuration file](https://pip.pypa.io/en/stable/user_guide/#configuration)
+    ```ini
+    [global]
+    extra-index-url = https://artifactory.vgt.vito.be/artifactory/api/pypi/python-packages/simple
+    ```
+- install the `terracatalogueclient` package
+    ```shell
+    $ pip install terracatalogueclient
+    ```
+Or provide the Terrascope PyPi repository directly to the installation command:
+```shell
+$ pip install --extra-index-url https://artifactory.vgt.vito.be/artifactory/api/pypi/python-packages/simple terracatalogueclient
+```
+
+## Development
+### Building the docs
+Install the documentation dependencies:
+```
+$ pip install -e .[docs]
+```
+
+Build the documentation:
+```
+$ cd docs/
+$ make html
+```
