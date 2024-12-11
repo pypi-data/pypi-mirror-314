@@ -1,0 +1,113 @@
+Metadata-Version: 2.1
+Name: predocs
+Version: 1.3.0
+Summary: PreDoCS (Preliminary Design of Composite Structures) is Python tool for a fast evaluation of wing structure concepts i.e. for a multi-disciplinary design optimization.
+Author-email: Edgar Werthen <edgar.werthen@dlr.de>, Daniel Hardt <daniel@daniel-hardt.de>
+License: <!--
+        SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+        SPDX-License-Identifier: MIT
+        -->
+        
+        
+        ## License
+        
+        Copyright © 2024 German Aerospace Center (DLR)
+        
+        This work is licensed under multiple licenses:
+        - The source code and the accompanying material are licensed under [MIT](LICENSES/MIT.txt).
+        - The documentation and the resulting plots are licensed under [CC-BY-4.0](LICENSES/CC-BY-4.0.txt).
+        
+        Please see the individual files for more accurate information.
+        
+        > **Hint:** We provided the copyright and license information in accordance to the [REUSE Specification 3.0](https://reuse.software/spec/).
+        
+Project-URL: Homepage, https://gitlab.dlr.de/vcp/predocs/predocs/
+Project-URL: Documentation, https://vcp.pages.gitlab.dlr.de/predocs/predocs/
+Project-URL: Homepage standalone, https://gitlab.com/DLR-SY/predocs
+Project-URL: Documentation standalone, https://dlr-sy.gitlab.io/predocs
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: numpy<2
+Requires-Dist: scipy
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: networkx
+Requires-Dist: cloudpickle
+Requires-Dist: deepdiff
+Requires-Dist: openpyxl
+Requires-Dist: cython
+Requires-Dist: ruamel.yaml
+Provides-Extra: full
+Requires-Dist: openpyxl; extra == "full"
+Requires-Dist: PySide6; extra == "full"
+Requires-Dist: pillow; extra == "full"
+Requires-Dist: sympy; extra == "full"
+Requires-Dist: jupyter; extra == "full"
+Requires-Dist: mathjax; extra == "full"
+Provides-Extra: build-docs
+Requires-Dist: sphinx; extra == "build-docs"
+Requires-Dist: sphinx_rtd_theme; extra == "build-docs"
+Requires-Dist: myst_parser; extra == "build-docs"
+Requires-Dist: pandoc; extra == "build-docs"
+Requires-Dist: jupyter; extra == "build-docs"
+Requires-Dist: sympy; extra == "build-docs"
+Requires-Dist: pillow; extra == "build-docs"
+Requires-Dist: nbsphinx; extra == "build-docs"
+Requires-Dist: h5py; extra == "build-docs"
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: pytest-env; extra == "tests"
+Requires-Dist: pytest-cov; extra == "tests"
+Requires-Dist: pytest-xdist; extra == "tests"
+Requires-Dist: pytest-durations; extra == "tests"
+Requires-Dist: coverage; extra == "tests"
+Requires-Dist: nbval; extra == "tests"
+Requires-Dist: h5py; extra == "tests"
+Requires-Dist: deepdiff; extra == "tests"
+
+# PreDoCS: Preliminary Design of Composite Structures
+
+PreDoCS (Preliminary Design of Composite Structures) is a Python tool for fast evaluation of
+wing structure concepts i.e. for a multi-disciplinary design optimization.
+
+
+## Install PreDoCS
+
+Create an [Anaconda](https://anaconda.org/) environment:
+
+    conda create -n predocs python=3.11
+    conda activate predocs
+
+
+Install the OpenCASCADE anf TIGL3 dependencies (only available with conda)
+
+    conda install -c dlr-sc "pythonocc-core<7.5" tigl3 tixi3
+
+
+To install PreDoCS, use pip:
+
+    pip install predocs
+
+
+### Additional dependencies
+
+For the export of the cross sections for [BECAS](https://becas.dtu.dk/)
+(`PreDoCS.CrossSectionAnalysis.Export.generate_BECAS_input`), the
+[BECAS shellexpander](https://becas.dtu.dk/software/pre-and-post-processors/shellexpander)
+must be installed.
+
+
+## Quickstart
+
+For a quickstart example, take a look at the [PreDoCS examples](https://gitlab.com/dlr-sy/predocs/-/jobs/artifacts/master/browse/examples?job=examples_standalone).
+
+
+## License
+
+Please see the file [LICENSE.md](LICENSE.md) for further information about how the content is licensed.
+
+
+## Documentation
+
+The documentation is available at https://dlr-sy.gitlab.io/predocs/ .
