@@ -1,0 +1,119 @@
+Metadata-Version: 2.1
+Name: wc-django-utm
+Version: 0.1.1
+Summary: UTM parameters tracker.
+Author: WebCase
+Author-email: info@webcase.studio
+License: MIT License
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: px-settings<0.2.0,>=0.1.3
+Provides-Extra: dev
+Requires-Dist: pytest<7.0,>=6.0; extra == "dev"
+Requires-Dist: pytest-mock<4.0.0,>=3.10.0; extra == "dev"
+Requires-Dist: pytest-watch<5.0,>=4.2; extra == "dev"
+Requires-Dist: pytest-django<5.0,>=4.3; extra == "dev"
+Requires-Dist: django-environ==0.4.5; extra == "dev"
+Requires-Dist: django-stubs; extra == "dev"
+Requires-Dist: django<4,>=2.2; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+
+# WebCase UTM tracker
+
+Simple middleware and utils for tracking utm parameters.
+
+## Installation
+
+```sh
+pip install wc-django-utm
+```
+
+In `settings.py`:
+
+```python
+INSTALLED_APPS += [
+  'wcd_utm',
+]
+
+WCD_UTM = {
+  # All the "main" parameters that must be resolved.
+  'PARAMETERS': [
+    'utm_source', 'utm_medium', 'utm_campaign',
+    'utm_term', 'utm_content',
+
+    'gclid', 'aclk', 'msclkid', 'fbclid', 'twclid',
+  ]),
+  # Additional parameter prefixes. Also used to convert prefixed parameters
+  # like "utm_content" into "content".
+  'RESOLVABLE_PREFIXES':['utm_'],
+  # Whether to unwrap prefixed parameters or not.
+  # Example: "utm_content" will be unwrapped into "content".
+  # By default - do not.
+  'UNWRAP_PREFIXED_PARAMETERS': False,
+
+  # Used to store all different utm parameters sets, that user had during the
+  # session.
+  'SESSION_STORAGE_KEY': 'utm_params_stored',
+  # Latest utm parameters set. The key that you are mostly going to use.
+  'SESSION_ACCESS_KEY': 'utm_params',
+
+  # Header to parse UTM parameters from as if it is URL.
+  # Use this to pass utm parameters from Android/iOS app, for example.
+  'HEADER_ORIGIN_URL': 'HTTP_X_UTM_ORIGIN_URL',
+  # Same as previous, but this one should store JSON data instead of plain
+  # URL string.
+  'HEADER_JSON': 'HTTP_X_UTM_JSON',
+}
+```
+
+## Usage
+
+Most of the time only the middleware will be used:
+
+```python
+MIDDLEWARE = [
+  # ...
+  'django.contrib.sessions.middleware.SessionMiddleware',
+  # MUST be placed after session middleware ^.
+  'wcd_utm.middleware.UTMSessionMiddleware',
+  # ...
+]
+```
+
+### In a view
+
+Middleware will store parsed data in a `SESSION_ACCESS_KEY`(`'utm_params'`) key. Parameter values will always be a list of strings:
+
+```python
+def some_view(request):
+  params = request.session["utm_params"]
+
+  # Values are always lists
+  if 'black_friday_sale' in params.get('utm_campaign', []):
+    # Then do stuff related to you black friday sale campaign.
+    pass
+
+  # ...
+```
+
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.1]
+### Changed
+- Make prefixed parameters unwrapping optional.
+
+## [0.1.0]
+Initial version.
