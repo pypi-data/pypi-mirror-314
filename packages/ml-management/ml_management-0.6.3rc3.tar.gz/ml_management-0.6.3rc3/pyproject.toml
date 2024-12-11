@@ -1,0 +1,39 @@
+[project]
+name = "ml-management"
+dynamic = []
+description = "Python implementation of model pattern, dataset"
+authors = [
+    { name = "ISPRAS MODIS", email = "modis@ispras.ru" },
+]
+dependencies = [
+    "sgqlc>=16",
+    "boto3>1,<2",
+    "aioboto3>=13,<14",
+    "jsonschema>=4.18,<5",
+    "tqdm>=4.66.6,<5",
+    "pydantic>=1,<2",
+    "jsf==0.7.1",
+    "pylint>=3,<4",
+    "httpx<1",
+    "websocket-client>1,<2",
+    "pandas>2,<3",
+    "PyYAML>6,<7",
+    "numpy>1.26,<2",
+    "matplotlib>=3.7,<4",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+maintainers = [
+    { name = "Maxim Ryndin" },
+]
+version = "0.6.3rc3"
+
+[build-system]
+requires = [
+    "pdm-backend==2.4.3",
+]
+build-backend = "pdm.backend"
+
+[tool.pdm.version]
+source = "call"
+getter = "ML_management.version:get_version"
