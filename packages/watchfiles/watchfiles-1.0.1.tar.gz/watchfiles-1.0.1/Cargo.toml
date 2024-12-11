@@ -1,0 +1,33 @@
+[package]
+name = "watchfiles_rust_notify"
+version = "1.0.1"
+edition = "2021"
+license = "MIT"
+homepage = "https://github.com/samuelcolvin/watchfiles"
+repository = "https://github.com/samuelcolvin/watchfiles/watchfiles.git"
+readme = "README.md"
+include = [
+    "/pyproject.toml",
+    "/README.md",
+    "/LICENSE",
+    "/Makefile",
+    "/src",
+    "/watchfiles",
+    "/tests",
+    "/requirements",
+    "/.cargo",
+    "!__pycache__",
+    "!tests/.mypy_cache",
+    "!tests/.pytest_cache",
+    "!*.so",
+]
+rust-version = "1.63"
+
+[dependencies]
+crossbeam-channel = "0.5.12"
+notify = {git = "https://github.com/samuelcolvin/notify.git", branch = "keep-io-error"}
+pyo3 = { version = "0.23.3", features = ["extension-module", "generate-import-lib"] }
+
+[lib]
+name = "_rust_notify"
+crate-type = ["cdylib"]
