@@ -1,0 +1,36 @@
+{% import "templates/routing/_default.ios.j2" as ospf_default %}
+!
+{% macro config(ospf_pid,ospf_vrf,ospf_data,intf_data,bgp={}) %}
+{% import "templates/routing/_redistribute.ios.j2" as redistribute with context %}
+router ospfv3 {{ ospf_pid }}
+ router-id {{ ospf_data.router_id }}
+{% if ospf_data.reference_bandwidth is defined %}
+ auto-cost reference-bandwidth {{ ospf_data.reference_bandwidth }}
+{% endif %}
+{% if ospf_vrf %}
+ address-family ipv6 unicast vrf {{ ospf_vrf }}
+{% else %}
+ address-family ipv6 unicast
+{% endif %}
+{% for l in intf_data if l.ospf.passive|default(False) %}
+  passive-interface {{ l.ifname }}
+{% endfor %}
+{{ ospf_default.config(ospf_data,'ipv6')|indent(1,first=True) }}
+{{ redistribute.config(ospf_data,af='ipv6',vrf=ospf_vrf)|indent(1,first=True) }}
+!
+{% for l in intf_data if 'ospf' in l and ('ipv6' in l or 'ipv6' in l.dhcp.client|default({})) %}
+interface {{ l.ifname }}
+! {{ l.name|default("") }}
+ ospfv3 {{ ospf_pid }} ipv6 area {{ l.ospf.area }}
+{%   if l.ospf.network_type is defined %}
+ ospfv3 network {{ l.ospf.network_type }}
+{%   endif %}
+{%   if l.ospf.cost is defined %}
+ ospfv3 cost {{ l.ospf.cost }}
+{%   endif %}
+{%   if l.ospf.bfd|default(False) %}
+ ospfv3 bfd
+{%   endif %}
+!
+{% endfor %}
+{% endmacro %}
