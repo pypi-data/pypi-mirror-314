@@ -1,0 +1,63 @@
+# Dguard VAD
+
+Based on [Silero VAD](https://github.com/snakers4/silero-vad) and [RnNoise](https://github.com/werman/noise-suppression-for-voice).
+
+## Installation
+
+```bash
+pip install dguard_vad==0.1.0
+```
+or
+```bash
+git clone http://ai.lyxxkj.com.cn:3001/zhaosheng/dguard_vad.git
+cd dguard_vad
+pip install -e .
+```
+The model files will not be downloaded automatically.
+You need to download them manually and put them in the right place.(Default: `$$DGUARD_MODEL_PATH/dguard_vad.onnx`)
+> $DGUARD_MODEL_PATH is an environment variable that used in all dgurad* projects.
+
+
+
+## Usage
+
+1. `VAD` class
+```python
+from dguard_vad import VAD
+SR = 16000
+WAV_PATH = "../data/test_16k.wav"
+vad = VAD(SR)
+# Use get_speech_timestamps to get 
+# start and end timestamps of speech segments
+timestamps = vad.get_speech_timestamps(WAV_PATH)
+for _ in timestamps:
+    print(_)
+
+# You shuold get the following output:
+# {'segment': 0, 'start': 26560, 'end': 48704}
+# {'segment': 1, 'start': 71616, 'end': 106048}
+# {'segment': 2, 'start': 149952, 'end': 185920}
+
+# Use get_speech_probs to get probabilities for each chunk
+probs = vad.get_speech_probs(WAV_PATH)
+for _ in probs:
+    print(_)
+# You shuold get the following output:
+# 0.02
+# 0.01
+# 0.01
+# 0.01
+# 0.0
+```
+
+2. `VAD` class with noise suppression
+You just need to set `denoise=True` when initializing `VAD` class.
+```python
+vad = VAD(SR, denoise=True)
+```
+Please note that: func:`get_speech_probs` may not work well with noise suppression.
+
+3. `VADIterator` class
+Please refer to `ws_app/ws_server.py` for more details.
+
+
