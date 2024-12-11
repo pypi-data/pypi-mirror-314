@@ -1,0 +1,64 @@
+{% extends 'generic/object.html' %}
+{% load buttons %}
+{% load static %}
+{% load helpers %}
+{% load plugins %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">K8s Services</h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ object.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Application</th>
+                        <td>{{ object.application }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Namespace</th>
+                        <td>{{ object.namespace }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Memory</th>
+                        <td>{{ object.memory }} GB</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">CPU</th>
+                        <td>{{ object.cpu }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">GPU</th>
+                        <td>{{ object.gpu }} GB</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cluster</th>
+                        <td>{{ object.k8s_cluster }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Contacts</th>
+                        <td>
+                            {% for contact in object.contact.all %}
+                            <a href="{% url 'tenancy:contact' contact.id %}">{{ contact.name }},</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% include 'inc/panels/custom_fields.html' %}
+    </div>
+    <div class="col col-md-6">
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+    </div>
+</div>
+{% endblock content %}
