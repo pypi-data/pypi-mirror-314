@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pressoir"
+dynamic = ["version"]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "dataclass-wizard",
+  "Jinja2",
+  "minicli",
+  "progressist",
+  "pypandoc",
+  "PyYAML",
+  "selectolax",
+  "python-slugify",
+  "tomli >= 1.1.0 ; python_version < '3.11'",
+  "unidecode",
+]
+[tool.hatch.version]
+path = "pressoir/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/pressoir",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pressoir"]
+
+[project.scripts]
+pressoir = "pressoir.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "cogapp",
+  "isort",
+  "hatch",
+  "pytest",
+  "ruff",
+]
+
+[tool.ruff]
+output-format = "full"
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "PTH", "RUF"]
+fixable = ["I"]
+# Espace insecable (guillemets) + fine insecable (ponctuation double, chiffres)
+# + vraie apostrophe.
+allowed-confusables = [" ", " ", "’", "–"]

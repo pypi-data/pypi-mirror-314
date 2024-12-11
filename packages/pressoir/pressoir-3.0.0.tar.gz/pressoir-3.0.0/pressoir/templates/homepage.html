@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      $if(book.lang)$ xml:lang="$book.lang$"$endif$$if(book.dir)$ dir="$book.dir$"$endif$>
+
+<head>
+
+     <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+     <link rel="schema.MARCREL" href="http://www.loc.gov/loc.terms/relators/"/>
+     <link rel="DCTERMS.subject" href="http://rameau.bnf.fr"/>
+     <link rel="schema.prism" href="http://prismstandard.org/namespaces/basic/2.0/"/>
+
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+     <meta name="generator" content="pandoc templateFicheLivreV1" />
+
+
+<!--Metadonnees Dublin Core -->
+
+   <meta name="DC.type" content="Text" />
+   <meta name="DC.format" content="text/html" />
+   <meta name="DC.type" content="book" />
+
+   <meta name="DC.title" content="$book.title$" />
+   <meta name="DC.title.Main" content="$book.title$" />
+   $if(book.subtitle)$
+   <meta name="DC.title.Subtitle" content="$book.subtitle$" />
+   $endif$
+   <meta name="DC.publisher" class="editeur" content="Les ateliers de Sens public" />
+   <meta name="DC.publisher" class="producteur" content="Sens public" />
+   <meta name="DC.publisher" class="producteurNum" content="Sens public" />
+   <meta name="DC.publisher" class="diffuseur" content="Sens public" />
+   <meta name="DC.language" content="$book.lang$" />
+   <meta name="DC.date" class="completeDate" content="$year$-$month$-$day$" />
+   <meta name="DC.date" class="year" content="$year$" />
+   <meta name="DC.rights" content="$rights$" />
+
+
+  $if(url)$
+   <meta name="url" content="$url$" />
+  $endif$
+  $if(url)$
+   <meta name="DC.identifier" content="$url$" />
+  $endif$
+
+   <meta name="DC.identifier" class="isbn" content="urn:ISBN:$isbnprint$" />
+   <meta name="DC.identifier" class="isbn" content="urn:ISBN:$isbnpdf$" />
+   <meta name="DC.identifier" class="isbn" content="urn:ISBN:$isbnepub$" />
+
+
+<!--Auteur de l'article -->
+  $if(authors)$
+  $for(authors)$
+   <meta name="author" content="$authors.forname$ $authors.surname$" />
+   <meta name="DC.creator" content="$authors.forname$ $authors.surname$" />
+  $endfor$
+  $endif$
+
+<!--Resumes -->
+   <meta name="description" xml:lang="fr" lang="fr" content="$abstract_fr$" />
+   <meta name="DC.description" xml:lang="fr" lang="fr" content="$abstract_fr$" />
+$if(abstract_en)$
+   <meta name="description" xml:lang="en" lang="en" content="$abstract_en$" />
+   <meta name="DC.description" xml:lang="en" lang="en" content="$abstract_en$" />
+   $endif$
+
+<!--Mots cles auteurs -->
+  $if(keyword_fr)$
+   <meta name="keywords" xml:lang="fr" lang="fr" content="$for(keyword_fr)$$keyword_fr$$sep$, $endfor$" />
+  $endif$
+
+  $if(keyword_en)$
+   <meta name="keywords" xml:lang="en" lang="en" content="$for(keyword_en)$$keyword_en$$sep$, $endfor$" />
+  $endif$
+
+
+
+<!--  traducteur avec specification MARCREL -->
+  $if(translator)$
+  $for(translator)$
+   <meta name="DC.contributor.trl" content="$translator.forname$ $translator.surname$" />
+   <meta name="MARCREL.trl" content="$translator.forname$ $translator.surname$" />
+  $endfor$
+  $endif$
+
+
+
+<!--  table des matières -->
+  $if(toc)$
+  $for(toc)$
+   <meta name="DC.description.tableOfContents" content="$toc$"/>
+  $endfor$
+  $endif$
+
+
+<!-- schema citation : Indexation pour Google Scholar  -->
+
+     <meta name="citation_publisher" content="Les atelier de Sens public" />
+  $for(authors)$
+     <meta name="citation_authors" content="$authors.forname$ $authors.surname$" />
+  $endfor$
+     <meta name="citation_title" content="$title$" />
+   $if(subtitle)$
+   <meta name="citation_subtitle" content="$subtitle$" />
+   $endif$
+     <meta name="citation_publication_date" content="$date$" />
+     <meta name="citation_online_date" content="$date$" />
+          <meta name="citation_isbn" content="$isbnprint$" />
+<!--si numero de dossier existe
+    <meta name="citation_issue" content="$dossiernum$" />
+-->
+     <meta name="citation_language" content="$lang$" />
+
+   <meta name="citation_abstract" xml:lang="fr" lang="fr" content="$abstract_fr$" />
+   $if(abstract_en)$
+   <meta name="citation_abstract" xml:lang="en" lang="en" content="$abstract_en$" />
+   $endif$
+
+  $if(keyword_fr)$
+     <meta name="citation_keywords" xml:lang="fr" lang="fr" content="$for(keyword_fr)$$keyword_fr$$sep$, $endfor$" />
+  $endif$
+
+  $if(keyword_en)$
+     <meta name="citation_keywords" xml:lang="en" lang="en" content="$for(keyword_en)$$keyword_en$$sep$, $endfor$" />
+  $endif$
+
+
+<meta name="citation_pdf_url" content="$pdfurl$">
+
+
+
+<!--PRISM schema - Publishing Requirements for Industry Standard Metadata
+Schema specialise pour les revues et journaux-->
+     <meta name="prism.url" content="$url$"/>
+
+     <meta name="prism.corporateEntity" content="Sens public"/>
+
+     <meta name="prism.publicationDate" content="$date$"/>
+
+     <meta name="prism.isbn" content="$isbnprint$"/>
+
+     <meta name="prism.teaser" content="$abstract_fr$"/>
+
+
+<!--RDFa pour ajout des metadonnees DC-->
+     <meta property="dc:format" content="text/html" />
+  $if(url_article_sp)$
+     <meta property="dc:identifier" content="$url$" />
+  $endif$
+  $if(issnnum)$
+     <meta property="dc:identifier" content="$isbnprint$" />
+  $endif$
+     <meta property="dc:title" content="$title$" />
+     <meta property="dc:title.Main" content="$title$" />
+   $if(subtitle)$
+   <meta property="dc:title.Subtitle" content="$subtitle$" />
+   $endif$
+     <meta property="dc:publisher" content="Sens public" />
+     <meta property="dc:language" content="$lang$" />
+     <meta property="dc:type" content="book" />
+     <meta property="dcterm:created" content="$date$" />
+     <meta property="dc:rights" content="$rights$" />
+
+  $for(authors)$
+     <meta property="dc:creator" content="$authors.forname$ $authors.surname$" />
+  $endfor$
+
+
+   <meta property="dcterms:abstract" xml:lang="fr" lang="fr" content="$abstract_fr$" />
+   $if(abstract_en)$
+   <meta property="dcterms:abstract" xml:lang="en" lang="en" content="$abstract_en$" />
+   $endif$
+
+
+<!--Fin des metadonnees dans le Head-->
+
+ <!-- Social network -->
+
+    <meta property="og:type" content="book" />
+
+    <meta property="og:url" content="​$url$" />
+    <meta property="og:title" content="$title$" />
+    <meta property="og:description" content="$abstract_fr$ " />
+    <meta property="og:image" content="$coverurl$" />
+
+
+
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="stylesheet" href="static/$meta.css_filename$" />
+
+   <style type="text/css">
+    hgroup {
+      text-align: center;
+    }
+    section {
+      display: flex;
+      flex-direction: row;
+      margin: 2rem auto;
+      gap: 2rem;
+      max-width: 1200px;
+    }
+    @media (max-width: 768px) {
+      section {
+        flex-direction: column;
+      }
+    }
+    section div {
+      margin: 1rem;
+    }
+    section div:first-of-type {
+      min-width: 250px;
+    }
+    section div:first-of-type,
+    section div:last-of-type {
+      margin-block-start: 7rem;
+    }
+    section div:first-of-type * {
+      font-size: 110%;
+    }
+    .cta {
+      text-align: center;
+      padding: 1rem;
+    }
+    .cta a {
+      padding: 1rem;
+      border: 2px solid #0e0e0e;
+      white-space: nowrap;
+    }
+   </style>
+    <title>$book.title$</title>
+
+</head>
+
+<body>
+  <hgroup>
+    <h1>$book.title$</h1>
+    <h2>$book.subtitle$</h2>
+  </hgroup>
+  <section>
+    <div>
+      <h3>Auteurs</h3>
+      <p>
+        $for(book.authors)$
+          <a href="$book.authors.orcidurl$">$book.authors.forname$ $book.authors.surname$</a>
+        $endfor$
+      </p>
+      <h3>Résumé</h3>
+      <p>$book.abstract_fr$</p>
+      <p><strong>ISBN (web) :</strong> $book.isbnnum$</p>
+      <p><strong>ISBN (PDF) :</strong> $book.isbnpdf$</p>
+      <p><strong>ISBN (EPUB) :</strong> $book.isbnepub$</p>
+      <p><strong>ISBN (POD) :</strong> $book.isbnprint$</p>
+      <p>
+        <a href="$book.chapters/first$.html">Lire l’édition augmentée</a>
+      </p>
+    </div>
+    <div>
+      $body$
+    </div>
+    <div>
+      <a href="$book.chapters/first$.html"><img src="$book.coverurl$" alt="$book.title$"></a>
+    </div>
+  </section>
+</body>
+</html>
