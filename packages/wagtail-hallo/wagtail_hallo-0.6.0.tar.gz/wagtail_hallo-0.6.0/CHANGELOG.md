@@ -1,0 +1,46 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [unreleased] - YYYY-MM-DD
+
+## [0.6.0] - 2024-12-10
+
+- Add support for Wagtail 6.2 and 6.3 _Robert Rollins_
+- Add replacement for Rangy which will be removed from Wagtail 6.4 _Robert Rollins_
+
+## [0.5.0] - 2024-12-10
+
+- Add support for Python 3.12, Django 5.0, Wagtail 6.1 and Psycopg 3 _Joren Hammudoglu_
+
+## [0.4.0] - 2024-12-09
+
+- Add support for Wagtail 5 _Joren Hammudoglu_
+
+## [0.3.0] - 2024-12-02
+
+- Add Django 4.1 and Python 3.10 classifier to PyPI _Joren Hammudoglu_
+- Add Django 4.1 support to CI _Joren Hammudoglu_
+- Add support for Wagtail 4 _Katherine Domingo_
+- Update URL route names for docs and images to work on Wagtail 4 _Cynthia Kiser_
+- Drop support for Wagtail < 4.0 _Cynthia Kiser_
+
+## [0.2.0] - 2024-12-02
+
+- Add Wagtail 3 classifier for PyPI _Paarth Agarwal_
+- Fix toolbar scrolling out of the editor textarea _Robert Rollins_
+
+## [0.1.0] - 2022-05-05
+
+- First non-alpha release
+- Fix issue where Embed choosers were not working _Cynthia Kiser_
+
+## [0.1.0a1] - 2022-02-15
+
+### Added
+
+- Extract all Wagtail Hallo editor code from the Wagtail core codebase into a new package, prepare main documents _LB (Ben Johnston)_
+- Set up CI, code infrastructure, basic unit tests for this codebase _LB (Ben Johnston), Dan Braghis, & Thibaud Colas_
+- Correct typo in plugin example _Cynthia Kiser_
