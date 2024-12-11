@@ -1,0 +1,3 @@
+from typing import TextIO
+
+def create_logger(name, stream: TextIO = ..., level=...): ...
