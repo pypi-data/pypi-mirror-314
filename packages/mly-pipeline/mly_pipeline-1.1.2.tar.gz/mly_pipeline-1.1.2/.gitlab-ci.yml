@@ -1,0 +1,105 @@
+# include templates from gitlab-ci-templates
+# for docs see https://computing.docs.ligo.org/gitlab-ci-templates
+include:
+  - project: computing/gitlab-ci-templates
+    file: python.yml
+
+stages:
+  # build the project
+  - build
+  # test the project
+  - test
+  # quality check the code
+  - lint
+  # deploy packages/docs etc
+  - deploy
+
+# -- build ------------------
+#
+# Generate distributions of
+# this project using setuptools
+#
+
+build:
+  extends:
+    # https://computing.docs.ligo.org/gitlab-ci-templates/python/#.python:build
+    - .python:build
+  stage: build
+  needs: []
+
+# -- test -------------------
+#
+# Run the test suite of this
+# package over all supported
+# Python versions
+#
+
+# test template (templates start with '.')
+.test:
+  extends:
+    # https://computing.docs.ligo.org/gitlab-ci-templates/python/#.python:pytest
+    - .python:pytest
+  stage: test
+  #needs: [build] <-- can't use the tarball just yet because we need requirements.txt
+  needs: []
+  variables:
+    INSTALL_TARGET: "-r requirements.txt ."
+    # point pytest at the installed package
+    PYTEST_OPTIONS: "--pyargs mly_pipeline"
+
+# actually run the tests for each python version we support
+test:3.8:
+  extends: [.test]
+  image: python:3.8
+
+test:3.9:
+  extends: [.test]
+  image: python:3.9
+
+test:3.10:
+  extends: [.test]
+  image: python:3.10
+
+#test:3.11:
+#  extends: [.test]
+#  image: python:3.11
+
+# -- lint -------------------
+#
+# Check the code for style
+# issues with flake8
+#
+
+lint:
+  extends:
+    # https://computing.docs.ligo.org/gitlab-ci-templates/python/#.python:flake8
+    - .python:flake8
+  stage: lint
+  needs: []
+  variables:
+    # don't fail the pipeline because of linting issues,
+    # these are presented in the code-quality box in the
+    # merge_request UI
+    FLAKE8_OPTIONS: "--exit-zero"
+
+# -- docs -------------------
+#
+# Build documentation for
+# this project
+#
+
+sphinx:
+  extends:
+    - .python:sphinx
+
+pages:
+  stage: deploy
+  needs: [sphinx]
+  script:
+    - mv -v html public
+  artifacts:
+    paths:
+      - public
+  rules:
+    # only deploy if running from the default branch of the main project
+    - if: '$CI_PROJECT_ROOT_NAMESPACE == "mly" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

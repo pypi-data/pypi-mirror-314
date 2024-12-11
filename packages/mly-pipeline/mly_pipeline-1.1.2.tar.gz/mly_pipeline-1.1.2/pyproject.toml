@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>61", "setuptools-scm>=3.4.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mly_pipeline"
+authors = [
+    {name = "Vasileios SKliris", email = "sklirisv@cardiff.ac.uk"},
+]
+description = "Search pipeline to run online and offline GW searches with mly package."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["ml", "gravitational waves", "bursts"]
+license = {file = "LICENCE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "mly",
+    "spython==0.2",
+    "hermes.aeriel",
+    "hermes.quiver",
+    "hermes.stillwater"
+]
+
+# dynamic properties set by tools
+dynamic = [
+  "version",
+]
+
+[project.scripts]
+mly-pipeline-init = "mly_pipeline.initialization:main"
+mly-pipeline-start = "mly_pipeline.initialization:_start_search"
+mly-pipeline-stop = "mly_pipeline.initialization:_end_search"
+mly-pipeline-statuspage = "mly_pipeline.initialization:_status_page"
+mly-pipeline-status = "mly_pipeline.initialization:_search_status"
+
+[tool.setuptools.packages.find]
+# note: this is only required in CI, which otherwise fails because
+#       GHA is creating a temporary directory that setuptools
+#       discovers as another top-level package
+include = [
+  "mly_pipeline",
+]
+
+[tool.coverage.run]
+source = [ "mly_pipeline" ]
+omit = [
+  # don't report coverage for _version.py
+  # (generated automatically by setuptools-scm)
+  "*/_version.py",
+]
+
+[tool.setuptools_scm]
+write_to = "mly_pipeline/_version.py"
