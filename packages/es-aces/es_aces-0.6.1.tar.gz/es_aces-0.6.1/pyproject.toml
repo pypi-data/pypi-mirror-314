@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "es-aces"
+dynamic = ["version"]
+authors = [
+  { name="Justin Xu", email="justin13601@hotmail.com" },
+  { name="Matthew McDermott", email="mattmcdermott8@gmail.com" },
+]
+description = "ACES: Automatic Cohort Extraction System for Event-Streams"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "polars >= 1.0.0, <= 1.17.1",
+    "bigtree == 0.18.*",
+    "ruamel.yaml == 0.18.*",
+    "loguru == 0.7.*",
+    "hydra-core == 1.3.*",
+    "pytimeparse == 1.1.*",
+    "networkx == 3.3.*",
+    "pyarrow == 17.*",
+    "meds == 0.3.3",
+]
+
+[tool.setuptools_scm]
+
+[project.scripts]
+aces-cli = "aces.__main__:main"
+expand_shards = "aces.expand_shards:main"
+
+[project.optional-dependencies]
+dev = [
+  "pre-commit<4", "pytest", "pytest-cov", "pytest-subtests", "rootutils", "hypothesis"
+]
+profiling = ["psutil"]
+
+[project.urls]
+Homepage = "https://github.com/justin13601/ACES"
+Issues = "https://github.com/justin13601/ACES/issues"
