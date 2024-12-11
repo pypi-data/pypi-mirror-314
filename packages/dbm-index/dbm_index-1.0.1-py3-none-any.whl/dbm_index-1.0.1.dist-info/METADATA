@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: dbm-index
+Version: 1.0.1
+Summary: An object mapper and indexer for key value databases, written in python
+Author-email: James Rao <jamesnarayanrao@gmail.com>
+Project-URL: Homepage, https://github.com/JamesRao98/pyomi
+Project-URL: Bug Tracker, https://github.com/JamesRao98/pyomi/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# DBM Index
+
+An object mapper and indexer for key value databases, written in python.
+
+## Usage
+
+```python
+from dbm_index import Indexer
+
+indexer = Indexer({})
+
+resource_id = indexer.create({'hello': 'world'})
+
+resource = indexer.retreive_one(resource_id)
+resources = indexer.retreive()
+
+indexer.update(resource_id, {'hello': 123})
+
+indexer.delete(resource_id)
+```
