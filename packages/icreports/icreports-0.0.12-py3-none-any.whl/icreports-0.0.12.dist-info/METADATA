@@ -1,0 +1,131 @@
+Metadata-Version: 2.1
+Name: icreports
+Version: 0.0.12
+Summary: Utilities for generating technical reports.
+Author-email: "James Grogan, Irish Centre for High End Computing" <james.grogan@ichec.ie>
+Project-URL: Repository, https://git.ichec.ie/performance/toolshed/icreports
+Project-URL: Homepage, https://git.ichec.ie/performance/toolshed/icreports
+Keywords: Publishing,Technical Reports
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: System :: Distributed Computing
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: icplot[cairo]==0.1.2
+Requires-Dist: ictasks==0.1.2
+Requires-Dist: markdown-it-py
+Requires-Dist: mdit_py_plugins
+Requires-Dist: mdformat
+Requires-Dist: beautifulsoup4
+Requires-Dist: pyspelling
+Requires-Dist: jupyter-book
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: pytest-sugar; extra == "test"
+Requires-Dist: black; extra == "test"
+Requires-Dist: mypy; extra == "test"
+Provides-Extra: types
+Requires-Dist: types-PyYAML; extra == "types"
+
+# icreports
+
+`icreports` is a configuration management tool (à la CMake) for generating e-books and technical documents. It is used at the Irish Centre for High End Computing (ICHEC) to build the [ICHEC handbook](https://ichec-handbook.readthedocs.io/en/latest/src/frontmatter.html).
+
+# Features #
+
+The project is based on the [Jupyter Book](https://jupyterbook.org/en/stable/intro.html) toolchain and formats, providing a wrapper that allows building multiple configurations of a book based on tags in document frontmatter, allowing the concept of 'public', 'private' or 'draft' versions.
+
+In particular, it allows:
+
+* Rendering of different book versions (e.g. `public`, `private`, `draft`) based on document frontmatter tags
+* Automatic conversion of image formats (including TIKZ) to best suit the output format (web, PDF etc).
+* Named build configurations specified in YAML, allowing rendering of multiple versions in the same build job.
+* Book version numbering
+
+## Why is this useful? ##
+
+At ICHEC (at least) we want a handbook that is as easy as possible to contribute to. But the people who maintain the handbook don't have easy access to the centre's hosting infrastructure - so it isn't easy to 'self-host' web services that we need. Ideally we live in a DevOps world where this is possible - but we aren't there yet. This library sidesteps this by relying on public infrastructure like ReadTheDocs to do the document build and hosting. However, we want 'internal' info in the handbook too. The convoluted steps needed to maintain public and internal handbook versions while also building on piecemeal public infrastructures motivated this tool. Maybe you are in a similar situation and it can be helpful for you too.
+
+# Usage #
+
+Assuming a repository has been set up for a standard Jupyter Book build, to use `icreports` you can add some build configurations to the existing `_config.yml` under an `icreports` key, for example:
+
+``` yaml
+title: Mock Book
+author: Mock Book Author
+exclude_patterns: [/src/media, infra/, infra/README.md, _build, .venv]
+only_build_toc_files: true
+sphinx:
+  config:
+    myst_heading_anchors: 3
+latex:
+  latex_documents:
+     targetname: book.tex
+icreports:
+  project_name: mock_book
+  version: 0.0.0
+  builds:
+    - name: "internal"
+      outputs:
+        - "pdf"
+        - "html"
+        - "src"
+    - name: "public"
+      outputs:
+        - "pdf"
+        - "html"
+        - "src"
+      include_tags:
+        - "public"
+```
+
+here the book is given a version and two builds 'internal' and 'public' are specified. The public build will only include documents that have the tag 'public' in their frontmatter, through the use of the 'include_tags' attribute. All supported output formats 'pdf', 'html' and 'src' (just copy all sources) are requested in this case. This will lead to four invocations of Jupyter Book (and two custom copy operations for 'src').
+
+To do the builds run: 
+
+``` shell
+icreports book --source_dir $SOURCE_DIR 
+```
+
+where `SOURCE_DIR` is the location of the book sources.
+
+
+# Installation #
+
+The project is available on PyPi, you can install it with:
+
+``` shell
+pip install icreports
+```
+
+Some features rely on converting images between various formats. For full image format support `imagemagick`, `cairo` and a full LaTeX environment are required. On Mac you can install the former with `brew`, with MacTeX used to install the LaTeX environment.
+
+## Using a container ##
+
+If you prefer not to set up the dependencies or are having issues with them you can use a container to do the build. Assuming you have `podman` or `docker` installed you can do:
+
+``` shell
+cd infra
+podman build --platform linux/arm64 -t icreports .
+podman run -it -v $SOURCE_DIR:/src -v $BUILD_DIR/:/build -p 8000:8000 --platform linux/arm64 icreports
+```
+
+The `SOURCE_DIR` is the path to the book sources on the host. The `BUILD_DIR` is somewhere you want build output to go on the host. `--platform` can be omitted on `x86_64` systems. 
+
+Build output will also be served at [localhost:8000](http://localhost:8000), which you can open in a web browser.
+
+# Contact #
+
+For further information you can contact `james.grogan@ichec.ie`. Due to our current Gitlab hosting setup we can't easily accept contributions or defect reports via that platform. We may in future set up a mirror if of interest - please get in touch by email with any defect reports or other feedback in the meantime.
+
+# Copyright #
+
+Copyright 2024 Irish Centre for High End Computing
+
+The software in this repository can be used under the conditions of the GPLv3+ license, which is available for reading in the accompanying `LICENSE` file.
+
+If you are an ICHEC collaborator or National Service user and hope to use this library under different terms please get in touch.
