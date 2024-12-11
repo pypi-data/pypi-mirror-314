@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% if field.field.widget.input_type == "checkbox" %}
+  {% include "./checkbox.html" %}
+{% elif field.field.widget.input_type == "radio" %}
+  {% include "./radio.html" %}
+{% elif field.field.widget.input_type == "time" %}
+  {% include "./time.html" %}
+{% elif field.field.widget.input_type == "date" %}
+  {% include "./date.html" %}
+{% elif field.field.widget.input_type == "select" %}
+  {% include "./select.html" %}
+{% elif field.field.widget.input_type == "file" %}
+  {% include "./file.html" %}
+{% else %}
+  {% include "./other.html" %}
+{% endif %}

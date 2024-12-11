@@ -1,0 +1,31 @@
+{% load i18n %}
+
+<div class="relative flex items-center w-1/2">
+  <button type="button" id="decrement-button"
+    data-input-counter-decrement="{{ widget.attrs.id }}"
+    class="rounded-s-lg p-3 h-11 border bg-primary-100 border-gray-300
+      hover:bg-primary-200
+      focus:ring-primary-500 focus:ring-2 focus:outline-none">
+    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+    </svg>
+  </button>
+  <input
+    type="text"
+    name="{{ widget.name }}"
+    aria-describedby="helper-text-explanation"
+    class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm
+      block w-full py-2.5
+      focus:ring-primary-500 focus:border-primary-500"
+    {% if widget.value %}value="{{ widget.value }}"{% endif %}
+    {% include "django/forms/widgets/attrs.html" %}
+  />
+  <button type="button" id="increment-button" data-input-counter-increment="{{ widget.attrs.id }}"
+    class="bg-primary-100 border border-gray-300 rounded-e-lg p-3 h-11
+      hover:bg-primary-200
+      focus:ring-primary-500 focus:ring-2 focus:outline-none">
+    <svg class="w-3 h-3 text-primary-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+    </svg>
+  </button>
+</div>
