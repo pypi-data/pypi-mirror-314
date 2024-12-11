@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "django-multifactor"
+version = "0.7.3"
+description = "Drop-in multifactor authentication subsystem for Django."
+authors = ["Oli Warner <oli@thepcspy.com>"]
+repository = "https://github.com/oliwarner/django-multifactor"
+homepage = "https://github.com/oliwarner/django-multifactor"
+readme = 'README.md'
+license = "MIT"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 2.2",
+    "Framework :: Django :: 3.0",
+    "Framework :: Django :: 3.1",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [
+    { include="multifactor", from="." },
+]
+include = [
+    'multifactor/templates/**',
+    'multifactor/static/**',
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7, <4.0"
+django = "> 2.2, < 5.2"
+pyotp = '^2.9'
+fido2 = ">=1.1.2,<1.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+pytest-cov = "^2.4"
+dephell = "*"
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "pep440"
+
+[[tool.poetry.source]]
+name = "pypi-public"
+url = "https://pypi.org/simple/"
+
+[build-system]
+requires = ["poetry-core>=1.7.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
