@@ -1,0 +1,70 @@
+# File: README.md
+# SPINEX Time Series
+
+SPINEX (Similarity-based Predictions and Explainable Neighbors Exploration) Time Series is an advanced algorithm that combines multiple similarity measures with multi-level analysis capabilities.
+
+## Features
+
+- Multiple similarity measures (DTW, Euclidean, Cosine, etc.)
+- Dynamic window sizing
+- Automatic parameter adjustment
+- Anomaly detection
+- Multi-level pattern recognition
+- Comprehensive prediction validation
+- Built-in visualization tools
+
+## Installation
+
+```bash
+pip install spinex_timeseries
+```
+
+## Quick Start
+
+```python
+from spinex_timeseries import SPINEX_Timeseries
+import numpy as np
+
+# Generate sample data
+data = np.sin(np.linspace(0, 10, 100)) + np.random.normal(0, 0.1, 100)
+
+# Initialize SPINEX
+model = SPINEX_Timeseries(data, window_size=10, forecast_horizon=5)
+
+# Make predictions
+predictions = model.predict()
+
+# Visualize results
+model.plot_prediction()
+```
+
+## Advanced Usage
+
+```python
+# Configure with custom parameters
+model = SPINEX_Timeseries(
+    data,
+    window_size=20,
+    forecast_horizon=10,
+    similarity_methods=['dtw', 'euclidean', 'cosine'],
+    dynamic_window=True,
+    multi_level=True,
+    dynamic_threshold=True
+)
+
+# Detect anomalies
+anomalies = model.detect_anomalies()
+model.plot_anomalies()
+
+# Get prediction explanations
+explanations = model.get_explainability_results()
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
