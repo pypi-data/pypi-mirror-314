@@ -1,0 +1,53 @@
+name: Package
+on:
+  # Building on pull-requests, manual dispatch, and pushes to main; but restricting
+  # publishing only to main pushes and manual dispatch with `if`s in specific steps.
+  workflow_dispatch:
+  push:
+    branches:
+      - alpha
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  package:
+    name: Package
+    environment: production
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Setup | Force correct release branch on workflow sha
+        run: |
+          git clone https://github.com/${{ github.repository }} .
+          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+          git config user.name "cpg-software-ci-bot"
+          git config user.email "software-team+githubcibot@populationgenomics.org.au"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Action | Semantic Version Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v9.14.0
+        with:
+          root_options: "-vvv"
+          git_committer_email: "software-team+githubcibot@populationgenomics.org.au"
+          git_committer_name: "cpg-software-ci-bot"
+          github_token: ${{ secrets.BOT_ACCESS_TOKEN }}
+
+      - name: Publish | Upload package to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.12.2
+        if: steps.release.outputs.released == 'true'
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Publish | Upload to GitHub Release Assets
+        uses: python-semantic-release/publish-action@v9.8.9
+        if: steps.release.outputs.released == 'true'
+        with:
+          github_token: ${{ secrets.BOT_ACCESS_TOKEN }}
+          tag: ${{ steps.release.outputs.tag }}
