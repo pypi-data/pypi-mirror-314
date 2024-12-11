@@ -1,0 +1,48 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+      - '*.x'
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.rst'
+  pull_request:
+    branches:
+      - main
+      - '*.x'
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.rst'
+jobs:
+  tests:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {name: '3.11', python: '3.11', tox: py311}
+          - {name: 'Lowest', python: '3.11', tox: py311-min}
+          - {name: '3.10', python: '3.10', tox: py310}
+          - {name: '3.9', python: '3.9', tox: py39}
+          - {name: '3.8', python: '3.8', tox: py38}
+          - {name: '3.7', python: '3.7', tox: py37}
+          - {name: 'Typing', python: '3.11', tox: typing}
+    steps:
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0
+        with:
+          python-version: ${{ matrix.python }}
+          cache: 'pip'
+          cache-dependency-path: 'requirements/*.txt'
+      - name: cache mypy
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+        with:
+          path: ./.mypy_cache
+          key: mypy|${{ matrix.python }}|${{ hashFiles('requirements/mypy.txt') }}
+        if: matrix.tox == 'typing'
+      - run: pip install tox
+      - run: tox r -e ${{ matrix.tox }}
