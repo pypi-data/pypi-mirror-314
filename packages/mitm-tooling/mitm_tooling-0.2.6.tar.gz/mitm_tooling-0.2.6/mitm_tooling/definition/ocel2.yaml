@@ -1,0 +1,60 @@
+mitm: OCEL2
+concepts:
+  - event
+  - object
+  - e2o
+  - o2o
+concept-properties:
+  o2o:
+    typing-concept: ocel_qualifier
+    plural: o2o
+    permit-attributes: false
+  e2o:
+    typing-concept: ocel_qualifier
+    plural: e2o
+    permit-attributes: false
+weak-concepts:
+  id: text
+  time: datetime
+  qualifier: text
+  attribute_name: text
+  type_name: text
+owned-relations:
+  event:
+    identity:
+      ocel_id: id
+    inline:
+      time: time
+  object:
+    identity:
+      ocel_id: id
+  e2o:
+    inline:
+      ocel_qualifier: qualifier
+    foreign:
+      event:
+        event:
+          ocel_event_id: ocel_id
+      object:
+        object:
+          ocel_object_id: ocel_id
+  o2o:
+    inline:
+      ocel_qualifier: qualifier
+    foreign:
+      source_obj:
+        object:
+          ocel_source_id: ocel_id
+      target_obj:
+        object:
+          ocel_target_id: ocel_id
+  obj_changes:
+    inline:
+      time: time
+      attribute: attribute_name
+      object_type: type_name
+    foreign:
+      object:
+        object:
+          ocel_object_id: ocel_id
+

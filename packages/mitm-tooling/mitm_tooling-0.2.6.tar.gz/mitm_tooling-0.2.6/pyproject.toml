@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "mitm-tooling"
+version = "0.2.6"
+description = ""
+authors = ["Leah Tacke genannt Unterberg <leah.tgu@pads.rwth-aachen.de>"]
+readme = "README.md"
+packages = [{ include = "mitm_tooling" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+pydantic = "^2.9.2"
+pyyaml = "6.0.2"
+genson = "^1.3.0"
+
+sqlalchemy = { version = "^2.0.34", extras = ["postgresql-psycopg", "postgresql"] }
+sqlalchemy-utils = "0.41.2"
+pandas = { version = "^2.0", extras = ["performance", "excel", "hdf5", "output_formatting", "computation", "postgresql", "mysql", "sql-other", "plot", "compression"] }
+
+[tool.poetry.extras]
+analysis = ["polars"]
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+
+[[tool.poetry.source]]
+name = "testpypi"
+url = "https://test.pypi.org/"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
