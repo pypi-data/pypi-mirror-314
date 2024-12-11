@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>Faktura - daňový doklad číslo: {{ invoice.invoice_number }}</title>
+
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 0.7cm;
+        }
+
+        .invoice-box {
+            font-size: 10pt;
+            line-height: 150%;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+        }
+
+        .invoice-box table.header,
+        .invoice-box table.subjects,
+        .invoice-box table.payment,
+        .invoice-box table.lines {
+            margin-bottom: 0.7cm;
+        }
+
+        .invoice-box table th,
+        .invoice-box table td {
+            padding: 1mm;
+            vertical-align: top;
+        }
+
+        .invoice-box table tr th {
+            background: #eee;
+            border-bottom: 0.2mm solid #ddd;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .invoice-box table.header tr td,
+        {% if qr_code is none %}
+            .invoice-box table.payment tr td,
+        {% endif %}
+        .invoice-box table.subjects tr th {
+            width: 50%;
+        }
+
+        .invoice-box table.header td.title {
+            padding: 0;
+        }
+
+        .invoice-box table.header td.title table td:nth-child(2) {
+            width: 33%;
+            text-align: right;
+        }
+
+        .invoice-box table.payment td table td {
+            padding: 0;
+        }
+
+        .invoice-box table.payment td.qr-code img {
+            width: 2.5cm;
+        }
+
+        .invoice-box table.lines tr th {
+            text-align: center;
+        }
+
+        .invoice-box table.lines tr th:first-child {
+            text-align: left;
+            width: 25%;
+        }
+
+        .invoice-box table.lines tr th:last-child {
+            text-align: right;
+        }
+
+        .invoice-box table.lines tr.item td {
+            border-bottom: 0.2mm solid #eee;
+        }
+
+        .invoice-box table.lines tr.item.last td {
+            border-bottom: none;
+        }
+
+        .invoice-box table.lines tr.total td {
+            border-top: 0.5mm solid #eee;
+            font-weight: bold;
+        }
+
+        .invoice-box table.lines tr td:nth-child(2),
+        .invoice-box table.lines tr td:nth-child(4),
+        .invoice-box table.lines tr td:nth-child(5),
+        .invoice-box table.lines tr td:nth-child(6),
+        .invoice-box table.lines tr td:nth-child(7),
+        .invoice-box table.lines tr td:nth-child(8) {
+            text-align: right;
+        }
+
+        .invoice-box table.summary-wrapper > tbody > tr > td {
+            padding: 0;
+        }
+
+        .invoice-box table.summary-wrapper > tbody > tr > td:first-child {
+            width: 43%;
+        }
+
+        .invoice-box table.summary tr th {
+            text-align: center;
+        }
+
+        .invoice-box table.summary tr th:first-child {
+            text-align: left;
+        }
+
+        .invoice-box table.summary tr th:last-child {
+            text-align: right;
+
+        }
+
+        .invoice-box table.summary tr td {
+            border-bottom: 0.2mm solid #eee;
+        }
+
+        .invoice-box table.summary tr.last td {
+            border-bottom: none;
+        }
+
+        .invoice-box table.summary tr.total td {
+            border-top: 0.5mm solid #eee;
+            font-weight: bold;
+        }
+
+        .invoice-box table.summary tr td:nth-child(2),
+        .invoice-box table.summary tr td:nth-child(3),
+        .invoice-box table.summary tr td:nth-child(4) {
+            text-align: right;
+        }
+
+        .invoice-box p.footer {
+            text-align: center;
+            font-size: 8pt;
+        }
+    </style>
+</head>
+
+<body>
+<div class="invoice-box">
+    <table class="header">
+        <tr class="top">
+            <td class="title">
+                <!-- place for logo -->
+            </td>
+            <td class="title">
+                <table>
+                    <tr>
+                        <th>Faktura - daňový doklad číslo</th>
+                        <td>{{ invoice.invoice_number }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table class="subjects">
+        <tr>
+            <th>Dodavatel</th>
+            <th>Odběratel</th>
+        </tr>
+        <tr>
+            <td>
+                {{ invoice.sender.company }}<br>
+                {{ invoice.sender.street }}<br>
+                {{ invoice.sender.zip_code }}, {{ invoice.sender.city }}<br>
+                {{ invoice.sender.country }}<br>
+                IČ: {{ invoice.sender.company_id }}<br>
+                {% if invoice.sender.vat_id is not none %}
+                    DIČ: {{ invoice.sender.vat_id }}
+                {% endif %}
+            </td>
+            <td>
+                {{ invoice.receiver.company }}<br>
+                {{ invoice.receiver.street }}<br>
+                {{ invoice.receiver.zip_code }}, {{ invoice.receiver.city }}<br>
+                {{ invoice.receiver.country }}<br>
+                IČ: {{ invoice.receiver.company_id }}<br>
+                {% if invoice.receiver.vat_id is not none %}
+                    DIČ: {{ invoice.receiver.vat_id }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <table class="payment">
+        <tr>
+            <th colspan="{% if qr_code is not none %}3{% else %}2{% endif %}">Platební podmínky</th>
+        </tr>
+        <tr>
+            {% if qr_code is not none %}
+                <td class="qr-code">
+                    <img src="data:image/png;base64,{{ qr_code }}" alt="QR code"/>
+                </td>
+            {% endif %}
+            <td>
+                <table>
+                    <tr>
+                        <td>Banka:</td>
+                        <td>{{ invoice.bank }}</td>
+                    </tr>
+                    <tr>
+                        <td>Bankovní účet:</td>
+                        <td>{{ invoice.bank_account }}</td>
+                    </tr>
+                    <tr>
+                        <td>Variabilní symbol:</td>
+                        <td>{{ invoice.invoice_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Způsob platby:</td>
+                        <td>{{ invoice.payment_method }}</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Datum vystavení:</td>
+                        <td>{{ invoice.issue_date.strftime("%d. %m. %Y") }}</td>
+                    </tr>
+                    <tr>
+                        <td>Datum uskutečnění zdanitelného plnění:</td>
+                        <td>{{ invoice.supply_date.strftime("%d. %m. %Y") }}</td>
+                    </tr>
+                    <tr>
+                        <td>Datum splatnosti:</td>
+                        <td>{{ invoice.due_date.strftime("%d. %m. %Y") }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table class="lines">
+        <tr>
+            <th>Položka</th>
+            <th>Počet</th>
+            <th>MJ</th>
+            <th>Sazba DPH</th>
+            <th>Cena za MJ</th>
+            <th>Cena</th>
+            <th>DPH</th>
+            <th>Cena s DPH</th>
+        </tr>
+
+        {% for invoice_line in invoice.invoice_lines %}
+            <tr class="item{{ " last" if loop.last }}">
+                <td>{{ invoice_line.description }}</td>
+                <td>{{ invoice_line.quantity }}</td>
+                <td>{{ invoice_line.unit }}</td>
+                <td>{{ "%d"|format(invoice_line.vat_rate * 100) }} %</td>
+                <td>{{ invoice_line.unit_price|price }} {{ invoice.currency }}</td>
+                <td>{{ invoice_line.price|price }} {{ invoice.currency }}</td>
+                <td>{{ invoice_line.vat|price }} {{ invoice.currency }}</td>
+                <td>{{ invoice_line.price_vat|price }} {{ invoice.currency }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table class="summary-wrapper">
+        <tr>
+            <td></td>
+            <td>
+                <table class="summary">
+                    <tr>
+                        <th>Sazba</th>
+                        <th>Základ</th>
+                        <th>DPH</th>
+                        <th>Včetně DPH</th>
+                    </tr>
+                    {% for rate in vat_summary %}
+                        <tr{{ " class=\"last\"" if loop.last }}>
+                            <td>{{ "%d"|format(vat_summary[rate].vat_rate * 100) }} %</td>
+                            <td>{{ vat_summary[rate].price|price }} {{ invoice.currency }}</td>
+                            <td>{{ vat_summary[rate].vat|price }} {{ invoice.currency }}</td>
+                            <td>{{ vat_summary[rate].price_vat|price }} {{ invoice.currency }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="total last">
+                        <td colspan="3">Celková cena:</td>
+                        <td>{{ total_price|price }} {{ invoice.currency }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <p class="footer">{{ invoice.register_info }}</p>
+</div>
+</body>
+</html>
