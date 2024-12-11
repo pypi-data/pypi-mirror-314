@@ -1,0 +1,156 @@
+from nautobot.core.apps import (
+    NavContext,
+    NavGrouping,
+    NavItem,
+    NavMenuAddButton,
+    NavMenuGroup,
+    NavMenuItem,
+    NavMenuTab,
+)
+
+menu_items = (
+    NavMenuTab(
+        name="Circuits",
+        weight=500,
+        groups=(
+            NavMenuGroup(
+                name="Circuits",
+                weight=100,
+                items=(
+                    NavMenuItem(
+                        link="circuits:circuit_list",
+                        name="Circuits",
+                        weight=100,
+                        permissions=[
+                            "circuits.view_circuit",
+                        ],
+                        buttons=(
+                            NavMenuAddButton(
+                                link="circuits:circuit_add",
+                                permissions=[
+                                    "circuits.add_circuit",
+                                ],
+                            ),
+                        ),
+                    ),
+                    NavMenuItem(
+                        link="circuits:circuittermination_list",
+                        name="Circuit Terminations",
+                        weight=200,
+                        permissions=[
+                            "circuits.view_circuittermination",
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="circuits:circuittype_list",
+                        name="Circuit Types",
+                        weight=300,
+                        permissions=[
+                            "circuits.view_circuittype",
+                        ],
+                        buttons=(
+                            NavMenuAddButton(
+                                link="circuits:circuittype_add",
+                                permissions=[
+                                    "circuits.add_circuittype",
+                                ],
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            NavMenuGroup(
+                name="Providers",
+                weight=200,
+                items=(
+                    NavMenuItem(
+                        link="circuits:provider_list",
+                        name="Providers",
+                        weight=100,
+                        permissions=[
+                            "circuits.view_provider",
+                        ],
+                        buttons=(
+                            NavMenuAddButton(
+                                link="circuits:provider_add",
+                                permissions=[
+                                    "circuits.add_provider",
+                                ],
+                            ),
+                        ),
+                    ),
+                    NavMenuItem(
+                        link="circuits:providernetwork_list",
+                        name="Provider Networks",
+                        weight=200,
+                        permissions=[
+                            "circuits.view_providernetwork",
+                        ],
+                        buttons=(
+                            NavMenuAddButton(
+                                link="circuits:providernetwork_add",
+                                permissions=[
+                                    "circuits.add_providernetwork",
+                                ],
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+)
+
+navigation = (
+    NavContext(
+        name="Inventory",
+        groups=(
+            NavGrouping(
+                name="Circuits",
+                weight=400,
+                items=(
+                    NavItem(
+                        link="circuits:circuit_list",
+                        name="Circuits",
+                        weight=100,
+                        permissions=[
+                            "circuits.view_circuit",
+                        ],
+                    ),
+                    NavItem(
+                        link="circuits:circuittermination_list",
+                        name="Circuit Terminations",
+                        weight=200,
+                        permissions=[
+                            "circuits.view_circuittermination",
+                        ],
+                    ),
+                    NavItem(
+                        link="circuits:circuittype_list",
+                        name="Circuit Types",
+                        weight=300,
+                        permissions=[
+                            "circuits.view_circuittype",
+                        ],
+                    ),
+                    NavItem(
+                        link="circuits:provider_list",
+                        name="Providers",
+                        weight=400,
+                        permissions=[
+                            "circuits.view_provider",
+                        ],
+                    ),
+                    NavItem(
+                        link="circuits:providernetwork_list",
+                        name="Provider Networks",
+                        weight=500,
+                        permissions=[
+                            "circuits.view_providernetwork",
+                        ],
+                    ),
+                ),
+            ),
+        ),
+    ),
+)
