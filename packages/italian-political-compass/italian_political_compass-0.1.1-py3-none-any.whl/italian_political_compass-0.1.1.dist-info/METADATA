@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: italian-political-compass
+Version: 0.1.1
+Summary: A political compass tool using AI
+Home-page: https://github.com/yourusername/political-compass
+Author: financialsupport
+Author-email: marvin994@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: transformers
+
+# Political Compass
+
+A simple tool to determine the italian political alignment of LLM.
+
+## Installation
+
+```bash
+pip install italian-political-compass
+
+```python
+
+from italian_political_compass import ItalianPoliticalCompass
+
+compass = ItalianPoliticalCompass()
+results = compass.calculate_alignment()
+compass.print_results(verbose=False)
+
+#or
+
+compass = ItalianPoliticalCompass(model_name="different/model-name")
+results = compass.calculate_alignment()
+compass.print_results(verbose=True) # prints questions and responses
+
+# and
+
+compass = ItalianPoliticalCompass()
+parties = compass.get_supported_parties()
+print(parties)
+
+
