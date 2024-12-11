@@ -1,0 +1,94 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cradmin-legacy"
+requires-python = ">=3.8.0"
+dynamic = ["version"]
+description = "Legacy 1.x fork of django cradmin."
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    { name = "Espen Angell Kristiansen"},
+    { name = "Tor Johansen" },
+    { name = "Vegard Angell"},
+    { name = "Magne Westlie"},
+    { name = "Stian Julseth"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "Django>=5.0.0,<6.0.0",
+    "django-crispy-forms==1.14.0",
+    "html2text",
+    "django-multiupload",
+    "future",
+    "ievv_opensource>=11.1.1,<12.0.0",
+    "django_cradmin>=11.0.1,<12.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "django-extensions",
+    "flake8",
+    "tox",
+    "model-bakery",
+    "ipython",
+    "django-dbdev",
+    "coverage",
+    "Sphinx",
+    "sphinxcontrib-napoleon",
+    "sphinx-rtd-theme",
+    "appresso_sphinx_extensions",
+    "vitalstyles",
+]
+test = [
+    "htmls",
+    "pytest",
+    "pytest-django",
+    "pytest-env",
+    "model-bakery",
+    "coverage",
+    "mock-django",
+    "mock",
+    "sorl-thumbnail",
+    "Pillow",
+]
+optionalprod = [
+    "sorl-thumbnail",
+    "Pillow",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+path = "cradmin_legacy/__init__.py"
+
+[tool.hatch.build]
+packages = [
+    "/cradmin_legacy"
+]
+exclude = [
+    "node_modules",
+    "/cradmin_legacy/static/cradmin_legacy/bower_components",
+    "/cradmin_legacy/demo/project/demo/dumps/default.sql",
+    "/cradmin_legacy/demo"
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "6.0.1"
+version_files = [
+    "cradmin_legacy/__init__.py:__version__"
+]
+tag_format = "$version"
+update_changelog_on_bump = true
