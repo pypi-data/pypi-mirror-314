@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: inincompatibility
+Version: 0.0.1
+Summary: A socket-based solution for resolving Python environment incompatibilities
+Author-email: userElaina <userelaina@pm.me>
+Maintainer-email: userElaina <userelaina@pm.me>
+License: MIT License
+        
+        Copyright (c) 2024 Elaina
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/userElaina/inincompatibility
+Project-URL: Bug Reports, https://github.com/userElaina/inincompatibility/issues
+Project-URL: Source, https://github.com/userElaina/inincompatibility
+Keywords: compatibility,incompatibility,socket
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+
+inincompatibility
+=================
+
+A ``socket``-based solution for resolving **Python** environment
+incompatibilities.
+
+Usage Guidelines
+----------------
+
+**Installation**:
+
+To install the ``inincompatibility`` package, run:
+
+.. code:: shell
+
+   pip install inincompatibility
+
+**Example: LLMs Integration**:
+
+First, make your LLMs callable functions and ``import`` them into a
+``.py`` file, like so:
+
+.. code:: python
+
+   # LLM_functions.py
+   from your_LLM import your_forward, your_backward
+
+Next, use the ``inincompatibility`` package to run the LLM in its
+(**Python** / **conda**) environment and generate the necessary
+importable code:
+
+.. code:: shell
+
+   python -m inincompatibility -i LLM_functions.py -o api_for_other.py
+
+Now, you can directly ``import`` the generated code in another
+(**Python** / **conda**) environment:
+
+.. code:: python
+
+   # your_other_code.py
+   from api_for_other import your_forward, your_backward
+
+**Example: Additional Samples**:
+
+For more usage examples, check out the
+`sample1 <https://github.com/userElaina/inincompatibility/tree/main/sample1>`__
+directory on
+`GitHub <https://github.com/userElaina/inincompatibility>`__.
