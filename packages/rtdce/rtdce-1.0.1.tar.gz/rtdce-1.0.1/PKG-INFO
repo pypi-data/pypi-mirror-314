@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: rtdce
+Version: 1.0.1
+Summary: A runtime type enforcer for dataclasses.
+Author-email: James Rao <jamesnarayanrao@gmail.com>
+Project-URL: Homepage, https://github.com/JamesRao98/rtdce
+Project-URL: Bug Tracker, https://github.com/JamesRao98/rtdce/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Runtime Dataclass Enforcer 
+
+```python
+
+from rtdce import enforce 
+
+from dataclasses import dataclass
+from typing import Dict
+
+@dataclass
+class Test:
+    hello: Dict[str, int]
+
+t = Test(hello={'world': 123})
+
+enforce(t)
+
+```
