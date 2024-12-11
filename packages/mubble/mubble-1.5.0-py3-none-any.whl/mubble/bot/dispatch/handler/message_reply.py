@@ -1,0 +1,36 @@
+import typing
+
+from mubble.api.api import API
+from mubble.bot.cute_types.message import MessageCute
+from mubble.bot.dispatch.context import Context
+from mubble.bot.dispatch.handler.base import BaseReplyHandler
+from mubble.bot.rules.abc import ABCRule
+
+
+class MessageReplyHandler(BaseReplyHandler):
+    def __init__(
+        self,
+        text: str,
+        *rules: ABCRule,
+        parse_mode: str | None = None,
+        is_blocking: bool = True,
+        as_reply: bool = False,
+        preset_context: Context | None = None,
+        **default_params: typing.Any,
+    ) -> None:
+        self.text = text
+        self.parse_mode = parse_mode
+        super().__init__(
+            *rules,
+            is_blocking=is_blocking,
+            as_reply=as_reply,
+            preset_context=preset_context,
+            **default_params,
+        )
+
+    async def run(self, _: API, event: MessageCute, __: Context) -> typing.Any:
+        method = event.answer if not self.as_reply else event.reply
+        await method(text=self.text, parse_mode=self.parse_mode, **self.default_params)
+
+
+__all__ = ("MessageReplyHandler",)
