@@ -1,0 +1,46 @@
+[project]
+dependencies = [
+  "click>=8.1.7",
+  "jmespath>=1.0.1",
+  "multipledispatch>=1.0.0",
+  "pydantic>=2.9.2",
+  "requests>=2.32.3",
+  "rich>=13.9.2",
+  "setuptools>=75.1.0",
+  "typer>=0.12.5",
+]
+description = "Kubiya SDK"
+name = "kubiya-sdk"
+readme = "README.md"
+requires-python = ">=3.11"
+version = "0.60.0"
+
+[project.optional-dependencies]
+server = ["fastapi>=0.115.2", "sentry-sdk[fastapi]>=2.16.0", "uvicorn>=0.31.1", "nats-py>=2.9.0"]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["kubiya_sdk"]
+
+[project.scripts]
+kubiya = "kubiya_sdk.main:cli"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+known_first_party = ["kubiya_sdk"]
+length_sort = true
+profile = "black"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.ruff]
+ignore = [
+  "E501", # line too long, handled by black
+]
+ignore-init-module-imports = true

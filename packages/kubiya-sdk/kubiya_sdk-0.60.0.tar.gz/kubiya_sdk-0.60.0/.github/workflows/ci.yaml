@@ -1,0 +1,160 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - '.github/**'
+      - '.git/**'
+      - '!examples/**'
+  pull_request:
+    branches:
+      - '**'
+    paths-ignore:
+      - '.github/**'
+      - '.git/**'
+      - '!examples/**'
+
+env:
+  COVERAGE_FILE_FORMAT: html
+  PYTHONPATH: ./kubiya_sdk  # Add kubiya_sdk to PYTHONPATH
+
+jobs:
+  changed-files:
+    name: Get changes
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v39
+        with:
+          json: true
+          quotepath: false
+          dir_names: true
+          dir_names_max_depth: 4
+          files_ignore: |
+            {.github,.git}/**
+
+      - name: List all changed files
+        run: echo '${{ steps.changed-files.outputs.all_modified_files }}'
+
+      - name: Set matrix
+        id: set-matrix
+        run: echo "matrix={\"dir\":${{ steps.changed-files.outputs.all_modified_files }}}" >> "$GITHUB_OUTPUT"
+
+      - name: scan-push
+        id: scan-push
+        uses: trufflesecurity/trufflehog@main
+        with:
+          base: ""
+          head: ${{ github.ref_name }}
+          extra_args: --only-verified
+
+  test:
+    runs-on: ubuntu-latest
+
+    continue-on-error: true
+
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    needs: [changed-files]
+    strategy:
+      matrix: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.x'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+
+      - name: Identify affected projects and install dependencies
+        run: |
+          git fetch origin main
+          CHANGED_FILES=$(git diff --name-only origin/main)
+          echo "Changed files: $CHANGED_FILES"
+          AFFECTED_PROJECTS=""
+
+          for file in $CHANGED_FILES; do
+            DIR=$(dirname "$file")
+            while [ "$DIR" != "." ]; do
+              if [ -f "$DIR/setup.py" ]; then
+                echo "Found setup.py in $DIR"
+                AFFECTED_PROJECTS="$AFFECTED_PROJECTS $DIR"
+                break
+              elif [ -f "$DIR/requirements.txt" ]; then
+                echo "Found requirements.txt in $DIR"
+                AFFECTED_PROJECTS="$AFFECTED_PROJECTS $DIR"
+                break
+              fi
+              DIR=$(dirname "$DIR")
+            done
+          done
+
+          AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | tr ' ' '\n' | sort -u | tr '\n' ' ')
+          echo "Affected projects: $AFFECTED_PROJECTS"
+
+          if [ -z "$AFFECTED_PROJECTS" ]; then
+            echo "No affected Python projects found, exiting..."
+            exit 0
+          fi
+
+          for project in $AFFECTED_PROJECTS; do
+            if [ -f "$project/setup.py" ]; then
+              echo "Installing $project using setup.py"
+              pip install -e "$project" --no-deps
+            elif [ -f "$project/requirements.txt" ]; then
+              echo "Installing dependencies for $project"
+              pip install -r "$project/requirements.txt"
+            fi
+          done
+
+      - name: Run pytest for coverage
+        run: |
+          pytest "${{ matrix.dir }}/tests" \
+            --continue-on-collection-errors \
+            --cov="${{ matrix.dir }}" \
+            --cov-report term \
+            --cov-report=${{ env.COVERAGE_FILE_FORMAT }}:${{ matrix.dir }}/coverage.${{ env.COVERAGE_FILE_FORMAT }} \
+            --cov-report html:${{ matrix.dir }}/coverage.html \
+            --junitxml=${{ matrix.dir }}/pytest.xml \
+            --cov-report=term-missing:skip-covered -v  | tee /tmp/pytest-coverage.txt \
+            pwd && ls -la && ls -la ${{ matrix.dir }}
+
+        # pytest --junitxml=${{ matrix.dir }}/pytest.xml --cov-report term-missing:skip-covered --cov=${{ matrix.dir }} -v | tee ${{ matrix.dir }}/pytest-coverage.txt
+
+      - name: Validate report
+        run: |
+          pwd && ls -la
+          ls -la ${{ matrix.dir }}
+          if [ -f /tmp/pytest-coverage.txt ]; then
+            echo "Coverage report found"
+          else
+            echo "Coverage report not found or malformed"
+            exit 1
+          fi
+
+      - name: Upload coverage report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ${{ matrix.dir }}/coverage.${{ env.COVERAGE_FILE_FORMAT }}
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: /tmp/pytest-coverage.txt #${{ matrix.dir }}/pytest-coverage.txt #/coverage.${{ env.COVERAGE_FILE_FORMAT }}
+          junitxml-path: ${{ matrix.dir }}/pytest.xml
