@@ -1,0 +1,80 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+xfail_strict = true
+addopts = [
+  "-v",
+  "--doctest-modules",
+  "--ignore=pymc_experimental/model_builder.py"
+]
+
+filterwarnings =[
+  "error",
+  # Raised by arviz when the model_builder class adds non-standard group names to InferenceData
+  "ignore::UserWarning:arviz.data.inference_data",
+
+  # bool8, find_common_type, cumproduct, and product had deprecation warnings added in numpy 1.25
+  'ignore:.*(\b(pkg_resources\.declare_namespace|np\.bool8|np\.find_common_type|cumproduct|product)\b).*:DeprecationWarning',
+
+  # JAX issues an over-eager warning if os.fork() is called when the JAX module is loaded, even if JAX isn't being used
+  'ignore:os\.fork\(\) was called\.:RuntimeWarning',
+
+  # Warning coming from blackjax
+  'ignore:jax\.tree_map is deprecated:DeprecationWarning',
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: nocover",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["D", "E", "F", "I", "UP", "W", "RUF"]
+ignore = [
+  "E501",
+  "RUF001", # String contains ambiguous character (such as Greek letters)
+  "RUF002", # Docstring contains ambiguous character (such as Greek letters)
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D107",
+  "D200",
+  "D202",
+  "D203",
+  "D204",
+  "D205",
+  "D209",
+  "D212",
+  "D213",
+  "D301",
+  "D400",
+  "D401",
+  "D403",
+  "D413",
+  "D415",
+  "D417",
+]
+
+[tool.ruff.lint.isort]
+lines-between-types = 1
+
+[tool.ruff.lint.per-file-ignores]
+'tests/*.py' = [
+  'F841', # Unused variable warning for test files -- common in pymc model declarations
+  'D106',  # Missing docstring for public method -- unittest test subclasses don't need docstrings
+  'E402'  # Import at top, not respected when pytest.importorskip is required
+]
+'tests/statespace/*.py' =  [
+  'F401', # Unused import warning for test files -- this check removes imports of fixtures
+  'F811'  # Redefine while unused -- this check fails on imported fixtures
+]
+'pymc_experimental/__init__.py' = ['F401', 'F403']
