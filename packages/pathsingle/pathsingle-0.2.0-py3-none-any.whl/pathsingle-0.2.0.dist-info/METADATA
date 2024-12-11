@@ -1,0 +1,89 @@
+Metadata-Version: 2.1
+Name: pathsingle
+Version: 0.2.0
+Summary: PathSingle is a Python package for pathway analysis of single-cell RNA-seq data.
+Home-page: https://github.com/zurkin1/pathsingle
+Author: Dani Livne
+Author-email: zurkin@gmail.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Requires-Dist: scanpy
+Requires-Dist: tqdm
+Requires-Dist: omnipath
+Requires-Dist: umap-learn
+Requires-Dist: magic-impute
+Requires-Dist: matplotlib
+Requires-Dist: scprep
+Requires-Dist: seaborn
+
+# PathSingle: A Biochemical Pathway Analysis Tool for Single-Cell Data
+![Pathway analysis](pathsingle/data/Pathsingle.png)
+
+## Overview
+PathSingle is a Python-based pathway analysis tool tailored for single-cell data analysis. It employs a unique graph-based algorithm to enable the analysis of diverse cellular states, such as T cell subtypes. Designed to be open-source, extensible, and computationally efficient, PathSingle provides researchers with a versatile framework for uncovering biologically meaningful insights from high-dimensional single-cell transcriptomics data.
+
+## Key Features
+- Tailored for single-cell RNA-seq data analysis
+- Unique graph-based algorithm for pathway analysis
+- Efficient classification of diverse cellular states
+- Open-source and extensible
+- Computationally efficient
+
+## Installation
+`pip install pathsingle`
+
+Or simply clone this repository using git clone command.
+
+## Quick Start
+```
+anndata = sc.read('./data/activity_df.csv', delimiter=',', cache=False)
+calc_activity(anndata)
+```
+
+## Usage
+For detailed usage instructions, please refer to the scripts and notebooks in the `pathsingle` folder.
+
+[Single Cells Benchmark Readme](pathsingle/benchmark.md)
+
+[Feature Reduction Notebook](pathsingle/feature_reduction.ipynb)
+
+The [pathway_db](pathsingle/pathway_db) subfolder contains scripts for building and customizing the pathways database.
+- [kegg](pathsingle/pathway_db/kegg): Scripts for downloading pathways from KEGG PATHWAY database and building the existing PathSingle database pathway_relations.csv.
+- [reactome](pathsingle/pathway_db/reactome): Scripts for downloading and building a new PathSingle pathway_relations.csv database using Reactome Pathway database.
+- [pathwaycommon](pathsingle/pathway_db/pathwaycommon): Scripts for downloading and building a new PathSingle pathway_relations.csv database using Pathway Commons integrated database.
+
+## Supported Pathways
+PathSingle currently supports 357 curated pathways. Click the link to view the full list. [List of supported pathways.](pathsingle/data/pathway_relations.csv)
+
+## Contributing
+We welcome contributions! Please see our Contributing Guidelines for more information on how to get involved.
+
+## License
+PathSingle is available under the MIT license. See the LICENSE file for more details.
+
+## Support
+For questions, issues, or feature requests, please open an issue on our GitHub repository.
+
+For additional support, contact: zurkin at yahoo dot com.
+
+## Acknowledgments
+We thank the scientific community for their valuable feedback and contributions to this project.
+
