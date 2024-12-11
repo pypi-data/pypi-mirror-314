@@ -1,0 +1,97 @@
+Metadata-Version: 2.1
+Name: happyx
+Version: 4.6.5
+Summary: HappyX web framework bindings for Python 🐍
+Home-page: https://github.com/HapticX/happyx/tree/master/bindings/python
+Author: Ethosa
+Author-email: social.ethosa@gmail.com
+Maintainer: HapticX
+Maintainer-email: hapticx.company@gmail.com
+License: MIT
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Description-Content-Type: text/markdown
+Requires-Dist: jinja2
+
+<div align="center">
+
+# HappyX
+
+### Python Bindings For HappyX Web Framework 🔥
+
+![Python language](https://img.shields.io/badge/>=3.7.x-1b1e2b?style=for-the-badge&logo=python&logoColor=f1fa8c&label=Python&labelColor=2b2e3b)
+
+</div>
+
+
+## Getting Started ✌
+
+### Installing 📥
+
+You can install HappyX via `pypi`:
+```bash
+pip install happyx
+```
+
+## Usage 🔌
+
+### Hello World 👋
+
+```py
+from happyx import Server
+
+
+app = Server('127.0.0.1', 5000)  # host and port are optional params
+
+
+@app.get('/')
+def home():
+    return "Hello world!"
+
+
+app.start()
+```
+
+
+### JSON/HTML/File Responses 🛠
+
+```py
+from happyx import Server, JsonResponse, HtmlResponse, FileResponse
+
+
+app = Server()
+
+
+@app.get('/json')
+def json_resp():
+    return JsonResponse(
+      {'key': 'value', 'arr': [1, 2, 3, 4, 5]},
+      status_code=200  # also available headers: dict param
+    )
+
+
+@app.get('/html')
+def html_resp():
+    return HtmlResponse(
+      '<h1>HTML Response!</h1>',
+      status_code=200  # also available headers: dict param
+    )
+
+
+@app.get('/file')
+def file_resp():
+    return FileResponse('my_cool_icon.png')
+
+
+app.start()
+```
+
+Read more in [User Guide](https://hapticx.github.io/happyx/#/guide/)
