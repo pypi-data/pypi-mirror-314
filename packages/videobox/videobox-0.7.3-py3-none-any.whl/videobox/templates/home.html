@@ -1,0 +1,126 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+
+{% block content %} 
+    <main id="main">
+        <!--  style="background-image: url({{ today_series.fanart_url if today_series and today_series.fanart_url else '' }});" -->
+        <section>
+            <h1 class="text-xlg font-weight-black mb-5">Videobox</h1>
+
+            {% if server_alert %}
+                <p class="border rounded p-3 mb-5" style="max-width: fit-content">
+                    ⚠️ {{server_alert}}
+                </p>
+            {% endif %}
+    
+            {% if today_series %}
+                <h2 class="text-lg font-weight-black mb-4">Today’s top episodes</h2>
+        
+                <section class="today-series">
+                    <div class="carousel">
+                        <div class="carousel__items py-2">
+                            {% for s in today_series %}
+                                <div class="carousel-item">
+                                    {% set episode_hash = 'e' ~ s.episode.id %}
+                                    <div class="card-episode">
+                                        <a href="{{ url_for('main.series_detail', series_id=s.id, view='list', _anchor=episode_hash) }}">
+                                            <img class="card-episode__image w-100 img-fluid rounded" loading="lazy" src="{{ s.episode.thumbnail }}" width="300" height="170"
+                                            alt="Still for episode {{s.episode.season_episode_id}}" />
+                                        </a>           
+                                        <a href="{{ url_for('main.series_detail', series_id=s.id) }}">
+                                            <img class="card-episode__poster img-fluid rounded" loading="lazy" src="{{ s.poster }}" width="340" height="500" alt="Poster for {{ s.name }}" />                                            
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm text-muted text-uppercase mb-2">{{s.episode.season_episode_id}}</h2>
+                                        <h3 class="text-regular">
+                                            <a class="" href="{{ url_for('main.series_detail', series_id=s.id, view='list', _anchor=episode_hash) }}">
+                                                {{ s.episode.name }}<!-- {{ s.total_completed }} -->
+                                            </a>
+                                        </h3>                                    
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </section>
+
+        <hr class="my-5">
+
+        <!-- FEATURED SERIES -->
+
+        <section>
+            <h2 class="text-lg font-weight-black mb-4">Featured series</h2>
+            <div class="mobile-carousel">
+                {% for series in featured_series %}
+                    <div class="mobile-carousel__item">
+                        {{ macros.render_series_card(series) }}
+                    </div>            
+                {% endfor %}
+            </div>    
+        </section>
+
+        <hr class="my-5">
+
+        <!-- TAGS -->
+
+        <section>
+            <h2 class="text-lg font-weight-black mb-4">Popular tags</h2>
+
+            <div class="carousel">
+                <div class="carousel__items py-2">
+                    {% for tag in top_tags %}      
+                        <a class="carousel-item" href="{{ url_for( 'main.tag_detail', slug=tag.tag_slug) }}">
+                            <div class="card-tag rounded">
+                                    <img class="img-fluid rounded" width="300" height="170" src="{{tag.thumbnail_url}}" alt=""><div class="card-tag__name rounded">{{tag.tag_name}}</div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-5">
+
+        <!-- FOLLOWED -->
+        
+        {% if followed_series %}
+            <section>
+                <div class="d-flex align-items-center mb-3">
+                    <h2 class="text-lg font-weight-black mb-4">Followed series</h2>
+                    <a class="ml-auto" href="{{ url_for('main.following') }}"><small>View all</small></a>
+                </div>
+                    {{ macros.render_series_timeline(followed_series) }}
+            </section>
+            
+            <hr class="my-5">
+        {% endif %}
+
+        <footer>
+            <p class="text-muted mb-2">
+                <small><strong>This is Videobox {{version}}</strong></small>
+            </p>
+    
+            <p class="text-muted mb-2">
+                <small>Tracking {{ "{:,}".format(total_series) }} series and
+                {{ "{:,}".format(total_releases) }} torrents&emsp;
+                {% if last_sync and last_sync.status == "K" %}
+                    <img style="vertical-align: middle" class="mr-1" width="16" height="16" src="{{ url_for('static', filename='icon-check-bold.svg') }}"><a href="{{ url_for('main.system_status') }}">Library is up to date</a>
+                {% else %}
+                    <img style="vertical-align: middle" class="mr-1" width="16" height="16" src="{{ url_for('static', filename='icon-warning-bold.svg') }}"><a href="{{ url_for('main.system_status') }}">There were errors updating library</a>
+                {% endif %}
+                </small>
+            </p>
+            
+            <p class="text-muted body-copy">
+                <small>Videobox doesn’t host any copyrighted content. TV series information and
+                  images are provided by <a rel="noreferrer" href="https://www.themoviedb.org/">The Movie DB</a>, but we are not endorsed or
+                  certified by The Movie DB or its affiliates.</small>
+            </p>
+        </footer>
+    </main>
+{% endblock %}
+
+
