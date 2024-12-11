@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "HopfieldModel"
+version = "1.0.1"
+description = "A Python package to model single-cell data using Hopfield networks"
+authors = [
+    {name = "Ashish Phal", email = "aphal@uw.edu"},
+]
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+keywords = ["hopfield", "network", "single-cell", "bioinformatics"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scikit-learn",
+    "scanpy",
+    "seaborn",
+    "scipy",
+]
+
+[project.urls]
+homepage = "https://github.com/ashx56/scHopfield"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+]
+
+[tool.setuptools]
+packages = ["hopfield_model"]
+
+[project.scripts]
+hopfield-model = "hopfield_model.main:main"
