@@ -1,0 +1,39 @@
+{% extends "partials/question.template" %}
+
+{% import 'partials/answer_list.template' as answer_list %}
+
+{% block field_ids %}
+    {{ answer_list.field_ids(question.id, question.answers) }}
+{% endblock %}
+
+{% block body %}
+    <response_str ident="response1" rcardinality="Single">
+        <render_fib>
+            <response_label ident="answer1" rshuffle="No"/>
+        </render_fib>
+    </response_str>
+{% endblock %}
+
+{% block scoring %}
+    <resprocessing>
+        <outcomes>
+            <decvar maxvalue="100" minvalue="0" varname="SCORE" vartype="Decimal"/>
+        </outcomes>
+        {% for answer in question.answers %}
+            {% set id = 'af' ~ question.id ~ 'f' ~ loop.index0 %}
+            <respcondition continue="Yes">
+                <conditionvar>
+                    <varequal respident="response1">{{ answer.raw_text }}</varequal>
+                </conditionvar>
+                <setvar varname="SCORE" action="Set">100</setvar>
+            </respcondition>
+            {% if answer.feedback %}
+                <displayfeedback feedbacktype="Response" linkrefid="{{ id }}_fb"/>
+            {% endif %}
+        {% endfor %}
+    </resprocessing>
+{% endblock %}
+
+{% block additional_feedback %}
+    {{ answer_list.feedback(question.id, question.answers) }}
+{% endblock %}
