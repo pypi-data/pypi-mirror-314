@@ -1,0 +1,101 @@
+Metadata-Version: 2.1
+Name: pydetectgpt
+Version: 0.1.0
+Summary: LLM-Generated text detection in PyTorch
+Author-email: Dylan Harden <dylanharden33@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Dylan-Harden3
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/Dylan-Harden3/PyDetectGPT
+Project-URL: Repository, https://github.com/Dylan-Harden3/PyDetectGPT
+Keywords: ai,detection,llm,pytorch
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: torch
+Requires-Dist: numpy
+Requires-Dist: transformers
+Provides-Extra: dev
+Requires-Dist: black; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: pydocstyle; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+
+# PyDetectGPT
+
+LLM-Generated text detection in Pytorch.
+
+## Quick Start
+```python
+from pydetectgpt import detect_ai_text
+
+text = "text you want to check here"
+result = detect_ai_text(text)
+print("AI Generated" if result else "Human Written")
+```
+
+## CLI
+
+There is also a CLI wrapper.
+```bash
+pydetectgpt "Your text here"
+```
+> "Detection Result: AI Generated" or "Detection Result: Human Written"
+
+If you want just the 0/1 result (ex for scripting) use the `-q` flag:
+
+```bash
+pydetectgpt "Your text here" -q
+```
+> 0 or 1
+
+For a full list of args see [cli.py](pydetectgpt/cli.py)
+
+## Detection Methods
+
+PyDetectGPT supports four detection methods, in order of effectiveness:
+
+1. **FastDetectGPT** (default): Implementation of [Fast-DetectGPT: Efficient Zero-Shot Detection of Machine-Generated Text][1]
+2. **DetectLLM**: Implementation of [DetectLLM: Leveraging Log Rank Information for Zero-Shot Detection of Machine-Generated Text][2]
+3. **LogRank**: Average log token rank
+4. **LogLikelihood**: Basic log likelihood of the text
+
+[1]: https://arxiv.org/abs/2310.05130 "Fast-DetectGPT: Efficient Zero-Shot Detection of Machine-Generated Text"
+[2]: https://arxiv.org/abs/2306.05540 "DetectLLM: Leveraging Log Rank Information for Zero-Shot Detection of Machine-Generated Text"
+
+## Acknowledgements
+
+- [Fast-DetectGPT: Efficient Zero-Shot Detection of Machine-Generated Text][1] (Bao et al., ICLR 2024)
+- [DetectLLM: Leveraging Log Rank Information for Zero-Shot Detection of Machine-Generated Text][2] (Su et al., 2023)
+
+## License
+
+MIT
