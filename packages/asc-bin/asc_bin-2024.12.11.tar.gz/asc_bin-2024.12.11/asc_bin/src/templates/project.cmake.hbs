@@ -1,0 +1,210 @@
+# set cmake version required
+cmake_minimum_required(VERSION {{cmake_version}})
+
+# set project name
+project ({{project}} C CXX)
+
+{{#if (or std_c std_cxx)}}
+{{#if std_c}}
+# set c standard version
+set(CMAKE_C_STANDARD {{std_c}})
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+{{/if}}
+
+{{#if std_cxx}}
+# set c++ standard version
+set(CMAKE_CXX_STANDARD {{std_cxx}})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+{{/if}}
+{{/if}}
+
+# configure msvc
+if(MSVC)
+    # utf-8 source code encoding
+    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+    # Visual Studio - Property - C/C++ - General - Debug Information Format - Program Database (/Zi)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi /Od")  # Disable Optimization
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi /O1")  # Favor Size
+
+    # Visual Studio - Property - Linker - Debugging - Generate Debug Info - Generate Debug Information (/Debug)
+    set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /DEBUG")
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG")
+
+    # Visual Studio - Property - Linker - Debugging - Generate Debug Info - Generate Debug Information (/Debug)
+    set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEBUG")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG")
+endif(MSVC)
+
+# version
+set({{project_upper}}_VERSION_MAJOR {{build_year}})
+set({{project_upper}}_VERSION_MINOR {{build_month}})
+set({{project_upper}}_VERSION_MICRO {{build_day}})
+set(VERSION_STRING "{{build_year}}.{{build_month}}.{{build_day}}")
+{{#if is_workspace}}
+configure_file(${CMAKE_SOURCE_DIR}/{{project}}/version.h.in ${CMAKE_BINARY_DIR}/{{project}}/version.h @ONLY)
+{{else}}
+configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_BINARY_DIR}/version.h @ONLY)
+{{/if}}
+
+{{{user_cmake_txt}}}
+{{#if is_workspace}}
+configure_file(${CMAKE_SOURCE_DIR}/{{project}}/config.h.cm ${CMAKE_BINARY_DIR}/{{project}}/config.h)
+{{else}}
+configure_file(${CMAKE_SOURCE_DIR}/config.h.cm ${CMAKE_BINARY_DIR}/config.h)
+{{/if}}
+
+# package
+include(CMakePackageConfigHelpers)
+set(PACKAGE ${PROJECT_NAME})
+set(PACKAGE_NAME ${PROJECT_NAME})
+set(PACKAGE_STRING "${PROJECT_NAME} ${VERSION_STRING}")
+set(PACKAGE_TARNAME ${PROJECT_NAME})
+set(PACKAGE_URL "")
+set(PACKAGE_VERSION ${VERSION_STRING})
+set(STDC_HEADERS 1)
+set(SUPPORT_ATTRIBUTE_VISIBILITY_DEFAULT 1)
+set(SUPPORT_FLAG_VISIBILITY 1)
+set(VERSION ${VERSION_STRING})
+
+# glob sources
+{{#each sources_group_by_dir as |group|}}
+FILE(
+    GLOB
+    {{group.dir}}
+    {{#each group.files as |path|}}
+    "{{path}}"
+    {{/each}}
+)
+{{/each}}
+
+# group sources
+{{#each sources_group_by_dir as |group|}}
+SOURCE_GROUP("{{group.original_dir}}" FILES {{group.variable}})
+{{/each}}
+
+{{#if library}}
+# generate library
+add_library(
+{{else}}
+# generate executable
+add_executable(
+{{/if}}
+    ${PROJECT_NAME}
+{{#if shared_library}}
+    SHARED
+{{/if}}
+    {{#each sources_group_by_dir as |group|}}
+    {{group.variable}}
+    {{/each}}
+)
+
+if(DEFINED VCPKG_TARGET_TRIPLET)
+    if(VCPKG_TARGET_TRIPLET STREQUAL "x64-windows-static")
+        if(MSVC)
+            set_target_properties(
+                ${PROJECT_NAME}
+                PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+            )
+        endif()
+    endif()
+endif()
+
+{{#if find_packages}}
+# find package
+{{#each find_packages as |package|}}
+find_package({{package}} CONFIG REQUIRED)
+{{/each}}
+{{/if}}
+
+# set include dirs
+target_include_directories(
+    ${PROJECT_NAME}
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/../src
+    ${CMAKE_CURRENT_BINARY_DIR}
+{{#each include_directories as |directory|}}
+    {{directory}}
+{{/each}}
+)
+
+{{#if (or private_libraries std_libraries) }}
+# link libraries
+{{/if}}
+set(LINK_LIBS "")
+{{#each private_libraries as |lib|}}
+list(APPEND LINK_LIBS {{lib}})
+{{/each}}
+{{#each std_libraries as |lib|}}
+{{#if lib.1}}
+if({{lib.1}})
+{{/if}}
+list(APPEND LINK_LIBS {{lib.0}})
+{{#if lib.1}}
+endif()
+{{/if}}
+{{/each}}
+{{#if (or private_libraries std_libraries) }}
+target_link_libraries(
+    ${PROJECT_NAME}
+    PRIVATE
+    ${LINK_LIBS}
+)
+{{/if}}
+
+# export dynamic library symbols
+if(BUILD_SHARED_LIBS)
+    add_definitions(-DBUILD_SHARED_LIBS)
+    add_definitions(-D{{project_upper}}_EXPORTS)
+endif()
+
+{{#if library}}
+# export library
+add_library(
+    ${PROJECT_NAME}::${PROJECT_NAME}
+    ALIAS
+    ${PROJECT_NAME}
+)
+
+# export include path
+target_include_directories(
+    ${PROJECT_NAME}
+    INTERFACE
+    $<INSTALL_INTERFACE:include>
+)
+{{/if}}
+
+# install archive, library, bin
+install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}
+    ARCHIVE DESTINATION {{install_lib_dir}}
+    LIBRARY DESTINATION {{install_lib_dir}}
+    RUNTIME DESTINATION {{install_bin_dir}}
+)
+
+{{#if library}}
+# install headers
+{{#each install_headers as |header|}}
+install(FILES "{{header.src}}" DESTINATION include/${PROJECT_NAME}/{{header.dst}})
+{{/each}}
+
+# install package config
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}-config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+    INSTALL_DESTINATION "{{install_share_dir}}/${PROJECT_NAME}"
+)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" DESTINATION "{{install_share_dir}}/${PROJECT_NAME}")
+
+# install cmake targets
+install(
+    EXPORT ${PROJECT_NAME}-targets
+    DESTINATION {{install_share_dir}}/${PROJECT_NAME}
+    NAMESPACE ${PROJECT_NAME}::
+)
+{{/if}}
