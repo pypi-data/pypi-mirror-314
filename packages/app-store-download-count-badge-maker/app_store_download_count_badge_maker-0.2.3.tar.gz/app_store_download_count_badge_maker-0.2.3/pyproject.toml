@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "app-store-download-count-badge-maker"
+version = "0.2.3" # replacing poetry-dynamic-versioning
+description = "A command-line tool to create badges displaying the number of app downloads from App Store"
+authors = ["nnsnodnb <nnsnodnb@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/nnsnodnb/app-store-download-count-badge-maker"
+keywords = [
+    "apple",
+    "app store",
+    "badge",
+    "download count",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+packages = [
+    { include = "maker" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.14"
+cryptography = ">=43.0.0,<45.0.0"
+httpx = "^0.28.0"
+pandas = "^2.2.2"
+PyJWT = "^2.9.0"
+PyYAML = "^6.0.2"
+click = "^8.1.7"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+isort = "^5.13.2"
+mypy = "^1.11.2"
+flake8 = "^7.1.1"
+invoke = "^2.2.0"
+types-pyyaml = "^6.0.12.20240808"
+pytest-httpx = "^0.35.0"
+pytest-asyncio = "^0.24.0"
+pytest-mock = "^3.14.0"
+
+[tool.poetry.scripts]
+app-store-download-count-badge-maker = "maker.main:cli"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "pep440"
+
+[build-system]
+requires = ["poetry-core", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+(
+    /(
+         \.git
+        |\.github
+        |\.mypy_cache
+        |\.pytest_cache
+    )/
+)
+'''
+
+[tool.isort]
+include_trailing_comma = true
+line_length = 120
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
