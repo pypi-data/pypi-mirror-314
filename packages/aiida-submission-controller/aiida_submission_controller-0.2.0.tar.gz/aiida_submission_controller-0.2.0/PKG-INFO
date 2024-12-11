@@ -1,0 +1,48 @@
+Metadata-Version: 2.3
+Name: aiida-submission-controller
+Version: 0.2.0
+Summary: Utilities for controlling submission flow in AiiDA
+Author: Giovanni Pizzi, Austin Zadoks, Marnik Bercx
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: AiiDA
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: aiida-core>=1.0
+Requires-Dist: pydantic~=1.10.4
+Requires-Dist: rich
+Requires-Dist: pre-commit~=2.17.0 ; extra == "dev"
+Requires-Dist: pylint-pydantic~=0.1.8 ; extra == "dev"
+Requires-Dist: aiida-quantumespresso ; extra == "qe"
+Project-URL: Source, https://github.com/aiidateam/aiida-submission-controller
+Provides-Extra: dev
+Provides-Extra: qe
+
+# AiiDA submission controller
+
+Some classes to help managing large number of submissions, while controlling the maximum number of submissions running at any given time.
+
+This project is still in early phase and the API might change.
+
+It includes an abstract base class that implements the main logic, a very simple example of an implementation
+to compute a 12x12 addition table (in `examples/add_in_batches.py`), and a main script to run it (and get results and show them).
+
+To use it, you are supposed to launch the script (e.g. in a `screen` terminal) with something like this:
+```bash
+cd examples
+while true ; do verdi run add_in_batches.py ; sleep 5 ; done
+```
+where you can adapt the sleep time.
+Typically, for real simulations, you might want something in the
+range of 5-10 minutes, or anyway so that at every new run you have at least some new processes to submit,
+but still less that the maximum number of available slots, to try to keep the 'queue' quite filled at any
+given time.
+
+There is also a second subclass that, rather than just creating new submissions from some extras, will use (input) nodes in another group as a reference for which calculations to run (e.g.: a group of crystal structures, representing the inputs to a set of workflows).
+
