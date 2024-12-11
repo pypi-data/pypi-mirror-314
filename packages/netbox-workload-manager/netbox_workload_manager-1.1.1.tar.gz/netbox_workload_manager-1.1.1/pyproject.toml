@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netbox-workload-manager"
+dynamic = ["version"]
+description = "Workload Manager Netbox Plugin"
+readme = "README.md"
+requires-python = ">=3.10.12"
+license = { text = "Apache-2.0" }
+authors = [
+    {name = "ducna", email = "ducna-hcd@gmail.com"},
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = []
+
+[project.optional-dependencies]
+build = [
+    "build == 1.2.1",
+    "setuptools == 70.3.0",
+    "twine == 5.1.1",
+]
+tools = [
+    "ruff == 0.5.1",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "netbox_workload_manager.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["netbox_workload_manager"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["netbox_workload_manager"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+    "D104",  # https://beta.ruff.rs/docs/rules/#pydocstyle-d - don't require doc strings in __init__.py files
+    "F401",  # https://beta.ruff.rs/docs/rules/#pyflakes-f - don't complain about unused imports in __init__.py files
+]
+"netbox_workload_manager/migrations/*.py" = [
+    "E501",  # https://beta.ruff.rs/docs/rules/line-too-long/ - don't check on Django generated migration files
+]
+
+[tool.ruff.format]
+exclude = ["netbox_workload_manager/migrations/*.py"]
