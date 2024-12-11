@@ -1,0 +1,92 @@
+Metadata-Version: 2.1
+Name: scipion-em-warp
+Version: 3.4.3
+Summary: Plugin to use Warp within the Scipion framework
+Author-email: Grigory Sharov <sharov.grigory@gmail.com>, Yunior Fonseca <cfonseca@cnb.csic.es>, Pablo Conesa <pconesa@cnb.csic.es>
+License: GNU General Public License v3 (GPLv3)
+Project-URL: Homepage, https://github.com/scipion-em/scipion-em-warp
+Project-URL: Repository, https://github.com/scipion-em/scipion-em-warp
+Project-URL: Issues, https://github.com/scipion-em/scipion-em-warp/issues
+Keywords: scipion,electron-microscopy,cryo-em,structural-biology,image-processing,scipion-3.0
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: scipion-em
+Requires-Dist: emtools
+
+===========
+Warp plugin
+===========
+
+This plugin provides a wrapper for some of the programs of the `Warp <https://github.com/warpem/warp>`_ software.
+
+.. image:: https://img.shields.io/pypi/v/scipion-em-warp.svg
+        :target: https://pypi.python.org/pypi/scipion-em-warp
+        :alt: PyPI release
+
+.. image:: https://img.shields.io/pypi/l/scipion-em-warp.svg
+        :target: https://pypi.python.org/pypi/scipion-em-warp
+        :alt: License
+
+.. image:: https://img.shields.io/pypi/pyversions/scipion-em-warp.svg
+        :target: https://pypi.python.org/pypi/scipion-em-warp
+        :alt: Supported Python versions
+
+.. image:: https://img.shields.io/sonar/quality_gate/scipion-em_scipion-em-warp?server=https%3A%2F%2Fsonarcloud.io
+        :target: https://sonarcloud.io/dashboard?id=scipion-em_scipion-em-warp
+        :alt: SonarCloud quality gate
+
+.. image:: https://img.shields.io/pypi/dm/scipion-em-warp
+        :target: https://pypi.python.org/pypi/scipion-em-warp
+        :alt: Downloads
+
+Installation
+-------------
+
+You will need to use 3.0+ version of Scipion to be able to run these protocols. To install the plugin, you have two options:
+
+a) Stable version
+
+.. code-block::
+
+   scipion installp -p scipion-em-warp
+
+b) Developer's version
+
+   * download repository
+
+    .. code-block::
+
+        git clone -b devel https://github.com/scipion-em/scipion-em-warp.git
+
+   * install
+
+    .. code-block::
+
+       scipion installp -p /path/to/scipion-em-warp --devel
+
+
+Verifying
+---------
+
+To check the installation, simply run one of the following Scipion tests:
+
+* scipion3 tests warp.tests.protocols_tomo_tests.TestWarpEstimateCTFTomoReconstruction
+* scipion3 tests warp.tests.protocols_tomo_tests.TestDeconvolveTomo
+* scipion3 tests warp.tests.test_protocols.TestWarpMotionCorrection
+* scipion3 tests warp.tests.test_protocols.TestDeconvolveMics
+
+Protocols
+----------
+
+* deconvolve micrographs
+* deconvolve tomograms
+* deconvolve tilt-series
+* tomo reconstruction
+* motion correction (for SPA)
+* tilt-series motion and ctf estimation (includes ctf estimation and defocus handedness)
+
+References
+-----------
+
+1. Dimitry Tegunov and Patrick Cramer. Real-time cryo-electron microscopy data preprocessing with Warp. Nature Methods 16(11), 2019, p. 1146-1152.
