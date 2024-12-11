@@ -1,0 +1,72 @@
+[project]
+name = "nrp-devtools"
+version = "1.0.18"
+description = "NRP repository development tools"
+readme = "README.md"
+authors = [{ name = "Miroslav Simek", email = "miroslav.simek@cesnet.cz" }]
+dependencies = [
+  "setuptools",
+  "pip",
+  "wheel",
+  "click",
+  "aenum",
+  "pydash",
+
+  # config loading/writing
+  "PyYAML",
+  "dacite",
+  "ruamel.yaml",
+
+  # for code scaffolding
+  "case-converter",
+  "cookiecutter",
+  "cryptography",
+
+  # for managing requirements / installation
+  "pdm",
+  "tomli",
+  "tomli-w",
+  "requirements-parser",
+
+  # progress bar everywhere
+  "tqdm",
+
+  # for develop (webpack)
+  "watchdog",
+  "psutil",
+
+  # nrp makemessages
+  "oarepo-tools",
+
+  # for checks
+  "minio",
+  "redis",
+  "psycopg[binary]",
+  "pika",
+  "opensearch-py",
+
+  # testing
+  "pytest",
+
+  # i18n
+  "oarepo-tools",
+
+  # pypi proxy
+  "flask",
+  "lxml"
+]
+
+[project.scripts]
+nrp-devtools = "nrp_devtools.main:nrp_command"
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+nrp_devtools = ["*"]
+"nrp_devtools.templates" = ["*", "**/*"]
