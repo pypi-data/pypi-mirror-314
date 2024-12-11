@@ -1,0 +1,61 @@
+# -*- coding: utf-8 -*- 
+
+from setuptools import setup, find_packages
+
+with open('README.md', 'r') as f:
+    LONG_DESCRIPTION = f.read()
+    
+
+REQUIREMENTS=[
+    'PyYAML>=6.0,<7.0',
+'PyPDF2>=3.0,<4.0',
+'reportlab>=4.0,<5.0',
+'requests>=2.31,<3.0',
+'pytesseract>=0.3.10,<0.4.0',
+'Pillow>=10.0,<11.0',
+'moviepy>=2.0.0,<3.0.0',
+'matplotlib>=3.8,<4.0',
+'numpy>=1.24,<2.0',
+'librosa>=0.10,<0.11',
+'soundfile>=0.12,<0.13',
+'plotly>=5.15,<6.0',
+'tqdm>=4.65,<5.0',
+'ffmpeg-python>=0.2.0,<1.0',
+]
+
+NAME = 'YoungLion'
+VERSION = '0.0.5'
+DESCRIPTION = "It is a library whose main purpose is to make the work of YoungLion developers easier."
+LONG_DESCRIPTION_CONTENT_TYPE = 'text/markdown'
+# URL = 'https://github.com/Cavanshirpro/YoungLion'
+AUTHOR = "Cavanşir Qurbanzadə"
+AUTHOR_EMAIL = "cavanshirpro@gmail.com"
+LICENSE = 'MIT'
+KEYWORDS = 'YoungLion, Young Lion, Cavanshirpro'
+
+setup(
+    name=NAME,
+    version=VERSION,
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    description=DESCRIPTION,
+    license=LICENSE,
+    keywords=KEYWORDS,
+    long_description=LONG_DESCRIPTION,
+    long_description_content_type=LONG_DESCRIPTION_CONTENT_TYPE,
+    # url="https://github.com/Cavanshirpro/YoungLion",
+    packages=find_packages('src'),
+    install_requires=REQUIREMENTS,
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+    ],
+    python_requires=">=3.7",
+    package_dir={'': 'src'}
+)
