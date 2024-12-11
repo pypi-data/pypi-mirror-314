@@ -1,0 +1,50 @@
+image: registry.gitlab.com/octomy/gitlab-runner:1.0.3
+
+variables:
+  GIT_DEPTH: 1
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  RESTORE_CACHE_ATTEMPTS: 10
+  ARTIFACT_DOWNLOAD_ATTEMPTS: 10
+  GET_SOURCES_ATTEMPTS: 10
+
+cache:
+  key: one-cache-to-rule-them-all
+  paths:
+  - .cache/pip
+
+stages:
+  - build-and-test
+  - deploy
+
+Build:
+  stage: build-and-test
+  tags:
+  - grunner
+  script:
+  - make pypi-build
+  artifacts:
+    paths:
+    - dist
+    expire_in: 2 hours
+
+Test:
+  stage: build-and-test
+  tags:
+  - grunner
+  script:
+  - make --version
+  - make env
+  - make ver
+  - make info
+  - make code-quality
+  - make test
+
+Deploy:
+  stage: deploy
+  tags:
+  - grunner
+  script:
+  - make pypi-push
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "production"'
+      when: on_success
