@@ -1,0 +1,18 @@
+[envs.default]
+installer = "uv"
+
+[envs.hatch-static-analysis]
+config-path = "ruff_defaults.toml"
+
+[envs.hatch-test]
+extra-dependencies = [
+  "pyfakefs",
+]
+
+[envs.types]
+extra-dependencies = [
+  "mypy",
+  "pytest",
+]
+[envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/deva tests}"
