@@ -1,0 +1,57 @@
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["sirp_dsi_converter"]
+py-modules = ["conversion"]
+
+[project]
+name = "sirp_dsi_converter"
+dynamic = ["version"]
+description = "A converter between D-SI and SI Reference Point unit formats"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+keywords = ["metrology", "unit conversion"]
+authors = [
+    { name = "Diego Nahuel Coppa" },
+    { name = "Daniel Hutzschenreuter" },
+    { name = "Maximilian Gruber" },
+]
+maintainers = [
+    { name = "Maximilian Gruber", email = "maximilian.gruber@ptb.de" },
+]
+# For a list of valid classifiers, see https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 3 - Alpha", # 3 - Alpha, 4 - Beta, 5 - Production/Stable
+
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = ["rdflib"]
+
+#[project.optional-dependencies]
+# dev = ["owlrl"]
+# test = ["coverage"]
+
+[tool.setuptools.dynamic]
+version = { attr = "sirp_dsi_converter.__version__" }
+
+[project.urls]
+"Homepage" = "https://github.com/PTB-M4D/SIRP-D-SI-Converter-Service/"
+"Bug Reports" = "https://github.com/PTB-M4D/SIRP-D-SI-Converter-Service/issues"
+"Source" = "https://github.com/PTB-M4D/SIRP-D-SI-Converter-Service/"
+
+[project.scripts]
+convert_d2s = "conversion:dsi_to_sirp"
