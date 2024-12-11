@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools >= 61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "theia_dumper"
+version = "0.0.2"
+description = "THEIA-MTP geospatial data publisher"
+authors = [
+    { name = "Rémi Cresson", email = "remi.cresson@inrae.fr" },
+]
+requires-python = ">=3.9"
+dependencies = [
+    "pystac",
+    "pystac_client",
+    "dinamis_sdk==0.3.3",
+    "requests",
+    "rio-cogeo"
+]
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+theia-dumper = "theia_dumper.cli:app"
+
+[tool.setuptools]
+packages = ["theia_dumper"]
+
+[tool.setuptools.dynamic]
+version = { attr = "theia_dumper.__version__" }
+
+[tool.pydocstyle]
+convention = "google"
+
