@@ -1,0 +1,229 @@
+on: [push, workflow_dispatch]
+
+jobs:
+  testlinux:
+    name: Test risset on linux - py${{ matrix.python-version }} - ${{ matrix.csound-branch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+        csound-branch: ["csound6", "develop"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: install csound 6
+        if: matrix.csound-branch == 'csound6'
+        run: |
+          git clone -b csound6 https://github.com/csound/csound --depth 1
+          cd csound
+          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev libpulse-dev swig liblua5.1-0-dev default-jdk libfltk1.1-dev libfluidsynth-dev liblo-dev fluid ladspa-sdk libpng-dev dssi-dev libstk0-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
+          mkdir build && cd build
+          cmake .. -DUSE_MP3=0
+          cmake --build . --parallel
+          sudo make install
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+          sudo ldconfig
+          csound --version
+
+      - name: install csound develop
+        if: matrix.csound-branch == 'develop'
+        run: |
+          git clone -b develop https://github.com/csound/csound --depth 1
+          cd csound
+          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev libpulse-dev swig liblua5.1-0-dev default-jdk libfltk1.1-dev libfluidsynth-dev liblo-dev fluid ladspa-sdk libpng-dev dssi-dev libstk0-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
+          mkdir build && cd build
+          cmake .. -DUSE_MP3=0
+          cmake --build . --parallel
+          sudo make install
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+          sudo ldconfig
+          csound --version
+
+      - name: linux - test install from git
+        run: |
+          pip install .
+          echo "Risset version: $(risset --version)"
+          risset --debug update
+          risset --debug list
+          echo "Installing some plugins (klib, else)"
+          risset --debug install klib else
+          echo "-------------------------------"
+          echo "Checking that the plugins are installed and recognized by csound"
+          csound -z1 2>&1 | grep dict_ || echo ok
+
+          echo "Checking that the plugins are functional"
+          csound -o test/lfnoise-linux-${{ matrix.csound-branch }}-git.flac --format=flac test/lfnoise.csd
+          mkdir -p artifacts
+          cp test/*.flac artifacts
+
+          risset show else
+          risset man mtro
+          risset info --full
+          risset makedocs
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: artifacts/*
+
+  testwin:
+    name: Test risset on windows
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+        csound-branch: ["csound6", "develop"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: lukka/get-cmake@v3.29.0
+
+      - name: Export GitHub Actions cache environment variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
+      - name: install csound6
+        if: matrix.csound-branch == 'csound6'
+        run: |
+          curl -L -o csound-binaries.zip https://github.com/csound/csound/releases/download/6.18.1/Csound-6.18.1-windows-x64-binaries.zip
+          Expand-Archive csound-binaries.zip -DestinationPath ".\csound-binaries"
+          New-Item -Type Directory -Force "C:/Program Files/csound"
+          cp .\csound-binaries\build\Release\* "C:/Program Files/csound"
+
+          [Environment]::SetEnvironmentVariable("PATH", $Env:PATH + ";C:\Program Files\csound", [EnvironmentVariableTarget]::Machine)
+          $Env:Path = $Env:Path + ";C:\Program Files\csound"
+          Write-Output $Env:PATH
+          csound.exe --version
+
+      - name: install csound develop
+        if: matrix.csound-branch == 'develop'
+        env:
+          VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+        run: |
+          git clone -b develop https://github.com/csound/csound --depth 1
+          cd csound
+          git submodule update --init --recursive
+
+          choco install -y winflexbison3 innosetup
+          .\vcpkg\bootstrap-vcpkg.bat
+          cmake -B build -S . -DBUILD_TESTS=0 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/windows/Custom-vs.cmake" -DBUILD_JAVA_INTERFACE=OFF -DBUILD_TESTS=OFF
+          cmake --build build --config Release
+
+          Get-ChildItem -Path ".\build" -Recurse
+          New-Item -Type Directory -Force "C:/Program Files/csound"
+          cp build\Release\* "C:/Program Files/csound"
+
+          $machinePath = [System.Environment]::GetEnvironmentVariable('PATH', 'Machine')
+          [System.Environment]::SetEnvironmentVariable("PATH", $machinePath + ";C:/Program Files/csound", [EnvironmentVariableTarget]::Machine)
+          $Env:Path = $Env:Path + ";C:/Program Files/csound"
+          csound.exe --version
+
+      - name: windows - test install from git
+        run: |
+          $Env:Path = $Env:Path + ";C:\Program Files\csound"
+
+          python -c "import platform; print('platform.machine: ', platform.machine())"
+
+          pip install .
+          risset update
+          risset list
+          risset install klib else
+          echo "-------------------------------"
+          echo "Checking that the plugin is installed and recognized by csound"
+          csound -z1 | Select-String "dict"
+
+          csound -o test/lfnoise-linux-${{ matrix.csound-branch }}-pip.flac --format=flac test/lfnoise.csd
+
+          risset show else
+          risset man mtro
+          risset info --full
+          risset makedocs
+
+  testmacos:
+    name: Test risset on macos ${{ matrix.arch }} - ${{ matrix.csound-branch }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+        arch: ["arm64"]
+        csound-branch: ["csound6", "develop"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: macos - install csound 6
+        if: matrix.csound-branch == 'csound6'
+        run: |
+          set -x
+          curl -L -o csound6.18.dmg https://github.com/csound/csound/releases/download/6.18.1/Csound-MacOS-universal-6.18.1.dmg
+          brew install p7zip
+          7z x csound6.18.dmg
+          cd Csound-universal-6.18.1
+          sudo installer -pkg csound-MacOS-universal-6.18.1.pkg -target /
+          csound --version
+          uname -m
+          file $(which csound)
+          cd ..
+
+      - name: install csound develop
+        if: matrix.csound-branch == 'develop'
+        run: |
+          git clone -b develop https://github.com/csound/csound --depth 1
+          cd csound
+          git submodule update --init --recursive
+
+          brew install bison flex libmicrohttpd libogg flac lame libvorbis mpg123 opus libsndfile portaudio fluid-synth libaec libsamplerate aften liblo openblas portmidi jack
+          cmake -B build -DBUILD_TESTS=OFF -DBUILD_RELEASE=ON -DBUILD_CSBEATS=OFF -DBUILD_DSSI_OPCODES=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_UTILITIES=OFF -DUSE_ALSA=0 -DUSE_AUDIOUNIT=1 -DUSE_CURL=0 -DUSE_COREMIDI=1 -DUSE_DOUBLE=1 -DUSE_GETTEXT=0 -DUSE_JACK=0 -DUSE_LIB64=1 -DUSE_MP3=0 -DUSE_PORTAUDIO=1 -DUSE_PORTMIDI=1 -DUSE_PULSEAUDIO=0 -DHAVEBIG_ENDIAN=0 -DFAIL_MISSING=OFF
+          cmake --build build --config Release
+          sudo cmake --install build
+          csound --version
+
+      - name: macos ${{ matrix.arch }} - test install from git
+        shell: bash
+        run: |
+          set -x
+          pip install .
+          risset update
+          risset list
+          risset install klib else
+          risset dev codesign
+          echo "-------------------------------"
+          echo "Checking that the plugin is installed and recognized by csound"
+
+          csound --version
+          # csound -z1 2>&1 | grep dict_
+          csound -z1 || true   # csound exits with 1 if there is some warning, so silence that
+
+          echo "Ok..."
+
+          csound -o test/lfnoise-macos-${{ matrix.arch }}-${{ matrix.csound-branch }}-git.flac --format=flac test/lfnoise.csd
+
+          mkdir -p artifacts
+          cp test/*.flac artifacts
+
+          risset show else
+          risset man mtro
+          risset info --full
+          risset makedocs
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: artifacts/*
