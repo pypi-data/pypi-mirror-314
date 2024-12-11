@@ -1,0 +1,45 @@
+[package]
+name = "moyo"
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+readme = "README.md"
+
+[package.metadata.release]
+tag = true
+
+[lib]
+name = "moyo"
+
+[dependencies]
+nalgebra.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+approx.workspace = true
+log.workspace = true
+itertools = "0.13"
+thiserror = "1.0"
+union-find = "0.4"
+strum = "0.25"
+strum_macros = "0.25"
+kiddo = "4.2"
+
+[dev-dependencies]
+rand = "0.8"
+rstest = "0.18"
+criterion = { version = "0.5", features = ["html_reports"] }
+env_logger = "0.11"
+test-log = "0.2"
+
+[[bench]]
+name = "translation_search"
+path = "benches/translation_search.rs"
+harness = false
+
+[[bench]]
+name = "dataset"
+path = "benches/dataset.rs"
+harness = false

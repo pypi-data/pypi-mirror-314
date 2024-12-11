@@ -1,0 +1,30 @@
+[package]
+name = "moyopy"
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[package.metadata.release]
+release = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "moyopy"
+crate-type = ["cdylib"]
+
+[dependencies]
+moyo = { path = "../moyo", version = "0.2.1" }
+nalgebra.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+approx.workspace = true
+log.workspace = true
+pyo3-log = "0.10"
+
+[dependencies.pyo3]
+version = "0.21"
+# "abi3-py38" tells pyo3 (and maturin) to build using the stable ABI with minimum Python version 3.8
+features = ["abi3-py38"]
