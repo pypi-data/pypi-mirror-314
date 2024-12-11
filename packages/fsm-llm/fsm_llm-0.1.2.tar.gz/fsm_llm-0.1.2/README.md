@@ -1,0 +1,49 @@
+# FSM-based LLM Conversational Agents
+
+This project provides a package framework for creating conversational agents using a Finite State Machine (FSM) powered by Large Language Models (LLMs). It integrates with OpenAI's API and provides an easy way to define states, transitions, and interactions.
+
+This is currently an experimental setup, and also part of a research project I am doing for university. For now it is meant for developers and experimenters mainly. Requires an OpenAI API key (currently tested on gpt-4o-mini).
+
+
+## Features
+
+- Define states and transitions for your agent using a simple decorator.
+- Handle dynamic conversation flow with flexible state management.
+- Integrates with GPT models to generate responses based on state context.
+
+## Installation
+
+1. Install the package directly from PyPI:
+   ```
+   pip install fsm-llm
+   ```
+
+
+2. Set up environment variables:
+   Create a `.env` file and add your OpenAI API key:
+     ```
+     OPENAI_API_KEY=your-api-key
+     OPENAI_ORGANIZATION=your-organization-id
+     ```
+
+Ensure that your .env file is properly loaded. You can use the python-dotenv library to load these variables if they're not automatically loaded.
+
+## Usage Example (On/Off Switch)
+
+1. The `LLMStateMachine` class is the core of the framework. It handles state transitions based on user input.
+```python
+from core.fsm import LLMStateMachine
+
+# Create the FSM
+fsm = LLMStateMachine(initial_state="START", end_state="END")
+```
+
+
+## Examples
+
+- **Light Switch Agent**: A simple agent that asks the user whether they want to turn a light on or off. ```switch_agent.py```
+- **Customer Support Agent**: A bot that collects user details and assists with customer queries. ```support_agent.py```
+- **Medical Triage Agent**: A complex agent that helps assess if a medical situation is an emergency and collects patient data. ```medical_agent.py```
+
+<!-- ## Contributing
+Feel free to fork, star, and create pull requests. Contributions are welcome! -->
