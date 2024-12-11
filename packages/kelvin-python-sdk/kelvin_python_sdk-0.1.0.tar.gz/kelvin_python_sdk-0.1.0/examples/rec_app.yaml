@@ -1,0 +1,46 @@
+environment:
+  node_name: bignode
+  workload_name: bigworkload
+
+app:
+  kelvin:
+    assets:
+      - name: asset1
+        parameters:
+          kelvin_closed_loop:
+            value: true
+
+    language:
+      type: python
+      python:
+        entry_point: kelvin_python_sdk
+
+    outputs:
+      - name: output-number
+        data_type: number
+        targets:
+          - names: [output-number-datastream]
+
+      - name: output-cc-number
+        data_type: number
+        control_change: true
+        targets:
+          - names: [output-cc-number-datastream]
+
+    parameters:
+      - name: kelvin_closed_loop
+        data_type: boolean
+        default:
+          value: false
+
+  type: kelvin
+info:
+  description: example app
+  name: example-app
+  title: example-app
+  version: 1.0.1
+spec_version: 4.10.0
+system:
+  environment_vars:
+  - name: KELVIN_GW_MODE
+    value: SOCKETS
