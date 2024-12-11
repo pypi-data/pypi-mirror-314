@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "pyhelmgen"
+version = "1.1"
+description = "A Python package to generate Helm charts from Docker Compose files."
+authors = ["Nick Caravias <nick.caravias@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/NickCaravias/py-helm-gen"
+readme = "README.md"
+homepage = "https://github.com/NickCaravias/py-helm-gen"
+keywords = ["helm", "docker-compose", "kubernetes"]
+classifiers = [
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+# Package definition, specifying the `src` directory for your code
+packages = [
+    { include = "HelmFromComposer", from = "src" },
+]
+
+# Python version requirements
+[tool.poetry.dependencies]
+python = "^3.71"
+
+# Runtime dependencies
+pyyaml = "^6.0.0"
+
+# Dev dependencies
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+black = "^21.6b0"
+flake8 = "^3.9"
+
+# Build system using setuptools
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
