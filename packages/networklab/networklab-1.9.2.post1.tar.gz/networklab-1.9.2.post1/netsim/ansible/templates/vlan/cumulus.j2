@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+set -e # Exit immediately when any command fails
+#
+{% macro ipaddr(ifdata,loopback) -%}
+{%   if ifdata.ipv4 is defined %}
+    address {{ ifdata.ipv4 if ifdata.ipv4 is string else loopback.ipv4 }}
+{%   endif %}
+{%   if ifdata.ipv6 is defined and ifdata.ipv6 is string %}
+    address {{ ifdata.ipv6 }}
+{%   endif %}
+{%- endmacro %}
+#
+# Create multi-vlan bridge, specify VLANs, and attach interfaces to it
+#
+cat >/etc/network/interfaces.d/50-bridge.intf <<CONFIG
+auto bridge
+iface bridge
+    bridge-vlan-aware yes
+{% if vlans is defined %}
+{%  set vids = vlans.values() | map(attribute='id') | sort | map('string') %}
+    bridge-vids {{ ",".join(vids) }}
+{%  endif %}
+{% for ifdata in interfaces if ifdata.vlan is defined and (ifdata.virtual_interface is not defined or ifdata.type=="lag") %}
+    bridge-ports {{ ifdata.ifname }}
+{% endfor %}
+CONFIG
+#
+# Create VLAN interfaces
+#
+cat >/etc/network/interfaces.d/51-bridge-interfaces.intf <<CONFIG
+{% for ifdata in interfaces if ifdata.vlan is defined %}
+{%   if ifdata.type == "svi" %}
+auto {{ ifdata.ifname }}
+{%   endif %}
+iface {{ ifdata.ifname }}
+{%   if ifdata.vlan.trunk_id is defined and ifdata.type != "lag" %}
+    bridge-vids {{ ifdata.vlan.trunk_id|sort|join(",") }}
+{%     if ifdata.vlan.native is defined %}
+    bridge-pvid {{ ifdata.vlan.access_id }}
+{%     else %}
+    bridge-allow-untagged no
+{%     endif %}
+{%   elif ifdata.vlan.access_id is defined %}
+{%     if ifdata.type == 'vlan_member' %}
+{{       ipaddr(ifdata,loopback|default({})) }}
+{%     else %}
+    bridge-access {{ ifdata.vlan.access_id }}
+{%     endif %}
+{%   endif %}
+{%   if ifdata.type == "svi" %}
+{{     ipaddr(ifdata,loopback|default({})) }}
+    vlan-id {{ ifdata.ifname|replace("vlan","") }}
+    vlan-raw-device bridge
+{%   endif %}
+{% endfor %}
+CONFIG
+ifreload -a

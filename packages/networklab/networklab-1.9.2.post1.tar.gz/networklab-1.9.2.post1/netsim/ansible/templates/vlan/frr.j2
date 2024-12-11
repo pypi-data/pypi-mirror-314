@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+set -e # Exit immediately when any command fails
+#
+{# Create VLAN subinterfaces. No need to set IP addresses, FRR can handle that #}
+{% for i in interfaces if i.type == 'vlan_member' %}
+if [ ! -e /sys/devices/virtual/net/{{ i.ifname }} ]; then
+  ip link add link {{ i.parent_ifname }} name {{ i.ifname }} type vlan id {{ i.vlan.access_id }}
+  ip link set dev {{ i.ifname }} up
+fi
+{% endfor %}
+{% for i in interfaces if i.type == 'svi' %}
+if [ ! -e /sys/devices/virtual/net/{{ i.ifname }} ]; then
+  brctl addbr {{ i.ifname }}
+
+{# If STP is required, enable it before bringing up the bridge device to avoid any forwarding loops #}
+{%  if 'stp' in module|default([]) and (i.stp|default(stp)).enable|default(True) %}
+  brctl stp {{ i.ifname }} on
+{%  endif %}
+
+  ip link set dev {{ i.ifname }} up
+  ip addr flush dev {{ i.ifname }}
+{%   if 'ipv4' in i and (i.ipv4 is string or 'ipv4' in loopback) %}
+  ip addr add {{ i.ipv4 if i.ipv4 is string else loopback.ipv4 }} dev {{ i.ifname }}
+{%   endif %}
+{%   if 'ipv6' in i %}
+{%     if i.ipv6 is string %}
+  ip addr add {{ i.ipv6 }} dev {{ i.ifname }}
+{%     elif not i.ipv6 %}
+  sysctl -w net.ipv6.conf.{{ i.ifname }}.disable_ipv6=1
+{%     endif %}
+{%   endif %}
+fi
+{% endfor %}
+
+{# Add interfaces to VLAN bridges #}
+{% for i in interfaces if i.vlan.access_id is defined and i.vlan.mode|default('') != 'route' %}
+brctl addif vlan{{ i.vlan.access_id }} {{ i.ifname }}
+{% endfor %}
+exit 0
