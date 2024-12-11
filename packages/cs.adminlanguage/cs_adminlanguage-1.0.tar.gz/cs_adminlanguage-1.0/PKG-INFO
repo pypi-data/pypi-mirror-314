@@ -1,0 +1,122 @@
+Metadata-Version: 2.1
+Name: cs.adminlanguage
+Version: 1.0
+Summary: Addon to set the admin language
+Home-page: https://github.com/collective/cs.adminlanguage
+Author: Lur Ibargutxi
+Author-email: libargutxi@codesyntax.com
+License: GPL version 2
+Project-URL: PyPI, https://pypi.python.org/pypi/cs.adminlanguage
+Project-URL: Source, https://github.com/collective/cs.adminlanguage
+Project-URL: Tracker, https://github.com/collective/cs.adminlanguage/issues
+Keywords: Python Plone
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: Addon
+Classifier: Framework :: Plone :: 6.0
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Classifier: Development Status :: 5 - Production/Stable
+Requires-Python: >=3.10
+License-File: LICENSE.GPL
+License-File: LICENSE.rst
+Requires-Dist: setuptools
+Requires-Dist: AccessControl
+Requires-Dist: plone.app.registry
+Requires-Dist: plone.registry
+Requires-Dist: plone.z3cform
+Requires-Dist: Products.CMFCore
+Requires-Dist: Products.CMFPlone
+Requires-Dist: Products.GenericSetup
+Requires-Dist: zope.component
+Requires-Dist: zope.i18n
+Requires-Dist: zope.i18nmessageid
+Requires-Dist: zope.interface
+Requires-Dist: zope.publisher
+Requires-Dist: zope.schema
+Provides-Extra: test
+Requires-Dist: plone.app.testing; extra == "test"
+Requires-Dist: plone.api; extra == "test"
+Requires-Dist: plone.app.contenttypes; extra == "test"
+Requires-Dist: plone.app.robotframework[debug]; extra == "test"
+Requires-Dist: plone.browserlayer; extra == "test"
+Requires-Dist: plone.testing>=5.0.0; extra == "test"
+
+.. This README is meant for consumption by humans and pypi. Pypi can render rst files so please do not use Sphinx features.
+   If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide.html
+   This text does not appear on pypi or github. It is a comment.
+
+================
+cs.adminlanguage
+================
+
+This package provides a control panel to configure in which language do you want to show the admin interface.
+
+This is useful if you need to configure a website in a language you don't know.
+
+This package is based in Silvuple_ a package that use to do this and more for Plone 3.
+
+Installation
+------------
+
+Install cs.adminlanguage by adding it to your buildout::
+
+    [buildout]
+
+    ...
+
+    eggs =
+        cs.adminlanguage
+
+
+and then running ``bin/buildout``.
+Then start Plone and activate the add-on in the Add-ons control panel.
+
+Now you can go to the Language Admin Settings control panel from this add-on and set the preferred admin language.
+This language will be used for all translation messages in domains that start with "plone" or "collective" (or the "linguaplone" domain).
+
+Now any authenticated user with the "cs.adminlanguage: ViewinAdminLanguage" permission will see messages from those domains in the chosen admin language.
+The suggested way for configuring this, is to go to the Groups control panel, select the Administrators and Site Administrators groups, and grant them the AdminLanguageReader role.
+
+
+Contribute
+----------
+
+- Issue Tracker: https://github.com/codesyntax/cs.adminlanguage/issues
+- Source Code: https://github.com/codesyntax/cs.adminlanguage
+
+
+Support
+-------
+
+If you are having issues, please let us know adding an issue in Github
+
+
+License
+-------
+
+The project is licensed under the GPLv2.
+
+
+.. _Silvuple: https://github.com/miohtama/silvuple/
+
+
+Contributors
+============
+
+- Lur Ibargutxi, libargutxi@codesyntax.com
+
+
+Changelog
+=========
+
+
+1.0 (2024-12-11)
+----------------
+
+- Initial release.
+  [libargutxi]
