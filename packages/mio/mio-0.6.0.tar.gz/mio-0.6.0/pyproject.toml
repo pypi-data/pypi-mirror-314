@@ -1,0 +1,218 @@
+[project]
+name = "mio"
+description = "Generic I/O for miniscopes"
+authors = [
+    { name = "sneakers-the-rat", email = "sneakers-the-rat@protonmail.com" },
+    { name = "t-sasatani", email = "sasatani.dev@gmail.com" },
+]
+dynamic = []
+requires-python = "<4.0,>=3.9"
+dependencies = [
+    "opencv-python>=4.7.0.72",
+    "numpy>=1.25.0",
+    "pandas>=2.1.0",
+    "pydantic>=2.3.0",
+    "pyserial>=3.5",
+    "tqdm>=4.66.1",
+    "bitstring>=4.2.3",
+    "pydantic-settings>=2.0.3",
+    "rich>=13.6.0",
+    "pyyaml>=6.0.1",
+    "click>=8.1.7",
+    "platformdirs>=4.3.6",
+    "typing-extensions>=4.10.0; python_version<\"3.13\"",
+]
+readme = "README.md"
+keywords = [
+    "miniscope",
+    "neuroscience",
+    "io",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Video :: Capture",
+    "Topic :: Scientific/Engineering",
+]
+version = "0.6.0"
+
+[project.license]
+text = "AGPL-3.0"
+
+[project.urls]
+homepage = "https://miniscope-io.readthedocs.io/"
+repository = "https://github.com/Aharoni-Lab/mio"
+documentation = "https://miniscope-io.readthedocs.io/"
+
+[project.optional-dependencies]
+plot = [
+    "matplotlib>=3.9.2",
+]
+tests = [
+    "pytest>=8.2.2",
+    "pytest-cov>=5.0.0",
+    "pytest-timeout>=2.3.1",
+    "mio[plot]",
+    "tomli-w>=1.1.0",
+]
+docs = [
+    "sphinx>=6.2.1",
+    "sphinx-click>=6.0.0",
+    "furo>2023.07.26",
+    "myst-parser>3.0.0",
+    "autodoc-pydantic>=2.0.1",
+    "sphinxcontrib-programoutput>=0.17",
+    "sphinx-design>=0.6.1",
+]
+dev = [
+    "black>=24.1.1",
+    "ruff>=0.2.0",
+    "pre-commit>=3.7.1",
+]
+all = [
+    "mio[tests,docs,dev]",
+]
+
+[project.scripts]
+mio = "mio.cli.main:cli"
+
+[tool.pdm.scripts]
+test = "pytest"
+
+[tool.pdm.scripts.lint]
+composite = [
+    "ruff check",
+    "black mio --diff",
+]
+
+[tool.pdm.scripts.format]
+composite = [
+    "ruff check --fix",
+    "black mio",
+]
+
+[tool.pdm.build]
+includes = [
+    "mio",
+]
+
+[tool.pdm.version]
+source = "scm"
+tag_filter = "v*"
+tag_regex = "v(?P<version>([1-9][0-9]*!)?(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*))*((a|b|c|rc)(0|[1-9][0-9]*))?(\\.post(0|[1-9][0-9]*))?(\\.dev(0|[1-9][0-9]*))?$)$"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--cov=mio",
+    "--cov-append",
+]
+filterwarnings = [
+    "ignore:builtin type SwigPyPacked",
+    "ignore:builtin type SwigPyObject",
+]
+testpaths = [
+    "tests",
+]
+timeout = 60
+
+[tool.coverage.run]
+omit = [
+    "mio/vendor/*",
+    "mio/devices/opalkelly.py",
+]
+
+[tool.ruff]
+target-version = "py39"
+include = [
+    "mio/**/*.py",
+    "pyproject.toml",
+]
+exclude = [
+    "docs",
+    "tests",
+    "mio/vendor",
+    "noxfile.py",
+]
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "UP",
+    "B",
+    "SIM",
+    "I",
+    "ANN",
+    "T10",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D106",
+    "D107",
+    "D207",
+    "D208",
+    "D210",
+    "D211",
+    "D419",
+    "N802",
+]
+ignore = [
+    "ANN101",
+    "ANN102",
+    "ANN401",
+    "ANN204",
+    "B905",
+    "UP006",
+    "UP035",
+    "UP007",
+    "UP038",
+    "D107",
+]
+fixable = [
+    "ALL",
+]
+
+[tool.mypy]
+plugins = [
+    "pydantic.mypy",
+]
+packages = [
+    "mio",
+]
+exclude = [
+    ".*vendor.*",
+]
+follow_imports = "silent"
+warn_unreachable = true
+
+[tool.black]
+target-version = [
+    "py38",
+    "py39",
+    "py310",
+    "py311",
+]
+include = "mio/.*\\.py$"
+extend-exclude = "mio/vendor/.*"
+line-length = 100
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
