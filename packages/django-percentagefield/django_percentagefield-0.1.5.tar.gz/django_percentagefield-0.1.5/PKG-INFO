@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: django-percentagefield
+Version: 0.1.5
+Summary: A ``PercentageField`` for Django that shows a Decimal (ex. ``0.2100`` in the database - by default rounded to 4 decimal spaces) as a percentage in the admin (ex. ``21%``). With built-in (overridable) min and max validator to ensure a valid percentage range: 0 ≤ x ≤ 100.
+Author-email: Nico Vromans <nico.vromans@alpinedigital.be>, Alpine Digital <contact@alpinedigital.be>
+Project-URL: Homepage, https://github.com/alpine-digital/django-percentagefield
+Project-URL: Issues, https://github.com/alpine-digital/django-percentagefield/issues
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django :: 5.0
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: django>=5.0.6
+
+# Django Percentage Field
+
+This package add a ``PercentageField`` to Django (also works with Unfold, some minor styling improvements needed) that
+shows a percentage in the admin as ``21%``, but stores it as a Decimal - ``0.2100`` - to the database.
+This makes it clearer for admins what the field represents, while the decimal value makes actual calculations easier.
+
+## Installation
+
+Run `pip install django-percentagefield` (or `poetry add django-percentagefield`)
+
+## Settings
+
+- add ``django_percentagefield`` to your ``INSTALLED_APPS`` **before** ``django.contrib.admin``
+- in your ``models.py``, add the ``PercentageField`` as such:
+
+```python models.py
+from django.db import models
+
+from django_percentagefield.db.models import PercentageField
+
+
+class YourModel(models.Model):
+    percentage_field = PercentageField()
+```
+
+- in your ``admin.py``, add the following wherever you use ``PercentageField``:
+
+```python admin.py
+from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+from django_percentagefield.utils import format_percentage
+
+from .models import YourModel
+
+
+@admin.register(YourModel)
+class YourModelAdmin(admin.ModelAdmin):
+    list_display = ('formatted_percentage_field',)
+
+    def formatted_percentage_field(self, instance: YourModel) -> str:
+        return format_percentage(value=instance.percentage_field, include_percentage_symbol=True)
+
+    formatted_percentage_field.short_description = _('PercentageField description')
+```
+
+- _[optional]_: add ``PERCENTAGE_MAX_DIGITS`` and ``PERCENTAGE_DECIMAL_PLACES`` to your ``settings.py`` (default values
+  ``7`` and ``4`` respectively)
+
+**TODO**: make the ``django-percentagefield`` package handle the formatting in ``list_display``, ``readonly_fields``,
+etc. automatically.
