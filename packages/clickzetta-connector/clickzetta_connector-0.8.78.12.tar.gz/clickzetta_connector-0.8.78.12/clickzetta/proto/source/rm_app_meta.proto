@@ -1,0 +1,21 @@
+syntax = "proto3";
+option java_package = "com.clickzetta.rm.proto";
+option java_outer_classname = "RMAppProtos";
+package com.clickzetta.rm;
+option java_multiple_files = true;
+
+enum RMAppState {
+    RM_APP_RUNNING = 0;
+    RM_APP_SUCCESS = 1;
+    RM_APP_FAILED = 2;
+}
+
+message RMAppMeta {
+  optional string app_id = 1;
+  optional string app_name = 2;
+  optional int32 priority = 3;
+  optional int64 vc_id = 4;
+  optional RMAppState app_state = 5;
+  optional int64 submit_time = 6;
+  optional int64 finish_time = 7;
+}

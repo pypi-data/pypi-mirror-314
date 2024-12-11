@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package cz.proto;
+
+import 'object_identifier.proto';
+import 'workspace_meta.proto';
+import 'schema.proto';
+import 'table_common.proto';
+import 'table_meta.proto';
+import 'account.proto';
+import 'role_meta.proto';
+import 'job_meta.proto';
+import 'property.proto';
+import 'virtual_cluster_meta.proto';
+import 'file_meta_data.proto';
+import 'rm_app_meta.proto';
+import 'virtual_cluster_size.proto';
+import 'share_meta.proto';
+import 'function_meta.proto';
+import 'connection_meta.proto';
+import 'network_policy.proto';
+
+message Entity {
+  optional ObjectIdentifier identifier = 1;
+  int64 creator = 2;
+  PrincipalType creator_type = 3;
+  optional string comment = 4;
+  repeated Property properties = 5;
+  int64 create_time = 6;
+  int64 last_modify_time = 7;
+  ObjectState.Type state = 8;
+  enum Category {
+    MANAGED = 0;
+    EXTERNAL = 1;
+    SHARED = 2;
+  }
+  Category category = 9;
+
+  oneof entity {
+    Workspace workspace = 10;
+    Schema schema = 11;
+    TableMeta table = 12;
+    User user = 13;
+    Role role = 14;
+    JobMeta job = 15;
+    VirtualClusterMeta virtual_cluster = 16;
+    FileMetaData file = 17;
+    com.clickzetta.rm.VirtualClusterSizeSpec virtual_cluster_size_spec = 18;
+    Share share = 19;
+    Function function = 20;
+    Connection connection = 21;
+    NetworkPolicy network_policy = 22;
+    Index index = 23;
+  }
+}
+
+message EntityList {
+  repeated Entity entities = 1;
+}
