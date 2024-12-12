@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "isahitlab"
+dynamic = ["version"]
+description = 'Python client for isahit lab'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Isahit", email = "dev@isahit.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "requests >= 2.0.0, < 3.0.0",
+  "tqdm >= 4.0.0, < 5.0.0",
+  "typeguard >= 4, < 5",
+  "jsonschema >= 4"
+]
+
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs",
+  "mkdocstrings[python]",
+  "mkdocs-material",
+  "mkdocstrings",
+  "mike"
+]
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build --clean --strict"
+serve = "mkdocs serve --dev-addr localhost:8000"
+
+[project.urls]
+Documentation = "https://sdk-docs.lab.isahit.com/latest/"
+
+
+[tool.hatch.version]
+path = "src/isahitlab/__about__.py"
+
+[tool.hatch.envs.types]
+dependencies = [
+  "python-dateutil >= 2.0.0"
+]
+extra-dependencies = [
+  "mypy>=1.0.0"
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/isahitlab tests}"
+
+[tool.coverage.run]
+source_pkgs = ["isahitlab", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/isahitlab/__about__.py",
+]
+
+[tool.coverage.paths]
+isahitlab = ["src/isahitlab", "*/lab/src/isahitlab"]
+tests = ["tests", "*/lab/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/tests",
+  "/site",
+]
