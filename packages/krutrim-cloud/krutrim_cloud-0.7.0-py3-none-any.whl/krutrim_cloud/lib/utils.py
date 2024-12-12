@@ -1,0 +1,546 @@
+import base64
+from PIL import Image
+import io
+import os
+import time
+import cv2
+import numpy as np
+from datetime import datetime
+from krutrim_cloud._exceptions import TimeRetrievalError, CouldNotDecodeError
+from pydub import AudioSegment  # type: ignore
+from pydub.exceptions import CouldntDecodeError  # type: ignore
+from moviepy.editor import ImageSequenceClip
+import requests
+
+
+def convert_base64_to_PIL_img(base64_data: str) -> Image.Image:
+    """
+    Convert a base64 encoded string to a PIL Image.
+
+    Args:
+        base64_data (str): A base64 encoded string representing image data.
+
+    Returns:
+        PIL.Image.Image: A PIL Image object created from the base64 encoded data.
+
+    Raises:
+        ValueError: If the base64_data is not a valid base64 string.
+        IOError: If the base64 data cannot be decoded into an image.
+
+    Example:
+        >>> base64_data = "iVBORw0KGgoAAAANSUhEUgAAAAUA..."
+        >>> image = convert_base64_to_PIL_img(base64_data)
+        >>> image.show()
+    """
+    try:
+        img_bytes = base64.b64decode(base64_data)
+    except (base64.binascii.Error, TypeError) as e:
+        raise ValueError("Invalid base64 string") from e
+
+    try:
+        image = Image.open(io.BytesIO(img_bytes))
+    except (IOError, ValueError) as e:
+        raise IOError("Cannot convert base64 data to an image") from e
+
+    return image
+
+
+def convert_base64_to_OpenCV_img(base64_str: str):
+    """
+    Convert a base64 string to an OpenCV image.
+
+    Args:
+        base64_str (str): The base64 string of the image
+
+    Returns:
+        An OpenCV image (NumPy array)
+    """
+    try:
+        # Decode the base64 string to binary data
+        image_data = base64.b64decode(base64_str)
+    except base64.binascii.Error as e:
+        raise ValueError("Invalid base64 string") from e
+
+    try:
+        # Convert the binary data to a NumPy array
+        np_arr = np.frombuffer(image_data, np.uint8)
+
+        # Check if the conversion to a NumPy array was successful
+        if np_arr.size == 0:
+            raise CouldNotDecodeError("Error: The decoded data could not be converted to a NumPy array.")
+
+        # Decode the NumPy array into an OpenCV image
+        opencv_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+        # Check if the decoding was successful
+        if opencv_image is None:
+            raise CouldNotDecodeError("Error: The NumPy array could not be decoded into an OpenCV image.")
+
+    except Exception as e:
+        raise Exception(f"An error occurred while converting the base64 data to an OpenCV image: {e}")
+
+    return opencv_image
+
+
+def save_PIL_img(PIL_image_obj: Image.Image, output_dirpath: str, filename: str) -> None:
+    """
+    Save a PIL Image object to the specified directory with the given filename.
+
+    Args:
+        PIL_image_obj (PIL.Image.Image): The PIL Image object to be saved.
+        output_dirpath (str): The directory path where the image will be saved.
+        filename (str): The name of the file to save the image as.
+
+    Returns:
+        None
+
+    Raises:
+        ValueError: If the PIL_image_obj is not a valid PIL Image object.
+        OSError: If the image cannot be saved due to an OS-related error.
+
+    Example:
+        >>> from PIL import Image
+        >>> image = Image.new('RGB', (100, 100), color = 'red')
+        >>> save_PIL_img(image, '/path/to/save', 'image.png')
+    """
+    if not isinstance(PIL_image_obj, Image.Image):
+        raise ValueError("The provided object is not a valid PIL Image object.")
+
+    try:
+        os.makedirs(output_dirpath, exist_ok=True)
+    except OSError as e:
+        raise OSError(f"Failed to create directory '{output_dirpath}': {e}")
+
+    try:
+        save_path = os.path.join(output_dirpath, filename)
+        PIL_image_obj.save(save_path)
+    except OSError as e:
+        raise OSError(f"Failed to save the image to '{save_path}': {e}")
+
+
+def save_text_array_content(text_data_array: list, output_dirpath: str, filename: str) -> None:
+    """
+    Save the content of a list of text data to a file in the specified directory.
+
+    Args:
+        text_data_array (list): A list of strings where each string represents a line of text.
+        output_dirpath (str): The directory path where the file will be saved.
+        filename (str): The name of the file to save the text data as.
+
+    Returns:
+        None
+
+    Raises:
+        ValueError: If text_data_array is not a list of strings.
+        OSError: If the directory cannot be created or the file cannot be written due to an OS-related error.
+
+    Example:
+        >>> text_data = ["Line 1", "Line 2", "Line 3"]
+        >>> save_text_array_content(text_data, '/path/to/save', 'output.txt')
+    """
+    if not isinstance(text_data_array, list) or not all(isinstance(line, str) for line in text_data_array):
+        raise ValueError("text_data_array must be a list of strings.")
+
+    try:
+        os.makedirs(output_dirpath, exist_ok=True)
+    except OSError as e:
+        raise OSError(f"Failed to create directory '{output_dirpath}': {e}")
+
+    try:
+        file_path = os.path.join(output_dirpath, filename)
+        with open(file_path, "w") as file:
+            for line in text_data_array:
+                file.write(line + "\n")
+    except OSError as e:
+        raise OSError(f"Failed to write to file '{file_path}': {e}")
+
+
+def save_text_content(text_data: str, output_dirpath: str, filename: str) -> None:
+    """
+    Save a string of text data to a file in the specified directory.
+
+    Args:
+        text_data (str): The text data to be saved to the file.
+        output_dirpath (str): The directory path where the file will be saved.
+        filename (str): The name of the file to save the text data as.
+
+    Returns:
+        None
+
+    Raises:
+        ValueError: If text_data is not a string.
+        OSError: If the directory cannot be created or the file cannot be written due to an OS-related error.
+
+    Example:
+        >>> text_data = "This is a sample text."
+        >>> save_text_content(text_data, '/path/to/save', 'output.txt')
+    """
+    if not isinstance(text_data, str):
+        raise ValueError("text_data must be a string.")
+
+    try:
+        os.makedirs(output_dirpath, exist_ok=True)
+    except OSError as e:
+        raise OSError(f"Failed to create directory '{output_dirpath}': {e}")
+
+    try:
+        file_path = os.path.join(output_dirpath, filename)
+        with open(file_path, "w") as file:
+            file.write(text_data + "\n")
+    except OSError as e:
+        raise OSError(f"Failed to write to file '{file_path}': {e}")
+
+
+def convert_PIL_image_to_base64(PIL_image_obj: Image.Image, format: str = "JPEG") -> str:
+    """
+    Convert a PIL Image object to a base64 encoded string.
+
+    Args:
+        PIL_image_obj (PIL.Image.Image): The PIL Image object to be converted.
+        format (str): The format to use for encoding the image. Defaults to "JPEG".
+
+    Returns:
+        str: The base64 encoded string of the image.
+
+    Raises:
+        ValueError: If PIL_image_obj is not a valid PIL Image object.
+        OSError: If there is an error during the image saving or encoding process.
+
+    Example:
+        >>> from PIL import Image
+        >>> image = Image.new('RGB', (100, 100), color = 'red')
+        >>> base64_string = convert_PIL_image_to_base64(image, format="PNG")
+        >>> print(base64_string)
+    """
+    if not isinstance(PIL_image_obj, Image.Image):
+        raise ValueError("The provided object is not a valid PIL Image object.")
+
+    try:
+        # Convert the PIL Image to a BytesIO object
+        buffered = io.BytesIO()
+        PIL_image_obj.save(buffered, format=format)
+    except (OSError, ValueError) as e:
+        raise OSError(f"Failed to save the image to a BytesIO object: {e}")
+
+    try:
+        # Encode the BytesIO object to base64
+        return base64.b64encode(buffered.getvalue()).decode("utf-8")
+    except (base64.binascii.Error, TypeError) as e:
+        raise OSError(f"Failed to encode the image to base64: {e}")
+
+
+def validate_audio_file(file_path: str) -> bool:
+    """
+    Validates whether the input file is a valid audio file.
+
+    Parameters:
+    -----------
+    file_path : str
+        The path to the audio file to be validated.
+
+    Returns:
+    --------
+    bool
+        True if the file is a valid audio file, False otherwise.
+
+    Raises:
+    -------
+    FileNotFoundError:
+        If the input audio file does not exist.
+    """
+    try:
+        # Attempt to load the file using pydub
+        _ = AudioSegment.from_file(file_path)  # type: ignore
+        return True
+
+    except FileNotFoundError:
+        raise  # Re-raise the exception to handle it in the calling context
+
+    except CouldntDecodeError:
+        raise  # Re-raise the exception to handle it in the calling context
+
+    except Exception:
+        raise  # Re-raise the exception to handle it in the calling context
+
+
+def convert_audio_file_to_base64(audio_filepath: str) -> str:
+    """
+    Convert an audio file to a base64 encoded string.
+
+    Args:
+        audio_filepath (str): The file path to the audio file to be converted.
+
+    Returns:
+        str: The base64 encoded string of the audio file.
+
+    Raises:
+        FileNotFoundError: If the audio file does not exist.
+        OSError: If there is an error reading the audio file.
+        ValueError: If audio_filepath is not a valid string.
+
+    Example:
+        >>> base64_string = convert_audio_file_to_base64('/path/to/audio.mp3')
+        >>> print(base64_string)
+    """
+    if not isinstance(audio_filepath, str):
+        raise ValueError("audio_filepath must be a valid string.")
+
+    try:
+        if validate_audio_file(audio_filepath):
+            with open(audio_filepath, "rb") as audio_file:
+                audio_data = audio_file.read()
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f"Audio file '{audio_filepath}' not found: {e}")
+    except OSError as e:
+        raise OSError(f"Error reading the audio file '{audio_filepath}': {e}")
+    except CouldntDecodeError as decode_error:
+        raise CouldntDecodeError(
+            f"The file '{audio_filepath}' is not a valid or supported audio file format.\n{decode_error}"
+        )
+    try:
+        # Encode the audio data to base64
+        return base64.b64encode(audio_data).decode("utf-8")
+    except (base64.binascii.Error, TypeError) as e:
+        raise ValueError(f"Failed to encode the audio file to base64: {e}")
+
+
+def get_current_time_string(format: str = "%Y%m%d_%H%M%S") -> str:
+    """
+    Retrieve the current time as a string in the specified format.
+
+    Args:
+        format (str): The format in which to return the current time string. Defaults to "%Y%m%d_%H%M%S".
+
+    Returns:
+        str: The current time formatted as a string.
+
+    Raises:
+        TimeRetrievalError: If there's an issue retrieving or formatting the current time.
+
+    Example:
+        >>> current_time = get_current_time_string()
+        >>> print(current_time)  # Output: 20240801_130501
+    """
+    try:
+        current_time = datetime.now()
+        time_string = current_time.strftime(format)
+        return time_string
+    except Exception as exc:
+        raise TimeRetrievalError(f"Failed to retrieve or format the current time: {exc}")
+
+
+def create_video_clip(video_frames, fps=8):
+    """
+    Create a video clip from a list of video frames.
+
+    Args:
+        video_frames (list): A list of frames, each represented as an image object (e.g., PIL Image or similar).
+        fps (int, optional): Frames per second for the video. Defaults to 8.
+
+    Returns:
+        ImageSequenceClip: A MoviePy ImageSequenceClip object created from the provided frames.
+
+    Raises:
+        ValueError: If any frame in video_frames cannot be converted to a numpy array.
+        TypeError: If video_frames is not a list or contains non-image objects.
+
+    Example:
+        >>> video_frames = [frame1, frame2, frame3]
+        >>> clip = create_video_clip(video_frames, fps=10)
+        >>> clip.write_videofile("output_video.mp4")
+    """
+    try:
+        frames = [np.array(frame) for frame in video_frames]
+    except Exception as e:
+        raise ValueError("Error converting frames to numpy arrays") from e
+    try:
+        clip = ImageSequenceClip(frames, fps=fps)
+    except Exception as e:
+        raise ValueError("Error creating video clip from frames") from e
+    return clip
+
+
+def save_video_clip(video_frames, output_dirpath: str, filename: str, fps=8) -> None:
+    """
+    Create a video clip from the provided frames and save it to the specified directory with the given filename.
+
+    Args:
+        video_frames (list): A list of frames, each represented as an image object (e.g., PIL Image or similar).
+        output_dirpath (str): The directory path where the video will be saved.
+        filename (str): The name of the file to save the video as.
+        fps (int, optional): Frames per second for the video. Defaults to 8.
+
+    Returns:
+        None
+
+    Raises:
+        ValueError: If the video_frames cannot be converted to a video clip.
+        OSError: If the video cannot be saved due to an OS-related error.
+
+    Example:
+        >>> video_frames = [frame1, frame2, frame3]
+        >>> save_video_clip(video_frames, '/path/to/save', 'video.mp4')
+    """
+    try:
+        clip = create_video_clip(video_frames, fps)
+    except ValueError as e:
+        raise ValueError("Error creating video clip") from e
+    try:
+        os.makedirs(output_dirpath, exist_ok=True)
+    except OSError as e:
+        raise OSError(f"Failed to create directory '{output_dirpath}': {e}")
+    try:
+        save_path = os.path.join(output_dirpath, filename)
+        clip.write_videofile(save_path, fps=fps)
+    except OSError as e:
+        raise OSError(f"Failed to save the video to '{save_path}': {e}")
+
+def encode_file_to_base64(file_path: str) -> str:
+    """
+    Encodes a file into a base64 string.
+
+    Args:
+        file_path (str): The path to the file to be encoded.
+
+    Returns:
+        str: The base64 encoded string of the file content.
+
+    Raises:
+        FileNotFoundError: If the file does not exist at the specified path.
+        OSError: If there is an error reading or encoding the file.
+
+    Example:
+        >>> base64_string = encode_file_to_base64("example.pdf")
+        >>> print(base64_string)
+    """
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"The file at '{file_path}' does not exist.")
+
+    try:
+        with open(file_path, "rb") as file:
+            file_content = file.read()
+            # Encode the file content to base64
+            encoded_string = base64.b64encode(file_content).decode("utf-8")
+        return encoded_string
+    except (OSError, ValueError) as e:
+        raise OSError(f"Error reading or encoding the file '{file_path}': {e}")
+    except Exception as e:
+        raise Exception(f"An unexpected error occurred while encoding the file: {e}")
+
+
+def save_audio_file(audio_file_download_url: str, output_dirpath: str, filename: str) -> None:
+    """
+    Download an audio file from the provided URL and save it to the specified directory with the given filename.
+
+    Args:
+        audio_file_download_url (str): The URL to download the audio file from.
+        output_dirpath (str): The directory path where the audio file will be saved.
+        filename (str): The name of the file to save the audio as.
+
+    Returns:
+        None
+
+    Raises:
+        ValueError: If the audio file cannot be downloaded.
+        OSError: If the audio file cannot be saved due to an OS-related error.
+
+    Example:
+        >>> save_audio_file("https://example.com/audio.mp3", "/path/to/save", "output.mp3")
+    """
+    try:
+        # Download the audio file
+        response = requests.get(audio_file_download_url, stream=True)
+        response.raise_for_status()  # Will raise an exception for non-2xx status codes
+    except requests.exceptions.RequestException as e:
+        raise ValueError(f"Error downloading audio file from URL '{audio_file_download_url}': {e}") from e
+
+    try:
+        # Create the output directory if it does not exist
+        os.makedirs(output_dirpath, exist_ok=True)
+    except OSError as e:
+        raise OSError(f"Failed to create directory '{output_dirpath}': {e}")
+
+    try:
+        # Save the audio file to the specified path
+        save_path = os.path.join(output_dirpath, filename)
+        with open(save_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Audio file saved successfully to '{save_path}'")
+    except OSError as e:
+        raise OSError(f"Failed to save the audio file to '{save_path}': {e}")
+
+def poll_request_status(client, request_id: str, max_retries: int = 10, retry_delay: int = 10):
+    """
+    Poll the request status API to check when the request is complete and return the output file download link.
+
+    Args:
+        client (KrutrimCloud): The initialized KrutrimCloud client instance.
+        request_id (str): The unique request identifier returned by the initial API call.
+        max_retries (int): Maximum number of retries to check the request status.
+        retry_delay (int): Delay (in seconds) between retries.
+
+    Returns:
+        str: The download link for the output file if successful, None if the process failed.
+
+    Raises:
+        Exception: If the request status could not be fetched or if retries exceed max_retries.
+    """
+    retries = 0
+    while retries < max_retries:
+        try:
+            # Poll request status
+            status_response = client.languagelabs.job_status.run(
+                request_id=request_id
+            )
+
+            if status_response.status == "success":
+                status_data = status_response.data
+                if status_data.status == "SUCCESS":
+                    print(f"Request is complete.Output url available.")
+                    return status_data.output_file  # Return the output file download link
+                else:
+                    print(f"Request is still being processed. Retrying... (Attempt {retries + 1}/{max_retries})")
+            else:
+                print(f"Error in request status response: {status_response.status}")
+
+        except Exception as e:
+            print(f"Error fetching request status: {e}")
+
+        retries += 1
+        time.sleep(retry_delay)
+
+    print(f"Request processing took too long. Max retries reached.")
+    return None  # Return None if the process is not complete after max retries
+
+
+
+def get_transcribed_text_from_s3(s3_url: str) -> str:
+    """
+    Download the transcribed text from the provided S3 URL.
+
+    Args:
+        s3_url (str): The S3 URL pointing to the transcribed file.
+
+    Returns:
+        str: The content of the transcribed file.
+
+    Raises:
+        Exception: If there's an error downloading or reading the file.
+    """
+    try:
+        # Send a GET request to the S3 URL to download the file
+        response = requests.get(s3_url)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+
+            # Assuming the file is in plain text format
+            return response.text  # Returns the file content as a string
+
+        else:
+            raise Exception(f"Failed to download file from S3. Status code: {response.status_code}")
+
+    except Exception as e:
+        print(f"Error fetching transcribed text from S3: {e}")
+        raise
