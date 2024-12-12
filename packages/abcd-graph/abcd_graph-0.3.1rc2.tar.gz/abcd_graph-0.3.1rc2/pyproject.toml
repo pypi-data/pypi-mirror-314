@@ -1,0 +1,96 @@
+[tool.poetry]
+name = "abcd-graph"
+version = "0.3.1-rc.2"
+description = "A python library for generating ABCD graphs."
+authors = ["Aleksander Wojnarowicz", "Jordan Barrett"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "abcd_graph", from = "src"}]
+repository = "https://github.com/AleksanderWWW/abcd-graph"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "semver"
+pattern = "default-unprefixed"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^1.26.4"
+typing-extensions = "^4.10.0"
+
+# dev
+pre-commit = { version = "^3.7.0", optional = true }
+pytest = { version = "^8.1.1", optional = true }
+pytest-cov = { version = "^5.0.0", optional = true }
+
+# integrations
+networkx = { version = "^3.3", optional = true }
+igraph = { version = "*", optional = true }
+matplotlib = { version = "^3.9.0", optional = true }
+scipy = { version = "^1.0.0", optional = true}
+
+
+[tool.poetry.extras]
+dev = [
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+]
+networkx = ["networkx"]
+igraph = ["igraph"]
+matplotlib = ["matplotlib"]
+scipy = ["scipy"]
+
+all = [
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "networkx",
+    "igraph",
+    "matplotlib",
+    "scipy",
+]
+
+extended = [
+    "scipy",
+    "matplotlib",
+]
+
+
+[tool.black]
+line-length = 120
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+force_grid_wrap = 2
+
+[tool.mypy]
+files = "src/abcd_graph"
+mypy_path = "stubs"
+install_types = "True"
+non_interactive = "True"
+disallow_untyped_defs = "True"
+disallow_any_unimported = "True"
+no_implicit_optional = "True"
+check_untyped_defs = "True"
+warn_return_any = "True"
+show_error_codes = "True"
+warn_unused_ignores = "True"
