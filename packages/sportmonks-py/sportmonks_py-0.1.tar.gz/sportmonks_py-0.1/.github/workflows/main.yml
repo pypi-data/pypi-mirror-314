@@ -1,0 +1,68 @@
+name: Python package
+
+on:
+  push:
+    branches: [ "feature/*", "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install UV
+        run: |
+          pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync
+          pip install ruff pytest responses
+
+      - name: Install sportmonks-py
+        run: pip install -e .
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest
+        env:
+          SPORTMONKS_API_TOKEN: "${{ secrets.SPORTMONKS_API_TOKEN }}"
+
+  publish:
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.12"
+
+      - name: Install build & twine
+        run: |
+          pip install build twine
+
+      - name: Build the distribution
+        run: python -m build
+
+      - name: Publish to PyPI
+        run: twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
