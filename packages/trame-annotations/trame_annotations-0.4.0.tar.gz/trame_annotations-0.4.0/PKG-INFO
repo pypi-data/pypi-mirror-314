@@ -1,0 +1,62 @@
+Metadata-Version: 2.3
+Name: trame-annotations
+Version: 0.4.0
+Summary: Trame widgets for image/video annotations
+Author-email: Alessandro Genova <alessandro.genova@kitware.com>, Vicente Adolfo Bolea Sanchez <vicente.bolea@kitware.com>, Paul Elliott <paul.elliott@kitware.com>
+Keywords: Python,trame,widget
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: License :: Other/Proprietary License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: trame-client
+Provides-Extra: dev
+Requires-Dist: black; extra == 'dev'
+Requires-Dist: flake8; extra == 'dev'
+Requires-Dist: pytest; extra == 'dev'
+Requires-Dist: trame; extra == 'dev'
+Requires-Dist: trame-vuetify; extra == 'dev'
+Provides-Extra: package
+Requires-Dist: build; extra == 'package'
+Requires-Dist: python-semantic-release; extra == 'package'
+Requires-Dist: setuptools; extra == 'package'
+Requires-Dist: wheel; extra == 'package'
+Description-Content-Type: text/markdown
+
+# trame-annotations
+
+This trame package aims to gather widgets that help make image/video annotations easier with your trame application.
+
+## Installing
+
+Install it from pypi:
+
+```bash
+pip install trame-annotations
+```
+
+## Contribute to trame-annotations
+
+```bash
+git clone https://github.com/Kitware/trame-annotations.git
+cd trame-annotations
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -U pip
+pip install -e '.[dev]'
+pip install pre-commit
+pre-commit install
+pytest .
+python examples/image_detection.py
+```
+
+### To continually rebuild JS bundle
+
+```bash
+cd vue-components
+npm run dev
+```
