@@ -1,0 +1,189 @@
+Metadata-Version: 2.1
+Name: gemflix
+Version: 0.0.1
+Summary: A Python-powered movie collection management system
+Author-email: jenny-chung301 <je.chung301@gmail.com>, j232shen <janexshen@gmail.com>
+Project-URL: homepage, https://github.com/j232shen/movie-collection
+Project-URL: issues, https://github.com/j232shen/movie-collection/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pandas>=2.2.2
+Requires-Dist: matplotlib>=3.8.4
+Requires-Dist: numpy>=2.1.3
+Requires-Dist: google-generativeai>=0.8.3
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: langchain-couchbase>=0.2.2
+Requires-Dist: tqdm>=4.67.0
+Requires-Dist: pygal>=3.0.5
+
+# 🎥 GemFlix
+
+A Python-powered movie collection management system designed to organize, analyze, and discover movies effortlessly. With seamless Couchbase integration, GemFlix efficiently manages data for 1000+ movies and personal user collections. Users can rate, review, and create custom collections, while tailored filters and suggestions, powered by Gemini, enhance movie discovery. Additionally, built-in analysis tools provide deeper insights into viewing habits and collection trends.
+
+[![Build Status](https://app.travis-ci.com/j232shen/movie-collection.svg?token=yhEzGjSL4HpePqCJ4eQs&branch=main)](https://app.travis-ci.com/j232shen/movie-collection)
+---
+
+## 🚀 Features
+1. **User Management**: 
+   - Sign up new users with personalized collections.
+
+2. **Movie Management**:
+   - Add and manage movies in your collection.
+   - Delete movies or collections.
+
+3. **Search Functionality**:
+   - Search movies by keywords (e.g. father daughter story)
+   - Filter movies by custom filters (e.g. title, genre, director, or actor)
+
+4. **Recommendation System**:
+   - Get personalized movie recommendations based on user preferences.
+
+5. **Data Analysis**:
+   - Analyze user moive data such as:
+     - basic descriptive statistics.
+     - Top directors in the collection.
+     - Most popular genres.
+
+5. **Visualization**:
+   - Visualize data trends, including:
+     - Summary reports.
+     - Top directors with details.
+     - Annual or Monthly genre trends.
+   - Display an interactive dashboard for easy access to insights.
+---
+
+## 📜 Function Details
+
+Below are the key functions in GemFlix and how they work:
+
+### `sign_up`
+Creates a user account 
+
+#### Parameters:
+- `user_id` (str): The user ID
+
+#### Example:
+```python
+collection.user_id(user_id="julia")
+```
+### `create_collection`
+Adds a new colection to the user's document 
+
+#### Parameters:
+- `collection_name` (str): The name of the collection.
+
+#### Example:
+```python
+collection.create_collection(collection_name="sci-fi")
+```
+### `display_collection`
+Displays all collections or movies within a specified collection.
+
+#### Parameters:
+- `collection_name` (str): The name of the collection. (optional)
+
+#### Example:
+```python
+collection.display_collection(collection_name="sci-fi")
+```
+### `add_log`
+Adds a movie to a collection by its title, including details like rating, watched date, and
+notes.
+
+#### Parameters:
+- `collection_name` (str): The name of the collection.
+- `movie_title` (str): The title of the movie to add.
+- `rate` (int): The user's rating for the movie.
+- `watched_date` (str): The date the movie was watched (optional).
+- `notes` (str): Additional notes about the movie (optional).
+
+#### Example:
+```python
+collection.add_log(collection_name = "sci-fi", 
+                   movie_title = "Interstellar",
+                   rate = 10, 
+                   watched_data = "2024-11-28",
+                   notes =  "touching")
+```
+### `keyword_search`
+Perform a keyword search using Couchbase, and generate an HTML page displaying movie results based on the search text.
+
+#### Parameters:
+- `search_text` (str): The search query used for fetching the movie results.
+
+#### Example:
+```python
+keyword_search("christmas family movies")
+```
+### `filter_results`
+Filter documents with dynamic conditions passed by the user.
+
+#### Parameters:
+- `filters` (str): A list of custom filter conditions. Each filter is a dictionary with the following keys:
+   - `field` (str) : The field to filter 
+   - `condition` (str) : The condition to apply
+   - `values` (list) : The values to match against the condition.
+- `limit` (int) : The maximum number of movies to return.
+- `sort_by` (tuple) : The sorting criteria, specified as (field, order)
+
+#### Example:
+```python
+filters = [
+    {"field": "Released_Year", "condition": "BETWEEN", "values": [1960, 1980]},
+    {"field": "Genre", "condition": "LIKE", "values": ["Romance"]},
+]
+sort_by = ("IMDB_Rating", "DESC")
+filter_results(filters, 5, sort_by)
+```
+### `recommend`
+Generates top 'k' movie recommendations based on a collection of movies.
+
+#### Parameters:
+- `collection` (MovieCollection) : MovieCollection object to retrieve data.
+- `collection_name` (str): The name of the collection base recommendations on (optional). 
+- `k` (int): The number of top recommendations to return.
+
+#### Example:
+```python
+recommend(collection, 7)
+```
+### `display_dashboard`
+Combine all visualizations into a single HTML dashboard and display it in the browser.
+
+#### Parameters:
+- `user_collection` (MovieCollection): The user's collection.
+- `collection_name` (str): The name of the collection.
+- `period` (str) : The period criterion ('month' or 'year').
+- `year` (int) : The specific year to filter the data (optional).
+
+#### Example:
+```python
+display_dashboard(collection, None, "Year")
+```
+
+## Prerequisites
+
+- Python 3.11 or higher
+- Couchbase Server
+- Couchbase Python SDK
+- `poetry`
+
+
+## Contact
+
+For questions or feedback, please contact:
+
+Jane
+
+Email: janexshen@gmail.com
+
+Jenny
+
+Email: je.chung301@gmail.com
+
+
+
+
