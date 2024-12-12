@@ -1,0 +1,19 @@
+# CI for github actions built off
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: Test and lint on pull request
+
+on: [pull_request]
+
+jobs:
+  test_and_lint:
+    name: ${{ matrix.os }} python${{ matrix.python-version }}
+
+    uses: ./.github/workflows/test_lint.yml
+    with:
+      os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+        python-version: ["3.9", "3.10"]

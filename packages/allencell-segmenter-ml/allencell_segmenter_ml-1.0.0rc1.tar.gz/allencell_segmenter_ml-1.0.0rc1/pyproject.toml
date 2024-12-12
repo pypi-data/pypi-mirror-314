@@ -1,0 +1,146 @@
+# package build
+# https://peps.python.org/pep-0518/
+[build-system]
+requires = ["setuptools>=69", "setuptools-scm>=8"] # not including wheel based on https://setuptools.pypa.io/en/latest/userguide/quickstart.html
+build-backend = "setuptools.build_meta"
+
+# package basics
+# https://peps.python.org/pep-0621/
+[project]
+name = "allencell-segmenter-ml"
+version = "1.0.0rc1"
+description = "A plugin to leverage ML segmentation in napari"
+readme = "README.md"
+requires-python = ">=3.9,<3.11"
+license = { file = "LICENSE" }
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Framework :: napari",
+    "Intended Audience :: Science/Research",
+    "License :: Other/Proprietary License",
+    "License :: Free for non-commercial use",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+
+dependencies = [
+    "npe2>=0.6.2",
+    "numpy",
+    "hydra-core==1.3.2",
+    "bioio==1.1.0",
+    "tifffile>=2023.4.12",
+    "watchdog",
+    "cyto-dl>=0.4.4",
+    "scikit-image!=0.23.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/AllenCell/allencell-ml-segmenter"
+"Bug Tracker" = "https://github.com/AllenCell/allencell-ml-segmenter/issues"
+Documentation = "https://github.com/AllenCell/allencell-ml-segmenter#README.md"
+"User Support" = "https://github.com/AllenCell/allencell-ml-segmenter/issues"
+
+# extra dependencies
+# https://peps.python.org/pep-0621/#dependencies-optional-dependencies
+[project.optional-dependencies]
+napari = [
+    "napari>=0.4.18",
+    "pyqt5",
+]
+
+test_lint = [
+    "pytest<8.0.0", # https://docs.pytest.org/en/latest/contents.html
+    "pytest-cov",  # https://pytest-cov.readthedocs.io/en/latest/
+    "pytest-qt",
+    "qtpy",
+    "pyqt5",
+    "black>=24.2.0",
+    'pytest-xvfb; sys_platform == "linux"',
+    "responses",
+    "mypy",
+    "toml",
+    "bumpver",
+    "napari>=0.4.18",
+    "magicgui"
+]
+
+dev = [
+    "black>=24.2.0",
+    "coverage>=7.2.2",
+    "flake8>=6.0.0",
+    "pytest>=7.2.2, <8.0.0",
+    "pytest-qt>=3.3.0",
+    "pytest-cov>=2.6.1",
+    "pyqt5>=5.15.9",
+    "bumpver>=2023.1129",
+    "build>=1.0.3",
+    "twine>=5.0.0",
+    "responses",
+    "mypy",
+]
+
+# entry points
+# https://peps.python.org/pep-0621/#entry-points
+[project.entry-points."napari.manifest"]
+allencell-segmenter-ml = "allencell_ml_segmenter:napari.yaml"
+
+# build settings
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# does not work with include-package-data due to https://github.com/pypa/setuptools/issues/3260
+# exclude = ["*_tests*", "*sample*"]
+
+[tool.setuptools_scm]
+
+# https://pypi.org/project/bumpver
+[tool.bumpver]
+current_version = "1.0.0rc1"
+version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
+commit_message  = "Bump version {old_version} -> {new_version}"
+commit          = true
+tag             = false # no longer useful to tag here, must happen in create_publish_pr.yaml
+push            = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"src/allencell_ml_segmenter/__init__.py" = ['__version__ = "{version}"']
+# ".github/workflows/publish_to_pypi.yaml" = ["Current version: {version}"]
+
+[tool.black]
+line-length = 79 # should change to 88 once release_pipeline is merged
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+# https://flake8.pycqa.org/en/latest/user/options.html
+# https://gitlab.com/durko/flake8-pyprojecttoml
+# configure flake8 to work with black
+[tool.flake8]
+max-line-length = 88
+max-complexity = 18
+ignore = "E203,E266,E501,W503"
+select = "B,C,E,F,W,T4"
+
+# allow pytest testing on pyqt5
+[tool.pytest]
+qt_api="pyqt5"
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_defs = true
+exclude = [
+    "src/allencell_ml_segmenter/_tests/*",
+    "src/debug.py",
+]
