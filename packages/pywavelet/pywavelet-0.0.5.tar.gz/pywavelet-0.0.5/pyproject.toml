@@ -1,0 +1,133 @@
+[build-system]
+requires = [
+    "setuptools>=64",
+    "setuptools-scm>=8.0",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pywavelet"
+dynamic = ["version"] # scm versioning (using tags)
+requires-python = ">=3.8"
+description = "WDM wavelet transform your time/freq series!"
+readme = "README.md"
+authors = [
+    { name = "Pywavelet Team", email = "avi.vajpeyi@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+]
+dependencies = [
+    "numpy",
+    "numba",
+    "scipy",
+    "matplotlib",
+    "tqdm",
+    "rich",
+    "rocket-fft",
+    "astropy>=5.2.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=4.1.0",
+    "pre-commit",
+    "flake8>=5.0.4",
+    "black>=22.12.0",
+    "black[jupyter]>=22.12.0",
+    "isort",
+    "mypy",
+    "jupyter-book",
+    "GitPython",
+]
+
+[tool.setuptools_scm]
+version_file = "src/pywavelet/_version.py"
+
+[tool.semantic_release]
+version_variable = "src/pywavelet/_version.py:__version__"
+version_source = "commit"
+commit_version_number = true
+commit_subject = "chore(release): {version}"
+commit_message = "chore(release): {version}"
+tag_format = "v{version}"
+no_local_version = true
+
+
+[tool.semantic_release.changelog]
+changelog_file = "CHANGELOG.rst"
+
+[project.urls]  # Optional
+"Homepage" = "https://pywavelet.github.io/pywavelet/"
+"Bug Reports" = "https://pywavelet.com/pywavelet/pywavelet/issues"
+"Source" = "https://github.com/pywavelet/pywavelet/"
+
+
+[tool.setuptools]
+package-data = { "pywavelet" = [""] }
+
+
+
+[tool.black]
+line-length = 79
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "pywavelet"
+]
+
+[tool.coverage.paths]
+source = [
+    "src/pywavelet",
+    "**/site-packages/pywavelet"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug",
+    "raise AssertionError",
+    "raise NotImplentedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]
+
+ignore_errors = true
+
+[tool.coverage.html]
+title = "pywavelet Coverage Test Report"
+
+
+[[tool.mypy.overrides]]
+module = "matplotlib.*,scipy.*,numba.*,bilby.*"
+ignore_missing_imports = true
