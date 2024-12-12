@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling < 1.22"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pdocs"]
+
+[project]
+name = "tmp-fat-pdocs"
+version = "1.2.0"
+description = "A simple program and library to auto generate API documentation for Python modules."
+authors = [
+  {name = "Timothy Crosley", email = "timothy.crosley@gmail.com"}
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.7"
+
+dependencies = [
+  "Markdown>=3.0.0",
+  "Mako>1.2.2",
+  "docstring_parser>=0.7.2"
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=0.720.0",
+  "isort>=4.3",
+  "pytest>=5.1",
+  "pytest-cov>=2.7",
+  "flake8-bugbear>=19.8",
+  "bandit>=1.6",
+  "vulture>=1.0",
+  "safety>=1.8",
+  "black",
+  "pytest-mock>=1.10",
+  "ipython>=7.7",
+  "flake8>=3.7",
+  "pep8-naming>=0.8.2",
+  "types-Markdown>0.0"
+]
+
+[tool.portray.mkdocs.theme]
+favicon = "art/logo.png"
+logo = "art/logo.png"
+name = "material"
+palette = {primary = "deep purple", accent = "pink"}
