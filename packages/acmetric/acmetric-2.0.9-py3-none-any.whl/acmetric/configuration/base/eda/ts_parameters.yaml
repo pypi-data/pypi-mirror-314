@@ -1,0 +1,52 @@
+# Settings for Time Series Exploratory Data Analysis
+
+data_structure:
+  type: 'horizontal'  # Specify the data structure ('horizontal', 'vertical')
+  time_series:
+    entity_column: 'entity'  # Column name that holds different entities (only applicable for 'vertical' structure)
+    value_column: 'value'  # Column name that holds values (only applicable for 'vertical' structure)
+    time_column: 'time'  # Column name that holds time information (only applicable for 'vertical' structure)
+
+plotting:
+  type: 'line'  # Type of plot ('line', 'bar', 'scatter')
+  max_lines_per_plot: 10  # Maximum number of lines to plot on one plot
+  separate_subplots: true  # If true, each line gets its own subplot
+  max_number_of_subplots: 9  # Maximum number of subplots to display
+
+data_selection:
+  column_names:  # User can specify a list of column names for EDA (only applicable for 'horizontal' structure)
+    - 'Date'
+    - 'EN3.4'
+    - 'RB'
+    - 'WPAC'
+    - 'TUPAC'
+    - 'WPAC2'
+  include_all_columns: false  # If true, use all columns from the DataFrame (overrides column_names)
+  max_number_of_columns: 50  # Maximum number of columns to use for plotting and testing
+  max_number_of_rows:   # Maximum number of rows to use for plotting and testing, leave empty to use all rows
+
+data_handling:
+  missing_values: 'ignore'  # How to handle missing values ('drop', 'fill', 'ignore', 'interpolate')
+  fill_value: 0  # Value to fill missing data if 'fill' is chosen
+
+export:
+  save_plots: false  # Whether to save plots after EDA
+  plot_format: 'png'  # Format for saving plots ('png', 'jpeg')
+  output_directory: 'eda_results/'  # Directory to save results
+
+plot_types:
+  line: true
+  differencing: false
+  distribution: false
+  acf: true
+  pacf: false
+  qq_plot: false
+  diff_lag: 1  # Number of lags to use for differencing plot
+  lag: 20  # Number of lags to use for ACF and PACF plots
+
+statistics:
+  summary_statistics: true
+  normality_test: true
+  stationarity_test: true
+  autocorrelation_test: true
+  max_lag: 10  # Maximum lag for autocorrelation test
