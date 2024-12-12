@@ -1,0 +1,33 @@
+
+[:python_version < "3.10"]
+typing_extensions
+
+[dev]
+validate-pyproject[all]
+black
+pylint
+mypy
+pytest
+freezegun
+tzdata
+build
+mkdocs
+mkdocs-material>=8.5
+mkdocs-awesome-pages-plugin
+mdx_truly_sane_lists
+mkdocstrings[python]
+mkdocs-gen-files
+mkdocs-literate-nav
+mike
+
+[dev:implementation_name != "pypy"]
+orjson
+
+[dev:implementation_name != "pypy" and python_version < "3.13"]
+msgspec
+
+[dev:implementation_name != "pypy" and python_version == "3.13"]
+msgspec-python313-pre
+
+[dev:python_version < "3.9"]
+backports.zoneinfo
