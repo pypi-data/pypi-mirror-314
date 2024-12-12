@@ -1,0 +1,55 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "graphbook"
+version = "0.9.3"
+authors = ["Richard Franklin <rsamf@graphbook.ai>"]
+description = "The AI-drive data pipeline and workflow framework for data scientists and machine learning engineers."
+keywords = ["ml", "workflow", "framework", "pytorch", "data science", "machine learning", "ai"]
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+homepage = "https://graphbook.ai"
+documentation = "https://docs.graphbook.ai"
+repository = "https://github.com/graphbookai/graphbook"
+
+[tool.poetry.scripts]
+graphbook = "graphbook.main:main"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aiohttp = "^3.9.4"
+pillow = "^10.3.0"
+watchdog = "^4.0.0"
+psutil = "^6.0.0"
+pyyaml = "^6.0.2"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+sphinxcontrib-applehelp = "^1.0.8"
+sphinxcontrib-devhelp = "^1.0.6"
+sphinxcontrib-htmlhelp = "^2.0.5"
+sphinxcontrib-jquery = "^4.1"
+sphinxcontrib-jsmath = "^1.0.1"
+sphinxcontrib-qthelp = "^1.0.7"
+sphinxcontrib-serializinghtml = "^1.1.10"
+pytest-asyncio = "^0.23.8"
+sphinx-sitemap = "^2.6.0"
+sphinxawesome-theme = "^5.2.0"
+sphinx-design = "^0.6.1"
+
+[tool.poetry.group.peer]
+optional = true
+
+[tool.poetry.group.peer.dependencies]
+torch = "^2.0.0"
+torchvision = "^0.18.1"
