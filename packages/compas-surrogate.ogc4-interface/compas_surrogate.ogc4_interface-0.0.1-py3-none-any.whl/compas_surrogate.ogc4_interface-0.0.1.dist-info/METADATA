@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: compas_surrogate.ogc4_interface
+Version: 0.0.1
+Summary: Interface to OGC-4 (https://github.com/gwastro/4-ogc)
+Author-email: Avi Vajpeyi <avi.vajpeyi@gmail.com>
+Project-URL: Homepage, https://github.com/COMPAS-Surrogate/ogc4_interface
+Project-URL: Bug Reports, https://github.com/COMPAS-Surrogate/ogc4_interface/issues
+Project-URL: Source, https://github.com/COMPAS-Surrogate/ogc4_interface/
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: pycbc>=2.7.0
+Requires-Dist: colorlog
+Requires-Dist: tqdm
+Requires-Dist: h5py
+Requires-Dist: matplotlib
+Requires-Dist: pandas
+Requires-Dist: seaborn
+Requires-Dist: colormath
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: coverage[toml]; extra == "dev"
+Requires-Dist: pre-commit; extra == "dev"
+Requires-Dist: flake8>=5.0.4; extra == "dev"
+Requires-Dist: black==22.10.0; extra == "dev"
+Requires-Dist: jupyter-book; extra == "dev"
+Requires-Dist: pydata_sphinx_theme; extra == "dev"
+
+# OGC-4 Interface
+
+[![PyPI version](https://badge.fury.io/py/compas-surrogate.ogc4-interface.svg?icon=si%3Apython)](https://badge.fury.io/py/compas-surrogate.ogc4-interface)
+
+This repo interfaces with [OGC-4](https://github.com/gwastro/4-ogc) to read in posterior samples for the LVK GW events.
+
+The `PopulationMcZ` class is the main API interface, and is used to get the Mc-z posterior samples and
+priors for all the events, and cache them as a matrix of binned Mc-z weights.
+
+
+```python
+from ogc4_interface.population_mcz import PopulationMcZ
+
+population = PopulationMcZ.load()
+population.plot_event_mcz_estimates()
+population.filter_events(threshold=0.95)
+population.plot_weights()
+```
+
+## Events
+![](docs/_static/event_mcz_estimates.jpeg)
+
+
+## Weights
+![](docs/_static/weights.jpeg)
