@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "kicad-python"
+version = "0.1.0a1"
+description = "KiCad API Python Bindings"
+authors = ["The KiCad Development Team"]
+homepage = "https://kicad.org/"
+repository = "https://gitlab.com/kicad/code/kicad-python"
+license = "GPL-3"
+readme = "README.md"
+packages = [
+    { include = "kipy" },
+]
+include = ["**/kipy/**/*.py", "**/kipy/**/*.pyi"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+protobuf = "^4.21.12"
+pynng = "^0.7.2"
+
+[tool.poetry.group.dev.dependencies]
+nox = "^2024.3.2"
+ruff = "^0.3.2"
+protoletariat = "^3.2.19"
+mypy-protobuf = "^3.5.0"
+poetry-plugin-export = "^1.7.1"
+mypy = "^1.9.0"
+
+[build-system]
+requires = [
+    "poetry-core",
+    "protoletariat == 3.2.*"
+]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.build]
+generate-setup-file = false
+script = "build.py"
+
+[tool.ruff]
+exclude = [
+    "kipy/proto"
+]
+
+[tool.mypy]
+exclude = [
+    "kipy/proto"
+]
+
+[[tool.mypy.overrides]]
+module = "pynng"
+ignore_missing_imports = true
