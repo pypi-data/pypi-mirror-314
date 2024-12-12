@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools", "setuptools-git-versioning"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "waylay-sdk-core"
+dynamic = ["version"]
+description = "Waylay Python SDK."
+requires-python = ">=3.9"
+keywords = ["waylay", "sdk"]
+readme = "README.md"
+authors = [{name = "Waylay", email = "info@waylay.io"}]
+license={file = "LICENSE.txt"}
+dependencies = [
+    "httpx == 0.27.*",
+    "appdirs",
+    "pyjwt",
+    "python_dateutil",
+    "typing_extensions >= 4.10.0",
+    "typeguard",
+    "jsonpath-ng",
+    "pydantic >= 2.6.0",
+    "eval-type-backport ~= 0.1.3; python_version < '3.10'",
+    "waylay-beta==0.0.999",
+]
+
+[project.urls]
+Homepage = "https://www.waylay.io/"
+Documentation = "https://docs.waylay.io/#/"
+Repository = "https://github.com/waylayio/waylay-sdk-py.git"
+
+[project.entry-points.dynamic]
+"waylay_sdk_plugins"= "waylay.sdk.plugin.loader:PLUGINS"
+
+[tool.setuptools-git-versioning]
+enabled = true
+
+[tool.setuptools.package-data]
+waylay = ["py.typed"]
+
+[tool.setuptools.packages.find]
+where = ["src/"]
+include = ["waylay*"]
+exclude = []
+namespaces = true
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-httpx",
+    "pytest-asyncio",
+    "starlette",
+    "syrupy",
+    "ruff",
+    'mypy!=1.11.*',
+    'pyjwt',
+    'types-appdirs',
+    'types-python-dateutil',
+    'pre-commit',
+    'sse-starlette',
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+include = ["pyproject.toml", "src/**/*.py", "test/**/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "SIM", "FA", "D", "UP007", "I001", "PIE790"]
+ignore = ["D203", "D213"]
+
+[tool.ruff.lint.isort]
+from-first = false
+known-first-party = ["waylay*"]
+
+[tool.ruff.lint.per-file-ignores]
+"test/**/*.py" = ["D"] # no docstyle required
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:"
+]
