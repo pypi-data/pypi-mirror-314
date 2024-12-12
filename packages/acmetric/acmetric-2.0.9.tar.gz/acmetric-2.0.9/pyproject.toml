@@ -1,0 +1,167 @@
+[tool.poetry]
+name = "acmetric"
+version = "2.0.9"
+description = "acmetric package and sample project."
+authors = [
+    "Ivan <ivan@acmetric.org>",
+    "Jakob <jakob@acmetric.org>",
+    "Marc <marc@acmetric.org>",
+    "Martijn <martijn@acmetric.org>",
+    "Max <max@acmetric.org>",
+    "Negin <negin@acmetric.org>",
+    "Niek <niek@acmetric.org>",
+    "Nils <nils@acmetric.org>",
+    "Rutger <rutger@acmetric.org>",
+]
+packages = [
+    { include = "acmetric", from = "src" }
+]
+
+[tool.poetry.scripts]
+# test_run = "test:test_function"
+
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+# validation
+pydantic = "*"
+# stats packages
+numpy = "^1.23.0"
+scipy = "^1.8.1"
+statsmodels = "^0.14.4"
+# data handling
+pandas = "^1.4.3"
+# working with parquet
+pyarrow = "^12.0.1"
+fastparquet = "^2023.7.0"
+# visualizations
+# acmetric-plotting = {git = "https://github.com/ACMetric/acmetric_package.git"}
+matplotlib = "^3.7.2"
+seaborn = "^0.11.2"
+# configurations
+hydra-core = "^1.2.0"
+# portray = "^1.7.0"
+# "ruamel.yaml" = "^0.17.21"
+# PyYAML = "^6.0"
+# pandasgui = "^0.2.14" # Manual installation for the time being
+
+# logging
+loguru = { version = "^0.7.2", optional = true }
+
+[tool.poetry.extras]
+logging = ["loguru"]
+
+# Development dependencies
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.13.0"
+# testing tools
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+# precommit and linting
+pre-commit = "=2.21.0"
+mypy = "=1.6.0"
+black = "=22.3.0"
+# flake8 = "=4.0.1"
+ruff = "=0.1.6"
+
+
+
+
+# The dependency groups below are optional and can be installed with the following command:
+# poetry install --with <group_name>,<group_name>,...
+# For example, if you need Kedro, Pandera and Spark for your project, you can run:
+# poetry install --with kedro,pandera,spark
+# The command above will install all dependencies from the default group and the groups you specified.
+
+# GCP
+[tool.poetry.group.gcp]
+optional = true
+
+[tool.poetry.group.gcp.dependencies]
+google-cloud-bigquery-storage = "^2.13.2"
+google-api-core = "^2.8.2"
+pandas-gbq = "^0.19.2"
+gcsfs = "^2023.9.2"
+dbt-bigquery = "^1.0.0"
+
+# Spark
+[tool.poetry.group.spark]
+optional = true
+
+[tool.poetry.group.spark.dependencies]
+pyspark = "^3.2.0"
+
+# Kedro
+[tool.poetry.group.kedro]
+optional = true
+
+[tool.poetry.group.kedro.dependencies]
+kedro = "^0.18.13"
+kedro-datasets = "^1.7.0"
+
+# Great Expectations
+[tool.poetry.group.gx]
+optional = true
+
+[tool.poetry.group.gx.dependencies]
+great-expectations = "^0.18.2"
+
+# Pandera
+[tool.poetry.group.pandera]
+optional = true
+
+[tool.poetry.group.pandera.dependencies]
+pandera = "^0.17.2"
+
+# Logging
+# [tool.poetry.group.logging]
+# optional = true
+
+# [tool.poetry.group.logging.dependencies]
+# loguru = "^0.7.2"
+
+# CI/CD
+[tool.poetry.group.ci]
+optional = true
+
+[tool.poetry.group.ci.dependencies]
+pandas = "^1.4.3"
+kedro = "^0.18.13"
+kedro-datasets = "^1.7.0"
+great-expectations = "^0.18.2"
+pyspark = "^3.2.0"
+loguru = "^0.7.2"
+statsmodels = "^0.14.4"
+matplotlib = "^3.7.2"
+# testing tools
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+
+# Tool configurations
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+show_error_codes = true
+warn_unused_ignores = true
+
+[tool.ruff]
+line-length = 120
+ignore = ["F811"]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.py" = ["E402"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project.optional-dependencies]
+logging = [
+    "loguru ^0.7.2"
+]
