@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=42", "wheel", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "liger_kernel_nightly"
+version = "0.5.2.dev20241212030605"
+description = "Efficient Triton kernels for LLM Training"
+urls = { "Homepage" = "https://github.com/linkedin/Liger-Kernel" }
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+dynamic = ["dependencies", "optional-dependencies"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["liger_kernel*"]
+namespaces = false
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+asyncio_mode = "auto"
+log_cli = true
+log_cli_level = "INFO"
