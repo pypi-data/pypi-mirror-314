@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--durations=0 -v -m \"not slowtest and not smoketest and not unimportant and not unfinished and not onlylocal\""
+markers = [
+    "slowtest: marks tests as slow (deselect with '-m \"not slow\"')",
+    "serial",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.bumpver]
+current_version = "1.0.2a9"
+version_pattern = "MAJOR.MINOR.PATCH[PYTAG][NUM]"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+]
+
+"cellpy/_version.py" = [
+    '__version__ = "{version}"',
+]
