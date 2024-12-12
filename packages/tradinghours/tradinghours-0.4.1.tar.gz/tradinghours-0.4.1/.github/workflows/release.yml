@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11' # Specify your Python version here
+
+    - name: Version and Summary
+      id: update_info
+      run: |
+        VERSION=$(grep '__version__' src/tradinghours/__init__.py | cut -d '"' -f 2)
+        echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+        line_number=$(grep -n '^## ' "release_log.txt" | head -2 | tail -1 | cut -d: -f1)
+        SUMMARY="$(sed -n "2,$(( ${line_number} -1))p" release_log.txt)"
+        echo "${SUMMARY}"
+        
+        echo "summary<<EOF" >> $GITHUB_OUTPUT
+        echo "${SUMMARY}" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+        sed -i "s/## new_release/## ${VERSION} ($(date +%Y-%m-%d))/" release_log.txt
+
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        file_pattern: release_log.txt
+        commit_message: '[GH-Actions] v${{ steps.update_info.outputs.version }} -- updated release_log.txt'
+
+    - name: Build and publish package using Flit
+      run: |
+        pip install flit
+
+        export FLIT_USERNAME=__token__
+        export FLIT_PASSWORD=${{ secrets.PYPI_TOKEN }}
+
+        flit publish
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: ${{ steps.update_info.outputs.version }}
+        tag_name: ${{ steps.update_info.outputs.version }}
+        body: |
+          ${{ steps.update_info.outputs.summary }}
+  

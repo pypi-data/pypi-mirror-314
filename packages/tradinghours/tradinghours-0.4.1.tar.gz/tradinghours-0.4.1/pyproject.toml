@@ -1,0 +1,63 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "tradinghours"
+authors = [{ name="TradingHours", email="developer@tradinghours.com" }]
+dynamic = ["version", "description"]
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Software Development :: Libraries",   
+]
+dependencies = ['tzdata', 'requests', 'sqlalchemy']
+
+[project.urls]
+"Homepage" = "https://github.com/tradinghours/tradinghours-python"
+"Bug Tracker" = "https://github.com/tradinghours/tradinghours-python/issues"
+
+[project.optional-dependencies]
+dev = [
+    'flit',
+    'isort',
+    'flake8',
+    'flake8-pyproject',
+    'black',
+    'coverage[toml]',
+    'pytest',
+    'pytest-mock',
+]
+mysql = [
+    'pymysql',
+    'cryptography'
+]
+postgres = [
+    'psycopg2-binary'
+]
+
+[project.scripts]
+tradinghours = "tradinghours.console:main"
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = 'E203'
+
+[tool.black]
+exclude = '''
+/(
+  | tests
+)/
+'''
+
+[tool.coverage.run]
+omit = [ 'tests/*' ]
