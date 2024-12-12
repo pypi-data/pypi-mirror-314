@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=64", "protobuf>=3.20.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esp-ppq"
+version = "0.2.2"
+description = "Quantization tools for esp-dl"
+authors = [
+    { name = "esp-dl", email = "sunxiangyu@example.com" }
+]
+license = {text = "Apache License v2.0"}
+readme = "README.md"
+requires-python = ">=3.6"
+
+dependencies = [
+    "onnx >= 1.14.0",
+    "torch>=1.12.0",
+    "protobuf",
+    "onnxsim", 
+    "tqdm", 
+    "flatbuffers",
+    "cryptography"
+]
+
+[project.optional-dependencies]
+cpu = [ "torch==2.0.0+cpu" ]
+
+[tool.setuptools.packages.find]
+where = ["ppq"]
