@@ -1,0 +1,33 @@
+[project]
+name = "verbia-cli"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "inquirerpy>=0.3.4",
+    "readchar>=4.2.1",
+    "rich>=13.9.4",
+    "sqlalchemy>=2.0.36",
+    "sqlmodel>=0.0.22",
+    "typer>=0.14.0",
+    "aiosqlite>=0.20.0",
+    "langcodes>=3.5.0",
+    "loguru>=0.7.2",
+    "verbia-core>=0.1.0",
+]
+
+[project.scripts]
+verbia = "verbia_cli.app:app"
+
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.uv.sources]
+verbia-core = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
