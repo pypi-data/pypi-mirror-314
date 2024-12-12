@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "EasyFactory"
+version = "1.4.2"
+authors = [
+    { name = "Baboin Arthur", email = "baboin.arthur@gmail.com" },
+]
+description = "EasyFactory is a wrapper above FactoryBoy to allow the generation of Factory class with mandatory parameter filed."
+readme = "README.md" # will break limit of 4000 chr cf https://gitlab.com/gitlab-org/gitlab/-/issues/431505
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "factory_boy~=3.3.0",
+    "SQLAlchemy~=2.0.36",
+    "pydantic~=2.8.2",
+]
+[project.optional-dependencies]
+tests = [
+    "pytest~=8.0.2",
+    "pytest-cov~=4.1.0",
+    "pytest-mock~=3.12.0",
+]
+[project.urls]
+Homepage = "https://gitlab.com/Tagashy/easyfactory"
+Documentation = "https://tagashy.gitlab.io/easyfactory/"
+Repository = "https://gitlab.com/Tagashy/easyfactory.git"
+Issues = "https://gitlab.com/Tagashy/easyfactory/issues"
+"Bug Tracker" = "https://gitlab.com/Tagashy/easyfactory/issues"
+
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "-s",
+    "-v",
+    "--durations=0",
+    "--junit-xml=pytest.xml"
+]
+testpaths = [
+    "tests"
+]
+pythonpath = [
+    "src"
+]
+cache_dir = ".cache/pytest_cache"
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+command_line = "-m pytest"
+
+[tool.coverage.report]
+#fail_under = 70
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if typing.TYPE_CHECKING:",
+    "if TYPE_CHECKING:"
+]
+
+
+[tool.coverage.xml]
+output = "coverage.xml"
