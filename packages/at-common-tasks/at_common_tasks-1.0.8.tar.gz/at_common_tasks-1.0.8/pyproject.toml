@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "at_common_tasks"
+version = "1.0.8"
+authors = [
+    { name="Rui Chen", email="apextrader.ai@gmail.com" },
+]
+description = "A Python package providing common asynchronous task definitions and utilities for workflow operations."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "at_common_workflow>=1.1.15",
+    "SQLAlchemy>=2.0.36",
+    "at-common-models>=0.1.3",
+    "aiomysql>=0.2.0",
+    "greenlet>=3.0.3"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.24.0"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/apex-trader/at-common-tasks"
+"Bug Tracker" = "https://github.com/apex-trader/at-common-tasks/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = [
+    "at_common_tasks",
+    "at_common_tasks.tasks",
+    "at_common_tasks.tasks.data",
+    "at_common_tasks.utils"
+]
