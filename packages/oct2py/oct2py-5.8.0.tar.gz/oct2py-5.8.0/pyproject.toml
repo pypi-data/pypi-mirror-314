@@ -1,0 +1,169 @@
+[build-system]
+requires = ["hatchling>=1.5"]
+build-backend = "hatchling.build"
+
+[project]
+name = "oct2py"
+dynamic = ["version"]
+description = "'Python to GNU Octave bridge --> run m-files from python.'"
+license = {text = "MIT"}
+authors = [{name = "Steven Silvester", email = "steven.silvester@ieee.org"}]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy >=1.12",
+    "scipy >=0.17",
+    "octave_kernel >= 0.34.0",
+]
+readme = "README.rst"
+
+[project.urls]
+homepage = "https://github.com/blink1073/oct2py"
+documentation = "https://blink1073.github.io/oct2py"
+
+[project.optional-dependencies]
+test = [
+    "pytest<8",
+    "pandas",
+    "nbconvert",
+    "pytest-timeout",
+    "pre-commit",
+]
+docs = [
+    "sphinx",
+    "pydata_sphinx_theme",
+    "myst_parser",
+    "sphinxcontrib_spelling",
+]
+
+[tool.jupyter-releaser.hooks]
+before-build-python = ["sudo apt-get update", "sudo apt-get install -qq octave octave-signal liboctave-dev"]
+before-check-links = ["sudo apt-get update", "sudo apt-get install -qq octave octave-signal liboctave-dev"]
+
+[tool.hatch.version]
+path = "oct2py/_version.py"
+
+[tool.hatch.envs.docs]
+features = ["docs"]
+[tool.hatch.envs.docs.scripts]
+build = "make -C docs html SPHINXOPTS='-W'"
+
+[tool.hatch.envs.test]
+features = ["test"]
+[tool.hatch.envs.test.scripts]
+test = "python -m pytest -vv {args}"
+nowarn = "python -m pytest -vv -W default {args}"
+
+[tool.hatch.envs.cover]
+features = ["test"]
+dependencies = ["coverage", "pytest-cov"]
+[tool.hatch.envs.cover.env-vars]
+ARGS = "--doctest-modules -l --cov-report html --cov-report=xml --cov=oct2py -vv"
+[tool.hatch.envs.cover.scripts]
+test = "python -m pytest $ARGS --cov-fail-under 85 {args}"
+
+[tool.hatch.envs.lint]
+detached = true
+dependencies = ["pre-commit"]
+[tool.hatch.envs.lint.scripts]
+build = [
+  "pre-commit run --all-files ruff",
+  "pre-commit run --all-files ruff-format"
+]
+
+[tool.hatch.envs.typing]
+dependencies = [ "pre-commit"]
+detached = true
+[tool.hatch.envs.typing.scripts]
+test = "pre-commit run --all-files --hook-stage manual mypy"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+xfail_strict = true
+log_cli_level = "info"
+addopts = [
+  "-ra", "--durations=10", "--color=yes", "--doctest-modules",
+   "--showlocals", "--strict-markers", "--strict-config"
+]
+testpaths = ["tests", "tests/ipython"]
+doctest_optionflags = "NORMALIZE_WHITESPACE IGNORE_EXCEPTION_DETAIL"
+timeout = 300
+# Restore this setting to debug failures
+# timeout_method = "thread"
+filterwarnings= [
+  # Fail on warnings
+  "error",
+  # Ignore our own user warnings
+  "ignore:Using deprecated:UserWarning:tests",
+  "ignore:Key - value pairs:UserWarning:tests",
+  "module:Jupyter is migrating its paths:DeprecationWarning",
+  "module:datetime.datetime.utcf:DeprecationWarning",
+  "ignore:(?s).*Pyarrow will become a required dependency of pandas:DeprecationWarning",  # pandas pyarrow (pandas<3.0),
+]
+
+[tool.coverage.run]
+relative_files = true
+source = ["oct2py"]
+omit = [
+  "tests/*",
+]
+
+[tool.mypy]
+strict = true
+disable_error_code = ["no-untyped-call", "no-untyped-def"]
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+pretty = true
+show_error_context = true
+warn_unreachable = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+  "A", "B", "C", "DTZ", "E", "EM", "F", "FBT", "I", "ICN", "N",
+  "PLC", "PLE", "PLR", "PLW", "Q", "RUF", "S", "SIM", "T", "TID", "UP",
+  "W", "YTT",
+]
+ignore = [
+# Q000 Single quotes found but double quotes preferred
+"Q000",
+# FBT001 Boolean positional arg in function definition
+"FBT001", "FBT002", "FBT003",
+# C901 `async_setup_kernel` is too complex (12)
+"C901",
+# C408 Unnecessary `dict` call (rewrite as a literal)
+"C408", "C409"
+]
+
+[tool.ruff.lint.per-file-ignores]
+# S101 Use of `assert` detected
+# N806 Variable `V` in function should be lowercase
+# PLR2004 Magic value used in comparison
+# SIM114 Combine `if` branches
+# PLR0912 Too many branches
+"tests/*" = ["S101", "N806", "PLR2004", "SIM114", "PLR0912"]
+"*.ipynb" = ["B018", "T201", "F821"]
+
+[tool.interrogate]
+ignore-init-module=true
+ignore-private=true
+ignore-semiprivate=true
+ignore-property-decorators=true
+ignore-nested-functions=true
+ignore-nested-classes=true
+fail-under=100
+exclude = ["tests", "docs"]
+
+[tool.repo-review]
+ignore = ["PY007", "GH102"]
