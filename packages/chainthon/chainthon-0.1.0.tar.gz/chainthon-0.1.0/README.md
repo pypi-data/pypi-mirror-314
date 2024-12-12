@@ -1,0 +1,174 @@
+# Chainthon
+
+Chainthon is a Python library for building chatbots. It provides a simple interface for building chatbots using natural language processing (NLP) and Large Language Models (LLMs).
+
+
+## uv 使用方式
+
+```bash
+# 项目构建
+uv init chainthon
+
+# cd chainthon
+
+# uv add ruff  # 添加依赖包
+
+# uv run ruff check  # 检查依赖包
+
+```
+
+### 工具管理
+
+
+uv 执行并安装 Python 包提供的命令行工具, 类似于 `pipx`, 可以是`uvx` （uv tool run）在临时环境中运行工具。
+
+```bash 
+uvx pocowsay "hello world"  # 运行 pocowsay 工具
+```
+
+使用`uv tool install`安装工具：
+
+```bash
+uv tool install ruff  # 安装 ruff 工具
+```
+
+使用`uv tool run`运行工具：
+
+```bash
+uv tool run ruff check  # 运行 ruff check 命令
+```
+
+### Python 管理
+
+uv 安装 Python 并允许在版本之间快速切换。
+安装多个Python版本：
+```bash
+
+uv python install 3.10 3.11 3.12
+```
+
+根据需要下载Python版本：
+
+```bash
+uv venv --python 3.12.0
+uv run --python pypy@3.8 -- python
+```
+使用当前目录中的特定Python版本：
+```bash
+
+uv python pin pypy@3.11
+```
+
+### pip 接口
+
+将需求编译成与平台无关的需求文件：
+
+```bash
+uv pip compile docs/requirements.in \
+   --universal \
+   --output-file docs/requirements.txt
+```
+
+创建虚拟环境：
+
+```bash
+
+uv venv
+```
+安装锁定要求：
+
+```bash
+
+uv pip sync docs/requirements.txt
+```
+
+
+###  安装和管理 Python 本身。
+
+uv python install ：安装Python版本。
+uv python list ：查看可用的Python版本。
+uv python find ：查找已安装的Python版本。
+uv python pin ：固定当前项目以使用特定的 Python 版本。
+uv python uninstall ：卸载Python版本。
+
+### 脚本
+
+```bash
+uv run example.py #  运行脚本
+uv add  --script example.py # 向脚本添加依赖项
+uv remove --script example.py # ：从脚本中删除依赖项
+```
+
+### 项目
+
+创建并处理 Python 项目，即使用pyproject.toml 。
+
+```bash
+uv init ：创建一个新的Python项目。
+uv add ：向项目添加依赖项。
+uv remove ：从项目中删除依赖项。
+uv sync ：将项目的依赖项与环境同步。
+uv lock ：为项目的依赖项创建一个锁定文件。
+uv run ：在项目环境中运行命令。
+uv tree ：查看项目的依赖关系树。
+uv build ：将项目构建到分发档案中。
+uv publish ：将项目发布到包索引。
+```
+
+### 工具
+
+运行并安装发布到 Python 包索引的工具，例如`ruff`或`black` 。
+```bash
+uvx / uv tool run ：在临时环境中运行工具。
+uv tool install ：在用户范围内安装工具。
+uv tool uninstall ：卸载工具。
+uv tool list ：列出已安装的工具。
+uv tool update-shell ：更新 shell 以包含工具可执行文件。
+```
+
+### pip接口
+
+手动管理环境和包 - 旨在用于遗留工作流程或高级命令无法提供足够控制的情况。
+
+```bash
+uv venv ：创建一个新的虚拟环境。
+uv pip install ：将软件包安装到当前环境中。
+uv pip show ：显示有关已安装软件包的详细信息。
+uv pip freeze ：列出已安装的软件包及其版本。
+uv pip check ：检查当前环境是否有兼容的包。
+uv pip list ：列出已安装的软件包。
+uv pip uninstall ：卸载软件包。
+uv pip tree ：查看环境的依赖关系树。
+uv pip compile ：将需求编译到锁定文件中。
+uv pip sync ：将环境与锁定文件同步。
+```
+
+###  Utility
+
+```bash
+uv cache clean ：删除缓存条目。
+uv cache prune ：删除过时的缓存条目。
+uv cache dir ：显示uv缓存目录路径。
+uv tool dir : 显示uv工具目录路径。
+uv python dir ：显示 uv 安装的 Python 版本路径。
+uv self update ：将uv更新到最新版本。
+uv --help
+uv init --help
+uv version
+```
+
+### 项目创建
+`uv` 支持管理 Python 项目，这些项目在`pyproject.toml`文件中定义其依赖项。
+
+```bash
+uv init hello-world
+cd hello-world
+```
+或者
+
+```bash
+mkdir hello-world
+cd hello-world
+uv init
+```
+
