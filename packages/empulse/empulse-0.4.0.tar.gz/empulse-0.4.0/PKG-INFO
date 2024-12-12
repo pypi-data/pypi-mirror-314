@@ -1,0 +1,161 @@
+Metadata-Version: 2.1
+Name: empulse
+Version: 0.4.0
+Summary: Value-driven metrics and models for scikit-learn
+Author-email: Shimanto Rahman <shimanto.rahman@ugent.be>
+License: MIT License
+        
+        Copyright (c) 2023 Shimanto Rahman
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+        
+        ==
+        
+        Empulse contains code that is licensed by third-party developers.
+        
+        ==
+        SciPy
+        
+        
+        The Empulse contains the codes from SciPy project.
+        
+        
+        Copyright (c) 2001-2002 Enthought, Inc. 2003-2022, SciPy Developers.
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions
+        are met:
+        
+        1. Redistributions of source code must retain the above copyright
+           notice, this list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above
+           copyright notice, this list of conditions and the following
+           disclaimer in the documentation and/or other materials provided
+           with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived
+           from this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+        "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+        LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+        A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+        OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+        SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+        DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+        THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Project-URL: documentation, https://shimantorahman.github.io/empulse/
+Project-URL: repository, https://github.com/ShimantoRahman/empulse
+Project-URL: issue-tracker, https://github.com/ShimantoRahman/empulse/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numba>=0.57.0
+Requires-Dist: numpy>=1.24.2
+Requires-Dist: scikit-learn>=1.2.1
+Requires-Dist: scipy>=1.10.1
+Requires-Dist: xgboost>=1.7.4
+Requires-Dist: joblib>=1.3.2
+Provides-Extra: test
+Requires-Dist: empulse; extra == "test"
+Requires-Dist: pytest>=7.4.4; extra == "test"
+Requires-Dist: pytest-cov>=4.1.0; extra == "test"
+Requires-Dist: tox>=4.13.0; extra == "test"
+Requires-Dist: pandas>=2.2.0; extra == "test"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7.2.6; extra == "docs"
+Requires-Dist: sphinx_rtd_theme>=2.0.0; extra == "docs"
+Requires-Dist: sphinx-copybutton>=0.5.2; extra == "docs"
+Requires-Dist: numpydoc>=1.6.0; extra == "docs"
+Provides-Extra: dev
+Requires-Dist: empulse[docs,test]; extra == "dev"
+Requires-Dist: twine>=4.0.2; extra == "dev"
+
+[![Python Version](https://img.shields.io/pypi/v/empulse)](https://pypi.org/project/empulse/)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ShimantoRahman/empulse)
+![](https://img.shields.io/pypi/pyversions/empulse)
+![Tests](https://github.com/ShimantoRahman/empulse/actions/workflows/tests.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/654945788.svg)](https://zenodo.org/doi/10.5281/zenodo.11185663)
+
+# Empulse
+
+Empulse is a package aimed to enable value-driven analysis in Python.
+The package implements popular value-driven metrics and algorithms in accordance to sci-kit learn conventions.
+This allows the measures to seamlessly integrate into existing ML workflows.
+
+## Installation
+
+Install `empulse` via pip with
+
+```bash
+pip install empulse
+```
+
+## Documentation
+You can find the documentation [here](https://shimantorahman.github.io/empulse/).
+
+## Usage
+
+We offer custom metrics and models.
+You can use them within the scikit-learn ecosystem.
+
+```python
+# the scikit learn stuff we love
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import make_classification
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import make_scorer
+
+# the stuff we add
+from empulse.metrics import empc_score
+from empulse.models import ProfLogitClassifier
+
+X, y = make_classification()
+
+pipeline = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", ProfLogitClassifier())
+])
+
+cross_val_score(pipeline, X, y, scoring=make_scorer(empc_score, needs_proba=True))
+```
