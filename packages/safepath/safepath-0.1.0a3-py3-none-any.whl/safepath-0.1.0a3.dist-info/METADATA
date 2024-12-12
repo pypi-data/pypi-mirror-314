@@ -1,0 +1,80 @@
+Metadata-Version: 2.3
+Name: safepath
+Version: 0.1.0a3
+Summary: A Python library providing null-safe attribute and key access through a simple chaining API
+Project-URL: Homepage, https://github.com/yourusername/safepath
+Project-URL: Repository, https://github.com/yourusername/safepath.git
+Project-URL: Issues, https://github.com/yourusername/safepath/issues
+Author-email: Alex Wohletz <awohletz3@gmail.com>
+License: MIT
+Keywords: chaining,null-safe,optional,utility
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# safepath
+
+A Python library providing null-safe attribute and key access through a simple chaining API.
+
+## Installation
+
+```bash
+pip install safepath
+```
+
+## Usage
+
+```python
+from safepath import sp
+
+# Basic usage
+data = {"user": {"name": "John"}}
+name = sp(data)["user"]["name"]()  # Returns "John"
+missing = sp(data)["user"]["age"]()  # Returns None
+
+# Object attribute access
+class User:
+    def __init__(self):
+        self.name = "John"
+        self.address = None
+
+user = User()
+name = sp(user).name()  # Returns "John"
+city = sp(user).address.city()  # Returns None
+
+# Chaining
+data = {
+    "users": [
+        {"profile": {"address": {"city": "New York"}}}
+    ]
+}
+city = sp(data)["users"][0]["profile"]["address"]["city"]()  # Returns "New York"
+missing = sp(data)["users"][1]["profile"]["address"]["city"]()  # Returns None
+```
+
+## Features
+
+- Null-safe attribute access
+- Null-safe dictionary/list access
+- Method chaining
+- Immutable wrapper objects
+- Type hints support
+- Zero dependencies
+
+## License
+
+MIT License
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
