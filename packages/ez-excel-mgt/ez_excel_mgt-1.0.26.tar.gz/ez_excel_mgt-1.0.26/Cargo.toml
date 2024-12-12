@@ -1,0 +1,42 @@
+[package]
+name = "ez_excel_mgt"
+version = "1.0.26"
+edition = "2018"
+description = "A Rust-powered Python library for Excel file management and data manipulation"
+license-file = "LICENSE"
+documentation = "https://github.com/stoachup/ez-excel-mgt"
+homepage = "https://github.com/stoachup/ez-excel-mgt"
+repository = "https://github.com/stoachup/ez-excel-mgt"
+
+
+
+[dependencies]
+log = "0.4.22"
+env_logger = "0.11.5"
+pyo3 = { version = "0.18", features = ["extension-module"] }
+polars = { version = "0.43.1", features = ["serde", "ipc"] }
+umya-spreadsheet = "2.0"
+short-uuid = "0.1.3"
+once_cell = "1.20.2"
+
+[lib]
+name = "ez_excel_mgt"
+crate-type = ["cdylib"]
+
+[package.metadata.maturin]
+bindings = ["pyo3"]
+include = [
+    "src/**/*.rs",
+    "pyproject.toml",
+    "cargo.toml",
+    "README.md",
+    "LICENSE"
+]
+exclude = [
+    "tests/**/*",
+    "target/**/*",
+    "example*.*",
+    "Cargo.lock",
+    "poetry.lock",
+    "wheelhouse/**/*"
+]

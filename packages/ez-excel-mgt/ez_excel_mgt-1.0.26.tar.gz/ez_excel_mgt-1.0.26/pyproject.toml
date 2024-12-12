@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "ez_excel_mgt"
+version = "1.0.26"
+description = "Rust-powered Python module for Excel manipulation"
+authors = ["Christophe Druet <christophe@stoachup.com>"]
+license = "MIT"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Rust",
+    "Development Status :: 5 - Production/Stable",
+]
+keywords = ["credentials", "keyring"]
+homepage = "https://github.com/stoachup/ez-excel-mgt"
+repository = "https://github.com/stoachup/ez-excel-mgt"
+
+# If needed, you can use `exclude` to prevent certain files from being included
+exclude = [
+    "tests",  # Exclude the tests folder
+    "target",   # Exclude the target folder
+    "example*",  # Exclude the examples folder
+    "wheelhouse",
+]
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.test.dependencies]
+pandas = "^2.2.2"
+polars = "1.7.1"
+pyarrow = "^17.0.0"
+openpyxl = "^3.1.5"
+xlsx2csv = "^0.8.3"
+
+[tool.poetry.group.dev.dependencies]
+maturin = "^1.7.1"
+pytest = "^8.3.3"
+pytest-sugar = "^1.0.0"
+pytest-icdiff = "^0.9"
+pytest-clarity = "^1.0.1"
+pytest-cov = "^5.0.0"
+cibuildwheel = "^2.21.1"
+twine = "^5.1.1"
+bumpver = "^2023.1129"
+black = "^24.8.0"
+isort = "^5.13.2"
+loguru = "^0.7.2"
+
+[build-system]
+requires = ["poetry-core>=1.4.0", "maturin>=1.7.1", "setuptools", "cibuildwheel>=2.0"]
+build-backend = "maturin"
+
+[tool.setuptools.packages.find]
+where = ["."]  # list of folders that contain the packages (["."] by default)
+include = ["src/*"]  # package names should match these glob patterns (["*"] by default)
+exclude = ["test*", "wheelhouse", "target", "example*"]  # exclude packages matching these glob patterns (empty by default)
+namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+
+[tool.bumpver]
+current_version = "1.0.26"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message  = "bump version {old_version} -> {new_version}"
+commit          = true
+tag             = true
+push            = false
+
+[tool.bumpver.file_patterns]
+    "pyproject.toml" = [
+        '^current_version = "{version}"',
+        '^version = "{version}"',
+    ]
+    "Cargo.toml" = [
+        '^version = "{version}"',
+    ]
+
+[tool.isort]
+profile                   = "black"
+import_heading_stdlib     = "Standard library imports"
+import_heading_thirdparty = "Third party imports"
+import_heading_firstparty = "Local imports"

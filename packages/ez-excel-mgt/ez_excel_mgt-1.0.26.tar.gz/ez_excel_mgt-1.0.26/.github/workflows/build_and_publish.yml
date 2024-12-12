@@ -1,0 +1,112 @@
+name: Build and Publish Python Wheels
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  # Disable incremental compilation for faster from-scratch builds
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  build:
+    name: Build Wheels
+    runs-on: ${{ matrix.os }}
+    if: startsWith(github.event.head_commit.message, 'bump version ')
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Set up Python for the selected version
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Install Poetry on Windows
+      - name: Install Poetry on Windows
+        if: runner.os == 'Windows'
+        run: |
+          python -m ensurepip --upgrade
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+          echo "Adding Poetry to PATH"
+          echo "${{ env.APPDATA }}\\Python\\Scripts" >> $env:GITHUB_PATH
+          echo "Verifying Poetry Installation"
+          poetry --version
+
+      # Install Poetry on Linux/MacOS
+      - name: Install Poetry
+        if: runner.os != 'Windows'
+        run: curl -sSL https://install.python-poetry.org | python3 -
+    
+      # Cache Poetry dependencies for faster builds
+      - name: Cache Poetry Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      # Install project dependencies
+      - name: Install Dependencies
+        run: poetry install --no-interaction --no-ansi
+
+      # Update the Rust
+      - name: Update Rust
+        run: rustup update stable
+
+      # Install Maturin
+      - name: Install Maturin
+        run: pip install maturin
+
+      # Build wheels
+      - name: Build Wheels
+        run: maturin build --release
+
+      # Upload the built wheels as artifacts
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels-${{ matrix.os }}-${{ matrix.python-version }}
+          path: target/wheels/*
+
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Download the wheels uploaded from the build job
+      - name: Download Wheels
+        uses: actions/download-artifact@v3
+        with:
+          path: all_wheels
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      # Install Twine for publishing
+      - name: Install Twine
+        run: pip install twine
+
+      # Publish wheels to PyPI
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload --skip-existing all_wheels/**/*
