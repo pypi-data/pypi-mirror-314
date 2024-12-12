@@ -1,0 +1,48 @@
+[project]
+name = "felyx"
+version = "0.12.13"
+description = "Video coder for psychological experiments"
+authors = [
+    { name = "Rafael Laboissière", email = "rafael.laboissiere@cnrs.fr" },
+    { name = "Esteban Milleret", email = "esteban.milleret@etu.univ-grenoble-alpes.fr" },
+]
+dependencies = [
+    "PySide6==6.6.2",
+    "numpy==1.26.3",
+    "pyyaml>=6.0.1",
+    "colour>=0.1.5",
+    "docopt>=0.6.2",
+    "appdirs>=1.4.4",
+    "pandas>=2.2.2",
+]
+requires-python = ">=3.8"
+readme = "README.md"
+
+[project.license]
+text = "GPL-3.0-or-later"
+
+[project.scripts]
+felyx = "felyx:main"
+
+[build-system]
+requires = [
+    "pdm-pep517>=1.0.0",
+]
+build-backend = "pdm.pep517.api"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+source-includes = [
+    "CHANGELOG.md",
+    "FORMAT.md",
+]
+
+[tool.autopub]
+project-name = "Felyx"
+git-username = "CI Bot"
+git-email = "project_25250_bot_8333a3c87cc06d06fd8b7b0d93c534b3@gricad-gitlab.univ-grenoble-alpes.fr"
+
+[tool.black]
+line-length = 80
