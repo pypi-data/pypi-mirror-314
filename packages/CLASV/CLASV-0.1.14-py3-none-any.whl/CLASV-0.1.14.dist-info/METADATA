@@ -1,0 +1,168 @@
+Metadata-Version: 2.1
+Name: CLASV
+Version: 0.1.14
+Summary: CLASV is a pipeline designed for rapidly predicting Lassa virus lineages using a Random Forest model.
+Home-page: https://github.com/JoiRichi/CLASV/commits?author=JoiRichi
+Author: Richard Daodu, Ebenezer Awotoro
+Author-email: lordrichado@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: appdirs==1.4.4
+Requires-Dist: argparse-dataclass==2.0.0
+Requires-Dist: attrs==24.2.0
+Requires-Dist: biopython==1.84
+Requires-Dist: certifi==2024.8.30
+Requires-Dist: charset-normalizer==3.4.0
+Requires-Dist: conda-inject==1.3.2
+Requires-Dist: ConfigArgParse==1.7
+Requires-Dist: connection_pool==0.0.3
+Requires-Dist: contourpy==1.3.1
+Requires-Dist: cycler==0.12.1
+Requires-Dist: datrie==0.8.2
+Requires-Dist: docutils==0.21.2
+Requires-Dist: dpath==2.2.0
+Requires-Dist: fastjsonschema==2.21.1
+Requires-Dist: fonttools==4.55.2
+Requires-Dist: gitdb==4.0.11
+Requires-Dist: GitPython==3.1.43
+Requires-Dist: humanfriendly==10.0
+Requires-Dist: idna==3.10
+Requires-Dist: immutables==0.21
+Requires-Dist: Jinja2==3.1.4
+Requires-Dist: joblib==1.4.2
+Requires-Dist: jsonschema==4.23.0
+Requires-Dist: jsonschema-specifications==2024.10.1
+Requires-Dist: jupyter_core==5.7.2
+Requires-Dist: kiwisolver==1.4.7
+Requires-Dist: MarkupSafe==3.0.2
+Requires-Dist: matplotlib==3.9.3
+Requires-Dist: nbformat==5.10.4
+Requires-Dist: numpy==1.23.5
+Requires-Dist: packaging==24.2
+Requires-Dist: pandas==2.2.3
+Requires-Dist: pillow==11.0.0
+Requires-Dist: plac==1.4.3
+Requires-Dist: platformdirs==4.3.6
+Requires-Dist: plotly==5.24.1
+Requires-Dist: psrecord==1.4
+Requires-Dist: psutil==6.1.0
+Requires-Dist: PuLP==2.9.0
+Requires-Dist: pyparsing==3.2.0
+Requires-Dist: python-dateutil==2.9.0.post0
+Requires-Dist: pytz==2024.2
+Requires-Dist: PyYAML==6.0.2
+Requires-Dist: referencing==0.35.1
+Requires-Dist: requests==2.32.3
+Requires-Dist: reretry==0.11.8
+Requires-Dist: rpds-py==0.22.3
+Requires-Dist: scikit-learn==1.2.2
+Requires-Dist: scipy==1.14.1
+Requires-Dist: six==1.17.0
+Requires-Dist: smart-open==7.0.5
+Requires-Dist: smmap==5.0.1
+Requires-Dist: snakemake==8.25.5
+Requires-Dist: snakemake-interface-common==1.17.4
+Requires-Dist: snakemake-interface-executor-plugins==9.3.2
+Requires-Dist: snakemake-interface-report-plugins==1.1.0
+Requires-Dist: snakemake-interface-storage-plugins==3.3.0
+Requires-Dist: tabulate==0.9.0
+Requires-Dist: tenacity==9.0.0
+Requires-Dist: threadpoolctl==3.5.0
+Requires-Dist: throttler==1.2.2
+Requires-Dist: traitlets==5.14.3
+Requires-Dist: tzdata==2024.2
+Requires-Dist: urllib3==2.2.3
+Requires-Dist: wrapt==1.17.0
+Requires-Dist: yte==1.5.4
+Requires-Dist: zipp==3.21.0
+
+# CLASV
+
+## Overview
+Lassa virus lineage prediction based on random forest.
+
+Information on the research can be found here: 
+https://www.biorxiv.org/content/10.1101/2024.07.31.605963v2
+
+## Project Repositories
+- **Data and Processing:** [LASV_ML_Manuscript_Data](https://github.com/JoiRichi/LASV_ML_manuscript_data)
+- **Lassa Virus Lineage Prediction:** [CLASV_GITHUB](https://github.com/JoiRichi/CLASV)
+
+## Jupyter Notebooks on Google Colab
+- **General Preprocessing:** [Notebook Link](https://colab.research.google.com/drive/1JOgS2-dDoQ7OPHPcXm3AIBDnGQAFxIyR)
+- **Lassa Virus Lineage Prediction Training:** [Notebook Link](https://colab.research.google.com/drive/1G0lEjuvPR07bcb181Rfhm-S0WenMFSmR)
+
+## Prediction Pipeline Overview
+![CLASV](predflow.png)
+
+## Running the Pipeline
+
+It is recommended that python 3.11 is used (or at least between 3.6 - 3.11). [Python3.11](https://www.python.org/downloads/release/python-3110/)
+
+
+Highly recommended to use a virtual environment:
+```sh
+python3.11 -m venv myenv #where myenv can be any name of your chioce
+
+source myenv/bin/activate  # activates the virtual environment
+```
+
+Install CLASV using pip
+```sh
+pip install clasv
+```
+This tool relies on Nextclade for gene extraction and alignment. This is automatically installed. More information about the nextstrain project here: [installation guide](https://docs.nextstrain.org/projects/cli/en/stable/installation/). This tool uses the Snakemake engine which is automatically installed.
+
+
+```sh
+clasv find-lassa --input myinputfolderpath --output mychosenfolderpath --cores 4 #default
+
+```
+
+Find Fasta files in the input directory and subdirectories recursively:
+
+```sh
+# 
+clasv find-lassa --input myinputfolderpath --output mychosenfolderpath --recursive --cores 4 #default
+```
+
+
+Force rerun:
+
+```sh
+# 
+clasv find-lassa --input myinputfolderpath --output mychosenfolderpath --force --cores 4 #default
+```
+
+
+Upon completion, go to the pipeline 'visuals' folder and open the html files in a browser.
+
+
+## Customization
+
+This pipeline has the ability to process multiple FASTA files containing multiple sequences with proficiency and speed. It is recommended that multiple FASTA files are concatenated into one; however, this is not compulsory, especially if the projects are different. By default, the pipeline finds all files with the extension `.fasta` in your **input_folder** folder and tries to find LASV GPC sequences in the files. 
+
+To ensure Snakemake has a memory of what files have been checked, intermediary files are created for all files checked, even if they contain no GPC sequences. However, those files would be empty.
+
+### Important Outputs
+
+At the end of the run, you can check the **predictions** folder for the CSV files containing the predictions per sample. A visualization of the prediction can be found in the **visuals** folder. Open the HTML files in a browser. The images are high quality and reactive, allowing you to hover over them to see more information.
+
+For further details, please refer to the respective notebooks and repositories linked above. You can also leave a comment for help regarding the pipeline.
+
+
+
+## Model training
+
+Learn how the data was preprocessed here: [LASV_ML_Manuscript_Data](https://github.com/JoiRichi/LASV_ML_manuscript_data). Training process here [Notebook Link](https://colab.research.google.com/drive/1G0lEjuvPR07bcb181Rfhm-S0WenMFSmR).
+
