@@ -1,0 +1,1 @@
+cpdef bint webp_supported(bytes user_agent)
