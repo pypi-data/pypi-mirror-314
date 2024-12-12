@@ -1,0 +1,24 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ecommerce-job
+  labels:
+    app.kubernetes.io/component: job
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ecommerce
+          image: {{ ECOMMERCE_DOCKER_IMAGE }}
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: ecommerce.settings.tutor.production
+          volumeMounts:
+            - mountPath: /openedx/ecommerce/ecommerce/settings/tutor/
+              name: settings
+      volumes:
+        - name: settings
+          configMap:
+            name: ecommerce-settings
