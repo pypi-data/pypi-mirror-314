@@ -1,0 +1,63 @@
+- label: "训练轮数"
+  min: 1
+  max: 1000
+  defaultValue: 120
+  step: 1
+  name: "epoch"
+  help: "模型训练的最大轮数"
+  type: "inputNumber"
+
+- label: "基础学习率"
+  min: 0.00001
+  max: 0.5
+  defaultValue: 0.001
+  step: 0.5
+  name: "Optimizer.lr.learning_rate"
+  formatter: "%f"
+  help: "模型训练的基础学习率"
+  type: "inputNumber"
+
+- label: "数据读取进程数量"
+  min: 1
+  max: 4
+  defaultValue: 2
+  step: 1
+  name: "workerNum"
+  help: "训练数据读取进程数量"
+  type: "inputNumber"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 2048
+  defaultValue: 224
+  step: 32
+  name: "evalHeight"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 2048
+  defaultValue: 224
+  step: 32
+  name: "evalWidth"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+- label: "模型训练batch大小"
+  min: 1
+  max: 256
+  defaultValue: 16
+  step: 1
+  name: "batchSize"
+  help: "模型训练的batch大小，设置过大可能会导致显存不够训练报错"
+  type: "inputNumber"
+
+- label: "模型结构类型"
+  options:
+    - "图像分类-极速版"
+    - "图像分类-标准版"
+  defaultIndex: 1
+  name: "networkArchitecture"
+  help: "目前仅支持resnet"
+  type: "Select"

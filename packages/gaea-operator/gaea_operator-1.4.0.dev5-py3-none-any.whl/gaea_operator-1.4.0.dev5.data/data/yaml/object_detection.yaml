@@ -1,0 +1,152 @@
+title: Image/ObjectDetection
+type: object
+properties:
+  artifactName:
+    type: string
+    description: Name of the model used for evaluation.
+  datasetName:
+    type: string
+    description: Name of the dataset used for evaluation.
+  baselineJobName:
+    type: string
+    description: Name of the baseline job.
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp of the evaluation.
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp of the evaluation.
+  labels:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the label.
+        name:
+          type: string
+          description: Name of the label.
+          example: car
+  metrics:
+    type: array
+    items:
+      anyOf:
+        - type: object
+          properties:
+            name: # boundingBoxLabelMetric
+              type: string
+              description: Name of the metric.
+            displayName: # P-R曲线
+              type: string
+              description: Display name of the metric.
+            result:
+              type: array
+              items:
+                type: object
+                properties:
+                  iouThreshold:
+                    type: number
+                    format: float
+                    description: Intersection over Union threshold.
+                  averagePrecision:
+                    type: number
+                    format: float
+                    description: Average precision value.
+                  confidenceMetrics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        recall:
+                          type: number
+                          format: float
+                          description: Recall value.
+                        precision:
+                          type: number
+                          format: float
+                          description: Precision value.
+        - type: object
+          properties:
+            name: # boundingBoxMeanAveragePrecision
+              type: string
+              description: Name of the metric.
+            displayName: # AP50指标
+              type: string
+              description: Display name of the metric.
+            result:
+              type: object
+              properties:
+                meanAveragePrecision:
+                  type: number
+                  format: float
+        - type: object
+          properties:
+            name: # boundingBoxMeanAverageRecall
+              type: string
+              description: Name of the metric.
+            displayName: # AR指标
+              type: string
+              description: Display name of the metric.
+            result:
+              type: object
+              properties:
+                meanAveragerecall:
+                  type: number
+                  format: float
+        - type: object
+          properties:
+            name: # boundingBoxLabelAveragePrecision
+              type: string
+              description: Name of the metric.
+            displayName: # 类别AP结果
+              type: string
+              description: Display name of the metric.
+            result:
+              type: array
+              items:
+                type: object
+                properties:
+                  labelName:
+                    type: string
+                    description: Name of the label.
+                  averagePrecision:
+                    type: number
+                    format: float
+                    description: Average Precision value for the label.
+        - type: object
+          properties:
+            name: # confusionMatrix
+              type: string
+              description: Name of the metric.
+            displayName: # 混淆矩阵
+              type: string
+              description: Display name of the metric.
+            result:
+              type: object
+              properties:
+                annotationSpecs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        description: Unique identifier for the annotation.
+                      labelName:
+                        type: string
+                        description: Name of the label.
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      row:
+                        items:
+                          type: integer
+                          format: int64
+                          description: Confusion matrix values.

@@ -1,0 +1,30 @@
+backend_config:
+  type: onnxruntime
+codebase_config:
+  model_type: end2end
+  post_processing:
+    background_label_id: -1
+    confidence_threshold: 0.001
+    iou_threshold: 0.5
+    keep_top_k: 100
+    max_output_boxes_per_class: 200
+    pre_top_k: 5000
+    score_threshold: 0.005
+  task: ObjectDetection
+  type: mmdet
+onnx_config:
+  export_params: true
+  input_names:
+    - input
+  input_shape: # w,h
+    - 224
+    - 224
+  keep_initializers_as_inputs: false
+  opset_version: 11
+  optimize: true
+  output_names:
+    - dets
+    - labels
+    - scores
+  save_file: best_model.onnx
+  type: onnx

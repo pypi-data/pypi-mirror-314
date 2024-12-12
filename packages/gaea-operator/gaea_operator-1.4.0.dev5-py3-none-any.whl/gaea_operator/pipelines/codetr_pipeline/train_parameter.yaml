@@ -1,0 +1,84 @@
+- label: "训练轮数"
+  min: 1
+  max: 1000
+  # defaultValue: 10
+  defaultValue: 200
+  step: 1
+  name: "max_epochs"
+  help: "模型训练的最大轮数"
+  type: "inputNumber"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 2048
+  # defaultValue: 1024
+  defaultValue: 640
+  step: 32
+  name: "eval_height"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 2048
+  # defaultValue: 1024
+  defaultValue: 640
+  step: 32
+  name: "eval_width"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+- label: "模型训练batch大小"
+  min: 1
+  max: 16
+  defaultValue: 1
+  step: 1
+  name: "batch_size"
+  help: "模型训练的batch大小，设置过大可能会导致显存不够训练报错"
+  type: "inputNumber"
+
+- label: "模型结构类型"
+  options:
+    - "目标检测大模型"
+  defaultIndex: 0
+  name: "networkArchitecture"
+  help: "目前仅支持codetr"
+  type: "Select"
+
+- label: "IOU阈值"
+  min: 0.00001
+  max: 1.00
+  defaultValue: 0.5
+  step: 0.00001
+  name: "iou_thresh"
+  formatter: "%f"
+  help: "NMS的IOU阈值，一般最大值0.7"
+  type: "inputNumber"
+
+- label: "置信度阈值"
+  min: 0.00001
+  max: 1.00
+  defaultValue: 0.001
+  step: 0.00001
+  name: "score_thresh"
+  formatter: "%f"
+  help: "NMS的置信度阈值"
+  type: "inputNumber"
+
+- label: "随机缩放时是否保持长宽比"
+  options:
+    - true
+    - false
+  name: "train_dataloader.dataset.pipeline.transforms.RandomChoiceResize.keep_ratio"
+  defaultIndex: 1
+  help: "RandomChoiceResize.keep_ratio--随机缩放时是否保持长宽比"
+  type: "Select"
+
+- label: "是否选用康拓自定义增强算子"
+  options:
+    - true
+    - false
+  name: "train_dataloader.dataset.pipeline.transforms.RotateKangtuo"
+  defaultIndex: 0
+  help: "RotenateKangtuo--是否选用康拓自定义增强算子"
+  type: "Select"
