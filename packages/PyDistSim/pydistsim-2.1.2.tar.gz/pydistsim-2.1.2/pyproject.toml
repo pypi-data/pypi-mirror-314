@@ -1,0 +1,97 @@
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PyDistSim"
+version = "2.1.2" # Should match version at pydistsim/docs/conf.py
+authors = [
+  { name="Agustin Recoba", email="agustin.recoba@outlook.com" }, # Fork author
+  { name="Damir Arbula", email="damir.arbula@gmail.com" }, # Original author
+]
+description = "A high-level Python library for simulation of distributed algorithms."
+readme = "README.rst"
+requires-python = ">=3.11"
+keywords = ["Networks", "Distributed algorithms"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Distributed Computing",
+    "Topic :: System :: Networking",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/agustin-recoba/pydistsim"
+Issues = "https://github.com/agustin-recoba/pydistsim/issues"
+Documentation = "https://pydistsim.readthedocs.io/"
+Repository = "https://github.com/agustin-recoba/pydistsim.git"
+"CI-CD" = "https://app.travis-ci.com/github/agustin-recoba/pydistsim/"
+"Test Coverage" = "https://coveralls.io/github/agustin-recoba/PyDistSim"
+
+[project.scripts]
+ipydistsim = "pydistsim.scripts.ipydistsim:start_ipydistsim"
+
+[project.gui-scripts]
+pydistsim-simgui = "pydistsim.gui.simulationgui:main"
+
+[tool.setuptools]
+license-files = [
+    'LICENSE.txt',
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {dev = { file = ["requirements-dev.txt"] }, gui = { file = ["requirements-gui.txt"] }}
+
+[tool.pytest.ini_options]
+addopts = "--color=yes --cov=pydistsim --cov-report=xml --cov-append -n auto"
+
+[tool.coverage.run]
+source = ["pydistsim"]
+branch = true
+omit = [
+    "pydistsim/conf/ipython/ipython_config.py",
+    "pydistsim/release.py",
+    "pydistsim/gui/*",
+    "pydistsim/scripts/ipydistsim.py",
+    "__init__.py",
+]
+
+[tool.coverage.report]
+skip_empty = true
+
+# Regexes for lines to exclude from consideration
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+    "if dev:",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
+
+ignore_errors = true
+
+[tool.coverage.html]
+directory = "coverage_html_report"
+
+[tool.black]
+line-length = 120
+target-version = ["py311"]
