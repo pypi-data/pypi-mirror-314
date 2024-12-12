@@ -1,0 +1,577 @@
+{
+  "$id": "https://urljsf.rtfd.org/en/latest/_static/urljsf/schema/v0/form.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "urljsf",
+  "description": "A schema for building forms for building URLs for building...",
+  "properties": {
+    "$id": {
+      "type": "string",
+      "description": "an optional identifier for this instance of the `urljsf` schema\n",
+      "format": "uri-reference"
+    },
+    "$schema": {
+      "type": "string",
+      "description": "an optional identifier for the `urljsf` schema that constrains this: this\ncan be used by non-`urljsf` tools to validate and provide more insight while\nauthoring.\n",
+      "format": "uri-reference"
+    },
+    "checks": {
+      "$ref": "#/definitions/checks",
+      "description": "markdown templates, which if rendered to _any_ non-whitespace, will be treated as\nan error, preventing the submit button from being shown.\n"
+    },
+    "forms": {
+      "$ref": "#/definitions/forms",
+      "description": "forms that describe how to build the URL\n"
+    },
+    "iframe": {
+      "type": "boolean",
+      "description": "isolate each form on the page in an `iframe`"
+    },
+    "iframe_style": {
+      "type": "string",
+      "description": "additional simple CSS to apply to an `iframe` element (implies `iframe`)\n"
+    },
+    "no_bootstrap": {
+      "type": "boolean",
+      "description": "don't try to add a link to bootstrap if missing.",
+      "default": false
+    },
+    "nunjucks": {
+      "type": "object",
+      "description": "options for the `nunjucks` environment",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "description": "filters to ensure in `nunjucks` templates",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/any-file-format"
+              }
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "style": {
+      "$ref": "#/definitions/styles",
+      "description": "simple CSS rules scoped to the current form id, or objects keyed by child\nselector\n"
+    },
+    "templates": {
+      "$ref": "#/definitions/templates",
+      "description": "`nunjucks` templates that control URLs for machines and markdown for humans\n"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "Props": {
+      "type": "object",
+      "description": "JSON-compatible default values for `rjsf` [Form.props][props].\n\n[props]: https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/form-props",
+      "properties": {
+        "acceptCharset": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `accept-charset` HTML attribute on the form"
+        },
+        "action": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `action` HTML attribute on the form\n\nNOTE: this just renders the `action` attribute in the HTML markup. There is no real network request being sent to this `action` on submit. Instead, react-jsonschema-form catches the submit event with `event.preventDefault()` and then calls the `onSubmit` function, where you could send a request programmatically with `fetch` or similar."
+        },
+        "autoComplete": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `autocomplete` HTML attribute on the form"
+        },
+        "className": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `class` HTML attribute on the form"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "It's possible to disable the whole form by setting the `disabled` prop. The `disabled` prop is then forwarded down to each field of the form. If you just want to disable some fields, see the `ui:disabled` parameter in `uiSchema`"
+        },
+        "enctype": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `enctype` HTML attribute on the form"
+        },
+        "extraErrorsBlockSubmit": {
+          "type": "boolean",
+          "description": "If set to true, causes the `extraErrors` to become blocking when the form is submitted"
+        },
+        "focusOnFirstError": {
+          "type": "boolean",
+          "description": "If set to true, then the first field with an error will receive the focus when the form is submitted with errors"
+        },
+        "formContext": {
+          "type": "object",
+          "description": "globals for custom UI"
+        },
+        "formData": {
+          "type": "object",
+          "description": "The data for the form, used to prefill a form with existing data"
+        },
+        "id": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `id` HTML attribute on the form"
+        },
+        "idPrefix": {
+          "type": "string",
+          "description": "To avoid collisions with existing ids in the DOM, it is possible to change the prefix used for ids; Default is `root`"
+        },
+        "idSeparator": {
+          "type": "string",
+          "description": "To avoid using a path separator that is present in field names, it is possible to change the separator used for ids (Default is `_`)"
+        },
+        "liveOmit": {
+          "type": "boolean",
+          "description": "If `omitExtraData` and `liveOmit` are both set to true, then extra form data values that are not in any form field will be removed whenever `onChange` is called. Set to `false` by default"
+        },
+        "liveValidate": {
+          "type": "boolean",
+          "description": "If set to true, the form will perform validation and show any validation errors whenever the form data is changed, rather than just on submit"
+        },
+        "method": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `method` HTML attribute on the form"
+        },
+        "name": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `name` HTML attribute on the form"
+        },
+        "noHtml5Validate": {
+          "type": "boolean",
+          "description": "If set to true, turns off HTML5 validation on the form; Set to `false` by default"
+        },
+        "omitExtraData": {
+          "type": "boolean",
+          "description": "If set to true, then extra form data values that are not in any form field will be removed whenever `onSubmit` is called. Set to `false` by default."
+        },
+        "readonly": {
+          "type": "boolean",
+          "description": "It's possible to make the whole form read-only by setting the `readonly` prop. The `readonly` prop is then forwarded down to each field of the form. If you just want to make some fields read-only, see the `ui:readonly` parameter in `uiSchema`"
+        },
+        "schema": {
+          "type": "object",
+          "description": "The JSON schema object for the form"
+        },
+        "showErrorList": {
+          "type": ["boolean", "string"],
+          "description": "When this prop is set to `top` or 'bottom', a list of errors (or the custom error list defined in the `ErrorList`) will also show. When set to false, only inline input validation errors will be shown. Set to `top` by default",
+          "enum": [false, "top", "bottom"]
+        },
+        "tagName": {
+          "type": "string",
+          "description": "It's possible to change the default `form` tag name to a different HTML tag, which can be helpful if you are nesting forms. However, native browser form behaviour, such as submitting when the `Enter` key is pressed, may no longer work"
+        },
+        "target": {
+          "type": "string",
+          "description": "The value of this prop will be passed to the `target` HTML attribute on the form"
+        },
+        "uiSchema": {
+          "$ref": "#/definitions/UISchema",
+          "description": "The uiSchema for the form"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UISchema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "$ref": "#/definitions/UISchema",
+          "description": "An array of objects representing the items in the array"
+        },
+        "ui:field": {
+          "type": "string",
+          "description": "Allows RJSF to override the default field implementation by specifying either the name of a field that is used to look up an implementation from the `fields` list or an actual one-off `Field` component implementation itself"
+        },
+        "ui:fieldReplacesAnyOrOneOf": {
+          "type": "boolean"
+        },
+        "ui:options": {
+          "type": "object",
+          "description": "An object that contains all the potential UI options in a single object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "We know that for title, it will be a string, if it is provided"
+            },
+            "description": {
+              "type": "string",
+              "description": "We know that for description, it will be a string, if it is provided"
+            },
+            "classNames": {
+              "type": "string",
+              "description": "Any classnames that the user wants to be applied to a field in the ui"
+            },
+            "disabled": {
+              "type": "boolean",
+              "description": "Flag, if set to `true`, will mark all child widgets from a given field as disabled"
+            },
+            "emptyValue": {
+              "description": "The default value to use when an input for a field is empty",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {}
+                },
+                {
+                  "allOf": [
+                    {
+                      "type": "array",
+                      "items": {}
+                    },
+                    {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "enumDisabled": {
+              "type": "array",
+              "description": "Will disable any of the enum options specified in the array (by value)",
+              "items": {
+                "type": ["string", "number", "boolean"]
+              }
+            },
+            "enumNames": {
+              "description": "Allows a user to provide a list of labels for enum values in the schema",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "allOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "filePreview": {
+              "type": "boolean",
+              "description": "Flag, if set to `true`, will cause the `FileWidget` to show a preview (with download for non-image files)"
+            },
+            "help": {
+              "type": "string",
+              "description": "Used to add text next to a field to guide the end user in filling it in"
+            },
+            "hideError": {
+              "type": "boolean",
+              "description": "Flag, if set to `true`, will hide the default error display for the given field AND all of its child fields in the hierarchy"
+            },
+            "inline": {
+              "type": "boolean",
+              "description": "Flag, if set to `true`, will mark a list of checkboxes as displayed all on one line instead of one per row"
+            },
+            "inputType": {
+              "type": "string",
+              "description": "Used to change the input type (for example, `tel` or `email`) for an <input>"
+            },
+            "order": {
+              "description": "This property allows you to reorder the properties that are shown for a particular object",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "allOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "placeholder": {
+              "type": "string",
+              "description": "We know that for placeholder, it will be a string, if it is provided"
+            },
+            "readonly": {
+              "type": "boolean",
+              "description": "Flag, if set to `true`, will mark all child widgets from a given field as read-only"
+            },
+            "rows": {
+              "type": "number",
+              "description": "Provides a means to set the initial height of a textarea widget"
+            },
+            "style": {
+              "type": "object"
+            },
+            "urljsf:grid": {
+              "type": "object",
+              "description": "custom overrides for urlsjf grid",
+              "properties": {
+                "addButton": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "children": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "default": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "widget": {
+              "type": "string"
+            }
+          }
+        },
+        "ui:rootFieldId": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/UISchema"
+          },
+          {}
+        ]
+      }
+    },
+    "any-file-format": {
+      "type": "string",
+      "title": "File Format",
+      "description": "a format that can be serialized or deserialized",
+      "enum": ["json", "toml", "yaml"]
+    },
+    "any-form": {
+      "type": "object",
+      "title": "Any Form",
+      "description": "a definition of a form",
+      "properties": {
+        "form_data": {
+          "$ref": "#/definitions/any-schema",
+          "description": "JSON-compatible initial data for this form\n"
+        },
+        "order": {
+          "type": "number",
+          "description": "the order in which to show a form, lowest (or omitted) first, with a tiebreaker on name\n"
+        },
+        "props": {
+          "description": "JSON-compatible subset of `rjsf` component properties for this form\n",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Props"
+            },
+            {
+              "type": "string",
+              "format": "#/definitions/any-schema-location"
+            }
+          ]
+        },
+        "schema": {
+          "$ref": "#/definitions/any-schema",
+          "description": "URL for a JSON schema to describe the this form: features not present in\nDraft 7 are best-effort.\n"
+        },
+        "ui_schema": {
+          "$ref": "#/definitions/any-schema",
+          "description": "URL for an `rjsf` UI schema to describe how the `schema` will be presented\n"
+        }
+      },
+      "additionalProperties": false
+    },
+    "any-object": {
+      "type": "object",
+      "title": "An Inline Object",
+      "description": "A literal object"
+    },
+    "any-schema": {
+      "title": "A Schema",
+      "description": "A schema-like object referenced by URL, or inline as an object",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/any-schema-location",
+          "title": "Schema By URL"
+        },
+        {
+          "$ref": "#/definitions/any-object",
+          "title": "Inline Object"
+        }
+      ]
+    },
+    "any-schema-location": {
+      "type": "string",
+      "description": "a path to a JSON schema, serialized as JSON, TOML, or (simple) YAML. The URN-like\n`py:module.submodule:member` may be used to reference an importable module\n`dict` or `str` member, or function that returns one, and will be expanded into\na JSON object or URL.",
+      "format": "uri-reference",
+      "minLength": 1
+    },
+    "any-style": {
+      "description": "A CSS rule, or a nested selector object containing more rules",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "any-template": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "a `nunjucks` template as a simple string"
+        },
+        {
+          "type": "array",
+          "description": "    a template as a list of strings that will be concatenated before being rendered\n  ",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      ]
+    },
+    "checks": {
+      "type": "object",
+      "description": "`nunjucks` templates keyed by the label displayed to a form user: any evaluating\nto a non-whitespace string will be considered _failing_.",
+      "additionalProperties": {
+        "$ref": "#/definitions/any-template"
+      }
+    },
+    "forms": {
+      "type": "object",
+      "description": "forms used to build and populate a URL",
+      "patternProperties": {
+        "[a-zA-Z\\d\\-_]+": {
+          "$ref": "#/definitions/any-form"
+        }
+      }
+    },
+    "known-templates": {
+      "type": "object",
+      "properties": {
+        "download_filename": {
+          "$ref": "#/definitions/any-template",
+          "description": "If given, a template for the submit button's `download` attribute, to\nsuggest an appropriate filename. Leading and trailing whitespace will be trimmed.\n"
+        },
+        "submit_button": {
+          "$ref": "#/definitions/any-template",
+          "description": "Markdown to show on the button when a form is valid. Multiple lines will be joined\nwith `\\n`. Leading and trailing whitespace will be trimmed. If empty,\nno submit button will be shown.\n"
+        },
+        "submit_target": {
+          "$ref": "#/definitions/any-template",
+          "description": "If given, the value of the `target` attribute on the `submit_button`. Use `_blank`\nto open a new tab.\n"
+        },
+        "url": {
+          "$ref": "#/definitions/any-template",
+          "description": "a URL to apply to the submit button. All whitespace will be removed.\n"
+        }
+      }
+    },
+    "styles": {
+      "type": "object",
+      "description": "CSS rules, or nested selector objects containing more rules",
+      "patternProperties": {
+        "^.+$": {
+          "$ref": "#/definitions/any-style"
+        }
+      }
+    },
+    "templates": {
+      "description": "[nunjucks](https://mozilla.github.io/nunjucks/templating.html) strings\n(or lists of strings) that control how strings are built from forms.\nSee documentation for further customizations.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/known-templates"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/any-template"
+          }
+        }
+      ]
+    }
+  },
+  "required": ["forms", "templates"]
+}

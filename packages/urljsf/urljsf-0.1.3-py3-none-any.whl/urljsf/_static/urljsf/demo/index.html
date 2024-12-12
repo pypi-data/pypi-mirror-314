@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>urljsf - HTML forms from schema</title>
+  <script type="module" src="../index.js"></script></head>
+  <body>
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+      <header>
+        <h1><code>urljsf</code> examples</h1>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="#example-xkcd">xkcd</a></li>
+          
+          <li>
+            <a href="#example-toml">TOML</a>
+          </li>
+          
+          <li>
+            <a href="#example-yaml">YAML</a>
+          </li>
+          
+          <li>
+            <a href="#example-json">JSON</a>
+          </li>
+          
+        </ul>
+      </nav>
+      <main class="bs-main">
+        <div class="bs-content">
+          <div class="bs-article-container">
+            <section>
+              <h2 id="example-xkcd">
+                <a href="#example-xkcd">#</a>
+                XKCD
+              </h2>
+              <script type="application/vnd.deathbeds.urljsf.v0+toml">
+                [forms.url.schema]
+                title = "pick an xkcd"
+                description = "this will redirect to `xkcd.com`"
+                type = "object"
+                required = ["xkcd"]
+                properties.xkcd = {type="integer", minimum=1, maximum=2997}
+
+                [forms.url.ui_schema.xkcd."ui:options"]
+                widget = "range"
+
+                [templates]
+                url = "https://xkcd.com/{{ data.url.xkcd }}"
+                submit_button = "see xkcd #{{ data.url.xkcd }}"
+              </script>
+            </section>
+            
+            <section>
+              <h2 id="example-toml">
+                <a href="#example-toml">#</a>
+                TOML
+              </h2>
+              <script
+                type="application/vnd.deathbeds.urljsf.v0+toml"
+                src="./toml/urljsf.toml"
+              ></script>
+            </section>
+            
+            <section>
+              <h2 id="example-yaml">
+                <a href="#example-yaml">#</a>
+                YAML
+              </h2>
+              <script
+                type="application/vnd.deathbeds.urljsf.v0+yaml"
+                src="./yaml/urljsf.yaml"
+              ></script>
+            </section>
+            
+            <section>
+              <h2 id="example-json">
+                <a href="#example-json">#</a>
+                JSON
+              </h2>
+              <script
+                type="application/vnd.deathbeds.urljsf.v0+json"
+                src="./json/urljsf.json"
+              ></script>
+            </section>
+            
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

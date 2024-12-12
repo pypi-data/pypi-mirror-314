@@ -1,0 +1,3 @@
+/*! For license information please see 87.113f7a94.js.LICENSE.txt */
+export const __webpack_id__=87;export const __webpack_ids__=[87];export const __webpack_modules__={s72f:(e,_,n)=>{n.d(_,{IFrame:()=>t});var o=n("PHfN"),c=n("2vsB");function t(e){const[_,n]=(0,c.J0)(),t=_?.contentWindow?.document?.body;return(0,o.Y)("iframe",{ref:n,...e,children:t&&(0,c.d5)(e.children,t)})}}};
+//# sourceMappingURL=87.113f7a94.js.map

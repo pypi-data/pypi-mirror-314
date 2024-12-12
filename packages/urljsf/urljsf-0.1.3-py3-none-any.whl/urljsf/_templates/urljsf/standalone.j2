@@ -1,0 +1,43 @@
+{%- import "urljsf/_form.j2" as form with context -%}
+<!doctype html>
+<html>
+  {% set static = url_base ~ "_static/urljsf" %}
+
+  {% block html_head %}
+  <head>
+    <meta charset="utf-8" />
+    {% block html_title %}
+    {% if html_title %}
+    <title>{{ html_title }}</title>
+    {% endif %}
+    {% endblock %}
+    {% block html_style %}
+    <link rel="stylesheet"
+      href="{% block bootstrap_url %}{{ static }}/bootstrap.min.css{% endblock %}" />
+    {% endblock %}
+    {% block extra_head %}{% endblock %}
+  </head>
+  {% endblock %}
+  <body>
+    {% block before_form %}
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+      {% block before_main %}{% endblock %}
+      <main class="bs-main">
+        <div class="bs-content">
+          <div class="bs-article-container">
+            <section>
+    {% endblock before_form %}
+              {{ form.urljsf() }}
+    {% block after_form %}
+            </section>
+          </div>
+        </div>
+      </main>
+      {% block after_main %}{% endblock %}
+    </div>
+    {% endblock after_form %}
+    {% block body_script %}
+    <script type="module" src="{{ static }}/index.js"></script>
+    {% endblock %}
+  </body>
+</html>

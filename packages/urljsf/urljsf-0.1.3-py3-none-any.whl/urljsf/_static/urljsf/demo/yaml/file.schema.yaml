@@ -1,0 +1,45 @@
+$schema: http://json-schema.org/draft-07/schema#
+title: A Task List
+description: |
+  This form validates user-provided data for a single YAML file.
+
+  > _Some tasks have been left to be done below to show various features._
+required:
+  - $schema
+  - name
+  - tasks
+properties:
+  $schema:
+    type: string
+    format: uri-reference
+    const: ../json/file.schema.json
+    default: ../json/file.schema.json
+  name:
+    type: string
+    description: '**What** is _this_ list about?'
+    minItems: 3
+  tasks:
+    type: array
+    description: What is **at least** one **unique** thing that needs to get done?
+    minItems: 1
+    maxItems: 10
+    items:
+      $ref: '#/definitions/Task'
+definitions:
+  Task:
+    type: object
+    required:
+      - task
+    properties:
+      complete:
+        description: done?
+        type: boolean
+        default: false
+      task:
+        type: string
+        description: '**What** needs to be done?'
+        minLength: 1
+      deadline:
+        type: string
+        description: '**When** does it need to be done?'
+        format: date

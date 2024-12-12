@@ -1,0 +1,36 @@
+$schema: ../../schema/v0/form.schema.json
+nunjucks:
+  filters:
+    - yaml
+forms:
+  file:
+    order: 0
+    schema: ./yaml/file.schema.yaml
+    ui_schema: ./yaml/file.uischema.yaml
+    form_data: ./yaml/file.data.yaml
+  url:
+    order: 1
+    schema: ./yaml/url.schema.yaml
+    ui_schema: ./yaml/url.uischema.yaml
+templates:
+  url: |
+    https://github.com/{{ data.url.repo }}/new/{{ data.url.branch }}?
+    {{
+        {"filename": data.url.filename, "value": data.file | to_yaml } | urlencode | safe
+    }}
+  submit_button: Start new YAML Pull Request
+checks:
+  Unique Names: |
+    {% for name, tasks in data.file.tasks | default([]) | groupby("task") %}
+    {% set dupes = tasks | length %}
+    {% if dupes > 1 %}
+    - [ ] {{ dupes }} tasks have the name _"{{ name }}"_
+    {% endif %}
+    {% endfor %}
+style:
+  --bs-danger-rgb: var(--bs-warning-rgb)
+  --bs-form-invalid-border-color: var(--bs-warning-text-emphasis)
+  --bs-form-invalid-color: var(--bs-warning-text-emphasis)
+  .btn-danger:
+    --bs-btn-bg: var(--bs-warning-text-emphasis)
+iframe: true

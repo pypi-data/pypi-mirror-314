@@ -1,0 +1,44 @@
+$schema: http://json-schema.org/draft-07/schema#
+title: Propose New YAML Task List
+type: object
+required:
+  - repo
+  - branch
+  - filename
+description: |
+  While the form above provides the content of the `fileData` parameter, this
+  form provides the rest of the inputs to the URL template, which uses the
+  [`nunjucks`][nunjucks] templating engine.
+
+  Right below this form, a user would see a validation summary of of both forms, followed
+  by any custom [`nunjucks`][nunjucks]-based checks.
+
+  > _As this is **only a demonstration**, expect actually submitting the form to
+  > redirect to a `404 NOT FOUND` on GitHub_.
+
+  [nunjucks]: https://mozilla.github.io/nunjucks/templating.html
+properties:
+  repo:
+    description: Who should get the PR?
+    type: string
+    enum:
+      - deathbeds/urljsf
+    default: deathbeds/urljsf
+    format: uri-reference
+  branch:
+    description: What branch should it target?
+    type: string
+    oneOf:
+      - const: not-a-branch
+        title: a branch
+      - const: not-yet-another-branch
+        title: another branch
+    format: uri-reference
+  filename:
+    description: |
+      What should the file be called? _It must be in `tasks` and end with `.yaml`._
+    type: string
+    minLength: 5
+    pattern: tasks/[^/]+\.yaml$
+    default: tasks/untitled-tasks.yaml
+    format: uri-reference

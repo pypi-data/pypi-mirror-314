@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Propose New JSON Task List",
+  "description": "While the form above provides the content of the `fileData` parameter, this\nform provides the rest of the inputs to the URL template, which uses the\n[`nunjucks`][nunjucks] templating engine.\n\nRight below this form, a user would see a validation summary of of both forms, followed\nby any custom [`nunjucks`][nunjucks]-based checks.\n\n> _As this is **only a demonstration**, expect actually submitting the form to\n> redirect to a `404 NOT FOUND` on GitHub_.\n\n[nunjucks]: https://mozilla.github.io/nunjucks/templating.html\n",
+  "properties": {
+    "branch": {
+      "type": "string",
+      "description": "What branch should it target?",
+      "format": "uri-reference",
+      "oneOf": [
+        {
+          "title": "a branch",
+          "const": "not-a-branch"
+        },
+        {
+          "title": "another branch",
+          "const": "not-yet-another-branch"
+        }
+      ]
+    },
+    "filename": {
+      "type": "string",
+      "description": "What should the file be called? _It must be in `tasks` and end with `.json`._\n",
+      "default": "tasks/untitled-tasks.json",
+      "format": "uri-reference",
+      "minLength": 5,
+      "pattern": "tasks/[^/]+\\.json$"
+    },
+    "repo": {
+      "type": "string",
+      "description": "Who should get the PR?",
+      "default": "deathbeds/urljsf",
+      "enum": ["deathbeds/urljsf"],
+      "format": "uri-reference"
+    }
+  },
+  "required": ["repo", "branch", "filename"]
+}

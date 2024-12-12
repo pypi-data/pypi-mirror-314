@@ -1,0 +1,43 @@
+# this is the reference example, all others formats are generated from here
+"$schema" = "../../schema/v0/form.schema.json"
+
+[nunjucks]
+filters = ["toml"]
+
+[forms.file]
+order = 0
+schema = "./toml/file.schema.toml"
+ui_schema = "./toml/file.uischema.toml"
+form_data = "./toml/file.data.toml"
+
+[forms.url]
+order = 1
+schema = "./toml/url.schema.toml"
+ui_schema = "./toml/url.uischema.toml"
+
+[templates]
+url = """
+https://github.com/{{ data.url.repo }}/new/{{ data.url.branch }}?
+{{
+    {"filename": data.url.filename, "value": data.file | to_toml } | urlencode | safe
+}}
+"""
+submit_button = """Start new TOML Pull Request"""
+
+[checks]
+"Unique Names" = """
+{% for name, tasks in data.file.tasks | default([]) | groupby("task") %}
+{% set dupes = tasks | length %}
+{% if dupes > 1 %}
+- [ ] {{ dupes }} tasks have the name _"{{ name }}"_
+{% endif %}
+{% endfor %}
+"""
+
+[style]
+"--bs-danger-rgb" = "var(--bs-warning-rgb)"
+"--bs-form-invalid-border-color" = "var(--bs-warning-text-emphasis)"
+"--bs-form-invalid-color" = "var(--bs-warning-text-emphasis)"
+
+[style.".btn-danger"]
+"--bs-btn-bg" = "var(--bs-warning-text-emphasis)"
