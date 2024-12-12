@@ -1,0 +1,45 @@
+{
+    "name": "My Codespace Project",
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
+    "hostRequirements": {
+        "cpus": 2
+    },
+    "customizations": {
+        "codespaces": {
+            // 기본으로 열릴 파일 설정
+            "openFiles": [
+                "README.md"
+            ]
+        },
+        "vscode": {
+            // 확장 프로그램
+            "extensions": [
+                "ms-toolsai.jupyter",
+                "ms-python.python",
+                "GitHub.copilot"
+            ],
+            "settings": {
+                "workbench.editorAssociations": {
+                    // README.md 를 프리뷰로 열기
+                    "README.md": "vscode.markdown.preview.editor"
+                }
+            }
+        }
+    },
+
+    // 컨테이너가 생성될 때 실행할 명령
+    "updateContentCommand": "python3 -m pip install -r requirements.txt",
+
+    // VS Code가 Dev Container에 연결된 후 실행할 명령
+    "postAttachCommand": {
+        "chat": "aicastle chat run"
+    },
+
+    // 포트 속성과 동작을 설정
+    "portsAttributes": {
+        "8501": {
+            "label": "Chat",
+            "onAutoForward": "openPreview"  
+        }
+    }
+}
