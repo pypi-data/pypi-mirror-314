@@ -1,0 +1,57 @@
+from ipywidgets import HTML, HTMLMath
+
+from .renderer import Rendered
+
+
+class Area:
+    """
+    the elementary piece of output that holds a text, or anything really
+    the Area base class primarily builds upon the HTMLMath class from ipywidgets
+    """
+
+    def __init__(self, rendered, layout_dict=None, classes=None, is_code=False, css_properties=None):
+        if isinstance(rendered, (str, tuple)):
+            self.rendered = Rendered(rendered)
+        elif isinstance(rendered, Rendered):
+            self.rendered = rendered
+        else:
+            raise TypeError(f"Area expects a Rendered or a str or a tuple, got {type(rendered).__name__}")
+        self.layout_dict = layout_dict or {}
+        self.classes = classes or []
+        self.is_code = is_code
+        self._widget = None
+        if css_properties:
+            self.rendered.css_properties.update(css_properties)
+        
+    @property
+    def text(self):
+        return self.rendered.text
+        
+    def widget(self):
+        if self._widget:
+            return self._widget
+        text = self.rendered.text 
+        if self.is_code:
+            text = f"<pre>{text}</pre>"
+        style = self.rendered.style()
+        if style:
+            text = f"<span style='{style}'>{text}</span>"
+        self._widget = HTMLMath(text, layout=self.layout_dict)
+        for cls in self.classes:
+            self._widget.add_class(cls)
+        return self._widget
+        
+    def add_class(self, cls):
+        self._widget.add_class(cls)
+
+
+class CodeArea(Area):
+    def __init__(self, *args, **kwds):
+        super().__init__(*args, **kwds)
+        self.is_code = True
+
+
+class StyleArea(Area):
+    def __init__(self, css):
+        super().__init__(f"<style>{css}</style>")
+        self.layout_dict = {'display': 'none'}
