@@ -1,0 +1,52 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "tradelocker"
+version = "0.56.1"
+description = "Python client for TradeLocker's Trading API"
+authors = ["TradeLocker <admin@tradelocker.com>"]
+license = "MIT"
+readme = "README.md"
+keywords=["tradelocker","api", "rest", "trading", "algotrading", "algo", "bots", "strategies"]
+urls.Source = "https://github.com/tradelocker/tradelocker-python/"
+urls.Issues = "https://github.com/tradelocker/tradelocker-python/issues"
+
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+
+pandas = ">=2.1.2"
+PyJWT = "2.8.0"
+requests = "2.32.2"
+python-dotenv = "1.0.0"
+# typeguard is removed as being a dependency since it causes problems with pyinstaller and nuitka -- add it manually if you prefer to use it or if you want to run tests
+# typeguard = "4.1.5"
+joblib = "1.4.2"
+
+[tool.poetry.dev-dependencies]
+poethepoet = "0.26.1"
+pytest = "7.4.2"
+pytest-cov = "4.1.0"
+mypy = "1.5.1"
+mypy-extensions = "1.0.0"
+types-requests = "2.32.0.*"
+pandas-stubs = "2.0.3.*"
+pylint = "2.17.7"
+black = "24.4.2"
+
+
+[tool.poe.tasks]
+test_typing = "poetry run mypy src/tradelocker --strict"
+test_pylint = "poetry run pylint tradelocker"
+test_all = ["test", "test_typing", "test_pylint"]
+test = [
+  { cmd = "poetry run pip install typeguard" },
+  { cmd = 'pytest tests --junitxml=results.xml -v --disable-warnings "$PYTEST_FLAGS"' },
+]
+
+
+[tool.poetry_bumpversion.file."src/tradelocker/__about__.py"]
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
