@@ -1,0 +1,27 @@
+diff -Nur a/BUILD.bazel b/BUILD.bazel
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -42,6 +42,13 @@
+ )
+
+ config_setting(
++    name = "mingw-gcc",
++    flag_values = {
++        "@bazel_tools//tools/cpp:compiler": "mingw-gcc",
++    },
++)
++
++config_setting(
+     name = "perfcounters",
+     define_values = {
+         "pfm": "1",
+@@ -77,6 +84,9 @@
+     linkopts = select({
+         ":windows": ["-DEFAULTLIB:shlwapi.lib"],
+         "//conditions:default": ["-pthread"],
++    }) + select({
++       ":mingw-gcc": ["-lshlwapi"],
++        "//conditions:default": [],
+     }),
+     # Only static linking is allowed; no .so will be produced.
+     # Using `defines` (i.e. not `local_defines`) means that no
