@@ -1,0 +1,132 @@
+[build-system]
+build-backend = "hatchling.build"
+
+requires = [ "hatchling>=1.26.1" ]
+
+[project]
+name = "falco-app"
+description = "Falco is a toolkit to build web apps with django faster."
+readme = "README.md"
+keywords = [
+  "cookiecutter",
+  "django",
+  "project-template",
+  "python",
+]
+license-file = "LICENSE.txt"
+authors = [
+  { name = "Tobi DEGNON", email = "tobidegnon@proton.me" },
+]
+requires-python = ">=3.10"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Framework :: Django :: 4",
+  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = [ "version" ]
+dependencies = [ "django", "httpx", "parso", "rich" ]
+optional-dependencies = { filters = [ "django-filter" ], ui = [ "falco-ui" ], all = [ "django-filter", "falco-ui" ] }
+
+urls.Documentation = "https://github.com/falcopackages/falco#readme"
+urls.Issues = "https://github.com/falcopackages/falco/issues"
+urls.Source = "https://github.com/falcopackages/falco"
+
+[tool.hatch.env]
+requires = [
+  "hatch-pip-compile>=1.11.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+  "src/falco",
+]
+
+[tool.hatch.envs.default]
+features = [ "all" ]
+dependencies = [
+  "falco-cli==0.27.0a2",
+  "heroicons[django]",
+  "django-template-partials",
+  "django-extensions",
+  "Werkzeug",
+  "django_htmx",
+  "django-allauth",
+  "pre-commit",
+  "pytest",
+  "pytest-django",
+  "pytest-xdist",
+  "pyproject-fmt",
+]
+pip-compile-constraint = "default"
+pip-compile-installer = "uv"
+pip-compile-resolver = "uv"
+type = "pip-compile"
+lock-filename = "requirements.txt"
+
+[tool.hatch.version]
+path = "src/falco/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/falco_app tests}"
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "sphinx",
+  "sphinx-autobuild",
+  "myst-parser",
+  "shibuya",
+  "sphinx-design",
+  "sphinx-tabs",
+  "sphinx-copybutton",
+  "sphinx-togglebutton",
+  "sphinxcontrib-mermaid",
+  "jupyter-sphinx",
+  "ipykernel",
+  "sphinx-github-changelog",
+  "sphinx-docsearch",
+]
+lock-filename = "docs/requirements.txt"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "demo.settings"
+addopts = "--create-db -n auto --dist loadfile --doctest-modules"
+norecursedirs = ".* bin build dist *.egg htmlcov logs node_modules templates venv"
+python_files = "tests.py test_*.py *_tests.py"
+pythonpath = "src demo"
+testpaths = [ "tests" ]
+
+[tool.coverage.run]
+source_pkgs = [ "falco_app", "tests" ]
+branch = true
+parallel = true
+omit = [
+  "src/falco/__about__.py",
+]
+
+[tool.coverage.paths]
+falco_app = [ "src/falco", "*/falco-app/src/falco" ]
+tests = [ "tests", "*/falco/tests" ]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
