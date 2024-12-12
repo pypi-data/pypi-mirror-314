@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [
+    {name = "Amine Sehili", email = "amine.sehili@gmail.com"},
+]
+name = "generss"
+dynamic = ["version"]
+description = "Generate RSS feeds from media files in a directory"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.6"
+keywords = ["RSS", "podcast"]
+license = {text = "MIT License"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: File Sharing",
+    "Topic :: Utilities",
+]
+dependencies = ["mutagen>=1.47", "eyed3>=0.9.7"]
+
+[project.urls]
+homepage = "https://pypi.org/project/generss/"
+repository = "https://github.com/amsehili/genRSS"
+
+[project.scripts]
+genRSS = "generss:main"
+
+
+[tool.setuptools]
+packages = ["generss"]
+package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+version = {attr = "generss.__version__"}
