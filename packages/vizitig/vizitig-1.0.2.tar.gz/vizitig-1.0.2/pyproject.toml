@@ -1,0 +1,81 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vizitig"
+dynamic = ["version"]
+description = "A python manipulation and visualization of genomic graph data"
+readme = "README.md"
+license = "BSD-3-Clause"
+requires-python = ">= 3.9"
+authors = [
+    { name = "Charles Paperman", email = "charles.paperman@univ-lille.fr" },
+    { name = "Camille Marchet", email = "camille.marchet@univ-lille.fr" },
+]
+keywords = [
+   "DNA", "BCALM", "graph", "visualization", "RNA", "De Brujn Graph", "kmer"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: BSD License",
+    "Topic :: Scientific/Engineering :: Bio-Informatics"
+]
+dependencies = [
+    "fastapi",
+    "websockets",
+    "tabulate",
+    "minineedle",
+    "pydantic-extra-types",
+    "types-requests",
+    "python-multipart",
+    "requests",
+    "lark",
+    "uvicorn",
+    "typing_extensions",
+    "networkdisk",
+    "vizibridge >= 0.4.8; platform_system == 'Linux' and platform_machine == 'x86_64'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pytest",
+    "types_networkx",
+    "types-tabulate",
+    "types-tqdm",
+    "pytest-cov"
+]
+all = [
+    "vizitig[dev]",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "networkdisk",
+    "networkdisk.sqlite",
+    "minineedle.smith",
+    "minineedle.needle",
+    "minineedle", 
+    "vizibridge",
+    "vizibridge.kmer_index"
+]
+ignore_missing_imports = true
+
+[project.scripts]
+vizitig = "vizitig.__main__:main"
+
+[tool.hatch.version]
+path = "vizitig/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/vizitig",
+]
+[tool.hatch.build.targets.wheel.force-include]
+
+"./vizitig/data" = "/vizitig/data"
+
+[tool.hatch.metadata]
+allow-direct-references = true
