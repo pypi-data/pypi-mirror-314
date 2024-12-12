@@ -1,0 +1,96 @@
+Metadata-Version: 2.1
+Name: pii_scanner
+Version: 0.1.11
+Summary: A library for scanning Personally Identifiable Information (PII).
+Home-page: https://github.com/devankit01/pii_scanner
+Author: Ankit Gupta
+Author-email: devankitgupta01@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# PII Scanner
+
+A library for scanning Personally Identifiable Information (PII) from text.
+
+## Installation
+
+```bash
+pip install pii_scanner
+```
+
+## Usage 
+
+```bash
+from pii_scanner.scanner import PIIScanner
+
+# Create an instance of the scanner
+pii_scanner = PIIScanner()
+
+# Sample data containing PII
+data = [
+    "Ankit Gupta",
+    "Lucknow",
+    "+9191840562195",
+    "Indian",
+    "Sofia Rossi",
+    "Rome",
+    "+390612345678",
+    "Italian"
+]
+
+# Scan the structured data
+results = pii_scanner.scan_structured_data(data, chunk_size=10, sample_size=1.0)
+
+# Print the results
+print(results)
+
+```
+
+
+## Output 
+
+```bash
+[
+    {
+        "text": "Ankit Gupta",
+        "entity_detected": [
+            {"type": "PERSON", "start": 0, "end": 11, "score": 0.85}
+        ]
+    },
+    {
+        "text": "Rome",
+        "entity_detected": [
+            {"type": "LOCATION", "start": 0, "end": 4, "score": 0.85}
+        ]
+    },
+    {
+        "text": "+919140562195",
+        "entity_detected": [
+            {"type": "PHONE_NUMBER", "start": 0, "end": 13, "score": 0.85}
+        ]
+    },
+    {
+        "text": "Sofia Rossi",
+        "entity_detected": [
+            {"type": "PERSON", "start": 0, "end": 11, "score": 0.85}
+        ]
+    },
+    {
+        "text": "Indian",
+        "entity_detected": [
+            {"type": "NATIONALITY", "start": 0, "end": 6, "score": 0.9}
+        ]
+    }
+]
+
+
+```
+
+
+
+
