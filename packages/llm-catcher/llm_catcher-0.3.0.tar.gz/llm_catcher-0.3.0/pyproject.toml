@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-catcher"
+version = "0.3.0"
+description = "A Python library that uses LLMs to diagnose and explain exceptions"
+authors = [{name = "Dave York", email = "dave.york@me.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "openai>=1.0.0",
+    "python-dotenv>=0.19.0",
+    "loguru>=0.6.0",
+]
+
+[project.optional-dependencies]
+fastapi = [
+    "fastapi>=0.68.0",
+    "uvicorn>=0.15.0",
+    "requests>=2.26.0",
+]
+
+[tool.setuptools]
+packages = ["llm_catcher"]
