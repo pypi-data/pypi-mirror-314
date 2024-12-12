@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "compas_surrogate.acquisition_plotting"
+dynamic = ["version"]
+description = "Plotting utils"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "Avi Vajpeyi", email = "avi.vajpeyi@gmail.com"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+]
+dependencies = [
+    "scipy",
+    "scikit-learn",
+    "pandas",
+    "corner",
+    "tqdm",
+    "bilby",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=4.1.0",
+    "coverage[toml]",
+    "pre-commit",
+    "flake8>=5.0.4",
+    "black==22.10.0",
+    "jupyter-book",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/COMPAS-Surrogate/acquisition_plotting"
+"Bug Reports" = "https://github.com/COMPAS-Surrogate/acquisition_plotting/issues"
+"Source" = "https://github.com/COMPAS-Surrogate/acquisition_plotting/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["acquisition_plotting*"]
+exclude = ["acquisition_plotting.tests*"]
+namespaces = false
+
+[tool.setuptools_scm]
+version_file = "src/acquisition_plotting/_version.py"
+
+[tool.semantic_release]
+version_variable = "src/acquisition_plotting/_version.py:__version__"
+version_source = "commit"
+commit_version_number = true
+commit_subject = "chore(release): {version}"
+commit_message = "chore(release): {version}"
+tag_format = "v{version}"
+no_local_version = true
+
+[tool.black]
+line-length = 79
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
