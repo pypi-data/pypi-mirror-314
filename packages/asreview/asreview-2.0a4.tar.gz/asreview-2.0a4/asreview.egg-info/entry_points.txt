@@ -1,0 +1,52 @@
+[asreview.datasets]
+synergy = asreview.datasets:SynergyDataGroup
+
+[asreview.entry_points]
+algorithms = asreview.models.cli:cli_algorithms
+auth-tool = asreview.webapp.entry_points.auth_tool:AuthTool
+lab = asreview.webapp.entry_points.lab:lab_entry_point
+simulate = asreview.simulation.cli:_cli_simulate
+
+[asreview.entry_points_internal]
+task-manager = asreview.webapp.entry_points.task_manager:main
+
+[asreview.models.balance]
+double = asreview.models.balance:DoubleBalance
+undersample = asreview.models.balance:UndersampleBalance
+
+[asreview.models.classifiers]
+logistic = asreview.models.classifiers:LogisticClassifier
+nb = asreview.models.classifiers:NaiveBayesClassifier
+rf = asreview.models.classifiers:RandomForestClassifier
+svm = asreview.models.classifiers:SVMClassifier
+
+[asreview.models.feature_extraction]
+onehot = asreview.models.feature_extraction:OneHot
+tfidf = asreview.models.feature_extraction:Tfidf
+
+[asreview.models.query]
+cluster = asreview.models.query.cluster:ClusterQuery
+max = asreview.models.query.max_prob:MaxQuery
+max_random = asreview.models.query.mixed:MaxRandomQuery
+max_uncertainty = asreview.models.query.mixed:MaxUncertaintyQuery
+random = asreview.models.query.random:RandomQuery
+uncertainty = asreview.models.query.uncertainty:UncertaintyQuery
+
+[asreview.readers]
+.csv = asreview.data:CSVReader
+.ris = asreview.data:RISReader
+.tab = asreview.data:CSVReader
+.tsv = asreview.data:CSVReader
+.txt = asreview.data:RISReader
+.xlsx = asreview.data:ExcelReader
+
+[asreview.writers]
+.csv = asreview.data:CSVWriter
+.ris = asreview.data:RISWriter
+.tab = asreview.data:TSVWriter
+.tsv = asreview.data:TSVWriter
+.txt = asreview.data:RISWriter
+.xlsx = asreview.data:ExcelWriter
+
+[console_scripts]
+asreview = asreview.__main__:main
