@@ -1,0 +1,65 @@
+site_name: Meteors
+site_url: "https://xai4space.github.io/meteors/"
+
+nav:
+  - 🏠 Home: index.md
+  - 🚀 Quickstart: quickstart.md
+  - 📚 Tutorials:
+      - 🎓 Introduction: tutorials/introduction.md
+      - LIME: tutorials/lime.md
+      - Attribution Methods `attr`: tutorials/attr_showcase.md
+      - Segmentation: tutorials/segmentation.md
+  - 📖 API Reference: reference.md
+  - 📝 Changelog: changelog.md
+  - 🤝 How to Contribute: how-to-guides.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_heading: true
+            show_source: true
+  - mike:
+
+theme:
+  name: material
+  logo: assets/logo.png
+  palette:
+    - scheme: default
+      primary: custom
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+
+  features:
+    - navigation.tracking
+    - navigation.path
+    - navigation.top
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+markdown_extensions:
+  - pymdownx.details
+
+extra_css:
+  - stylesheets/extra.css
+
+repo_url: https://github.com/xai4space/meteors
+repo_name: xai4space/meteors
+
+watch:
+  - src
+  - examples

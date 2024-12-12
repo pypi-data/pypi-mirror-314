@@ -1,0 +1,79 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.1
+    hooks:
+      - id: ruff
+        name: ✅ Lint using ruff
+        types_or: [python, pyi, jupyter, toml]
+        args: [--fix, --exit-non-zero-on-fix]
+        exclude: |
+          (?x)^(
+            # examples with outsourced code
+            examples/lime/clip_model.py
+            # jupyter notebooks
+            examples/lime/lime.ipynb
+          )$
+      - id: ruff-format
+        name: ☕️ Format using ruff
+        types_or: [python, pyi, jupyter, toml]
+        exclude: |
+          (?x)^(
+            # examples with outsourced code
+            examples/lime/clip_model.py
+            # jupyter notebooks
+            examples/lime/lime.ipynb
+            # docs references
+            docs/reference.md
+          )$
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        name: 💄 Ensuring files are prettier
+        args: [--write]
+        types_or: [yaml, markdown, json]
+  - repo: local
+    hooks:
+      - id: codespell
+        name: ✅ Check code for common misspellings
+        language: system
+        types: [text]
+        exclude: |
+          (?x)^(
+            rye.lock|
+            custom_components/foldingathomecontrol/translations/de.json|
+            custom_components/foldingathomecontrol/translations/nb.json|
+            custom_components/foldingathomecontrol/translations/pl.json|
+            custom_components/foldingathomecontrol/translations/pt.json|
+            # examples with jupyter notebooks
+            examples/.*
+            # docs references
+            docs/reference.md
+          )$
+        entry: rye run codespell
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: requirements-txt-fixer
+      - id: check-added-large-files
+        args: ["--maxkb=9000"]
+      - id: check-ast
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: detect-private-key
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        args: ["--config-file", "pyproject.toml"]
+        additional_dependencies: [pydantic==2.7.1]
+        exclude: |
+          (?x)^(
+            # examples with outsourced code
+            examples/lime/clip_model.py
+          )$

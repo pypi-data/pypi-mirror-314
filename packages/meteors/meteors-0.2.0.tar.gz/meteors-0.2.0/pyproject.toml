@@ -1,0 +1,101 @@
+[project]
+name = "meteors"
+version = "0.2.0"
+authors = [
+  { name="Tymoteusz Kwiecinski", email="tymoteuszkwiecinski@gmail.com" },
+]
+description = "Explanations of models for Hyperspectral data"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "BSD-3-Clause" }
+
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "captum>=0.7.0",
+    "spyndex>=0.6.0",
+    "numpy<2.0.0", # From Captum
+    "torch>=1.10", # From Captum
+    "eval-type-backport",
+    "loguru",
+    "matplotlib",
+    "seaborn",
+    "pandas",
+    "pydantic",
+    "scikit-image",
+    "scikit-learn",
+    "importlib-resources; python_version < '3.10'",
+    "setuptools>=60.0.0",
+]
+
+[metadata]
+license = "BDS-3-Clause"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pre-commit>=3.7.1",
+    'exceptiongroup>=1.0.0rc8; python_version < "3.11"',
+    "pytest>=8.2.2",
+    "pytest-cov>=5.0.0",
+    "tomli>=2.0.1",
+    "codespell>=2.3.0",
+    "jupyter>=1.0.0",
+    "mike>=2.0.0",
+    "mkdocs>=1.0.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings[python]>=0.25.0",
+    "ipykernel>=6.29.5",
+    "torchvision>=0.17.2",
+    "gitpython>=3.1.43",
+    "segmentation_models_pytorch>=0.0.3",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+files = ["src"]
+plugins = [
+  "pydantic.mypy",
+]
+
+[tool.codespell]
+skip = [
+    "examples/*",
+    ".github/CODE_OF_CONDUCT.md",
+]
+ignore-words-list = "hsi,HSI"
+
+[tool.ruff]
+line-length = 120
+extend-include = ["*.ipynb"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 120
+
+[tool.coverage.run]
+omit = [
+    "src/meteors/lime_base.py",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=src/meteors --cov-report=xml"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/meteors"]
+
+[project.urls]
+Homepage = "https://github.com/xai4space/meteors/"

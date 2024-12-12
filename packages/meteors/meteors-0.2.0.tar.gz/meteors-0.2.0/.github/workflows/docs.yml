@@ -1,0 +1,91 @@
+name: Docs
+
+on:
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: macos-latest
+    permissions:
+      contents: write # This is required to push the changes to the repository
+    steps:
+      - name: Checkout code 📂
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git 🛠️
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Fetch gh-pages branch
+          git fetch origin gh-pages --depth=1
+
+      - name: Setup Rye 🌾
+        id: setup-rye
+        uses: eifinger/setup-rye@v4
+        with:
+          enable-cache: true
+          version: "0.42.0"
+
+      - name: Pin python-version 3.10 📌
+        run: rye pin 3.10
+      - name: Cache dependencies 📦
+        uses: actions/cache@v4
+        with:
+          path: ./venv
+          key: venv-3.10-macos-latest-${{ hashFiles('requirements.lock') }}-${{ hashFiles('requirements-dev.lock') }}
+
+      - name: Install dependencies 🛠️
+        run: |
+          rye sync
+
+      - name: Get the README 📝
+        run: |
+          cp README.md docs/index.md
+
+      - name: Get the ChangeLog 📝
+        run: |
+          cp changelog.md docs/changelog.md
+
+      - name: Convert Jupyter examples to Markdown 📓➡️📄
+        run: |
+          output_dir="docs/tutorials/"
+          if [ -d "examples" ]; then
+            for dir in examples/*/; do
+              if [ -d "$dir" ]; then
+                dir_name=$(basename "$dir")
+                if ls "$dir"/*.ipynb 1> /dev/null 2>&1; then
+                  for notebook in "$dir"/*.ipynb; do
+                    rye run jupyter nbconvert --to markdown "$notebook" --output-dir "$output_dir"
+                  done
+                else
+                  echo "No notebooks found in directory '$dir_name'."
+                fi
+              fi
+            done
+          else
+            echo "Directory 'examples' does not exist."
+            exit 1
+          fi
+
+      - name: Move Assets to Docs ➡️
+        run: |
+          if [ -d "docs/assets" ]; then
+            rm -rf docs/assets
+          fi
+          mv assets docs/
+
+      - name: Build Docs Website 🌐
+        run: |
+          # Extract version from rye
+          export VERSION=$(rye version)
+          echo "Building the docs with version $VERSION"
+
+          # Deploy new version with --update-aliases flag
+          rye run mike deploy --push --branch gh-pages -u "$VERSION" latest
+
+          # Set default version
+          rye run mike set-default --push --branch gh-pages latest
