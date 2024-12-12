@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cedarscript-grammar"
+dynamic = ["version"]
+description = "CEDARScript grammar.js for tree-sitter"
+authors = [
+    {name = "Elifarley", email = "cedarscript@orgecc.com"},
+]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Compilers",
+    "Topic :: Text Processing :: Linguistic",
+    "Typing :: Typed"
+]
+keywords = ["parser", "tree-sitter", "ast", "cedarscript", "code-editing", "refactoring", "code-analysis", "sql-like", "ai-assisted-development", "python-binding"]
+requires-python = ">=3.8"
+dependencies = [
+    # https://github.com/tree-sitter/py-tree-sitter/issues/303
+    # https://github.com/grantjenks/py-tree-sitter-languages/issues/64
+    "tree-sitter<0.22", # 0.22 breaks tree-sitter-languages
+]
+
+[project.urls]
+Homepage = "https://github.com/CEDARScript/cedarscript-grammar#readme"
+Repository = "https://github.com/CEDARScript/cedarscript-grammar.git"
+Documentation = "https://github.com/CEDARScript/cedarscript-grammar#readme"
+"Bug Tracker" = "https://github.com/CEDARScript/cedarscript-grammar/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools_scm]
+# To override version:
+# >>> SETUPTOOLS_SCM_PRETEND_VERSION=0.0.2 python -m build
+# To dry-run and see version:
+# >>> python -m setuptools_scm
+write_to = "src/version/_version.py"
+# Append .post{number of commits} to your version if there are commits after the last tag.
+version_scheme = "post-release"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["version", "cedarscript_grammar"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"cedarscript_grammar" = ["py.typed", "*.so", "*.dylib", "*.dll"]
+
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
