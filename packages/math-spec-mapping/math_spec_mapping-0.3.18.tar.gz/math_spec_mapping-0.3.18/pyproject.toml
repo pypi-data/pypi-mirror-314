@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "math-spec-mapping"
+version = "0.3.18"
+authors = [
+  { name="Sean McOwen", email="Sean@Block.Science" },
+]
+description = "A library for easy mapping of mathematical specifications."
+dependencies = [
+  "graphviz>=0.20.1",
+  "ipython>=7.7.0",
+  "pandas>=1.4"
+]
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools]
+include-package-data = true
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+'math_spec_mapping' = ['*.json']
