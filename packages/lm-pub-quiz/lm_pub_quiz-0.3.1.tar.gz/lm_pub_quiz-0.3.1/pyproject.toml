@@ -1,0 +1,178 @@
+[project]
+name = "lm-pub-quiz"
+description = "Evaluate language models using multiple choice items"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "torch",
+  "datasets",
+  "transformers>=4.38",
+  "accelerate>0.25.0",
+  "pandas",
+  "numpy",
+  "scikit-learn",
+]
+dynamic = ["version"]
+authors = [
+  { name = "Jacek Wiland", email = "jacek.wiland@hu-berlin.de" },
+  { name = "Max Ploner", email = "max.ploner@hu-berlin.de" },
+  { name = "Alan Akbik", email = "alan.akbik@hu-berlin.de" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/lm_pub_quiz/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocstrings[python]>=0.18",
+  "mkdocs-section-index>=0.3",
+  "black",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+serve-docs = [
+  "mkdocs serve"
+]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+[tool.hatch.envs.lint]
+detached = true
+dependencies = [
+  "mypy>=1.8.0",
+  "ruff>=0.8.1",
+]
+[tool.hatch.envs.lint.scripts]
+typing = "mypy --install-types --non-interactive {args:src/lm_pub_quiz tests}"
+style = [
+  "ruff format --check {args:.}",
+  "ruff check {args:.}",
+]
+fmt = [
+  "ruff format {args:.}",
+  "ruff check --fix {args:.}",
+  "style",
+]
+all = [
+  "style",
+  "typing",
+]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+  "A",
+  "ARG",
+  "B",
+  "C",
+  "DTZ",
+  "E",
+  "EM",
+  "F",
+  "FBT",
+  "I",
+  "ICN",
+  "ISC",
+  "N",
+  "PLC",
+  "PLE",
+  "PLR",
+  "PLW",
+  "Q",
+  "RUF",
+  "S",
+  "T",
+  "TID",
+  "UP",
+  "W",
+  "YTT",
+]
+ignore = [
+  # Allow non-abstract empty methods in abstract base classes
+  "B027",
+  # Allow boolean positional values in function calls, like `dict.get(... True)`
+  "FBT003",
+  # Ignore checks for possible passwords
+  "S105", "S106", "S107",
+  # Allow asserts for now (transitioning to recommended exceptions)
+  "S101",
+  # Ignore complexity
+  "C901", "PLR0911", "PLR0912", "PLR0913", "PLR0915",
+  # Apparently causes issues when used with the formatter
+  "ISC001",
+]
+unfixable = [
+  # Don't touch unused imports
+  "F401",
+]
+exclude = [
+  "scripts/*"  # TODO: this is only temporary
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["lm_pub_quiz"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
+
+[tool.coverage.run]
+source_pkgs = ["lm_pub_quiz"]
+branch = true
+parallel = true
+omit = [
+  "src/lm_pub_quiz/__about__.py",
+]
+
+[tool.coverage.paths]
+lm_pub_quiz = ["src/lm_pub_quiz"] 
+tests = ["tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
