@@ -1,0 +1,163 @@
+[tool.poetry]
+name = "curia"
+version = "4.21.0-beta.8"
+description = "A library for interfacing with the Curia API."
+authors = ["Aledade, Inc."]
+readme = "README.md"
+include = ["task_docker/Dockerfile", "task_docker/task.py"]
+
+[tool.poetry.scripts]
+taskinfra = "curia.infra.cli:cli"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+boto3 = "^1.26.0"
+certifi = ">= 2024.8.30"
+six = ">= 1.10"
+python-dateutil = ">= 2.5.3"
+urllib3 = ">= 1.15.1"
+pyarrow = "^14.0.1"
+pymaybe = "^0.1.6"
+requests = "^2.32.0"
+moto = {extras = ["ecr"], version = "^4.2.3"}
+numpy = "^1.24.3"
+logzero = "^1.7.0"
+pandas = "^1.5.0"
+flask = ">=2.3.2,<4.0.0"
+flask-cors = "^5.0.0"
+mlflow = "^2.14.2"
+hyperopt = "^0.2.7"
+click = "^8.1.7"
+python-dotenv = "^1.0.0"
+multipart = "^0.2.4"
+waitress = "^3.0.1"
+pillow = "^11.0.0"
+gitpython = "^3.1.43"
+werkzeug = "^3.0.3"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+pytest-cov = "^4.1.0"
+pytest-pylint = "^0.21.0"
+pylint = ">=2.17.4,<4.0.0"
+poethepoet = ">=0.30"
+pytest-runner = "^6.0.0"
+
+
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=6.0.1,<8.0.0"
+sphinx-rtd-theme = "^1.2.2"
+sphinxcontrib-apidoc = "^0.3.0"
+sphinx-markdown-builder = ">=0.5.5,<0.7.0"
+sphinx-jekyll-builder = "^0.3.0"
+python-frontmatter = "^1.0.0"
+
+[tool.poetry.group.container_infra]
+optional = true
+
+[tool.poetry.group.container_infra.dependencies]
+docker = "^7.1.0"
+
+[tool.poetry.group.jupyter.dependencies]
+jupyterlab = "^4.3.0"
+
+[tool.poetry.group.databricks_infra.dependencies]
+pyspark = "^3.4.1"
+databricks-sdk = "^0.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-config .coveragerc --cov-report xml:coverage.xml --cov-report term-missing -ra -W ignore"
+testpaths = "test"
+norecursedirs = ["*.eggs", "dist", "venv"]
+log_cli = true
+log_level = "INFO"
+
+[tool.semantic_release]
+version_toml = "pyproject.toml:tool.poetry.version"
+version_variable = "src/curia/__init__.py:__version__"
+patch_without_tag = false
+build_command = "pip install poetry && poetry build"
+branch = "main"
+upload_to_pypi = true
+commit_message = "chore(release): release {version}"
+
+[tool.poe.tasks]
+install = "poetry install"
+install-docs = "poetry install --with docs"
+test = "pytest"
+lint = "pylint src test"
+check = ["test", "lint"]
+_build = "poetry build"
+build = ["test", "_build"]
+swagger-codegen-prod = ["install", "_swagger-codegen-prod", "_swagger-codegen-wrapup"]
+swagger-codegen-dev = ["install", "_swagger-codegen-dev", "_swagger-codegen-wrapup"]
+build-docs = ["install-docs", "_docs_html", "_docs_readmeio", "_docs_wrapup"]
+
+[tool.poe.tasks.clean]
+shell = """
+find . -type f -name \"*.py[co]\" -delete # remove python artifacts
+find . -type d -name \"__pycache__\" -delete # remove python artifacts
+# remove build artifacts
+rm -rf build dist *.egg-info temp .coverage coverage.xml .coverage.* .pytest_cache .eggs src/*.egg-info
+"""
+
+
+[tool.poe.tasks._swagger-codegen-wrapup]
+shell = """
+# NB: sed here won't work on macs unless you install gnu-sed. See the Readme for more info.
+find src/curia/api -type f -exec sed -i 's/^from swagger_client/from curia.api.swagger_client/g' {} +
+find src/curia/api -type f -exec sed -i 's/^import swagger_client/import curia.api.swagger_client/g' {} +
+find src/curia/api -type f -exec sed -i 's/swagger_client.models, klass/curia.api.swagger_client.models, klass/g' {} +
+touch src/curia/api/__init__.py
+
+# we use the same version as previously here for the package version, since the package version is update by
+# semantic release, not the swagger codegen
+VERSION=$(cat src/curia/__init__.py | grep __version__ | cut -d' ' -f3 | sed 's/"//g')
+# we get the most recent api version from the api-version.txt file
+API_VERSION=$(cat api-version.txt)
+
+echo "__version__ = \\"$VERSION\\"" > src/curia/__init__.py
+echo "__api_version__ = \\"$API_VERSION\\"" >> src/curia/__init__.py
+echo "\\n" >> src/curia/__init__.py
+echo "from curia import api" >> src/curia/__init__.py
+"""
+
+
+[tool.poe.tasks._swagger-codegen-prod]
+shell = """
+java -jar swagger-codegen-cli.jar generate -i https://api.curia.ai/-json -l python -o src/curia/api
+"""
+
+[tool.poe.tasks._swagger-codegen-dev]
+shell = """
+java -jar swagger-codegen-cli.jar generate -i https://api.dev.curia.ai/-json -l python -o src/curia/api
+"""
+
+
+[tool.poe.tasks._docs_html]
+shell = """
+sphinx-build -M html doc doc/_build
+"""
+
+
+[tool.poe.tasks._docs_readmeio]
+shell = """
+sphinx-build -M readmeio doc doc/_build
+"""
+
+[tool.poe.tasks._docs_wrapup]
+shell = """
+mkdir -p docs
+cp -r doc/_build/html/* docs/
+touch docs/.nojekyll
+"""

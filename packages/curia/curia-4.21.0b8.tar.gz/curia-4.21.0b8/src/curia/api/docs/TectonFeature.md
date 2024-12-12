@@ -1,0 +1,26 @@
+# TectonFeature
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **str** |  | [optional] 
+**last_updated_by** | **str** |  | [optional] 
+**created_by** | **str** |  | [optional] 
+**created_at** | **datetime** |  | [optional] 
+**updated_at** | **datetime** |  | [optional] 
+**archived_at** | **datetime** |  | [optional] 
+**version** | **float** |  | [optional] 
+**name** | **str** |  | 
+**column_name** | **str** |  | 
+**description** | **str** |  | [optional] 
+**feature_view_id** | **str** |  | [optional] 
+**feature_view** | [**FeatureView**](FeatureView.md) |  | [optional] 
+**feature_table_id** | **str** |  | [optional] 
+**feature_table** | [**FeatureTable**](FeatureTable.md) |  | [optional] 
+**model_populations** | [**list[ModelPopulation]**](ModelPopulation.md) |  | [optional] 
+**metadata** | **object** |  | [optional] 
+**synced_at** | **datetime** |  | [optional] 
+**organization_id** | **str** |  | 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
