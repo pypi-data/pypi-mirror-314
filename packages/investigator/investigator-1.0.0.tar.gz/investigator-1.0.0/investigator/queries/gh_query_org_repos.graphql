@@ -1,0 +1,73 @@
+query Repos($owner: String!, $cursor: String) {
+  repositoryOwner(login: $owner) {
+    repositories(
+      
+      first: 10
+      ownerAffiliations: OWNER
+      orderBy: { field: PUSHED_AT, direction: DESC }
+      after: $cursor
+    ) {
+      nodes {
+        id
+        databaseId
+        url
+        name
+        archivedAt
+        description
+        isTemplate
+        primaryLanguage {
+          name
+        }
+        isPrivate
+        pushedAt
+        createdAt
+        isTemplate
+        licenseInfo {
+          name
+        }
+        branchProtectionRules(first: 10) {
+          nodes {
+            allowsDeletions
+            allowsForcePushes
+            isAdminEnforced
+            requiresConversationResolution
+            requiredApprovingReviewCount
+            requiresCodeOwnerReviews
+            requiresCommitSignatures
+            matchingRefs(first: 10) {
+              nodes {
+                name
+              }
+            }
+          }
+        }
+        defaultBranchRef {
+          name
+          target {
+            ... on Commit {
+              oid
+            }
+          }
+        }
+        vulnerabilityAlerts(first: 7, states: OPEN) {
+          totalCount
+          nodes {
+            state
+            createdAt
+            dismissReason
+            dismissedAt
+            dismisser {
+              login
+            }
+            fixedAt
+            securityAdvisory {
+              summary
+              severity
+              permalink
+            }
+          }
+        }
+      }
+    }
+  }
+}
