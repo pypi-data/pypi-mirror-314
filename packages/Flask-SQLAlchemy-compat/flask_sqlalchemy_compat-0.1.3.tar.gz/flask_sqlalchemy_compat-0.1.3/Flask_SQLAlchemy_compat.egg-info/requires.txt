@@ -1,0 +1,43 @@
+flask[async]
+werkzeug
+typing-extensions>=4.1.0
+
+[:python_version < "3.8"]
+sqlalchemy[asyncio]>=2.0.0
+
+[:python_version >= "3.13"]
+sqlalchemy[asyncio]>=2.0.31
+
+[:python_version >= "3.8" and python_version < "3.13"]
+sqlalchemy[asyncio]>=2.0.16
+
+[backends]
+
+[backends:python_version < "3.8"]
+flask-sqlalchemy-compat-backend-py37
+
+[backends:python_version >= "3.8"]
+flask-sqlalchemy>=3.1.0
+
+[backends:python_version >= "3.9"]
+flask-sqlalchemy-lite
+
+[dev]
+flask-migrate
+flask-alembic
+black
+flake8
+flake8-black
+packaging
+build
+wheel
+
+[dev:python_version < "3.8"]
+flask-sqlalchemy-compat-backend-py37
+importlib-metadata
+
+[dev:python_version >= "3.8"]
+flask-sqlalchemy>=3.1.0
+
+[dev:python_version >= "3.9"]
+flask-sqlalchemy-lite
