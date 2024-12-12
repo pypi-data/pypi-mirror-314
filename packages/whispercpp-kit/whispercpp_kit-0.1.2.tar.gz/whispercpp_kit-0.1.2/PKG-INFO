@@ -1,0 +1,108 @@
+Metadata-Version: 2.1
+Name: whispercpp_kit
+Version: 0.1.2
+Summary: A toolkit for whisper.cpp with audio processing and model management
+Author-email: Simeon Emanuilov <simeon.emanuilov@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Simeon Emanuilov
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        1. The above copyright notice and this permission notice shall be included in all
+           copies or substantial portions of the Software.
+        
+        2. When using or distributing the Software, proper attribution must be given to 
+           the original author by citing the project name "whispercpp_kit" and its source.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/s-emanuilov/whispercpp_kit
+Keywords: whisper,speech-to-text,audio,transcription
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: ffmpeg-python
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+
+# WhisperCPP Kit
+
+A wrapper arround [whisper.cpp](https://github.com/ggerganov/whisper.cpp) with additional helper features like model management capabilities.
+
+While `whispercpp_kit` will automatically build and set up whisper.cpp for you, it requires certain system-level dependencies (git, cmake, ffmpeg) to be pre-installed on your system. 
+If any dependency is missing, the library will provide a clear error message indicating what needs to be installed.
+
+
+## System requirements
+
+Before installing `whispercpp_kit`, ensure you have the following dependencies installed:
+
+- `git`
+- `cmake`
+- `ffmpeg`
+
+### Installing dependencies
+
+Ubuntu/Debian:
+```bash
+sudo apt update
+sudo apt install git cmake ffmpeg
+```
+
+MacOS:
+```bash
+brew install git cmake ffmpeg
+```
+
+## Installation
+
+```bash
+pip install whispercpp_kit
+```
+
+## Quickstart
+
+```python
+from whispercpp_kit import WhisperCPP
+
+whisper = WhisperCPP(model_name="tiny.en")
+# whisper = Whisper(model_path="/custom/pathggml-large-v3-turbo-q5_0.bin")
+
+output = whisper.transcribe("input.mp3")
+print(output)
+```
+
+## Docker example
+
+See [examples/docker/README.md](examples/docker/README.md) for more details. You can run the container in two ways:
+
+```bash
+git clone https://github.com/s-emanuilov/whispercpp_kit
+cd whispercpp_kit/examples/docker
+
+docker build -t whispercpp_kit .
+
+# Run with default model (base.en)
+docker run -v $(pwd):/app/audio whispercpp_kit your_audio.mp3
+
+# Using specific model (works with both mounting options)
+docker run -v $(pwd):/app/audio whispercpp_kit your_audio.mp3 tiny.en
+```
