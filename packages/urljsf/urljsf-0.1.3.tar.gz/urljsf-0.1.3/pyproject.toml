@@ -1,0 +1,156 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit-core >=3.9.0,<4.0.0"]
+
+[project]
+name = "urljsf"
+version = "0.1.3"
+description = "Build declarative, interactive HTML forms with JSON Schema"
+readme = "README.md"
+authors = [{name = "urljsf contributors"}]
+requires-python = ">=3.9"
+license.text = "BSD-3-Clause"
+classifiers = [
+  "Framework :: Sphinx :: Extension",
+  "Framework :: Sphinx",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3",
+  "Topic :: File Formats :: JSON :: JSON Schema",
+  "Topic :: File Formats :: JSON",
+  "Topic :: File Formats",
+  "Typing :: Typed",
+]
+scripts.urljsf = "urljsf.cli:main"
+dependencies = [
+  "jinja2",
+  "jsonschema[format] >=4.18",
+  "tomli; python_version < '3.11'",
+  "typing_extensions >=4.0.0; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+sphinx = [
+  "sphinx >=6.1",
+]
+yaml = [
+  "ruamel.yaml",
+]
+mkdocs = [
+  "mkdocs >=1.5",
+  "pymdown-extensions >=10.11.0",
+]
+test = [
+  "pytest",
+  "pytest-console-scripts",
+  "tomli-w",
+]
+
+[project.entry-points."mkdocs.plugins"]
+urljsf = "urljsf.mkdocsext.plugin:UrljsfMkdocs"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/deathbeds/urljsf/issues"
+Changelog = "https://github.com/deathbeds/urljsf/blob/main/CHANGELOG.md"
+Documentation = "https://urljsf.rtfd.org"
+PyPI = "https://pypi.org/project/urljsf"
+Source = "https://github.com/deathbeds/urljsf"
+
+[tool.flit.sdist]
+include = ["LICENSE", "tests"]
+
+# coverage #####################################################################
+[tool.coverage.run]
+disable_warnings = [
+  "no-data-collected",
+  "module-not-measured",
+  "module-not-imported",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "except ImportError as err:",
+  "except ImportError:",
+  "if TYPE_CHECKING:",
+  """if __name__ == "__main__":""",
+  "pragma: no cover",
+]
+
+[tool.coverage.html]
+show_contexts = true
+
+# mypy #########################################################################
+[tool.mypy]
+cache_dir = "build/.cache/mypy"
+python_version = "3.11"
+strict = true
+show_error_codes = true
+warn_return_any = true
+warn_unused_ignores = true
+
+# pytest #######################################################################
+[tool.pytest.ini_options]
+cache_dir = "build/.cache/pytest"
+script_launch_mode = "subprocess"
+testpaths = ["tests"]
+addopts = ["--color=yes", "-Werror", "--tb=long", "-vv"]
+
+# robocop ######################################################################
+[tool.robocop]
+exclude = [
+  "replace-set-variable-with-var",
+  "replace-create-with-var",
+  "no-suite-variable",
+]
+configure = [
+  "too-many-calls-in-keyword:max_calls:20",
+]
+
+# ruff #########################################################################
+[tool.ruff]
+cache-dir = "build/.cache/ruff"
+extend-exclude = [".ipynb_checkpoints"]
+include = ["{atest,docs,src,scripts,tests}/**/*.py"]
+line-length = 88
+preview = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D211", "D213", "COM812", "ISC001", "D203", "DOC501", "DOC201"]
+flake8-copyright.notice-rgx = '''
+# Copyright \(C\) urljsf contributors\.
+# Distributed under the terms of the Modified BSD License\.
+'''
+isort.known-first-party = ["urljsf"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "PLC0415", "T201", "DOC402", "ARG001", "INP001"]
+"**/sphinxext/*.py" = ["TID252", "ANN401", "ARG001"]
+"**/mkdocsext/*.py" = ["TID252", "PLR6301", "ANN401", "ARG002", "PLR0917", "PLR0913"]
+"docs/**/*.py" = ["INP001", "BLE001"]
+"docs/conf.py" = ["SLF001", "ARG005", "ANN001", "N806", "ARG001", "ANN202", "ANN401"]
+"nodes.py" = ["N801"]
+"**/_schema.py" = [
+  "D205",
+  "D400",
+  "D415",
+  "E501",
+  "N815",
+  "PYI016",
+  "TCH001",
+  "TID252",
+  "UP006",
+  "UP035",
+]
+"scripts/*.py" = [
+  "S603",
+  "T201",
+  "INP001",
+  "ANN401",
+  "S404",
+  "S607",
+  "PLW0108",
+  "RUF017",
+]
+"**/source.py" = ["PLC0415"]
+"atest/**/*.py" = ["INP001", "PLR6301", "T201"]

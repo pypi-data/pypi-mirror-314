@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A Task List",
+  "description": "This form validates user-provided data for a single JSON file.\n\n> _Some tasks have been left to be done below to show various features._\n",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "../json/file.schema.json",
+      "default": "../json/file.schema.json",
+      "format": "uri-reference"
+    },
+    "name": {
+      "type": "string",
+      "description": "**What** is _this_ list about?",
+      "minItems": 3
+    },
+    "tasks": {
+      "type": "array",
+      "description": "What is **at least** one **unique** thing that needs to get done?",
+      "items": {
+        "$ref": "#/definitions/Task"
+      },
+      "maxItems": 10,
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "Task": {
+      "type": "object",
+      "properties": {
+        "complete": {
+          "type": "boolean",
+          "description": "done?",
+          "default": false
+        },
+        "deadline": {
+          "type": "string",
+          "description": "**When** does it need to be done?",
+          "format": "date"
+        },
+        "task": {
+          "type": "string",
+          "description": "**What** needs to be done?",
+          "minLength": 1
+        }
+      },
+      "required": ["task"]
+    }
+  },
+  "required": ["$schema", "name", "tasks"]
+}
