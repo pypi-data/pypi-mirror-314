@@ -1,0 +1,77 @@
+[tool.poetry]
+name = "pyrfx"
+version = "0.1.12"
+description = "A comprehensive Python SDK for interacting with RFX contracts and data."
+authors = ["RFX Dev <dev@rfx.exchange>"]
+maintainers = ["RFX Dev <dev@rfx.exchange>"]
+repository = "https://github.com/relative-finance/pyrfx"
+readme = "README.md"
+license = "MIT"
+homepage = "https://rfx.exchange"
+documentation = "https://rfx.exchange"
+keywords = ["SDK", "RFX", "blockchain", "Python", "DeFi", "DEX", "Exchange"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[tool.poetry.dependencies]
+python = ">= 3.10,<4"
+hexbytes = "^1.2.1"
+web3 = "^7.3.0"
+pandas = "^2.2.3"
+tenacity = "^9.0.0"
+ratelimit = "^2.2.1"
+numpy = "^2.1.2"
+eth-abi = "^5.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pyyaml = "^6.0.2"
+matplotlib = "^3.9.2"
+starlette = "^0.41.0"
+pdoc = "^15.0.0"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "tests/get",
+    "tests/order"
+]
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = { find = { include = ["pyrfx", "pyrfx.*"] } }
+namespaces = false
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | blib2to3
+  | tests/data
+  | profiling
+)/
+'''
+
+[tool.isort]
+profile = "black"
