@@ -1,0 +1,491 @@
+---
+$schema: http://json-schema.org/draft-07/schema#
+title: Deployment
+$ref: "#/definitions/deployment"
+definitions:
+  deployment:
+    type: object
+    properties:
+      apiVersion:
+        const: apiextensions.rapyuta.io/v1
+        default: apiextensions.rapyuta.io/v1
+      kind:
+        const: Deployment
+        default: Deployment
+      metadata:
+        "$ref": "#/definitions/metadata"
+      spec:
+        "$ref": "#/definitions/componentSpec"
+    required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+
+  metadata:
+    type: object
+    properties:
+      name:
+        type: string
+      depends:
+        "$ref": "#/definitions/packageDepends"
+      labels:
+        "$ref": "#/definitions/stringMap"
+        uniqueItems: true
+      guid:
+        "$ref": "#/definitions/deploymentGUID"
+      creator:
+        "$ref": "#/definitions/uuid"
+      project:
+        "$ref": "#/definitions/projectGUID"
+
+    required:
+      - name
+      - depends
+
+  envArgsSpec:
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+
+  deviceNetworkAttachSpec:
+    properties:
+      depends:
+        "$ref": "#/definitions/networkDepends"
+
+  cloudNetworkAttachSpec:
+    properties:
+      depends:
+        "$ref": "#/definitions/networkDepends"
+
+  cloudVolumeAttachSpec:
+    type: object
+    properties:
+      execName:
+        type: string
+      mountPath:
+        type: string
+      subPath:
+        type: string
+      depends:
+        "$ref": "#/definitions/diskDepends"
+
+  deviceVolumeAttachSpec:
+    type: object
+    properties:
+      execName:
+        type: string
+      mountPath:
+        type: string
+        pattern: '^\/$|(^(?=\/)|^\.|^\.\.)(\/(?=[^/\0])[^/\0]+)*\/?$'
+      subPath:
+        type: string
+        pattern: '^\/$|(^(?=\/)|^\.|^\.\.)(\/(?=[^/\0])[^/\0]+)*\/?$'
+      uid:
+        type: integer
+      gid:
+        type: integer
+      perm:
+        type: integer
+
+    additionalProperties: false
+
+
+  endpointSpec:
+    properties:
+      name:
+        type: string
+      depends:
+        properties:
+          kind:
+            const: staticroute
+            default: staticroute
+          nameOrGUID:
+            type: string
+
+  managedServiceSpec:
+    type: object
+    properties:
+      depends:
+        "$ref": "#/definitions/managedServiceDepends"
+
+  componentSpec:
+    type: object
+    properties:
+      runtime:
+        type: string
+        enum:
+          - device
+          - cloud
+    dependencies:
+      runtime:
+        oneOf:
+          - properties:
+              runtime:
+                type: string
+                enum:
+                  - device
+              depends:
+                type: array
+                items:
+                  "$ref": "#/definitions/deploymentDepends"
+              device:
+                type: object
+                properties:
+                  depends:
+                    type: object
+                    "$ref": "#/definitions/deviceDepends"
+              restart:
+                type: string
+                enum:
+                  - always
+                  - onfailure
+                  - never
+              envArgs:
+                type: array
+                items:
+                  "$ref": "#/definitions/envArgsSpec"
+              volumes:
+                type: array
+                items:
+                  "$ref": "#/definitions/deviceVolumeAttachSpec"
+              rosNetworks:
+                type: array
+                items:
+                  "$ref": "#/definitions/deviceNetworkAttachSpec"
+              rosBagJobs:
+                type: array
+                items:
+                  "$ref": "#/definitions/deviceROSBagJobSpec"
+              features:
+                type: ["object", "null"]
+                properties:
+                  params:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      trees:
+                        type: array
+                        items:
+                          type: string
+                      disableSync:
+                        type: boolean
+                      blockUntilSynced:
+                        type: boolean
+                        default: false
+                    required:
+                      - enabled
+                      - trees
+            type: object
+            additionalProperties: false
+
+          - properties:
+              runtime:
+                type: string
+                enum:
+                  - cloud
+              depends:
+                type: array
+                items:
+                  "$ref": "#/definitions/deploymentDepends"
+              features:
+                type: ["object", "null"]
+                properties:
+                  vpn:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                    required:
+                      - enabled
+                  params:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      trees:
+                        type: array
+                        items:
+                          type: string
+                      disableSync:
+                        type: boolean
+                    required:
+                      - enabled
+                      - trees
+              envArgs:
+                type: array
+                items:
+                  "$ref": "#/definitions/envArgsSpec"
+              volumes:
+                type: array
+                items:
+                  "$ref": "#/definitions/cloudVolumeAttachSpec"
+              staticRoutes:
+                type: array
+                items:
+                  "$ref": "#/definitions/endpointSpec"
+              rosNetworks:
+                type: array
+                items:
+                  "$ref": "#/definitions/cloudNetworkAttachSpec"
+              managedServices:
+                type: array
+                items:
+                  "$ref": "#/definitions/managedServiceSpec"
+              rosBagJobs:
+                type: array
+                items:
+                  "$ref": "#/definitions/cloudROSBagJobSpec"
+            type: object
+            additionalProperties: false
+    required:
+      - runtime
+
+  cloudROSBagJobSpec:
+    type: object
+    properties:
+      name:
+        type: string
+      recordOptions:
+        "$ref": "#/definitions/rosbagRecordOptionsSpec"
+      overrideOptions:
+        "$ref": "#/definitions/rosbagOverrideOptionsSpec"
+    required:
+      - name
+      - recordOptions
+
+  deviceROSBagJobSpec:
+    type: object
+    properties:
+      name:
+        type: string
+      recordOptions:
+        "$ref": "#/definitions/rosbagRecordOptionsSpec"
+      uploadOptions:
+        "$ref": "#/definitions/rosbagUploadOptionsSpec"
+      overrideOptions:
+        "$ref": "#/definitions/rosbagOverrideOptionsSpec"
+    required:
+      - name
+      - recordOptions
+
+  rosbagRecordOptionsSpec:
+    type: object
+    oneOf:
+      - required:
+          - allTopics
+      - anyOf:
+          - required:
+              - topics
+          - required:
+              - topicIncludeRegex
+    properties:
+      allTopics:
+        type: boolean
+      topics:
+        type: array
+        items:
+          type: string
+      topicIncludeRegex:
+        type: array
+        items:
+          type: string
+      topicExcludeRegex:
+        type: string
+      maxMessageCount:
+        type: integer
+      node:
+        type: string
+      compression:
+        type: string
+        enum:
+          - BZ2
+          - LZ4
+      maxSplits:
+        type: integer
+      maxSplitSize:
+        type: integer
+      chunkSize:
+        type: integer
+      prefix:
+        type: string
+      maxSplitDuration:
+        type: integer
+
+  rosbagUploadOptionsSpec:
+    type: object
+    properties:
+      maxUploadRate:
+        type: integer
+        default: 1048576
+      purgeAfter:
+        type: boolean
+      uploadType:
+        type: string
+        enum:
+          - OnStop
+          - Continuous
+          - OnDemand
+        default: OnDemand
+      onDemandOpts:
+        type: object
+        "$ref": "#/definitions/rosbagOnDemandUploadOptionsSpec"
+
+  rosbagOnDemandUploadOptionsSpec:
+    type: object
+    properties:
+      timeRange:
+        type: object
+        properties:
+          from:
+            type: integer
+            default: 0
+          to:
+            type: integer
+            default: 0
+        required:
+          - from
+          - to
+    required:
+      - timeRange
+
+  rosbagOverrideOptionsSpec:
+    type: object
+    properties:
+      topicOverrideInfo:
+        type: array
+        items:
+          "$ref": "#/definitions/rosbagTopicOverrideInfoSpec"
+      excludeTopics:
+        type: array
+        items:
+          type: string
+
+  rosbagTopicOverrideInfoSpec:
+    type: object
+    oneOf:
+      - required:
+          - topicName
+          - recordFrequency
+      - required:
+          - topicName
+          - latched
+    properties:
+      topicName:
+        type: string
+      recordFrequency:
+        type: integer
+      latched:
+        type: boolean
+
+  stringMap:
+    type: object
+    additionalProperties:
+      type: string
+  organizationGUID:
+    type: string
+    pattern: "^org-[a-z]{24}$"
+  projectGUID:
+    type: string
+    pattern: "^project-([a-z0-9]{20}|[a-z]{24})$"
+  secretGUID:
+    type: string
+    pattern: "^secret-([a-z0-9]{20}|[a-z]{24})$"
+  diskGUID:
+    type: string
+    pattern: "^disk-([a-z0-9]{20}|[a-z]{24})$"
+  packageGUID:
+    type: string
+    pattern: "^pkg-([a-z0-9]{20}|[a-z]{24})$"
+  deploymentGUID:
+    type: string
+    pattern: "^dep-([a-z0-9]{20}|[a-z]{24})$"
+  networkGUID:
+    type: string
+    pattern: "^network-([a-z0-9]{20}|[a-z]{24})$"
+  uuid:
+    type: string
+    pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+
+  packageDepends:
+    properties:
+      kind:
+        const: package
+        default: package
+      nameOrGUID:
+        type: string
+      version:
+        type: string
+      guid:
+        type: string
+  deviceDepends:
+    properties:
+      kind:
+        const: device
+        default: device
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+  networkDepends:
+    properties:
+      kind:
+        const: network
+        default: network
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+  secretDepends:
+    properties:
+      kind:
+        const: secret
+        default: secret
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+  diskDepends:
+    properties:
+      kind:
+        const: disk
+        default: disk
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+  staticRouteDepends:
+    properties:
+      kind:
+        const: static-route
+        default: static-route
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+  deploymentDepends:
+    properties:
+      kind:
+        const: deployment
+        default: deployment
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+      wait:
+        type: boolean
+  managedServiceDepends:
+    properties:
+      kind:
+        const: managedservice
+        default: managedservice
+      nameOrGUID:
+        type: string
+      guid:
+        type: string
+
+
