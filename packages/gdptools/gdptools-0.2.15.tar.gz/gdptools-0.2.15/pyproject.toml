@@ -1,0 +1,163 @@
+[tool.poetry]
+name = "gdptools"
+version = "0.2.15"
+description = "Gdptools"
+authors = [
+    "Richard McDonald <rmcd@usgs.gov>",
+    "Anders Hopkins <ahopkins@usgs.gov>",
+    "August Schultz <arschultz@usgs.gov>"]
+license = "LICENSE.md"
+readme = "README.md"
+homepage = "https://code.usgs.gov/wma/nhgf/toolsteam/gdptools"
+repository = "https://code.usgs.gov/wma/nhgf/toolsteam/gdptools"
+documentation = "https://gdptools.readthedocs.io"
+packages = [
+    { include = "gdptools", from = "src" },
+    { include = "tests", format = "sdist"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved",
+]
+
+[tool.poetry.urls]
+Changelog = "https://code.usgs.gov/wma/nhgf/toolsteam/gdptools/-/blob/develop/HISTORY.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<=3.12"
+pandas = ">=2.0.0"
+numpy = "<2.0"
+geopandas = ">=0.13.0"
+Shapely = ">=2.0"
+pyproj = ">=3.3.0"
+xarray = ">=2024.3.0"
+netCDF4 = ">=1.5.8"
+zarr = ">=2.12.0"
+rasterio = ">=1.2.9"
+Bottleneck = ">=1.3.3"
+dask-geopandas = "0.4.1"
+dask = {extras = ["dataframe"], version = "^2024.7.1"}
+bottleneck = ">=1.3.8"
+joblib = ">=1.4.0"
+rioxarray = ">=0.13.0"
+fastparquet = ">=2024.2.0"
+scipy = "^1.13.0"
+pydantic = "^1.10.5"
+s3fs = "^2024.3.1"
+pystac = "^1.10.0"
+xpystac = "^0.1.3"
+statsmodels = "^0.14.0"
+tqdm = "^4.66.2"
+# Fixed pyarrow below because it was failing when building the docs.
+pyarrow = "<18.1.1"
+# Added this because there are conflicts between v1 and v2.
+urllib3 = "^1.26.0"
+
+[tool.poetry.scripts]
+gdptools = "gdptools.__main__:main"
+
+[tool.poetry.group.dev.dependencies]
+rioxarray = "^0.13.3"
+jupyter-book = "^1.0"
+pytest = "^8.0"
+safety = "^3.0"
+mypy = "^1.9"
+typeguard = "^4.2"
+xdoctest = {extras = ["colors"], version = "^1.1.0"}
+Sphinx = ">=4"
+sphinx-autobuild = "^2024.0"
+pre-commit = ">=2.20.0"
+flake8 = ">=4.0.4"
+black = ">=22.8.0"
+flake8-bandit = "^4.1.1"
+flake8-bugbear = ">=22.8.23"
+flake8-docstrings = "^1.6.0"
+pep8-naming = "^0.13.2"
+darglint = "^1.8.1"
+reorder-python-imports = ">3.11.0"
+pre-commit-hooks = "^4.3.0"
+sphinx-rtd-theme = ">=1.0.0"
+sphinx-click = "^5.0"
+Pygments = "^2.9.0"
+nox = ">=2021.10.1"
+nbconvert = "^7.0"
+bandit = "1.8.0"
+ipykernel = "^6.12.1"
+docutils = "^0.20"
+nbstripout = "^0.5.0"
+nox-poetry = ">=1.0.1"
+coverage = "^7.4"
+sphinxcontrib-bibtex = "^2.5.0"
+jupytext = "^1.14.1"
+pipreqs = "^0.5"
+bump2version = "^1.0.1"
+vulture = "^2.9.1"
+pydeps = "^1.12.17"
+graphviz = "^0.20.1"
+
+[tool.black]
+line-length = 120
+target-version = ["py310"]
+
+[tool.flake8]
+line-length = 120
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["gdptools"]
+omit = [
+    "src/gdptools/helpers_for_test.py",
+    "src/gdptools/fill_missing_vals_nearest_neighbor.py"
+]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+no_implicit_reexport = true
+pretty = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy", "numpy.typing.mypy_plugin"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = "noxfile"
+warn_unreachable = false
+disallow_untyped_decorators = false
+
+[build-system]
+requires = ["poetry_core"]
+build-backend = "poetry.core.masonry.api"
