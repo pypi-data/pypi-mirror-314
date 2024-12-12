@@ -1,0 +1,43 @@
+# ref: https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linode_mgmt"
+description = "Linode management python package"
+license = {file = "LICENSE"}
+authors = [
+  {name = "Shlomi Ben-David", email = "shlomi.ben.david@gmail.com"},
+]
+dynamic = [
+    "version",
+    "dependencies",
+    "readme"
+]
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = '>=3.9'
+
+[project.scripts]
+linode-mgmt = "linode_mgmt.__main__:main"
+
+[project.urls]
+Repository = "https://github.com/shlomibendavid/linode-mgmt"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "linode_mgmt.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+
+[tool.setuptools.exclude-package-data]
+"*" = ["*.pyc"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = true
