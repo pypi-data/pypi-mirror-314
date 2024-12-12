@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "graphrag_sdk"
+version = "0.3.4"
+license = "MIT"
+description = "Enables graph-based RAG and integration with LLMs for advanced querying and knowledge graph creation."
+authors = ["FalkorDB <info@falkordb.com>"]
+readme = "README.md"
+repository = "https://github.com/FalkorDB/GraphRAG-SDK"
+homepage = "http://RAG-SDK.readthedocs.io"
+keywords = ['RAG', 'Graph-RAG', 'KnowledgeGraph']
+
+[tool.poetry.dependencies]
+python = "^3.9.0"
+falkordb = "^1.0.9"
+typing-extensions = "^4.12.1"
+bs4 = "^0.0.2"
+pypdf = "^4.2.0"
+backoff = "^2.2.1"
+requests = "^2.32.3"
+python-abc = "^0.2.0"
+ratelimit = "^2.2.1"
+python-dotenv = "^1.0.1"
+fix-busted-json = "^0.0.18"
+ipykernel = "^6.29.5"
+vertexai = { version = "^1.49.0", optional = true } 
+ollama = { version = "^0.2.1", optional = true }
+openai = { version = "^1.35.9", optional = true }
+google-generativeai = { version = "^0.8.1", optional = true }
+
+[tool.poetry.extras]
+all = ["vertexai", "ollama", "openai", "google-generativeai"]
+ollama = ["ollama"]
+openai = ["openai"]
+vertexai = ["vertexai"]
+google-generativeai = ["google-generativeai"]
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.1"
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^7.3.7"
+sphinx-rtd-theme = "^2.0.0"
+pandas = "^2.2.2"
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
