@@ -1,0 +1,65 @@
+name: on-push
+
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - "[0-9]+.[0-9]+.[0-9]+"
+  pull_request:
+    branches:
+    - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  setup:
+    name: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+      - name: install hat package
+        shell: bash -l {0}
+        run: pip install .
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+      - name: developer install of hat package
+        shell: bash -l {0}
+        run: pip install .[test]
+      - name: run tests
+        shell: bash -l {0}
+        run: pytest
+
+  distribution:
+    name: distribution
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v2
+    - name: install hat package
+      shell: bash -l {0}
+      run: pip install .
+    - name: build distributions
+      run: |
+        pip install build
+        python -m build
+    - name: publish a Python distribution to PyPI
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
