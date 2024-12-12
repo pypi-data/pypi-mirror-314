@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "dtx-assessment-api"
+version = "0.10.1"  # Should be same as VERSION file
+description = "detoxio.ai - Assessment Findings to Platform syncup api client"
+authors = ["detoxio.ai <hello@detoxio.ai>"]
+readme = "README.md"
+license = "Apache-2.0"
+homepage = "https://detoxio.ai"
+documentation = "https://docs.detoxio.ai"
+classifiers = [
+        "Topic :: Security",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+[tool.poetry-dynamic-versioning]
+enable = true
+
+[tool.poetry-dynamic-versioning.from-file]
+source = "VERSION"
+
+[tool.poetry.dependencies]
+python = "<4.0,>=3.10"
+requests = "^2.32.3"
+pydantic = "^2.8.2"
+detoxio-api-protocolbuffers-python = "*"
+detoxio_api_grpc_python = "*"
+
+[[tool.poetry.source]]
+name = "buf"
+url = "https://buf.build/gen/python"
+priority = "supplemental"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
