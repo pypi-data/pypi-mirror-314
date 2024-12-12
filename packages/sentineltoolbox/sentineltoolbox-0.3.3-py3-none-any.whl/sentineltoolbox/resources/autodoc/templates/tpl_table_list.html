@@ -1,0 +1,17 @@
+<table class="{{ kwargs.get('identifier', 'lst') }}">
+    {% if kwargs.get("headers") %}
+    <tr>
+    {% for item in kwargs["headers"] %}
+        <th>{{ item }}</th>
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% for item in obj %}
+    <tr>
+        {% for col in item %}
+        <td>{{ extractor.html(col)|safe }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>

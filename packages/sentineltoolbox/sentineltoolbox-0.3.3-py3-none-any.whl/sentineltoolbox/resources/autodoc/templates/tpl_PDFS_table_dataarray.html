@@ -1,0 +1,83 @@
+<!-- keep in mind https://github.com/mwouts/itables/tree/main -->
+
+{% set ellipsis = kwargs["ellipsis"] %}
+{% set _ = extractor.to_str %}
+{% if ellipsis %}
+    <!-- Reset ellipsis data -->
+    {% set _ = ellipsis.init() %}
+    {% set all_paths = extractor.all_paths(obj) %}
+    {% set _ = ellipsis.prune(all_paths) %}
+{% endif %}
+
+<div class="variables">
+    <table class="grouped_data eogroup">
+        <tr>
+            <th class="name">Short Name <br><span class="unit">unit</span> </th>
+            <th class="long_name">Long Name</th>
+            <th class="dimensions">Dimensions</th>
+            <th class="range">Data Range<br><span class="storage">Storage Range<br>fill_value</span></th>
+            <th class="type">Data Type<br><span class="storage">Storage Type</span></th>
+        </tr>
+
+        <tr>
+            <td class="name">{{ obj.name }}<br><span class="unit">{{ obj.attrs["units"] }}</span></td>
+            <td>{{ extractor.html(extractor.description(None, None, ellipsis=ellipsis, obj=obj))|safe }}</td>
+            <td class="dimensions">{{ extractor.variable_dims(obj.dims, ellipsis=ellipsis)|join('<br>'|safe) }}</td>
+            <td>{{ _(extractor.variable_range(obj)) }}<br>
+                <span class="storage">
+                    {{ _(extractor.variable_storage_range(obj)) }}
+                    {% if fv != None %}
+                    <br> {{ _(fv) }}
+                    {% endif %}
+                </span>
+            </td>
+            <td>{{ obj.dtype }} <br>
+                <span class="storage">{{ _(extractor.variable_storage_type(obj)) }}</span>
+            </td>
+        </tr>
+
+</table>
+
+
+<!-- Attribute table for **all** groups -->
+{% if obj.attrs %}
+<h5>Attributes</h5>
+<table class="grouped_data metadata">
+
+    <tr>
+        <th class="name">Name</th>
+        <th class="description">Description</th>
+        <th class="details">Note<br><span class="sample">(show value if constant)</span></th>
+    </tr>
+
+    {% for key, value in extractor.ellipse_attrs(obj.attrs, "", ellipsis=ellipsis) %}
+        {% with key=key, value=value, extractor=extractor, kwargs=kwargs %}
+        {% include "tpl_PDFS_tr_attribute.html" %}
+        {% endwith %}
+    {% endfor %} <!-- for key/val -->
+</table>
+{% endif %}  <!-- group.attrs -->
+
+{% set flags = extractor.to_flag_dict(obj, obj.name) %}
+{% if flags %}
+
+<table class="grouped_data metadata">
+    <tr>
+        <th>Value</th>
+        <th>Name<br>(Meaning)</th>
+        <th>Description</th>
+    </tr>
+
+
+
+    <tr class="group"><td colspan="3" class="name">{{ extractor.path(varpath, ellipsis=ellipsis) }}</td></tr>
+    {% for attrs in flags.values() %}
+    <tr>
+        <td>{{ attrs["value"] }}</td>
+        <td>{{ attrs["name"] }}</td>
+        <td>{{ attrs["description"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}

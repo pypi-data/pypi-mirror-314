@@ -1,0 +1,40 @@
+{% set ellipsis = kwargs["ellipsis"] %}
+
+<!-- Variable summary (name, short_name, long_name, ...) for **all** groups -->
+<div class="variables">
+    <table class="grouped_data eogroup">
+        <tr>
+            <th class="name">Short Name <br><span class="unit">unit</span> </th>
+            <th class="long_name">Long Name</th>
+            <th class="dimensions">Dimensions</th>
+            <th class="range">Data Range<br><span class="storage">Storage Range<br>fill_value</span></th>
+            <th class="type">Data Type<br><span class="storage">Storage Type</span></th>
+        </tr>
+
+{% for group in extractor.ellipse_groups(obj, ellipsis=ellipsis) %}
+    {% if extractor.contains_variables(group, exclude_flags=False) %}
+    <tr class="group">
+        <td class="name" colspan="5">{{ extractor.path(group.path, ellipsis=ellipsis) }}</td>
+    </tr>
+    {% set doc=extractor.documentation(obj, group.path, ellipsis=ellipsis) %}
+
+    {% if doc %}
+    <tr class="group_doc">
+        <td class="name" colspan="5">{{ doc }}</td>
+    </tr>
+    {% endif %}
+
+    {% set variables = extractor.iter_variables(obj, group.path, ellipsis=ellipsis, exclude_flags=True) %}
+
+    {% for var_path, variable in variables %}
+        {% with product=obj, variable=variable, path=var_path, extractor=extractor, kwargs=kwargs %}
+        {% include "tpl_PDFS_tr_variable.html" %}
+        {% endwith %}
+    {% endfor %}
+
+    {% endif %}
+{% endfor %}
+</table>
+
+<span class="coordinate name">*variable</span>: this variable is a coordinate
+</div>

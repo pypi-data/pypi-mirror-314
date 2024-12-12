@@ -1,0 +1,39 @@
+{% set ellipsis = kwargs["ellipsis"] %}
+{% set attributes_to_ignore = kwargs["attributes_to_ignore"] %}
+
+{% if extractor.has_attrs(obj) %}
+
+<table class="grouped_data metadata">
+
+    <tr>
+        <th class="name">Name</th>
+        <th class="description">Description</th>
+        <th class="details">Note<br><span class="sample">(show value if constant)</span></th>
+    </tr>
+
+{% for group in extractor.ellipse_groups(obj, ellipsis=ellipsis) %}
+    {% if extractor.has_attrs(group, ignore_list=attributes_to_ignore, recursive=False) %}
+    <tr class="group"><td colspan="3" class="name">{{ extractor.path(group.path, ellipsis=ellipsis) }}</td></tr>
+
+    {% for key, value in extractor.ellipse_attrs(group.attrs, group.path, ellipsis=ellipsis) %}
+        {% with key=key, value=value, extractor=extractor, kwargs=kwargs %}
+        {% include "tpl_PDFS_tr_attribute.html" %}
+        {% endwith %}
+    {% endfor %} <!-- for key/val -->
+
+    {% endif %}  <!-- group.attrs -->
+    {% endfor %} <!-- for group -->
+</table>
+{% endif %} <!-- has attrs -->
+
+
+
+
+{% set show_sample=[
+    "eopf:type", "eopf:baseline", "eopf:image_size", "eopf:instrument_mode",
+    "eo:bands",
+    "instrument", "mission", "title",
+    "data_information",
+    "processing:level",
+    "sat:platform_international_designator", "sat:orbit_state",
+]%}
