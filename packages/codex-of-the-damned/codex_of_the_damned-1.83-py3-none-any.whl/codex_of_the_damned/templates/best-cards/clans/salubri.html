@@ -1,0 +1,90 @@
+{% extends "best-cards/_layout.html" %}
+{% import "best-cards/_layout_card_column.html" as layout with context%}
+
+{% block content %}
+<h1>{{ salubri }} Salubri</h1>
+<div class="insert tip">
+    <p>
+        {% trans trimmed
+        lost_kindred_expansion=external(
+        "https://www.blackchantry.com/products/current-products/lost-kindred/",
+        _("Lost Kindred expansion")
+        ),
+        saulot_friends=link("/archetypes/saulot-wall"),
+        spirit_marionette_arch=link("/archetypes/spirit-marionette"),
+        saulot_the_wanderer=card("Saulot, The Wanderer"),
+        spirit_marionette=card("Spirit Marionette")
+        %}
+        The Salubri and their antitribu are a rare sight in tournaments.
+        This could change following the {{ lost_kindred_expansion }} release in 2018.
+        They have unique disciplines, respectively {{ obe }} and {{ val }}.
+        For now, they are seen in mainly two archetypes: {{ saulot_friends }},
+        a wall deck featuring {{ saulot_the_wanderer }}, and {{ spirit_marionette_arch }},
+        using {{ obe }} and the eponymous {{ spirit_marionette }}.
+        {% endtrans %}
+    </p>
+</div>
+
+{% call layout.card_column("Repulsion", decks=33, copies="1-4") %}
+{% trans trimmed %}
+A good stealth modifier that can become permanent.
+An excellent way for Salubri to bump up their game as they do not have access
+to many other stealth enhancer given their clan disciplines.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Spirit Marionette", decks=29, copies="4-11") %}
+{% trans trimmed
+an_archetype_of_its_own=link("/archetypes/spirit-marionette", _("an archetype of its own"))
+%}
+An iconic card of the {{ obe }} discipline, it has brought up
+{{ an_archetype_of_its_own }}.
+Stealing an opponent minion is always good, the central issue is to abuse,
+cripple or destroy it afterwards.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Gift of Sleep", decks=25, copies="1-4") %}
+{% trans trimmed %}
+A second stealth enhancer, still at no cost, a good card for {{ OBE }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Saulot, The Wanderer", decks=23, copies="3-5") %}
+{% trans trimmed %}
+Star of the Salubri clan, Saulot has both {{ OBE }} and {{ VAL }} at superior,
+along a nice set of disciplines. His abilities are also impressive.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Renewed Vigor", decks=22, copies="3-7") %}
+{% trans trimmed giant_s_blood=card("Giant's Blood") %}
+Bringing back any big capacity vampire to full capacity is a good way to bloat, but also
+a useful bargaining chip to barter for big favors or even a game-changer.
+This is the only card of the game allowing this along {{ giant_s_blood }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Anesthetic Touch", decks=20, copies="3-9") %}
+{% trans trimmed immortal_grapple=card("Immortal Grapple") %}
+An excellent <em>combat ends</em> at superior {{ OBE }},
+it is a bit weak at inferior {{ obe }}. The fact that it's still a hand strike
+makes it a good counter to {{ immortal_grapple }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Sense Death", decks=18, copies="1-5") %}
+{% trans trimmed deep_song=card("Deep Song") %}
+An excellent rush action, with high maneuverability and a most desirable +1 stealth.
+It is even played in some {{ ani }} decks as a stealthy alternative to {{ deep_song }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Neutral Guard", decks=13, copies="2-6") %}
+{% trans trimmed saulot_the_wanderer=card("Saulot, The Wanderer") %}
+A good block denial at superior {{ OBE }} for a big capacity vampire like
+{{ saulot_the_wanderer }}.
+{% endtrans %}
+{% endcall %}
+
+{% endblock %}

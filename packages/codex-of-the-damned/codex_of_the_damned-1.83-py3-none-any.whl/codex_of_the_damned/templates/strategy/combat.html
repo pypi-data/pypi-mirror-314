@@ -1,0 +1,426 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 id="combat">{{ _('Combat') }}</h1>
+<p>
+    {% trans trimmed
+    bums_rush=card("Bum’s Rush"),
+    rush_decks=link("/strategy/archetype-categories", _("rush decks"), 'rush')
+    %}
+    Combat occurs when a block succeeds, but can also be provoked directly using actions
+    like {{ bums_rush }}: because of this card, other actions with similar effects
+    are commonly called <strong>rush actions</strong>.
+    It also gave its name to an entire category of decks: the {{ rush_decks }}.
+    {% endtrans %}
+</p>
+<h2 id="posture">{{ _('Posture') }}</h2>
+{% trans trimmed
+a_b=link("/strategy/fundamentals", _("A&B"), 'AB'),
+bloat=link("/strategy/bloat", _("bloat")),
+table_balance=link("/strategy/table-talk", _("table balance"), "table-balance"),
+rush_decks=link("/strategy/archetype-categories", _("Rush decks"), "rush"),
+blood_pool_and_grinding_beads=link(
+"/strategy/articles/basic/blood-pool-and-grinding-beads",
+_("Blood, Pool and Grinding Beads")
+)
+%}
+<p>
+    Combat does not help reducing the prey's pool, at least not directly.
+    There are basically three strategic postures a deck can adopt when it comes
+    to combat:
+<ul>
+    <li><strong>Disabling</strong> the opponents minions is the most aggressive one.
+        This slows down the opponents, but does not help to achieve
+        victory by itself. On the other hand, it gives incredible control over the
+        {{ table_balance }}. {{ rush_decks }} specialize in that aspect.
+    </li>
+    <li><strong>Grinding</strong> is a more balanced posture. The idea is to target
+        the prey's blood and not only its pool, focusing on making sure the
+        opponents systematically lose more blood. Paul Jones' article
+        {{ blood_pool_and_grinding_beads }} explains the grinding posture
+        in details.
+    </li>
+    <li><strong>Resisting</strong> is the last posture: the idea is to just
+        be able to resist the two other postures well enough, either with defensive
+        combat options, or just relying on speed or number of minions.
+    </li>
+</ul>
+</p>
+{% endtrans %}
+<h2 id="dealing-damage">{{ _('Dealing damage') }}</h2>
+<p>
+    {% trans trimmed
+    aid_from_bats=card("Aid from Bats"),
+    carrion_crows=card("Carrion Crows"),
+    theft_of_vitae=card("Theft of Vitae")
+    %}
+    On the discipline side, {{ pot }} and {{ thn }} are great at dealing high damage.
+    {{ ani }} has a strong combination with {{ aid_from_bats }} and
+    {{ carrion_crows }}, giving 3 damages with a press.
+    {{ tha }} has the excellent {{ theft_of_vitae }},
+    which provides a non-preventable 4 blood differential at no cost.
+    Many disciplines give access to aggravated damage options:
+    {% endtrans %}
+</p>
+<ul>
+    <li>
+        {{ pro }} {{ _('with') }} {{ card("Wolf Claws") }},
+        {{ card("Claws of the Dead") }},
+        {{ card("Bone Spur") }},
+        {{ card("Donnybrook") }} ({{ _("Anarch") }}),
+        {{ card("Sculpt the Flesh") }} ( {{ tzimisce }} ),
+        {{ _('and') }}
+        {{ card("Body Flare") }}.
+    </li>
+    <li>
+        {{ vic }} {{ _('with') }}
+        {{ card("Chiropteran Marauder") }} {{ _('and') }}
+        {{ card("Breath of the dragon") }}.
+    </li>
+    <li>
+        {{ tha }} {{ _('with') }}
+        {{ card("Walk of Flame") }},
+        {{ card("Flames of the Netherworld") }}
+        {{ _('and') }} {{ card("Burst of Sunlight") }}.
+    </li>
+    <li>
+        {{ val }} {{ _('with') }}
+        {{ card("Eye of Unforgiving Heaven") }}
+        {{ _('and') }} {{ card("Sword of the Righteous") }}.
+    </li>
+    <li>
+        {{ dai }} {{ _('with') }}
+        {{ card("Flames of the Netherworld") }}
+        {{ _('and') }} {{ card("Conflagration") }}.
+    </li>
+    <li>
+        {{ qui }} {{ _('with') }}
+        {{ card("Baal's Bloody Talons") }}
+        {{ _('and') }} {{ card("Taste of Death") }}.
+    </li>
+    <li>{{ nec }} {{ _('with') }} {{ card("Breath of Thanatos") }}.</li>
+    <li>{{ chi }} {{ _('with') }} {{ card("Mayaparisatya") }}.</li>
+    <li>{{ abo }} {{ _('with') }} {{ card("Devil Channel: Hands") }}.</li>
+    <li>{{ for }} {{ _('with') }} {{ card("Dawn Operation") }}.</li>
+    <li>
+        {% trans trimmed
+        raking_talons=card("Raking Talons")
+        %}
+        Gargoyles {{ gargoyle }} with {{ raking_talons }}.
+        {% endtrans %}
+    </li>
+</ul>
+<div class="insert tip">
+    <h3>{{ _('Using aggravated damage') }}</h3>
+    {% trans trimmed
+    claws_of_the_dead=card("Claws of the Dead"),
+    rötschreck=card("Rötschreck")
+    %}
+    <p>
+        Using aggravated damage while acting is tricky,
+        as the acting minion has to choose <strong>and pay</strong>
+        for his strike before the reacting minion.
+        Cards that make the damage of a strike aggravated, like {{ claws_of_the_dead }},
+        are superior in this aspect, as one can wait to see if the reacting minion
+        will play a combat ends or a dodge before using the card.
+    </p>
+    <p>
+        Using aggravated damage on the reacting side is easier.
+        Moreover, it allows the use of {{ rötschreck }}, sending the opponent into torpor
+        whatever his strike. The only prerequisite is for the range to be right
+        for the aggravated strike to be able to land in theory.
+    </p>
+    {% endtrans %}
+</div>
+{% trans trimmed
+arms_of_the_abyss=card("Arms of the Abyss"),
+devil_channel_back=card("Devil Channel: Back"),
+octopod=card("Octopod"),
+target_vitals=card("Target Vitals")
+%}
+<p>
+    Apart from dealing more damage each strike, <strong>additional strikes</strong>
+    are a good option to deliver more damage each combat. They are, however,
+    mostly available only for {{ cel }} users, with the notable exceptions of
+    {{ arms_of_the_abyss }} ({{ obt }}),
+    {{ devil_channel_back }} ({{ abo }}) and {{ octopod }} ({{ san }}).
+</p>
+<p>
+    Finally, {{ target_vitals }} is an excellent option
+    to increase damage, available for every minion at no cost.
+</p>
+{% endtrans %}
+<div class="insert tip">
+    <h3>{{ _('Weapons') }}</h3>
+    <p>
+        {% trans trimmed %}
+        Weapons are also a good way to improve damage.
+        There are a lot of weapons available, here are the most efficient and most played:
+        {% endtrans %}
+    </p>
+    <ul>
+        <li>
+            {% trans trimmed
+            weighted_walking_stick=card("Weighted Walking Stick")
+            %}
+            <b>{{ weighted_walking_stick }}:</b>
+            A weapon that can be wielded without losing an action to equip it.
+            It provides a total of three additional damages at no cost, an excellent ratio.
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            magnum=card(".44 Magnum"),
+            concealed_weapon=card("Concealed Weapon")
+            %}
+            <b>{{ magnum }}:</b>
+            An additional damage each strike, together with a manoeuver
+            to keep the range long an avoid damage.
+            This is also the best weapon {{ concealed_weapon }}
+            can get out, thus avoiding to loose an action (and risking interception)
+            to equip with it.
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            ivory_bow=card("Ivory Bow")
+            %}
+            <b>{{ ivory_bow }}:</b> Although unique, 1 pool for an aggravated ranged damage
+            each strike is a bargain.
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            sniper_rifle=card("Sniper Rifle")
+            %}
+            <b>{{ sniper_rifle }}:</b>
+            Although only useful when blocking, its ability to set the range
+            is an excellent option to avoid damage.
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            assault_rifle=card("Assault Rifle"),
+            magnum=card(".44 Magnum"),
+            alastor=card("Alastor")
+            %}
+            <b>{{ assault_rifle }}:</b>
+            A stronger version of the {{ magnum }}.
+            The 5 pool cost is prohibitive, but if it can be reduced
+            by bringing it in game using {{ alastor }},
+            for example.
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            blade_of_bellona=card("Blade of Bellona")
+            %}
+            <b>{{ blade_of_bellona }}:</b>
+            An additional damage and optional manoeuver at no cost, a bargain for
+            Salubri antitribu {{ salubri_antitribu }}.
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            ak_47=card("AK 47")
+            %}
+            <b>{{ ak_47 }}:</b>
+            A more brutal version of the {{ assault_rifle }}. The latter is often preferred
+
+            {% endtrans %}
+        </li>
+        <li>
+            {% trans trimmed
+            blade_of_bellona=card("Blade of Bellona")
+            %}
+            <b>{{ blade_of_bellona }}:</b>
+            An additional damage and optional manoeuver at no cost, a bargain for
+            Salubri antitribu {{ salubri_antitribu }}.
+            {% endtrans %}
+        </li>
+    </ul>
+</div>
+<h2 id="defence">{{ _('Defence') }}</h2>
+<p>
+    {% trans trimmed %}
+    The easiest defense for combats is to avoid them altogether using a
+    <em>Strike: Combat Ends</em>, <strong>S:CE</strong> for short.
+    Multiple disciplines give access to this option:
+    {% endtrans %}
+</p>
+<ul>
+    <li>
+        {{ pre }} {{ _('with') }}
+        {{ card("Majesty") }},
+        {{ card("Force of Personality") }},
+        {{ card("Catatonic Fear") }},
+        {{ card("Charismatic Aura") }} ({{ pre }}{{ aus }}),
+        {{ card("Staredown") }} {{ _('and') }}
+        {{ card("Unholy Penance") }}.
+    </li>
+    <li>
+        {{ pro }} {{ _('with') }}
+        {{ card("Earth Meld") }},
+        {{ card("Form of Mist") }} {{ _('and') }}
+        {{ card("Rapid Change") }}.
+    </li>
+    <li>
+        {{ obt }} {{ _('with') }}
+        {{ card("Oubliette") }} {{ _('and') }}
+        {{ card("Shadow Body") }}.
+    </li>
+    <li>{{ ani }}{{ for }} {{ _('with') }} {{ card("Alpha Glint") }}.</li>
+    <li>{{ ANI }} {{ _('with') }} {{ card("Flesh Bond") }}.</li>
+    <li>{{ OBF }} {{ _('with') }} {{ card("No Trace") }}.</li>
+    <li>{{ VIC }} {{ _('with') }} {{ card("Meld with the Land") }}.</li>
+    <li>
+        {{ CEL }} {{ _('with') }}
+        {{ card("Preternatural Evasion") }}.
+    </li>
+    <li>
+        {{ NEC }} {{ _('with') }}
+        {{ card("Spiritual Intervention") }}.
+    </li>
+    <li>{{ SPI }} {{ _('with') }} {{ card("Leapfrog") }}.</li>
+    <li>
+        {{ pre }}{{ ser }} {{ _('with') }}
+        {{ card("Serpent's Numbing Kiss") }}.
+    </li>
+</ul>
+<p>
+    {% trans trimmed
+    flash_grenade=card("Flash Grenade"),
+    obedience=card("Obedience"),
+    mental_maze=card("Mental Maze")
+    %}
+    It is worth noting that {{ flash_grenade }}
+    is an option for any minion, and also that big capacity vampires have access to
+    {{ dom }} {{ obedience }} and
+    {{ OBF }} {{ mental_maze }} to avoid combat altogether,
+    although only when reacting to an action.
+    {% endtrans %}
+</p>
+<div class="insert tip">
+    {% trans trimmed
+    nsa_trio=card("NSA Trio"),
+    immortal_grapple=card("Immortal Grapple"),
+    psyche=card("Psyche!"),
+    telepathic_tracking=card("Telepathic Tracking"),
+    relentless_reaper=card("Relentless Reaper"),
+    sanguine_entrapment=card("Sanguine Entrapment"),
+    hunters_mark=card("Hunter's Mark"),
+    rush_decks=link("/strategy/archetype-categories", _("Rush decks"), "rush")
+    %}
+    <h3>How to deal with Strike: Combat Ends (S:CE)</h3>
+    <p>
+        S:CE are a real issue for combat-focused deck. Some solutions exist to deal with them.
+    </p>
+    <ul>
+        <li>
+            {{ nsa_trio }} is available to everyone but
+            is not an option for {{ rush_decks }},
+            as their combat may not be the result of a block.
+        </li>
+        <li>
+            Some disciplines have a counter that let them prevent S:CE or
+            continue the combat after a S:CE:
+            {{ pot }} with {{ immortal_grapple }},
+            {{ CEL }} with {{ psyche }},
+            {{ AUS }} with {{ telepathic_tracking }},
+            {{ THN }} with {{ relentless_reaper }},
+            {{ CEL }}{{ QUI }} with {{ sanguine_entrapment }} and
+            {{ CEL }}{{ THA }} with {{ hunters_mark }}.
+        </li>
+    </ul>
+    <p>
+        Other than that, the only option is to get into enough combats
+        to exhaust the S:CE on the defence side.
+    </p>
+    {% endtrans %}
+</div>
+<p>
+    {% trans trimmed %}
+    <strong>Damage prevention</strong> is another important aspect of combat.
+    It is useful in defence, but also on the offence: reducing the loss of blood
+    is always important. {{ for }} is the key discipline for damage prevention,
+    and only a few damage prevention cards exist outside this discipline:
+    {% endtrans %}
+<ul>
+    <li>
+        {% trans trimmed
+        glancing_blow=card("Glancing Blow")
+        %}
+        {{ glancing_blow }} prevents only one damage,
+        that makes it a viable option only for saving an ally.
+        {% endtrans %}
+    </li>
+    <li>
+        {{ card("Rockheart") }} {{ _('and') }}
+        {{ card("Stonestrength") }} ({{ VIS }})
+    </li>
+    <li>{{ card("Rego Motum") }} ({{ tha }})</li>
+    <li>{{ card("Apparition") }} ({{ chi }})</li>
+    <li>{{ card("Flesh of Marble") }} ({{ pro }})</li>
+    <li>{{ card("Horrid Form") }} ({{ VIC }})</li>
+    <li>
+        {{ card("Leathery Hide") }}
+        {{ gangrel_antitribu }}
+    </li>
+</ul>
+</p>
+{% trans trimmed
+dodge=card("Dodge"),
+coma=card("Coma"),
+entombment=card("Entombment")
+%}
+<p>
+    <strong>Dodging</strong> is also a good defensive option, and the simple
+    {{ dodge }} is available for everyone. It is weaker than ending the combat with a
+    S:CE, but it is still a viable defensive option when S:CE are not available.
+</p>
+<p>
+    Finally, two combat cards can <strong>send a vampire into torpor directly</strong>:
+    {{ coma }} ({{ dem }}) and {{ entombment }} ({{ OBT }}).
+    They're too costly to be used effectively as an offensive option,
+    but they are good defensive options as they can act
+    as a deterrent against combat decks.
+</p>
+{% endtrans %}
+<h2 id="range-management">{{ _('Range Management') }}</h2>
+<p>
+    {% trans trimmed %}
+    Getting the correct range is fundamental for combat.
+    Most combat module specialize in a given range,
+    either maintaining <strong>long range</strong>
+    to avoid the basic one damage any vampire can do,
+    or using strong <strong>short range</strong> strikes and effects.
+    Many cards provide <strong>maneuvers</strong> and many offensive combat module
+    use them to manage their range.
+    A few cards allow a vampire to <strong>set the range</strong> directly,
+    without letting the opponent the opportunity to maneuver:
+    {% endtrans %}
+</p>
+<ul>
+    <li>{{ card("Sniper Rifle") }}</li>
+    <li>{{ card("High Ground") }} ({{ FLIGHT }})</li>
+    <li>{{ card("Selective Silence") }} ({{ QUI }})</li>
+    <li>{{ card("Shadow Step") }} ({{ OBT }})</li>
+    <li>{{ card("Cold Aura") }} ({{ nec }})</li>
+    <li>
+        {{ card("Charge of the Buffalo") }} ({{ spi }})
+    </li>
+    <li>{{ card("Brick by Brick") }} ({{ VIS }})</li>
+    <li>
+        {{ card("Giulia Giovanni Abruzzina") }}
+        {{ giovanni }}
+    </li>
+    <li>
+        {{ card("Omael Kuman") }}
+        {{ assamite }}
+    </li>
+    <li>
+        {{ card("Storm Sewers") }}
+        {{ nosferatu }}
+    </li>
+</ul>
+{% endblock %}
