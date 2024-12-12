@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "SiLAFramework.proto";
+
+package sila2.org.silastandard.test.observablecommandtest.v1;
+
+/* This is a test feature to test observable commands. It specifies various observable commands and returns defined answers to validate against. */
+service ObservableCommandTest {
+  /* Observable iteration, running NumberIterations times and returning the current count as intermediate result. */
+  rpc ObservableIteration (sila2.org.silastandard.test.observablecommandtest.v1.ObservableIteration_Parameters) returns (sila2.org.silastandard.CommandConfirmation) {}
+  /* Monitor the state of ObservableIteration */
+  rpc ObservableIteration_Info (sila2.org.silastandard.CommandExecutionUUID) returns (stream sila2.org.silastandard.ExecutionInfo) {}
+  /* Retrieve intermediate responses of ObservableIteration */
+  rpc ObservableIteration_Intermediate (sila2.org.silastandard.CommandExecutionUUID) returns (stream sila2.org.silastandard.test.observablecommandtest.v1.ObservableIteration_IntermediateResponses) {}
+  /* Retrieve result of ObservableIteration */
+  rpc ObservableIteration_Result(sila2.org.silastandard.CommandExecutionUUID) returns (sila2.org.silastandard.test.observablecommandtest.v1.ObservableIteration_Responses) {}
+  /* Echo the given value asynchronously after the specified delay */
+  rpc EchoValueAsync (sila2.org.silastandard.test.observablecommandtest.v1.EchoValueAsync_Parameters) returns (sila2.org.silastandard.CommandConfirmation) {}
+  /* Monitor the state of EchoValueAsync */
+  rpc EchoValueAsync_Info (sila2.org.silastandard.CommandExecutionUUID) returns (stream sila2.org.silastandard.ExecutionInfo) {}
+  /* Retrieve result of EchoValueAsync */
+  rpc EchoValueAsync_Result(sila2.org.silastandard.CommandExecutionUUID) returns (sila2.org.silastandard.test.observablecommandtest.v1.EchoValueAsync_Responses) {}
+}
+
+/* Parameters for ObservableIteration */
+message ObservableIteration_Parameters {
+  sila2.org.silastandard.Integer NumberIterations = 1;  /* Number of Iterations to perform */
+}
+
+/* Responses of ObservableIteration */
+message ObservableIteration_Responses {
+  sila2.org.silastandard.Integer IterationResponse = 1;  /* If the command ended successfully the response should be NumberIterations - 1 */
+}
+
+/* Intermediate responses of ObservableIteration */
+message ObservableIteration_IntermediateResponses {
+  sila2.org.silastandard.Integer CurrentIteration = 1;  /* Return the current iteration in progress, starting from 0 to NumberIterations (excluded). */
+}
+
+/* Parameters for EchoValueAsync */
+message EchoValueAsync_Parameters {
+  sila2.org.silastandard.Integer Value = 1;  /* The value to echo */
+  sila2.org.silastandard.Integer DelayInMs = 2;  /* The delay in milliseconds */
+}
+
+/* Responses of EchoValueAsync */
+message EchoValueAsync_Responses {
+  sila2.org.silastandard.Integer ReceivedValue = 1;  /* The Received Value */
+}
