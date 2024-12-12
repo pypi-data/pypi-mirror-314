@@ -1,0 +1,895 @@
+Metadata-Version: 2.1
+Name: petaly
+Version: 0.0.8
+Summary: Python ETL tool
+Author-email: Pavel Rabaev <contact@petaly.org>
+Maintainer-email: Pavel Rabaev <contact@petaly.org>
+License:                                  Apache License
+                                   Version 2.0, January 2004
+                                http://www.apache.org/licenses/
+        
+           TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+        
+           1. Definitions.
+        
+              "License" shall mean the terms and conditions for use, reproduction,
+              and distribution as defined by Sections 1 through 9 of this document.
+        
+              "Licensor" shall mean the copyright owner or entity authorized by
+              the copyright owner that is granting the License.
+        
+              "Legal Entity" shall mean the union of the acting entity and all
+              other entities that control, are controlled by, or are under common
+              control with that entity. For the purposes of this definition,
+              "control" means (i) the power, direct or indirect, to cause the
+              direction or management of such entity, whether by contract or
+              otherwise, or (ii) ownership of fifty percent (50%) or more of the
+              outstanding shares, or (iii) beneficial ownership of such entity.
+        
+              "You" (or "Your") shall mean an individual or Legal Entity
+              exercising permissions granted by this License.
+        
+              "Source" form shall mean the preferred form for making modifications,
+              including but not limited to software source code, documentation
+              source, and configuration files.
+        
+              "Object" form shall mean any form resulting from mechanical
+              transformation or translation of a Source form, including but
+              not limited to compiled object code, generated documentation,
+              and conversions to other media types.
+        
+              "Work" shall mean the work of authorship, whether in Source or
+              Object form, made available under the License, as indicated by a
+              copyright notice that is included in or attached to the work
+              (an example is provided in the Appendix below).
+        
+              "Derivative Works" shall mean any work, whether in Source or Object
+              form, that is based on (or derived from) the Work and for which the
+              editorial revisions, annotations, elaborations, or other modifications
+              represent, as a whole, an original work of authorship. For the purposes
+              of this License, Derivative Works shall not include works that remain
+              separable from, or merely link (or bind by name) to the interfaces of,
+              the Work and Derivative Works thereof.
+        
+              "Contribution" shall mean any work of authorship, including
+              the original version of the Work and any modifications or additions
+              to that Work or Derivative Works thereof, that is intentionally
+              submitted to Licensor for inclusion in the Work by the copyright owner
+              or by an individual or Legal Entity authorized to submit on behalf of
+              the copyright owner. For the purposes of this definition, "submitted"
+              means any form of electronic, verbal, or written communication sent
+              to the Licensor or its representatives, including but not limited to
+              communication on electronic mailing lists, source code control systems,
+              and issue tracking systems that are managed by, or on behalf of, the
+              Licensor for the purpose of discussing and improving the Work, but
+              excluding communication that is conspicuously marked or otherwise
+              designated in writing by the copyright owner as "Not a Contribution."
+        
+              "Contributor" shall mean Licensor and any individual or Legal Entity
+              on behalf of whom a Contribution has been received by Licensor and
+              subsequently incorporated within the Work.
+        
+           2. Grant of Copyright License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              copyright license to reproduce, prepare Derivative Works of,
+              publicly display, publicly perform, sublicense, and distribute the
+              Work and such Derivative Works in Source or Object form.
+        
+           3. Grant of Patent License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              (except as stated in this section) patent license to make, have made,
+              use, offer to sell, sell, import, and otherwise transfer the Work,
+              where such license applies only to those patent claims licensable
+              by such Contributor that are necessarily infringed by their
+              Contribution(s) alone or by combination of their Contribution(s)
+              with the Work to which such Contribution(s) was submitted. If You
+              institute patent litigation against any entity (including a
+              cross-claim or counterclaim in a lawsuit) alleging that the Work
+              or a Contribution incorporated within the Work constitutes direct
+              or contributory patent infringement, then any patent licenses
+              granted to You under this License for that Work shall terminate
+              as of the date such litigation is filed.
+        
+           4. Redistribution. You may reproduce and distribute copies of the
+              Work or Derivative Works thereof in any medium, with or without
+              modifications, and in Source or Object form, provided that You
+              meet the following conditions:
+        
+              (a) You must give any other recipients of the Work or
+                  Derivative Works a copy of this License; and
+        
+              (b) You must cause any modified files to carry prominent notices
+                  stating that You changed the files; and
+        
+              (c) You must retain, in the Source form of any Derivative Works
+                  that You distribute, all copyright, patent, trademark, and
+                  attribution notices from the Source form of the Work,
+                  excluding those notices that do not pertain to any part of
+                  the Derivative Works; and
+        
+              (d) If the Work includes a "NOTICE" text file as part of its
+                  distribution, then any Derivative Works that You distribute must
+                  include a readable copy of the attribution notices contained
+                  within such NOTICE file, excluding those notices that do not
+                  pertain to any part of the Derivative Works, in at least one
+                  of the following places: within a NOTICE text file distributed
+                  as part of the Derivative Works; within the Source form or
+                  documentation, if provided along with the Derivative Works; or,
+                  within a display generated by the Derivative Works, if and
+                  wherever such third-party notices normally appear. The contents
+                  of the NOTICE file are for informational purposes only and
+                  do not modify the License. You may add Your own attribution
+                  notices within Derivative Works that You distribute, alongside
+                  or as an addendum to the NOTICE text from the Work, provided
+                  that such additional attribution notices cannot be construed
+                  as modifying the License.
+        
+              You may add Your own copyright statement to Your modifications and
+              may provide additional or different license terms and conditions
+              for use, reproduction, or distribution of Your modifications, or
+              for any such Derivative Works as a whole, provided Your use,
+              reproduction, and distribution of the Work otherwise complies with
+              the conditions stated in this License.
+        
+           5. Submission of Contributions. Unless You explicitly state otherwise,
+              any Contribution intentionally submitted for inclusion in the Work
+              by You to the Licensor shall be under the terms and conditions of
+              this License, without any additional terms or conditions.
+              Notwithstanding the above, nothing herein shall supersede or modify
+              the terms of any separate license agreement you may have executed
+              with Licensor regarding such Contributions.
+        
+           6. Trademarks. This License does not grant permission to use the trade
+              names, trademarks, service marks, or product names of the Licensor,
+              except as required for reasonable and customary use in describing the
+              origin of the Work and reproducing the content of the NOTICE file.
+        
+           7. Disclaimer of Warranty. Unless required by applicable law or
+              agreed to in writing, Licensor provides the Work (and each
+              Contributor provides its Contributions) on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+              implied, including, without limitation, any warranties or conditions
+              of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+              PARTICULAR PURPOSE. You are solely responsible for determining the
+              appropriateness of using or redistributing the Work and assume any
+              risks associated with Your exercise of permissions under this License.
+        
+           8. Limitation of Liability. In no event and under no legal theory,
+              whether in tort (including negligence), contract, or otherwise,
+              unless required by applicable law (such as deliberate and grossly
+              negligent acts) or agreed to in writing, shall any Contributor be
+              liable to You for damages, including any direct, indirect, special,
+              incidental, or consequential damages of any character arising as a
+              result of this License or out of the use or inability to use the
+              Work (including but not limited to damages for loss of goodwill,
+              work stoppage, computer failure or malfunction, or any and all
+              other commercial damages or losses), even if such Contributor
+              has been advised of the possibility of such damages.
+        
+           9. Accepting Warranty or Additional Liability. While redistributing
+              the Work or Derivative Works thereof, You may choose to offer,
+              and charge a fee for, acceptance of support, warranty, indemnity,
+              or other liability obligations and/or rights consistent with this
+              License. However, in accepting such obligations, You may act only
+              on Your own behalf and on Your sole responsibility, not on behalf
+              of any other Contributor, and only if You agree to indemnify,
+              defend, and hold each Contributor harmless for any liability
+              incurred by, or claims asserted against, such Contributor by reason
+              of your accepting any such warranty or additional liability.
+        
+           END OF TERMS AND CONDITIONS
+        
+           APPENDIX: How to apply the Apache License to your work.
+        
+              To apply the Apache License to your work, attach the following
+              boilerplate notice, with the fields enclosed by brackets "[]"
+              replaced with your own identifying information. (Don't include
+              the brackets!)  The text should be enclosed in the appropriate
+              comment syntax for the file format. We also recommend that a
+              file or class name and description of purpose be included on the
+              same "printed page" as the copyright notice for easier
+              identification within third-party archives.
+        
+           Copyright 2024, Pavel Rabaev
+        
+           Licensed under the Apache License, Version 2.0 (the "License");
+           you may not use this file except in compliance with the License.
+           You may obtain a copy of the License at
+        
+               http://www.apache.org/licenses/LICENSE-2.0
+        
+           Unless required by applicable law or agreed to in writing, software
+           distributed under the License is distributed on an "AS IS" BASIS,
+           WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+           See the License for the specific language governing permissions and
+           limitations under the License.
+Project-URL: Homepage, https://petaly.org
+Keywords: petaly,etl,ingestion,database
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Database :: Database Engines/Servers
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: cffi==1.17.1
+Requires-Dist: cryptography==43.0.1
+Requires-Dist: markdown-it-py==3.0.0
+Requires-Dist: mdurl==0.1.2
+Requires-Dist: mysql-connector-python==9.1.0
+Requires-Dist: numpy==2.1.1
+Requires-Dist: psycopg==3.2.1
+Requires-Dist: psycopg-binary==3.2.1
+Requires-Dist: pyarrow==17.0.0
+Requires-Dist: pycparser==2.22
+Requires-Dist: Pygments==2.18.0
+Requires-Dist: PyMySQL==1.1.1
+Requires-Dist: PyYAML==6.0.2
+Requires-Dist: rich==13.8.0
+Requires-Dist: typing_extensions==4.12.2
+
+![](https://raw.githubusercontent.com/petaly-labs/petaly/main/images/logo/petaly_logo_transparent.png)
+
+![](https://raw.githubusercontent.com/petaly-labs/petaly/main/docs/tutorial/recording/petaly_run_pipe.gif)
+
+## Welcome to Petaly!
+
+Petaly is an open-source ETL (Extract, Transform, Load) tool created by and for data professionals! 
+Our mission is to simplify data movement and transformation across different platforms with a tool that truly understands the needs of the data community.
+
+Designed for seamless data exchange, Petaly supports PostgreSQL, MySQL and CSV formats, with plans to expand and integrate additional open-source technologies. 
+It makes connecting and transferring data across various systems effortless. Petaly is user-friendly and requires no programming knowledge. 
+Data pipelines can be easily configured using the YAML format, making the tool ready to use immediately after installation.
+
+## Important
+This is an Alpha version of the Petaly project!
+
+## Getting Started
+
+Explore the documentation below:
+  
+<br>**[1. Installation](#petaly-install)**
+<br>**[2. Init config file and workspace](#petaly-init-config-workspace)**
+<br>**[3. Init a pipeline](#petaly-init-pipeline)**
+<br>**[4. Run the pipeline](#petaly-run-pipeline)**
+<br>**[5. Load CSV to Postgres](#petaly-load-csv-postgres-examples)** (Step-by-Step Tutorial)
+<br>**[6. Pipeline better explained](#petaly-pipeline-explained)**
+<br>**[7. More Examples](#petaly-pipeline-more-examples)**
+
+
+## Tool Features
+In the current version Petaly provides extract and load data between following endpoints:
+
+- CSV
+- MySQL (tested version 8.0+)
+- PostgreSQL (tested version 16+)
+
+## Requirements:
+- Python 3.10 - 3.12
+
+## Tested on
+Petaly was tested on: 
+
+OS: 
+- MacOS 14.6
+- Ubuntu 22.04.3 LTS
+
+It's possible that the tool will work with other operating systems and other databases and python versions. It just hasn't been tested yet.
+
+<a id="petaly-install"></a>
+
+## 1. Installation
+
+Petaly can be installed using `pip` or downloaded directly from this repository.
+
+### Install with pip
+```
+$ mkdir petaly
+$ cd petaly
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip3 install petaly
+
+```
+### Alternatively, download and install from GitHub
+
+```
+$ git clone https://github.com/petaly-labs/petaly.git
+$ cd petaly
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip3 install -r requirements.txt
+$ cd src/
+
+# Installation step completed
+```
+
+Check petaly installation.
+
+If petaly was installed with: 
+
+`$ pip install petaly`
+
+run:
+
+`$ python3 -m petaly --help` 
+
+If the repo was cloned from the GitHub  [petaly-labs](https://github.com/petaly-labs/petaly) repository navigate to the src folder first:
+
+`$ cd petaly/scr` and execute the command above
+
+<a id="petaly-init-config-workspace"></a>
+
+## 2. Initialize config file and workspace
+
+
+This tutorial explains the `petaly.ini` configuration file and how to create a workspace.
+
+### Init config file
+
+To create petaly.ini file run following step once:
+
+`$ python3 -m petaly init -c /absolute-path-to-your-config-dir/petaly.ini`
+
+After the configuration file has been created, either use it always with the [-c] argument
+
+`$ python -m petaly init -c /absolute-path-to-your-config-dir/petaly.ini`
+
+or to skip the [-c] argument, set the environment variable `PETALY_CONFIG_DIR`
+
+`$ export PETALY_CONFIG_DIR=/absolute-path-to-your-config-dir`
+
+### Init workspace
+
+This step must be performed only once after petaly installation. 
+
+If the workspace is already initialised, you can skip the following step and start configuring pipelines. If the workspace hasn't been initialised yet, first define following three parameters in petaly.ini
+
+```
+pipeline_dir_path=/absolute-path-to-pipelines-dir
+logs_dir_path=/absolute-path-to-logs-dir
+output_dir_path=/absolute-path-to-output-dir
+```
+And then initialize the workspace with following command. This command will simply create all these 3 paths defined above in the petaly.ini file.
+
+`$ python3 -m petaly init --workspace -c /path_to_config_dir/petaly.ini` 
+
+<a id="petaly-init-pipeline"></a>
+
+## 3. Init a pipeline
+
+
+Run the following command and follow the wizard steps to initialize a pipeline my_pipeline.
+No changes will be made to the target endpoint at this point.
+
+`$ python3 -m petaly init -p my_pipeline -c /path_to_config_dir/petaly.ini`
+
+Run the following command to configure your pipeline. Once the pipeline is created, you can modify it manually.
+
+For detailed instructions, check in the section: **[Pipeline explained](#petaly-pipeline-explained)**
+
+<a id="petaly-run-pipeline"></a>
+
+## 4. Run Pipeline
+
+Now you can run the pipeline my_pipeline and load data from the specified source. 
+Note that it will make changes, re/create tables in the target endpoint (database or folders)
+
+`$ python3 -m petaly run -p my_pipeline -c /path_to_config_dir/petaly.ini`
+
+<a id="petaly-load-csv-postgres-examples"></a>
+
+## 5. Load CSV file to Postgres
+
+In this tutorial, we’ll show you how to run a new pipeline and load a test CSV file into PostgreSQL.
+
+### 5.1. Before You Start
+
+- Ensure that Petaly is installed properly and your workspace is initialized. 
+- Refer to our [installation](#petaly-install) and [workspace setup guides](#petaly-init-config-workspace) if needed.
+
+- Install a PostgreSQL server locally, or use a Docker image for setup.
+
+### 5.2. Configure the Pipeline:
+
+- Run the following command to configure your pipeline. For detailed instructions, check the section below **[Pipeline explained](#petaly-pipeline-explained)**
+
+- `$ python3 -m petaly init -p csv_to_postgres -c /path_to_config_dir/petaly.ini`
+
+### 5.3. Download the test files:
+
+- Download the stocks and options CSV files from the repository. [./tests/data/csv/*](./tests/data/csv/) and store it under `/your-directory-path-to-csv-files`
+- unzip it under linux or mac with: `gunzip options.csv.gz`, `gunzip stocks.csv.gz` 
+
+### 5.4. Set Up the Pipeline:
+
+- Use `csv` as the source and `postgres` as the target. Follow the configuration wizard.
+
+- Specify objects for `stocks` and `options`, and provide the appropriate paths in object_source_dir and file_names inside.
+
+### 5.5. Run the Pipeline:
+
+- Execute the pipeline using the configured settings:
+
+- `$ python3 -m petaly run -p csv_to_postgres -c /path_to_config_dir/petaly.ini`
+
+
+### 5.6 CSV to Postgres Full Examples
+
+Use the wizard to create the appropriate pipeline skeleton, as different connector types require specific parameters.
+
+Once the pipeline is created, you can modify it using editors like `vi`, `nano`, or any other text editor.
+
+The following examples are provided for reference only. For detailed instructions, and other examples check the section below **[Pipeline explained](#petaly-pipeline-explained)**
+
+#### CSV to Postgres
+```
+pipeline:
+  pipeline_attributes:
+    pipeline_name: csv_to_psql
+    is_enabled: true
+  source_attributes:
+    connector_type: csv
+  target_attributes:
+    connector_type: postgres
+    database_user: root
+    database_password: db-password
+    database_host: localhost
+    database_port: 5432
+    database_name: petalydb
+    database_schema: petaly_tutorial
+  data_attributes:
+    use_data_objects_spec: only
+    object_default_settings:
+      header: true
+      columns_delimiter: ","
+      quote_char: none-quote
+---
+data_objects_spec:
+- object_spec:
+    object_name: stocks
+    destination_object_name:
+    recreate_destination_object: true
+    cleanup_linebreak_in_fields: false
+    exclude_columns:
+    -
+    object_source_dir: /your-directory-path-to-csv-files
+    file_names:
+    - stocks.csv
+- object_spec:
+    object_name: options
+    destination_object_name:
+    recreate_destination_object: true
+    cleanup_linebreak_in_fields: false
+    exclude_columns:
+    -
+    object_source_dir: /your-directory-path-to-csv-files
+    file_names:
+    - options.csv
+```
+
+<a id="petaly-pipeline-explained"></a>
+
+## 6. Pipeline explained
+
+This tutorial provides a step-by-step guide for getting started with Petaly after installation. It begins with an explanation of the petaly.ini configuration file and then dives into the details of the pipeline.yaml file.
+
+### Pipeline configuration
+
+To avoid mistakes during configuration, it is recommended to use the pipeline wizard. The configuration differs depending on the endpoints.
+
+To use pipeline wizard run following command:
+
+`$ python3 -m petaly init -p my_pipeline -c /path_to_config_dir/petaly.ini`
+
+### Pipeline structure
+After creating the pipeline, let's review the structure and each parameter.
+
+Here is an example of an export table from mysql to postgres
+
+The pipeline.yaml file contains two documents `pipeline:` and `data_objects_spec:`.
+
+The `pipeline:` document defines `pipeline_attributes:`, `source_attributes:`, `target_attributes:` and `data_attributes:`
+
+The second document in the pipeline.yaml file, separated by three dashes, is the `data_objects_spec:` document which contains the definition of each object/table.
+
+Here is the skeleton of the whole pipeline.yaml document:
+
+```
+pipeline:
+  pipeline_attributes:
+    ....
+  source_attributes:
+    ....
+  target_attributes:
+    ....
+  data_attributes:
+    ....
+--- 
+data_objects_spec:[] 
+```
+
+### Pipeline Main Blocks:
+
+The structure of a pipeline definition is explained in the following sections.
+
+#### pipeline_attributes
+
+```
+  pipeline_attributes:
+    # The name of the pipeline must be unique
+    pipeline_name: mysql_to_psql
+    
+    # True indicates that the pipeline is enabled. The default is true
+    is_enabled: true
+    
+```
+
+#### source_attributes
+
+The source attributes specify the source connections. The connection parameters may differ depending on the endpoint type.
+
+```
+  source_attributes:
+    # Specify endpoint type: mysql, postgres, csv
+    connector_type: mysql 
+    
+    # Specify database user name
+    database_user: root
+    
+    # Specify database user password in plain text
+    database_password: dbpassword
+    
+    # Specify the database hostname or IP address. It can also be remote, if access is given to the machine running petaly, or if an ssh tunnel is provided.
+    database_host: localhost
+    
+    # Specify database port
+    database_port: 3306
+    
+    # Specify database name
+    database_name: tutorial_db
+    
+```    
+#### target_attributes
+
+The target attributes specify the target connections. The connection parameters may differ depending on the endpoint type.
+
+```
+  target_attributes:    
+    
+    # Specify endpoint type: mysql, postgres, csv
+    connector_type: postgres
+    
+    # Specify database user name
+    database_user: postgres
+     
+    # Specify database user password in plain text
+    database_password: dbpassword
+    
+    # Specify the database hostname or IP address. It can also be remote, if access is given to the machine running petaly, or if an ssh tunnel is provided.
+    database_host: localhost
+    
+    # Specify database port
+    database_port: 5432
+    
+    # Specify database name
+    database_name: petaly_db
+     
+    # Specify database schema name
+    database_schema: petaly
+```
+#### data_attributes
+Following parameters configuring default behavior for data-objects/tables 
+```
+    data_attributes:
+      
+      # provide fine definition: only, prefer, ignore 
+      data_objects_spec_mode: only
+```
+In this step, you will define the main behaviour of the object definition, as follows:<br>
+If **only** [default]: Load only the objects explicitly specified in data_objects_spec[] section. These objects will be configured in the next step.<br>
+If **ignore**: Load all objects from the database_schema (or database_name if no schema exists) as defined in the source_attributes section, completely disregarding data_objects_spec[] section.<br>
+If **prefer**: Load all objects from the database_schema, but for objects specified in data_objects_spec[], apply the refined configuration defined in that section.<br>
+
+**object_default_settings**
+
+The object_default_settings parameter defines the default configuration options applied to objects during processing.
+These settings serve as a baseline and can be overridden by more specific configurations if needed.
+
+This section is used for loading data from CSV files, as well as for extracting and loading data from databases.
+
+It provides a standardized configuration to facilitate seamless data exchange between different engines, such as MySQL and PostgreSQL.
+
+
+```
+      # define csv parse options. It also valid for mysql, postgres extract or load
+      object_default_settings:
+        
+        # Specifies whether the file should contains or contains a header line with the names of each column in the file.
+        header: true
+        
+        # The character delimiting individual cells in the CSV data.
+        columns_delimiter: ","
+        
+        # Choose between double-quote, single-quote or none-quote. The default is double-quote.
+        quote_char:  double-quote
+        
+```
+
+### data_objects_spec
+
+The second document `data_objects_spec:` in the pipeline.yaml file, separated by three dashes, contains none, one or more object (table). 
+
+```
+---
+data_objects_spec:[]
+```
+
+As explained above data_objects_spec is only used when it set to **only** or **prefer**. The default mode is **only**
+`data_objects_spec_mode: only`
+
+Take a look at the `data_objects_spec:` bellow:
+
+```
+---
+data_objects_spec:
+- object_spec:
+    object_name: orders
+    destination_object_name:   
+    ...
+- object_spec:
+    object_name: customers
+    destination_object_name: customers_reloaded
+    ...     
+```
+
+The `object_name` has to be unique.
+This can be a source/destination table name.
+Multiple objects can be specified starting with a dash `- object_spec:` and followed by `object_name: table_name` and few others parameters.
+
+Optionally, the destination object/table name can be different. To achieve this specify the parameter `destination_object_name`.
+
+```
+---
+data_objects_spec:
+- object_spec:
+    object_name: stocks
+    destination_object_name: stocks_new
+```
+
+If the `recreate_destination_object` parameter is true, the target object (table) will be recreated. 
+Otherwise, the object/table will only be created if it does not exist. The default is false.
+
+```
+    recreate_destination_object: false
+```
+
+Use the `exclude_columns` parameter to exclude specific columns, or leave it blank to include all columns for specific table/object. 
+If you want to exclude columns: either specify a comma-separated list of columns to exclude in parentheses [] or use dashes '-', one per line. As shown below:   
+
+To include all
+```    
+    exclude_columns:
+      - null
+```
+
+To exclude column1, column2
+
+```
+    exclude_columns:
+      - column1
+      - column2
+```
+
+Alternative approach to exclude column1, column2
+
+```
+    exclude_columns: [column1, column2]
+```
+
+### csv files as source
+
+In `object_source_dir:`, specify the path to the directory where the csv files are stored. This is only relevant for file uploads.
+
+`object_source_dir: /absolute-path-to-file-dir`
+
+Specify the filenames to load specific file or leave blank/null to include all files from `object_source_dir:`.
+At least one dash or empty brackets [] should be present.
+If you leave it empty/null, remember that all files in `object_source_dir:` should have the same metadata structure as they will be loaded into the same table. 
+In case you want to load only a specific file/s from the given `object_source_dir:` use dash character one per line and filename.
+
+Use one of the following options: 
+1. To load all files from the `object_source_dir` set dash to null `- null` or keep dash `-` empty:    
+```
+    file_names:
+    - null
+```
+Alternatively, to load all files from the `object_source_dir` set:    
+```
+    file_names: []
+```
+2. To load specific files from the `object_source_dir` set: 
+```
+
+    file_names:
+    - file_name.csv
+    - file_name_2.csv
+    - file_name_3.csv
+```
+Alternatively, to load specific files from `object_source_dir` set:
+
+```
+    file_names: [file_name.csv, file_name_2.csv, file_name_3.csv]
+```
+
+### csv as target
+
+The target file format is specified through connector_type: csv.
+
+The initial data is loaded into the output folder defined in the petaly.ini file. 
+The destination_file_dir defines the final directory after download the data in the output folder first.
+
+
+```
+pipeline:
+  ....
+  target_attributes:
+    connector_type: csv
+    destination_file_dir: /your-path-to-destination-folder
+```
+
+<a id="petaly-pipeline-more-examples"></a>
+
+## 7. More Examples
+
+#### MySQL to Postgres
+
+The following example exports a table `stocks` from Mysql into PostgreSQL under the name `stocks_in_postgres`
+
+```
+pipeline:
+  pipeline_attributes:
+    pipeline_name: mysql2psql
+    is_enabled: true
+  source_attributes:
+    connector_type: mysql
+    database_user: root
+    database_password: db-password
+    database_host: localhost
+    database_port: 3306
+    database_name: petaly_tutorial
+  target_attributes:
+    connector_type: postgres
+    database_user: postgres
+    database_password: db-password
+    database_host: localhost
+    database_port: 5432
+    database_name: petalydb
+    database_schema: petaly_tutorial
+  data_attributes:
+    data_objects_spec_mode: only
+    object_default_settings:
+      header: true
+      columns_delimiter: ','
+      quote_char: double-quote
+---
+data_objects_spec:
+- object_spec:
+    object_name: stocks
+    destination_object_name: stocks_in_postgres
+    recreate_destination_object: false
+    cleanup_linebreak_in_fields: false
+    exclude_columns:
+    -
+```
+
+#### CSV to MySQL
+
+The following example create a new table and load csv file stocks.csv into Mysql database.
+
+```
+pipeline:
+  pipeline_attributes:
+    pipeline_name: csv2mysql
+    is_enabled: true
+  source_attributes:
+    connector_type: csv
+  target_attributes:
+    connector_type: mysql
+    database_user: root
+    database_password: db-password
+    database_host: localhost
+    database_port: 3306
+    database_name: petaly_tutorial
+  data_attributes:
+    use_data_objects_spec: only
+    object_default_settings:
+      header: true
+      columns_delimiter: ","
+      quote_char: none
+---
+data_objects_spec:
+- object_spec:
+    object_name: stocks
+    destination_object_name:
+    recreate_destination_object: true
+    cleanup_linebreak_in_fields: false
+    exclude_columns:
+    -
+    object_source_dir: /your-path-to-csv-folder/stocks
+    file_names:
+    - 
+- object_spec:
+    object_name: options
+    destination_object_name:
+    recreate_destination_object: true
+    cleanup_linebreak_in_fields: false
+    exclude_columns:
+    -
+    object_source_dir: /your-directory-path-to-csv-files
+    file_names:
+    - options.csv
+    - options2.csv    
+```
+
+
+#### Postgres to CSV
+
+The following example exports tables **stocks*** and ***users** from Postgres into destination folder `destination_file_dir: /your-path-to-destination-folder`
+It also exclude columns ***likebroadway***, ***likemusicals*** of table **users** from export.
+
+```
+pipeline:
+  pipeline_attributes:
+    pipeline_name: psql2csv
+    is_enabled: true
+  source_attributes:
+    connector_type: postgres
+    database_user: postgres
+    database_password: db-password
+    database_host: localhost
+    database_port: 5432
+    database_name: petalydb
+    database_schema: petaly_schema
+  target_attributes:
+    connector_type: csv
+    destination_file_dir: /your-path-to-destination-folder
+  data_attributes:
+    data_objects_spec_mode: only
+    object_default_settings:
+      header: true
+      columns_delimiter: ","
+      quote_char: double-quote
+---
+data_objects_spec:
+- object_spec:
+    object_name: stocks
+    destination_object_name: stocks_as_csv
+    recreate_destination_object: true
+    cleanup_linebreak_in_fields: true
+    exclude_columns:
+    - 
+- object_spec:
+    object_name: users
+    destination_object_name: users_as_csv
+    recreate_destination_object: true
+    cleanup_linebreak_in_fields: true
+    exclude_columns:
+    - likebroadway
+    - likemusicals
+```
+
+
+## Let's Build Together  🌱
+
+Join us in building something meaningful together. 
+The foundation of any open-source project is its community, a group of individuals collaborating, sharing knowledge and contributing to a shared vision. At Petaly, every contribution, no matter the size, plays an important role in shaping the project.
+We’re continuously improving Petaly, and your feedback and contributions are invaluable. 
+Check out our [Contributing Guide](./CONTRIBUTING.md) to see how you can get involved. Connect with fellow contributors, share your experiences and get support in our community channels. 
+
+Together, we can make Petaly even better!
