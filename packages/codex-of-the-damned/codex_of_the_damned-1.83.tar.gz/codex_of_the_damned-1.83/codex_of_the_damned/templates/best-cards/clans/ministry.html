@@ -1,0 +1,88 @@
+{% extends "best-cards/_layout.html" %}
+{% import "best-cards/_layout_card_column.html" as layout with context%}
+
+{% block content %}
+<h1> {{ ministry }}
+    {% trans trimmed %}Ministry{% endtrans %}
+</h1>
+<div class="insert tip">
+    <p>
+        {% trans trimmed
+        bima_dominate=link("/archetypes/bima-dominate"),
+        bima=card("Bima")
+        %}
+        The Ministry (previously named <em>Followers of Set</em>)
+        are devious experts of sin and stealth.
+        They have given birth to ecclectic decks around politics and mummies
+        but their most successful archetype is the {{ bima_dominate }},
+        using the {{ bima }} ally with {{ dom }}.
+        {% endtrans %}
+    </p>
+    <p>
+    {% trans trimmed
+        v5_ministry=external("https://www.blackchantry.com/products/vampire-the-eternal-struggle-fifth-edition/fifth-edition-the-ministry/", _("V5 Ministry"))
+    %}
+    Note that before the 2021 release of the {{ v5_ministry }} precon, they had {{ ser }} as clan discipline
+    instead of {{ pro }}. The new vampires and cards released in this precon offer a whole new different area for
+    deck building, and it's not yet clear what high level archetypes might emerge of it.
+    {% endtrans %}
+    </p>
+</div>
+
+{% call layout.card_column("Opium Den", decks=57, copies="1") %}
+{% trans trimmed %}
+A nice permanent stealth enhancer at a low cost, a must have for the Followers.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Enticement", decks=41, copies="1-4") %}
+{% trans trimmed %}
+Pool damage without a bleed: this makes it impervious
+to bounces and other anti-bleed tools.
+2 or 3 copies of the card to avoid a bounce on a lunge is common.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Temptation", decks=37, copies="2-9") %}
+{% trans trimmed %}
+A versatile, if tricky, card. It can even be put on one's own vampires
+to get two actions in a single turn from time to time.
+On an opponent's vampire, he will think twice before getting too low on blood.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Form of Corruption", decks=36, copies="1-2") %}
+{% trans trimmed %}
+This can be a serious blow to a prey if it put into play early enough.
+Only a few cards can change the control of a vampire permanently.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Truth of a Thousand Lies", decks=32, copies="2-6") %}
+{% trans trimmed %}
+Although costly, this is a very versatile tool — enhancing bleed at {{ ser }}
+or getting another action at {{ SER }} are both excellent.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Nakhthorheb", decks=30, copies="1-4") %}
+{% trans trimmed %}
+A star among the Followers, his ability to get two actions in a single turn
+is a serious asset.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Set's Curse", decks=24, copies="1-3") %}
+{% trans trimmed %}
+An excellent action against allies and breed constructs,
+it can get rid of a minion in a single blow, and give a minion back.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Renenet", decks=22, copies="1-2") %}
+{% trans trimmed %}
+A powerful disciplines combination for just 5 pool.
+She can even find her place in a mono {{ pre }} deck.
+{% endtrans %}
+{% endcall %}
+{% endblock %}

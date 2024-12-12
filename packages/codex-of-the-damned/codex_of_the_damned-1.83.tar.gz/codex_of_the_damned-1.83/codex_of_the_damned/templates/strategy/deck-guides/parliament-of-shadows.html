@@ -1,0 +1,146 @@
+{% extends "strategy/deck-guides/_layout.html" %}
+{% import "strategy/deck-guides/parliament-of-shadows.json" as deck_json %}
+
+{% block meta %}
+<meta property="decklist" content='{{ deck_json | tojson }}' />
+<meta property="deckname" content="{{ _('Parliament of Shadows') }}" />
+{% endblock %}
+
+{% block deck_name %}
+<h1>{{ lasombra }}
+    {{ _("Parliament of Shadows") }}
+</h1>
+{% endblock %}
+
+{% block deck_guide %}
+{% trans trimmed
+ancient_influence=card("Ancient Influence"),
+archon_investigation=card("Archon Investigation"),
+banishment=card("Banishment"),
+blanket_of_night=card("Blanket of Night"),
+conditioning=card("Conditioning"),
+deflection=card("Deflection"),
+govern_the_unaligned=card("Govern the Unaligned"),
+kine_resources_contested=card("Kine Resources Contested"),
+obedience=card("Obedience"),
+on_the_qui_vive=card("On the Qui Vive"),
+oubliette=card("Oubliette"),
+political_stranglehold=card("Political Stranglehold"),
+seduction=card("Seduction"),
+shadow_body=card("Shadow Body"),
+shadow_play=card("Shadow Play"),
+shroud_of_absence=card("Shroud of Absence"),
+shroud_of_night=card("Shroud of Night"),
+tenebrous_form=card("Tenebrous Form"),
+under_siege=card("Under Siege"),
+villein=card("Villein"),
+wake_with_evening_s_freshness=card("Wake with Evening’s Freshness")
+%}
+<h2>Summary</h2>
+<p>
+    This is a Lasombra <em>Stealth, Bleed & Vote</em> deck. The setup is to get a the
+    oldest vampire out first, then play {{ govern_the_unaligned }} at superior {{ DOM }}
+    to get more Lasombra in play. Each vampire can undertake strong bleed and strong
+    votes, and the high level of stealth make them hard to block.
+</p>
+<h2>Offence</h2>
+<p>
+    <strong>Pool damage</strong> is very high, using {{ kine_resources_contested }} and
+    {{ govern_the_unaligned }}, modified by {{ conditioning }}.
+</p>
+<p>
+    This strong offence is supported by a <strong>strong stealth module</strong> of
+    20 action modifiers. {{ shadow_play }}, {{ shroud_of_absence }} and
+    {{ shroud_of_night }} improve stealth, {{ tenebrous_form }} can even be used at
+    superior {{ OBT }} to deny block from an ally (as they have no blood to spend).
+    Finally, {{ blanket_of_night }} and {{ seduction }} are excellent block denials in
+    case the prey stacks too much intercept to get the actions through.
+</p>
+<p>
+    Finally, along damage dealing votes, {{ banishment }} makes for an excellent vampire
+    remover since the capacity of the deck vampires is high. Played on a vampire with
+    low blood, it forces the Methusalah to pay pool again to get her back into play.
+</p>
+<h2>Defence</h2>
+<p>
+    The <strong>bloat module is strong</strong>, using {{ villein }} to get blood back
+    from the big capacity vampires, as well as two strong bloating votes:
+    {{ ancient_influence }} and {{ political_stranglehold }}.
+</p>
+<p>
+    <strong>Intercept is low</strong>, with {{ under_siege }} being the only intercept
+    tool (although a very good one).
+</p>
+<p>
+    The combat module is strictly defensive, with {{ oubliette }} and {{ shadow_body }}
+    for <em>« Strike: Combat Ends »</em> and {{ obedience }} to avoid the combat
+    altogether.
+</p>
+<p>
+    The deck should be careful about what to intercept as it needs to avoid difficult
+    combats. Wakes are available with {{ on_the_qui_vive }} and
+    {{ wake_with_evening_s_freshness }}, to be able to play {{ deflection }} while
+    locked.
+</p>
+<h2>Tips</h2>
+<p>
+    Beware that some decks include {{ archon_investigation }}:
+    <strong>bleeding over 3 is a risk</strong> for the vampire, only the most disposable
+    should be risked this way.
+</p>
+<p>
+    Early game, use {{ govern_the_unaligned }} at superior {{ DOM }}
+    <strong>two to four times</strong>: stay modest and hidden during this build-up
+    and avoid putting too much pressure on your prey too soon.
+</p>
+<p>
+    <strong>Avoid combat</strong>, try to block only if you have an {{ obedience }}
+    ready.
+</p>
+<p>
+    <strong>Do not waste stealth</strong> if you are not confident you can get the
+    action through. Better to use a <em>« Strike: Combat Ends »</em> or hope the combat
+    does not go too bad, than to play an insufficient stealth modifier and hope to draw
+    another one.
+</p>
+{% endtrans %}
+<div class="insert tip">
+    {% trans trimmed
+    conditioning=card("Conditioning"),
+    govern_the_unaligned=card("Govern the Unaligned"),
+    kine_resources_contested=card("Kine Resources Contested")
+    %}
+    <h3>Lunge</h3>
+    <p>
+        The deck has great forward power, but using it well is tricky.
+        Too much pressure too soon and the prey will keep most of its pool for defence,
+        you will advantage your grand-prey too much and attract the table attention.
+        Too little, and you will not go as fast as you could.
+    </p>
+    <p>
+        The usual strategy to optimize this pressure is to try to
+        <strong>build a lunge hand</strong>. The idea is to gather a good aggressive
+        combination in hand to oust your prey <strong>in a single turn</strong>.
+    </p>
+    <p>
+        For example, if you have three vampires out, try to keep one or two
+        {{ kine_resources_contested }}, a {{ govern_the_unaligned }},
+        a {{ conditioning }} and some stealth, for a maximum total damage of 12 pool.
+        Until you get there, keep doing 3-5 damage per turn and deflecting your predator
+        bleed, slowly grinding your prey's pool and letting her believe 12 pool is a
+        comfortable cushion.
+    </p>
+    {% endtrans %}
+</div>
+<p>
+    {% trans trimmed
+    information_highway_article=external(
+    "https://vtesinformationhighway.wordpress.com/2019/01/14/lasombra-starter-parliament-of-shadows/",
+    _("Information Highway article")
+    )
+    %}
+    Check the {{ information_highway_article }} for a deck review and ideas on how to
+    improve it.
+    {% endtrans %}
+</p>
+{% endblock %}

@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "babel>=2", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codex-of-the-damned"
+dynamic = ["version"]
+authors = [
+    { name = "Lionel Panhaleux", email = "lionel.panhaleux+codex@gmail.com" },
+]
+description = "Website on VTES Strategy, cards rulings and TWD search interface"
+keywords = ["vtes", "Vampire: The Eternal Struggle", "CCG", "TWD", "TWDA"]
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 5 - Production/Stable",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Framework :: Flask",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+]
+dependencies = ["flask>=3", "flask-babel>=4", "unidecode>=1", "Jinja2>=3"]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24",
+    "build>=1",
+    "check-manifest>=0",
+    "ipython>=8",
+    "pytest>=8",
+    "requests>=2",
+    "ruff>=0",
+    "setuptools_scm>=8",
+    "twine>=5",
+]
+
+[project.scripts]
+codex = "codex_of_the_damned:main"
+
+[project.urls]
+Homepage = "https://codex-of-the-damned.org"
+Repository = "https://github.com/lionel-panhaleux/codex-of-the-damned"
+
+[tool.setuptools.packages.find]
+include = ["codex_of_the_damned*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.mo"]
+
+[tool.setuptools_scm]
