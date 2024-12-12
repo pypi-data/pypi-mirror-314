@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "funcnodes-numpy"
+version = "0.2.9"
+description = "implementations of numpy for funcnodes"
+authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
+readme = "README.md"
+license = "AGPL-3.0"
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    ]
+
+[tool.poetry.urls]
+homepage  = "https://github.com/Linkdlab/funcnodes_numpy"
+source  = "https://github.com/Linkdlab/funcnodes_numpy"
+tracker  = "https://github.com/Linkdlab/funcnodes_numpy/issues"
+download = "https://pypi.org/project/funcnodes-numpy/#files"
+
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+funcnodes = "*"
+numpy = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pre-commit = "*"
+funcnodes-module = "^0.1.19"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.plugins."funcnodes.module"]
+module = "funcnodes_numpy"
+shelf = "funcnodes_numpy:NODE_SHELF"
