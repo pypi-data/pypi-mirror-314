@@ -1,0 +1,54 @@
+[project]
+name = "wbportfolio"
+description = ""
+authors = [{ name = "Christopher Wittlinger", email = "c.wittlinger@stainly.com"}]
+dynamic = ["version"]
+
+dependencies = [
+  "wbcore",
+  "wbcrm",
+  "wbfdm",
+  "wbcompliance",
+  "wbnews",
+  "cryptography == 3.4.*",
+  # Reporting Tools
+  "xlrd == 2.*",
+  "XlsxWriter == 3.*",
+  # MS Office Crypto Tools
+  "msoffcrypto-tool == 4.10.*",
+  # String pattern matching
+
+  "dateparser == 1.*",
+  "scipy >= 1",
+  "weasyprint == 57.*",
+  "fuzzywuzzy == 0.*",
+  "python-Levenshtein == 0.*",
+  "reportlab == 3.*",
+
+  "django-storages == 1.14.*", # handling silk file is dependant of the django storage version. Version 1.14.* drops support for django 4
+  "jinjasql2 == 0.1.*",
+]
+
+[tool.uv.sources]
+wbcore = { workspace = true }
+wbcrm = { workspace = true }
+wbfdm = { workspace = true }
+wbcompliance = { workspace = true }
+wbnews = { workspace = true }
+
+[tool.uv]
+package = true
+
+[tool.hatch.version]
+path = "../../pyproject.toml"
+
+[tool.hatch.build.targets.sdist]
+include = ["wbportfolio/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wbportfolio"]
+only-packages = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
