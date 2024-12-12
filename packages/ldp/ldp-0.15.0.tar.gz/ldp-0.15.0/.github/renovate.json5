@@ -1,0 +1,38 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+  schedule: ["* 2 1-7 * 1"],
+  prHourlyLimit: 4,
+  timezone: "America/Los_Angeles",
+  rangeStrategy: "widen",
+  lockFileMaintenance: {
+    enabled: true,
+  },
+  "pre-commit": {
+    enabled: true,
+  },
+  packageRules: [
+    {
+      matchUpdateTypes: ["lockFileMaintenance"],
+      automerge: true,
+    },
+    {
+      // group:allNonMajor, with automerge
+      groupName: "all non-major dependencies",
+      groupSlug: "all-minor-patch",
+      matchPackageNames: ["*"],
+      matchUpdateTypes: ["minor", "patch"],
+      automerge: true,
+    },
+    {
+      // Allow 'widen' range strategy while matching aviary_internal pyproject.toml
+      matchPackageNames: ["openai"],
+      allowedVersions: "<1.47",
+    },
+    {
+      // TODO: remove after torch supports Python 3.13
+      matchPackageNames: ["python"],
+      allowedVersions: "<=3.12",
+    },
+  ],
+}
