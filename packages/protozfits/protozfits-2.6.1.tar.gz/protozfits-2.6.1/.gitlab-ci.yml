@@ -1,0 +1,146 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+variables:
+  # make sure the CI system checks out the submodules
+  GIT_SUBMODULE_STRATEGY: recursive
+  WHEEL_ABSEIL_VERSION: "20240116.2"
+  WHEEL_PROTOBUF_VERSION: "25.4"
+
+stages:
+  - static-checks
+  - test
+  - sonarqube
+  - deploy
+
+
+static:
+  image: "python:3.11"
+  variables:
+    DEBIAN_FRONTEND: "noninteractive"
+    CXX: "clang++"
+    CMAKE_EXPORT_COMPILE_COMMANDS: "ON"
+
+  before_script:
+    - apt update && apt install -y cmake libzmq3-dev libprotobuf-dev protobuf-compiler clang clang-format clang-tidy
+    - python -m pip install -U setuptools 'scikit-build-core[pyproject]' pybind11 'setuptools_scm[toml]' pre-commit
+    - pip install -e '.' -v --no-build-isolation --config-settings=build-dir=build
+    - ln -s build/compile_commands.json .
+
+  script:
+    - pre-commit run --all-files
+
+tests:
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.11", "3.12", "3.13.0rc2"]
+
+  image: python:${PYTHON_VERSION}
+
+  variables:
+    # needed to avoid interactive prompts during installation
+    DEBIAN_FRONTEND: "noninteractive"
+
+  before_script:
+    # install build dependencies
+    - apt update && apt install -y cmake libzmq3-dev libprotobuf-dev protobuf-compiler
+    - python --version
+
+  script:
+    - python -m pip install '.[all]'
+    - python -m pytest -v --pyargs protozfits
+
+
+tests-with-cov:
+  image: "python:3.10"
+
+  variables:
+    # needed to avoid interactive prompts during installation
+    DEBIAN_FRONTEND: "noninteractive"
+    CXXFLAGS: "--coverage -Wall -Wextra -Wpedantic"
+    CMAKE_EXPORT_COMPILE_COMMANDS: "ON"
+
+  before_script:
+    # install build dependencies
+    - apt update && apt install -y cmake libzmq3-dev libprotobuf-dev protobuf-compiler
+    - python --version
+    - python -m pip install 'scikit-build-core[pyproject]' pybind11 'setuptools_scm[toml]' gcovr
+
+  script:
+    # install in editable mode with a persistent build dir to enable coverage reporting on the cxx code
+    - pip install -e '.[all]' -v --no-build-isolation --config-settings=build-dir=build
+    - python -m pytest --cov --cov-report=xml -v
+    # get coverage for the cxx code
+    - gcovr -r . -e build -e adh-apis --sonarqube coverage-cxx.xml
+
+  artifacts:
+    paths:
+      - "coverage.xml"
+      - "coverage-cxx.xml"
+
+sonarqube:
+  stage: sonarqube
+  needs:
+    - job: tests-with-cov
+      artifacts: true
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+
+  script:
+    - sonar-scanner -Dsonar.branch.name=${CI_COMMIT_BRANCH}
+
+
+build_wheels:
+  rules:
+    - if: $CI_COMMIT_TAG
+  image: quay.io/pypa/manylinux2014_x86_64
+  stage: deploy
+  before_script:
+    - ulimit -n 1024 && yum install -y zeromq-devel zlib-devel
+    - cd /tmp
+    # build absl
+    - curl -sSfL https://github.com/abseil/abseil-cpp/releases/download/${WHEEL_ABSEIL_VERSION}/abseil-cpp-${WHEEL_ABSEIL_VERSION}.tar.gz | tar xz
+    - cd abseil-cpp-${WHEEL_ABSEIL_VERSION}
+    - cmake -S . -B build -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DABSL_PROPAGATE_CXX_STD=ON
+    - cmake --build build -- -j 2
+    - cmake --install build
+    - cd ..
+    # build protobuf
+    - curl -sSfL https://github.com/protocolbuffers/protobuf/releases/download/v${WHEEL_PROTOBUF_VERSION}/protobuf-${WHEEL_PROTOBUF_VERSION}.tar.gz | tar xz
+    - cd protobuf-${WHEEL_PROTOBUF_VERSION}
+    - cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -Dprotobuf_BUILD_TESTS=OFF -Dprotobuf_ABSL_PROVIDER=package
+    - cmake --build build -- -j 2
+    - cmake --install build
+    - protoc --version
+    - cd $CI_PROJECT_DIR
+
+  script:
+    - ./dev/build_wheels.sh
+
+  artifacts:
+    paths:
+      - dist/*
+
+
+pypi:
+  rules:
+    - if: $CI_COMMIT_TAG
+  stage: deploy
+  needs:
+    - "build_wheels"
+  image: "python:3.12-slim"
+  before_script:
+    - pip install -U twine
+  script:
+    - twine upload dist/*
+  variables:
+    TWINE_NON_INTERACTIVE: "true"
+    TWINE_USERNAME: "__token__"
