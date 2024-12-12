@@ -1,0 +1,144 @@
+<div id="group-types">
+    {% if group_types != None %}
+        {% if group_types %}
+            <div class="row">
+                <div class="col-sm-4">
+                    <label style="font-size: 2rem">Create group query</label>
+                </div>
+            </div>
+            <form class="col-sm-6" id="email" method="get" action="{% url 'compose_email' %}">
+                <input type="hidden" name="audience" value="group">
+                <fieldset id="selected-groups">
+                    <legend style="font-size:1.75rem">New "AND" group</legend>
+                    {% for group_type in group_types %}
+                        <div class="row checkbox" style="margin-left: 1rem">
+                            <label>
+                                <input type="checkbox" value="{{ group_type.id }}" />
+                                {{ group_type.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    <div style="text-align: right">
+                        <div class="btn btn-sm btn-default add-group-btn">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            &nbsp;Add group to query
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset id="query-content" style="margin: 1rem 0">
+                    <legend style="font-size:1.75rem">Query</legend>
+                    <div class="hidden query-group row" style="margin: 0.5rem">
+                        <input type="hidden" />
+                        <span class="col-sm-1 condition">&nbsp;</span>
+                        <span class="col-sm-9 groups">&nbsp;</span>
+                        <span class="col-sm-1 btn btn-xs btn-danger delete-group-btn">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </span>
+                    </div>
+                    <div class="empty">No group in query!</div>
+                </fieldset>
+                <div class="row" style="margin-top: 2rem;">
+                    <input id="group-submit" type="submit" class="btn btn-sm btn-success" disabled value="Confirm" />
+                    <span id="group-warning" class="btn alert-warning btn-sm" disabled style="opacity: 1;">
+                        <i class="glyphicon glyphicon-alert"></i>
+                        &nbsp;Add a group in query to proceed
+                    </span>
+                </div>
+            </form>
+        {% else %}
+            <div class="empty">No groups available.</div>
+        {% endif %}
+    {% endif %}
+</div>
+<script type="text/javascript">
+    /**
+     * Function to remove a set of groups from the query
+     * @param event
+     */
+    let delete_group_from_query = (event) => {
+        event.preventDefault();
+
+        // Remove the line where the button has been clicked.
+        $(event.target).parents(".query-group").remove();
+
+        let queryContent = $("#query-content");
+
+        // Remove the OR from the first query group item
+        queryContent.find(".query-group:eq(1)>.condition").text("");
+
+        // Add warning if query content is empty
+        if(queryContent.children().length === 3) {
+            queryContent.find(".empty").removeClass("hidden");
+
+            let submitButton = $("#group-submit");
+            submitButton.prop("disabled", true);
+            submitButton.parent().children("#group-warning").removeClass("hidden")
+        }
+    }
+
+    /**
+     * Function adding a set of groups to the query. Groups are ANDed together.
+     * @param event
+     */
+    let add_group_to_query = (event) => {
+        event.preventDefault();
+
+        // Compute the name of the query to display.
+        let queryGroupText = "";
+        let queryGroupIds = [];
+        $("#selected-groups").find("input[type='checkbox']:checked").each((index, item) => {
+            queryGroupIds.push($(item).val());
+            let groupName = $(item).parent().text().trim()
+
+            if(queryGroupText !== "") {
+                queryGroupText += " AND "
+            }
+            queryGroupText += groupName
+
+            $(item).prop("checked", false)
+        })
+
+        // Do not add a new query group if no group has been checked.
+        if(queryGroupText === "") return;
+
+        let queryContent = $("#query-content");
+        let newQueryGroup = $("div.query-group.hidden").clone(true);
+        newQueryGroup.removeClass("hidden")
+
+        if(queryContent.children().length >= 4) {
+            newQueryGroup.find(".condition").text("OR")
+        }
+
+        // Configure input value and name
+        newQueryGroup.find("input[type='hidden']").attr("name", "selection")
+        newQueryGroup.find("input[type='hidden']").val(queryGroupIds.join(" "))
+
+        // Insert text
+        newQueryGroup.find(".groups").text("(" + queryGroupText + ")")
+
+        // Insert query group
+        newQueryGroup.insertAfter(queryContent.children(":last"))
+
+        // If there is something in the query do not display the warning message
+        if(queryContent.children().length === 4) {
+            queryContent.find(".empty").addClass("hidden");
+
+            let submitButton = $("#group-submit");
+            submitButton.prop("disabled", false);
+            submitButton.parent().children("#group-warning").addClass("hidden")
+        }
+    }
+
+    let init_group_email = () => {
+        let groupEmailPosition = 2;
+        $("div.container>ul>li:nth-of-type(" + (groupEmailPosition - 1) + ")").after(
+            "<li><a href='{% url 'email_broadcast' 'group' %}'>are part of a group</a></li>"
+        );
+        $("#group-types").insertAfter($(".body-container>.container>ul"))
+        $("#group-submit").prop("disabled", true)
+    }
+
+    $(document).on("click", ".add-group-btn", add_group_to_query)
+    $(document).on("click", ".delete-group-btn", delete_group_from_query)
+    $(init_group_email);
+</script>

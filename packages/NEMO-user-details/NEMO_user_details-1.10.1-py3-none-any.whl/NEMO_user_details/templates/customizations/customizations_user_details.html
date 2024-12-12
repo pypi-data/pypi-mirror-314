@@ -1,0 +1,287 @@
+{% load custom_tags_and_filters %}
+{% load user_details_tags %}
+<form method="POST" action="{% url 'customize' 'user_details' %}" class="form-horizontal">
+    <div class="panel-body">
+        {% csrf_token %}
+        <h3 class="customization-section-title">User details settings</h3>
+        <p>
+            Note: required fields cannot be disabled. If certain choice fields are required (e.g. Gender), you won't be able to save a user until you add choices (Male, Female, etc.) in detailed administration.
+        </p>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_employee_id">Employee id</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_employee_id"
+                               name="user_details_enable_employee_id"
+                               {% if user_details_enable_employee_id %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_employee_id', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_employee_id"
+                               name="user_details_require_employee_id"
+                               {% if user_details_require_employee_id %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_employee_id');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_orcid">ORCID</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_orcid"
+                               name="user_details_enable_orcid"
+                               {% if user_details_enable_orcid %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_orcid', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_orcid"
+                               name="user_details_require_orcid"
+                               {% if user_details_require_orcid %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_orcid');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_phone_number">Phone number</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_phone_number"
+                               name="user_details_enable_phone_number"
+                               {% if user_details_enable_phone_number %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_phone_number', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_phone_number"
+                               name="user_details_require_phone_number"
+                               {% if user_details_require_phone_number %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_phone_number');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_emergency_contact">Emergency contact</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_emergency_contact"
+                               name="user_details_enable_emergency_contact"
+                               {% if user_details_enable_emergency_contact %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_emergency_contact', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_emergency_contact"
+                               name="user_details_require_emergency_contact"
+                               {% if user_details_require_emergency_contact %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_emergency_contact');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_groups">Authentication groups</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_groups"
+                               name="user_details_enable_groups"
+                               {% if user_details_enable_groups %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_groups', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_groups"
+                               name="user_details_require_groups"
+                               {% if user_details_require_groups %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_groups');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_race">Race</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_race"
+                               name="user_details_enable_race"
+                               {% if user_details_enable_race %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_race', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_race"
+                               name="user_details_require_race"
+                               {% if user_details_require_race %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_race');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_gender">Gender</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_gender"
+                               name="user_details_enable_gender"
+                               {% if user_details_enable_gender %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_gender', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_gender"
+                               name="user_details_require_gender"
+                               {% if user_details_require_gender %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_gender');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_ethnicity">Ethnicity</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_ethnicity"
+                               name="user_details_enable_ethnicity"
+                               {% if user_details_enable_ethnicity %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_ethnicity', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_ethnicity"
+                               name="user_details_require_ethnicity"
+                               {% if user_details_require_ethnicity %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_ethnicity');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-4" for="user_details_enable_education_level">Education level</label>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_enable_education_level"
+                               name="user_details_enable_education_level"
+                               {% if user_details_enable_education_level %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_require_education_level', true);">
+                        enable
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               id="user_details_require_education_level"
+                               name="user_details_require_education_level"
+                               {% if user_details_require_education_level %}checked{% endif %}
+                               value="enabled"
+                               onclick="check_if_checked(this, 'user_details_enable_education_level');">
+                        require
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-offset-3 col-sm-offset-4">{% button type="save" value="Save settings" %}</div>
+    </div>
+</form>
+<script>
+	function check_if_checked(element, id, reverse)
+    {
+        reverse = reverse || false
+		let look = reverse ? document.getElementById(id) : element;
+		let check = reverse ? element : document.getElementById(id);
+        if (look.checked)
+        {
+            check.checked = true;
+		}
+	}
+</script>

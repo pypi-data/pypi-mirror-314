@@ -1,0 +1,238 @@
+{% load custom_tags_and_filters %}
+{% load user_details_tags %}
+<div id="user_details">
+    {% if not form_details.fields.employee_id.disabled %}
+        <div id="details_employee_id" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="employee_id"
+                   {% if form_details.fields.employee_id.required %}style="font-weight: bold !important"{% endif %}>
+                Employee id
+            </label>
+            <div class="col-sm-4">
+                <input id="employee_id"
+                       name="employee_id"
+                       autocomplete="off"
+                       type="text"
+                       class="form-control"
+                       value="{{ form_details.employee_id.value|default_if_none:"" }}"
+                       {% if form_details.employee_id.required %}required{% endif %}>
+            </div>
+            {% if form_details.employee_id.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.employee_id.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.orcid.disabled %}
+        <div id="details_orcid" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="orcid"
+                   {% if form_details.fields.orcid.required %}style="font-weight: bold !important"{% endif %}>
+                ORCID
+            </label>
+            <div class="col-sm-4">
+                <input id="orcid"
+                       name="orcid"
+                       autocomplete="off"
+                       type="text"
+                       class="form-control"
+                       value="{{ form_details.orcid.value|default_if_none:"" }}"
+                       {% if form_details.orcid.required %}required{% endif %}>
+            </div>
+            {% if form_details.orcid.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.orcid.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.phone_number.disabled %}
+        <div id="details_phone_number" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="phone_number"
+                   {% if form_details.fields.phone_number.required %}style="font-weight: bold !important"{% endif %}>
+                Phone number
+            </label>
+            <div class="col-sm-4">
+                <input id="phone_number"
+                       name="phone_number"
+                       autocomplete="off"
+                       type="text"
+                       class="form-control"
+                       value="{{ form_details.phone_number.value|default_if_none:"" }}"
+                       {% if form_details.phone_number.required %}required{% endif %}>
+            </div>
+            {% if form_details.phone_number.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.phone_number.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.emergency_contact.disabled %}
+        <div id="details_emergency" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="emergency_contact"
+                   {% if form_details.fields.emergency_contact.required %}style="font-weight: bold !important"{% endif %}>
+                Emergency contact
+            </label>
+            <div class="col-sm-4">
+                <input id="emergency_contact"
+                       name="emergency_contact"
+                       autocomplete="off"
+                       type="text"
+                       class="form-control"
+                       value="{{ form_details.emergency_contact.value|default_if_none:"" }}"
+                       {% if form_details.emergency_contact.required %}required{% endif %}>
+            </div>
+            {% if form_details.emergency_contact.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.emergency_contact.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.race.disabled %}
+        <div id="details_race" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="race"
+                   {% if form_details.fields.race.required %}style="font-weight: bold !important"{% endif %}>
+                Race
+            </label>
+            <div class="col-sm-4">
+                <select id="race"
+                        name="race"
+                        class="form-control"
+                        {% if form_details.fields.race.required %}required{% endif %}>
+                    {% for t in form_details.fields.race.choices %}
+                        <option value="{{ t.0 }}" {% if t.0 == form_details.race.value|to_int %}selected{% endif %}>{{ t.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if form_details.race.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.race.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.gender.disabled %}
+        <div id="details_gender" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="gender"
+                   {% if form_details.fields.gender.required %}style="font-weight: bold !important"{% endif %}>
+                Gender
+            </label>
+            <div class="col-sm-4">
+                <select id="gender"
+                        name="gender"
+                        class="form-control"
+                        {% if form_details.fields.gender.required %}required{% endif %}>
+                    {% for t in form_details.fields.gender.choices %}
+                        <option value="{{ t.0 }}" {% if t.0 == form_details.gender.value|to_int %}selected{% endif %}>{{ t.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if form_details.gender.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.gender.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.ethnicity.disabled %}
+        <div id="details_ethnicity" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="ethnicity"
+                   {% if form_details.fields.ethnicity.required %}style="font-weight: bold !important"{% endif %}>
+                Ethnicity
+            </label>
+            <div class="col-sm-4">
+                <select id="ethnicity"
+                        name="ethnicity"
+                        class="form-control"
+                        {% if form_details.fields.ethnicity.required %}required{% endif %}>
+                    {% for t in form_details.fields.ethnicity.choices %}
+                        <option value="{{ t.0 }}" {% if t.0 == form_details.ethnicity.value|to_int %}selected{% endif %}>{{ t.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if form_details.ethnicity.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.ethnicity.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if not form_details.fields.education_level.disabled %}
+        <div id="details_education_level" class="form-group">
+            <label class="control-label col-sm-2"
+                   for="education_level"
+                   {% if form_details.fields.education_level.required %}style="font-weight: bold !important"{% endif %}>
+                Education level
+            </label>
+            <div class="col-sm-4">
+                <select id="education_level"
+                        name="education_level"
+                        class="form-control"
+                        {% if form_details.fields.education_level.required %}required{% endif %}>
+                    {% for t in form_details.fields.education_level.choices %}
+                        <option value="{{ t.0 }}" {% if t.0 == form_details.education_level.value|to_int %}selected{% endif %}>
+                            {{ t.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if form_details.education_level.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.education_level.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% if not form_details.fields.groups.disabled %}
+    <div id="user_groups">
+        <div class="form-group">
+            <label class="control-label col-sm-2"
+                   for="add_a_group"
+                   {% if form_details.fields.groups.required %}style="font-weight: bold !important;"{% endif %}>
+                User groups
+            </label>
+            <div class="col-sm-4">
+                <input id="add_a_group" type="text" autocomplete="off" class="form-control" placeholder="Add a group" />
+            </div>
+            {% if form_details.groups.errors %}
+                <div class="col-sm-6 form-control-static danger-highlight">{{ form_details.groups.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <div id="group-list" class="col-sm-offset-2 col-sm-4">This user has no assigned groups.</div>
+        </div>
+    </div>
+{% endif %}
+<script>
+	let badge_number_element = document.getElementById('badge_number')
+	let closest_group = badge_number_element.closest("div.form-group");
+	let parent = closest_group.parentNode
+    parent.insertBefore(document.getElementById('user_details'), closest_group.nextSibling);
+
+    function add_group(jquery_event, group) {
+        if(jquery_event !== null) {
+            $(this).typeahead('val', '').focus();
+        }
+        add_to_list(
+            "#group-list",
+            "remove_group",
+            group.id,
+            group.name,
+            "Remove this user from " + group.name,
+            "groups"
+        );
+    }
+    function remove_group(group_id) {
+        remove_from_list(
+            "#group-list",
+            "#groups_" + group_id,
+            "This user has no assigned groups."
+        );
+    }
+
+    function init_groups() {
+        let projects_form_group = $("div.form-group:contains('Projects')");
+        $("#user_groups").insertBefore(projects_form_group);
+
+        $('#add_a_group').autocomplete("groups", add_group, {{ groups|json_search_base }});
+
+        {{ user_groups|json_search_base }}.forEach((item, index) => {
+            add_group(null, item);
+        });
+    }
+
+    $(init_groups);
+</script>
