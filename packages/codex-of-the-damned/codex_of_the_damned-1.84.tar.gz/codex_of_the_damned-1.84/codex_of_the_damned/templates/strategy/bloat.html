@@ -1,0 +1,286 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 id="bloat">{{ _('Bloat') }}</h1>
+<p>
+    {% trans trimmed %}
+    Pool is the core resource of the game. The more the better: more pool means more life and more minions.
+    All efficient decks have at least a basic <strong>bloat</strong> module:
+    a group of cards designed to get pool back.
+    Getting blood on uncontrolled vampires amounts to bloating, as the blood can easily be taken back
+    using a few transfers.
+    {% endtrans %}
+</p>
+<h2 id="leeching">{{ _('Leeching') }}</h2>
+<p>
+    {% trans trimmed %}
+    Getting pool back by taking blood from one’s minions — commonly known as <strong>leeching</strong> —
+    is the most widespread way to bloat. This technique makes use of the following Master cards:
+    {% endtrans %}
+</p>
+<ul>
+    <li> {{ card("Minion Tap") }} </li>
+    <li> {{ card("Villein") }} </li>
+    <li> {{ card("Blood Doll") }} </li>
+    <li> {{ card("Vessel") }} </li>
+    <li> {{ card("Tribute to the Master") }} </li>
+    <li> {{ card("Grooming the Protégé") }} </li>
+    <li>
+        {{ card("Powerbase: Cape Verde") }}
+        {{ giovanni }}
+    </li>
+    <li>
+        {{ card("Wasserschloss Anif, Austria") }}
+        {{ tremere }}
+    </li>
+</ul>
+<p>
+    {% trans trimmed
+    villein=card("Villein"),
+    vessel=card("Vessel")
+    %}
+    It does take some Master cards slots out in a deck, and it leaves your minions somewhat weakened.
+    Still, a vampire may act and use all its disciplines even with only 1 blood left.
+    The two trifles, {{ villein }} and {{ vessel }}, are appealing as they do not use up a Master
+    card slot, but they are a bit less efficient thant their plain counterparts.
+    {% endtrans %}
+</p>
+<div class="insert warn">
+    <h3>{{ _('Villein errata') }}</h3>
+    <p>
+        {% trans trimmed
+        villein=card("Villein"),
+        minion_tap=card("Minion Tap")
+        %}
+        {{ villein }} has seen its card text change in June 2018:
+        it now has an <strong>upper limit of 5 blood</strong>, which was not the case before.
+        Be careful when reading an older deck list, as it may use {{ villein }} where
+        {{ minion_tap }} would be a better fit nowadays.
+        {% endtrans %}
+    </p>
+</div>
+<p>
+    {% trans trimmed
+    hunting_grounds=card("Academic Hunting Ground", "Hunting Grounds")
+    %}
+    Decks that use this technique may improve it by including some cards to regenerate their vampires blood,
+    as it has effectively become a source of pool. {{ hunting_grounds }} can be used –
+    there is one for almost each clan, plus more generic hunting grounds or cards that have a similar effect:
+    {% endtrans %}
+</p>
+<ul>
+    <li> {{ card("Giant's Blood") }} </li>
+    <li> {{ card("Jake Washington") }} </li>
+    <li> {{ card("The Coven") }} </li>
+    <li> {{ card("The Rack") }} ({{ _('needs to be defended') }}) </li>
+    <li> {{ card("Papillon") }} ({{ _('City titled vampires') }}) </li>
+    <li> {{ card("Carfax Abbey") }} ({{ _('Anarch') }}) </li>
+    <li> {{ card("Twilight Camp") }} ({{ _('Anarch') }}) </li>
+    <li>
+        {{ card("Swiss Cut") }} {{ giovanni }}
+    </li>
+    <li>
+        {{ card("Acquired Ventrue Assets") }} {{ giovanni }}
+    </li>
+    <li> {{ card("Weeping Stone") }} ({{ _('Black Hand, costly and fragile') }}) </li>
+    <li> {{ card("Perfectionist") }} </li>
+    <li> {{ card("Life in the City") }} </li>
+    <li> {{ card("Procurer") }} ({{ _('costly and fragile') }}) </li>
+    <li> {{ card("Threestar Cab Company") }} ({{ _('costly and less efficient') }}) </li>
+</ul>
+<p>
+    {% trans trimmed %}
+    Finally, a handful of cards can augment the blood amount vampires get from hunting,
+    which is another way to regenerate their blood:
+    {% endtrans %}
+</p>
+<ul>
+    <li> {{ card("Inbase Discotek, Frankfurt") }}</li>
+    <li> {{ card("The Anarch Free Press") }} ({{ _('Anarch') }}) </li>
+    <li> {{ card("Hospital Food") }} ({{ _('Anarch') }}) </li>
+    <li> {{ card("Festivo dello Estinto") }} ({{ _('Sabbat') }}) </li>
+    <li> {{ card("The Hungry Coyote") }} ({{ _('Sabbat') }}) </li>
+</ul>
+<h2 id="master-bloating">{{ _('Master bloating') }}</h2>
+<p>
+    {% trans trimmed %}
+    Another alternative is to let the minions use their blood as they see fit
+    and focus on generating pool directly using Master cards. A few cards allow this:
+    {% endtrans %}
+</p>
+<ul>
+    <li>
+        {{ card("Liquidation") }}
+    </li>
+    <li>
+        {{ card("Ashur Tablets") }}
+        {% trans trimmed
+        girls=link("/archetypes/girls-will-find-inner-circle")
+        %}
+        (uses up a lot of Master slots, best in an MMPA archetypes like {{ girls }})
+        {% endtrans %}
+    </li>
+    <li>
+        {{ card("Powerbase: Montreal") }}
+        ({{ _('needs to be defended') }})
+    </li>
+    <li>
+        {{ card("Powerbase: Barranquilla") }}
+        ({{ _('needs to be defended') }})
+    </li>
+    <li>
+        {{ card("Specialization") }}
+    </li>
+    <li>
+        {{ card("Tend the Flock") }} {{ baali }}
+    </li>
+    <li>
+        {{ card("Ventrue Investment") }} {{ ventrue_antitribu }}
+    </li>
+    <li>
+        {{ card("Mbare Market, Harare") }}
+        ({{ _('Laibon') }})
+    </li>
+    <li>
+        {{ card("Tower of London") }} {{ giovanni }}
+    </li>
+    <li>
+        {{ card("Great Symposium") }} {{ kiasyd }}
+    </li>
+    <li>
+        {{ card("The Church of Vindicated Faith") }}
+        ({{ _('Imbued') }})
+    </li>
+    <li>
+        {% trans trimmed
+        secret_horde=card("Secret Horde"),
+        protracted_investment=card("Protracted Investment"),
+        ashur_tablets=card("Ashur Tablets")
+        %}
+        Generic investments {{ secret_horde }} and {{ protracted_investment }}
+        are rarely played, as they need many Master actions and {{ ashur_tablets }}
+        are generally preferred when one has enough master actions to play them.
+        {% endtrans %}
+    </li>
+</ul>
+<div class="insert tip">
+    <h3>{{ _('Clan masters') }}</h3>
+    <p>{{ _('5 clans give access to a unique location generating pool:') }}</p>
+    <ul>
+        <li>
+            {{ gangrel }}
+            {{ card("Ecoterrorists") }}
+        </li>
+        <li>
+            {{ tremere }}
+            {{ card("Arcane Library") }}
+        </li>
+        <li>
+            {{ toreador }}
+            {{ card("Art Museum") }}
+        </li>
+        <li>
+            {{ brujah_antitribu }}
+            {{ card("Gang Territory") }}
+        </li>
+        <li>
+            {{ nosferatu_antitribu }}
+            {{ card("Nosferatu Kingdom") }}
+        </li>
+    </ul>
+</div>
+{% trans trimmed
+momentums_edge=card("Momentum's Edge"),
+gambit_accepted=card("Gambit Accepted"),
+golconda_inner_peace=card("Golconda: Inner Peace"),
+khobar_towers_al_khubar=card("Khobar Towers, Al-Khubar"),
+redeem_the_lost_soul=card("Redeem the Lost Soul"),
+feast_of_the_soul_s_secrets=card("Feast of the Soul's Secrets"),
+govern_the_unaligned=card("Govern the Unaligned"),
+enchant_kindred=card("Enchant Kindred"),
+scouting_mission=card("Scouting Mission"),
+legal_manipulations=card("Legal Manipulations"),
+social_charm=card("Social Charm"),
+kindred_spirits=card("Kindred Spirits"),
+art_scam=card("Art Scam"),
+reunion_kamut=card("Reunion Kamut"),
+founders_of_the_ebony_kingdom=card("Founders of the Ebony Kingdom"),
+khabar_glory=card("Khabar: Glory")
+%}
+<p>
+    Fast decks can rely on the fact they should score their first Victory Point early
+    and use {{ momentums_edge }} and {{ gambit_accepted }}.
+</p>
+<p>
+    Finally, those ready to pay the price can even sacrifice some vampires to get
+    some pool back with {{ golconda_inner_peace }},
+    {{ khobar_towers_al_khubar }} {{ follower_of_set }}
+    or {{ redeem_the_lost_soul }}.
+</p>
+<h2 id="action-bloating">Action bloating</h2>
+<p>
+    The last alternative is to use actions directly to bloat. This is excellent if the action has a powerful
+    alternative, like the infamous {{ DOM }} {{ govern_the_unaligned }} or
+    {{ PRE }} {{ enchant_kindred }} and {{ scouting_mission }}, or if the bloat
+    is a side-effect of a useful action, like {{ PRE }} {{ legal_manipulations }} and
+    {{ social_charm }}, {{ salubri }} {{ feast_of_the_soul_s_secrets }} or {{ DEM }} {{ kindred_spirits }}.
+</p>
+<p>
+    Actions getting blood on uncontrolled vampires with no alternative are less efficient.
+    They can still come in handy when used in swarm constructs to get
+    many vampiers out quickly, as is the case for
+    Toreador antitribu {{ toreador_antitribu }} {{ art_scam }} and Black Hand {{ reunion_kamut }},
+    but otherwise they are only used sparsingly.
+    Guruhi {{ guruhi }} {{ founders_of_the_ebony_kingdom }} and
+    Assamite {{ assamite }} {{ khabar_glory }} deserve a special motion,
+    as they are unusually high on blood gain.
+</p>
+{% endtrans %}
+<div class="insert tip">
+    <h3>{{ _('Vote bloating') }}</h3>
+    <p>
+        {% trans trimmed %}
+        Most standard actions only generate bloats between 1 and 3 points.
+        Some political actions, however, can produce higher bloats if they get through.
+        They are so efficient, virtually every political oriented deck include
+        some of them:
+        {% endtrans %}
+    </p>
+    <ul>
+        <li> {{ card("Consanguineous Boon") }} </li>
+        <li> {{ card("Diversity") }} </li>
+        <li> {{ card("Autarkis Persecution") }} </li>
+        <li> {{ card("Anathema") }} </li>
+        <li> {{ card("Parity Shift") }} ({{ _('Prince or Justicar') }}) </li>
+        <li>
+            {{ card("Ancient Influence") }} {{ _('and') }} {{ card("Political Stranglehold") }}
+            ({{ _('Big capacity vampires') }})
+        </li>
+        <li> {{ card("Black Forest Base") }} ({{ _('Sabbat') }}) </li>
+        <li>
+            {{ card("Benefit Performance") }}
+            {{ daughter_of_cacophony }}
+        </li>
+    </ul>
+</div>
+<h2 id="counters">{# TRANSLATORS: not tokens, strategies against bloat #}{{ _('Counters') }}</h2>
+<p>
+    {% trans trimmed
+    sudden_reversal=card("Sudden Reversal"),
+    wash=card("Wash"),
+    bleeding_the_vine=card("Bleeding the Vine"),
+    minion_tap=card("Minion Tap"),
+    liquidation=card("Liquidation"),
+    delaying_tactics=card("Delaying Tactics")
+    %}
+    Most bloat modules are focused on Master cards. This entails that countering those masters with
+    {{ sudden_reversal }}, {{ wash }} or {{ bleeding_the_vine }}
+    is a valid offensive strategy.
+    Technically, they amount to an indirect bleed: preventing one's prey
+    to get three pools from {{ minion_tap }} or {{ liquidation }} is equivalent
+    to removing three pools from her using a bleed.
+    The same logic applies to stopping pool generating political actions with
+    {{ delaying_tactics }}.
+    {% endtrans %}
+</p>
+{% endblock %}
