@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="library.core">
+<body>
+
+<metal:main fill-slot="content-core">
+<metal:content-core define-macro="content-core">
+
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+/>
+<div tal:define="self nocall:context/@@view;">
+  <fieldset tal:repeat="group view/groups|nothing"
+            tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
+      <tal:block tal:define="widgets group/widgets/values" tal:condition="python:group.__name__ not in ('categorization','Bien et PPPW')">
+          <legend tal:content="group/label"  tal:condition="python:view.is_there_any_values(group.widgets.values())" />
+          <tal:block tal:repeat="widget group/widgets/values">
+              <tal:widget tal:condition="python:widget.value and widget.value != ['unselected']" tal:replace="structure widget/@@ploneform-render-widget"/>
+          </tal:block>
+      </tal:block>
+  </fieldset>
+  <!-- print field "information" -->
+  <tal:widget
+     tal:define="widget python:view.widgets.get('informations', None)"
+     tal:condition="widget/value"
+     tal:replace="structure widget/@@ploneform-render-widget" />
+
+  <fieldset tal:repeat="group view/groups|nothing"
+            tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
+      <tal:block tal:condition="python:group.__name__ in ('Bien et PPPW')">
+          <legend tal:content="group/label" />
+          <tal:block tal:define="values group/widgets/values" tal:repeat="widget group/widgets/values">
+              <tal:cond tal:condition="python:view.is_TextTitleWidget(widget)">
+              <h2 tal:condition="python:view.is_there_any_fields_after_this_title(widget, values)" tal:content="structure widget"/>
+              </tal:cond>
+              <tal:cond tal:condition="python:not view.is_TextTitleWidget(widget)">
+              <tal:widget tal:condition="widget/value" tal:replace="structure widget/@@ploneform-render-widget"/>
+              </tal:cond>
+          </tal:block>
+      </tal:block>
+  </fieldset>
+
+  <tal:widget
+     tal:define="widget python:view.widgets.get('fichier_pdf', None)"
+     tal:condition="widget"
+     tal:replace="structure widget/@@ploneform-render-widget" />
+
+  <!-- lead image, integrated with fancybox gallery. -->
+  <tal:block tal:condition="context/image"
+              tal:define="lead_image_caption context/image_caption|nothing">
+    <a id="form-widgets-ILeadImage-image"
+       data-fancybox="gallery"
+       href=""
+       tal:define="scale_func context/@@images;
+                   full_size_image python: scale_func.scale('image');
+                   preview_image python: scale_func.scale('image', scale='preview', direction='thumbnail');"
+       tal:attributes="href full_size_image/url;
+                       data-caption lead_image_caption">
+          <img src="" tal:attributes="src preview_image/url">
+    </a>
+    <div class="leadimagecaption" tal:content="lead_image_caption"></div>
+  </tal:block>
+
+  <fieldset tal:define="group python: view.fieldsets.get('categorization', None)"
+             tal:condition="nocall:group"
+            tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
+      <legend tal:content="group/label" />
+      <tal:block tal:repeat="widget group/widgets/values">
+          <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+      </tal:block>
+  </fieldset>
+  <tal:block condition="view/is_geolocated">
+    <tal:widget
+      tal:define="widget python:view.widgets.get('IGeolocatable.geolocation', None)"
+      tal:replace="structure widget/@@ploneform-render-widget" />
+    <label class="horizontal" i18n:translate="">
+      Coordinates
+    </label>
+    <span tal:content="context/geolocation/latitude" /> ;
+    <span tal:content="context/geolocation/longitude" />
+  </tal:block>
+</div>
+</metal:content-core>
+</metal:main>
+
+</body>
+</html>
