@@ -1,0 +1,30 @@
+[project]
+name = "xmlapply"
+version = "0.1.0"
+description = "A tool for applying XML-defined file changes to a project directory"
+readme = "README.md"
+authors = [
+    { name = "Darin", email = "86675935+darinkishore@users.noreply.github.com" },
+]
+requires-python = ">=3.11"
+dependencies = ["click>=8.1.7", "pyperclip>=1.8.2", "PyYAML>=6.0"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Repository = "https://github.com/darinkishore/xmlapply"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+xmlapply = "xmlapply.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xmlapply"]
