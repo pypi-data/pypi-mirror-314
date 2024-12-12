@@ -1,0 +1,45 @@
+import aiohttp
+from scrapy.http import Request
+from typing import TYPE_CHECKING, Union
+from gzspidertools.spiders import AyuSpider
+from scrapy.crawler import CrawlerProcess
+from scrapy.http import Request
+from scrapy.utils.project import get_project_settings
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+
+
+class $classname(AyuSpider):
+    name = "$name"
+    allowed_domains = ["$domain"]
+    start_urls = ["http://$domain/"]
+    custom_settings = {
+        "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
+    }
+
+    async def parse(self, response: "ScrapyResponse"):
+        self.slog.info("starting ...")
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://myip.ipip.net") as additional_response:
+                additional_data = await additional_response.text()
+                self.slog.debug(f"parse 响应内容: {additional_data}")
+                yield Request(
+                    url="https://myip.ipip.net",
+                    callback=self.parse_first,
+                    dont_filter=True,
+                )
+
+    async def parse_first(self, response: "ScrapyResponse"):
+        self.slog.debug(f"parse_first 响应内容: {response.text}")
+
+
+if __name__ == '__main__':
+    process = CrawlerProcess(get_project_settings())
+    process.crawl($classname.name)
+    process.start()
