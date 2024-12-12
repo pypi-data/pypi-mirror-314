@@ -1,0 +1,93 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypigeon"
+dynamic = ["version"]
+description = "an easy-to-use Python client for Pigeon"
+readme = "README.md"
+authors = [{name = "BioTeam", email="contact@bioteam.net"}]
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pyyaml>=6.0",
+    "httpx>=0.20.0,<0.26.0",
+    "attrs>=21.3.0",
+    "python-dateutil",
+    "pyarrow",
+    "pandas",
+    "tqdm",
+    "tabulate",
+]
+
+[project.optional-dependencies]
+dev = [
+    "sphinx",
+    "pytest",
+    "pytest-httpx>=0.20.0,<0.26.0",
+    # kgutwin 2024-11-26  pinning pydantic2 versions, getting "PydanticUserError"
+    #                     on pydantic 2.10.2
+    "pydantic==2.8.2",
+    "pydantic_core==2.20.1",
+    "openapi-python-client==0.17.2",
+    "reorder-python-imports",
+    "ruff>=0.5.0",
+    "black==23.12.1",
+    "mypy",
+    "types-python-dateutil",
+    "pandas-stubs",
+    "types-tqdm",
+    "types-PyYAML",
+    "types-tabulate",
+    "build",
+    "twine",
+]
+doc = [
+    "sphinx",
+]
+
+[project.scripts]
+pcmd = "pypigeon.pcmd.cli:main"
+
+[tool.mypy]
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pypigeon.pigeon_core.*",
+    # kgutwin 2024-08-12  pyarrow-stubs are not in good health; recommend avoiding them
+    #                     for the time being
+    "pyarrow",
+]
+ignore_missing_imports = true
+disable_error_code = 'redundant-cast'
+
+[tool.setuptools]
+packages = ["pypigeon"]
+
+[tool.setuptools_scm]
+root = "../.."
+
+[tool.black]
+
+[tool.ruff]
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+extend-safe-fixes = ["F841"]
+
+[tool.ruff.lint.per-file-ignores]
+"pypigeon/pigeon_core/**/*.py" = ["E501"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = [
+    "pypigeon",
+    "tests",
+]
