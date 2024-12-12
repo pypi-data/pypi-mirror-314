@@ -1,0 +1,85 @@
+Metadata-Version: 2.3
+Name: poktroll-clients
+Version: 0.1.0a1.dev0
+Summary: Python bindings for the Pocket Network protocol client library (libpoktroll-clients)
+Project-URL: Homepage, https://github.com/pokt-network/poktroll-clients-py
+Project-URL: Repository, https://github.com/pokt-network/poktroll-clients-py.git
+Project-URL: Documentation, https://github.com/pokt-network/poktroll-clients-py#readme
+Author-email: Bryan White <bryanchriswhite@gmail.com>
+License: MIT
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Requires-Dist: atomics>=1.0.2
+Requires-Dist: cffi>=1.17.1
+Requires-Dist: protobuf>=5.29.0
+Provides-Extra: dev
+Requires-Dist: asyncio>=3.4.3; extra == 'dev'
+Requires-Dist: black>=23.0.0; extra == 'dev'
+Requires-Dist: isort>=5.0.0; extra == 'dev'
+Requires-Dist: mypy-protobuf>=3.6.0; extra == 'dev'
+Requires-Dist: mypy>=1.0.0; extra == 'dev'
+Provides-Extra: test
+Requires-Dist: pytest-asyncio>=0.24.0; extra == 'test'
+Requires-Dist: pytest>=8.3.4; extra == 'test'
+Description-Content-Type: text/markdown
+
+# Poktroll-clients-py
+
+Python bindings to the [`poktroll` client packages](https://pkg.go.dev/github.com/pokt-network/poktroll@v0.0.10/pkg/client).
+
+## Start poktroll localnet
+```bash
+git clone https://github.com/pokt-network/poktroll
+cd poktroll
+
+# Start poktroll localnet
+make localnet_up
+```
+
+## Build and install `libpoktroll_clients` shared library & headers
+```bash
+git clone https://github.com/byanchriswhite/libpoktroll_clients
+cd libpoktroll_clients
+
+# Build shared library - NOTE: this will take a while until some import optimizations are done.
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+#OR build and install os-specific package; see libpoktroll_clients/README.md.
+```
+
+## Poktroll-clients-py development environment setup
+```bash
+git clone https://github.com/bryanchriswhite/poktroll-clients-py
+cd poktroll-clients-py
+
+# Install dependencies
+pip install pipenv
+pipenv install
+pipenv shell
+
+# (optional) Update protobufs ("pull" from buf.build)
+buf export buf.build/pokt-network/poktroll
+
+# (optional) Re-generate protobufs & fix imports
+buf generate && python ./scripts/fix_proto_imports.py
+
+# Install the package in editable mode
+pip install -e .
+
+# Run tests
+pytest
+```
