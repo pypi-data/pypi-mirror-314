@@ -1,0 +1,111 @@
+Metadata-Version: 2.1
+Name: pii-scanner
+Version: 0.1.9
+Summary: A library for scanning Personally Identifiable Information (PII).
+Home-page: https://github.com/devankit01/pii_scanner
+Author: Ankit Gupta
+Author-email: devankitgupta01@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: unstructured==0.15.5
+Requires-Dist: presidio-analyzer==2.2.32
+Requires-Dist: openpyxl==3.1.5
+Requires-Dist: opencv-python==4.10.0.84
+Requires-Dist: pdf2image==1.17.0
+Requires-Dist: pytesseract==0.3.13
+Requires-Dist: PyPDF2==3.0.1
+Requires-Dist: python-docx==1.1.2
+Requires-Dist: python-pptx==1.0.2
+Requires-Dist: xmltodict==0.13.0
+Requires-Dist: scikit-image==0.24.0
+Requires-Dist: deskew==1.5.1
+Requires-Dist: gliner==0.2.10
+Requires-Dist: charset-normalizer==3.3.2
+Requires-Dist: idna==3.7
+
+# PII Scanner
+
+A library for scanning Personally Identifiable Information (PII) from text.
+
+## Installation
+
+```bash
+pip install pii_scanner
+```
+
+## Usage 
+
+```bash
+from pii_scanner.scanner import PIIScanner
+
+# Create an instance of the scanner
+pii_scanner = PIIScanner()
+
+# Sample data containing PII
+data = [
+    "Ankit Gupta",
+    "Lucknow",
+    "+9191840562195",
+    "Indian",
+    "Sofia Rossi",
+    "Rome",
+    "+390612345678",
+    "Italian"
+]
+
+# Scan the structured data
+results = pii_scanner.scan_structured_data(data, chunk_size=10, sample_size=1.0)
+
+# Print the results
+print(results)
+
+```
+
+
+## Output 
+
+```bash
+[
+    {
+        "text": "Ankit Gupta",
+        "entity_detected": [
+            {"type": "PERSON", "start": 0, "end": 11, "score": 0.85}
+        ]
+    },
+    {
+        "text": "Rome",
+        "entity_detected": [
+            {"type": "LOCATION", "start": 0, "end": 4, "score": 0.85}
+        ]
+    },
+    {
+        "text": "+919140562195",
+        "entity_detected": [
+            {"type": "PHONE_NUMBER", "start": 0, "end": 13, "score": 0.85}
+        ]
+    },
+    {
+        "text": "Sofia Rossi",
+        "entity_detected": [
+            {"type": "PERSON", "start": 0, "end": 11, "score": 0.85}
+        ]
+    },
+    {
+        "text": "Indian",
+        "entity_detected": [
+            {"type": "NATIONALITY", "start": 0, "end": 6, "score": 0.9}
+        ]
+    }
+]
+
+
+```
+
+
+
+
