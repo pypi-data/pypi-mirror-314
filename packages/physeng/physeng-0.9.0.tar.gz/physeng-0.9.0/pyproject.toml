@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "physeng"
+version = "0.9.0"
+authors = [
+  { name="Andreas Mussgiller", email="andreas.mussgiller@desy.de" },
+]
+description = "Physics and engineering tools"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Intended Audience :: Science/Research"
+]
+dependencies = [
+    "pandas",
+    "workalendar",
+    "lxml",
+    "numpy"
+]
+
+[tool.setuptools]
+packages = [
+    "physeng",
+    "physeng.data",
+    "physeng.materials",
+    "physeng.geometry",
+    "examples.physeng"
+]
+
+[tool.setuptools.package-data]
+physeng = [
+    "data/*.xml",
+    "data/*.csv"
+]
+
+[project.urls]
+Homepage = "https://gitlab.desy.de/andreas.mussgiller/PhysEng"
+Issues = "https://gitlab.desy.de/andreas.mussgiller/PhysEng"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "--import-mode=importlib",
+]
+testpaths = [
+    "tests",
+]
+python_files = [
+    "tests/*.py",
+]
+python_functions = [
+    "test_singleton",
+    "test_DateTimeFromDecimalYear",
+    "test_humidity",
+    "test_Dimensionless",
+    "test_Length",
+    "test_Area",
+    "test_Density",
+    "test_Pressure",
+    "test_VolumeFlowRate",
+    "test_MassFlowRate",
+    "test_Velocity",
+    "test_Energy",
+    "test_Power",
+    "test_Temperature",
+    "test_TemperatureGradient",
+    "test_ThermalConductivity",
+    "test_ISO286",
+    "test_ISO2768",
+    "test_Materials",
+    "test_Geometry2D"
+]
