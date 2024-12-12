@@ -1,0 +1,86 @@
+name: slsa-publish
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digests: ${{ steps.hash.outputs.digests }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Cache jq
+      - name: Cache jq installation
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/jq
+          key: ${{ runner.os }}-jq-${{ hashFiles('setup.py', 'requirements.txt', 'pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-jq-
+
+      # Install jq if not cached
+      - name: Install jq
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      # Build the Python package artifact
+      - name: Build Python Package Artifacts
+        run: |
+          python -m pip install --upgrade pip
+          python setup.py sdist bdist_wheel
+
+      # Validate artifacts
+      - name: Validate Artifacts
+        run: |
+          if [ ! -s dist/*.whl ]; then
+            echo "No wheel artifact found!" >&2
+            exit 1
+          fi
+
+      # Test artifacts (e.g., install and run tests)
+      - name: Test Artifacts
+        run: |
+          python -m pip install dist/*.whl
+          pytest tests/
+
+      # Generate subject for provenance
+      - name: Generate subject for provenance
+        id: hash
+        run: |
+          set -euxo pipefail
+          files=$(ls dist/*.whl)
+          hashes=$(sha256sum $files | awk '{print $1}' | jq -R -s -c 'split("\n")[:-1]')
+          echo "digests=$hashes" >> "${GITHUB_OUTPUT}"
+
+  provenance:
+    needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.5.0
+    with:
+      base64-subjects: "${{ needs.build.outputs.digests }}"
+      upload-assets: true
+
+  verify_provenance:
+    needs: [provenance]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Provenance Metadata
+        run: |
+          echo "Verifying provenance files..."
+          if [ ! -f ./provenance/*.json ]; then
+            echo "Provenance files not found!" >&2
+            exit 1
+          fi
+          cat ./provenance/*.json
+          jq '.[0].provenance' ./provenance/*.json

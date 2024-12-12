@@ -1,0 +1,35 @@
+name: stale
+
+on:
+  schedule:
+    - cron: "15 13 * * *" # Run at 13:15 UTC daily
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/stale@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not
+            had recent activity. If you believe this issue is still relevant, please
+            add a comment to keep it open. Otherwise, it will be closed in 7 days.
+          stale-pr-message: >
+            This pull request has been automatically marked as stale because it has not
+            had recent activity. If you believe this PR is still relevant, please update it.
+            Otherwise, it will be closed in 7 days.
+          stale-issue-label: "stale"
+          stale-pr-label: "stale"
+          days-before-stale: 30 # Time in days before marking an issue or PR as stale
+          days-before-close: 7 # Time in days after marking stale before closing
+          exempt-issue-labels: "pinned,keep-open" # Labels that prevent an issue from being marked stale
+          exempt-pr-labels: "work-in-progress,do-not-close" # Labels that prevent a PR from being marked stale
+          only-labels: "" # Only apply to issues or PRs with specific labels (leave empty for all)
+          operations-per-run: 30 # Number of issues and PRs to process in one run
+          debug-only: false # Set to true for testing without taking any actions
