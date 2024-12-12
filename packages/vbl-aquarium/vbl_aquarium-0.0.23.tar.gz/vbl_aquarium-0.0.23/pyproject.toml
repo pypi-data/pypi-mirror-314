@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vbl-aquarium"
+dynamic = ["version"]
+description = 'Collection of Pydantic models describing data objects passed between Virtual Brain Lab projects.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = ['pydantic', "virtualbrainlab", "neuroscience"]
+authors = [
+  { name = "Daniel Birman", email = "dbirman@uw.edu" },
+  { name = "Kenneth Yang", email = "kjy5@uw.edu" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research",
+]
+dependencies = [
+  "pydantic==2.10.3",
+]
+
+[project.urls]
+Documentation = "https://github.com/VirtualBrainLab/vbl-aquarium/blob/main/README.md"
+Issues = "https://github.com/VirtualBrainLab/vbl-aquarium/issues"
+Source = "https://github.com/VirtualBrainLab/vbl-aquarium"
+
+[tool.hatch.version]
+path = "src/vbl_aquarium/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/models"]
+
+[tool.hatch.envs.default]
+python="3.13"
+dependencies = [
+#  "coverage[toml]>=6.5",
+#  "mypy>=1.0.0",
+#  "pytest",
+]
+
+#[tool.hatch.envs.default.scripts]
+#test = "pytest {args:tests}"
+#test-cov = "coverage run -m pytest {args:tests}"
+#cov-report = [
+#  "- coverage combine",
+#  "coverage report",
+#]
+#cov = [
+#  "test-cov",
+#  "cov-report",
+#]
+#check = "mypy --strict --install-types --non-interactive {args:src/vbl_aquarium}"
+
+#[tool.coverage.run]
+#source_pkgs = ["vbl_aquarium", "tests"]
+#branch = true
+#parallel = true
+#omit = [
+#  "src/vbl_aquarium/__about__.py",
+#]
+#
+#[tool.coverage.paths]
+#vbl_aquarium = ["src/vbl_aquarium", "*/vbl-aquarium/src/vbl_aquarium"]
+#tests = ["tests", "*/vbl-aquarium/tests"]
+#
+#[tool.coverage.report]
+#exclude_lines = [
+#  "no cov",
+#  "if __name__ == .__main__.:",
+#  "if TYPE_CHECKING:",
+#]
+
+[tool.ruff.lint]
+ignore=["A003", "EM101", "FBT002", "T201", "TCH001", "TRY002", "TRY003"]
