@@ -1,0 +1,24 @@
+query ($org: String!, $team_slug: String!) {
+  organization(login: $org) {
+    team(slug: $team_slug) {
+      repositories(first: 100) {
+        nodes {
+          ... on Repository {
+            id
+            databaseId
+            url
+            name
+            description
+            primaryLanguage {
+              name
+            }
+            archivedAt
+            defaultBranchRef {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+query ($query: String!, $resultsPerPage: Int!) {
+  search(type: REPOSITORY, query: $query, first: $resultsPerPage) {
+    repos: edges {
+      repo: node {
+        ... on Repository {
+          id
+          databaseId
+          url
+          name
+          archivedAt
+          description
+          isTemplate
+          primaryLanguage {
+            name
+          }
+          isPrivate
+          pushedAt
+          createdAt
+          isTemplate
+          licenseInfo {
+            name
+          }
+          branchProtectionRules(first: 10) {
+            nodes {
+              allowsDeletions
+              allowsForcePushes
+              isAdminEnforced
+              requiresConversationResolution
+              requiredApprovingReviewCount
+              requiresCodeOwnerReviews
+              requiresCommitSignatures
+              matchingRefs(first: 10) {
+                nodes {
+                  name
+                }
+              }
+            }
+          }
+          defaultBranchRef {
+            name
+            target {
+              ... on Commit {
+                oid
+              }
+            }
+          }
+          vulnerabilityAlerts(first: 10, states: OPEN) {
+            totalCount
+            nodes {
+              state
+              createdAt
+              dismissReason
+              dismissedAt
+              dismisser {
+                login
+              }
+              fixedAt
+              securityAdvisory {
+                summary
+                severity
+                permalink
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
