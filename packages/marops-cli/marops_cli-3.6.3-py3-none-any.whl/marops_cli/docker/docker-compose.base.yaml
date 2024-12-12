@@ -1,0 +1,162 @@
+name: marops
+
+services:
+  marops_autoheal:
+    container_name: marops_autoheal
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  marops_ui:
+    container_name: marops_ui
+    image: ghcr.io/greenroom-robotics/marops_ui:$MAROPS_VERSION
+    build:
+      dockerfile: ./docker/Dockerfile.marops_ui
+    environment:
+      HASURA_HTTP_URL: http://localhost:7003/v1/graphql
+      HASURA_WS_URL: ws://localhost:7003/v1/graphql
+      CORE_URL: http://localhost:7004
+      TILER_URL: http://localhost:7001
+      DOCS_URL: http://localhost:7005
+      STUDIO_URL: http://localhost:7006
+    ports:
+      - "7000:7000"
+    restart: unless-stopped
+
+  marops_docs:
+    container_name: marops_docs
+    image: ghcr.io/greenroom-robotics/marops_docs:$MAROPS_VERSION
+    build:
+      dockerfile: ./docker/Dockerfile.marops_docs
+    ports:
+      - "7005:3000"
+    restart: unless-stopped
+
+  marops_core:
+    container_name: marops_core
+    image: ghcr.io/greenroom-robotics/marops_core:$MAROPS_VERSION
+    build:
+      dockerfile: ./docker/Dockerfile.marops_core
+    ports:
+      - "7004:7004"
+    volumes:
+      - file_data:/file-data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $MAROPS_BACKUP_PATH:/backups
+    environment:
+      HASURA_METADATA_DIR: /app/projects/hasura/metadata
+      FILE_DATA_PATH: /file-data
+      FILE_DATA_TEMP_PATH: /app/projects/marops_core/file_data_templates
+      MAROPS_BACKUP_PATH: $MAROPS_BACKUP_PATH
+      HASURA_GRAPHQL_ADMIN_SECRET: $HASURA_GRAPHQL_ADMIN_SECRET
+      HASURA_GRAPHQL_JWT_SECRET: $HASURA_GRAPHQL_JWT_SECRET
+      SECURE_COOKIE: $SECURE_COOKIE
+    restart: unless-stopped
+    links:
+      - "postgres:postgres"
+
+  studio:
+    container_name: marops_studio
+    image: ghcr.io/greenroom-robotics/studio:1.0.0
+    ports:
+      - "7006:8080"
+    restart: unless-stopped
+
+  plugins:
+    container_name: marops_plugins
+    build:
+      context: ./projects/plugins
+    image: ghcr.io/greenroom-robotics/marops_plugins:$MAROPS_VERSION
+    ports:
+      - "7010:7010"
+    restart: unless-stopped
+    volumes:
+      - file_data:/file-data
+
+  postgres:
+    container_name: marops_postgres
+    image: timescale/timescaledb:2.11.2-pg12
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+      TS_TUNE_MAX_CONNS: 200
+
+  marops_hasura:
+    container_name: marops_hasura
+    image: ghcr.io/greenroom-robotics/marops_hasura:$MAROPS_VERSION
+    build:
+      dockerfile: ./docker/Dockerfile.marops_hasura
+    ports:
+      - "7003:8080"
+    depends_on:
+      - "postgres"
+      - "marops_core"
+    links:
+      - "marops_core:marops_core"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      NESTJS_EVENT_WEBHOOK_ENDPOINT: http://marops_core:7004/hasura/events
+      HASURA_NESTJS_WEBHOOK_SECRET_HEADER_VALUE: hasura-nest-secret
+      CORE_SERVICE_ENDPOINT: http://marops_core:7004/graphql
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: $HASURA_GRAPHQL_ADMIN_SECRET
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      HASURA_GRAPHQL_JWT_SECRET: $HASURA_GRAPHQL_JWT_SECRET
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: "inherited_roles"
+
+  marops_chart_tiler:
+    container_name: marops_chart_tiler
+    image: ghcr.io/greenroom-robotics/marops_chart_tiler:$MAROPS_VERSION
+    build:
+      dockerfile: ./docker/Dockerfile.marops_chart_tiler
+    volumes:
+      - chart_data:/app/data
+    ports:
+      - 7001:8080
+    restart: unless-stopped
+
+  marops_chart_api:
+    container_name: marops_chart_api
+    image: ghcr.io/greenroom-robotics/gr_chart_api:1.1.0
+    volumes:
+      - chart_data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 7002:3000
+    restart: unless-stopped
+    environment:
+      TILER_DOCKER_IMAGE_NAME: marops_chart_tiler
+
+  marops_rsync:
+    container_name: marops_rsync
+    image: ghcr.io/greenroom-robotics/marops_rsync:$MAROPS_VERSION
+    build:
+      dockerfile: ./docker/Dockerfile.marops_rsync
+    depends_on:
+      - "marops_core"
+    volumes:
+      - file_data:/data/src
+      - $MAROPS_DATA_PATH:/data/dst
+    restart: unless-stopped
+    environment:
+      DESTINATION_PATH: $MAROPS_DATA_PATH
+      TZ: Etc/Zulu
+      RSYNC_UID: 1000 # This assigns ownership of the files
+      RSYNC_GID: 1000
+
+volumes:
+  db_data:
+  file_data:
+  chart_data:

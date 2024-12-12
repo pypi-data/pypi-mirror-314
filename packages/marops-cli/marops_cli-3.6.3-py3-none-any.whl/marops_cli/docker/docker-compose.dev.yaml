@@ -1,0 +1,43 @@
+services:
+  marops_ui:
+    volumes:
+      - ./libs/marops_interfaces/src:/app/libs/marops_interfaces/src
+      - ./projects/marops_ui/src:/app/projects/marops_ui/src
+
+  marops_docs:
+    volumes:
+      - ./projects/docs/docs:/app/docs
+      - ./projects/docs/src:/app/src
+      - ./projects/docs/static:/app/static
+    command: yarn start
+
+  marops_core:
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./libs/marops_interfaces/src:/app/libs/marops_interfaces/src
+      - ./projects/marops_core/src:/app/projects/marops_core/src
+      - ./projects/hasura/metadata:/app/projects/hasura/metadata
+
+  marops_hasura:
+    volumes:
+      - ./projects/hasura/migrations:/hasura-migrations
+      - ./projects/hasura/metadata:/hasura-metadata
+      - ./projects/hasura/seeds:/hasura-seeds
+      - ./projects/hasura/config.yml:/config.yml
+
+  marops_chart_tiler:
+    volumes:
+      - ./projects/chart_data:/app/data
+
+  marops_chart_api:
+    volumes:
+      - ./projects/chart_data:/app/data
+
+  marops_rsync:
+    volumes:
+      - ./projects/rsync/file-data:/data/dst
+
+  plugins:
+    volumes:
+      - ./projects/plugins:/app/
