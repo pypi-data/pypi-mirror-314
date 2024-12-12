@@ -1,0 +1,55 @@
+- label: "源模型框架"
+  options:
+    - "onnx"
+  defaultIndex: 0
+  name: "source_framework"
+  help: "待转换的模型框架，只支持从ONNX转换"
+  type: "Select"
+
+- label: "模型结构类型"
+  options:
+    - "repvit_m0_9"
+    - "repvit_m1_0"
+    - "repvit_m1_1"
+    - "repvit_m1_5"
+    - "repvit_m2_3"
+  defaultIndex: 3
+  name: "networkArchitecture"
+  help: "目前支持repvit"
+  type: "Select"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 2048
+  defaultValue: 224
+  step: 32
+  name: "eval_height"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 2048
+  defaultValue: 224
+  step: 32
+  name: "eval_width"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+- label: "推理最大batch"
+  min: 1
+  max: 128
+  defaultValue: 8
+  step: 1
+  name: "max_batch_size"
+  help: "模型推理时支持的最大batch，一般推荐最大值为8。此值跟不同的模型、不同的部署硬件强相关。此值设置的过大会导致模型转换失败或者运行时报错。"
+  type: "inputNumber"
+
+- label: "模型转换精度"
+  options:
+    - "fp16"
+    - "fp32"
+  defaultIndex: 0
+  name: "precision"
+  help: "模型转换精度"
+  type: "Select"

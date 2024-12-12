@@ -1,0 +1,71 @@
+- label: "训练轮数"
+  min: 1
+  max: 1000
+  defaultValue: 50
+  step: 1
+  name: "Global.epoch_num"
+  help: "模型训练的最大轮数"
+  type: "inputNumber"
+
+- label: "基础学习率"
+  min: 0.00001
+  max: 0.5
+  defaultValue: 0.0005
+  step: 0.6
+  name: "Optimizer.lr.learning_rate"
+  formatter: "%f"
+  help: "模型训练的基础学习率"
+  type: "inputNumber"
+
+- label: "数据读取进程数量"
+  min: 1
+  max: 4
+  defaultValue: 2
+  step: 1
+  name: "Train.loader.num_workers"
+  help: "训练数据读取进程数量"
+  type: "inputNumber"
+
+- label: "模型训练batch大小"
+  min: 1
+  max: 128
+  defaultValue: 32
+  step: 1
+  name: "Train.loader.batch_size_per_card"
+  help: "是指一次训练(Iteration)所包含的样本数。 Batchsize越大，显存占用越大"
+  type: "inputNumber"
+
+- label: "模型训练图像高度"
+  min: 32
+  max: 240
+  defaultValue: 48
+  step: 1
+  name: "eval_height"
+  help: "模型训练图像的高度"
+  type: "Slider"
+
+- label: "模型训练图像宽度"
+  min: 32
+  max: 2048
+  defaultValue: 320
+  step: 1
+  name: "eval_width"
+  help: "模型训练图像的宽度"
+  type: "Slider"
+
+- label: "模型结构类型"
+  options:
+    - "文字识别-标准版"
+  name: "networkArchitecture"
+  defaultIndex: 0
+  help: "模型类型越大训练资源越多，训练越慢，精度越高"
+  type: "Select"
+
+- label: "文字类型"
+  options:
+    - "英文"
+    - "中文"
+  name: "textScene"
+  defaultIndex: 0
+  help: "文字类型, 英文或中文"
+  type: "Select"
