@@ -1,0 +1,37 @@
+//===--------- dpctl_config.h - Configured options for dpctl C API         ===//
+//
+//                      Data Parallel Control (dpctl)
+//
+// Copyright 2020-2024 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file exports a set of dpctl C API configurations.
+///
+//===----------------------------------------------------------------------===//
+
+#pragma once
+
+/* Defined when dpctl was built with level zero program creation enabled. */
+#define DPCTL_ENABLE_L0_PROGRAM_CREATION 1
+
+#define __SYCL_COMPILER_VERSION_REQUIRED 20221201L
+
+/* The DPCPP version used to build dpctl */
+#define DPCTL_DPCPP_VERSION "2025.0.1"
+
+#define DPCTL_LIBZE_LOADER_FILENAME "libze_loader.so.1"
+#define DPCTL_LIBCL_LOADER_FILENAME "libOpenCL.so.1"
