@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ALISE</title>
+</head>
+<body style="margin: 0; display: flex; flex-direction: column; background: #1e1e20; color: #dfdfd6; font-family: sans-serif;">
+<header style="display: flex; background: #161618; height: 100px; width: 100%; ">
+    <div style="display: flex; align-items: center; margin: auto 50px auto auto;">
+
+        <!-- ALISE LOGO -->
+        <a href="/">
+            <img style="height: 100px; width: 110px;" src="static/logo.svg" alt="ALISE">
+        </a>
+                <h1>ALISE &nbsp; </h1>
+                Welcome to the <br/>wonderful<br/> world of <br/>account linking
+
+    </div>
+</header>
+
+<section
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 270px); padding: 50px 0;">
+
+
+    <!-- {% if request.user.is_authenticated %} -->
+    <!--     <h3> You are authenticated</h> -->
+    <!-- {% endif %} -->
+    <!--  -->
+    <!-- {% if request.user.is_authenticated_as_internal %} -->
+    <!--     <h3> You are an INTERNAL user</h> -->
+    <!-- {% endif %} -->
+
+    {% block logged_in_or_not %}
+
+        {% if request.user.is_authenticated %}
+
+            <h1>Hi, {{ request.user.display_name }}</h1>
+
+            <!-- <small style="margin-bottom: 0;"> -->
+            <!--     Your last login used "{{ request.auth.provider.provider }}"&nbsp;&nbsp;&nbsp; -->
+            <!--     (<a href="/oauth2/{{ request.auth.provider.provider }}/authorize">relogin</a>) -->
+            <!-- </small> -->
+            {% block content %}{% endblock %}
+
+        {% else %}
+
+            <h1>You are not authenticated</h1>
+            <p>You should sign in using one of the OAuth options</p>
+            {% block nonauth_content %} {% endblock %}
+
+        {% endif %}
+
+    {% endblock %}
+</section>
+
+<header style="display: flex; background: #161618; height: 50px; width: 100%; ">
+    <div style="display: flex; align-items: center; margin: auto 50px auto auto;">
+        <a href="/privacy.html">Privacy Statement<a>
+        <!-- ALISE LOGO -->
+            <img style="height: 40px; width: 40px;" src="static/logo.svg" alt="ALISE">
+
+    </div>
+</header>
+</body>
+
+
+</html>
