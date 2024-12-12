@@ -1,0 +1,10 @@
+__title__ = 'ka_uts_com'
+__description__ = 'Communication Utilities.'
+__url__ = 'https://ka-ut-com.readthedocs.io/en/latest'
+__version__ = '1.0.0.240823'
+__build__ = 0x022200
+__author__ = 'Bernd Stroehle'
+__author_email__ = 'bernd.stroehle@gmail.com'
+__license__ = 'Apache-2.0'
+__copyright__ = 'Copyright 2024 Bernd Stroehle'
+__cake__ = u'\u2728 \U0001f370 \u2728'

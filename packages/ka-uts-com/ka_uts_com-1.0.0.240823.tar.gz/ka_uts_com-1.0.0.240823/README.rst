@@ -1,0 +1,917 @@
+##########
+ka_uts_com
+##########
+
+Overview
+********
+
+.. start short_desc
+
+**Communication Utilities**
+
+.. end short_desc
+
+Installation
+************
+.. start installation
+
+The package ``ka_uts_com`` can be installed from PyPI or Anaconda.
+
+To install with ``pip``:
+
+.. code-block:: shell
+
+	$ python -m pip install ka_uts_com
+
+To install with ``conda``:
+
+.. code-block:: shell
+
+	$ conda install -c conda-forge ka_uts_com
+
+.. end installation
+
+This requires that the ``readme`` extra is installed:
+
+.. code-block:: bash
+
+	$ python -m pip install ka_uts_com[readme]
+
+Configuration
+*************
+
+The Configuration of standard or personal (tenant specific) Package logging can be defined in Yaml Configuration Files in the data directory <Package Name>/data of the Package.
+
+  .. logging-configuration-files-label:
+  .. table:: *Logging Configuration Files*
+
+   +--------+----------------+---------------+-----------------------------------------------+
+   |Type    |Name            |Directory      |Description                                    |
+   +========+================+=========+=====+===============================================+
+   |standard|log.standard.yml|ka_uts_com/data|the Python Logger compatible stabdard Yaml     |
+   |        |                |               |config. file is used to define standard logging|
+   +--------+----------------+               +-----------------------------------------------+
+   |personal|log.personal.yml|               |the Python Logger compatible personal Yaml     | 
+   |        |                |               |config. file is used to define personal logging|
+   +--------+----------------+---------------+-----------------------------------------------+
+
+Modules
+*******
+
+Classification
+==============
+
+The Modules of Package ``ka_uts_com`` could be classified into the follwing module types:
+
+  .. Module-classification-types-label:
+  .. table:: *Modules-classification-types*
+
+   +-------------------------------------------------------------+
+   |Module                                                       |
+   +--------------+---------------+------------------------------+
+   |Name          |Type           |Functionality                 |
+   +==============+===============+==============================+
+   |aeq.py        |Data Utility   |Equate array processing       |
+   +--------------+---------------+------------------------------+
+   |argv.py       |Data Utility   |Argument value processing     |
+   +--------------+---------------+------------------------------+
+   |date.py       |Data Utility   |Date processing               |
+   +--------------+---------------+------------------------------+
+   |str.py        |Data utility   |String processing             |
+   +--------------+---------------+------------------------------+
+   |com.py        |Base           |Communication management      |
+   +--------------+---------------+------------------------------+
+   |fnc.py        |Function       |Function processing           |
+   +--------------+---------------+------------------------------+
+   |ioc.py        |I/O            |I/O management                |
+   +--------------+---------------+------------------------------+
+   |log.py        |Log            |Log management                |
+   +--------------+---------------+------------------------------+
+   |pacmod.py     |Package/Module |Package and module management |
+   +--------------+---------------+------------------------------+
+   |timer.py      |Timer          |Timer management              |
+   +--------------+---------------+------------------------------+
+   |__init__.py   |Special        |Package directory marker      |
+   +--------------+---------------+------------------------------+
+   |__version__.py|Special        |Version handling              |
+   +--------------+---------------+------------------------------+
+
+Special Modules
+===============
+
+  .. Special-modules-label:
+  .. table:: *Special Modules*
+
+   +--------------+---------+----------------------------------------------+
+   |Name          |Type     |Statements                                    |
+   +==============+=========+==============================================+
+   |__init__.py   |Package  |Module with no Statements.                    |
+   |              |directory|The module is used to mark the directory it   |
+   |              |marker   |contains as a package. A dummy Module enforces| 
+   |              |         |explicit imports and thus clear namesoace use |
+   |              |         |and call them with the dotnotation.           |
+   +--------------+---------+----------------------------------------------+
+   |__version__.py|Version  |Assignment Statements for Version System      |
+   |              |         |Variables.                                    |
+   +--------------+---------+----------------------------------------------+
+
+Special Module: __version__.py
+------------------------------
+
+Variables
+^^^^^^^^^
+
+The Module ``__version__.py`` contains no classes, but assignment statements for
+system variables used by versioning.
+
+  .. Variables-of-module-__version__-label:
+  .. table:: *Variables of module __version__*
+
+   +---------------------------------------------------------+
+   |Variable                                                 |
+   +---------------+-----------------------------------------+
+   |Name           |Example                                  |
+   +===============+=========================================+
+   |__title__      |'ka_uts_com'                             |
+   +---------------+-----------------------------------------+
+   |__description__|'Communication Area Utilities.'          |
+   +---------------+-----------------------------------------+
+   |__url__        |'https://ka-com.readthedocs.io/en/latest'|
+   +---------------+-----------------------------------------+
+   |__version___   |'2023.2.2'                               |
+   +---------------+-----------------------------------------+
+   |__build__      |0x022200                                 |
+   +---------------+-----------------------------------------+
+   |__author_email_|'Bernd Stroehle'                         |
+   +---------------+-----------------------------------------+
+   |__license__    |'Apache-2.0'                             |
+   +---------------+-----------------------------------------+
+   |__copyright__  |'Copyright 2023 bs29'                    |
+   +---------------+-----------------------------------------+
+   |__cake__       |u'\u2728 \U0001f370 \u2728'              |
+   +---------------+-----------------------------------------+
+
+Data Utility Module: aeq.py
+===========================
+
+Static classes
+--------------
+
+The Module ``aeq.py`` contains the subsequent static class.
+
+  .. Static-class-of-module-awq-label:
+  .. table:: *Static class of Module aeq*
+
+   +---------------------------------------------------+
+   |Static Class                                       |
+   +-----+---------------------------------------------+
+   |Name |Description                                  |
+   +=====+=============================================+
+   |Aeq  |Manage Commandline Arguments as Equate String|
+   +-----+---------------------------------------------+
+
+static Class: Aeq
+-----------------
+
+The static Class ``Aeq`` contains the subsequent methods.
+
+Methods
+^^^^^^^
+
+  .. Methods-of-class-Aeq-label:
+  .. table:: *Methods of class Aeq*
+
+   +------------------------------+-----------------------------------------------+
+   |Method                        |Parameter / Return Value                       |
+   +--------+---------------------+-------------+------+---+----------------------+
+   |Name    |                     |Name         |Type  |P/R|Description           | 
+   +========+=====================+=============+======+===+======================+
+   |sh_value|Show value of equate |cls          |class |P  |current class         |
+   |        |string provided by   +-------------+------+---+----------------------+
+   |        |single command line  |key          |str   |P  |Key of equate string  |
+   |        |argument             +-------------+------+---+----------------------+
+   |        |                     |value        |Any   |P  |Value of equate string|
+   |        |                     +-------------+------+---+----------------------+
+   |        |                     |d_valid_parms|TN_Dic|P  |Dictionary of valid   |
+   |        |                     |             |      |   |keys (parameters)     |
+   |        |                     +-------------+------+---+----------------------+
+   |        |                     |value        |Any   |RV |converted Value of the|
+   |        |                     |             |      |   |equate-string         |
+   |        |                     |             |      |   |according Value type  |
+   |        |                     |             |      |   |d_valid_parms         |
+   +--------+---------------------+-------------+------+---+----------------------+
+   |sh_d_eq |Show Dictionary creat|cls          |class |P  |current class         |
+   |        |created by parsing   +-------------+------+---+----------------------+
+   |        |array of equate      |a_s_eq       |T_Arr |P  |array of equate       |
+   |        |strings provided by  |             |      |   |strings               |
+   |        |commandline arguments+-------------+------+---+----------------------+
+   |        |                     |d_valid_parms|TN_Dic|P  |Dictionary of valid   |
+   |        |                     |             |      |   |parameter-keys        |
+   |        |                     +-------------+------+---+----------------------+
+   |        |                     |d_eq         |TN_Dic|RV |Dictiony of parameter |
+   |        |                     |             |      |   |key, values           |
+   +--------+---------------------+-------------+------+---+----------------------+
+
+Data Utility Module: argv.py
+============================
+
+Static classes
+--------------
+
+The Module ``argv.py`` contains the subsequent static class.
+
+  .. Static-class-of-module-argv-label:
+  .. table:: *Static class of Module argv*
+
+   +---------------------------------------------------+
+   |Static Class                                       |
+   +-----+---------------------------------------------+
+   |Name |Description                                  |
+   +=====+=============================================+
+   |Argv |Manage Commandline Arguments as Equate String|
+   +-----+---------------------------------------------+
+
+Static Class: Argv
+------------------
+
+The static Class ``Argv`` contains the subsequent variables and methods
+
+Variables
+^^^^^^^^^
+
+  .. Static-variables-of-class-Argv-label:
+  .. table:: *Static variables of class Argv*
+
+   +------------------------------------------------------------------+
+   |Static Variable                                                   |
+   +---------------+--------+-------+---------------------------------+
+   |Name           |Type    |Default|Description                      |
+   +===============+========+=======+=================================+
+   |sw_init        |T_Bool  |False  |initialisation switch            |
+   +---------------+--------+-------+---------------------------------+
+   |httpmod        |T_Dic   |None   |http modus                       |
+   +---------------+--------+-------+---------------------------------+
+   |sw_replace_keys|TN_Bool |False  |replace keys switch              |
+   +---------------+--------+-------+---------------------------------+
+   |keys           |TN_Arr  |None   |Keys array                       |
+   +---------------+--------+-------+---------------------------------+
+   |reqs           |T_Dic   |None   |Requests dictionary              |
+   +---------------+--------+-------+---------------------------------+
+   |app            |T_Dic   |None   |Appliction dictionary            |
+   +---------------+--------+-------+---------------------------------+
+
+Methods
+^^^^^^^
+
+  .. Methods-of-class-Argv-label:
+  .. table:: *Methods of class Argv*
+
+   +--------------------------------+-------------------------------------+
+   |Method                          |Parameter / Return Value             |
+   +-------------+------------------+---------+--------+----+-------------+
+   |Name         |Description       |Name     |Type    |P/RV|Description  |
+   +=============+==================+=========+========+====+=============+
+   |set_by_pacmod|set current pacmod|d_eq     |T_Dic   |P   |Dictionary of|
+   |             |dictionary        |         |        |    |equates      |
+   |             |                  +---------+--------+----+-------------+
+   |             |                  |root_cls |Class   |P   |Root Class   |
+   +-------------+------------------+---------+--------+----+-------------+
+   |set_d_eq     |set current pacmod|d_eq     |T_Dic   |P   |Dictionary of|
+   |             |dictionary        |         |        |    |equates      |
+   |             |                  +---------+--------+----+-------------+
+   |             |                  |root_cls |Class   |P   |Root Class   |
+   +-------------+------------------+---------+--------+----+-------------+
+
+Base Module: com
+================
+
+static Classes
+--------------
+
+  .. Static-classes-of-base-modul-com-label:
+  .. table:: *Static classes of base modul com*
+
+   +------------------------------------------------+
+   |Static Classes                                  |
+   +-----------+------------------------------------+
+   |Name       |Description                         |
+   +===========+====================================+
+   |App        |Application management class        |
+   +-----------+------------------------------------+
+   |Cfg        |Configuration class                 | 
+   +-----------+------------------------------------+
+   |Com        |Communication management class      |
+   +-----------+------------------------------------+
+   |Exit       |Exit processing class               |
+   +-----------+------------------------------------+
+   |LogPersonal|Personal logging class              |
+   +-----------+------------------------------------+
+   |LogStandard|Standard logging class              |
+   +-----------+------------------------------------+
+   |Mgo        |Mongo DB class                      |
+   +-----------+------------------------------------+
+
+static Class: App
+-----------------
+
+The static Class ``App`` contains the subsequent static variables and methods
+
+Variables
+^^^^^^^^^
+
+  .. Variables-of-static-class-App-label:
+  .. table:: *Variables of static class App*
+
+   +-----------------------------------------------------+
+   |Static Variable                                      |
+   +---------------+-------+-------+---------------------+
+   |Name           |Type   |Default|Description          |
+   +===============+=======+=======+=====================+
+   |sw_init        |T_Bool |False  |initialisation switch|
+   +---------------+-------+-------+---------------------+
+   |httpmod        |T_Dic  |None   |http modus           |
+   +---------------+-------+-------+---------------------+
+   |sw_replace_keys|TN_Bool|False  |replace keys switch  |
+   +---------------+-------+-------+---------------------+
+   |keys           |TN_Arr |None   |Keys array           |
+   +---------------+-------+-------+---------------------+
+   |reqs           |T_Dic  |None   |Requests dictionary  |
+   +---------------+-------+-------+---------------------+
+   |app            |T_Dic  |None   |Appliction dictionary|
+   +---------------+-------+-------+---------------------+
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-App-label:
+  .. table:: *Methods of static class App*
+
+   +--------------------------------+--------------------------------------+
+   |Method                          |Parameter / Return Value              |
+   +----+---------------------------+---------+------+---+-----------------+
+   |Name|Description                |Name     |Type  |P/R|Description      |
+   +====+===========================+=========+======+===+=================+
+   |init|initialise static variables|cls      |class |P  |current class    |
+   |    |of class if they are not   +---------+------+---+-----------------+
+   |    |allready initialized       |\**kwargs|list  |P  |Keyword arguments|
+   +----+---------------------------+---------+------+---+-----------------+
+   |sh  |show (return) class        |cls      |class |P  |current class    |
+   |    |                           +---------+------+---+-----------------+
+   |    |                           |\**kwargs|list  |P  |Keyword arguments|
+   |    |                           +---------+------+---+-----------------+
+   |    |                           |log      |Logger|R  |                 |
+   +----+---------------------------+---------+------+---+-----------------+
+
+static Class: Cfg
+-----------------
+
+The static Class ``Cfg`` contains the subsequent methods.
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-Cfg-label:
+  .. table:: *Methods of static class Cfg*
+
+   +-----------------------------------+--------------------------------+
+   |Method                             |Parameter / Return Value        |
+   +----+------------------------------+------+------+----+-------------+
+   |Name|Description                   |Name  |Type  |P/RV|Description  |
+   +====+==============================+======+======+====+=============+
+   |init|read pacmod yaml file into    |cls   |class |P   |current class|
+   |    |dictionary variable _dic and  +------+------+----+-------------+
+   |    |return _dic                   |pacmod|T_Dic |P   |pacmod       |
+   |    |                              |      |      |    |dictionary   |
+   |    |                              +------+------+----+-------------+
+   |    |                              |_dic  |TN_Dic|RV  |             |
+   +----+------------------------------+------+------+----+-------------+
+
+static Class: Exit
+------------------
+
+  .. Variables-of-static-class-Exit-label:
+  .. table:: *Static Variables of class Exit*
+
+   +----------------------------------------------------------------+
+   |Variable                                                        |
+   +--------------+-------+-------+---------------------------------+
+   |Name          |Type   |Default|Description                      |
+   +==============+=======+=======+=================================+
+   |sw_critical   |T_Bool |False  |critical switch                  |
+   +--------------+-------+-------+---------------------------------+
+   |sw_stop       |T_Bool |False  |stop switch                      |
+   +--------------+-------+-------+---------------------------------+
+   |sw_interactive|T_Bool |False  |interactive switch               |
+   +--------------+-------+-------+---------------------------------+
+
+static Class: Com
+-----------------
+
+The static Class ``Com`` contains the subsequent variables and methods
+
+Variables
+^^^^^^^^^
+
+  .. Variables-of-static-class-Com-label:
+  .. table:: *Variables of static class Com*
+
+   +-----------------------------------------------+
+   |Variable                                       |
+   +-------+------+-------+------------------------+
+   |Name   |Type  |Default|Description             |
+   +=======+======+=======+========================+
+   |cfg    |T_Dic |None   |Configuration dictionary|
+   +-------+------+-------+------------------------+
+   |log    |Logger|None   |logging Method          |
+   +-------+------+-------+------------------------+
+   |sw_init|T_Bool|False  |initialisation switch   |
+   +-------+------+-------+------------------------+
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-Com-label:
+  .. table:: *Methods of static class Com*
+
+   +-----------------------------------+--------------------------------------+
+   |Method                             |Parameter / Return Value              |
+   +----+------------------------------+---------+-----+----+-----------------+
+   |Name|Description                   |Name     |Type |P/RV|Description      |
+   +====+==============================+=========+=====+====+=================+
+   |init|initialise static variables   |cls      |class|P   |current class    |
+   |    |if they are not allready      +---------+-----+----+-----------------+
+   |    |initialized                   |\**kwargs|list |P   |keyword arguments|
+   +----+------------------------------+---------+-----+----+-----------------+
+
+static Class: LogPersonal
+-------------------------
+
+The static Class ``LogPersonal`` contains the subsequent static variables and methods.
+
+Variables
+^^^^^^^^^
+
+  .. Variables-of-ststic-class-LogPersonal-label:
+  .. table:: *Variables of static class LogPersonal*
+
+   +--------------------------------------------------------+
+   |Static Variable                                         |
+   +-------+------+-------+---------------------------------+
+   |Name   |Type  |Default|Description                      |
+   +=======+======+=======+=================================+
+   |sw_init|T_Bool|False  |initialisation switch            |
+   +-------+------+-------+---------------------------------+
+   |cfg    |T_Dic |None   |Configuration dictionary         |
+   +-------+------+-------+---------------------------------+
+   |log    |Logger|None   |logging function                 |
+   +-------+------+-------+---------------------------------+
+   |logfile|str   |None   |Logfile name                     |
+   +-------+------+-------+---------------------------------+
+
+Methods
+^^^^^^^
+
+  .. Methods-of-ststic-class-LogPersonal-label:
+  .. table:: *Methods of static class LogPersonal*
+
+   +----------------------------------+-----------------------------------------+
+   |Method                            |Parameter / Return Value                 |
+   +---------+------------------------+---------+--------+----+-----------------+
+   |Name     |Description             |Name     |Type    |P/RV|Description      |
+   +=========+========================+=========+========+====+=================+
+   |init     |Initialize static class |cls      |class   |P   |current class    |
+   |         |variables if they are   +---------+--------+----+-----------------+
+   |         |not allready initialized|\**kwargs|        |P   |keywords         |
+   +---------+------------------------+---------+--------+----+-----------------+
+   |read     |                        |pacmod   |T_Dic   |P   |pacmod dictionary|
+   |         |                        +---------+--------+----+-----------------+
+   |         |                        |filename |str     |P   |                 |
+   |         |                        +---------+--------+----+-----------------+
+   |         |                        |log_main |str     |RV  |                 |
+   +---------+------------------------+---------+--------+----+-----------------+
+   |set_level|set static variable log |sw_debug |bool    |P   |debug switch     |
+   |         |level in log            |         |        |    |                 |
+   |         |configuration handlers  |         |        |    |                 |
+   +---------+------------------------+---------+--------+----+-----------------+
+   |sh       |show static Logger      |cls      |class   |P   |current class    |
+   |         |variable log            +---------+--------+----+-----------------+
+   |         |                        |\**kwargs|        |P   |keyword arguments|
+   |         |                        +---------+--------+----+-----------------+
+   |         |                        |log      |Logger  |P   |                 |
+   +---------+------------------------+---------+--------+----+-----------------+
+   
+Static class: LogStandard
+-------------------------
+
+The static Class ``LogStandard`` contains the subsequent variables and methods
+
+Variables
+^^^^^^^^^
+
+  .. Variables-of-static-class-LogStandard-label:
+  .. table:: *Variables of static class LogStandard*
+
+   +---------------------------------------------------------+
+   |Variable                                                 |
+   +-------+-------+-------+---------------------------------+
+   |Name   |Type   |Default|Description                      |
+   +=======+=======+=======+=================================+
+   |sw_init|T_Bool |False  |initialisation switch            |
+   +-------+-------+-------+---------------------------------+
+   |cfg    |T_Dic  |None   |Configuration dictionary         |
+   +-------+-------+-------+---------------------------------+
+   |log    |Logger |None   |logging function                 |
+   +-------+-------+-------+---------------------------------+
+   |logfile|T_Str  |None   |Logfile name                     |
+   +-------+-------+-------+---------------------------------+
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-LogStandard-label:
+  .. table:: *Methods of static class LogStandard*
+
+   +-----------------------------------+-------------------------------------+
+   |Method                             |Parameter / Return Value             |
+   +---------+-------------------------+---------+--------+----+-------------+
+   |Name     |Description              |Name     |Type    |P/RV|Description  |
+   +=========+=========================+=========+========+====+=============+
+   |read     |Read log file path with  |pacmod   |T_Dic   |P   |             |
+   |         |jinja2 I/O utility       +---------+--------+----+-------------+
+   |         |                         |filename |str     |P   |             |
+   |         |                         +---------+--------+----+-------------+
+   |         |                         |log_main |str     |RV  |             |
+   +---------+-------------------------+---------+--------+----+-------------+
+   |set_level|Set static variable log  |sw_debug |bool    |P   |             |
+   |         |level in log             |         |        |    |             |
+   |         |configuration handlers   |         |        |    |             |
+   +---------+-------------------------+---------+--------+----+-------------+
+   |init     |initialise static        |cls      |class   |P   |current class|
+   |         |variables of class if    +---------+--------+----+-------------+
+   |         |if they are not allready |\**kwargs|        |P   |             |
+   |         |initialized              |         |        |    |             |
+   +---------+-------------------------+---------+--------+----+-------------+
+   |sh       |show static Logger       |cls      |class   |P   |current class|
+   |         |variable                 +---------+--------+----+-------------+
+   |         |                         |\**kwargs|        |P   |Keywords     |
+   |         |                         +---------+--------+----+-------------+
+   |         |                         |log      |Logger  |RV  |             |
+   +---------+-------------------------+---------+--------+----+-------------+
+
+Utility module: ioc.py
+======================
+
+The Module ``ioc.py`` provides Classes with I/O Control methods for files;
+it contains the subsequent classes classified by the supported file type.
+
+Static Classes
+--------------
+
+  .. Static-classes-of-utility-module-ioc-label:
+  .. table:: *Static classes of utility module ioc*
+
+   +--------------------------------------------+
+   |Static Classes                              |
+   +-------+------------------------------------+
+   |Name   |Description                         |
+   +=======+====================================+
+   |Jinja2 |I/O Control for Jinja2 files        |
+   +-------+------------------------------------+
+   |Yaml   |I/O Control for Yaml files          |
+   +-------+------------------------------------+
+
+static Class: Jinja2
+--------------------
+
+The static Class ``Jinja2`` provides I/O Control methods for Jinja2 files;
+it contains the subsequent methods.
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-Jinja2-label:
+  .. table:: *Methods of static class Jinja2*
+
+   +--------------------------------+------------------------------------+
+   |Method                          |Parameter / Return Value            |
+   +-------------+------------------+---------+------+---+---------------+
+   |Name         |Description       |Name     |Type  |P/R|Description    |
+   +=============+==================+=========+======+===+===============+
+   |read         |Read log file path|pacmod   |TN_Dic|P  |               |
+   |             |with jinja        +---------+------+---+---------------+
+   |             |                  |filename |str   |P  |               |
+   |             |                  +---------+------+---+---------------+
+   |             |                  |         |TN_Any|RV |no return value|
+   +-------------+------------------+---------+------+---+---------------+
+   |read_template|Read log file path|pacmod   |TN_Dic|P  |               |
+   |             |with jinja2       +---------+------+---+---------------+
+   |             |                  |filename |TN_Any|P  |               |
+   |             |                  +---------+------+---+---------------+
+   |             |                  |         |TN_Any|RV |no return value|
+   +-------------+------------------+---------+------+---+---------------+
+
+static Class: Yaml
+------------------
+
+The static Class ``Yaml`` provides I/O Control methods for Yaml files;
+it contains the subsequent variables and methods
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-Yaml-label:
+  .. table:: methods of static class Yaml*
+
+   +-------------------------------+-------------------------------------+
+   |Method                         |Parameter / Return Value             |
+   +----+--------------------------+---------+------+----+---------------+
+   |Name|Description               |Name     |Type  |P/RV|Description    |
+   +====+==========================+=========+======+====+===============+
+   |load|Load yaml string into any |string   |str   |P   |               |
+   |    |object using yaml loader; +---------+------+----+---------------+
+   |    |default is yaml.safeloader|loader   |str   |P   |               |
+   |    |                          +---------+------+----+---------------+
+   |    |                          |         |TN_Any|RV  |no return value|
+   +----+--------------------------+---------+------+----+---------------+
+   |read|Read yaml file path into  |path     |str   |P   |               |
+   |    |any object using yaml     +---------+------+----+---------------+
+   |    |loader; default loader is |loader   |str   |P   |               |
+   |    |yaml.safeloader           +---------+------+----+---------------+
+   |    |                          |         |TN_Any|RV  |no return value|
+   +----+--------------------------+---------+------+----+---------------+
+
+Utility Module: log.py
+======================
+
+The Module ``log`` provides Classes with I/O Control methods for log files;
+it contains the following static classes.
+
+
+  .. Static-classes-of-utility-module-log-label:
+  .. table:: Static classes of utility module log*
+
+   +------------------------------------------+
+   |Static Classes                            |
+   +-----+------------------------------------+
+   |Name |Description                         |
+   +=====+====================================+
+   |Log  |Log Management                      |
+   +-----+------------------------------------+
+
+Static Class: Log
+-----------------
+
+Variables
+^^^^^^^^^
+
+  .. Variables-of-static-class-Log-label:
+  .. table:: Variables of static class Log*
+
+   +-------+------+-------+---------------------------------+
+   |Name   |Type  |Default|Description                      |
+   +=======+======+=======+=================================+
+   |sw_init|T_Bool|False  |initialisation switch            |
+   +-------+------+-------+---------------------------------+
+   |cfg    |T_Dic |None   |Configuration dictionary         |
+   +-------+------+-------+---------------------------------+
+   |log    |Logger|None   |logging function                 |
+   +-------+------+-------+---------------------------------+
+
+Sub-Classes
+^^^^^^^^^^^
+
+The Class ``Log`` contains the following static sub-classes.
+
+  .. Static-sub-classes-of-static-class-Log-label:
+  .. table:: Static sub-classes of static class Log*
+
+   +---------------------------------------+
+   |Sub-class                              |
+   +----+----------------------------------+
+   |Name|Description                       |
+   +====+==================================+
+   |Eq  |Log Management for Equate Messages|
+   +----+----------------------------------+
+
+Methods
+"""""""
+
+  .. Methods-of-static-class-Log-label:
+  .. table:: Methods of static class Log*
+
+   +---------------------------+---------------------------------------+
+   |Method                     |Parameter / Return Value               |
+   +-------+-------------------+---------+--------+----+---------------+
+   |Name   |Description        |Name     |Type    |P/RV|Description    |
+   +=======+===================+=========+========+====+===============+
+   |debug  |Log debug message  |cls      |class   |P   |current class  |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |key      |Any     |P   |               |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |value    |Any     |P   |               |
+   +-------+-------------------+---------+--------+----+---------------+
+   |error  |Log error message  |cls      |class   |P   |current class  |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |key      |Any     |P   |               |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |value    |Any     |P   |               |
+   +-------+-------------------+---------+--------+----+---------------+
+   |info   |Log info message   |cls      |class   |P   |current class  |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |key      |Any     |P   |               |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |value    |Any     |P   |               |
+   +-------+-------------------+---------+--------+----+---------------+
+   |warning|Log warning message|cls      |class   |P   |current class  |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |key      |Any     |P   |               |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |value    |Any     |P   |               |
+   +-------+-------------------+---------+--------+----+---------------+
+   |sh     |show equate message|key      |Any     |P   |               |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |value    |Any     |P   |               |
+   |       |                   +---------+--------+----+---------------+
+   |       |                   |         |str     |RV  |no return value|
+   +-------+-------------------+---------+--------+----+---------------+
+
+Utility Module: pacmod.py
+=========================
+
+Static Classes
+--------------
+
+The utility module ``pacmod`` contains the following static classes.
+
+  .. Static-classes-of-utility-module-pacmod.py-label:
+  .. table:: Static classes of utility module pacmod.py*
+
+   +-------------------------------------------+
+   |Static Classes                             |
+   +------+------------------------------------+
+   |Name  |Description                         |
+   +======+====================================+
+   |Pacmod|Package Module Management           |
+   +------+------------------------------------+
+
+Static Class: Pacmod
+--------------------
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-Pacmod-label:
+  .. table:: *Metods of static class Pacmod*
+
+   +--------------------------------------------+---------------------------------------+
+   |Method                                      |Parameter / Return Value               |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |Name             |Description               |Name     |Type  |P/RV|Description      |
+   +=================+==========================+=========+======+====+=================+
+   |sh_d_pacmod      |create and show (return)  |root_cls |class |P   |root class       |
+   |                 |pacmod dictionary         +---------+------+----+-----------------+
+   |                 |                          |tenant   |Any   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |         |T_Dic |RV  |no return value  |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_path_cfg_yaml |show pacmod file path of  |pacmod   |T_Dic |P   |                 |
+   |                 |the yaml file             +---------+------+----+-----------------+
+   |                 |<pacmod module>.yaml      |         |str   |RV  |no return value  |
+   |                 |in the data directory of  |         |      |    |                 |
+   |                 |the current module of the |         |      |    |                 |
+   |                 |current package           |         |      |    |                 |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_path_keys_yaml|show pacmod file path type|pacmod   |T_Dic |P   |                 |
+   |                 |for the yaml file keys.yml+---------+------+----+-----------------+
+   |                 |keys.yml in the data      |type\_   |str   |P   |                 |
+   |                 |directory of the current  +---------+------+----+-----------------+
+   |                 |module of the current     |         |str   |RV  |no return value  |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_pacmod_type   |show pacmod type directory|pacmod   |T_Dic |P   |                 |
+   |                 |path                      +---------+------+----+-----------------+
+   |                 |                          |type\_   |str   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |         |str   |RV  |no return value  |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_file_path     |show pacmod file path     |cls      |class |P   |current class    |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |pacmod   |T_Dic |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |type\_   |str   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |suffix   |str   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |pid      |Any   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |ts       |Any   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |\**kwargs|      |P   |keyword arguments|
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |         |str   |RV  |no return value  |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_pattern       |show pacmod file path     |pacmod   |T_Dic |P   |                 |
+   |                 |pattern                   +---------+------+----+-----------------+
+   |                 |                          |type\_   |str   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |suffix   |str   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |\**kwargs|      |P   |keyword arguments|
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |         |str   |RV  |no return value  |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_path_cfg_log  |show file path of log     |pacmod   |TN_Dic|P   |                 |     
+   |                 |configuration file        +---------+------+----+-----------------+
+   |                 |                          |filename |str   |P   |                 |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |         |str   |RV  |no return value  |
+   +-----------------+--------------------------+---------+------+----+-----------------+
+   |sh_d_pacmod      |show pacmod dictionary    |cls      |class |P   |current class    |
+   |                 |                          +---------+------+----+-----------------+
+   |                 |                          |\**kwargs|      |P   |keyword arguments|
+   +-----------------+--------------------------+---------+------+----+-----------------+
+
+Utility Module: timer.py
+========================
+
+Static classes
+--------------
+
+The Module ``timer.py`` contains the following static classes.
+
+  .. Static-classes-of-utility-module-timer.py-label:
+  .. table:: *Static classes of utility module timer.py*
+
+   +----------------------------------------------+
+   |Static Classes                                |
+   +---------+------------------------------------+
+   |Name     |Description                         |
+   +=========+====================================+
+   |Timestamp|Timestamop class                    |
+   +---------+------------------------------------+
+   |Timer    |Timer class                         |
+   +---------+------------------------------------+
+
+Static class: Timer
+-------------------
+
+Variables
+^^^^^^^^^
+
+  .. Variables-of-static-class-Timer-label:
+  .. table:: *Variables of static class Timer*
+
+   +---------------------------------------------------------+
+   |Variable                                                 |
+   +-------+-------+-------+---------------------------------+
+   |Name   |Type   |Default|Description                      |
+   +=======+=======+=======+=================================+
+   |sw_init|T_Bool |False  |initialisation switch            |
+   +-------+-------+-------+---------------------------------+
+   |cfg    |T_Dic  |None   |Configuration dictionary         |
+   +-------+-------+-------+---------------------------------+
+   |log    |Logger |None   |logging function                 |
+   +-------+-------+-------+---------------------------------+
+
+Methods
+^^^^^^^
+
+  .. Methods-of-static-class-Timer-label:
+  .. table:: *Methods of static class Timer*
+
+   +---------------------------------------+--------------------------------------+
+   |Method                                 |Parameter / Return Value              |
+   +---------+-----------------------------+---------+-----+----+-----------------+
+   |Name     |Description                  |Name     |Type |P/RV|Description      |
+   +=========+=============================+=========+=====+====+=================+
+   |read     |Read log file path with      |pacmod   |T_Dic|P   |                 |
+   |         |jinja2                       +---------+-----+----+-----------------+
+   |         |                             |filename |str  |P   |                 |
+   |         |                             +---------+-----+----+-----------------+
+   |         |                             |log_main |str  |RV  |                 |
+   +---------+-----------------------------+---------+-----+----+-----------------+
+   |set_level|Set static variable log level|sw_debug |bool |P   |                 |
+   |         |in log configuration handlers|         |     |    |                 |
+   +---------+-----------------------------+---------+-----+----+-----------------+
+   |init     |initialise static variables  |cls      |class|P   |current class    |
+   |         |if they are not allready     +---------+-----+----+-----------------+
+   |         |initialized                  |\**kwargs|     |P   |keyword arguments|
+   +---------+-----------------------------+---------+-----+----+-----------------+
+   |sh       |show static variable log     |cls      |class|P   |                 |
+   |         |                             +---------+-----+----+-----------------+
+   |         |                             |\**kwargs|     |P   |keyword arguments|
+   +---------+-----------------------------+---------+-----+----+-----------------+
+
+Module Data
+===========
+
+   +-------------------+-------------------------------------+
+   |Name               |Description                          |
+   +===================+=====================================+
+   |log.main.tenant.yml|'ka_uts_com'                         |
+   |__copyright__      |'Copyright 2023 bs29'                |
+   +-------------------+-------------------------------------+
+
+Appendix
+========
+
+.. contents:: **Table of Content**
