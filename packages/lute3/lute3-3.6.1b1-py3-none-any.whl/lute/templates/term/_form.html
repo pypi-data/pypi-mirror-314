@@ -1,0 +1,446 @@
+<script type="text/javascript" src="{{ url_for('static', filename='js/dict-tabs.js') }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/lute-hotkey-utils.js') }}" charset="utf-8"></script>
+<script type="text/javascript">
+  const LUTE_USER_SETTINGS = {{ user_settings | safe }}
+</script>
+
+
+{% if duplicated_term %}
+{#
+  Duplicated term, only show a link to that term.
+  See DUPLICATE_TERM_CHECK comments in other files.
+#}
+<div class="flash-notice-narrow">
+  Term <a href="/term/edit/{{ duplicated_term.id }}">{{ duplicated_term.text }}</a> already exists.
+</div>
+{% else %}
+  {% for field_name, field_errors in form.errors.items() %}
+  {% for error in field_errors %}
+  <div class="flash-notice-narrow">{{ error }}</div>
+  {% endfor %}
+  {% endfor %}
+{% endif %}
+
+
+<div id="term-form-container">
+  <form id="term-form" name="term_form" method="POST"
+        onsubmit="return convert_pending_parent_tags(event);">
+    {{ form.hidden_tag() }}
+    <div id="term">
+      <div id="languageSel"
+        {% if term.language_id is none %}
+        {# show the language select box. #}
+        {% else %}
+        style="display:none;"
+        {% endif %}>
+        {{ form.language_id(class="form-control") }}
+        <button id="load-dicts-btn" title="Load dictionaries for the new term" type="button"></button>
+      </div>
+  
+      {{ form.original_text }}
+
+      <div>{{ form.text(class="form-control", value=(form.original_text.data or '')) }}</div>
+
+      <div>{{ form.parentslist(class="form-control") }}</div>
+  
+      <div {% if hide_pronunciation %}style="display:none;"{% endif %}>
+        {{ form.romanization(class="form-control") }}
+      </div>
+
+      <div id="translation-container">
+        <div>{{ form.translation }}</div>
+        <img {% if term.current_image %}style="grid-column: -1; display: block"{% endif %} 
+             class="zoomableTermImage"
+             id="term_image"
+             tabindex="0"
+             src="{{ form.current_image.object_data or '' }}"
+             onclick="clicked_zoomable_image(this);"
+             />
+      </div>
+
+      <div id="status-container">
+        {{ form.status(class="form-control") }}
+        <div id="sync-status-container">
+          {{ form.sync_status(class="form-control", disabled=True) }}
+          <label for="sync_status">Link to parent</label>
+        </div>
+      </div>
+
+      <div style="display: none">{{ form.current_image(class="form-control") }}</div>
+
+      <div>{{ form.termtagslist(class="form-control") }}</div>
+
+      <div id="term-button-container">
+          {% if term.id %}
+          <button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>
+          {% endif %}
+          <button id="btnsubmit" type="submit" title="Shortcut: Control+Enter" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<script type="text/javascript">
+
+  /** TERM IMAGE. ***************/
+
+  var term_image = null;
+
+  function clicked_zoomable_image(el) {
+    // alert('clicked');
+    $(el).toggleClass("clickedZoomableImage");
+  }
+
+  // The parent tag list, managed by tagify.
+  // Global reference needed for runtime inspection of tag list.
+  var parents_tagify = null;
+
+  // TODO zzfuture fix: acceptance tests for all interactions
+
+  // Monitor state of form change.
+  let form_changed = false;
+
+  $("form :input").change(function() {
+      form_changed = true;
+  });
+
+  let setup_parent_tagify = function(input) {
+    const tagify = new Tagify(input, {
+      placeholder: 'Parents',
+      editTags: false,
+      pasteAsTags: false,
+      backspace: true,
+      addTagOnBlur: false,
+      autoComplete: { enabled: true, rightKey: true, tabKey: true },
+      enforceWhitelist: false,
+      whitelist: [],
+      dropdown: {
+        enabled: 1,
+        maxItems: 15,
+        mapValueTo: 'suggestion',  // Field to display
+        placeAbove: false,  // Always put the dropdown below the textbox
+      },
+      templates: {
+        dropdownFooter(suggestions) {
+          var hasMore = suggestions.length - this.settings.dropdown.maxItems;
+          if (hasMore <= 0)
+            return '';
+          return `<footer data-selector='tagify-suggestions-footer' class="${this.settings.classNames.dropdownFooter}">
+            (more items available, please refine your search.)</footer>`;
+        }
+      },
+
+      // Use a hook to fire the onInput event!
+      // Pasting from the clipboard doesn't fire the
+      // tagify.on('input') event, so intercept it and handle
+      // it manually.
+      hooks: {
+        beforePaste : function(content) {
+          return new Promise((resolve, reject) => {
+            clipboardData = content.clipboardData || window.clipboardData;
+            pastedData = clipboardData.getData('Text');
+            // console.log("pasting => " + pastedData);
+            let e = { detail: { value: pastedData } };
+            onInput(e);
+            resolve();
+          });
+        }
+      },
+    });  // end tagify
+
+    tagify.on('click', function (e) {
+      // Exit early if language not set - will not handle, too complicated.
+      const langid = document.getElementById("language_id").value;
+      const clickedTagText = e.detail.data.value;
+      if (langid === "0" || clickedTagText === '') {
+        return;
+      }
+
+      if (form_changed) {
+        const msg = 'You have unsaved changes.  Click OK to save these changes and go to the parent term, or Cancel to continue editing.';
+        if (!confirm(msg))
+          return;
+      }
+
+      const in_reading_frame = ("{{ embedded_in_reading_frame }}" == "True");
+      let url = `/term/editbytext/${langid}/${clickedTagText}`;
+      if (in_reading_frame) {
+        url = `/read/termform/${langid}/${clickedTagText}`;
+      }
+
+      // Manually post, tell the reading screen to update, then go to the url.
+      const frm = $('#term-form');
+      const formData = frm.serialize();
+      $.post(frm.attr('action'), formData, function(response) {
+        if (in_reading_frame) {
+          window.parent.postMessage({ event: "LuteTermFormPosted" }, "*");
+        }
+        window.location.href = url;
+      });
+    });
+
+    tagify.on('add remove', function (e) {
+      // The #parents_list text box isn't changed consistently
+      // during events, so we have to check the tagify var
+      // itself, which has an accurate list of current tags.
+      // console.log(e);
+      // console.log(e.detail);
+      const single_parent = (parents_tagify.value.length == 1);
+      const cb = $("#sync_status");
+      cb.prop("checked", single_parent);
+      if (single_parent)
+        cb.removeAttr("disabled");
+      else
+        cb.attr("disabled", true);
+
+      // If adding a single parent, inherit its status.
+      if (e.type == 'add' && single_parent) {
+        if (e.detail && e.detail.data && e.detail.data.status) {
+          const targetValue = e.detail.data.status;
+          var radioButtons = document.getElementsByName('status');
+          for (var i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].value == targetValue) {
+              // console.log(`found at i = ${i}`);
+              radioButtons[i].checked = true;
+              break;
+            }
+          }
+        }
+      }
+    });
+
+    // Autocomplete
+    var controller;
+    tagify.on('input', onInput);
+    function onInput(e) {
+      tagify.whitelist = null;  // Reset whitelist.
+      if (e.detail.value == '' || e.detail.value.length < 1) {
+        controller && controller.abort();
+        tagify.whitelist = [];
+        tagify.loading(false).dropdown.hide();
+        return;
+      }
+      const s = encodeURIComponent(e.detail.value);
+      // console.log(s);
+      const langid = parseInt(document.getElementById('language_id').value);
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+      controller && controller.abort()
+      controller = new AbortController()
+
+      let make_dropdown = function(hsh) {
+        // console.log(`text: ${hsh.text}`);
+        const txt = decodeURIComponent(hsh.text);
+        let t = hsh.translation ?? '';
+        if (t == '') {
+          return txt;
+        }
+        t = t.replaceAll("\n", "; ").replaceAll("\r", "");
+        const maxlen = 70
+        if (t.length > maxlen) {
+          t = t.substring(0, maxlen) + "...";
+        }
+        return `${txt} (${t})`;
+      };
+
+      // Build whitelist from returned ajax data.  Remove current term
+      // since a term should not be assigned as its own parent.
+      let build_whitelist = function(data) {
+        const this_term_text = $("#original_text").val();
+        const whitelist = data.map((a) => ({
+          "value": a.text,
+          "suggestion": make_dropdown(a),
+          "status": a.status,
+        })).filter((hsh) => hsh.value != this_term_text);
+        return whitelist;
+      };
+
+      tagify.loading(true);  // spinning animation during fetch.
+      fetch(`/term/search/${s}/${langid}`, {signal:controller.signal})
+        .then(RES => RES.json())
+        .then(function(data) {
+          tagify.whitelist = build_whitelist(data); // update whitelist Array in-place
+          const sdecode = decodeURIComponent(s);
+          tagify.loading(false).dropdown.show(sdecode); // render the suggestions dropdown
+        }).catch(err => {
+          if (err.name === 'AbortError') {
+            // Do nothing, fetch was aborted due to another fetch.
+            // console.log('AbortError: Fetch request aborted');
+          }
+          else {
+            console.log(`error: ${err}`);
+          }
+        });
+    };  // end function onInput
+
+    return tagify;
+  }  // end setup_parent_tagify
+
+  // Parents are in the tagify-managed #parentslist input box.
+  let get_parents = function() {
+    // During form load, and in "steady state" (i.e., after the tags
+    // have been added or removed, and the focus has switched to
+    // another control) the #sync_status text box is loaded with the
+    // values.
+    const pdata = $('#parentslist').val();
+    if ((pdata ?? '') == '') {
+      return [];
+    }
+    const j = JSON.parse(pdata);
+    const parents = j.map(e => e.value);
+    return parents;
+  };
+
+  let enable_disable_sync_status_checkbox = function() {
+    const cb = $("#sync_status");
+    if (get_parents().length == 1)
+      cb.removeAttr("disabled");
+    else
+      cb.attr("disabled", true);
+  };
+
+  var TAGS = {{ tags | safe }};
+
+  let setup_term_tags_tagify = function(input) {
+    const tagify = new Tagify(input, {
+      placeholder: 'Tags',
+      editTags: false,
+      autoComplete: { enabled: true, rightKey: true, tabKey: true },
+      dropdown: { enabled: 1 },
+      enforceWhitelist: false,
+      whitelist: TAGS
+    });  // end tagify
+  };
+
+  $(document).ready(function () {
+
+    // "Save" shortcut
+    $(document).keydown(function(event) {
+      const s = get_pressed_keys_as_string(event);
+      if (s == LUTE_USER_SETTINGS.hotkey_SaveTerm) {
+        $("#btnsubmit").click();
+      }
+    });
+
+    /*
+    // Set term form focus
+    // DISABLING THIS: with this change, the term edit form pulls focus,
+    // so the left-and-right arrows don't work within the reading pane.
+    // The reading pane arrows are more important than the focus being set, IMO.
+    // Perhaps this can be changed later to set the focus if the form is opened
+    // from the term listing (i.e. move this to templates/term/formframes.html).
+    const langId = $("#language_id")
+    const text = $("#text")
+    const translation = $("#translation")
+
+    if(langId.val() == "0"){
+      langId.focus();
+    }else if(text.val() == ""){
+      text.focus();
+    }else{
+      translation.focus();
+    }
+    */
+
+    // Term image events.
+    var term_image = $("#term_image");
+
+    term_image.hover(
+      function(){ $(this).attr("title", "Click and hit Delete to remove, then Save."); },
+      function(){ $(this).removeClass('clickedZoomableImage') }
+    );
+
+    term_image.on("keydown", function(event) {
+      if (term_image.hasClass("clickedZoomableImage")) {
+        const k = event.key;
+        if (k === "Delete" || k === "Backspace") {
+          // Hide image on screen.
+          term_image.attr("src", "");
+          term_image.css("display", "none");
+          // Erase hidden form control value.
+          $("#current_image").val("");
+        }
+      }
+    });
+
+    const dictContainer = parent.document.querySelector(".dictcontainer");
+    var parentslist = document.getElementById('parentslist');
+    parents_tagify = setup_parent_tagify(parentslist);
+    var termtagslist = document.getElementById('termtagslist');
+    var termtags_tagify = setup_term_tags_tagify(termtagslist);
+    
+    // Post message re form opened.
+    // Note have to use this rather than the better
+    // this.dispatchEvent(new Event("termFormOpened"));
+    // because this form is opened in a frame.
+    window.parent.postMessage({ event: "LuteTermFormOpened" }, "*");
+
+    enable_disable_sync_status_checkbox();
+  });  // end $(document).ready
+
+
+  // =============================
+  // Submit.
+
+  // Users may enter in a parent term without actually hitting return
+  // in the tag input box, resulting in nothing getting posted.  This
+  // is annoying, so convert any pending text into a full tag before
+  // submitting.
+  function convert_pending_parent_tags(event) {
+    const pending_tag = $('span.tagify__input').text().trim();
+    if (pending_tag == '')
+      return true;
+    // console.log(`adding: ${pending_tag}`);
+
+    // Simply calling "addTags" is not enough, as there appears to be
+    // some kind of async processing and timing in that method.  We
+    // have to listen to the 'add' event, and only submit once that is
+    // called.
+    parents_tagify.on('add', onFinalTagAdded);
+
+    // Add the pending tag, and suppress the actual submit.
+    parents_tagify.addTags([pending_tag], true, false);
+    event.preventDefault();
+    return false;
+  }
+
+
+  // If some extra text has been added, wait for processing to be
+  // done, and then submit the form.
+  function onFinalTagAdded(e) {
+    // console.log('Tag added:', e.detail.data.value);
+
+    // We still have to wait for data to be fully processed :-(
+    const DELAY = 150;  // ms
+    setTimeout(function() {
+      const form = $('#term-form');
+      form[0].submit();
+    }, DELAY);
+
+    parents_tagify.off('add', onFinalTagAdded);  // clean up listener.
+  }
+
+
+  // =============================
+  // Delete.
+
+  function deleteTerm() {
+    const msg = "Are you sure you want to delete this term?\n\n" +
+          "This action cannot be undone, and if this term has children, they will be orphaned.";
+    if (!confirm(msg))
+      return;
+
+    $.post("/term/delete/{{ term.id }}", function( data ) {
+      if ("{{ embedded_in_reading_frame }}" == "True") {
+        window.parent.postMessage({ event: "LuteTermFormPosted" }, "*");
+        window.parent.document.getElementById('wordframeid').src = 'about:blank';
+      }
+      else {
+        // If on term page, go to term listing
+        window.location.href = '/term/index';
+      }
+    });
+  }
+
+</script>
