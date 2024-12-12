@@ -1,0 +1,1 @@
+from .partition_docx import partition_docx
