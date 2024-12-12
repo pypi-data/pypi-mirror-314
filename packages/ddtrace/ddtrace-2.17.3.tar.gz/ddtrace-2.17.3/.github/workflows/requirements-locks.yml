@@ -1,0 +1,34 @@
+name: Test Requirements Lockfiles Check
+on:
+  push:
+    branches:
+      - main
+      - 'mq-working-branch**'
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  validate:
+    name: Check requirements lockfiles
+    runs-on: ubuntu-latest
+    container: ghcr.io/datadog/dd-trace-py/testrunner@sha256:8ca43d46ff34e078bd7bc0662e74e6be38547a98140a5cd4203805f6b214b583
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fixup git permissions
+        # https://github.com/actions/checkout/issues/766
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Set python interpreters
+        run: pyenv global 3.10 3.7 3.8 3.9 3.11 3.12
+
+      - name: Install Dependencies
+        run: pip install --upgrade pip && pip install riot==0.20.0
+
+      - name: Generate riot locks
+        run: scripts/compile-and-prune-test-requirements
+
+      - name: Check git diff
+        run: scripts/check-diff '.riot/requirements/' 'Mismatches found between .riot/requirements/*.txt and riotfile.py. Run scripts/compile-and-prune-test-requirements and commit the result.'
