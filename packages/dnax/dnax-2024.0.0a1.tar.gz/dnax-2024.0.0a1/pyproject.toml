@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dnax"
+version = "2024.0.0a1"
+# dynamic = ["version"]
+dependencies = [
+  "jax",
+  "flax",
+  "optax",
+]
+requires-python = ">= 3.10"
+authors = [
+  {name = "Danila Bredikhin", email = "danila@stanford.edu"},
+]
+maintainers = [
+  {name = "Danila Bredikhin", email = "danila@stanford.edu"},
+]
+description = "DNA models implemented in JAX"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {text = "BSD3"}
+keywords = ["chromatin", "CNN", "ATAC", "DNA"]
+classifiers = [
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Development Status :: 3 - Alpha",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Repository = "https://github.com/gtca/dnax.git"
+"Bug Tracker" = "https://github.com/gtca/dnax/issues"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "torch",
+    "tensorflow",
+    "tensorflow-probability",
+]
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
+testpaths = [
+    "./tests", # unit tests
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dnax"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+]
+
+[tool.ruff]
+src = ["src"]
+
