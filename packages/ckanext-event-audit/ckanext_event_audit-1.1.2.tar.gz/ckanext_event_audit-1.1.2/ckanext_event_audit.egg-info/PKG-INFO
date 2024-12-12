@@ -1,0 +1,68 @@
+Metadata-Version: 2.1
+Name: ckanext-event-audit
+Version: 1.1.2
+Author-email: DataShades <datashades@linkdigital.com.au>, Oleksandr Cherniavskyi <mutantsan@gmail.com>
+License: AGPL
+Project-URL: Homepage, https://github.com/DataShades/ckanext-event-audit
+Project-URL: Documentation, https://datashades.github.io/ckanext-event-audit/
+Keywords: CKAN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic<3.0.0,>=2.3.0
+Requires-Dist: boto3<2.0.0,>=1.28.35
+Requires-Dist: openpyxl<4.0.0,>=3.1.2
+Provides-Extra: dev
+Requires-Dist: boto3-stubs[logs]<2.0.0,>=1.35.0; extra == "dev"
+Requires-Dist: pytest-ckan; extra == "dev"
+Requires-Dist: mkdocs<1.7,>=1.6.1; extra == "dev"
+
+[![Tests](https://github.com/DataShades/ckanext-event-audit/actions/workflows/test.yml/badge.svg)](https://github.com/DataShades/ckanext-event-audit/actions/workflows/test.yml)
+
+# ckanext-event-audit
+
+This extension will capture and retain a comprehensive record of all changes within a CKAN app. 
+
+Read the [documentation](https://datashades.github.io/ckanext-event-audit/) for a full user guide.
+
+## Quick start
+
+1. Install the extension from `PyPI`:
+
+    `pip install ckanext-event-audit`
+
+2. Enable the plugin in your CKAN configuration file (e.g. `ckan.ini` or `production.ini`):
+
+    `ckan.plugins = ... event_audit ...`
+
+3. Run DB migrations. For CKAN 2.10+ we can run this command:
+
+    `ckan db pending-migrations`
+
+    CKAN 2.11+ allows us to run the following command to create the tables:
+
+    `ckan db upgrade`
+
+4. Configure the extension up to your needs and you're ready to go. See the [documentation](https://datashades.github.io/ckanext-event-audit/) for more details about the configuration options.
+
+## Developer installation
+
+To install ckanext-event-audit for development, activate your CKAN virtualenv and
+do:
+
+    pip install -e '.[dev]'
+
+## Tests
+
+To run the tests, do:
+
+    pytest --ckan-ini=test.ini
+
+## License
+
+[AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
