@@ -1,0 +1,142 @@
+{% extends "strategy/deck-guides/_layout.html" %}
+{% import "strategy/deck-guides/den-of-fiends.json" as deck_json %}
+
+{% block meta %}
+<meta property="decklist" content='{{ deck_json | tojson }}' />
+<meta property="deckname" content="{{ _('Den of Fiends') }}" />
+{% endblock %}
+
+{% block deck_name %}
+<h1 id="den-of-fiends">{{ tzimisce }}
+    {{ _("Den of Fiends") }}
+</h1>
+{% endblock %}
+
+{% block deck_guide %}
+
+{% trans trimmed
+deep_song=card("Deep Song"),
+changeling=card("Changeling"),
+fame=card("Fame"),
+dragonbound=card("Dragonbound"),
+smiling_jack_the_anarch=card("Smiling Jack, The Anarch"),
+breath_of_the_dragon=card("Breath of the Dragon"),
+chiropteran_marauder=card("Chiropteran Marauder"),
+telepathic_tracking=card("Telepathic Tracking"),
+carrion_crows=card("Carrion Crows"),
+horrid_form=card("Horrid Form"),
+inner_essence=card("Inner Essence"),
+vessel=card("Vessel"),
+villein=card("Villein"),
+read_the_winds=card("Read the Winds"),
+eyes_of_argus=card("Eyes of Argus"),
+on_the_qui_vive=card("On the Qui Vive"),
+bowl_of_convergence=card("Bowl of Convergence"),
+raven_spy=card("Raven Spy"),
+channel_10=card("Channel 10"),
+telepathic_misdirection=card("Telepathic Misdirection"),
+seduction=card("Seduction")
+%}
+<h2>Summary</h2>
+<p>
+    This is a Tzimisce wall deck, leaning on the toolbox side of things.
+    The setup is to get a vampire with the three advanced clan disciplines
+    {{ AUS }}{{ VIC }}{{ ANI }} out first, then one to three sidekicks,
+    depending on the available pool. The idea is to focus on defence and slowly grind at
+    the prey’s pool.
+</p>
+<h2>Offence</h2>
+<p>
+    <strong>Pool damage</strong> is low, it uses naked bleed actions, {{ deep_song }} at
+    inferior {{ ani }} and {{ changeling }}. It also can deliver damage by putting the
+    prey’s vampires in torpor, combined with {{ fame }} and/or {{ dragonbound }}.
+    If {{ smiling_jack_the_anarch }} is drawn and kept in play long enough, it can
+    deliver fatal damage to the table.
+</p>
+<p>
+    The <strong>combat module</strong> is strong, using {{ VIC }} to deal aggravated
+    damage from afar with {{ breath_of_the_dragon }}, or at close range with
+    {{ chiropteran_marauder }}. {{ telepathic_tracking }} is a counter against
+    <em>« Strike: Combat Ends »</em>, to be kept in hand if a combat against {{ pre }}
+    or {{ obt }} is expected. {{ carrion_crows }} improves damage and it comes
+    <em>before any aggravated damage</em> from the strike, so it can be use to destroy a
+    vampire directly if it is low enough on blood to begin with. {{ horrid_form }} and
+    {{ inner_essence }} are just helpers, they should be played as soon as possible to
+    avoid jamming the hand.
+</p>
+<h2>Defence</h2>
+<p>
+    <strong>Bloat</strong> is low, using {{ vessel }} and {{ villein }} to get some pool
+    back.
+</p>
+<p>
+    The deck has exceptionnal <strong>intercept</strong> capacities.
+    {{ read_the_winds }}, {{ eyes_of_argus }} and {{ on_the_qui_vive }} are all wakes to
+    enable more blocks. Most of them can also be used for intercept as a last resort.
+</p>
+<p>
+    This deck needs to get some <strong>permanent intercept</strong> on the table as
+    soon as possible: {{ bowl_of_convergence }}, {{ raven_spy }}, and {{ channel_10 }}.
+    As 3 of them need an action to be put into play, one should
+    <strong>keep some stealth</strong> in hand ({{ changeling }}) to avoid interception.
+</p>
+<p>
+    Finally the deck has only a two {{ telepathic_misdirection }}, they should be kept
+    in hand to bounce heavy bleeds to the prey.
+</p>
+<h2>Tips</h2>
+<p>
+    <strong>Play defensively</strong>, do not hesitate to keep vampires unlocked to be
+    able to block more often.
+</p>
+<p>
+    <strong>Do not stack permanent intercept</strong> on a single vampire: if one has
+    the {{ bowl_of_convergence }}, another should get the {{ raven_spy }}. The more
+    vampires are able to intercept with good score, the less efficient block denials
+    cards like {{ seduction }} become.
+</p>
+<p>
+    You can target a strong vampire to put her into to torpor then
+    <strong>diablerize</strong> her with a low capacity disposable vampire of yours.
+</p>
+<p>
+    <strong>Keep them guessing</strong> about your hand, no one should know if you can
+    or cannot block an action, if you have or do not have what it takes to send their
+    vampires in torpor by combat.
+</p>
+<p>
+    Do not let <strong>combat cards jam</strong> your hand. If need be, use
+    {{ deep_song }} to enter combat and play the cards instead of using it for a bleed
+    your prey may be too afraid to block.
+</p>
+{% endtrans %}
+
+<div class="insert tip">
+    <h3>{{ _("What to block") }}</h3>
+    <p>
+        {% trans trimmed
+        consanguineous_boon=card("Consanguineous Boon"),
+        govern_the_unaligned=card("Govern the Unaligned"),
+        the_embrace=card("The Embrace")
+        %}
+        The deck has tremendous block power, but it can not block everything the prey or
+        the predator do. It should focus on blocking the
+        <strong>prey's bloat or defensive actions</strong> like
+        {{ consanguineous_boon }} or {{ govern_the_unaligned }} and the
+        <strong>predator's power building actions</strong> like allies recruitment or
+        breeding actions like {{ the_embrace }}.
+        {% endtrans %}
+    </p>
+</div>
+<p>
+    {% trans trimmed
+    information_highway_article=external(
+    "https://vtesinformationhighway.wordpress.com/2019/01/21/tzimisce-starter-den-of-fiends/",
+    _("Information Highway article")
+    )
+    %}
+    Check the {{ information_highway_article }} for a deck review and ideas on how to
+    improve it.
+    {% endtrans %}
+</p>
+{% endblock %}

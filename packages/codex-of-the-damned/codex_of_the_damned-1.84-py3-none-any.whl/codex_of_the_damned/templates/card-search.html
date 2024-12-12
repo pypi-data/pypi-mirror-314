@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% import "_layout_sponsor.html" as sponsor with context %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/url-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/complete.js') }}"></script>
+<script src="{{ url_for('static', filename='js/card-search.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>{{ _('Card Search') }}</h1>
+{{ sponsor }}
+<p>
+	{% trans trimmed
+	vekn=external("http://www.vekn.net/card-lists", "VEKN")
+	%}
+	Official cards text provided by {{ vekn }}. All rulings give a link to the actual
+	official ruling made by successive Rules Directors.
+	{% endtrans %}
+</p>
+<form id="card-search-form" autocomplete="off">
+	<div class="autocomplete">
+		<input type="text" id="card-name" placeholder="Card Name" autocomplete="off" autocorrect="off"
+			autocapitalize="off" spellcheck="false" />
+	</div>
+</form>
+<div class="result-message" id="result-message"></div>
+<div class="results" id="results" style="display: none">
+	<div class="card-info">
+		<div class="column-image">
+			<img class="card-image" id="card-image" />
+			<div class="image-footer" id="image-footer"></div>
+			<div class="card-sets" id="card-sets" style="display: none"></div>
+		</div>
+		<div class="column-image-counterpart">
+			<h3 id="card-title" class="card-title"></h3>
+			<p id="card-text"></p>
+		</div>
+	</div>
+	<div class="rulings" id="rulings">
+		<h3>{{ _('Rulings') }}</h3>
+	</div>
+	<div class="insert tip" id="submit-ruling">
+		<h3> {{ _('Submit a new ruling or a ruling correction') }}</h3>
+		<p>
+			{% trans trimmed
+			rulings_website=external("https://rulings.krcg.org/index.html", _("rulings website"))
+			%}
+			Login with your VEKN account on the {{ rulings_website }} and submit a change proposal there.
+			{% endtrans %}
+		</p>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% import "_layout_sponsor.html" as sponsor with context %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/decklist.js') }}"></script>
+<script src="{{ url_for('static', filename='js/url-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/complete.js') }}"></script>
+<script src="{{ url_for('static', filename='js/deck-search.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>{{ _('Deck Search') }}</h1>
+{{ sponsor }}
+<p>
+    {% trans trimmed
+    twda=external("http://www.vekn.fr/decks/twd.htm", "Tournament Winning Deck Archive (TWDA)")
+    %}
+    This is an interactive interface to the {{ twda }} provided by VEKN.
+    Type a card name to search all winning deck with it since 2008.
+    {% endtrans %}
+</p>
+<form id="deck-search-form" autocomplete="off">
+    <div class="autocomplete">
+        <input type="text" id="card-name" placeholder="Card Name" autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false" />
+        <input type="checkbox" id="threshold25" />
+        <label for="threshold25">{{ _("At least 25 competitors") }}</label>
+    </div>
+    <div id="deck-search-cards"></div>
+    <input type="button" id="clear-search" class="clear-search" style="display: none" value="Clear" />
+</form>
+<div class="result-message" id="result-message"></div>
+<div class="scrollable results">
+    <table>
+        <tbody id="results">
+        </tbody>
+    </table>
+</div>
+<div id="decklist" class="decklist" style="display: none">
+    <h2 id="deck-name"><a id="deck-link" target="_blank"></a></h2>
+    <a class="hyperlink-button vdb-color" id="vdb-button" target="_blank" rel="external">
+        <img src="https://vdb.im/favicon.ico">
+        {{ _('VDB') }}
+    </a>
+    <p class="subtitle" id="deck-header"></p>
+    <h3 id="crypt-header"></h3>
+    <ul id="crypt-list">
+    </ul>
+    <h3 id="library-header"></h3>
+    <ul id="library-list">
+    </ul>
+</div>
+<h2 id="comments-title" style="display: none">{{ _('Comments') }}</h2>
+<div id="comments" class="comments">
+</div>
+{% endblock %}
