@@ -1,0 +1,833 @@
+Metadata-Version: 2.1
+Name: dbgpt
+Version: 0.6.3rc1
+Summary: DB-GPT is an experimental open-source project that uses localized GPT large models to interact with your data and environment. With this solution, you can be assured that there is no risk of data leakage, and your data is 100% private and secure.
+Home-page: https://github.com/eosphoros-ai/DB-GPT
+Author: csunny
+Author-email: cfqcsunny@gmail.com
+License: https://opensource.org/license/mit/
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp ==3.8.4
+Requires-Dist: chardet ==5.1.0
+Requires-Dist: importlib-resources ==5.12.0
+Requires-Dist: python-dotenv ==1.0.0
+Requires-Dist: cachetools
+Requires-Dist: pydantic >=2.6.0
+Requires-Dist: typeguard
+Requires-Dist: snowflake-id
+Requires-Dist: typing-inspect
+Provides-Extra: agent
+Requires-Dist: termcolor ; extra == 'agent'
+Requires-Dist: pandas ==2.0.3 ; extra == 'agent'
+Requires-Dist: tomlkit ; extra == 'agent'
+Requires-Dist: psutil ==5.9.4 ; extra == 'agent'
+Requires-Dist: click ; extra == 'agent'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'agent'
+Requires-Dist: prettytable ; extra == 'agent'
+Requires-Dist: chardet ==5.1.0 ; extra == 'agent'
+Requires-Dist: typing-inspect ; extra == 'agent'
+Requires-Dist: rich ; extra == 'agent'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'agent'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'agent'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'agent'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'agent'
+Requires-Dist: snowflake-id ; extra == 'agent'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'agent'
+Requires-Dist: cachetools ; extra == 'agent'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'agent'
+Requires-Dist: colorama ==0.4.6 ; extra == 'agent'
+Requires-Dist: httpx ; extra == 'agent'
+Requires-Dist: typeguard ; extra == 'agent'
+Provides-Extra: all
+Requires-Dist: GitPython ; extra == 'all'
+Requires-Dist: termcolor ; extra == 'all'
+Requires-Dist: pympler ; extra == 'all'
+Requires-Dist: pandas ==2.0.3 ; extra == 'all'
+Requires-Dist: clickhouse-connect ; extra == 'all'
+Requires-Dist: torchaudio ==2.2.1 ; extra == 'all'
+Requires-Dist: pyhive ; extra == 'all'
+Requires-Dist: dashscope ; extra == 'all'
+Requires-Dist: pdfplumber ; extra == 'all'
+Requires-Dist: uvicorn ; extra == 'all'
+Requires-Dist: fschat ; extra == 'all'
+Requires-Dist: psycopg2 ; extra == 'all'
+Requires-Dist: openai ; extra == 'all'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'all'
+Requires-Dist: opentelemetry-exporter-otlp ; extra == 'all'
+Requires-Dist: prettytable ; extra == 'all'
+Requires-Dist: zhipuai ; extra == 'all'
+Requires-Dist: vertica-python ; extra == 'all'
+Requires-Dist: transformers >=4.34.0 ; extra == 'all'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'all'
+Requires-Dist: duckdb-engine ==0.9.1 ; extra == 'all'
+Requires-Dist: pymssql ; extra == 'all'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'all'
+Requires-Dist: python-multipart ; extra == 'all'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'all'
+Requires-Dist: snowflake-id ; extra == 'all'
+Requires-Dist: shortuuid ; extra == 'all'
+Requires-Dist: cachetools ; extra == 'all'
+Requires-Dist: gTTS ==2.3.1 ; extra == 'all'
+Requires-Dist: python-docx ; extra == 'all'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'all'
+Requires-Dist: spacy ==3.7 ; extra == 'all'
+Requires-Dist: vllm ; extra == 'all'
+Requires-Dist: markdown ; extra == 'all'
+Requires-Dist: pypdf ; extra == 'all'
+Requires-Dist: seaborn ; extra == 'all'
+Requires-Dist: sentence-transformers ; extra == 'all'
+Requires-Dist: opentelemetry-sdk ; extra == 'all'
+Requires-Dist: tomlkit ; extra == 'all'
+Requires-Dist: torch ==2.2.1 ; extra == 'all'
+Requires-Dist: torchvision ==0.17.1 ; extra == 'all'
+Requires-Dist: bitsandbytes ; extra == 'all'
+Requires-Dist: llama-cpp-python ; extra == 'all'
+Requires-Dist: accelerate >=0.20.3 ; extra == 'all'
+Requires-Dist: rocksdict ; extra == 'all'
+Requires-Dist: psutil ==5.9.4 ; extra == 'all'
+Requires-Dist: tokenizers >=0.14 ; extra == 'all'
+Requires-Dist: alembic ==1.12.0 ; extra == 'all'
+Requires-Dist: aiofiles ; extra == 'all'
+Requires-Dist: SQLAlchemy <2.0.29,>=2.0.25 ; extra == 'all'
+Requires-Dist: pydoris <2.0.0,>=1.0.2 ; extra == 'all'
+Requires-Dist: click ; extra == 'all'
+Requires-Dist: pymilvus ; extra == 'all'
+Requires-Dist: typing-inspect ; extra == 'all'
+Requires-Dist: rich ; extra == 'all'
+Requires-Dist: libro >=0.1.25 ; extra == 'all'
+Requires-Dist: xlrd ==2.0.1 ; extra == 'all'
+Requires-Dist: gpt4all ; extra == 'all'
+Requires-Dist: pyzmq ; extra == 'all'
+Requires-Dist: mysqlclient ==2.1.0 ; extra == 'all'
+Requires-Dist: coloredlogs ; extra == 'all'
+Requires-Dist: cryptography ; extra == 'all'
+Requires-Dist: bs4 ; extra == 'all'
+Requires-Dist: typeguard ; extra == 'all'
+Requires-Dist: duckdb ; extra == 'all'
+Requires-Dist: anthropic ; extra == 'all'
+Requires-Dist: cloudpickle ; extra == 'all'
+Requires-Dist: msgpack ; extra == 'all'
+Requires-Dist: graphviz ; extra == 'all'
+Requires-Dist: chardet ; extra == 'all'
+Requires-Dist: lyric-js-worker >=0.1.4 ; extra == 'all'
+Requires-Dist: sqlparse ==0.4.4 ; extra == 'all'
+Requires-Dist: opentelemetry-api ; extra == 'all'
+Requires-Dist: jsonschema ; extra == 'all'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'all'
+Requires-Dist: httpx ; extra == 'all'
+Requires-Dist: cpm-kernels ; extra == 'all'
+Requires-Dist: lyric-py >=0.1.4 ; extra == 'all'
+Requires-Dist: pymysql ; extra == 'all'
+Requires-Dist: tiktoken ; extra == 'all'
+Requires-Dist: schedule ; extra == 'all'
+Requires-Dist: auto-gpt-plugin-template ; extra == 'all'
+Requires-Dist: jinja2 ; extra == 'all'
+Requires-Dist: ollama ; extra == 'all'
+Requires-Dist: thrift ; extra == 'all'
+Requires-Dist: qianfan ; extra == 'all'
+Requires-Dist: sentencepiece ; extra == 'all'
+Requires-Dist: python-pptx ; extra == 'all'
+Requires-Dist: chardet ==5.1.0 ; extra == 'all'
+Requires-Dist: weaviate-client ; extra == 'all'
+Requires-Dist: thrift-sasl ; extra == 'all'
+Requires-Dist: neo4j ; extra == 'all'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'all'
+Requires-Dist: pyspark ; extra == 'all'
+Requires-Dist: poetry ; extra == 'all'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'all'
+Requires-Dist: lyric-py-worker >=0.1.4 ; extra == 'all'
+Requires-Dist: dbgpt-tugraph-plugins >=0.1.0rc1 ; extra == 'all'
+Requires-Dist: colorama ==0.4.6 ; extra == 'all'
+Requires-Dist: openpyxl ==3.1.2 ; extra == 'all'
+Provides-Extra: bitsandbytes
+Requires-Dist: bitsandbytes ; extra == 'bitsandbytes'
+Provides-Extra: cache
+Requires-Dist: rocksdict ; extra == 'cache'
+Provides-Extra: cli
+Requires-Dist: psutil ==5.9.4 ; extra == 'cli'
+Requires-Dist: chardet ==5.1.0 ; extra == 'cli'
+Requires-Dist: snowflake-id ; extra == 'cli'
+Requires-Dist: tomlkit ; extra == 'cli'
+Requires-Dist: typing-inspect ; extra == 'cli'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'cli'
+Requires-Dist: colorama ==0.4.6 ; extra == 'cli'
+Requires-Dist: rich ; extra == 'cli'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'cli'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'cli'
+Requires-Dist: httpx ; extra == 'cli'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'cli'
+Requires-Dist: prettytable ; extra == 'cli'
+Requires-Dist: click ; extra == 'cli'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'cli'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'cli'
+Requires-Dist: typeguard ; extra == 'cli'
+Requires-Dist: cachetools ; extra == 'cli'
+Provides-Extra: client
+Requires-Dist: chardet ==5.1.0 ; extra == 'client'
+Requires-Dist: snowflake-id ; extra == 'client'
+Requires-Dist: typing-inspect ; extra == 'client'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'client'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'client'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'client'
+Requires-Dist: httpx ; extra == 'client'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'client'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'client'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'client'
+Requires-Dist: typeguard ; extra == 'client'
+Requires-Dist: cachetools ; extra == 'client'
+Provides-Extra: code
+Requires-Dist: cloudpickle ; extra == 'code'
+Requires-Dist: lyric-js-worker >=0.1.4 ; extra == 'code'
+Requires-Dist: chardet ==5.1.0 ; extra == 'code'
+Requires-Dist: snowflake-id ; extra == 'code'
+Requires-Dist: lyric-py-worker >=0.1.4 ; extra == 'code'
+Requires-Dist: typing-inspect ; extra == 'code'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'code'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'code'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'code'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'code'
+Requires-Dist: lyric-py >=0.1.4 ; extra == 'code'
+Requires-Dist: typeguard ; extra == 'code'
+Requires-Dist: msgpack ; extra == 'code'
+Requires-Dist: cachetools ; extra == 'code'
+Provides-Extra: core
+Requires-Dist: chardet ==5.1.0 ; extra == 'core'
+Requires-Dist: snowflake-id ; extra == 'core'
+Requires-Dist: typing-inspect ; extra == 'core'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'core'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'core'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'core'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'core'
+Requires-Dist: typeguard ; extra == 'core'
+Requires-Dist: cachetools ; extra == 'core'
+Provides-Extra: datasource
+Requires-Dist: pymysql ; extra == 'datasource'
+Provides-Extra: datasource_all
+Requires-Dist: psycopg2 ; extra == 'datasource_all'
+Requires-Dist: clickhouse-connect ; extra == 'datasource_all'
+Requires-Dist: thrift ; extra == 'datasource_all'
+Requires-Dist: mysqlclient ==2.1.0 ; extra == 'datasource_all'
+Requires-Dist: pymysql ; extra == 'datasource_all'
+Requires-Dist: thrift-sasl ; extra == 'datasource_all'
+Requires-Dist: pydoris <2.0.0,>=1.0.2 ; extra == 'datasource_all'
+Requires-Dist: pymssql ; extra == 'datasource_all'
+Requires-Dist: pyspark ; extra == 'datasource_all'
+Requires-Dist: pyhive ; extra == 'datasource_all'
+Requires-Dist: vertica-python ; extra == 'datasource_all'
+Provides-Extra: default
+Requires-Dist: GitPython ; extra == 'default'
+Requires-Dist: termcolor ; extra == 'default'
+Requires-Dist: pandas ==2.0.3 ; extra == 'default'
+Requires-Dist: pympler ; extra == 'default'
+Requires-Dist: torchaudio ==2.2.1 ; extra == 'default'
+Requires-Dist: dashscope ; extra == 'default'
+Requires-Dist: pdfplumber ; extra == 'default'
+Requires-Dist: uvicorn ; extra == 'default'
+Requires-Dist: fschat ; extra == 'default'
+Requires-Dist: openai ; extra == 'default'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'default'
+Requires-Dist: opentelemetry-exporter-otlp ; extra == 'default'
+Requires-Dist: prettytable ; extra == 'default'
+Requires-Dist: zhipuai ; extra == 'default'
+Requires-Dist: transformers >=4.34.0 ; extra == 'default'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'default'
+Requires-Dist: duckdb-engine ==0.9.1 ; extra == 'default'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'default'
+Requires-Dist: python-multipart ; extra == 'default'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'default'
+Requires-Dist: snowflake-id ; extra == 'default'
+Requires-Dist: shortuuid ; extra == 'default'
+Requires-Dist: cachetools ; extra == 'default'
+Requires-Dist: gTTS ==2.3.1 ; extra == 'default'
+Requires-Dist: python-docx ; extra == 'default'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'default'
+Requires-Dist: spacy ==3.7 ; extra == 'default'
+Requires-Dist: markdown ; extra == 'default'
+Requires-Dist: pypdf ; extra == 'default'
+Requires-Dist: seaborn ; extra == 'default'
+Requires-Dist: sentence-transformers ; extra == 'default'
+Requires-Dist: opentelemetry-sdk ; extra == 'default'
+Requires-Dist: tomlkit ; extra == 'default'
+Requires-Dist: torch ==2.2.1 ; extra == 'default'
+Requires-Dist: torchvision ==0.17.1 ; extra == 'default'
+Requires-Dist: bitsandbytes ; extra == 'default'
+Requires-Dist: accelerate >=0.20.3 ; extra == 'default'
+Requires-Dist: tokenizers >=0.14 ; extra == 'default'
+Requires-Dist: psutil ==5.9.4 ; extra == 'default'
+Requires-Dist: rocksdict ; extra == 'default'
+Requires-Dist: alembic ==1.12.0 ; extra == 'default'
+Requires-Dist: aiofiles ; extra == 'default'
+Requires-Dist: SQLAlchemy <2.0.29,>=2.0.25 ; extra == 'default'
+Requires-Dist: click ; extra == 'default'
+Requires-Dist: typing-inspect ; extra == 'default'
+Requires-Dist: rich ; extra == 'default'
+Requires-Dist: libro >=0.1.25 ; extra == 'default'
+Requires-Dist: xlrd ==2.0.1 ; extra == 'default'
+Requires-Dist: pyzmq ; extra == 'default'
+Requires-Dist: coloredlogs ; extra == 'default'
+Requires-Dist: cryptography ; extra == 'default'
+Requires-Dist: bs4 ; extra == 'default'
+Requires-Dist: typeguard ; extra == 'default'
+Requires-Dist: duckdb ; extra == 'default'
+Requires-Dist: anthropic ; extra == 'default'
+Requires-Dist: cloudpickle ; extra == 'default'
+Requires-Dist: msgpack ; extra == 'default'
+Requires-Dist: graphviz ; extra == 'default'
+Requires-Dist: chardet ; extra == 'default'
+Requires-Dist: lyric-js-worker >=0.1.4 ; extra == 'default'
+Requires-Dist: sqlparse ==0.4.4 ; extra == 'default'
+Requires-Dist: opentelemetry-api ; extra == 'default'
+Requires-Dist: jsonschema ; extra == 'default'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'default'
+Requires-Dist: httpx ; extra == 'default'
+Requires-Dist: cpm-kernels ; extra == 'default'
+Requires-Dist: lyric-py >=0.1.4 ; extra == 'default'
+Requires-Dist: pymysql ; extra == 'default'
+Requires-Dist: tiktoken ; extra == 'default'
+Requires-Dist: schedule ; extra == 'default'
+Requires-Dist: auto-gpt-plugin-template ; extra == 'default'
+Requires-Dist: jinja2 ; extra == 'default'
+Requires-Dist: ollama ; extra == 'default'
+Requires-Dist: qianfan ; extra == 'default'
+Requires-Dist: sentencepiece ; extra == 'default'
+Requires-Dist: python-pptx ; extra == 'default'
+Requires-Dist: chardet ==5.1.0 ; extra == 'default'
+Requires-Dist: neo4j ; extra == 'default'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'default'
+Requires-Dist: poetry ; extra == 'default'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'default'
+Requires-Dist: lyric-py-worker >=0.1.4 ; extra == 'default'
+Requires-Dist: dbgpt-tugraph-plugins >=0.1.0rc1 ; extra == 'default'
+Requires-Dist: colorama ==0.4.6 ; extra == 'default'
+Requires-Dist: openpyxl ==3.1.2 ; extra == 'default'
+Provides-Extra: framework
+Requires-Dist: seaborn ; extra == 'framework'
+Requires-Dist: GitPython ; extra == 'framework'
+Requires-Dist: termcolor ; extra == 'framework'
+Requires-Dist: pandas ==2.0.3 ; extra == 'framework'
+Requires-Dist: tomlkit ; extra == 'framework'
+Requires-Dist: pympler ; extra == 'framework'
+Requires-Dist: pymysql ; extra == 'framework'
+Requires-Dist: schedule ; extra == 'framework'
+Requires-Dist: auto-gpt-plugin-template ; extra == 'framework'
+Requires-Dist: duckdb ; extra == 'framework'
+Requires-Dist: jinja2 ; extra == 'framework'
+Requires-Dist: cloudpickle ; extra == 'framework'
+Requires-Dist: msgpack ; extra == 'framework'
+Requires-Dist: uvicorn ; extra == 'framework'
+Requires-Dist: psutil ==5.9.4 ; extra == 'framework'
+Requires-Dist: fschat ; extra == 'framework'
+Requires-Dist: alembic ==1.12.0 ; extra == 'framework'
+Requires-Dist: aiofiles ; extra == 'framework'
+Requires-Dist: graphviz ; extra == 'framework'
+Requires-Dist: SQLAlchemy <2.0.29,>=2.0.25 ; extra == 'framework'
+Requires-Dist: click ; extra == 'framework'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'framework'
+Requires-Dist: prettytable ; extra == 'framework'
+Requires-Dist: chardet ==5.1.0 ; extra == 'framework'
+Requires-Dist: sqlparse ==0.4.4 ; extra == 'framework'
+Requires-Dist: transformers >=4.34.0 ; extra == 'framework'
+Requires-Dist: typing-inspect ; extra == 'framework'
+Requires-Dist: rich ; extra == 'framework'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'framework'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'framework'
+Requires-Dist: duckdb-engine ==0.9.1 ; extra == 'framework'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'framework'
+Requires-Dist: jsonschema ; extra == 'framework'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'framework'
+Requires-Dist: xlrd ==2.0.1 ; extra == 'framework'
+Requires-Dist: snowflake-id ; extra == 'framework'
+Requires-Dist: shortuuid ; extra == 'framework'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'framework'
+Requires-Dist: cachetools ; extra == 'framework'
+Requires-Dist: gTTS ==2.3.1 ; extra == 'framework'
+Requires-Dist: pyzmq ; extra == 'framework'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'framework'
+Requires-Dist: colorama ==0.4.6 ; extra == 'framework'
+Requires-Dist: coloredlogs ; extra == 'framework'
+Requires-Dist: httpx ; extra == 'framework'
+Requires-Dist: cryptography ; extra == 'framework'
+Requires-Dist: openpyxl ==3.1.2 ; extra == 'framework'
+Requires-Dist: typeguard ; extra == 'framework'
+Provides-Extra: gpt4all
+Requires-Dist: gpt4all ; extra == 'gpt4all'
+Provides-Extra: graph_rag
+Requires-Dist: python-docx ; extra == 'graph_rag'
+Requires-Dist: sentence-transformers ; extra == 'graph_rag'
+Requires-Dist: dbgpt-tugraph-plugins >=0.1.0rc1 ; extra == 'graph_rag'
+Requires-Dist: pdfplumber ; extra == 'graph_rag'
+Requires-Dist: neo4j ; extra == 'graph_rag'
+Requires-Dist: spacy ==3.7 ; extra == 'graph_rag'
+Requires-Dist: python-pptx ; extra == 'graph_rag'
+Requires-Dist: markdown ; extra == 'graph_rag'
+Requires-Dist: python-multipart ; extra == 'graph_rag'
+Requires-Dist: bs4 ; extra == 'graph_rag'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'graph_rag'
+Requires-Dist: pypdf ; extra == 'graph_rag'
+Provides-Extra: llama_cpp
+Requires-Dist: llama-cpp-python ; extra == 'llama_cpp'
+Provides-Extra: observability
+Requires-Dist: opentelemetry-sdk ; extra == 'observability'
+Requires-Dist: opentelemetry-api ; extra == 'observability'
+Requires-Dist: opentelemetry-exporter-otlp ; extra == 'observability'
+Provides-Extra: openai
+Requires-Dist: seaborn ; extra == 'openai'
+Requires-Dist: GitPython ; extra == 'openai'
+Requires-Dist: opentelemetry-sdk ; extra == 'openai'
+Requires-Dist: sentence-transformers ; extra == 'openai'
+Requires-Dist: termcolor ; extra == 'openai'
+Requires-Dist: pandas ==2.0.3 ; extra == 'openai'
+Requires-Dist: tomlkit ; extra == 'openai'
+Requires-Dist: pympler ; extra == 'openai'
+Requires-Dist: tiktoken ; extra == 'openai'
+Requires-Dist: pymysql ; extra == 'openai'
+Requires-Dist: schedule ; extra == 'openai'
+Requires-Dist: auto-gpt-plugin-template ; extra == 'openai'
+Requires-Dist: duckdb ; extra == 'openai'
+Requires-Dist: jinja2 ; extra == 'openai'
+Requires-Dist: cloudpickle ; extra == 'openai'
+Requires-Dist: msgpack ; extra == 'openai'
+Requires-Dist: pdfplumber ; extra == 'openai'
+Requires-Dist: uvicorn ; extra == 'openai'
+Requires-Dist: psutil ==5.9.4 ; extra == 'openai'
+Requires-Dist: fschat ; extra == 'openai'
+Requires-Dist: openai ; extra == 'openai'
+Requires-Dist: alembic ==1.12.0 ; extra == 'openai'
+Requires-Dist: aiofiles ; extra == 'openai'
+Requires-Dist: graphviz ; extra == 'openai'
+Requires-Dist: SQLAlchemy <2.0.29,>=2.0.25 ; extra == 'openai'
+Requires-Dist: click ; extra == 'openai'
+Requires-Dist: python-pptx ; extra == 'openai'
+Requires-Dist: opentelemetry-exporter-otlp ; extra == 'openai'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'openai'
+Requires-Dist: prettytable ; extra == 'openai'
+Requires-Dist: chardet ==5.1.0 ; extra == 'openai'
+Requires-Dist: sqlparse ==0.4.4 ; extra == 'openai'
+Requires-Dist: transformers >=4.34.0 ; extra == 'openai'
+Requires-Dist: opentelemetry-api ; extra == 'openai'
+Requires-Dist: typing-inspect ; extra == 'openai'
+Requires-Dist: rich ; extra == 'openai'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'openai'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'openai'
+Requires-Dist: duckdb-engine ==0.9.1 ; extra == 'openai'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'openai'
+Requires-Dist: jsonschema ; extra == 'openai'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'openai'
+Requires-Dist: xlrd ==2.0.1 ; extra == 'openai'
+Requires-Dist: python-multipart ; extra == 'openai'
+Requires-Dist: snowflake-id ; extra == 'openai'
+Requires-Dist: shortuuid ; extra == 'openai'
+Requires-Dist: cachetools ; extra == 'openai'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'openai'
+Requires-Dist: gTTS ==2.3.1 ; extra == 'openai'
+Requires-Dist: pyzmq ; extra == 'openai'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'openai'
+Requires-Dist: python-docx ; extra == 'openai'
+Requires-Dist: bs4 ; extra == 'openai'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'openai'
+Requires-Dist: colorama ==0.4.6 ; extra == 'openai'
+Requires-Dist: coloredlogs ; extra == 'openai'
+Requires-Dist: httpx ; extra == 'openai'
+Requires-Dist: spacy ==3.7 ; extra == 'openai'
+Requires-Dist: markdown ; extra == 'openai'
+Requires-Dist: cryptography ; extra == 'openai'
+Requires-Dist: openpyxl ==3.1.2 ; extra == 'openai'
+Requires-Dist: typeguard ; extra == 'openai'
+Requires-Dist: pypdf ; extra == 'openai'
+Provides-Extra: proxy
+Requires-Dist: seaborn ; extra == 'proxy'
+Requires-Dist: GitPython ; extra == 'proxy'
+Requires-Dist: opentelemetry-sdk ; extra == 'proxy'
+Requires-Dist: sentence-transformers ; extra == 'proxy'
+Requires-Dist: termcolor ; extra == 'proxy'
+Requires-Dist: pandas ==2.0.3 ; extra == 'proxy'
+Requires-Dist: tomlkit ; extra == 'proxy'
+Requires-Dist: pympler ; extra == 'proxy'
+Requires-Dist: tiktoken ; extra == 'proxy'
+Requires-Dist: pymysql ; extra == 'proxy'
+Requires-Dist: schedule ; extra == 'proxy'
+Requires-Dist: auto-gpt-plugin-template ; extra == 'proxy'
+Requires-Dist: duckdb ; extra == 'proxy'
+Requires-Dist: anthropic ; extra == 'proxy'
+Requires-Dist: jinja2 ; extra == 'proxy'
+Requires-Dist: cloudpickle ; extra == 'proxy'
+Requires-Dist: msgpack ; extra == 'proxy'
+Requires-Dist: pdfplumber ; extra == 'proxy'
+Requires-Dist: uvicorn ; extra == 'proxy'
+Requires-Dist: psutil ==5.9.4 ; extra == 'proxy'
+Requires-Dist: fschat ; extra == 'proxy'
+Requires-Dist: openai ; extra == 'proxy'
+Requires-Dist: alembic ==1.12.0 ; extra == 'proxy'
+Requires-Dist: aiofiles ; extra == 'proxy'
+Requires-Dist: graphviz ; extra == 'proxy'
+Requires-Dist: SQLAlchemy <2.0.29,>=2.0.25 ; extra == 'proxy'
+Requires-Dist: click ; extra == 'proxy'
+Requires-Dist: python-pptx ; extra == 'proxy'
+Requires-Dist: opentelemetry-exporter-otlp ; extra == 'proxy'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'proxy'
+Requires-Dist: prettytable ; extra == 'proxy'
+Requires-Dist: chardet ==5.1.0 ; extra == 'proxy'
+Requires-Dist: sqlparse ==0.4.4 ; extra == 'proxy'
+Requires-Dist: transformers >=4.34.0 ; extra == 'proxy'
+Requires-Dist: opentelemetry-api ; extra == 'proxy'
+Requires-Dist: typing-inspect ; extra == 'proxy'
+Requires-Dist: rich ; extra == 'proxy'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'proxy'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'proxy'
+Requires-Dist: duckdb-engine ==0.9.1 ; extra == 'proxy'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'proxy'
+Requires-Dist: jsonschema ; extra == 'proxy'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'proxy'
+Requires-Dist: xlrd ==2.0.1 ; extra == 'proxy'
+Requires-Dist: python-multipart ; extra == 'proxy'
+Requires-Dist: snowflake-id ; extra == 'proxy'
+Requires-Dist: shortuuid ; extra == 'proxy'
+Requires-Dist: cachetools ; extra == 'proxy'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'proxy'
+Requires-Dist: gTTS ==2.3.1 ; extra == 'proxy'
+Requires-Dist: pyzmq ; extra == 'proxy'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'proxy'
+Requires-Dist: python-docx ; extra == 'proxy'
+Requires-Dist: bs4 ; extra == 'proxy'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'proxy'
+Requires-Dist: colorama ==0.4.6 ; extra == 'proxy'
+Requires-Dist: coloredlogs ; extra == 'proxy'
+Requires-Dist: httpx ; extra == 'proxy'
+Requires-Dist: spacy ==3.7 ; extra == 'proxy'
+Requires-Dist: markdown ; extra == 'proxy'
+Requires-Dist: cryptography ; extra == 'proxy'
+Requires-Dist: openpyxl ==3.1.2 ; extra == 'proxy'
+Requires-Dist: typeguard ; extra == 'proxy'
+Requires-Dist: pypdf ; extra == 'proxy'
+Provides-Extra: quantization
+Requires-Dist: cpm-kernels ; extra == 'quantization'
+Requires-Dist: bitsandbytes ; extra == 'quantization'
+Provides-Extra: rag
+Requires-Dist: python-docx ; extra == 'rag'
+Requires-Dist: sentence-transformers ; extra == 'rag'
+Requires-Dist: pdfplumber ; extra == 'rag'
+Requires-Dist: spacy ==3.7 ; extra == 'rag'
+Requires-Dist: python-pptx ; extra == 'rag'
+Requires-Dist: markdown ; extra == 'rag'
+Requires-Dist: python-multipart ; extra == 'rag'
+Requires-Dist: bs4 ; extra == 'rag'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'rag'
+Requires-Dist: pypdf ; extra == 'rag'
+Provides-Extra: simple_framework
+Requires-Dist: termcolor ; extra == 'simple_framework'
+Requires-Dist: pandas ==2.0.3 ; extra == 'simple_framework'
+Requires-Dist: tomlkit ; extra == 'simple_framework'
+Requires-Dist: pympler ; extra == 'simple_framework'
+Requires-Dist: schedule ; extra == 'simple_framework'
+Requires-Dist: duckdb ; extra == 'simple_framework'
+Requires-Dist: jinja2 ; extra == 'simple_framework'
+Requires-Dist: cloudpickle ; extra == 'simple_framework'
+Requires-Dist: msgpack ; extra == 'simple_framework'
+Requires-Dist: uvicorn ; extra == 'simple_framework'
+Requires-Dist: psutil ==5.9.4 ; extra == 'simple_framework'
+Requires-Dist: fschat ; extra == 'simple_framework'
+Requires-Dist: SQLAlchemy <2.0.29,>=2.0.25 ; extra == 'simple_framework'
+Requires-Dist: click ; extra == 'simple_framework'
+Requires-Dist: importlib-resources ==5.12.0 ; extra == 'simple_framework'
+Requires-Dist: prettytable ; extra == 'simple_framework'
+Requires-Dist: chardet ==5.1.0 ; extra == 'simple_framework'
+Requires-Dist: sqlparse ==0.4.4 ; extra == 'simple_framework'
+Requires-Dist: typing-inspect ; extra == 'simple_framework'
+Requires-Dist: rich ; extra == 'simple_framework'
+Requires-Dist: pydantic >=2.6.0 ; extra == 'simple_framework'
+Requires-Dist: python-dotenv ==1.0.0 ; extra == 'simple_framework'
+Requires-Dist: duckdb-engine ==0.9.1 ; extra == 'simple_framework'
+Requires-Dist: numpy <2.0.0,>=1.21.0 ; extra == 'simple_framework'
+Requires-Dist: tenacity <=8.3.0 ; extra == 'simple_framework'
+Requires-Dist: snowflake-id ; extra == 'simple_framework'
+Requires-Dist: shortuuid ; extra == 'simple_framework'
+Requires-Dist: aiohttp ==3.8.4 ; extra == 'simple_framework'
+Requires-Dist: cachetools ; extra == 'simple_framework'
+Requires-Dist: fastapi >=0.100.0 ; extra == 'simple_framework'
+Requires-Dist: colorama ==0.4.6 ; extra == 'simple_framework'
+Requires-Dist: httpx ; extra == 'simple_framework'
+Requires-Dist: typeguard ; extra == 'simple_framework'
+Provides-Extra: torch
+Requires-Dist: torch ==2.2.1 ; extra == 'torch'
+Requires-Dist: torchaudio ==2.2.1 ; extra == 'torch'
+Requires-Dist: torchvision ==0.17.1 ; extra == 'torch'
+Provides-Extra: torch_cpu
+Requires-Dist: torch ==2.2.1 ; extra == 'torch_cpu'
+Requires-Dist: torchaudio ==2.2.1 ; extra == 'torch_cpu'
+Requires-Dist: torchvision ==0.17.1 ; extra == 'torch_cpu'
+Provides-Extra: torch_cuda
+Requires-Dist: torch ==2.2.1 ; extra == 'torch_cuda'
+Requires-Dist: torchaudio ==2.2.1 ; extra == 'torch_cuda'
+Requires-Dist: torchvision ==0.17.1 ; extra == 'torch_cuda'
+Provides-Extra: vllm
+Requires-Dist: vllm ; extra == 'vllm'
+Provides-Extra: vstore
+Requires-Dist: chromadb >=0.4.22 ; extra == 'vstore'
+Provides-Extra: vstore_all
+Requires-Dist: weaviate-client ; extra == 'vstore_all'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'vstore_all'
+Requires-Dist: pymilvus ; extra == 'vstore_all'
+Provides-Extra: vstore_milvus
+Requires-Dist: pymilvus ; extra == 'vstore_milvus'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'vstore_milvus'
+Provides-Extra: vstore_weaviate
+Requires-Dist: weaviate-client ; extra == 'vstore_weaviate'
+Requires-Dist: chromadb >=0.4.22 ; extra == 'vstore_weaviate'
+
+# DB-GPT: AI Native Data App Development framework with AWEL(Agentic Workflow Expression Language) and Agents
+
+<p align="left">
+  <img src="./assets/LOGO.png" width="100%" />
+</p>
+
+<div align="center">
+  <p>
+    <a href="https://github.com/eosphoros-ai/DB-GPT">
+        <img alt="stars" src="https://img.shields.io/github/stars/eosphoros-ai/db-gpt?style=social" />
+    </a>
+    <a href="https://github.com/eosphoros-ai/DB-GPT">
+        <img alt="forks" src="https://img.shields.io/github/forks/eosphoros-ai/db-gpt?style=social" />
+    </a>
+    <a href="https://opensource.org/licenses/MIT">
+      <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+    </a>
+     <a href="https://github.com/eosphoros-ai/DB-GPT/releases">
+      <img alt="Release Notes" src="https://img.shields.io/github/release/eosphoros-ai/DB-GPT" />
+    </a>
+    <a href="https://github.com/eosphoros-ai/DB-GPT/issues">
+      <img alt="Open Issues" src="https://img.shields.io/github/issues-raw/eosphoros-ai/DB-GPT" />
+    </a>
+    <a href="https://discord.gg/7uQnPuveTY">
+      <img alt="Discord" src="https://dcbadge.vercel.app/api/server/7uQnPuveTY?compact=true&style=flat" />
+    </a>
+    <a href="https://join.slack.com/t/slack-inu2564/shared_invite/zt-29rcnyw2b-N~ubOD9kFc7b7MDOAM1otA">
+      <img alt="Slack" src="https://badgen.net/badge/Slack/Join%20DB-GPT/0abd59?icon=slack" />
+    </a>
+    <a href="https://codespaces.new/eosphoros-ai/DB-GPT">
+      <img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg" />
+    </a>
+  </p>
+
+
+[**简体中文**](README.zh.md) | [**日本語**](README.ja.md) | [**Discord**](https://discord.gg/7uQnPuveTY) | [**Documents**](https://docs.dbgpt.site) | [**微信**](https://github.com/eosphoros-ai/DB-GPT/blob/main/README.zh.md#%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC) | [**Community**](https://github.com/eosphoros-ai/community) | [**Paper**](https://arxiv.org/pdf/2312.17449.pdf)
+
+</div>
+
+## What is DB-GPT?
+
+🤖 **DB-GPT is an open source AI native data app development framework with AWEL(Agentic Workflow Expression Language) and agents**. 
+
+The purpose is to build infrastructure in the field of large models, through the development of multiple technical capabilities such as multi-model management (SMMF), Text2SQL effect optimization, RAG framework and optimization, Multi-Agents framework collaboration, AWEL (agent workflow orchestration), etc. Which makes large model applications with data simpler and more convenient.
+
+
+🚀 **In the Data 3.0 era, based on models and databases, enterprises and developers can build their own bespoke applications with less code.**
+
+### AI-Native Data App 
+---
+- 🔥🔥🔥 [Released V0.6.0 | A set of significant upgrades](https://docs.dbgpt.cn/docs/changelog/Released_V0.6.0)
+  - [The AWEL upgrade to 2.0]()
+  - [GraphRAG]()
+  - [AI Native Data App construction and management]()
+  - [The GPT-Vis upgrade, supporting a variety of visualization charts]()
+  - [Support Text2NLU and Text2GQL fine-tuning]()
+  - [Support Intent recognition, slot filling, and Prompt management]()
+
+---
+
+![app_chat_v0 6](https://github.com/user-attachments/assets/a2f0a875-df8c-4f0d-89a3-eed321c02113)
+
+![app_manage_chat_data_v0 6](https://github.com/user-attachments/assets/c8cc85bb-e3c2-4fab-8fb9-7b4b469d0611)
+
+![chat_dashboard_display_v0 6](https://github.com/user-attachments/assets/b15d6ebe-54c4-4527-a16d-02fbbaf20dc9)
+
+![agent_prompt_awel_v0 6](https://github.com/user-attachments/assets/40761507-a1e1-49d4-b49a-3dd9a5ea41cc)
+
+## Contents
+- [Introduction](#introduction)
+- [Install](#install)
+- [Features](#features)
+- [Contribution](#contribution)
+- [Contact](#contact-information)
+
+## Introduction 
+The architecture of DB-GPT is shown in the following figure:
+
+<p align="center">
+  <img src="./assets/dbgpt.png" width="800" />
+</p>
+
+The core capabilities include the following parts:
+
+- **RAG (Retrieval Augmented Generation)**: RAG is currently the most practically implemented and urgently needed domain. DB-GPT has already implemented a framework based on RAG, allowing users to build knowledge-based applications using the RAG capabilities of DB-GPT.
+
+- **GBI (Generative Business Intelligence)**: Generative BI is one of the core capabilities of the DB-GPT project, providing the foundational data intelligence technology to build enterprise report analysis and business insights.
+
+- **Fine-tuning Framework**: Model fine-tuning is an indispensable capability for any enterprise to implement in vertical and niche domains. DB-GPT provides a complete fine-tuning framework that integrates seamlessly with the DB-GPT project. In recent fine-tuning efforts, an accuracy rate based on the Spider dataset has been achieved at 82.5%.
+
+- **Data-Driven Multi-Agents Framework**: DB-GPT offers a data-driven self-evolving multi-agents framework, aiming to continuously make decisions and execute based on data.
+
+- **Data Factory**: The Data Factory is mainly about cleaning and processing trustworthy knowledge and data in the era of large models.
+
+- **Data Sources**: Integrating various data sources to seamlessly connect production business data to the core capabilities of DB-GPT.
+
+### SubModule
+- [DB-GPT-Hub](https://github.com/eosphoros-ai/DB-GPT-Hub) Text-to-SQL workflow with high performance by applying Supervised Fine-Tuning (SFT) on Large Language Models (LLMs).
+
+- [dbgpts](https://github.com/eosphoros-ai/dbgpts)  dbgpts is the official repository which contains some data apps、AWEL operators、AWEL workflow templates and agents which build upon DB-GPT.
+
+#### Text2SQL Finetune
+- support llms
+  - [x] LLaMA
+  - [x] LLaMA-2
+  - [x] BLOOM
+  - [x] BLOOMZ
+  - [x] Falcon
+  - [x] Baichuan
+  - [x] Baichuan2
+  - [x] InternLM
+  - [x] Qwen
+  - [x] XVERSE
+  - [x] ChatGLM2
+
+-  SFT Accuracy
+As of October 10, 2023, through the fine-tuning of an open-source model with 13 billion parameters using this project, we have achieved execution accuracy on the Spider dataset that surpasses even GPT-4!
+
+[More Information about Text2SQL finetune](https://github.com/eosphoros-ai/DB-GPT-Hub)
+
+- [DB-GPT-Plugins](https://github.com/eosphoros-ai/DB-GPT-Plugins) DB-GPT Plugins that can run Auto-GPT plugin directly
+- [GPT-Vis](https://github.com/eosphoros-ai/GPT-Vis) Visualization protocol
+
+## Install 
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+
+[**Usage Tutorial**](http://docs.dbgpt.cn/docs/overview)
+- [**Install**](http://docs.dbgpt.cn/docs/installation)
+  - [Docker](http://docs.dbgpt.cn/docs/installation/docker)
+  - [Source Code](http://docs.dbgpt.cn/docs/installation/sourcecode)
+- [**Quickstart**](http://docs.dbgpt.cn/docs/quickstart)
+- [**Application**](http://docs.dbgpt.cn/docs/operation_manual)
+  - [Development Guide](http://docs.dbgpt.cn/docs/cookbook/app/data_analysis_app_develop) 
+  - [App Usage](http://docs.dbgpt.cn/docs/application/app_usage)
+  - [AWEL Flow Usage](http://docs.dbgpt.cn/docs/application/awel_flow_usage)
+- [**Debugging**](http://docs.dbgpt.cn/docs/operation_manual/advanced_tutorial/debugging)
+- [**Advanced Usage**](http://docs.dbgpt.cn/docs/application/advanced_tutorial/cli)
+  - [SMMF](http://docs.dbgpt.cn/docs/application/advanced_tutorial/smmf)
+  - [Finetune](http://docs.dbgpt.cn/docs/application/fine_tuning_manual/dbgpt_hub)
+  - [AWEL](http://docs.dbgpt.cn/docs/awel/tutorial)
+
+
+## Features
+
+At present, we have introduced several key features to showcase our current capabilities:
+- **Private Domain Q&A & Data Processing**
+
+  The DB-GPT project offers a range of functionalities designed to improve knowledge base construction and enable efficient storage and retrieval of both structured and unstructured data. These functionalities include built-in support for uploading multiple file formats, the ability to integrate custom data extraction plug-ins, and unified vector storage and retrieval capabilities for effectively managing large volumes of information.
+
+- **Multi-Data Source & GBI(Generative Business intelligence)**
+
+  The DB-GPT project facilitates seamless natural language interaction with diverse data sources, including Excel, databases, and data warehouses. It simplifies the process of querying and retrieving information from these sources, empowering users to engage in intuitive conversations and gain insights. Moreover, DB-GPT supports the generation of analytical reports, providing users with valuable data summaries and interpretations.
+
+- **Multi-Agents&Plugins**
+
+  It offers support for custom plug-ins to perform various tasks and natively integrates the Auto-GPT plug-in model. The Agents protocol adheres to the Agent Protocol standard.
+
+- **Automated Fine-tuning text2SQL**
+
+  We've also developed an automated fine-tuning lightweight framework centred on large language models (LLMs), Text2SQL datasets, LoRA/QLoRA/Pturning, and other fine-tuning methods. This framework simplifies Text-to-SQL fine-tuning, making it as straightforward as an assembly line process. [DB-GPT-Hub](https://github.com/eosphoros-ai/DB-GPT-Hub)
+
+- **SMMF(Service-oriented Multi-model Management Framework)**
+
+  We offer extensive model support, including dozens of large language models (LLMs) from both open-source and API agents, such as LLaMA/LLaMA2, Baichuan, ChatGLM, Wenxin, Tongyi, Zhipu, and many more. 
+
+  - News
+    - 🔥🔥🔥  [Qwen2.5-72B-Instruct](https://huggingface.co/Qwen/Qwen2.5-72B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-32B-Instruct](https://huggingface.co/Qwen/Qwen2.5-32B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-14B-Instruct](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-Coder-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct)
+    - 🔥🔥🔥  [Qwen2.5-Coder-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct)
+    - 🔥🔥🔥  [Meta-Llama-3.1-405B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3.1-405B-Instruct)
+    - 🔥🔥🔥  [Meta-Llama-3.1-70B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3.1-70B-Instruct)
+    - 🔥🔥🔥  [Meta-Llama-3.1-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct)
+    - 🔥🔥🔥  [gemma-2-27b-it](https://huggingface.co/google/gemma-2-27b-it)
+    - 🔥🔥🔥  [gemma-2-9b-it](https://huggingface.co/google/gemma-2-9b-it)
+    - 🔥🔥🔥  [DeepSeek-Coder-V2-Instruct](https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Instruct)
+    - 🔥🔥🔥  [DeepSeek-Coder-V2-Lite-Instruct](https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct)
+    - 🔥🔥🔥  [Qwen2-57B-A14B-Instruct](https://huggingface.co/Qwen/Qwen2-57B-A14B-Instruct)
+    - 🔥🔥🔥  [Qwen2-72B-Instruct](https://huggingface.co/Qwen/Qwen2-72B-Instruct)
+    - 🔥🔥🔥  [Qwen2-7B-Instruct](https://huggingface.co/Qwen/Qwen2-7B-Instruct)
+    - 🔥🔥🔥  [Qwen2-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2-1.5B-Instruct)
+    - 🔥🔥🔥  [Qwen2-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct)
+    - 🔥🔥🔥  [glm-4-9b-chat](https://huggingface.co/THUDM/glm-4-9b-chat)
+    - 🔥🔥🔥  [Phi-3](https://huggingface.co/collections/microsoft/phi-3-6626e15e9585a200d2d761e3)
+    - 🔥🔥🔥  [Yi-1.5-34B-Chat](https://huggingface.co/01-ai/Yi-1.5-34B-Chat)
+    - 🔥🔥🔥  [Yi-1.5-9B-Chat](https://huggingface.co/01-ai/Yi-1.5-9B-Chat)
+    - 🔥🔥🔥  [Yi-1.5-6B-Chat](https://huggingface.co/01-ai/Yi-1.5-6B-Chat)
+    - 🔥🔥🔥  [Qwen1.5-110B-Chat](https://huggingface.co/Qwen/Qwen1.5-110B-Chat)
+    - 🔥🔥🔥  [Qwen1.5-MoE-A2.7B-Chat](https://huggingface.co/Qwen/Qwen1.5-MoE-A2.7B-Chat)
+    - 🔥🔥🔥  [Meta-Llama-3-70B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct)
+    - 🔥🔥🔥  [Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct)
+    - 🔥🔥🔥  [CodeQwen1.5-7B-Chat](https://huggingface.co/Qwen/CodeQwen1.5-7B-Chat)
+    - 🔥🔥🔥  [Qwen1.5-32B-Chat](https://huggingface.co/Qwen/Qwen1.5-32B-Chat)
+    - 🔥🔥🔥  [Starling-LM-7B-beta](https://huggingface.co/Nexusflow/Starling-LM-7B-beta)
+    - 🔥🔥🔥  [gemma-7b-it](https://huggingface.co/google/gemma-7b-it)
+    - 🔥🔥🔥  [gemma-2b-it](https://huggingface.co/google/gemma-2b-it)
+    - 🔥🔥🔥  [SOLAR-10.7B](https://huggingface.co/upstage/SOLAR-10.7B-Instruct-v1.0)
+    - 🔥🔥🔥  [Mixtral-8x7B](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1)
+    - 🔥🔥🔥  [Qwen-72B-Chat](https://huggingface.co/Qwen/Qwen-72B-Chat)
+    - 🔥🔥🔥  [Yi-34B-Chat](https://huggingface.co/01-ai/Yi-34B-Chat)
+  - [More Supported LLMs](http://docs.dbgpt.site/docs/modules/smmf)
+
+- **Privacy and Security**
+  
+  We ensure the privacy and security of data through the implementation of various technologies, including privatized large models and proxy desensitization.
+
+- Support Datasources
+  - [Datasources](http://docs.dbgpt.cn/docs/modules/connections)
+
+## Image
+🌐 [AutoDL Image](https://www.codewithgpu.com/i/eosphoros-ai/DB-GPT/dbgpt)
+
+
+### Language Switching
+    In the .env configuration file, modify the LANGUAGE parameter to switch to different languages. The default is English (Chinese: zh, English: en, other languages to be added later).
+
+## Contribution
+
+- To check detailed guidelines for new contributions, please refer [how to contribute](https://github.com/eosphoros-ai/DB-GPT/blob/main/CONTRIBUTING.md)
+
+### Contributors Wall
+<a href="https://github.com/eosphoros-ai/DB-GPT/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=eosphoros-ai/DB-GPT&max=200" />
+</a>
+
+
+## Licence
+The MIT License (MIT)
+
+## Citation
+If you find `DB-GPT` useful for your research or development, please cite the following <a href="https://arxiv.org/abs/2312.17449" target="_blank">paper</a>:
+
+```bibtex
+@article{xue2023dbgpt,
+      title={DB-GPT: Empowering Database Interactions with Private Large Language Models}, 
+      author={Siqiao Xue and Caigao Jiang and Wenhui Shi and Fangyin Cheng and Keting Chen and Hongjun Yang and Zhiping Zhang and Jianshan He and Hongyang Zhang and Ganglin Wei and Wang Zhao and Fan Zhou and Danrui Qi and Hong Yi and Shaodong Liu and Faqiang Chen},
+      year={2023},
+      journal={arXiv preprint arXiv:2312.17449},
+      url={https://arxiv.org/abs/2312.17449}
+}
+```
+
+## Contact Information
+We are working on building a community, if you have any ideas for building the community, feel free to contact us.
+[![](https://dcbadge.vercel.app/api/server/7uQnPuveTY?compact=true&style=flat)](https://discord.gg/7uQnPuveTY)
+
+[![Star History Chart](https://api.star-history.com/svg?repos=csunny/DB-GPT&type=Date)](https://star-history.com/#csunny/DB-GPT)
