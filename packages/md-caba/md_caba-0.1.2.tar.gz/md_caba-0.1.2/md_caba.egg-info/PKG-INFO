@@ -1,0 +1,43 @@
+Metadata-Version: 2.1
+Name: md_caba
+Version: 0.1.2
+Summary: 一个简单的Markdown文件读取和解析工具
+Home-page: https://github.com/CaBa52052/md_caba
+Author: CaBa52052
+Author-email: CaBa52052@qq.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+Requires-Dist: markdown>=3.3.0
+
+# MD CaBa
+
+一个简单的Markdown文件读取和解析工具。
+
+## 安装
+
+```bash
+pip install md_caba
+```
+
+## 使用方法
+
+```python
+from md_caba import MDReader
+
+# 创建MDReader实例
+reader = MDReader('path/to/your/file.md')
+
+# 获取所有代码块
+code_blocks = reader.get_code_blocks()
+
+# 获取特定语言的代码块
+python_blocks = reader.get_code_blocks('python')
+
+# 打印所有内容
+reader.print_content()
+
+# 转换为JSON
+json_content = reader.to_json()
+``` 
