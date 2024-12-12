@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64.0", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "asp_selftest"
+# dynamic as per setuptools_scm
+dynamic = ["version"]
+authors = [ { name="Erik Groeneveld", email="ejgroene@ieee.org" }, ]
+description = "A tool for running in-source unittests for Anwer Set Programming (ASP)"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: ASP",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Operating System :: OS Independent",
+]
+dependencies=[
+    'clingo >= 5.7.1',
+    'selftest >= 0.4.0',
+    'coverage',
+]
+
+
+[project.scripts]
+asp-tests = "asp_selftest.__main__:main"
+clingo-tests = "asp_selftest.__main__:clingo_plus_tests"
+
+
+[tool.setuptools]
+script-files = ["bin/runasptests.sh"]
+
+
+[project.urls]
+Homepage = "https://github.com/ejgroene/asp-selftest"
+Issues = "https://github.com/ejgroene/asp-selftest/issues"
+
+
+[tool.setuptools_scm]
+# empty is enough to avtivate its magic of including a version from the latest tag
+# additionally it adds all files under version control to the package
