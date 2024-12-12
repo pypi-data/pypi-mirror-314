@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools_scm]
+
+[project]
+dynamic = ["version"]
+name = "dkist-processing-test"
+requires-python = ">=3.11"
+description = "Example instrument code used by the DKIST science data processing pipelines to test processing infrastructure"
+readme = "README.rst"
+authors = [ {name = "NSO / AURA", email = "dkistdc@nso.edu"} ]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+  "dkist-processing-common == 10.5.4rc1",
+  "dkist-header-validator == 5.1.1",
+  "dkist-service-configuration == 2.2",
+  "dkist-fits-specifications == 4.10.0",
+  "numba == 0.59.1",
+  "astropy == 7.0.0",
+  "numpy == 1.26.4",
+  "dkist-spectral-lines == 3.0.0"
+]
+
+[project.urls]
+Homepage = "https://nso.edu/dkist/data-center/"
+Repository = "https://bitbucket.org/dkistdc/dkist-processing-test/"
+Help = "https://nso.atlassian.net/servicedesk/customer/portal/5"
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-xdist",
+  "pytest-cov",
+  "pytest-mock",
+  "dkist-data-simulator >= 5.2.0",
+  "dkist-processing-test[inventory]",
+  "dkist-processing-test[asdf]",
+  "dkist-processing-test[quality]",
+]
+inventory = [
+  "dkist-processing-common[inventory]",
+  "dkist-inventory==1.4.3",
+]
+asdf = [
+  "dkist-processing-common[asdf]",
+  "dkist-inventory[asdf]==1.4.3",
+]
+quality = [
+ "dkist-quality == 1.1.1",
+]
+
+[tool.pytest.ini_options]
+markers = [
+  "development: For tests that can only be run while developing with a sidecar proxy (as opposed to in bitbucket pipelines)"
+]
+
+[tool.coverage.run]
+omit = [
+    "dkist_processing_test/tests/*",
+    "dkist_processing_test/__init__.py",
+]
+
+[tool.coverage.report]
+show_missing = true

@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: dkist-processing-test
+Version: 1.24.0rc1
+Summary: Example instrument code used by the DKIST science data processing pipelines to test processing infrastructure
+Author-email: NSO / AURA <dkistdc@nso.edu>
+License: BSD-3-Clause
+Project-URL: Homepage, https://nso.edu/dkist/data-center/
+Project-URL: Repository, https://bitbucket.org/dkistdc/dkist-processing-test/
+Project-URL: Help, https://nso.atlassian.net/servicedesk/customer/portal/5
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.11
+Description-Content-Type: text/x-rst
+Requires-Dist: dkist-processing-common==10.5.4rc1
+Requires-Dist: dkist-header-validator==5.1.1
+Requires-Dist: dkist-service-configuration==2.2
+Requires-Dist: dkist-fits-specifications==4.10.0
+Requires-Dist: numba==0.59.1
+Requires-Dist: astropy==7.0.0
+Requires-Dist: numpy==1.26.4
+Requires-Dist: dkist-spectral-lines==3.0.0
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-xdist; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: pytest-mock; extra == "test"
+Requires-Dist: dkist-data-simulator>=5.2.0; extra == "test"
+Requires-Dist: dkist-processing-test[inventory]; extra == "test"
+Requires-Dist: dkist-processing-test[asdf]; extra == "test"
+Requires-Dist: dkist-processing-test[quality]; extra == "test"
+Provides-Extra: inventory
+Requires-Dist: dkist-processing-common[inventory]; extra == "inventory"
+Requires-Dist: dkist-inventory==1.4.3; extra == "inventory"
+Provides-Extra: asdf
+Requires-Dist: dkist-processing-common[asdf]; extra == "asdf"
+Requires-Dist: dkist-inventory[asdf]==1.4.3; extra == "asdf"
+Provides-Extra: quality
+Requires-Dist: dkist-quality==1.1.1; extra == "quality"
+
+dkist-processing-test
+---------------------
+
+Overview
+--------
+The dkist-processing-test library serves as an example implementation of a Tasks and Workflows using the
+`dkist-processing-core <https://pypi.org/project/dkist-processing-core/>`_ framework and
+`dkist-processing-common <https://pypi.org/project/dkist-processing-common/>`_ Tasks.
+
+The recommended project structure is to separate tasks and workflows into separate packages.
+
+Build
+-----
+Artifacts are built through `bitbucket pipelines <bitbucket-pipelines.yml>`_
+
+The pipeline can be used in other repos with a modification of the package and artifact locations
+to use the names relevant to the target repo.
+
+e.g. dkist-processing-test -> dkist-processing-vbi and dkist_processing_test -> dkist_processing_vbi
+
+Deployment
+----------
+Deployment is done with `turtlebot <https://bitbucket.org/dkistdc/turtlebot/src/master/>`_ and follows
+the process detailed in `dkist-processing-core <https://pypi.org/project/dkist-processing-core/>`_
+
+Environment Variables
+---------------------
+Only those specified by `dkist-processing-core <https://pypi.org/project/dkist-processing-core/>`_ and `dkist-processing-common <https://pypi.org/project/dkist-processing-common/>`_
+
+Development
+-----------
+
+.. code-block:: bash
+
+    git clone git@bitbucket.org:dkistdc/dkist-processing-test.git
+    cd dkist-processing-test
+    pre-commit install
+    pip install -e .[test]
+    pytest -v --cov dkist_processing_test
