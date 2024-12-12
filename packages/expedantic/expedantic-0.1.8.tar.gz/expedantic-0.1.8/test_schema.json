@@ -1,0 +1,88 @@
+{
+  "$defs": {
+    "TestInnerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "a": {
+          "default": -1,
+          "title": "A",
+          "type": "integer"
+        },
+        "b": {
+          "default": -2.0,
+          "title": "B",
+          "type": "number"
+        }
+      },
+      "title": "TestInnerConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "a": {
+      "default": 1,
+      "title": "A",
+      "type": "integer"
+    },
+    "b": {
+      "default": 2.0,
+      "title": "B",
+      "type": "number"
+    },
+    "c": {
+      "default": "3.0",
+      "title": "C",
+      "type": "string"
+    },
+    "d": {
+      "items": {
+        "type": "number"
+      },
+      "title": "D",
+      "type": "array"
+    },
+    "e": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TestInnerConfig"
+        }
+      ],
+      "default": {
+        "a": -1,
+        "b": -2.0
+      }
+    },
+    "f": {
+      "default": "asdf",
+      "title": "F"
+    },
+    "g": {
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ],
+      "title": "G",
+      "type": "string"
+    },
+    "h": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "H",
+      "type": "array"
+    },
+    "file": {
+      "title": "File",
+      "type": "string"
+    }
+  },
+  "required": [
+    "g",
+    "h",
+    "file"
+  ],
+  "title": "TestConfig",
+  "type": "object"
+}

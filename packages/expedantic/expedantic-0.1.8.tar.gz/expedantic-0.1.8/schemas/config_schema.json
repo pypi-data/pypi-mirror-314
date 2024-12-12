@@ -1,0 +1,25 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "algorithm": {
+      "default": "TRPO",
+      "enum": [
+        "TRPO",
+        "PPO",
+        "SAC",
+        "TD3"
+      ],
+      "title": "Algorithm",
+      "type": "string"
+    },
+    "target_kl": {
+      "default": 0.01,
+      "description": "Should be small for stability. Values like 0.01, 0.05.",
+      "exclusiveMinimum": 0.0,
+      "title": "Target Kullback-Leibler divergence between updates.",
+      "type": "number"
+    }
+  },
+  "title": "Config",
+  "type": "object"
+}
