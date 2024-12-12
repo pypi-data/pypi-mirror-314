@@ -1,0 +1,63 @@
+Metadata-Version: 2.1
+Name: nova-scheduler-filters
+Version: 0.1.0
+Summary: Additional filters for the OpenStack Nova scheduler
+Home-page: https://vexxhost.github.io/nova-scheduler-filters/
+Author: VEXXHOST, Inc.
+Author-email: support@vexxhost.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/vexxhost/nova-scheduler-filters/issues
+Project-URL: Documentation, https://vexxhost.github.io/nova-scheduler-filters/
+Project-URL: Source Code, https://github.com/vexxhost/nova-scheduler-filters
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: OpenStack
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Requires-Python: >=3.8
+Requires-Dist: nova
+
+======================
+Nova Scheduler Filters
+======================
+
+This project contains a set of filters for the Nova scheduler.  These filters
+are intended to be used in conjunction with the default filters that ship with
+Nova.
+
+The goal of those filters are to provide additional filtering capabilities
+that can be co-installed with any version of Nova until the features are
+upstreamed.
+
+--------------
+Failure domain
+--------------
+
+The failure domain filter is a filter that can be used to spread instances
+across different failure domains.  A failure domain is a set of compute nodes
+that are expected to fail together.  For example, compute nodes in the same
+rack or in the same power distribution unit (PDU) are expected to fail
+together.
+
+Historically, some users have used the availability zone feature to spread
+instances across failure domains.  However, the availability zone feature is
+not designed for this purpose and it has some limitations.  There is also
+a need to spread instances across failure domains within the same availability
+zone.
+
+The failure domain is defined as a metadata on host aggregates.  The key of
+the metadata is ``failure_domain``.  The value of the metadata is a string that
+identifies the failure domain.  The failure domain filter will spread instances
+across different failure domains.  It is up to the operator to define the
+failure domains.
+
+
+
