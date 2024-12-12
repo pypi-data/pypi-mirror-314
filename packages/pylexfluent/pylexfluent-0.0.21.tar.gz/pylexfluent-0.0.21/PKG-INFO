@@ -1,0 +1,103 @@
+Metadata-Version: 2.3
+Name: pylexfluent
+Version: 0.0.21
+Summary: Extracteur de données de documents
+Project-URL: Homepage, https://dev.azure.com/LexFluent2020/RevolutionAI
+Project-URL: Issues, https://dev.azure.com/LexFluent2020/RevolutionAI/_queries/query/180a1ed2-3494-42cc-8d8a-2e60217c2171/
+Author-email: Jacques MASSA <jacques.massa@lexfluent.com>
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.12
+Requires-Dist: langchain-community
+Requires-Dist: matplotlib
+Requires-Dist: ocrmypdf
+Requires-Dist: opencv-python
+Requires-Dist: pandas
+Requires-Dist: pdf2image
+Requires-Dist: pdfplumber
+Requires-Dist: pillow==10.0.1
+Requires-Dist: pytesseract
+Requires-Dist: scikit-learn
+Requires-Dist: setuptools
+Requires-Dist: spacy[cuda12x]
+Requires-Dist: tensorflow-hub
+Requires-Dist: tensorflow==2.17.0
+Requires-Dist: tensorrt
+Requires-Dist: tf-keras==2.17.0
+Requires-Dist: tqdm
+Requires-Dist: wheel
+Description-Content-Type: text/markdown
+
+# Libraire python Lexfluent RevolutionAI
+*Auteur Jacques MASSA*
+*Créé le 2 décembre 2024*
+
+---
+
+## Présentation
+Cette librairie permet:
+- la classification de documents selon le modèle jupiterB0 
+- l'extraction de données contenu dans des documents de classes connues(Offre de prêts, IBAN, CNI, etc ...).
+
+
+## Installations Prérequises 
+
+``` 
+
+    pip install setuptools wheel 
+    pip install pdfplumber 
+    pip install spacy[cuda12x]
+    pip install tqdm 
+    pip install opencv-python
+    pip install pytesseract
+    pip install pdf2image
+    pip install pillow==10.0.1
+    pip install pandas
+    pip install scikit-learn
+    pip install matplotlib
+    pip install tensorflow==2.17.0
+    pip install tf-keras==2.17.0
+    pip install tensorflow_hub
+    pip install tensorrt
+    pip install langchain-community
+    pip install ocrmypdf
+
+```
+ 
+## Téléchargement modèles 
+### SPACY 
+
+``` python -m spacy download fr_core_news_lg ```
+
+## Update et installations requises
+``` 
+    apt-get update 
+    apt-get upgrade
+    apt install software-properties-common -y
+    apt-get install poppler-utils -y
+    add-apt-repository ppa:alex-p/tesseract-ocr5
+    apt-get install libc6 -y
+    apt-get install poppler-utils -y
+    apt-get install tesseract-ocr -y
+    apt-get install tesseract-ocr-fra -y
+    apt-get install tesseract-ocr-eng -y
+    apt-get install tesseract-ocr-ita -y
+    apt-get install tesseract-ocr-spa -y
+    apt-get install tesseract-ocr-deu -y
+    apt-get install tesseract-ocr-cos -y
+    apt-get install tesseract-ocr-lat -y
+    apt-get install automake libtool -y
+    apt-get install libleptonica-dev -y
+    apt-get install ffmpeg libsm6 libxext6  -y
+    apt-get install ocrmypdf -y    
+
+``` 
+
+## GPU issue 
+Si problème : Successful NUMA node read from SysFS had negative value (-1) 
+
+```
+for a in /sys/bus/pci/devices/*; do echo 0 |  tee -a $a/numa_node; done
+
+```
