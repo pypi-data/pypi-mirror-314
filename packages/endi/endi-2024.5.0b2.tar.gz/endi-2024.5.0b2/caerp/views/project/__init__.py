@@ -1,0 +1,11 @@
+def includeme(config):
+    config.include(".routes")
+    config.include(".layout")
+    config.include(".lists")
+    config.include(".project")
+    config.include(".estimation")
+    config.include(".invoice")
+    config.include(".phase")
+    config.include(".business")
+    config.include(".files")
+    config.include(".rest_api")
