@@ -1,0 +1,117 @@
+Metadata-Version: 2.1
+Name: rapyuta-io-cli
+Version: 9.5.0
+Summary: rapyuta.io Command Line Interface
+Author-email: Rapyuta Robotics <opensource@rapyuta-robotics.com>
+License: Apache-2.0
+Project-URL: Homepage, https://cli.rapyuta.io
+Project-URL: Documentation, https://cli.rapyuta.io/
+Project-URL: Repository, https://github.com/rapyuta-robotics/rapyuta-io-cli.git
+Project-URL: Issues, https://github.com/rapyuta-robotics/rapyuta-io-cli/issues
+Project-URL: Changelog, https://github.com/rapyuta-robotics/rapyuta-io-cli/blob/main/CHANGELOG.md
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.8.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: argparse>=1.4.0
+Requires-Dist: click-completion>=0.5.2
+Requires-Dist: click-help-colors>=0.9.1
+Requires-Dist: click-plugins>=1.1.1
+Requires-Dist: click-repl>=0.2.0
+Requires-Dist: click-spinner>=0.1.10
+Requires-Dist: click>=8.0.1
+Requires-Dist: dictdiffer>=0.9.0
+Requires-Dist: directory-tree>=0.0.3.1
+Requires-Dist: email-validator==2.0.0.post2
+Requires-Dist: etcd3gw>=2.4.0
+Requires-Dist: graphlib-backport>=1.0.3
+Requires-Dist: graphviz>=0.20.3
+Requires-Dist: jinja2>=3.0.1
+Requires-Dist: jsonschema==4.23.0
+Requires-Dist: munch>=2.4.0
+Requires-Dist: pretty-traceback>=2022.1018
+Requires-Dist: pyrfc3339>=1.1
+Requires-Dist: python-benedict>=0.33.2
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: python-hosts>=1.0.7
+Requires-Dist: python-magic>=0.4.27
+Requires-Dist: pytz
+Requires-Dist: pyyaml>=5.4.1
+Requires-Dist: rapyuta-io>=2.2.2
+Requires-Dist: requests>=2.20.0
+Requires-Dist: semver>=3.0.0
+Requires-Dist: setuptools
+Requires-Dist: six>=1.13.0
+Requires-Dist: tabulate>=0.8.0
+Requires-Dist: urllib3>=1.23
+Requires-Dist: waiting>=1.4.1
+Requires-Dist: yaspin==2.5.0
+Requires-Dist: ansible-core>=2.13.13
+
+# rapyuta.io CLI
+
+The rapyuta.io CLI exposes features of the rapyuta.io cloud platform on the command-line.
+
+The application is written in Python 3, and it is distributed through PyPI for Python 3 environments.
+
+For Reference on directory structure please refer Please have a look at the
+corresponding article:
+http://gehrcke.de/2014/02/distributing-a-python-command-line-application/
+
+## Installation
+
+### [Recommended] Installing the `AppImage`
+
+You can install the latest `AppImage` using the following command.
+
+```bash
+curl -fSsL https://cli.rapyuta.io/install.sh | bash
+```
+
+> Note: The `AppImage` is a self-contained executable that can be run on any Linux distribution.
+However, it is not supported for non-Linux systems.
+
+### Installing via `pip`
+
+```bash
+pip install rapyuta-io-cli
+```
+
+On Unix-like systems it places the `rio` executable in the user's PATH. On
+Windows it places the `rio.exe` in the centralized `Scripts` directory
+which should be in the user's PATH.
+
+### Installing from source
+
+To install the CLI from source, you can use the `setup.py` script directly.
+Clone the repository and from the root of the directory, run the following
+command.
+
+```bash
+git clone git@github.com:rapyuta-robotics/rapyuta-io-cli.git
+cd rapyuta-io-cli
+python setup.py install
+```
+
+## Getting Started
+
+To begin using the CLI, it must be authenticated with rapyuta.io.
+
+```bash
+rio auth login
+```
+
+The `email` and `password` can either be given through flags (for scripting purposes) or interactively through the prompt.
+
+> Note: Entering the password as a flag is not recommended because it leaves the traces.
+
+Once set up, run `rio --help` to see the available commands.
+
+## References
+* [Development Guide](CONTRIBUTING.md)
