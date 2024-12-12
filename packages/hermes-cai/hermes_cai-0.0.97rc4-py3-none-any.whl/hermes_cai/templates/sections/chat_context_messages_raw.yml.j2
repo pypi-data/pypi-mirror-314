@@ -1,0 +1,8 @@
+{% for cc_msg in pretruncate_messages(chat_context_messages, token_limit) %}
+    {% set qual_author_msg =  canonicalize_user_name(cc_msg.author) + ": " + cc_msg.text %}
+- name: "message_{{ loop.index }}"
+  truncation_priority: 5
+  content: |
+    {{ settings.start_token }}{{ escape_special_characters(qual_author_msg) }}{{ settings.eom }}
+    {%- set settings.start_token = settings.bom -%}
+{% endfor %}
