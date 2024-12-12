@@ -1,0 +1,101 @@
+{% extends "best-cards/_layout.html" %}
+{% import "best-cards/_layout_card_column.html" as layout with context%}
+
+{% block content %}
+<h1>{{ akunanse }} Akunanse</h1>
+<div class="insert tip">
+    {% trans trimmed
+    akunanse_wall=link("/archetypes-/akunanse-toolbox"),
+    team_jacob=link("/archetypes/tunnel-runners"),
+    tunnel_runner=card("Tunnel Runner"),
+    combat_ends=link("/strategy/combat", _("combat ends"), _anchor="defence")
+    %}
+    <p>
+        Akunanse and their rare {{ abo }} discipline provide a stronger defense
+        than the usual {{ ani }} builds.
+    </p>
+    <p>
+        This clan has two main archetypes: the {{ akunanse_wall }},
+        using {{ abo }} along {{ ani }} for a sturdy wall,
+        and {{ team_jacob }} using the infamous {{ tunnel_runner }}.
+        More combat-oriented builds are limited due to the inability
+        to deal with {{ combat_ends }}.
+    </p>
+    {% endtrans %}
+</div>
+
+{% call layout.card_column('Uchenna', decks=31, copies="1-3") %}
+{% trans trimmed
+no_secrets_from_the_magaji=card("No Secrets From the Magaji")
+%}
+A Magaji with superior {{ ABO }}{{ FOR }}{{ ANI }} for just 7 pool: definitely a good deal.
+Her ability may be useful in tense situations, although 1 blood to draw a card is a high price to pay.
+The fact that she is Magaji let her play the excellent {{ no_secrets_from_the_magaji }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column('Mapatano Utando', decks=22, copies="1-2") %}
+{% trans trimmed %}
+A good master for Akunanse decks: it can speed up the setup in the beginning,
+but also avoid pool loss regularly, at no cost.
+Gaining one or two turns or 3 pools or more is definitely efficient,
+it encourages the inclusion of low capacity vampires to get the edge sooner.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column('Reliquary: Akunanse Remains', decks=14, copies="1") %}
+{% trans trimmed %}
+A good equipment: a permanent +1 bleed for 1 pool is good,
+plus the discipline boost is excellent for low capacity vampires.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column('Tunnel Runner', decks=13, copies="3-8") %}
+{% trans trimmed
+jacob_fermor=card("Jacob Fermor"),
+tunnel_runners=link("/archetypes/tunnel-runners")
+%}
+He can be used as the main minion of the deck for good stealthed bleeds,
+his ability can be used more than once in a turn, allowing it to get +2 stealth.
+He is expensive, though — he becomes really efficient partnered with
+{{ jacob_fermor }} in the {{ tunnel_runners }} archetype.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Predator's Communion", decks=32, copies="3-6") %}
+{% trans trimmed %}
+Wake and intercept bundled in a single card: an excellent reaction for any intercept module.
+This card, combined with the combat-efficient {{ for }} discipline of the clan,
+explains the success of wall archetypes in the Akunanse clan.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column('Invoking the Beast', decks=21, copies="4-8") %}
+{% trans trimmed
+carrion_crows=card("Carrion Crows")
+%}
+A good combat card at no cost: additional damage,
+plus a handy press that combines very well with {{ carrion_crows }}
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Predator's Transformation", decks=20, copies="3-7") %}
+{% trans trimmed %}
+An easy to cycle stealth card, and the only one available for Akunanse.
+The superior effect may come in handy against weenie constructs.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column('Devil-Channel: Hands', decks=15, copies="3-8") %}
+{% trans trimmed
+invoking_the_beast=card("Invoking the beast"),
+carrion_crows=card("Carrion Crows"),
+immortal_grapple=card("Immortal Grapple")
+%}
+A good combat card, adding aggravated damage to an already efficient combat module.
+The strength bonus of {{ invoking_the_beast }} applies to it and the press
+at superior {{ ABO }} can be deadly when used alongside {{ carrion_crows }}.
+Finally, it works with a hand strike, so {{ immortal_grapple }} is useless against it.
+{% endtrans %}
+{% endcall %}
+{% endblock %}

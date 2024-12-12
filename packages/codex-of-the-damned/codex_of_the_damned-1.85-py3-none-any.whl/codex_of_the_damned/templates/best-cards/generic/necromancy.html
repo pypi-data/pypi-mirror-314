@@ -1,0 +1,77 @@
+{% extends "best-cards/_layout.html" %}
+{% import "best-cards/_layout_card_column.html" as layout with context %}
+
+{% block content %}
+<h1>{{ nec }} {{ _("Necromancy") }} </h1>
+<div class="insert tip">
+    <p>
+        {% trans trimmed %}
+        {{ nec }} provides a wide range of possibilities, including more than its share
+        of ash heap manipulations.
+        {% endtrans %}
+    </p>
+</div>
+
+{% call layout.card_column("Call of the Hungry Dead", decks=137, copies="3-7") %}
+{% trans trimmed seduction=card("Seduction") %}
+Played in most {{ nec }} decks, it is an excellent block denial card. Combined with
+{{ seduction }}, it can get any action through without even fighting for stealth.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Spectral Divination", decks=117, copies="3-6") %}
+{% trans trimmed %}
+A very versatile card, although the 1 blood cost is a bit high.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Spiritual Intervention", decks=65, copies="3-7") %}
+{% trans trimmed %}
+An excellent defensive combat card, providing a <em>combat ends</em> effect
+for no cost at superior {{ NEC }}, and still a useful <em>dodge</em> at inferior
+{{ nec }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Shambling Hordes", decks=55, copies="5-17") %}
+{% trans trimmed %}
+An excellent ally with solid combat abilities. A bit tricky to play or include in a
+deck, as it needs an ally or vampire in the ash heap already.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Trochomancy", decks=36, copies="1-4") %}
+{% trans trimmed
+inevitability_of_the_void=card("Inevitability of the Void"),
+ashur_tablets=card("Ashur Tablets")
+%}
+Generally inferior to the newer {{ inevitability_of_the_void }}, it's an excellent bleed
+enhancer, and its effect can be a good deterrent against {{ ashur_tablets }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Breath of Thanatos", decks=33, copies="2-4") %}
+{% trans trimmed
+spiritual_intervention=card("Spiritual Intervention"),
+target_vitals=card("Target Vitals")
+%}
+Although less used than the defensive {{ spiritual_intervention }}, the aggravated
+damage at superior {{ NEC }} is dreadful, even more so when combined with
+{{ target_vitals }}. If the deck uses wraiths, the card becomes very versatile.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Chair of Hades", decks=20, copies="1-2") %}
+{% trans trimmed %}
+An excellent ally remover at no cost, it can even be used against low capacity vampires.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Funeral Wake", decks=16, copies="1-3") %}
+{% trans trimmed the_unmasking=card("The Unmasking") %}
+A decent wake reaction, it becomes very good in allies-oriented decks once
+{{ the_unmasking }} is in play.
+{% endtrans %}
+{% endcall %}
+
+{% endblock %}
