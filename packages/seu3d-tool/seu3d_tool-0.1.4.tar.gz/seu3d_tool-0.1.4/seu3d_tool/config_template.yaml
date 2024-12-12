@@ -1,0 +1,36 @@
+# -------
+# (REQUIRED)
+# data to show on the server, in .h5ad format
+# a unique name for each file, and the path to the file
+# e.g. 
+# Dataset:
+#   E7.5: /path/to/E7.5.h5ad
+#   E8.0: /path/to/E8.0.h5ad
+Dataset:
+
+# -------
+# (REQUIRED)
+# name for the celltype annotation stored in the .h5ad files (adata.obs[annotation]), default: 'celltype'
+annotation: celltype
+
+# -------
+# name for the 3D embedding stored in the .h5ad files (adata.obsm[3D_embedding]), default: 'X_spatial'
+3D_embedding: X_3D
+
+# -------
+# (REQUIRED)
+# dir to store cache files, default: ./cache
+cache_dir: ./cache
+
+# -------
+# (OPTIONAL)
+# colormap is the drawing color for each unique celltype annotation.
+# colormap will be auto generated when server startup. After that, you could use
+# 'seu3d-tool config --current > seu3d_config.yaml' to get updated config file and modify the colormap,
+# and use 'seu3d-tool config --update seu3d_config.yaml' to update server configuration.
+# e.g.
+# colormap:
+#   celltypeA: '#AE72C1'
+#   celltypeB: '#DF8817'
+colormap:
+
