@@ -1,0 +1,105 @@
+{
+    "application_config_test": {
+        "purpose": "Tests the application configuration endpoints",
+        "domains": [
+            {
+                "domain": "api.example.com",
+                "expected_results" : {
+                    "status_code": 200
+                },
+                "enabled": true
+            },
+            {
+                "domain": "XXXXXXXXXXXXXXXXXXXXX",
+                "expected_results" : {
+                    "status_code": 403
+                },
+                "enabled": false
+            }
+        ]
+    },
+    "login_test": {
+        "purpose": "Tests the login endpoints",
+        "logins": [
+            {
+                "username": "foo",
+                "password": "barr",
+                "domain": "api.example.com",
+                "roles": []
+                
+            },
+            {
+                "username": "XXXXXXXXXXXXXXXXXXXXX",
+                "password": "XXXXXXXXXXXXXXXXXXXXX",
+                "domain": "XXXXXXXXXXXXXXXXXXXXX",
+                "roles": [
+                    "XXXXXXXXXXXXXXXXXXXXX"
+                ],
+                "enabled" : false,
+                "expected_results" : {
+                    "exception": "InvalidCredentialsException"
+                }
+            }
+        ]    
+    },
+    "file_upload_test": {
+        "purpose": "Tests the file upload endpoints.",
+        "notes": "a file can be on the local drive or pulled from a public https source.",
+        "login": {
+            "purpose": "optional: if present this login is used, unless a specific login is defined for the test",
+            "username": "foo",
+            "password": "bar",
+            "domain": "api.example.com"          
+        },
+        "files": [
+            {
+                "file": "XXXXXXXXXXXXXXXXXXXXX",                
+                "expected_results" : {
+                    "status_code": 200
+                }
+            },
+            {
+                "file": "XXXXXXXXXXXXXXXXXXXXX",
+                "login" : {
+                    "purpose": "optional: if present tests an upload for a specific user",
+                    "username": "XXXXXXXXXXXXXXXXXXXXX",
+                    "password": "XXXXXXXXXXXXXXXXXXXXX",
+                    "domain": "XXXXXXXXXXXXXXXXXXXXX" 
+                },
+                "expected_results" : {
+                    "status_code": 403
+                }
+            }
+        ]
+    },
+    "analysis_execution_test": {
+        "purpose": "Tests the analysis execution endpoints.",
+        "login": {
+            "username": "XXXXXXXXXXXXXXXXXXXXX",
+            "password": "XXXXXXXXXXXXXXXXXXXXX",
+            "domain": "XXXXXXXXXXXXXXXXXXXXX"          
+        },
+        "analyses": [
+            {                
+                "file": "XXXXXXXXXXXXXXXXXXXXX",
+                "meta": {},
+                "config": {},
+                "expected_results" : {
+                    "status_code": 200
+                }
+            }
+        ]
+    },
+    "validation_test": {
+        "purpose": "Tests the validation execution.",
+        "login": {
+            "username": "XXXXXXXXXXXXXXXXXXXXX",
+            "password": "XXXXXXXXXXXXXXXXXXXXX",
+            "domain": "XXXXXXXXXXXXXXXXXXXXX"          
+        },
+        "expected_results": {
+            "status_code": 200
+        }
+    }
+    
+}
