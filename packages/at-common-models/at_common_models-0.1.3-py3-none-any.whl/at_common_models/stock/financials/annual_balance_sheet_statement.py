@@ -1,0 +1,4 @@
+from at_common_models.stock.financials.base_models import BaseBalanceSheetStatementModel
+
+class AnnualBalanceSheetStatementModel(BaseBalanceSheetStatementModel):
+    __tablename__ = "stock_financials_annual_balance_sheet_statements"
