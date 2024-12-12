@@ -1,0 +1,33 @@
+[project]
+name = "inventory-card-reader"
+version = "0.0.16"
+authors = [
+    {name="Mathias Zinnen", email="mathias.zinnen@gmail.com"}
+]
+description = "Read, process, and integrate data from inventory cards."
+readme = "README.md"
+requires-python = ">=3.8"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "pero-ocr",
+  "pyyaml",
+  "pandas",
+  "tqdm",
+  "ultralytics",
+  "appdirs"
+]
+
+[project.urls]
+Homepage = "https://github.com/mathiaszinnen/inventory-card-reader"
+Issues = "https://github.com/mathiaszinnen/inventory-card-reader/issues"
+
+[project.scripts]
+read_inventory_cards = "inventory_card_reader.read_directory:main"
+
+[tool.setuptools]
+packages = ["inventory_card_reader", "inventory_card_reader.processors"]
