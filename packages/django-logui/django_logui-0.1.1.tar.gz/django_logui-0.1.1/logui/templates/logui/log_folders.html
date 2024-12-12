@@ -1,0 +1,37 @@
+{% extends 'logui/base.html' %}
+{% block title %}
+    LOGS
+{% endblock %}
+{% block main %}
+    <div class="fc maxw-500px px-2 mx-auto">
+        <h1 class="text-center">LOGS</h1>
+
+        {% if folders %}
+            <h2>Directories</h2>
+            <ul>
+                {% for folder in folders %}
+                    <li>
+                        <a href="{% url 'logui:log_files' folder %}"
+                           class="text-decoration-none fs-3">
+                            {{ folder }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if root_files %}
+            <h2>Log Files in Root</h2>
+            <ul>
+                {% for file in root_files %}
+                    <li>
+                        <a href="{% url 'logui:log_file_root' file %}"
+                           class="text-decoration-none fs-3">
+                            {{ file }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}
