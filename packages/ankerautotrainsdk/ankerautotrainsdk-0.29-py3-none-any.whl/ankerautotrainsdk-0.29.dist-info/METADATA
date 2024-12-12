@@ -1,0 +1,1019 @@
+Metadata-Version: 2.1
+Name: ankerautotrainsdk
+Version: 0.29
+Summary: Python Package Boilerplate
+Home-page: UNKNOWN
+Author: taco
+Author-email: taco.wang@anker-in.com
+License: MIT License
+Platform: UNKNOWN
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: requests (==2.27.1)
+Requires-Dist: pydantic (==1.9.2)
+Requires-Dist: pycryptodome (==3.21.0)
+Requires-Dist: bson (==0.5.10)
+Requires-Dist: tqdm (==4.62.3)
+Requires-Dist: ujson (==4.3.0)
+Requires-Dist: hachoir (==3.3.0)
+
+# 回流服务SDK
+
+## 怎么使用
+
+### 初始化SDK
+```python
+from ankerautotrainsdk import AnkerAutoTrainSDK
+
+# 这里url可以不传，默认是国外正式环境url=https://dataloop.anker-in.com
+# 如果想使用国外测试环境url=https://dataloop-qa.anker-in.com
+# 注意数据合规问题，选择恰当的环境url
+client = AnkerAutoTrainSDK(url="https://dataloop-qa.anker-in.com")
+```
+
+### 上传文件信息
+#### 一个文件信息必须要对应一个文件
+```python
+def upload_data_with_info(raw_data: dict)
+```
+参数
+- raw_data (dict): 上传的文件对应的文件信息
+- file_path (str): 上传的文件路径
+- directory (str)： 上传到云端的目录，留空为自动按日期创建
+
+返回值
+- url (str): 文件的上传url
+- bucket (str): 文件上传的bucket
+- storage_id (str): 文件上传的storage_id
+- object_name (str): 文件上传的object_name
+- uid (str): 文件的md5
+- raw_data_id (str): 文件原始信息的id
+- meta (Optional[FileMeta]): 文件的meta信息，默认为None
+
+
+使用示例
+```python
+## 上传文件
+upload_response = client.upload_image("test.jpeg", "test")
+
+## 上传文件对应的信息
+resolution = {"width": 1920, "height": 1080}
+sourceType = "trigger"
+localEventTime = "20241024"
+storage = {"storageId": upload_response.storage_id, "bucket": upload_response.bucket, "objectName": upload_response.object_name}
+raw_data = {
+    "uid": upload_response.uid,
+    "fileMeta": {"resolution": resolution},
+    "type": "image",
+    "region": "CN",
+    "securityLevel": "low",
+    "storage": storage,
+    "bg": "ap",
+    "owner": "ivan.liu",
+    "extra": {"localEventTime": localEventTime},
+    "sourceInfo":{"type": sourceType}
+}
+client.upload_raw_data(raw_data)
+```
+
+### 上传文件标注
+```python
+def upload_annotated_data(annotated_data: dict)
+```
+参数
+- annotated_data (dict): 上传的文件对应的标注信息
+
+返回值
+- annotation_data_id (str):  上传的标注返回的标注id
+
+使用示例
+```python
+## 上传文件对应的标注
+model_name = 'test_model'
+labelInfo = [{"bbox_xyxy": [4307,1834,4462,1952],"label": "poop","score": 1,"labelType": 0}]
+annotation_data = {
+    "annotationType": "object",
+    "bg": "ap",
+    "owner": "name",
+    "dataId": ["xxxx"], ##对应的原始文件的md5
+    "labelInfo": labelInfo, 
+    "labelMethod": "auto",
+    "labelScope": ["wire"],
+    "modelName": model_name,
+    "modelVersion": "0.1"
+}
+annotation_response = client.upload_annotated_data(annotation_data)
+
+## 返回标注的ID
+annotation_response.annotation_data_id
+```
+
+### 创建数据集
+#### 数据集用于组织上传的标注文件，所以上传标注文件返回的标注annotation_data_id必须保存为一个list[]
+函数签名
+```python
+def create_dataset(dataset_info: dict)
+```
+
+参数 
+- dataset_info (dict): 创建数据集的信息
+
+返回值
+- dataset_id (str): 数据集的id
+
+
+使用示例
+```python
+## 创建数据集
+create_dataset_info = {
+    "annotationBy": [],
+    "annotationType": "detection",
+    "bg": "ap",
+    "datasetName": "test dataset",
+    "datasetVersion": "v2",
+    "modelType": "teacher",
+    "owner": "name",
+    "remark": "This is a test dataset",
+    "versionType": "train"
+}
+create_datast_response = client.create_dataset(create_dataset_info)
+
+## 返回数据集的ID
+create_datast_response.dataset_id
+```
+
+### 链接数据集
+#### 创建完数据集后，需要将上传标注文件返回的标注annotation_data_id链接到这个数据集上。上传的所有标注annotation_data_id必须保存为一个list[]
+函数签名
+```python
+def link_dataset(annotation_id_list: list, dataset_id: str)
+```
+
+参数 
+- annotation_id_list (List[str]): 需要组织到这个数据集的所有标注annotation_data_id list
+- dataset_id (str): 创建的数据集dataset_id
+
+使用示例
+```python
+## 创建数据集
+id_list = ["66f519f20c11b8a33cd2aa7b", "66f519f20c11b8a33cd2aa7b"]
+
+link_response = client.link_dataset(annotation_id_list=id_list, dataset_version_id=create_datast_response.dataset_id)
+```
+
+### 通过storage下载文件
+函数签名
+```python
+def download_file_by_storage(storage_id: str, bucket: str, object_name: str, directory: str)
+```
+
+参数 
+- storage_id (str): 上传文件返回的storage_id
+- bucket (str): 上传文件返回的bucket
+- object_name (str): 上传文件返回的object_name
+- directory (str): 下载到本地的路径
+
+使用示例
+```python
+client.download_file_by_storage(storage_id="2vcrqyykgmaql", bucket="data-sync-storage", object_name="2024-10-24/cables_pack.jpg", directory="/home/save")
+```
+
+### 通过uid下载文件
+函数签名
+```python
+def download_file_by_uid(uid: str, directory: str)
+```
+
+参数 
+- uid (str): 文件的md5
+- directory (str): 保存到本地的路径
+
+使用示例
+```python
+client.download_file_by_uid(uid="b20911d85ce768742def204b032a95c7", directory="/home/save")
+```
+
+### 下载数据集
+函数签名
+```python
+def download_dataset(dataset_name: str, dataset_version: str, directory: str)
+```
+
+参数 
+- dataset_name (str): 需要下载的数据集名称
+- dataset_version (str): 需要下载的数据集版本
+- directory (str): 保存到本地的路径
+
+使用示例
+```python
+client.download_dataset(dataset_name="test dataset", dataset_version="v2", directory="/home/ivan")
+```
+
+### 根据查询条件下载数据集json
+
+函数签名 
+```python
+def batch_download_annotation4human(
+        self, req: dict, raw_data_id_list: List[str]=[], create_dataset: bool=False, file_path: str ="data.json", lite_data: bool = False, thread_nums: int = 4
+    )
+```
+参数说明
+
+- req: dict 参数和 annotation_version_create这个接口一致
+- raw_data_id_list (List[str]): 原始数据ID列表
+- create_dataset (bool): 是否在数据库中创建数据集
+- file_path (str): 保存的文件路径，默认存放到data.json
+- lite_data (bool)： 是否需要精简数据 
+- thread_nums (int): 并发数量，默认为4
+
+使用示例
+```python
+query = {
+    "bg": 'zx',
+    "labelMethod": "auto",
+    "annotationType": "detection",
+    "processState": 'diff',
+    "startTime": '20241208',
+    "endTime": '20241208',
+}
+client.batch_download_annotation4human(req=query)
+```
+
+### 根据数据集json下载图片数据
+函数签名
+```python
+def download_raw_data4human(
+        self, file_path: str="data.json", dist_path: str="data", thread_nums: int =4
+    )
+```
+参数说明
+
+- file_path (str): 数据集的文件路径，默认读取data.json
+- dist_path (str): 保存的文件路径，默认存放到data文件夹
+- thread_nums (int): 并发数量，默认为4
+
+使用示例
+```python
+client.download_raw_data4human(file_path="data.json", dist_path="image_data", thread_nums=10)
+```
+
+### 根据检测类别list下载难例标注数据
+函数签名
+```python
+def batch_download_detection_result(
+    self, bg: str, object_list: List[str], startDate: str, endDate: str, resultType: str='hardcase', file_path: str ="data.json", lite_data: bool = False, thread_nums: int = 4)
+```
+参数说明
+- bg (str): 搜索bg
+- object_list (List[str]): 需要搜索的类别，全量类别留空[]
+- startDate (str): 数据搜索起始日期
+- endDate (str): 数据搜索结束日期
+- resultType (str): 默认搜索难例，可以不填
+- file_path (str): 保存的文件路径，默认存放到data.json
+- lite_data (bool): 是否需要精简数据 
+- thread_nums (int): 并发数量，默认为4
+
+使用示例
+```python
+client.client.batch_download_detection_result(bg="ap", object_list=['wire'], startDate="20241206", endDate="20241206"， resultType='hardcase', file_path="data.json")
+```
+
+### 根据数据集id list下载原始数据
+函数签名
+```python
+def down_datasets4human(
+    self, dataset_ids: List[str], json_dist_path: str="data", download_image: bool=False, image_dist_path: str="data",  lite_data: bool = False, thread_nums=4
+)
+```
+参数说明
+- dataset_ids (List[str]): 数据集id list
+- json_dist_path (str): 保存的文件路径，默认存放到data文件夹
+- download_image (bool): 是否下载图片文件，默认False
+- image_dist_path (str): 保存的图片路径，默认存放到data文件夹
+- lite_data (bool): 是否精简数据，默认False
+- thread_nums (int): 并发数量，默认为4
+
+使用示例
+```python
+client.down_datasets4human(dataset_ids=['6756f411238851861e13fb13'], thread_nums=10)
+```
+
+### 查询数据集统计信息 
+#### 可以通过查询数据集统计信息，包括有多少张图，多少标注，每个类别多少
+函数签名
+```python
+def get_datasets_statistics(self, dataset_ids: List[str], thread_nums=4) -> Dict[str, LabelStatsResponse]
+```
+参数说明
+
+- dataset_ids (List[str]): 数据集的id list
+- thread_nums (int): 并发线程数，默认是4
+
+返回值说明
+```python
+class LabelStat:
+    label: str # 标注类型
+    count: int # 标注总计
+    percent: float = 0 # 标注百分比 保留四位小数如 0.1322
+
+class LabelStatsResponse:
+    datasetId: str # 数据集id
+    datasetName: str # 数据集名称
+    labelStats: list[LabelStat]
+    totalCount: int # 总标注数量
+    totalDataCount: int # 总图片数量
+```
+
+### 查询单日数据统计
+函数签名 
+```python
+def get_raw_data_statistics(
+        self, username: str, password: str,  bg: str, date: str, task: str
+    )
+```
+参数说明
+- username (str): 查询用户名
+- password (str): 查询密码
+- bg (str): 查询bg名称
+- date (str): 查询日期
+- task (str): 查询任务
+
+返回值说明
+```python
+class GetRawDataResponse:
+    num_video: int #视频个数
+    num_image: int #图片个数
+    num_device: int #设备数量
+    num_label: int #标注数量
+    num_hardcase: int #难例数量
+    task_hardcase: int #任务难例数量
+```
+
+使用示例
+```python
+client.get_raw_data_statistics(username='xxx', password='xxx', bg='ap', date='2024-12-01', task='wire')
+```
+
+# 模型管理模块
+
+## 如何使用：
+
+### 初始化 SDK
+
+**参数：**
+
+- `bg` (str): 背景信息（如业务线或部门）。
+- `owner` (str): 模型所有者。
+- `is_test_env` (bool, optional): 是否使用测试环境，默认为 `True`。
+  - `True`: 使用测试环境默认URL `https://aidc-dev.anker-in.com`
+  - `False`: 使用正式环境默认URL `https://aidc-us.anker-in.com`
+- `url` (str, optional): 自定义AIDC服务URL，如指定则覆盖默认环境地址。
+
+```python
+from ankerautotrainsdk import AnkerAutoTrainModelSDK
+
+# 初始化SDK
+client = AnkerAutoTrainModelSDK(
+    bg="zx",                      # 背景信息，例如业务线或部门
+    owner="wenxiang",             # 模型所有者的用户名
+    is_test_env=True,             # True 使用测试环境，False 使用正式环境
+    url="https://aidc-dev.anker-in.com"  # 自定义URL，不传则根据is_test_env使用默认URL
+
+)
+
+```
+
+
+### 注册模型版本
+
+**参数：**
+- `model_name` (str): 模型名称。
+- `model_version` (str): 模型版本名称，如使用时间戳进行标记。
+- `task_type` (str): 任务类型（如 `"detection"`）。
+- `model_arc` (str): 模型架构（如 `"yolov5"`）。
+- `url_model_library` (str): 模型库地址。
+- `url_data_base` (str): 数据库地址。
+- `optimizer` (str): 优化器（如 `"Adamw"`）。
+- `frame_type` (str): 框架类型（如 `"pytorch"`、`"tensorflow"`）。
+- `model_format` (str): 模型格式（如 `"onnx"`、`"KerasH5"`）。
+- `learning_rate` (float): 学习率。
+- `batch_size` (int): 批大小。
+- `epochs` (int): 训练轮数。
+- `img_size` (int): 输入图片大小（如384表示384x384）。
+- `pulled_data_number` (int): 拉取的数据样本数量。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+- `train_set_ids` (list, 可选): 训练集ID列表。
+- `test_set_ids` (list, 可选): 测试集ID列表。
+- `united_training` (dict, 可选): 联合训练信息，包含主机和从机的配置。
+    - `master_addr` (str): 主机IP地址。
+    - `master_network_port` (str): 主机网络端口。
+    - `gpu_num_main` (int): 主机GPU数量。
+    - `gpu_main` (str): 主机GPU序号，逗号分隔。
+    - `remote_host` (str): 从机IP地址。
+    - `network_port` (str): 从机网络端口。
+    - `gpu_num` (int): 从机GPU数量。
+    - `gpu` (str): 从机GPU序号，逗号分隔。
+
+
+**返回值：**
+
+- `Optional[Dict[str, Any]]`: 返回包含结果信息的字典，`ok`字段为 `True` 表示成功，包含相关数据；否则包含错误信息。
+
+
+**使用示例：**
+
+```python
+response = client.register_model(
+    bg="zx",
+    owner="wenxiang.han",
+    model_name="package",
+    model_version="20241127",  
+    task_type="detection",
+    model_arc="yolov5",
+    url_model_library="https://aidc-us.anker-in.com",
+    url_data_base="https://dataloop.anker-in.com",
+    optimizer="Adamw",
+    frame_type="tensorflow",
+    model_format="KerasH5",
+    learning_rate=0.001,
+    batch_size=32,
+    epochs=100,
+    img_size=384,
+    pulled_data_number=1000,
+    train_set_ids=["11", "22"],
+    test_set_ids=["33", "44"],
+    united_training={
+        "master_addr": "172.16.19.144",
+        "master_network_port": "enp4s0",
+        "gpu_num_main": 2,
+        "gpu_main": "0,1",
+        "remote_host": "10.46.0.60",
+        "network_port": "eth0",
+        "gpu_num": 2,
+        "gpu": "0,1"
+    }
+)
+
+print("注册模型的响应:", response)
+
+```
+
+
+### 添加模型到数据库
+
+**参数：**
+
+- `model_name` (str): 模型名称。
+- `model_version_name` (str): 模型版本名称。
+- `tar_md5` (str): TAR文件的MD5值。
+- `onnx_md5` (str): ONNX文件的MD5值。
+- `rknn_md5` (str): RKNN文件的MD5值。
+- `model_arc` (str): 模型架构（如 `"yolox"`）。
+- `region` (str): 区域（如 `"us"`、`"cn"`）。
+- `test_result` (list, 可选): 测试结果数据。
+- `test_set_ids` (list, 可选): 测试集ID列表。
+- `train_set_ids` (list, 可选): 训练集ID列表。
+- `show` (dict, 可选): 显示相关信息配置。
+- `model_id` (str, 可选): 模型ID，如果未提供将自动获取。
+- `quant_set_ids` (list, 可选): 量化集ID列表。
+- `params` (any, 可选): 其他参数。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+- `task_type` (str, optional): 任务类型，默认为 `'detection'`。
+- `desc` (any, 可选): 描述信息。
+- `code_id` (any, 可选): 代码ID。
+- `docker_image_id` (any, 可选): Docker镜像ID。
+- `frame_type` (str, optional): 框架类型，默认为 `'pytorch'`。
+- `model_format` (str, optional): 模型格式，默认为 `'onnx'`。
+- `model_type` (str, optional): 模型类型，默认为 `'目标检测'`。
+- `version_id` (str, optional): 版本ID，如果 `model_id` 未提供，将自动获取。
+
+
+**返回值：**
+
+- `Optional[Dict[str, Any]]`: 包含操作结果的字典。如果成功，包含成功信息和相关数据；否则包含错误信息。
+
+
+**使用示例：**
+
+```python
+response = client.add_model_to_db(
+    bg="zx",
+    owner="wenxiang",
+    model_name="multi_det",
+    model_version_name="20240806_093108",
+    tar_md5="your_tar_md5_hash",
+    onnx_md5="your_onnx_md5_hash",
+    rknn_md5="your_rknn_md5_hash",
+    model_arc="yolox",
+    region="us",
+    test_result=[
+        {
+            "allNum": 10000,
+            "badCaseIds": ["id1", "id2"],
+            "detail": [
+                {
+                    "name": "person",
+                    "recall": 0.85,
+                    "precision": 0.9,
+                    "fppi": 0.02,
+                    "neg": 1000,
+                    "pos": 8500,
+                    "negFP": 200,
+                    "posFP": 100,
+                    "threashold": 0.5
+                },
+                {
+                    "name": "car",
+                    "recall": 0.78,
+                    "precision": 0.85,
+                    "fppi": 0.03,
+                    "neg": 500,
+                    "pos": 7800,
+                    "negFP": 150,
+                    "posFP": 120,
+                    "threashold": 0.6
+                },
+                {
+                    "name": "pet",
+                    "recall": 0.78,
+                    "precision": 0.85,
+                    "fppi": 0.03,
+                    "neg": 500,
+                    "pos": 7800,
+                    "negFP": 150,
+                    "posFP": 120,
+                    "threashold": 0.6
+                }
+            ],
+            "testSetName": "multidet_test"
+        }
+    ],
+    test_set_ids=["your_test_set_id"],
+    train_set_ids=["your_train_set_id"],
+    show={
+        "multidet_test": ["person", "car", "pet"],
+        "precision_type": "fppi"
+    }
+)
+
+print("添加模型到数据库的响应:", response)
+
+```
+
+### 上传板端测试结果到数据库
+
+**参数：**
+
+- `model_name` (str): 模型名称。
+- `model_version_name` (str): 模型版本名称。
+- `board_result` (list): 板端测试结果数据。
+- `chip` (str): 芯片信息，如 `"rk3566"`。
+- `test_set_ids` (list): 测试集ID列表。
+- `input_h` (int): 输入图像高度。
+- `input_w` (int): 输入图像宽度。
+- `infer_time` (float): 推理时间（毫秒）。
+- `memory` (int): 内存使用（单位MB）。
+- `flash` (int): 闪存大小（单位MB）。
+- `project` (str): 项目名称。
+- `projectId` (str): 项目ID。
+- `modelPath` (str): 模型文件路径。
+- `boardTestVersion` (str): 板测试版本。
+- `testResultPath` (str): 测试结果文件路径。
+- `bad_case_ids` (list): 坏案例ID列表。
+- `model_id` (str, 可选): 模型ID，若未提供将自动获取。
+- `quant_algo` (str, optional): 量化算法，默认为 `"normal"`。
+- `quant_method` (str, optional): 量化方法，默认为 `"channel"`。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+
+
+**返回值：**
+
+- `Optional[Dict[str, Any]]`: 包含操作结果的字典。如果成功，返回相关数据；否则返回 `None`。
+
+**使用示例：**
+
+```python
+# 板端测试结果数据
+
+# 上传板端测试结果到数据库
+board_response = client.add_board_result_to_db(
+    model_name="multi_det",
+    model_version_name="20240806_093108",
+    board_result=[
+        {
+            "allNum": 10000,
+            "badCaseIds": ["id1", "id2"],
+            "detail": [
+                {
+                    "name": "person",
+                    "recall": 0.85,
+                    "precision": 0.9,
+                    "fppi": 0.02,
+                    "neg": 1000,
+                    "pos": 8500,
+                    "negFP": 200,
+                    "posFP": 100,
+                    "threashold": 0.5
+                },
+                {
+                    "name": "car",
+                    "recall": 0.78,
+                    "precision": 0.85,
+                    "fppi": 0.03,
+                    "neg": 500,
+                    "pos": 7800,
+                    "negFP": 150,
+                    "posFP": 120,
+                    "threashold": 0.6
+                },
+                {
+                    "name": "pet",
+                    "recall": 0.78,
+                    "precision": 0.85,
+                    "fppi": 0.03,
+                    "neg": 500,
+                    "pos": 7800,
+                    "negFP": 150,
+                    "posFP": 120,
+                    "threashold": 0.6
+                }
+            ],
+            "testSetName": "multidet_test"
+        }
+    ],
+    chip="rk3566",
+    test_set_ids=["your_test_set_id"],
+    input_h=640,
+    input_w=480,
+    infer_time=28.75,
+    memory=314,
+    flash=2048,
+    project="Test Project",
+    projectId="project_12345",
+    modelPath="/path/to/model",
+    boardTestVersion="v1.0",
+    testResultPath="/path/to/test/results",
+    bad_case_ids=["bad_case_id1", "bad_case_id2"]
+)
+
+print("上传板端测试结果的响应:", board_response)
+
+```
+
+
+### 获取模型列表
+
+**参数：**
+
+- `model_name` (str, 可选): 模型名称。
+- `model_version_name` (str, 可选): 模型版本名称。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+
+
+**返回值：**
+
+- `Optional[Dict[str, Any]]`: 包含模型列表信息的字典。如果成功，包含模型数据；否则返回 `None`。
+
+
+**使用示例：**
+
+```python
+# 获取模型列表
+model_list_response = client.get_model_list(
+    model_name="multi_det",
+    model_version_name="20240806_093108",
+    bg="zx",
+    owner="wenxiang"
+)
+
+print("模型列表响应:", model_list_response)
+
+```
+
+### 获取模型版本的文件列表
+
+**参数：**
+
+- `model_name` (str): 模型名称。
+- `model_version_name` (str): 模型版本名称。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+
+
+**返回值：**
+
+- `Optional[List[Dict[str, Any]]]`: 文件信息的列表。如果成功，返回文件列表；否则返回 `None`。
+
+
+**使用示例：**
+
+```python
+# 获取模型版本的文件列表
+files = client.get_model_version_files(
+    model_name="multi_det",
+    model_version_name="20240806_093108"
+)
+
+if files:
+    print(f"模型版本 '20240806_093108' 包含的文件列表:")
+    for file in files:
+        print(f"文件名: {file['name']}, 大小: {file['size']}")
+else:
+    print("未能获取模型版本的文件列表。")
+
+```
+
+
+
+### 获取模型版本的 ID
+
+**参数：**
+
+- `model_name` (str): 模型名称。
+- `model_version_name` (str): 模型版本名称。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+
+
+**返回值：**
+
+- `Optional[str]`: 模型版本ID。如果成功，返回模型ID；否则返回 `None`。
+
+
+**使用示例：**
+
+```python
+# 获取模型版本的 ID
+model_id = client.get_model_id(
+    model_name="multi_det",
+    model_version_name="20240806_093108"
+)
+
+if model_id:
+    print(f"模型版本 ID 为: {model_id}")
+else:
+    print("未能获取模型版本的 ID。")
+
+```
+
+
+### 获取上传或者下载文件的 URL
+
+**参数：**
+
+- `model_name` (str): 模型名称。
+- `model_version_name` (str): 模型版本名称。
+- `path` (str): 文件名或文件路径（通常为文件名）。
+- `url_type` (str): `"upload"` 或 `"download"`。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+
+
+**返回值：**
+
+- `Optional[str]`: 对应的上传或下载URL，如果失败返回 `None`。
+
+
+**使用示例：**
+
+```python
+# 获取上传文件的 URL
+upload_url = client.get_url(
+    model_name="multi_det",
+    model_version_name="20240806_093108",
+    path="model.onnx",    # 这里一般填文件名
+    url_type="upload"
+)
+
+if upload_url:
+    print(f"上传 URL 为: {upload_url}")
+else:
+    print("未能获取上传 URL。")
+
+```
+
+### 上传文件
+
+#### `upload_file`
+
+**功能：**
+
+上传文件到指定的 URL，并在请求头中添加 MD5 校验，以确保文件完整性。
+
+---
+
+**参数：**
+
+- `upload_url` (str): 上传目标URL。
+- `file_path` (str): 本地文件路径。
+
+
+**返回值：**
+
+- `bool`: 上传成功返回 `True`，否则返回 `False`。
+
+
+**使用示例：**
+
+```python
+# 假设已经初始化了 AnkerAutoTrainModelSDK 客户端
+upload_url = "https://upload-url.com/upload"
+
+# 上传文件
+success = client.upload_file(
+    upload_url=upload_url,
+    file_path="/path/to/your/file.onnx"  # 替换为实际文件路径
+)
+
+if success:
+    print("文件上传成功。")
+else:
+    print("文件上传失败。")
+
+```
+
+### 上传模型文件
+
+**参数：**
+
+- `model_name` (`str`): 模型名称。
+- `model_version_name` (`str`): 模型版本名称。
+- `file_path` (`str`): 本地文件路径。
+
+**返回值：**
+
+- `Optional[str]`: 如果上传成功，返回上传的 URL；否则返回 `None`。
+
+**使用示例：**
+
+```python
+
+
+# 上传模型文件
+upload_url = client.upload_model_file(
+    model_name="package",
+    model_version_name="20241127",
+    file_path="/path/to/your/model_file.onnx"  # 替换为实际文件路径
+)
+
+if upload_url:
+    print(f"文件上传成功，上传 URL: {upload_url}")
+else:
+    print("文件上传失败。")
+```
+
+
+
+### 下载文件
+
+**参数：**
+
+- `url` (str): 文件下载链接。
+- `local_path` (str): 本地保存路径。
+
+
+**返回值：**
+
+- `bool`: 下载成功返回 `True`，否则返回 `False`。
+
+
+**使用示例：**
+
+```python
+# 获取文件的下载链接
+download_url = client.get_url(
+    model_name="multi_det",
+    model_version_name="20240806_093108",
+    path="model.onnx",
+    url_type="download"
+)
+
+# 下载文件
+if download_url:
+    download_success = client.download_file(
+        url=download_url,
+        local_path="/local/path/to/save/model.onnx"
+    )
+    if download_success:
+        print("文件下载成功。")
+    else:
+        print("文件下载失败。")
+else:
+    print("未能获取文件的下载链接。")
+
+```
+
+### 下载模型文件
+
+**参数：**
+
+- `model_name` (str): 模型名称。
+- `model_version_name` (str): 模型版本名称。
+- `file_path` (str): 服务器上文件名或文件路径（一般只填文件名）。
+- `save_to` (str): 本地保存路径。
+- `bg` (str, 可选): 背景信息，不传则使用初始化传入的值。
+- `owner` (str, 可选): 模型所有者，不传则使用初始化传入的值。
+
+
+**返回值：**
+
+- `bool`: 下载成功返回 `True`，否则返回 `False`。
+
+
+**使用示例：**
+
+```python
+# 下载模型文件
+download_success = client.download_model_file(
+    model_name="multi_det",
+    model_version_name="20240806_093108",
+    file_path="model.onnx",           # 文件名
+    save_to="/local/path/to/save/model.onnx"    # 本地保存路径
+)
+
+if download_success:
+    print("模型文件下载成功。")
+else:
+    print("模型文件下载失败。")
+
+```
+
+
+# AI工具使用指南
+
+### 初始化类
+
+```python
+from ankerautotrainsdk import ai_tools
+
+# 初始化 BadCaseDetector 类
+bad_case_detector = ai_tools()
+```
+
+## 方法说明
+
+### 判断是否为坏案例
+
+**方法：** `is_badcase(predicted_labels, groundtruth_labels, class_names, thresholds, iou_threshold=0.5, is_positive=True)`
+
+**参数：**
+- `predicted_labels` (list): 模型预测的标签列表，每个标签的格式为 `[cls, conf, x1, y1, x2, y2]`。
+- `groundtruth_labels` (list): 真实标签列表，每个标签的格式为 `[cls, x1, y1, x2, y2]`。
+- `class_names` (dict): 类别名称字典，键为类别索引，值为类别名称。
+- `thresholds` (dict): 阈值字典，键为类别名称，值为对应的置信度阈值。
+- `iou_threshold` (float): IoU 阈值，默认值为 0.5。
+- `is_positive` (bool): 布尔变量，判断是否为正检测（True）还是误检测（False）。
+
+**返回值：**
+- `bool`: 如果是坏案例返回 `True`，否则返回 `False`。
+
+**说明：**
+该方法用于判断给定的标签是否为坏案例。根据预测标签和真实标签的重合情况，以及置信度阈值，判断是否存在正检测的错检或误检测的假阳性。
+
+- 如果 `is_positive` 为 `True`，则表示判断正检测，即预测结果与真实标签的匹配情况。
+- 如果 `is_positive` 为 `False`，则表示判断误检测，即判断是否存在假阳性。
+
+**使用示例：**
+```python
+# 导入 ai_tools 模块
+from ankerautotrainsdk import ai_tools
+
+# 初始化 BadCaseDetector 类
+bad_case_detector = ai_tools()
+
+# 示例数据
+predicted_labels = [
+    [0, 0.9, 50, 50, 150, 150],  # [cls, conf, x1, y1, x2, y2]
+    [1, 0.8, 200, 200, 300, 300]
+]
+groundtruth_labels = [
+    [0, 50, 50, 150, 150],  # [cls, x1, y1, x2, y2]
+    [1, 200, 200, 300, 300]
+]
+class_names = {
+    0: "person",
+    1: "car"
+}
+thresholds = {
+    "person": 0.85,
+    "car": 0.75
+}
+
+# 判断是否为坏案例
+is_bad = bad_case_detector.is_badcase(
+    predicted_labels=predicted_labels,
+    groundtruth_labels=groundtruth_labels,
+    class_names=class_names,
+    thresholds=thresholds,
+    iou_threshold=0.5,
+    is_positive=True
+)
+
+print(f"是否为坏案例: {is_bad}")
+
+```
+
