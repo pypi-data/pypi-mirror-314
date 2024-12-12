@@ -1,0 +1,29 @@
+[project]
+name = "wbtasks"
+description = ""
+authors = [{ name = "Christopher Wittlinger", email = "c.wittlinger@stainly.com"}]
+dynamic = ["version"]
+
+dependencies = [
+  "wbcore",
+]
+
+[tool.uv.sources]
+wbcore = { workspace = true }
+
+[tool.uv]
+package = true
+
+[tool.hatch.version]
+path = "../../pyproject.toml"
+
+[tool.hatch.build.targets.sdist]
+include = ["wbtasks/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wbtasks"]
+only-packages = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
