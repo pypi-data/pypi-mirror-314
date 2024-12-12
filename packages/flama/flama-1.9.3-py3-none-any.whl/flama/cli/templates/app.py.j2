@@ -1,0 +1,18 @@
+from flama import Flama
+
+app = Flama(
+    debug={{ debug }},
+    title="{{ title }}",
+    version="{{ version }}",
+    description="{{ description }}",
+    schema="{{ schema }}",
+    docs="{{ docs }}"
+)
+
+models = {{ models }}
+for model in models:
+    app.models.add_model(
+        path=model["url"],
+        model=model["path"],
+        name=model["name"],
+    )
