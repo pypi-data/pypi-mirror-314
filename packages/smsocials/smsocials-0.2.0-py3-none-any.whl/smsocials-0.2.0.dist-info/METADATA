@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: smsocials
+Version: 0.2.0
+Summary: Work with social networks
+Author: Artemy Sh
+Author-email: artemy.sh@gmail.com
+Requires-Python: >=3.12,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Dist: aiohttp (>=3.11.10,<4.0.0)
+Description-Content-Type: text/markdown
+
+# smsocials
+
+## setup
+
+```bash
+pip install smsocials
+```
+
+## example
+
+```python
+import asyncio
+
+from smsocials import VKService
+
+
+async def main():
+    vk_service = VKService(
+        "token"
+    )
+
+    user_info = await vk_service.get_user_info("123")
+    print(user_info)
+
+
+asyncio.run(main())
+
+```
+
