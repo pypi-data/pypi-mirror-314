@@ -1,0 +1,22 @@
+
+<div>
+  <h3>Satus:</h3>
+  {{app_text}}
+</div>
+
+<div *ngIf="socketio_ready">
+  <button (click)="ping()">Ping</button>
+</div>
+
+<div>
+  <h3>App config:</h3>
+  Username:
+    <input [(ngModel)]="app_config.username">
+  Token:
+    <input [(ngModel)]="app_config.token">
+</div>
+
+<div *ngIf="socketio_ready">
+  <button (click)="get_appconfig()">Get App Config</button>
+  <button (click)="set_appconfig()">Set App Config</button>
+</div>
