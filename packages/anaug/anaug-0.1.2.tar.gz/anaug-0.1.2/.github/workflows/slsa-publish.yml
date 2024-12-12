@@ -1,0 +1,58 @@
+name: slsa-publish
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digests: ${{ steps.hash.outputs.digests }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Step 1: Build artifacts
+      - name: Build artifacts
+        run: |
+          echo "artifact1" > artifact1
+          echo "artifact2" > artifact2
+
+      # Step 2: Validate artifacts
+      - name: Validate artifacts
+        run: |
+          if [ ! -s artifact1 ] || [ ! -s artifact2 ]; then
+            echo "Artifacts are missing or empty!" >&2
+            exit 1
+          fi
+
+      # Step 3: Generate subject for provenance
+      - name: Generate subject for provenance
+        id: hash
+        run: |
+          set -euxo pipefail
+
+          files=$(ls artifact*)
+          hashes=$(sha256sum $files | awk '{print $1}' | jq -R -s -c 'split("\n")[:-1]')
+
+          # Debugging hashes
+          echo "Generated hashes: $hashes"
+
+          echo "digests=$hashes" >> "${GITHUB_OUTPUT}"
+
+      # Step 4: Install jq (optional)
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+  provenance:
+    needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.5.0
+    with:
+      base64-subjects: "${{ needs.build.outputs.digests }}"
+      upload-assets: true
