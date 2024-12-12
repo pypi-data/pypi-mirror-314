@@ -1,0 +1,37 @@
+extract:
+  source: "api"  # Specify the source type (api, file, database)
+  connection_details:
+    headers:
+      Authorization: "Bearer ${API_TOKEN}"  # Use an environment variable for the API token
+  query_or_endpoint: "${API_ENDPOINT}"  # Use an environment variable for the API endpoint
+
+## BE CAREFUL WITH THE FOLLOWING CONFIGURATION
+
+transform:
+  script: "tests/transform_script.py"  # Path to the transformation script
+  config:  # Configuration for the transformation script
+    drop_columns: ["id"]  # Columns to drop from the data
+    rename_columns: 
+      title: "post_title"  # Rename columns (original_name: new_name)
+    filter_rows: "post_title != ''"  # Filter rows using a query
+    add_columns:
+      new_column: "post_title.str.len()"  # Add new columns with expressions
+
+load:
+  target: "S3 Bucket"  # Target for loading data (S3 Bucket, Local File, database, non_relational_database)
+  config:
+    aws_access_key_id: "${AWS_ACCESS_KEY_ID}"  # From environment variable
+    aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"  # From environment variable
+    region_name: "${AWS_REGION}"  # From environment variable
+    bucket_name: "${BUCKET_NAME}"  # From environment variable
+    file_name: "data.csv"  # Name of the file to be saved in the target
+
+# Instructions for users:
+# 1. Create a .env file in the root directory of your project.
+# 2. Add the following lines to the .env file and fill in your information:
+#    AWS_ACCESS_KEY_ID=your-access-key-id
+#    AWS_SECRET_ACCESS_KEY=your-secret-access-key
+#    AWS_REGION=your-region
+#    BUCKET_NAME=your-bucket-name
+#    API_TOKEN=your-api-token
+#    API_ENDPOINT=your-api-endpoint
