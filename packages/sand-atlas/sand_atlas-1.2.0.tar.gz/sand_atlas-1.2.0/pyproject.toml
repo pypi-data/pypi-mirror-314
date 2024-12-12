@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sand-atlas"
+version = "1.2.0"
+authors = [
+    {name = "Benjy Marks", email = "benjy.marks@sydney.edu.au"},
+    {name = "Ilija Vego", email = "ilija.vego@sydney.edu.au"}
+]
+description = "A python package for processing 3d volumetric data to build meshes for the Sand Atlas data repository"
+dependencies = [
+    "black",
+    "flake8",
+    "numpy",
+    "pandas",
+    "scikit-image",
+    "sphinx",
+    "nbsphinx",
+    "tifffile",
+    "pynrrd",
+    "h5py",
+    "spam",
+]
+
+requires-python = ">=3.8"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"
+]
+keywords = ["3d", "volumetric", "meshes", "data", "granular", "sand", "particles"]
+
+[project.optional-dependencies]
+neuroglancer  = [ "cloud-volume" ]
+
+[project.scripts]
+sand_atlas_process = "sand_atlas.pipeline:full_analysis_script"
+sand_atlas_properties = "sand_atlas.pipeline:properties_script"
+vdb_to_npy = "sand_atlas.pipeline:vdb_to_npy"
+
+[project.urls]
+Homepage = "https://sand-atlas.scigem.com"
+Documentation = "https://github.com/scigem/sand-atlas-python/docs/index.html"
+Repository = "https://github.com/scigem/sand-atlas-python.git"
+
+[tool.black]
+line-length = 120
+target-version = ['py312']
+
+[tool.flake8]
+max-line-length = 120
