@@ -1,0 +1,193 @@
+Metadata-Version: 2.1
+Name: dguard-oss
+Version: 0.1.2
+Summary: A command-line tool for interacting with MinIO.
+Home-page: https://github.com/nuaazs/dguard_oss
+Author: Zhao Sheng
+Author-email: zhaosheng@lyxxkj.com.cn
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+# Dguard OSS Tool: MinIO File Management CLI
+
+## Overview
+The Dguard OSS Tool is a command-line interface (CLI) utility for managing file uploads and downloads with a MinIO object storage server. It simplifies the process of uploading files, downloading objects, and handling bucket operations with user-friendly defaults and optional automation features.
+
+---
+
+## Features
+- Upload files to a specified or default bucket in MinIO.
+- Download objects from a specified bucket in MinIO.
+- Automatically create buckets if they do not exist (interactive or forced mode).
+- Default settings for frequently used operations.
+- Detailed help and usage examples.
+
+---
+
+## Prerequisites
+1. **Python**: Ensure Python 3.7 or higher is installed on your system.
+2. **MinIO Server**: Access to a MinIO server with proper credentials.
+3. **Configuration File**: Create a configuration file `config.json` in the `~/.dguard_oss` directory with the following structure:
+```json
+{
+    "endpoint": "xxxx:xxx",
+    "access_key": "xx",
+    "secret_key": "xx",
+    "secure": false
+}
+```
+
+---
+
+## Installation
+```bash
+pip install dguard_oss
+```
+
+---
+
+## Usage
+The CLI offers the following commands:
+
+### General Syntax
+```bash
+oss <command> [arguments] [options]
+```
+
+### Commands
+
+#### 1. **Upload Files**
+Uploads a file to a bucket in MinIO. If the bucket does not exist, the tool can create it interactively or automatically with the `-y` option.
+
+##### Syntax
+```bash
+oss upload <file_path> [bucket] [object_name] [-y] [--id=<config_id>]
+```
+
+##### Parameters
+- `file_path` (required): Path to the file to be uploaded.
+- `bucket` (optional): Target bucket name. Defaults to `temp`.
+- `object_name` (optional): Name for the object in the bucket. Defaults to the file name.
+- `-y` (optional): Automatically creates the bucket if it does not exist.
+- `--id` (optional): Configuration ID to use (default: `config`).
+
+##### Examples
+- Upload a file to the default bucket:
+  ```bash
+  oss upload ./example.txt
+  ```
+
+- Upload a file to a specific bucket with the same file name:
+  ```bash
+  oss upload ./example.txt my_bucket
+  ```
+
+- Upload a file to a specific bucket with a custom object name:
+  ```bash
+  oss upload ./example.txt my_bucket custom_name.txt
+  ```
+
+- Upload a file and force bucket creation:
+  ```bash
+  oss upload ./example.txt my_bucket -y
+  ```
+
+#### 2. **Download Files**
+Downloads a file from a bucket in MinIO to the local system.
+
+##### Syntax
+```bash
+oss download [bucket] <object_name> <save_path> [--id=<config_id>]
+```
+
+##### Parameters
+- `bucket` (optional): Source bucket name. Defaults to `temp`.
+- `object_name` (required): Name of the object in the bucket to download.
+- `save_path` (required): Path to save the downloaded file locally.
+- `--id` (optional): Configuration ID to use (default: `config`).
+
+##### Examples
+- Download a file from the default bucket:
+  ```bash
+  oss download example.txt ./local_example.txt
+  ```
+
+- Download a file from a specific bucket:
+  ```bash
+  oss download my_bucket example.txt ./local_example.txt
+  ```
+
+#### 3. **Help**
+Displays detailed help information about the CLI.
+
+##### Syntax
+```bash
+oss help
+```
+
+##### Example
+```bash
+oss help
+```
+
+---
+
+## Workflow Details
+1. **Upload Workflow**:
+   - If the target bucket does not exist, the tool will prompt the user to create it.
+   - The `-y` option skips prompts and automatically creates the bucket.
+   - The object name defaults to the file name if not specified.
+
+2. **Download Workflow**:
+   - Ensures the specified object and bucket exist before attempting to download.
+   - Saves the object locally at the specified `save_path`.
+
+---
+
+## Error Handling
+- Invalid arguments or missing required parameters will result in an error message and display the help information.
+- Bucket or object access errors are captured and reported with detailed messages.
+
+---
+
+## Examples
+
+### Upload Example
+1. Uploading a file to the default bucket:
+    ```bash
+    oss upload ./data.txt
+    ```
+
+2. Uploading with automatic bucket creation:
+    ```bash
+    oss upload ./data.txt new_bucket -y
+    ```
+
+### Download Example
+1. Downloading a file from the default bucket:
+    ```bash
+    oss download data.txt ./local_data.txt
+    ```
+
+2. Downloading from a specific bucket:
+    ```bash
+    oss download my_bucket data.txt ./local_data.txt
+    ```
+
+### Help
+```bash
+oss help
+```
+
+---
+
+## License
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+
+
