@@ -1,0 +1,73 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "poktroll-clients"
+version = "0.1.0a1.dev1"
+description = "Python bindings for the Pocket Network protocol client library (libpoktroll-clients)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "Bryan White", email = "bryanchriswhite@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+    "cffi>=1.17.1",
+    "atomics>=1.0.2",
+    "protobuf>=5.29.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/pokt-network/poktroll-clients-py"
+Repository = "https://github.com/pokt-network/poktroll-clients-py.git"
+Documentation = "https://github.com/pokt-network/poktroll-clients-py#readme"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.24.0",
+]
+dev = [
+    "black>=23.0.0",
+    "isort>=5.0.0",
+    "mypy>=1.0.0",
+    "mypy-protobuf>=3.6.0",
+    "asyncio>=3.4.3",
+]
+
+[tool.hatch.build]
+include = [
+    "src/poktroll_clients/**/*.py",
+    "src/poktroll_clients/**/*.pyi",
+    "src/poktroll_clients/**/*.h",
+    "src/poktroll_clients/**/*.pc.in",
+    "src/poktroll_clients/lib/*.so",
+    "src/poktroll_clients/lib/*.dylib",
+    "src/poktroll_clients/lib/*.dll"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/poktroll_clients"]
+artifacts = [
+    "src/poktroll_clients/lib/*.so",
+    "src/poktroll_clients/lib/*.dylib",
+    "src/poktroll_clients/lib/*.dll"
+]
+#force-include = { "native_libs" = "src/poktroll_clients/lib" }
+
+#[tool.hatch.build.hooks.custom]
+#path = "build.py"
