@@ -1,0 +1,75 @@
+name: sample-job
+gpuCount: 1
+# entrypoint: mnist_st.py
+# gpusPerTrial: 1
+# maxGpus: 1
+# requirements: requirements.txt
+numWorkstations: 1
+gpuTypes:
+  - K80
+
+# visualisation: TENSORBOARD
+  # type: TENSORBOARD
+  # startWithJob: True
+
+# codeTransfer:
+#   type: GITHUB_PRIVATE
+#   repo: git@github.com:username/repo.git
+#   commit: abc
+#   creds:
+#     GITHUB_PAT: your_gh_pat
+
+    
+
+# useSpot: false
+# cuda: 11.3
+
+# customImage:
+#   image: your_registry.com/docker_image
+#   creds:
+#     regsitry: your_registry
+#     username: username
+#     password: pass
+
+cloudProviders: 
+  - name: GCP
+    regions:
+    - us-central1
+
+#   - name: AZURE
+#     regions:
+#     - eastus
+#     - southcentralus
+  
+# environment:
+#   ST_API_KEY: OUR9NENAU28POFI690A3CZEMQMLW96LR
+#   PLATFORM_API: http://platform-api-loadbalancer-1708204133.us-east-1.elb.amazonaws.com
+
+# maxCost: 50
+# maxTime: 1h25m
+
+# preJobCommands:
+#   - apt-get update -y
+#   - apt-get install nano
+
+# postJobCommands:
+#   - curl --upload-file ./your-file.txt https://free.keep.sh 
+
+# sweep:
+#   searchSpace:
+#     batch_size:
+#       type: choice
+#       value: [16, 32, 64, 128]
+#     hidden_size:
+#       type: choice
+#       value: [128, 256, 512, 1024]
+#     lr:
+#       type: choice
+#       value: [0.0001, 0.001, 0.01, 0.1]
+#     momentum:
+#       type: uniform
+#       value: [0, 1]
+
+#   tuner:                          
+#     name: TPE                                     
+#     optimizeMode: maximize  

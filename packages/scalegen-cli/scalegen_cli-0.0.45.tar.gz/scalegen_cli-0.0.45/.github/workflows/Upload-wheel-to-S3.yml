@@ -1,0 +1,143 @@
+name: Build and test
+
+on:
+  push:
+    branches: [ main, workflow-setup, pep440-compliant ]
+
+jobs:
+
+  build-n-upload:
+    name: Build a wheel package and upload it to S3
+    runs-on: ubuntu-20.04
+    strategy: 
+      matrix: 
+        python-version: [3.7, 3.8, 3.9, '3.10']
+        platform: [darwin.arm64, darwin.aarch64, darwin.x86_64, linux.aarch64, linux.x86_64, windows.x86_64, m1]
+        product: ["scaletorch", "scalegen"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+      
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with: 
+          python-version: ${{ matrix.python-version }}
+
+      - name: Pull submodules
+        run: git submodule update --init --recursive
+
+      - name: Install dependencies
+        if: ${{ matrix.platform != 'm1' && matrix.python-version != '3.10' }}
+        run: >-
+          python -m
+          pip install build pyarmor==6.8.1 wheel
+          
+      - name: Install dependencies
+        if: ${{ matrix.platform != 'm1' && matrix.python-version == '3.10' }}
+        run: >-
+          python -m
+          pip install build wheel nuitka wheel
+
+      - name: Obfuscation
+        if: ${{ matrix.platform != 'm1' && matrix.python-version != '3.10' }}
+        run: >-
+          pyarmor obfuscate --recursive --output obfus/st_cli st_cli/__init__.py \
+                --platform ${{ matrix.platform }} 
+                
+      - name: Replace obfuscated code with actual code
+        if: ${{ matrix.platform != 'm1' && matrix.python-version != '3.10' }}
+        run: |
+          rm -rf st_cli
+          mv obfus/st_cli st_cli
+          
+      - name: Build a binary wheel
+        if: matrix.platform != 'm1'
+        run: >-
+          python3 setup.py bdist_wheel
+        env:
+          ST_CLI_VERSION: 0.1.post+${{ matrix.python-version }}.${{ matrix.platform }}
+          PRODUCT_TYPE: ${{ matrix.product }}
+          
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Upload to S3 bucket
+        if: matrix.platform != 'm1'
+        run: >-
+          aws s3 cp $(find dist/st_cli*.whl) s3://${{ secrets.AWS_S3_BUCKET }}/dist2/st_cli-0.1.post+${{ matrix.python-version }}.${{ matrix.platform }}.${{ matrix.product }}-py3-none-any.whl
+
+      - name: Make object public
+        if: matrix.platform != 'm1'
+        run: aws s3api put-object-acl --bucket ${{ secrets.AWS_S3_BUCKET }} --key dist2/st_cli-0.1.post+${{ matrix.python-version }}.${{ matrix.platform }}.${{ matrix.product }}-py3-none-any.whl --acl public-read
+
+
+  version-test:
+    needs: build-n-upload 
+    name: Setup python versions for testing uploaded package across them.
+    runs-on: ${{ matrix.os }}
+    strategy: 
+      matrix: 
+        python-version: [3.7, 3.8, 3.9, '3.10']
+        os: ['ubuntu-20.04', 'windows-latest', 'macos-latest']
+        product: ["scaletorch", "scalegen"]
+
+    steps:
+      - name: setup python
+        uses: actions/setup-python@v1
+        with: 
+          python-version: ${{ matrix.python-version }}
+          
+      # - name: Running package on different versions for linux on python 3.10 # Check for the latest PLATFORM_API
+      #   if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10'
+      #   run: |
+      #     ST_WHL=st_cli-0.1.post%2B${{ matrix.python-version }}.linux.x86_64-cp310-cp310-linux_x86_64.whl
+      #     pip3 install https://sc-builds-prod.s3.amazonaws.com/dist2/$ST_WHL
+      #     scaletorch login --access_key_id ${{ secrets.ST_ACCESS_KEY_ID }} --access_key_secret ${{ secrets.ST_ACCESS_KEY_SECRET }}
+
+      - name: Running package on different versions for linux  # Check for the latest PLATFORM_API
+        if: matrix.os == 'ubuntu-20.04' # && matrix.python-version != '3.10'
+        run: |
+          ST_WHL=st_cli-0.1.post%2B${{ matrix.python-version }}.linux.x86_64.${{ matrix.product }}-py3-none-any.whl
+          pip3 install https://sc-builds-prod.s3.amazonaws.com/dist2/$ST_WHL
+          ${{ matrix.product }} login --access_key_id ${{ secrets.ST_ACCESS_KEY_ID }} --access_key_secret ${{ secrets.ST_ACCESS_KEY_SECRET }}
+          ${{ matrix.product }} list
+
+
+      # Relates to issue #24
+      # - name: Running package on different versions for windows on python 3.10 # Check for the latest PLATFORM_API
+      #   if: matrix.os == 'windows-latest' && matrix.python-version == '3.10'
+      #   run: |
+      #     pip3 install https://sc-builds-prod.s3.amazonaws.com/dist2/st_cli-0.1.post%2B${{ matrix.python-version }}.windows.x86_64-cp310-cp310-linux_x86_64.whl
+      #     scaletorch login --access_key_id ${{ secrets.ST_ACCESS_KEY_ID }} --access_key_secret ${{ secrets.ST_ACCESS_KEY_SECRET }}
+
+      - name: Running package on different versions for windows # Check for the latest PLATFORM_API
+        if: matrix.os == 'windows-latest' && matrix.python-version != '3.10'
+        run: |
+          pip3 install https://sc-builds-prod.s3.amazonaws.com/dist2/st_cli-0.1.post%2B${{ matrix.python-version }}.windows.x86_64.${{ matrix.product }}-py3-none-any.whl
+          ${{ matrix.product }} login --access_key_id ${{ secrets.ST_ACCESS_KEY_ID }} --access_key_secret ${{ secrets.ST_ACCESS_KEY_SECRET }}
+          ${{ matrix.product }} list
+
+
+      # Macos for 3.10 nuitka based m1 builds 
+      # - name: Running package on different versions for macos on python 3.10 # Check for the latest PLATFORM_API
+      #   if: matrix.os == 'macos-latest' && matrix.python-version == '3.10'
+      #   run: |
+      #     ST_WHL=st_cli-0.1.post%2B${{ matrix.python-version }}.darwin.x86_64-cp310-cp310-linux_x86_64.whl
+      #     pip3 install https://sc-builds-prod.s3.amazonaws.com/dist2/$ST_WHL
+      #     scaletorch login --access_key_id ${{ secrets.ST_ACCESS_KEY_ID }} --access_key_secret ${{ secrets.ST_ACCESS_KEY_SECRET }}
+
+      - name: Running package on different versions for macos # Check for the latest PLATFORM_API
+        if: matrix.os == 'macos-latest' && matrix.python-version != '3.10'
+        run: |
+          ST_WHL=st_cli-0.1.post%2B${{ matrix.python-version }}.darwin.x86_64.${{ matrix.product }}-py3-none-any.whl
+          pip3 install https://sc-builds-prod.s3.amazonaws.com/dist2/$ST_WHL
+          ${{ matrix.product }} login --access_key_id ${{ secrets.ST_ACCESS_KEY_ID }} --access_key_secret ${{ secrets.ST_ACCESS_KEY_SECRET }}
+          ${{ matrix.product }} list

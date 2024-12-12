@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "requests", "importlib-metadata"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scalegen-cli"
+version = "{{application_version}}"
+description = "ScaleGenAI CLI"
+readme = "pulish.md"
+requires-python = ">=3.8"
+dynamic = ["dependencies"]
+
+[project.scripts]
+{{binary}} = "st_cli:cli"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.package-data]
+"st_cli" = ["*"]
