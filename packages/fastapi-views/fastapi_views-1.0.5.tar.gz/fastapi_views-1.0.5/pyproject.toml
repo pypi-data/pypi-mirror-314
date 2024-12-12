@@ -1,0 +1,149 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastapi-views"
+dynamic = ["version"]
+description = 'FastAPI Class Views and utilities'
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+keywords = ["fastapi", "views", "asyncio"]
+
+authors = [{ name = "RaRhAeu", email = "rarha_eu@protonmail.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ["fastapi", "pydantic>2.0,<3"]
+
+[project.urls]
+Documentation = "https://github.com/asynq-io/fastapi-views#readme"
+Issues = "https://github.com/asynq-io/fastapi-views/issues"
+Source = "https://github.com/asynq-io/fastapi-views"
+
+[project.scripts]
+fastapi-views = "fastapi_views.cli:cli"
+
+[project.optional-dependencies]
+uvloop = ["uvloop"]
+prometheus = ["starlette-exporter"]
+uvicorn = ["uvicorn"]
+cli = ["typer"]
+opentelemetry = ["opentelemetry-instrumentation-fastapi"]
+all = [
+    "uvloop",
+    "starlette-exporter",
+    "uvicorn",
+    "typer",
+    "opentelemetry-instrumentation-fastapi",
+]
+
+[tool.hatch.version]
+path = "fastapi_views/_version.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+    "uvloop",
+    "uvicorn",
+    "starlette-exporter",
+    "opentelemetry-sdk",
+    "opentelemetry-instrumentation-fastapi",
+    "opentelemetry-instrumentation-logging",
+    "mypy",
+    "ruff==0.8.0",
+    "bandit",
+    "deptry",
+    "asgi-lifespan",
+    "httpx",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-sugar",
+    "pytest-repeat",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-autorefs",
+    "mkdocstrings[python]",
+    "watchdog",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+check = [
+    "ruff check ./fastapi_views",
+    "ruff format --check ./fastapi_views",
+    "mypy --install-types --non-interactive {args:fastapi_views tests}",
+    "bandit -r ./fastapi_views",
+]
+docs = ["mkdocs gh-deploy --force"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "--cov=./fastapi_views"
+testpaths = ["./tests"]
+filterwarnings = "ignore::DeprecationWarning"
+
+[tool.pyright]
+venvPath = ".venv"
+venv = "fastapi-views"
+
+[tool.mypy]
+python_version = "3.12"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+follow_imports = "normal"
+ignore_missing_imports = true
+pretty = true
+show_column_numbers = true
+show_error_codes = true
+warn_no_return = false
+warn_unused_ignores = true
+
+[tool.ruff]
+target-version = "py39"
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+    "A001",
+    "A002",
+    "ARG002",
+    "ARG004",
+    "ASYNC109",
+    "ANN401",
+    "B008",     # do not perform function calls in argument defaults
+    "BLE001",
+    "COM812",
+    "D",
+    "E501",     # line too long
+    "FA100",
+    "FBT001",
+    "FBT002",
+    "FBT003",
+    "ISC001",
+    "N818",
+    "PLR0913",
+    "PLR2004",
+    "PTH123",
+    "S108",
+]
+
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "ANN001", "ANN002", "ANN003", "ANN201", "ANN202"]
+"examples/*" = ["S101", "ANN001", "ANN201", "INP001", "T201", "EM101", "TRY003"]
+
+[tool.bandit]
+skips = ['B101']
