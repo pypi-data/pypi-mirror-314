@@ -1,0 +1,66 @@
+Metadata-Version: 2.1
+Name: hashio
+Version: 0.1.0
+Summary: Custom file and directory checksum tool
+Home-page: http://github.com/rsgalloway/hashio
+Author: Ryan Galloway
+Author-email: ryan@rsgalloway.com
+License: BSD 3-Clause License
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+hashio
+======
+
+Custom file and directory checksum tool.
+
+## Features
+
+- multiple hash algos: c4, md5, sha256, sha512, xxh64
+- multiple export options (Default .json)
+- recursively runs checksums on files in directory trees
+- ignores predefined file name patterns
+- optionally caches results for better performance
+
+## Installation
+
+The easiest way to install:
+
+```bash
+$ pip install -U hashio
+```
+
+## Usage
+
+Checksum one or more files or directories using one or more hash
+algorithms (default is xxh64):
+
+```bash
+$ hashio <PATH1>..<PATHN> [--hash <ALGO1>..<ALGON>]
+```
+
+Recursively checksum and gather metadata all the files in a dir tree, and output
+results to a JSON file:
+
+```bash
+$ hashio <DIR>
+```
+
+Note that files matching patterns defined in `config.IGNORABLE` will be skipped.
+
+Verify paths in previously generated JSON file by comparing stored mtimes (if
+available) or regenerated hash values if mtimes are missing or different:
+
+```bash
+$ hashio --verify hash.json
+```
