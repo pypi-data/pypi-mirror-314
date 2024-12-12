@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "streamlit-desktop-app"
+version = "0.3.3"
+description = "Easily convert Streamlit apps into standalone desktop applications."
+authors = ["ohtaman <ohtamans@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/ohtaman/streamlit-desktop-app"
+repository = "https://github.com/ohtaman/streamlit-desktop-app"
+documentation = "https://github.com/ohtaman/streamlit-desktop-app#readme"
+keywords = ["streamlit", "desktop app", "pywebview", "pyinstaller"]
+
+[tool.poetry.dependencies]
+python = "^3.9,!=3.9.7,<3.14"
+streamlit = ">=1.13.0"
+pywebview = "^5.3.2"
+requests = "^2.32.3"
+pyinstaller = "^6.11.1"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.13.0"
+ruff = "^0.7.2"
+types-pyinstaller = "^6.11.0.20241028"
+types-requests = "^2.32.0.20241016"
+pytest = "^8.3.3"
+
+[tool.poetry.scripts]
+streamlit-desktop-app = "streamlit_desktop_app.cli:main"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+style = "pep440"
+write = true
+write-file = "streamlit_desktop_app/_version.py"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
