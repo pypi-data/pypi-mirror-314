@@ -1,0 +1,80 @@
+[build-system]
+requires = [
+    "cython~=3.0",
+    "meson-python~=0.16",
+]
+build-backend = 'mesonpy'
+
+[project]
+name = "dwave-optimization"
+dynamic = ["version"]
+authors = [
+    {name = "D-Wave Inc.", email = "tools@dwavesys.com"},
+]
+description = "Enables the formulation of nonlinear models for industrial optimization problems."
+license = {file = "LICENSE"}
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    'Programming Language :: Python :: Implementation :: CPython',
+]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.20.0",  # numpy.typing support
+]
+
+[project.readme]
+file = "README.rst"
+content-type = "text/x-rst"
+
+[project.urls]
+Changelog = "https://github.com/dwavesystems/dwave-optimization/releases"
+Documentation = "https://docs.ocean.dwavesys.com"
+"Source Code" = "https://github.com/dwavesystems/dwave-optimization"
+
+[tool.cibuildwheel]
+build-verbosity = "1"
+skip = "pp* *musllinux*"
+before-test = "pip install -r {project}/tests/requirements.txt"
+test-command = "python -Werror -m unittest discover {project}/tests/"
+
+[tool.cibuildwheel.config-settings]
+compile-args = ["-v"]
+
+[tool.cibuildwheel.linux]
+archs = "x86_64 aarch64"
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
+
+[tool.cibuildwheel.macos]
+# We follow NumPy and don't build universal wheels, see https://github.com/numpy/numpy/pull/20787
+archs = "x86_64 arm64"
+
+# Lowest version that has the C++ features we want, see https://cibuildwheel.pypa.io/en/stable/cpp_standards/
+environment = "MACOSX_DEPLOYMENT_TARGET=10.13"
+
+[tool.cibuildwheel.windows]
+archs = "AMD64"
+before-build = "pip install delvewheel>=1.4.0"
+repair-wheel-command = "delvewheel repair -w {dest_dir} {wheel} --namespace-pkg dwave"
+
+[tool.coverage.run]
+source = ["dwave/optimization"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

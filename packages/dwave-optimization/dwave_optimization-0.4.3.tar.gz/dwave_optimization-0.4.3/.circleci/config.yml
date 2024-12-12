@@ -1,0 +1,348 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@5.0.0
+  macos: circleci/macos@2.4.1
+
+commands:
+  run-cibuildwheel:
+    parameters:
+      cibw-version:
+        type: string
+        default: 2.21.0
+    steps:
+      - run:
+          name: run cibuildwheel
+          shell: bash -eo pipefail
+          command: |
+            if [[ $OS == Windows_NT ]]; then
+              python -m pip install --user cibuildwheel==<< parameters.cibw-version >>
+              python -m cibuildwheel --output-dir dist
+            else
+              python3 -m pip install --user cibuildwheel==<< parameters.cibw-version >>
+              python3 -m cibuildwheel --output-dir dist
+            fi
+
+      - store_artifacts: &store-artifacts
+          path: ./dist
+      - persist_to_workspace: &persist-to-workspace
+          root: ./dist/
+          paths: .
+
+environment: &global-environment
+  PIP_PROGRESS_BAR: 'off'
+
+jobs:
+  python-linux:
+    parameters:
+      python-version:
+        type: string
+
+    docker:
+      - image: cimg/python:3.9
+
+    environment:
+      <<: *global-environment
+      CIBW_PROJECT_REQUIRES_PYTHON: ~=<< parameters.python-version>>
+      CIBW_ARCHS_LINUX: x86_64
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run-cibuildwheel
+
+  python-linux-aarch64:
+    parameters:
+      python-version:
+        type: string
+
+    machine:
+      image: default
+
+    resource_class: arm.medium
+
+    environment:
+      <<: *global-environment
+      CIBW_PROJECT_REQUIRES_PYTHON: ~=<< parameters.python-version>>
+      CIBW_ARCHS_LINUX: aarch64
+
+    steps:
+      - checkout
+      - run-cibuildwheel
+
+  python-linux-debug:
+    docker:
+      - image: cimg/python:3.9
+
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            python -m venv env
+            . env/bin/activate
+            pip install build pip --upgrade
+
+      - run:
+          name: build with -Werror
+          command: |
+            . env/bin/activate
+            python -m build \
+              -Ccompile-args="-v" \
+              -Csetup-args="-Dwerror=true"
+
+      - run:
+          name: build and install with -Werror and without -NDEBUG
+          command: |
+            . env/bin/activate
+            python -m build \
+              -Ccompile-args="-v" \
+              -Csetup-args="-Db_ndebug=true" \
+              -Csetup-args="-Dwerror=true"
+            pip install dist/dwave*optimization*.whl --force
+
+      - run: &run-tests
+          name: test with installed package
+          command: |
+            . env/bin/activate
+            cd tests/
+            pip install -r requirements.txt
+            python -Werror -m unittest
+
+  python-macOS:
+    macos:
+      xcode: 16.1.0
+    resource_class: macos.m1.medium.gen1
+
+    parameters:
+      python-version:
+        type: string
+      cibw-arch:
+        type: string
+
+    environment:
+      <<: *global-environment
+      CIBW_PROJECT_REQUIRES_PYTHON: ~=<< parameters.python-version>>
+      CIBW_ARCHS_MACOS: << parameters.cibw-arch >>
+
+    steps:
+      - checkout
+      - macos/install-rosetta
+      - run-cibuildwheel
+
+  python-windows:
+    parameters:
+      python-version:
+        type: string
+
+    executor:
+      name: win/default
+
+    environment:
+      <<: *global-environment
+      CIBW_PROJECT_REQUIRES_PYTHON: ~=<< parameters.python-version>>
+      CIBW_ARCHS_WINDOWS: AMD64
+
+    steps:
+      - checkout
+      - run-cibuildwheel
+
+  python-sdist:
+    docker:
+      - image: cimg/python:3.9
+
+    steps:
+      - checkout
+      - run:
+          name: build sdist
+          command: |
+            python -m venv env
+            . env/bin/activate
+            pip install build pip --upgrade
+            python -m build --sdist
+      - store_artifacts: *store-artifacts
+      - persist_to_workspace: *persist-to-workspace
+      - run:
+          name: install from sdist
+          command: |
+            rm -r env
+            python -m venv env
+            . env/bin/activate
+            pip install pip --upgrade
+            pip install dist/dwave*optimization*.tar.gz
+      - run: *run-tests
+
+  python-dependencies:
+    parameters:
+      python-version:
+        type: string
+      dependency-versions:
+        type: string
+      only-binary:
+        type: string
+
+    docker:
+      - image: python:<< parameters.python-version >>-slim
+
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run:
+          name: install
+          command: |
+            python -m venv env
+            . env/bin/activate
+            pip install << parameters.dependency-versions >> --upgrade --only-binary << parameters.only-binary >>
+            pip install dwave-optimization --no-index -f dist/ --no-deps --force-reinstall
+      - run: *run-tests
+
+
+  cpp-gcc:
+    parameters:
+      gcc-version:
+        type: string
+
+    docker:
+      - image: gcc:<< parameters.gcc-version >>
+
+    steps:
+      - checkout
+      - run:
+          name: install python requirements
+          command: |
+            apt update
+            apt install python3-pip python3-venv -y
+      - run: &install-requirements
+          name: create venv and install build dependencies
+          command: |
+            python3 -m venv env
+            . env/bin/activate
+            pip install -r requirements.txt
+      - run: &run-cpp-tests
+          name: run c++ tests with meson
+          command: |
+            . env/bin/activate
+            meson setup _build -Dbuildtype=debug -Dwerror=true
+            meson test -C _build
+
+  cpp-macOS:
+    macos:
+      xcode: 15.3.0
+    resource_class: macos.m1.medium.gen1
+
+    steps:
+      - checkout
+      - run: *install-requirements
+      - run: *run-cpp-tests
+
+  docs:
+    docker:
+      - image: cimg/python:3.10  # As of July 2024, RTD uses 3.10
+
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run:
+          name: install package and docs dependencies
+          command: |
+            python -m venv env
+            . env/bin/activate
+            pip install dist/*optimization*cp310*.whl -r docs/requirements.txt
+
+      - run:
+          name: build docs
+          command: |
+            . env/bin/activate
+            make -C docs html
+
+      - store_artifacts:
+          path: docs/build/html
+
+      - run:
+          name: doctest
+          command: |
+            . env/bin/activate
+            make -C docs doctest
+
+  deploy:
+    docker:
+      - image: cimg/python:3.9
+
+    steps:
+      - attach_workspace:
+          at: dist
+
+      - store_artifacts:
+          path: ./dist
+
+      - run:
+          name: deploy
+          command: |
+            python -m venv env
+            . env/bin/activate
+            python -m pip install twine
+            twine upload -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD" --skip-existing ./dist/*
+
+workflows:
+  tests:
+    jobs:
+      - python-linux: &build-linux
+          matrix:
+            parameters:
+              # versions are built with ~= so the patch version doesn't matter
+              python-version: &python-versions [3.9.0, 3.10.0, 3.11.0, 3.12.0, 3.13.0]
+          filters: &tags
+            # also run on tags so the deploy pipeline works
+            tags:
+              only: &version-string /^[0-9]+(\.[0-9]+)*((\.dev|rc)([0-9]+)?)?$/
+      - python-linux-aarch64: *build-linux
+      - python-linux-debug
+      - python-macOS:
+          matrix:
+            parameters:
+              python-version: *python-versions
+              cibw-arch: [x86_64, arm64]
+          filters: *tags
+      - python-windows:
+          matrix:
+            parameters:
+              python-version: *python-versions
+          filters: *tags
+      - python-sdist:
+          filters: *tags
+      - python-dependencies:
+          name: python-dependencies-oldest
+          python-version: "3.9"
+          dependency-versions: numpy==1.20.0
+          only-binary: numpy
+          requires:
+            - python-linux
+      - python-dependencies:
+          name: python-dependencies-latest
+          python-version: "3.12"  # should be updated to 3.13 once there is a non-rc image
+          dependency-versions: numpy
+          only-binary: numpy
+          requires:
+            - python-linux
+      - cpp-gcc:
+          matrix:
+            parameters:
+              gcc-version: ["11", "12", "13", "14"]
+      - cpp-macOS
+      - docs:
+          requires:
+            - python-linux
+      - deploy:
+          filters:
+            tags:
+              only: *version-string
+            branches:
+              ignore: /.*/
+          requires:
+            - python-linux
+            - python-linux-aarch64
+            - python-macOS
+            - python-windows
+            - python-sdist
