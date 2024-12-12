@@ -1,0 +1,279 @@
+<model xmlns:easyform="http://namespaces.plone.org/supermodel/easyform"
+       xmlns:form="http://namespaces.plone.org/supermodel/form"
+       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+       xmlns:lingua="http://namespaces.plone.org/supermodel/lingua"
+       xmlns:marshal="http://namespaces.plone.org/supermodel/marshal"
+       xmlns:security="http://namespaces.plone.org/supermodel/security"
+       xmlns:users="http://namespaces.plone.org/supermodel/users"
+       xmlns="http://namespaces.plone.org/supermodel/schema"
+       i18n:domain="plone">
+  <schema>
+    <field name="numero_inventaire" type="zope.schema.TextLine">
+      <description/>
+      <required>False</required>
+      <title>Num&#233;ro d'inventaire</title>
+    </field>
+    <field name="informations" type="plone.app.textfield.RichText">
+      <default></default>
+      <description/>
+      <required>False</required>
+      <title>Informations</title>
+    </field>
+    <field name="contenus_lies" type="z3c.relationfield.schema.RelationList">
+      <description/>
+      <required>False</required>
+      <title>Contenus li&#233;s</title>
+      <value_type type="z3c.relationfield.schema.RelationChoice">
+        <title i18n:translate="">Relation Choice</title>
+        <portal_type>
+          <element>Folder</element>
+          <element>patrimoine</element>
+        </portal_type>
+      </value_type>
+    </field>
+    <field name="fichier_pdf" type="plone.namedfile.field.NamedBlobFile">
+      <description/>
+      <required>False</required>
+      <title>Fichier PDF</title>
+    </field>
+    <fieldset name="publication" label="Publication">
+      <field name="auteur" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Auteur</title>
+      </field>
+      <field name="lieu" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Lieu</title>
+      </field>
+      <field name="editeur" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Editeur</title>
+      </field>
+      <field name="date" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Date</title>
+      </field>
+      <field name="nombre_de_pages" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nombre de pages</title>
+      </field>
+      <field name="format_1" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Format</title>
+      </field>
+      <field name="illustre" type="zope.schema.Bool">
+        <description/>
+        <required>False</required>
+        <title>Illustr&#233;</title>
+        <form:widget type="z3c.form.browser.radio.RadioFieldWidget"/>
+      </field>
+    </fieldset>
+    <fieldset name="carte_postale" label="Carte postale">
+      <field name="nom_de_rue" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom de rue</title>
+      </field>
+      <field name="couleur" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Couleur</title>
+        <values>
+          <element>Couleur</element>
+          <element>Noir &amp; blanc</element>
+          <element></element>
+        </values>
+      </field>
+    </fieldset>
+    <fieldset name="registre" label="Registre">
+      <field name="nom_prenom_1" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom pr&#233;nom 1</title>
+      </field>
+      <field name="nom_du_conjoint_1" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom du conjoint 1</title>
+      </field>
+      <field name="evenement_date_1" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Ev&#233;nement li&#233; &#224; la date 1</title>
+        <values>
+          <element>Naissance</element>
+          <element>Mariage</element>
+          <element>D&#233;c&#232;s</element>
+        </values>
+      </field>
+      <field name="date_evenement_1" type="zope.schema.TextLine">
+        <description>(jj/mm/aaaa)</description>
+        <required>False</required>
+        <title>Date &#233;v&#233;nement 1</title>
+      </field>
+      <field name="nom_prenom_2" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom pr&#233;nom 2</title>
+      </field>
+      <field name="nom_du_conjoint_2" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom du conjoint 2</title>
+      </field>
+      <field name="evenement_date_2" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Ev&#233;nement li&#233; &#224; la date 2</title>
+        <values>
+          <element>Naissance</element>
+          <element>Mariage</element>
+          <element>D&#233;c&#232;s</element>
+        </values>
+      </field>
+      <field name="date_evenement_2" type="zope.schema.TextLine">
+        <description>(jj/mm/aaaa)</description>
+        <required>False</required>
+        <title>Date &#233;v&#233;nement 2</title>
+      </field>
+      <field name="nom_prenom_3" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom pr&#233;nom 3</title>
+      </field>
+      <field name="nom_du_conjoint_3" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom du conjoint 3</title>
+      </field>
+      <field name="evenement_date_3" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Ev&#233;nement li&#233; &#224; la date 3</title>
+        <values>
+          <element>Naissance</element>
+          <element>Mariage</element>
+          <element>D&#233;c&#232;s</element>
+        </values>
+      </field>
+      <field name="date_evenement_3" type="zope.schema.TextLine">
+        <description>(jj/mm/aaaa)</description>
+        <required>False</required>
+        <title>Date &#233;v&#233;nement 3</title>
+      </field>
+      <field name="nom_prenom_4" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom pr&#233;nom 4</title>
+      </field>
+      <field name="nom_du_conjoint_4" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nom du conjoint 4</title>
+      </field>
+      <field name="evenement_date_4" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Ev&#233;nement li&#233; &#224; la date 4</title>
+        <values>
+          <element>Naissance</element>
+          <element>Mariage</element>
+          <element>D&#233;c&#232;s</element>
+        </values>
+      </field>
+      <field name="date_evenement_4" type="zope.schema.TextLine">
+        <description>(jj/mm/aaaa)</description>
+        <required>False</required>
+        <title>Date &#233;v&#233;nement 4</title>
+      </field>
+    </fieldset>
+    <fieldset name="media" label="M&#233;dia">
+      <field name="auteur_du_media" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Auteur du m&#233;dia</title>
+      </field>
+      <field name="duree" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Dur&#233;e</title>
+      </field>
+      <field name="couleur_du_media" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Couleur du m&#233;dia</title>
+        <values>
+          <element>Noir &amp; Blanc</element>
+          <element>Couleur</element>
+        </values>
+      </field>
+    </fieldset>
+    <fieldset name="bien" label="Bien">
+      <field name="nature_du_bien" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Nature du bien</title>
+      </field>
+      <field name="lieu_dit" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Lieu dit</title>
+      </field>
+      <field name="appellation_courante" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Appellation courante</title>
+      </field>
+      <field name="prive_public" type="zope.schema.Choice">
+        <description/>
+        <required>False</required>
+        <title>Priv&#233; - public</title>
+        <values>
+          <element>Priv&#233;</element>
+          <element>Public</element>
+        </values>
+      </field>
+      <field name="reference_cadastrale" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>R&#233;f&#233;rence cadastrale</title>
+      </field>
+      <field name="descriptif" type="zope.schema.Text">
+        <description/>
+        <required>False</required>
+        <title>Descriptif</title>
+      </field>_inventaire
+      <field name="fonction_passee_et_actuelle" type="zope.schema.Text">
+        <description/>
+        <required>False</required>
+        <title>Fonction(s) pass&#233;e(s) et actuelle(s)</title>
+      </field>
+      <field name="etat" type="zope.schema.Text">
+        <description/>
+        <required>False</required>
+        <title>Etat</title>
+      </field>
+      <field name="dimensions" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Dimensions</title>
+      </field>
+      <field name="materiaux" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>Mat&#233;riaux</title>
+      </field>
+      <field name="remarques_commentaires" type="zope.schema.Text">
+        <description/>
+        <required>False</required>
+        <title>Remarques et commentaires</title>
+      </field>
+    </fieldset>
+  </schema>
+</model>
