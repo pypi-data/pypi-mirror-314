@@ -1,0 +1,112 @@
+[project]
+name = "wbcore"
+description = ""
+authors = [{ name = "Christopher Wittlinger", email = "c.wittlinger@stainly.com"}]
+dynamic = ["version"]
+
+dependencies = [
+  # Database Depenendencies
+  "redis == 4.*",
+  "psycopg[binary] == 3.*",
+
+  # Generic Python Dependencies
+  "python-slugify == 8.*",
+  "requests == 2.*",
+  "inscriptis == 1.*",   # TODO: Discuss if really needed
+
+  # Django Dependencies
+  "django == 5.0.*",
+  "django-configurations[database] == 2.5.*",
+  "django-dynamic-preferences == 1.16.*",
+  "django-filter == 24.*",
+  "django-extensions == 3.2.*",
+  "django-cors-headers == 4.6.*",
+  "django-storages[boto3] == 1.14.*",
+  "django-fsm == 3.*",  # TODO: Remove after viewflow
+  "django-ordered-model == 3.7.*",
+
+  # Django Rest Framework Dependencies
+  "djangorestframework == 3.*",
+  "djangorestframework-simplejwt == 5.*",
+  "pyjwt == 2.*",
+  "django-rest-fuzzysearch == 0.5.*",
+
+  # Background and Periodic Tasks
+  "celery[redis] == 5.*",
+  "django-celery-beat == 2.*",
+
+  # Model Object Permissions
+  "django-guardian == 2.4.*",
+  "djangorestframework-guardian == 0.3.*",
+
+  # Revision System
+  "django-reversion == 5.1.*",
+  "django-reversion-compare == 0.18.*",
+
+  # Datascience
+  "numpy == 1.*",
+  "pandas == 2.2.*",
+
+  # Visualization
+  "plotly == 5.*",
+
+  # Markdown
+  "markdown == 3.*",
+  "markdown-blockdiag == 0.*",
+
+  # Terminal Formatting and Utils
+  "tqdm == 4.*",
+  "prettytable == 0.*",
+  "igraph == 0.*",
+  "openpyxl == 3.*",
+
+  "django-colorfield == 0.11.*",
+  "django-better-admin-arrayfield == 1.4.*",
+  "django-picklefield == 3.*",
+
+  "firebase-admin == 6.*",
+  # Pinned to 42 to silence deprecation warning (TripleDES)
+  # We need to substitute pysftp with paramiko/fabric
+  # Issue: https://gitlab.com/stainly/workbench/-/issues/5402
+  # Ref: https://github.com/paramiko/paramiko/issues/2419#issuecomment-2250013087
+  "cryptography <= 42",
+  "pysftp == 0.*",
+
+  "croniter == 2.*",
+  "python-magic == 0.*",
+  "django-import-export == 4.*",
+  "django-admin-inline-paginator == 0.4.0",
+  "django-anymail == 12.*",
+  "pytest-sftpserver == 1.*",
+  "django-mptt == 0.*",
+  "pycountry == 23.*",
+  "phonenumbers == 8.*",
+  "schwifty == 2024.*",
+  "ics == 0.*",
+  "tatsu == 5.*",
+  "boto3 == 1.*",
+
+  "faker == 25.*",       # We add exlicitly faker because it's used in production
+  "graphviz == 0.*",
+  "django-maintenance-mode == 0.21.*",
+  "rstr == 3.2.*", # We add exlicitly faker because it's used in production
+  "langchain >= 0.3",
+  "langchain-openai == 0.2.*",
+]
+
+[tool.uv]
+package = true
+
+[tool.hatch.version]
+path = "../../pyproject.toml"
+
+[tool.hatch.build.targets.sdist]
+include = ["wbcore/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wbcore"]
+only-packages = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
