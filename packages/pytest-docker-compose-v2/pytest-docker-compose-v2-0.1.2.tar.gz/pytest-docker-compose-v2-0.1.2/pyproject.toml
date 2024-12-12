@@ -1,0 +1,101 @@
+[project]
+name = "pytest-docker-compose-v2"
+dynamic = []
+description = "Manages Docker containers during your integration tests"
+authors = [
+    { name = "Radu Suciu" },
+    { name = "Thomas Meckel" },
+    { name = "Roald Storm" },
+    { name = "Phoenix Zerin" },
+]
+dependencies = [
+    "pytest>=7.2.2",
+    "python-on-whales>=0.69.0,<1",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+keywords = [
+    "pytest",
+    "docker compose",
+]
+classifiers = [
+    "Topic :: Software Development :: Testing",
+    "Intended Audience :: Developers",
+    "Development Status :: 4 - Beta",
+    "Framework :: Pytest",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+version = "0.1.2"
+
+[project.license]
+text = "Apache"
+
+[project.entry-points.pytest11]
+docker_compose = "pytest_docker_compose.plugin:plugin"
+
+[project.urls]
+repository = "https://github.com/radusuciu/pytest-docker-compose-v2"
+
+[build-system]
+requires = [
+    "pdm-pep517>=1.0",
+]
+build-backend = "pdm.pep517.api"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "ruff>=0.0.259",
+    "bumpver>=2022.1120",
+    "git-cliff>=2.0.4",
+    "tox>=4.13.0",
+    "psycopg2-binary>=2.9.9",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.27.1",
+    "pytest>=7.4.4",
+    "mypy>=1.8.0",
+]
+
+[tool.pdm.version]
+source = "file"
+path = "pytest_docker_compose/__init__.py"
+
+[tool.pytest.ini_options]
+addopts = "-m 'not (should_fail or multiple_compose_files)' '--docker-compose' './tests/pytest_docker_compose_tests/my_network' '--docker-compose-no-build'"
+markers = [
+    "should_fail: marks a set of test that should throw an error when run",
+    "multiple_compose_files: marks a test that uses more than one compose file",
+]
+minversion = "7.2"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.bumpver]
+current_version = "0.1.2"
+version_pattern = "MAJOR.MINOR.PATCH[GITHASH]"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    "current_version = \"{version}\"",
+]
+"pytest_docker_compose/__init__.py" = [
+    "__version__ = \"{version}\"",
+]
+
+[tool.tox]
+legacy_tox_ini = "[tox]\nenvlist = py{39,310,311,312}-pytest{7,8}\n\n[testenv]\ndeps =\n    pytest7: pytest>=7,<8\n    pytest8: pytest>=8,<9\n    python_on_whales\n    ruff\n    mypy\nwhitelist_externals=\n    docker\ncommands=\n    ruff check pytest_docker_compose\n    mypy --namespace-packages --ignore-missing-imports pytest_docker_compose\n    pytest\n    pytest -m multiple_compose_files --docker-compose ./tests/pytest_docker_compose_tests/my_network,./tests/pytest_docker_compose_tests/my_network/extra-service.yml\n    docker compose -f tests/pytest_docker_compose_tests/my_network/docker-compose.yml up -d\n    pytest --use-running-containers\n    docker compose -f tests/pytest_docker_compose_tests/my_network/docker-compose.yml down -v\n"
