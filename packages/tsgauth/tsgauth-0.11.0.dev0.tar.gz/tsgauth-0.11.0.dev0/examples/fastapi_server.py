@@ -1,0 +1,92 @@
+from fastapi import FastAPI, Depends, Request, APIRouter
+import tsgauth.fastapi
+from tsgauth.fastapi import JWTBearerClaims
+from starlette.middleware.sessions import SessionMiddleware
+import uvicorn
+
+client_id = tsgauth.fastapi.settings.oidc_client_id
+
+description = f"""
+
+To access the secure endpoints, you need to either have a token with the audience of {client_id}
+or have a valid CERN SSO session active. 
+
+An example of how to do this with tsgauth using python is below. Please adjust http://localhost:5000 to the correct URL
+for the instance you wish to use
+
+```python
+
+import tsgauth.oidcauth
+import requests
+
+auth = tsgauth.oidcauth.DeviceAuth("{client_id}")
+r = requests.get("http://localhost:5000/api/v0/secure",**auth.authparams())
+
+"""
+
+
+app = FastAPI(title="TSG Auth Test Server",description=description)
+app.add_middleware(SessionMiddleware, secret_key="some-random-string-please-change-this", same_site="lax", https_only=True)
+tsgauth.fastapi.setup_app(app)
+print(tsgauth.fastapi.settings.oidc_client_id)
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+secure_route = APIRouter(dependencies=[Depends(JWTBearerClaims())],tags=["secure"])
+@secure_route.get("/api/v0/secure")
+def secure_endpoint(request: Request):
+    return {"claims" : request.state.claims}
+
+
+@app.get("/api/v0/unsecure")
+def unsecure_endpoint(request: Request):
+   return {"msg" : "unsecure endpoint"}
+
+@secure_route.get("/api/v0/setvalue")
+def setvalue(request: Request):
+
+    print(request.state)
+    request.state.value = 10
+    request.session['value'] = 1
+    return {"msg" : "value set","state" : request.state}
+
+@secure_route.get("/api/v0/getvalue")
+def getvalue(request: Request):
+    return {"value" : request.session.get('value',0),"state" : request.state}
+app.include_router(secure_route)
+
+"""
+Now here is an example of how to override the default auth store
+We just need to make a class which inherts from CustomAuthStore and define
+the 5 methods that are required
+This not even required that we actually do any auth, we can just return dummy claims
+This is what we will demonstrate below
+"""
+class DummyAuthStore(tsgauth.fastapi.SessionAuthBase):
+    
+    async def claims(cls,request : Request):        
+        return {"sub" : "testuser"}
+    
+    async def store(cls,request : Request,claims):
+        pass
+            
+    async def clear(cls,request : Request):
+        pass
+        
+    async def token_request_allowed(cls, request):
+        return await super().token_request_allowed(request)
+        
+    async def auth_attemp(cls):        
+        pass
+
+def custom_auth_store():    
+    return DummyAuthStore()
+"""
+to activate it, simply uncomment the line below
+"""
+#app.dependency_overrides[tsgauth.fastapi.get_auth_store] = custom_auth_store
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5000)
