@@ -1,0 +1,23 @@
+{% extends 'logui/base.html' %}
+{% block title %}
+    {{ folder_name }}
+{% endblock %}
+{% block main %}
+    <div class="fc maxw-500px px-2 mx-auto">
+        <h1>LOGS: {{ folder_name }}</h1>
+        <a href="{% url 'logui:log_folders' %}"
+           class="btn btn-secondary w-min py-0 fw-bold">
+            Back
+        </a>
+        <ul class="mt-2">
+            {% for file in files %}
+                <li>
+                    <a href="{% url 'logui:log_file' folder_name file %}"
+                       class="text-decoration-none fs-5">
+                        {{ file }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
