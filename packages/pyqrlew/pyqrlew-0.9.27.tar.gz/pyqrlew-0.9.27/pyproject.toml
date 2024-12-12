@@ -1,0 +1,58 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "pyqrlew"
+description = "A library to manipulate SQL queries, designed with privacy application in mind."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Nicolas Grislain", email = "ng@sarus.tech" }]
+keywords = [
+  "SQL",
+  "Privecy",
+  "Differential Privacy",
+  "AST",
+  "Intermediate Representation",
+  "Rust",
+]
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Rust",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+  "SQLAlchemy ~= 2.0",
+  "psycopg2 < 3.0",
+  "pymysql ~= 1.0",
+  "qrlew-datasets ~= 0.9",
+  "pandas >= 1.4",
+  "numpy ~= 1.24",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest ~= 7.0",
+  "mypy ~= 1.0",
+  "graphviz"
+]
+
+[project.urls]
+homepage = "https://qrlew.github.io"
+documentation = "https://pyqrlew.readthedocs.io"
+repository = "https://github.com/Qrlew/pyqrlew"
+changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+[tool.maturin]
+python-source = "python"
+features = ["pyo3/extension-module"]
