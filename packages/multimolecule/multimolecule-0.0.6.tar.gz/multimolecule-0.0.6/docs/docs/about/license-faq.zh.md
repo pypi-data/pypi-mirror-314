@@ -1,0 +1,1 @@
+--8<-- "about/license-faq.zh.md"
