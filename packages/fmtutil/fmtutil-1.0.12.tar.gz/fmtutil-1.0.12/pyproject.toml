@@ -1,0 +1,170 @@
+[build-system]
+requires = ["hatchling>=1.8.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fmtutil"
+description = "Lightweight formatter objects"
+readme = "README.md"
+requires-python = ">=3.9.0"
+license = "MIT"
+keywords = [
+    'utility',
+    'formatter',
+]
+authors = [
+    { name = "korawica", email = "korawich.anu@gmail.com" },
+]
+classifiers = [
+    "Topic :: Utilities",
+    "Natural Language :: English",
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "typing-extensions",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/korawica/fmtutil/"
+"Source Code" = "https://github.com/korawica/fmtutil/"
+
+[project.optional-dependencies]
+all = [
+    "python-dateutil>=2.8.2,<3.0.0",
+    "types-python-dateutil==2.9.0.20241003",
+]
+docs = [
+    "mkdocs-material",
+    "mkdocs-awesome-pages-plugin",
+]
+
+[project.scripts]
+fmtutil = "fmtutil.__main__:main"
+
+[tool.shelf.version]
+version = "./fmtutil/__about__.py"
+changelog = "./docs/CHANGELOG.md"
+
+[tool.shelf.git]
+commit_prefix_force_fix = true
+
+[tool.hatch.version]
+scheme = "standard"
+source = "code"
+path = "fmtutil/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/.pre-commit-config.yaml",
+    "/docs",
+    "/tests",
+    "/fmtutil/__assets.py",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["fmtutil"]
+
+[tool.coverage.run]
+branch = true
+concurrency = ["thread", "multiprocessing"]
+parallel = true
+context = '${CONTEXT}'
+source = ["fmtutil"]
+omit = [
+    "tests/perfs/",
+    "scripts/",
+    "fmtutil/__about__.py",
+    "fmtutil/__assets.py",
+    "fmtutil/__main__.py",
+    "fmtutil/__type.py",
+    "fmtutil/__version.py",
+    "fmtutil/cli.py",
+    "fmtutil/utils.py",
+]
+relative_files = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "no cov",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.pytest.ini_options]
+console_output_style = "count"
+filterwarnings = ["error"]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+]
+
+[tool.mypy]
+python_version = "3.9"
+files = ["fmtutil"]
+show_error_codes = true
+pretty = true
+strict = true
+warn_unreachable = true
+warn_unused_ignores = false
+exclude = [
+    '__version\.py$',
+]
+
+[tool.black]
+line-length = 80
+preview = true
+target-version = ['py39']
+exclude = """
+(
+    /(
+        \\.git
+        | \\.eggs
+        | \\.__pycache__
+        | \\.idea
+        | \\.ruff_cache
+        | \\.mypy_cache
+        | \\.pytest_cache
+        | \\.venv
+        | build
+        | dist
+        | venv
+    )/
+)
+"""
+
+[tool.ruff]
+line-length = 80
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    "venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
