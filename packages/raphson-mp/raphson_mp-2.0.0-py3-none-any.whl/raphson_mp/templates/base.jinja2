@@ -1,0 +1,39 @@
+{% macro icon(icon_name) %}
+    <div class="icon icon-{{ icon_name }}"></div>
+{% endmacro %}
+
+{% macro icon_button(icon_name, id = None, title = None) %}
+    <button {% if id %}id="{{id}}"{% endif %} class="icon-button" {% if title %} title="{{title}}"{% endif %}>
+        {{ icon(icon_name) }}
+    </button>
+{% endmacro %}
+{% macro page_heading(title, back_url='/') %}
+    <div class="page-heading">
+        <a href="{{ back_url }}">
+            {{ icon_button('arrow-left') }}
+        </a>
+        <h1>{{ title }}</h1>
+    </div>
+{% endmacro %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#4285f4" />
+
+    <link rel="icon" href="/static/img/favicon.ico">
+    <link rel="manifest" href="/static/manifest.json" />
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    {% block styles %}{% endblock styles %}
+    {% if user %}
+        <link rel="stylesheet" href="/static/css/theme/{{ user.theme }}.css">
+    {% else %}
+        <link rel="stylesheet" href="/static/css/theme/default.css">
+    {% endif %}
+
+</head>
+{% block body %}{% endblock body %}
+</html>

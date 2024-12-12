@@ -1,0 +1,29 @@
+{% extends "base_static.jinja2" %}
+
+{% block title %}
+    {% trans %}Musical chairs{% endtrans %}
+{% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/games_chairs.css">
+{% endblock styles %}
+
+{% block content %}
+
+{{ page_heading(gettext('Musical chairs'), back_url='/') }}
+
+<h3 id="text-choose">{% trans %}Choose a track{% endtrans %}</h3>
+<h3 hidden id="text-start">{% trans %}Press any key or click to start{% endtrans %}</h3>
+<div hidden class="icon icon-loading spinning" id="spinner"></div>
+
+<div class="boxes" id="boxes">
+</div>
+
+<audio id="audio"></audio>
+<div hidden id="csrf-token">{{ user.csrf }}</div>
+
+<script src="/static/js/base.js"></script>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/games_chairs.js"></script>
+
+{% endblock content %}

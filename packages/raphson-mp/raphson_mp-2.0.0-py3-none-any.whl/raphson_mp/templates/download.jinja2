@@ -1,0 +1,60 @@
+{% extends "base_static.jinja2" %}
+
+{% block title %}
+    {% trans %}Music downloader{% endtrans %}
+{% endblock title %}
+
+{% block content %}
+
+{{ page_heading(gettext('Music downloader')) }}
+
+<h2>{% trans %}Search{% endtrans %}</h2>
+
+<p>{% trans %}Enter a search query, then click search to populate a table with results. Click on one of the results to copy the URL for that video to the URL field below. Finally, click the download button below. Currently, a maximum of one result is displayed.{% endtrans %}</p>
+
+<form action="" id="search-form" class="form">
+    <label for="search-query">{% trans %}Search query{% endtrans %}</label>
+    <input id="search-query" type="text">
+
+    <input type="submit" id="search-button" value="{% trans %}Search{% endtrans %}">
+    <div hidden id="search-loading" class="icon icon-loading spinning"></div>
+</form>
+
+<table hidden class="table" id="search-table">
+    <thead>
+        <tr>
+            <th>{% trans %}Title{% endtrans %}</th>
+            <th>{% trans %}Views{% endtrans %}</th>
+            <th>{% trans %}Duration{% endtrans %}</th>
+            <th>{% trans %}Channel{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody id="search-results"></tbody>
+</table>
+
+<h2>{% trans %}Download{% endtrans %}</h2>
+
+<div class="form">
+    <label for="download-url">{% trans %}Video or track URL{% endtrans %}</label>
+    <input id="download-url" type="text">
+
+    <label for="download-playlist">{% trans %}Playlist{% endtrans %}</label>
+    <select id="download-playlist">
+    {% for playlist, write in playlists %}
+        <option name="{{ playlist }}" {% if not write %}disabled{% endif %} {% if playlist == primary_playlist %}selected{% endif %}>{{ playlist }}</option>
+    {% endfor %}
+    </select>
+
+    <button id="download-button">{% trans %}Download{% endtrans %}</button>
+    <div hidden id="download-loading" class="icon icon-loading spinning"></div>
+
+    <div id="download-log" class="logbox"></div>
+</div>
+
+<div hidden id="csrf-token">{{ user.csrf }}</div>
+
+<script src="/static/js/base.js"></script>
+<script src="/static/js/api.js"></script>
+<script src="/static/js/download.js"></script>
+
+{% endblock content %}

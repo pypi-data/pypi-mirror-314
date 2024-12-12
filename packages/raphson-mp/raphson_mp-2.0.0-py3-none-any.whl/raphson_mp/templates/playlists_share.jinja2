@@ -1,0 +1,25 @@
+{% extends "base_static.jinja2" %}
+
+{% block title %}
+    {% trans %}Share playlist write access{% endtrans %}
+{% endblock title %}
+
+{% block content %}
+
+{{ page_heading(gettext('Share playlist write access'), back_url='/playlist/manage') }}
+
+<p>{% trans %}Give someone else write access to the playlist: '{{ playlist }}'{% endtrans %}</p>
+<br>
+
+<form method="POST">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="playlist" value="{{ playlist }}" readonly>
+    <select name="username">
+        {% for username in usernames %}
+            <option value="{{ username }}">{{ username }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="{% trans %}Share{% endtrans %}">
+</form>
+
+{% endblock content %}

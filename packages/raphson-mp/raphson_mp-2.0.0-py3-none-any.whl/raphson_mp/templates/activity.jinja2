@@ -1,0 +1,75 @@
+{% extends "base_static.jinja2" %}
+
+{% block title %}
+    {% trans %}Activity{% endtrans %}
+{% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/activity.css">
+{% endblock styles %}
+
+{% block content %}
+
+{{ page_heading(gettext('Activity')) }}
+
+<h2>{% trans %}Now playing{% endtrans %}</h2>
+
+<div hidden id="nothing-playing-text">{% trans %}No one is playing music.{% endtrans %}</div>
+
+<div class="boxes" id="now-playing"></div>
+
+<h2>{% trans %}Playback history{% endtrans %}</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                {% trans %}Time{% endtrans %}
+            </th>
+            <th>
+                {% trans %}User{% endtrans %}
+            </th>
+            <th>
+                {% trans %}Playlist{% endtrans %}
+            </th>
+            <th>
+                {% trans %}Track{% endtrans %}
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbody-history">
+    </tbody>
+</table>
+
+<br>
+<a href="/activity/all">{% trans %}View more{% endtrans %}</a>
+
+<h2>{% trans %}Recent file changes{% endtrans %}</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                {% trans %}Time{% endtrans %}
+            </th>
+            <th>
+                {% trans %}Action{% endtrans %}
+            </th>
+            <th>
+                {% trans %}Playlist{% endtrans %}
+            </th>
+            <th>
+                {% trans %}Track{% endtrans %}
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbody-changes"></tbody>
+</table>
+
+<br>
+<a href="/activity/files">{% trans %}View more{% endtrans %}</a>
+
+<script src="/static/js/base.js"></script>
+<script src="/static/js/activity.js"></script>
+
+{% endblock content %}
