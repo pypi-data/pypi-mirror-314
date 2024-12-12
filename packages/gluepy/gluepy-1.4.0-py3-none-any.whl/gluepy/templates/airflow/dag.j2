@@ -1,0 +1,50 @@
+{% with tasks = dag.inject_tasks(), args = dag.extra_options %}
+import datetime
+from airflow import models
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import (
+    KubernetesPodOperator,
+)
+from kubernetes.client import models as k8s
+
+
+YESTERDAY = datetime.datetime.now() - datetime.timedelta(days=1)
+
+with models.DAG(
+    dag_id="{{dag_label}}",
+    start_date=YESTERDAY,
+    schedule_interval={% if args.airflow_schedule %}'{{args.airflow_schedule}}'{% else %}None{% endif %},
+    is_paused_upon_creation=True,
+) as dag:
+    {% for Task in links %}
+    {% with label = Task.label or Task.__name__.lower() %}
+    {{label|to_identifier}} = KubernetesPodOperator(
+        task_id="{{label}}",
+        name="{{label}}",
+        cmds=[
+            "python",
+            "manage.py",
+            "task",
+            "--retry", "runs/{% raw %}{{ds_nodash[:4]}}/{{ds_nodash[4:6]}}/{{ds_nodash[6:8]}}/{{run_id}}/{% endraw %}",
+            "--patch", "runs/{% raw %}{{ds_nodash[:4]}}/{{ds_nodash[4:6]}}/{{ds_nodash[6:8]}}/{{run_id}}/patch.yaml{% endraw %}",
+            "{{label}}",
+        ],
+        namespace="portal",
+        image="{{image}}",
+        config_file="{{k8s_config}}",
+        {% if pod_resources %}
+        resources=k8s.V1ResourceRequirements(**{
+            {% for key, value in pod_resources.items() %}"{{key}}": {
+                {% for k, v in value.items() %}"{{k}}": "{{v}}", {% endfor %}
+            }
+            {% endfor %}
+        }),
+        {% endif %}
+        image_pull_policy="Always",
+        configmaps=[{% for k in configmaps %}"{{k}}", {% endfor %}],
+    )
+    {% endwith %}
+    {% endfor %}
+
+{% for Task in links %}{{Task.label|to_identifier or Task.__name__.lower()}}{% if not loop.last %}{{" >> "|safe}}{% endif %}{% endfor %}
+
+{% endwith %}

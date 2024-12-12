@@ -1,0 +1,20 @@
+import os
+
+
+def main():
+    os.environ.setdefault('GLUEPY_SETTINGS_MODULE', 'configs.settings')
+    try:
+        from gluepy.commands import cli
+        from gluepy.exec.boot import bootstrap
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Gluepy. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+    bootstrap()
+    cli()
+
+
+if __name__ == '__main__':
+    main()
