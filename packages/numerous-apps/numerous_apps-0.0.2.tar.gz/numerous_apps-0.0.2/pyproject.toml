@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "numerous-apps"
+version = "0.0.2"
+description = "Application package for numerous"
+authors = [
+    {name = "Lasse Thomsen", email = "lasse.thomsen@numerous.com"},
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "jinja2",
+    "anywidget"
+]
+
+readme = "docs/README.md"
+license = {text = "MIT"}  # Adjust license as needed
+
+[project.optional-dependencies]
+dev = [
+    "anywidget[dev]",
+    "python-dotenv",
+    "numerous-widgets",
+    "pytest",
+    "ruff==0.6.4",
+    "mypy==1.11.2",
+    "coverage==7.6.1",
+    "twine==5.1.1",
+    "mkdocs==1.6.0",
+    "mkdocstrings==0.26.2",
+    "mkdocstrings-python==1.12.2",
+    "mkdocs_snippet_plugin==1.0.2",
+]
+
+[tool.poetry.dependencies]
+python-dotenv = "^1.0.0"
+
+[tool.semantic_release]
+branch = "main"
+commit_parser = "angular"
+version_toml = ["pyproject.toml:project.version"]
+template_dir = "templates"
+
+[tool.semantic_release.remote.token]
+env = "GH_TOKEN"
+
+[tool.semantic_release.changelog]
+exclude_commit_patterns = [
+    '''chore(?:\([^)]*?\))?: .+''',
+    '''ci(?:\([^)]*?\))?: .+''',
+    '''refactor(?:\([^)]*?\))?: .+''',
+    '''style(?:\([^)]*?\))?: .+''',
+    '''test(?:\([^)]*?\))?: .+''',
+    '''build\((?!deps\): .+)''',
+    '''Merged? .*''',
+    '''initial commit''',
+]
+
+
+[project.urls]
+Homepage = "https://github.com/numerous-com/numerous-app"
+Repository = "https://github.com/numerous-com/numerous-app"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["numerous.apps"]
+
+[tool.setuptools.package-data]
+"numerous.apps" = ["py.typed"]  # If you're using type hints
+
+[project.scripts]
+numerous-server = "numerous.apps.numerous_server:main"
