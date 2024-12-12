@@ -1,0 +1,179 @@
+{% extends 'logui/base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'logui/css/highlight.min.css' %}">
+    <script src="{% static 'logui/js/Client.js' %}"></script>
+    <script src="{% static 'logui/js/highlight.min.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+{% endblock %}
+{% block title %}{{ file_name }}{% endblock %}
+{% block main %}
+    <div class="fc maxw-1200px h-100 w-100 px-2 mx-auto">
+        <h1>{{ file_name }}</h1>
+
+        <div class="fr flex-wrap gap-2 my-2">
+            {% if folder_name %}
+                <a href="{% url 'logui:log_files' folder_name %}"
+                   class="btn btn-secondary w-min py-0 fw-bold">
+                    Back
+                </a>
+                <a href="{% url 'logui:log_file_download' folder_name file_name %}"
+                   class="btn btn-success w-min py-0 fw-bold" download>
+                    Download
+                </a>
+                <a href="{% url 'logui:api_log_file' folder_name file_name %}" id="api-url" hidden></a>
+            {% else %}
+                <a href="{% url 'logui:log_folders' %}"
+                   class="btn btn-secondary w-min py-0 fw-bold">
+                    Back
+                </a>
+                <a href="{% url 'logui:log_file_download_root' file_name %}"
+                   class="btn btn-success w-min py-0 fw-bold" download>
+                    Download
+                </a>
+                <a href="{% url 'logui:api_log_file_root' file_name %}" id="api-url" hidden></a>
+            {% endif %}
+
+            <button id="refresh-btn" class="btn btn-primary w-min py-0 fw-bold">Refresh</button>
+            <div class="form-check ms-3">
+                <input class="form-check-input" type="checkbox" value="" id="auto-scroll-checkbox" checked>
+                <label class="form-check-label" for="auto-scroll-checkbox">
+                    Auto-scroll
+                </label>
+            </div>
+        </div>
+
+        <!-- Радио-кнопки для выбора интервала обновления -->
+        <div class="">
+            <label class="form-label me-3">Update Interval:</label>
+            <div class="fr flex-wrap gap-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="update-interval" value="500" id="interval-500ms">
+                    <label class="form-check-label" for="interval-500ms">500ms</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="update-interval" value="1000" id="interval-1s"
+                           checked>
+                    <label class="form-check-label" for="interval-1s">1s</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="update-interval" value="2000" id="interval-2s">
+                    <label class="form-check-label" for="interval-2s">2s</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="update-interval" value="5000" id="interval-5s">
+                    <label class="form-check-label" for="interval-5s">5s</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="update-interval" value="0" id="interval-off">
+                    <label class="form-check-label" for="interval-off">Off</label>
+                </div>
+            </div>
+        </div>
+
+        <pre id="log-content" class="my-2 fc rounded-4" style="filter: invert(1);">
+            <code id="log-code" class="rounded-4 py-0 overflow-y-auto no-scrollbar" style="white-space: pre-wrap;">
+                {{ log_content }}
+            </code>
+        </pre>
+    </div>
+
+    <script>
+        (function () {
+            // Кэшируем DOM-элементы
+            const logCode = document.getElementById('log-code');
+            const autoScrollCheckbox = document.getElementById('auto-scroll-checkbox');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const radioButtons = document.querySelectorAll('input[name="update-interval"]');
+            const apiUrl = document.getElementById('api-url').href;
+
+            let updateInterval = 1000;  // Изначальный интервал 1с
+            let timeoutId = null;        // Идентификатор таймера
+            let isFetching = false;      // Флаг для предотвращения запуска нового запроса до завершения предыдущего
+            let lastLogContent = logCode.textContent; // Для проверки изменений
+
+            // Прокрутка к концу содержимого с использованием requestAnimationFrame
+            function scrollToBottom() {
+                window.requestAnimationFrame(() => {
+                    logCode.scrollTop = logCode.scrollHeight;
+                });
+            }
+
+            // Функция для обновления содержимого файла
+            async function fetchLogContent() {
+                if (isFetching) return;
+                isFetching = true;
+
+                try {
+                    const response = await Client.sendGet(apiUrl, {});
+                    const newContent = response.data.log_content;
+
+                    if (newContent !== lastLogContent) {
+                        logCode.textContent = newContent;
+                        hljs.highlightElement(logCode);
+                        lastLogContent = newContent;
+
+                        if (autoScrollCheckbox.checked) {
+                            scrollToBottom();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching log content:', error);
+                } finally {
+                    isFetching = false;
+                    scheduleNextFetch();
+                }
+            }
+
+            // Установка следующего обновления
+            function scheduleNextFetch() {
+                if (updateInterval > 0) {
+                    timeoutId = setTimeout(fetchLogContent, updateInterval);
+                }
+            }
+
+            // Устанавливаем интервал для обновления содержимого
+            function setUpdateInterval(newInterval) {
+                updateInterval = newInterval;
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+                if (updateInterval > 0) {
+                    scheduleNextFetch();
+                }
+            }
+
+            // Обработчик изменения интервала обновления
+            radioButtons.forEach((radio) => {
+                radio.addEventListener('change', function () {
+                    const selectedValue = parseInt(this.value, 10);
+                    if (isNaN(selectedValue)) return;
+
+                    if (selectedValue < 500 && selectedValue !== 0) {
+                        alert('Минимальный интервал обновления 500 мс.');
+                        this.checked = false;
+                        // Устанавливаем ближайший допустимый интервал
+                        document.querySelector(`input[name="update-interval"][value="500"]`).checked = true;
+                        setUpdateInterval(500);
+                        return;
+                    }
+
+                    setUpdateInterval(selectedValue);
+                });
+            });
+
+            // Обработчик кнопки "Refresh"
+            refreshBtn.addEventListener('click', fetchLogContent);
+
+            // Прокрутка вниз при первой загрузке
+            scrollToBottom();
+
+            // Изначально запускаем обновление с интервалом 1с
+            scheduleNextFetch();
+        })();
+    </script>
+{% endblock %}

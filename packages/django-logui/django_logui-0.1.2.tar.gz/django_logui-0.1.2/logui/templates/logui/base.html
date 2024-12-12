@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" class="overflow-x-hidden">
+<head>
+    <title>{% block title %}Logui{% endblock %}</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link href="{% static 'logui/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'logui/css/wide-classes.css' %}" rel="stylesheet">
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta id="theme" content="{{ theme }}">
+    {% block head %}{% endblock %}
+</head>
+<body data-bs-theme="{% if theme %}{{ theme }}{% else %}dark{% endif %}" class="overflow-x-hidden">
+<div id="wrapper" class="wrapper h-100vh fc position-relative overflow-x-hidden">
+    <main class="no-scrollbar h-100 fc flex-grow-1 overflow-x-hidden overflow-y-auto py-3">
+        {% block main %}{% endblock %}
+    </main>
+</div>
+</body>
+</html>
