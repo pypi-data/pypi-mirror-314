@@ -1,0 +1,270 @@
+Metadata-Version: 2.1
+Name: cellpy
+Version: 1.0.2a9
+Summary: Extract and manipulate data from battery data testers.
+Home-page: https://github.com/jepegit/cellpy
+Author: Jan Petter Maehlen
+Author-email: jepe@ife.no
+License: MIT license
+Keywords: cellpy
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+License-File: AUTHORS.md
+Requires-Dist: scipy
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: python-box
+Requires-Dist: setuptools
+Requires-Dist: ruamel.yaml
+Requires-Dist: matplotlib
+Requires-Dist: openpyxl
+Requires-Dist: click
+Requires-Dist: PyGithub
+Requires-Dist: tqdm
+Requires-Dist: pint
+Requires-Dist: requests
+Requires-Dist: pyodbc
+Requires-Dist: sqlalchemy>=2.0.0
+Requires-Dist: sqlalchemy-access; platform_system == "windows"
+Requires-Dist: python-dotenv
+Requires-Dist: fabric
+Requires-Dist: dateparser
+Requires-Dist: cookiecutter
+Requires-Dist: jinja2_time
+Requires-Dist: tables
+Requires-Dist: ipykernel
+Requires-Dist: rich
+Requires-Dist: charset-normalizer
+Provides-Extra: batch
+Requires-Dist: ipython; extra == "batch"
+Requires-Dist: jupyter; extra == "batch"
+Requires-Dist: plotly; extra == "batch"
+Requires-Dist: seaborn; extra == "batch"
+Requires-Dist: kaleido==0.1.*; extra == "batch"
+Provides-Extra: fit
+Requires-Dist: lmfit; extra == "fit"
+Provides-Extra: all
+Requires-Dist: ipython; extra == "all"
+Requires-Dist: jupyter; extra == "all"
+Requires-Dist: plotly; extra == "all"
+Requires-Dist: seaborn; extra == "all"
+Requires-Dist: kaleido==0.1.*; extra == "all"
+Requires-Dist: lmfit; extra == "all"
+
+<img src="https://raw.githubusercontent.com/jepegit/cellpy/master/docs/_static/cellpy-icon-long.svg" height="100" alt="cellpy-icon">
+
+# **cellpy** - *a library for assisting in analysing batteries and cells*
+
+
+[![cellpy](https://img.shields.io/pypi/v/cellpy.svg)](https://pypi.python.org/pypi/cellpy)
+[![cellpy](https://readthedocs.org/projects/cellpy/badge/?version=latest)](https://cellpy.readthedocs.io/en/latest/?badge=latest)
+[![cellpy](https://static.pepy.tech/badge/cellpy)](https://pepy.tech/project/cellpy)
+
+This Python Package was developed to help the
+researchers at IFE, Norway, in their cumbersome task of
+interpreting and handling data from cycling tests of batteries and cells.
+
+## Features
+
+* Convert testing data into a common format
+* Summarize and compare data
+* Filter out the steps of interest
+* Process and plot the data
+* Do simple and advanced analysis on single datasets as well as collections of datasets
+* And more!
+
+## Documentation
+
+The documentation for ``cellpy`` is hosted on [Read the Docs](https://cellpy.readthedocs.io).
+
+## Installation and dependencies
+
+The easiest way to install ``cellpy`` is to install with conda or pip.
+
+With conda:
+
+```
+conda install -c conda-forge cellpy
+```
+
+Or if you prefer installing using pip:
+
+```
+python -m pip install cellpy
+```
+
+Have a look at the documentation for more detailed installation procedures, especially
+with respect to "difficult" dependencies when installing with pip.
+
+## License
+
+``cellpy`` is free software made available under the MIT License.
+
+## Citing cellpy
+
+If you use ``cellpy`` in your work, please cite our paper:
+
+> Wind J., Ulvestad A., Abdelhamid M., MÃ¦hlen J.P. (2024). Cellpy â€“ an open-source library for processing and analysis of battery testing data. _Journal of Open Source Software, 9(97), 6236_.
+
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06236/status.svg)](https://doi.org/10.21105/joss.06236)
+
+## Contributing
+
+Contributions are welcome, and they are greatly appreciated! Every
+little bit helps, and credit will always be given. If you want to contribute,
+please have a look at [Contributing Guidelines](CONTRIBUTING.md).
+
+
+# History
+
+## 1.0.1
+
+* Utils: `example_data` now includes auto-download of example data
+* General: supports only python 3.10 and up to 3.11
+* Batch: `naked` and `init(empty=True)` easier method for creating batch with empty pages
+* File handling: new fix in `find_files`
+* Batch / Utils: refactored and updated `Collectors` (using `plotly`)
+* Batch: new summary plotter (using `plotly`)
+* Batch: new convenience function for automatically creating batch from batch-file if file exists.
+* Batch: added `mark` and `drop` methods
+* CLI: added possibility to use custom jupyter executable
+* Added checks (`c.has_xxx`) for checking if data has been processed correctly / fix errors in raw/semi-processed data.
+* Added possibility to filter on C-rates (`c.get_cycles`)
+* Added experimental feature `c.total_time_at_voltage_level` for calculating total time at low/high voltage
+* Added experimental instrument reader for neware xlsx files (hopefully not used much because it is very slow)
+* Added try-except block for ica post-processing step and add if-clause (suggested by Vajee)
+* Fixed several smaller bugs and improved some of the functionality (most notably in `c.get_cap`)
+* Added CI for macOS
+* Added conda package including `sqlalchemy-access`
+* Improved plotting tools
+* Improved documentation
+* Improved feedback from the CLI
+
+## 1.0.0 (2023)
+
+* Unit handling: new unit handling (using pint)
+* Unit handling: renaming summary headers
+* Unit handling: new cellpy-file-format version
+* Unit handling: tool for converting old to new format
+* Unit handling: parsing input parameters for units
+* Templates: using one repository with sub-folders
+* Templates: adding more documentation
+* File handling: allow for external raw files (ssh)
+* Readers: neware.txt (one version/model)
+* Readers: `arbin_sql7` (experimental, @jtgibson91)
+* Batch plotting: collectors for both data collection, plotting and saving
+* OCV-rlx: improvements of the OCV-rlx tools
+* Internals: rename main classes (`CellpyData` -> `CellpyCell`, `Cell` -> `Data`)
+* Internals: rename `.cell` property to `.data`
+* Internals: allow for only one `Data` object pr `CellpyCell` object
+* CLI: general improvements and bug fixes
+* CLI: move editing of db-file to the edit sub-command
+
+
+## 0.4.3 (2023)
+
+* Neware txt loader (supports one specific format only, other formats will have to wait for v.1.0)
+
+## 0.4.2 (2022)
+
+* Changed definition of Coulombic Difference (negative of previous)
+* Updated loaders with hooks and additional base class `TxtLoader` with configuration mechanism
+* Support for Maccor txt files
+* Supports only python 3.8 and up
+* Optional parameters through batch and pages
+* Several bug fixes and minor improvements / adjustments
+* Restrict use of instrument label to only one option
+* Fix bug in example file (@kevinsmia1939)
+
+## 0.4.1 (2021)
+
+* Updated documentations
+* CLI improvements
+* New argument for get_cap: `max_cycle`
+* Reverting from using Documents to user home for location of prm file in windows.
+* Easyplot by Amund
+* Arbin sql reader by Muhammad
+
+## 0.4.0 (2020)
+
+* Reading arbin .res files with auxiliary data should now work.
+* Many bugs have been removed - many new introduced.
+* Now on conda-forge (can be installed using conda).
+
+## 0.4.0 a2 (2020)
+
+* Reading PEC files now updated and should work
+
+## 0.4.0 a1 (2020)
+
+* New column names (lowercase and underscore)
+* New batch concatenating and plotting routines
+
+## 0.3.3 (2020)
+
+* Switching from git-flow to github-flow
+* New cli options for running batches
+* cli option for creating template notebooks
+* Using `ruamel.yaml` instead of `pyyaml`
+* Using `python-box` > 4
+* Several bug-fixes
+
+## 0.3.2 (2019)
+
+* Starting fixing documentation
+* TODO: create conda package
+* TODO: extensive tests
+
+## 0.3.1 (2019)
+
+* Refactoring - renaming from `dfsummary` to `summary`
+* Refactoring - renaming from `step_table` to `steps`
+* Refactoring - renaming from `dfdata` to `raw`
+* Refactoring - renaming `cellpy.data` to `cellpy.get`
+* Updated save and load cellpy files allowing for new naming
+* Implemented cellpy new and cellpy serve cli functionality
+
+## 0.3.0 (2019)
+
+* New batch-feature
+* Improved make-steps and make-summary functionality
+* Improved cmd-line interface for setup
+* More helper functions and tools
+* Experimental support for other instruments
+* invoke tasks for developers
+
+## 0.2.1 (2018)
+
+* Allow for using mdbtools also on win
+* Slightly faster find_files using cache and `fnmatch`
+* Bug fix: error in sorting files when using `pathlib` fixed
+
+## 0.2.0 (2018-10-17)
+
+* Improved creation of step tables (much faster)
+* Default compression on cellpy (hdf5) files
+* Bug fixes
+
+## 0.1.22 (2018-07-17)
+
+* Parameters can be set by dot-notation (`python-box`).
+* The parameter Instruments.cell_configuration is removed.
+* Options for getting voltage curves in different formats.
+* Fixed python 3.6 issues with Read the Docs.
+* Can now also be used on posix (the user must install `mdb_tools` first).
+* Improved logging allowing for custom log-directory.
+
+## 0.1.21 (2018-06-09)
+
+* No legacy python.
+
+## 0.1.0 (2016-09-26)
+
+* First release on PyPI.
