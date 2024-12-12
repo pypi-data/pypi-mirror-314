@@ -1,0 +1,278 @@
+<html>
+
+<head>
+    <title>{{ basics.name }} | {{basics.label}}</title>
+
+    <style>
+        html {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body {
+            max-width: 70em;
+            margin: 1em 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            box-shadow: #333 0 0 1em;
+        }
+
+        main {
+            padding: 1em;
+            padding-top: 0;
+        }
+
+        h2 {
+            margin: 1em 0 .5em 0;
+        }
+
+        h1,
+        h3,
+        h4 {
+            margin: 0;
+        }
+
+        p {
+            margin: 0;
+            padding: 1em 0;
+        }
+
+        td:first-child {
+            white-space: nowrap;
+            padding-right: 1.5em;
+            padding-top: .2em;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        #header h2 {
+            margin: .4em 0;
+        }
+
+        #header h2,
+        #publications h4 {
+            color: #666;
+        }
+
+        #header {
+            background-color: #f5ebe0;
+            padding: 1em;
+        }
+
+        #header img {
+            height: 160px;
+            width: 160px;
+            border-radius: 50%;
+            margin: 1em 0;
+        }
+
+        #header .row {
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        #header .vsep {
+            height: 5em;
+            margin-right: 2em;
+        }
+
+        #header p {
+            text-align: justify;
+            padding-right: 1em;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        #contact td {
+            padding: 2px 0;
+            border: none;
+        }
+
+        #contact td:first-child {
+            font-weight: bold;
+            padding-right: 10px;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .vsep {
+            border-left: 1px solid #ccc;
+            height: 1em;
+            margin: 0 1em;
+        }
+
+        #work,
+        #publications {
+            page-break-after: always;
+        }
+
+        .margin-left {
+            margin-left: 1em;
+        }
+
+        @media print {
+            body {
+                max-width: none;
+                box-shadow: none;
+                margin: 0;
+            }
+
+            p {
+                padding: 0;
+            }
+
+            #publications p,
+            #projects p {
+                padding: 1em 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header" class="row">
+        <div class="col">
+            <img src="data:image/jpeg;base64,{{basics.image}}" alt="{{basics.name}}">
+            <div id="contact-info">
+                {# <h3>Contact Information</h3> #}
+                <table id="contact">
+                    <tr>
+                        <td>Email</td>
+                        <td>{{basics.email}}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>{{basics.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Website</td>
+                        <td><a href="{{basics.url}}">{{basics.url}}</a></td>
+                    </tr>
+                    <tr>
+                        <td>LinkedIn</td>
+                        <td><a href="{{basics.linkedin}}">{{basics.linkedin}}</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="vsep"></div>
+        <div>
+            <h1>{{basics.name}}</h1>
+            <h2>{{basics.label}}</h2>
+            <p>{{basics.summary}}</p>
+        </div>
+    </div>
+
+    <main>
+        <div id="work">
+            <h2>Work Experience</h2>
+            <table>
+                {% for job in work %}
+                <tr>
+                    <td>{{job.startDate | date}} - {{job.endDate | date}}</td>
+                    <td>
+                        <h3>{{job.position}} @ {{job.company}}</h3>
+                        <p>{{job.summary}}</p>
+                        <ul>
+                            {% for highlight in job.highlights %}
+                            <li>{{highlight}}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="education">
+            <h2>Education</h2>
+
+            <table>
+                {% for edu in education %}
+                <tr>
+                    <td>{{edu.startDate | date}} - {{edu.endDate | date}}</td>
+                    <td>
+                        <div class="row">
+                            <h3>{{edu.studyType}}, {{edu.area}} @ {{edu.institution}}</h3>
+                            <div class="vsep"></div>
+                            <div>GPA: {{edu.score}}</div>
+                        </div>
+
+                        <p>{{edu.summary}}</p>
+
+                        <ul>
+                            {% for highlight in edu.highlights %}
+                            <li>{{highlight}}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="publications">
+            <h2>Selected Publications</h2>
+
+            <table>
+                {% for pub in publications %}
+                <tr>
+                    <td>{{pub.releaseDate | date}}</td>
+                    <td>
+                        <h3>{{pub.name}}</h3>
+                        <h4>{{pub.publisher}}</h4>
+                        <p>{{pub.summary}}</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="projects">
+            <h2>Projects</h2>
+
+            <div class="margin-left">
+                {% for project in projects %}
+                <div class="row">
+                    <h3>{{project.name}}</h3>
+                    <div class="vsep"></div>
+                    <a href="{{project.url}}">{{project.url}}</a>
+                </div>
+                <p>{{project.description}}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="skills">
+            <h2>Skills</h2>
+
+            <div class="margin-left">
+                <ul>
+                    {% for skill in skills %}
+                    <li><strong>{{skill.name}}:</strong> {{skill.description}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+    </main>
+</body>
+
+</html>
