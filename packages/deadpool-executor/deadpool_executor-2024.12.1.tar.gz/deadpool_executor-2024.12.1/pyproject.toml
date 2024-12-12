@@ -1,0 +1,58 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "deadpool-executor"
+authors = [{name = "Caleb Hattingh", email = "caleb.hattingh@gmail.com"}]
+dynamic = ["version", "description"]
+readme = "README.rst"
+dependencies = [
+    "psutil",
+]
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "License :: OSI Approved :: Apache Software License",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[project.urls]
+Home = "https://github.com/cjrh/deadpool"
+Documentation = "https://github.com/cjrh/deadpool"
+Source = "https://github.com/cjrh/deadpool"
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.flit.module]
+name = "deadpool"
+
+[tool.flit.sdist]
+exclude = [".github/", ".gitignore"]
+
+[project.optional-dependencies]
+test = [
+    "pytest >= 7",
+    "pytest-cov",
+    "flake8",
+    "coverage[toml]"
+]
+
+[tool.black]
+include = '\.pyi?$'
+extend-exclude = '''
+(
+    ^/venv.*
+)
+'''
+
+[tool.pyright]
+useLibraryCodeForTypes = true
