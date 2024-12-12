@@ -1,0 +1,55 @@
+{% extends "base_static.jinja2" %}
+
+{% block title %}
+    {% trans %}Information{% endtrans %}
+{% endblock title %}
+
+{% block content %}
+
+{{ page_heading(gettext('Information')) }}
+
+<h2>{% trans %}Hotkeys{% endtrans %}</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>{% trans %}Key combination{% endtrans %}</th>
+            <th>{% trans %}Description{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><kbd>1</kbd> - <kbd>9</kbd></td>
+            <td>{% trans %}Toggle playlists{% endtrans %}</td>
+        </tr>
+        <tr>
+            <td><kbd>←</kbd> / <kbd>→</kbd></td>
+            <td>{% trans %}Previous or next track{% endtrans %}</td>
+        </tr>
+        <tr>
+            <td><kbd>↑</kbd> / <kbd>↓</kbd></td>
+            <td>{% trans %}Increase or decrease volume{% endtrans %}</td>
+        </tr>
+        <tr>
+            <td><kbd>&lt;</kbd> / <kbd>&gt;</kbd></td>
+            <td>{% trans %}Seek in track{% endtrans %}</td>
+        </tr>
+        <tr>
+            <td><kbd>Esc</kbd></td>
+            <td>{% trans %}Close window{% endtrans %}</td>
+        </tr>
+        <tr>
+            <td><kbd>/</kbd></td>
+            <td>{% trans %}Open search{% endtrans %}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>{% trans %}Credits{% endtrans %}</h2>
+<p>
+    {% trans trimmed gh="https://github.com/Derkades/raphson-music-player", insp_gh="https://github.com/DanielKoomen/MusicPlayer" %}
+    <a href="{{gh}}" target="_blank">Super fancy music player 2.0</a> is inspired by the original
+    <a href="{{insp_gh}}" target="_blank">Super fancy music player</a>.
+    {% endtrans %}
+</p>
+
+{% endblock content %}

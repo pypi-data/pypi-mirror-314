@@ -1,0 +1,410 @@
+import json
+import logging
+import re
+from dataclasses import dataclass
+from pathlib import Path
+import shutil
+import tempfile
+
+from raphson_mp import music, process, settings
+
+log = logging.getLogger(__name__)
+
+
+FILENAME_STRIP_KEYWORDS = [
+    "(Hardstyle)",
+    "(Official Music Video)",
+    "[Official Music Video]",
+    "(Official Video)",
+    "(Official Audio)",
+    "[Official Audio]",
+    "[Official Video]",
+    "(Official Video 4K)",
+    "(Official Video HD)",
+    "[FREE DOWNLOAD]",
+    "(OFFICIAL MUSIC VIDEO)",
+    "(live)",
+    "[Radio Edit]",
+    "(Clip officiel)",
+    "(Audio Officiel)",
+    "(Official videoclip)",
+    "HQ Videoclip",
+    "[Monstercat Release]",
+    "[Monstercat Lyric Video]",
+    "[Nerd Nation Release]",
+    "[Audio]",
+    "(Remastered)",
+    "_ Napalm Records",
+    "| Napalm Records",
+    "(Lyrics)",
+    "[Official Lyric Video]",
+    "(Official Videoclip)",
+    "(Visual)",
+    "(long version)",
+    " HD",
+    "(Single Edit)",
+    "(official video)",
+    "High Quality",
+    "[OUT NOW]",
+    "(Dance Video)",
+    "Offisiell video",
+    "[FREE DL]",
+    "Official Music Video",
+]
+
+
+ALBUM_IGNORE_KEYWORDS = [
+    "top 2000",
+    "top 500",
+    "top 100",
+    "top 40",
+    "jaarlijsten",
+    "jaargang",
+    "super hits",
+    "the best of",
+    "het beste uit",
+    "hitzone",
+    "greatest hits",
+    "hits collection",
+    "top40",
+    "hitdossier",
+    "100 beste",
+    "top hits",
+    "the very best",
+    "top trax",
+    "ultimate rock collection",
+    "absolute music",
+    "tipparade",
+]
+
+ALBUM_ARTIST_IGNORE = {
+    "various artists",
+}
+
+
+METADATA_ADVERTISEMENT_KEYWORDS = [
+    "electronicfresh.com",
+    "djsoundtop.com",
+    "https://runderground.ru",
+    "Speeeedy EDM Blog",
+    "www.t.me/pmedia_music",
+]
+
+_NORMALIZE_PATTERN = re.compile(
+    r"(\(ft\. .*?\))|"
+    + r"(\(feat\. .*?\))|"
+    + r"(\(with .*?\))|"
+    + r"(\(w/ .*?\))|"
+    + r"( - Remastered \d{4})|"
+    + r"( - \d{4} remaster)|"
+    + r"( - \d{4} remastered version)|"
+    + r"( - remastered)|"
+    + r"( - album version remastered)|"
+    + r"( - rerecorded)|"
+    + r"( - original version)|"
+    + r"( - original mix)|"
+    + r"( - radio edit)"
+)
+
+
+def normalize_title(text: str) -> str:
+    """Return lower case title with some parts removed for the purpose of matching"""
+    return re.sub(_NORMALIZE_PATTERN, "", text.lower())
+
+
+def ignore_album(album: str) -> bool:
+    """Check whether album name should be ignored"""
+    album = album.lower()
+    for keyword in ALBUM_IGNORE_KEYWORDS:
+        if keyword in album:
+            return True
+    return False
+
+
+def ignore_album_artist(artist: str) -> bool:
+    """Check whether album artist should be ignored"""
+    return artist.lower() in ALBUM_ARTIST_IGNORE
+
+
+def _strip_keywords(inp: str) -> str:
+    """
+    Remove undesirable keywords from title, as a result of being downloaded from the internet.
+    """
+    for strip_keyword in FILENAME_STRIP_KEYWORDS:
+        inp = inp.replace(strip_keyword, "")
+    return inp
+
+
+def join_meta_list(entries: list[str]) -> str:
+    """Join list with semicolons"""
+    return "; ".join(entries)
+
+
+def split_meta_list(meta_list: str) -> list[str]:
+    """
+    Split list (stored as string in metadata) by semicolon
+    """
+    entries: list[str] = []
+    for entry in meta_list.split(";"):
+        entry = entry.strip()
+        if entry != "" and entry not in entries:
+            entries.append(entry)
+    return entries
+
+
+def _has_advertisement(metadata_str: str) -> bool:
+    """Check whether string contains advertisements and should be ignored"""
+    for keyword in METADATA_ADVERTISEMENT_KEYWORDS:
+        if keyword in metadata_str.lower():
+            return True
+    return False
+
+
+def sort_artists(artists: list[str], album_artist: str | None) -> list[str]:
+    """
+    Move album artist to start of artist list
+    """
+    if artists and album_artist and album_artist in artists:
+        artists.remove(album_artist)
+        return [album_artist] + artists
+
+    return artists
+
+
+@dataclass
+class Metadata:
+    relpath: str
+    duration: int
+    artists: list[str]
+    album: str | None
+    title: str | None
+    year: int | None
+    album_artist: str | None
+    track_number: int | None
+    tags: list[str]
+    lyrics: str | None
+    video: str | None
+
+    def _meta_title(self) -> str | None:
+        """
+        Generate title from 'artist', 'title' and 'date' metadata
+        Returns: Generated title, or None if the track lacks the required metadata
+        """
+        if not self.artists or not self.title:
+            return None
+
+        title = ", ".join(self.artists) + " - " + self.title
+        if self.year:
+            title += " [" + str(self.year) + "]"
+        return title
+
+    def filename_title(self) -> str:
+        """
+        Generate title from file name
+        Returns: Title string
+        """
+        title = self.relpath.split("/", maxsplit=1)[-1]
+        # Remove file extension
+        try:
+            title = title[: title.rindex(".")]
+        except ValueError:
+            pass
+        # Remove YouTube id suffix
+        title = re.sub(r" \[[a-zA-Z0-9\-_]+\]", "", title)
+        title = _strip_keywords(title)
+        title.strip()
+        return title
+
+    def display_title(self) -> str:
+        """
+        Generate display title. It is generated using metadata if
+        present, otherwise using the file name.
+        """
+        title = self._meta_title()
+        if title:
+            return title
+        return self.filename_title()
+
+    def download_name(self) -> str:
+        """
+        Name for a downloaded file. display_title() with some characters removed.
+        """
+        return re.sub(r"[^\x00-\x7f]", r"", self.display_title())
+
+    def primary_artist(self) -> str | None:
+        if len(self.artists) == 1:
+            return self.artists[0]  # if there is only one artist, it is the primary artist
+        elif len(self.artists) > 1:
+            # if there are multiple artists, the album artist is probably the primary artist
+            if self.album_artist is not None:
+                if self.album_artist in self.artists:
+                    return self.album_artist
+
+            # if album artist is not known, we have to guess
+            return self.artists[0]
+        else:
+            # no artists
+            return None
+
+    def get_ffmpeg_options(self, option: str = "-metadata") -> list[str]:
+        def convert(value: str | int | list[str] | None):
+            if value is None:
+                return ""
+            if type(value) == list:
+                return join_meta_list(value)
+            return str(value)
+
+        metadata_options: list[str] = [
+            option,
+            "album=" + convert(self.album),
+            option,
+            "artist=" + convert(self.artists),
+            option,
+            "title=" + convert(self.title),
+            option,
+            "date=" + convert(self.year),
+            option,
+            "album_artist=" + convert(self.album_artist),
+            option,
+            "track=" + convert(self.track_number),
+            option,
+            "lyrics=" + convert(self.lyrics),
+            option,
+            "genre=" + convert(self.tags),
+        ]
+        return metadata_options
+
+    async def save(self):
+        """
+        Write metadata to file
+        """
+        path = music.from_relpath(self.relpath)
+        original_extension = "." + self.relpath.split(".")[-1]
+        # ogg format seems to require setting metadata in stream instead of container
+        metadata_flag = "-metadata:s" if original_extension == ".ogg" else "-metadata"
+        with tempfile.NamedTemporaryFile(suffix=original_extension) as temp_file:
+            await process.run(
+                "ffmpeg",
+                "-y",  # overwriting file is required, because the created temp file already exists
+                "-hide_banner",
+                "-nostats",
+                "-loglevel",
+                settings.ffmpeg_log_level,
+                "-i",
+                path.as_posix(),
+                "-codec",
+                "copy",
+                *self.get_ffmpeg_options(metadata_flag),
+                temp_file.name,
+            )
+            shutil.copy(temp_file.name, path)
+
+
+async def probe(path: Path) -> Metadata | None:
+    """
+    Create Metadata object by running ffprobe on a file
+    Args:
+        path: Path to file
+    Returns: Metadata object, or None if ffprobe failed to read the file
+    """
+    try:
+        stdout, _stderr = await process.run_output(
+            "ffprobe",
+            "-show_streams",
+            "-show_format",
+            "-print_format",
+            "json",
+            path.resolve().as_posix(),
+        )
+    except process.ProcessStatusError:
+        log.warning("Error scanning track %s, is it corrupt?", path)
+        return None
+
+    data = json.loads(stdout.decode())
+
+    duration = int(float(data["format"]["duration"]))
+    artists: list[str] = []
+    album: str | None = None
+    title: str | None = None
+    year: int | None = None
+    album_artist: str | None = None
+    track_number: int | None = None
+    tags: list[str] = []
+    lyrics: str | None = None
+    video: str | None = None
+
+    meta_tags: list[tuple[str, str]] = []
+
+    for stream in data["streams"]:
+        if stream["codec_type"] == "audio":
+            if "tags" in stream:
+                meta_tags.extend(stream["tags"].items())
+
+        if stream["codec_type"] == "video":
+            if stream["codec_name"] == "vp9":
+                video = "vp9"
+            elif stream["codec_name"] == "h264":
+                video = "h264"
+
+    if "tags" in data["format"]:
+        meta_tags.extend(data["format"]["tags"].items())
+
+    for name, value in meta_tags:
+        # sometimes ffprobe returns tags in uppercase
+        name = name.lower()
+
+        if _has_advertisement(value):
+            log.info("Ignoring advertisement: %s = %s", name, value)
+            continue
+
+        if name == "album":
+            album = value
+
+        if name == "artist":
+            artists = split_meta_list(value)
+
+        if name == "title":
+            title = _strip_keywords(value).strip()
+
+        if name == "date":
+            try:
+                year = int(value[:4])
+            except ValueError:
+                log.warning("Invalid year '%s' in file '%s'", value, path.resolve().as_posix())
+
+        if name == "album_artist":
+            album_artist = value
+
+        if name == "track":
+            try:
+                track_number = int(value.split("/")[0])
+            except ValueError:
+                log.warning(
+                    "Invalid track number '%s' in file '%s'",
+                    value,
+                    path.resolve().as_posix(),
+                )
+
+        if name == "genre":
+            tags = split_meta_list(value)
+
+        if name in {"lyrics", "lyrics-en", "lyrics-eng", "lyrics-english"}:
+            lyrics = value
+
+        # Allow other languages, but only if no other lyrics are available
+        if name.startswith("lyrics") and lyrics is None:
+            lyrics = value
+
+    return Metadata(
+        music.to_relpath(path),
+        duration,
+        sort_artists(artists, album_artist),
+        album,
+        title,
+        year,
+        album_artist,
+        track_number,
+        tags,
+        lyrics,
+        video,
+    )

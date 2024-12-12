@@ -1,0 +1,28 @@
+services:
+
+  music:
+    ports:
+      - 127.0.0.1:8080:8080
+    build:
+      context: .
+      target: dev
+    volumes:
+      - type: bind
+        source: ./music
+        target: /music
+      - type: bind
+        source: ./data
+        target: /data
+      # To get new files without re-building, during development
+      - type: bind
+        source: .
+        target: /mp
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 5G
+    user: "1000"
+    read_only: true
+    cap_drop: ['all']
+    environment:
+      TZ: Europe/Amsterdam

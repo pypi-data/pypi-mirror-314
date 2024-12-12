@@ -1,0 +1,43 @@
+{% extends "base_static.jinja2" %}
+
+{% block title %}
+    {{ track }}
+{% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/share.css">
+{% endblock styles %}
+
+{% block content %}
+
+{{ page_heading(track) }}
+
+<div class="boxes">
+    <div class="box padding" id="player">
+        <audio controls preload="metadata">
+            <source src="/share/{{code}}/audio" type="audio/webm">
+        </audio>
+
+        <div>
+            <a href="/share/{{code}}/download/original" class="button icon-text-button">
+                <span class="icon icon-download"></span>
+                <span>{% trans %}Original{% endtrans %}</span>
+            </a>
+
+            <a href="/share/{{code}}/download/mp3" class="button icon-text-button">
+                <span class="icon icon-download"></span>
+                <span>{% trans %}MP3{% endtrans %}</span>
+            </a>
+        </div>
+
+    </div>
+
+    <img class="box cover-img" src="/share/{{ code }}/cover">
+
+    {# Ugly formatting here, because line breaks are preserved #}
+    {% if lyrics %}
+        <div class="box padding lyrics">{{ lyrics }}</div>
+    {% endif %}
+</div>
+
+{% endblock content %}
