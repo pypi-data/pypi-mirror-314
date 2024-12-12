@@ -1,0 +1,83 @@
+name: Building executable with PyInstaller
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build executable for Python 3.12
+    runs-on: windows-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true # Ensure submodules are initialized
+          fetch-depth: 0 # Fetch all history for submodules
+          token: ${{ secrets.GITRUNNER_ACCESS_TOKEN }}
+
+      # Manually update submodules if needed
+      - name: Update Submodules
+        run: |
+          git submodule sync
+          git submodule update --init --recursive
+
+      # Set up Python environment
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip' # caching pip dependencies
+
+      # Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Build the first executable
+      - name: Build executable
+        run: |
+          pyinstaller pyinstaller/lasercontrol.spec
+
+      # Upload the first executable as an artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lasercontrol.exe
+          path: dist/lasercontrol.exe
+
+      # Build the second executable
+      - name: Build executable scope
+        run: |
+          pyinstaller pyinstaller/lasercontrol_scope.spec
+
+      # Upload the second executable as an artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lasercontrol_scope.exe
+          path: dist/lasercontrol_scope.exe
+
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.head_commit.message }}
+          release_name: ${{ github.event.head_commit.message }}
+          overwrite: true
+          body: |
+            Test Release v1.0.0
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: dist/lasercontrol.exe
+          asset_name: Lasercontrol-Windows.exe
+          asset_content_type: application/zip
