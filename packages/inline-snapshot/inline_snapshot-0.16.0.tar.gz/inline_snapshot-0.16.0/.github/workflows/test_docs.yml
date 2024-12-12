@@ -1,0 +1,16 @@
+name: test docs
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: Deploy development docs
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout main
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+    - run: pip install hatch
+    - name: test docs
+      run: |
+        hatch run docs:build
