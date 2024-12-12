@@ -1,0 +1,44 @@
+[tool.black]
+target-version = ["py313"]
+extend-exclude = """
+(
+  ^/tests/obfuscator/test_names/code/
+  | ^/examples/out/
+)
+"""
+
+[tool.ruff]
+fix = true
+target-version = "py313"
+include = ["*.py"]
+exclude = [
+    ".eggs",
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "build",
+    "venv",
+    "docs",
+    "wip/",
+    "examples/",
+    "hello.py",
+    "examples/out/",
+]
+lint.select = ["ALL"]
+lint.ignore = ["ANN", "FIX"]
+lint.extend-ignore = ["ERA001", "S311", "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "TD001", "TD003"]
+lint.isort.known-local-folder = ["pof", "test"]
+lint.pydocstyle.convention = "google"
+lint.extend-per-file-ignores."pof/cli.py" = ["G004"]
+lint.flake8-copyright.author = "deoktr"
+
+[tool.mypy]
+ignore_missing_imports = true
+show_error_codes = true
+exclude = ["^tests/obfuscator/test_names/code/.*$"]
+
+[tool.pytest.ini_options]
+addopts = "-p no:warnings --cov=pof --no-cov-on-fail"
