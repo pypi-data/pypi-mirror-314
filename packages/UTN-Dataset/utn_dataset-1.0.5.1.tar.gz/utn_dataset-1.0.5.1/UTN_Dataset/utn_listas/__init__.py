@@ -1,0 +1,1 @@
+from .pokemones import lista_pokemones
