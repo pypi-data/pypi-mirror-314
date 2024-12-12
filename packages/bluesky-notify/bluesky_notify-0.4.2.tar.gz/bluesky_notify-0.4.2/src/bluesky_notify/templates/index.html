@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluesky Notification Manager</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Bluesky Notification Manager Logo" class="img-fluid mb-3" style="max-height: 100px;">
+            <h1 class="text-center mb-4">Bluesky Notification Manager</h1>
+        </div>
+        
+        <!-- Account Management Section -->
+        <div id="account-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title h5 mb-0">Manage Accounts</h2>
+                </div>
+                <div class="card-body">
+                    <form id="addAccountForm" class="mb-4">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="text" 
+                                       id="handle" 
+                                       class="form-control" 
+                                       placeholder="Enter Bluesky handle (e.g., user.bsky.social)" 
+                                       pattern="[a-zA-Z0-9][a-zA-Z0-9\.-]*[a-zA-Z0-9](\.[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])*"
+                                       title="Enter a valid Bluesky handle (e.g., user.bsky.social)"
+                                       required>
+                                <button type="submit" class="btn btn-primary">Add Account</button>
+                            </div>
+                            <div class="form-text text-muted">
+                                Enter your handle without the @ symbol (e.g., user.bsky.social)
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="desktopNotif" checked>
+                                <label class="form-check-label" for="desktopNotif">
+                                    <i class="bi bi-laptop"></i> Desktop Notifications
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="emailNotif">
+                                <label class="form-check-label" for="emailNotif">
+                                    <i class="bi bi-envelope"></i> Email Notifications
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Status</th>
+                                    <th>Desktop Notifications</th>
+                                    <th>Email Notifications</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTable">
+                                <!-- Accounts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong class="me-auto"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
