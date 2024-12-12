@@ -1,0 +1,77 @@
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pyopf"
+version = "1.4.0"
+description = "Python library for I/O and manipulation of projects under the Open Photogrammetry Format (OPF)"
+authors = [
+    "Pix4D",
+]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [
+    { include = "pyopf", from = "src" },
+    { include = "opf_tools", from = "src" },
+]
+homepage = "https://pix4d.github.io/opf-spec/specification/project.html"
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "photogrammetry",
+    "OPF",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+numpy = "*"
+pillow = "~10"
+pygltflib = "*"
+python-dateutil = "*"
+simplejson = "*"
+
+[tool.poetry.dependencies.laspy]
+version = "2.4.1"
+optional = true
+
+[tool.poetry.dependencies.plyfile]
+version = "0.9"
+optional = true
+
+[tool.poetry.dependencies.pyproj]
+version = "3.6.0"
+optional = true
+
+[tool.poetry.dependencies.shapely]
+version = "*"
+optional = true
+
+[tool.poetry.dependencies.tqdm]
+version = "^4.65.0"
+optional = true
+
+[tool.poetry.extras]
+tools = [
+    "laspy",
+    "plyfile",
+    "pyproj",
+    "shapely",
+    "tqdm",
+]
+
+[tool.poetry.scripts]
+opf_crop = "opf_tools.crop.cropper:main"
+opf_undistort = "opf_tools.undistort.undistorter:main"
+opf2nerf = "opf_tools.opf2nerf.converter:main"
+opf2colmap = "opf_tools.opf2colmap.converter:main"
+opf2las = "opf_tools.opf2las.converter:main"
+opf2ply = "opf_tools.opf2ply.converter:main"
