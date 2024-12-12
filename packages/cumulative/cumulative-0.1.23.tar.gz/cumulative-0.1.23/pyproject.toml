@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "cumulative"
+version = "0.1.23"
+description = "Manipulate and Visualize Time Series Collections"
+authors = ["Michele Dallachiesa <michele.dallachiesa@sigforge.com>"]
+license = "BSD-3"
+readme = "README.md"
+homepage = "https://elehcimd.github.io/cumulative/"
+repository = "https://github.com/elehcimd/cumulative"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved",
+    "Intended Audience :: Science/Research",
+]
+include = [
+    "LICENSE",
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.9.0"
+tqdm = ">=4.66.1"
+pandas = ">=1.5.3"
+scipy = ">=1.11.4"
+scikit-learn = ">=1.2.2"
+matplotlib = ">=3.7.1"
+mltraq = ">=0.1.156" # {path = "/Users/michele/dev/mltraq", develop = true}
+
+[tool.poetry.extras]
+
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "^4.0.10"
+ipywidgets = "^8.0.2"
+pytest = ">=7.2.0"
+black = {extras = ["jupyter"], version = ">=22.10.0"}
+ruff = ">=0.0.128"
+pytest-cov = ">=4.0.0"
+pylint = ">=2.15.9"
+pytest-xdist = ">=3.1.0"
+mkdocs-material = ">=8.5.11"
+mkdocs-macros-plugin = ">=0.7.0"
+mkdocstrings = {extras = ["python"], version = ">=0.19.1"}
+mkdocs-charts-plugin = "^0.0.10"
+mkdocs-glightbox = "^0.4.0"
+
+mdx-include = ">=1.4.2"
+anybadge = ">=1.14.0"
+matplotlib = ">=3.6.2"
+certifi = ">=2022.12.7"
+pyspellchecker = "^0.8.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target_version = ["py37"]
+preview = true
+
+[tool.ruff]
+line-length = 120
+lint.select = ["E", "F", "I", "U", "S", "C", "B", "A", "T", "Q", "BLE", "C", "ERA"] # ANN FBT
+target-version = "py37"
+lint.ignore = ["A003", "S101", "T201", "T203"]
+extend-include = ["*.ipynb"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
