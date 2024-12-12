@@ -1,0 +1,80 @@
+{% extends "best-cards/_layout.html" %}
+{% import "best-cards/_layout_card_column.html" as layout with context%}
+
+{% block content %}
+<h1>{{ tzimisce }} Tzimisce</h1>
+<div class="insert tip">
+    <p>
+        {% trans trimmed
+        tzimisce_wall=link("/archetypes/fear-factor"),
+        tzimisce_toolbox=link("/archetypes/tzimisce-toolbox"),
+        war_ghouls=link("/archetypes/war-ghouls"),
+        war_ghoul=card("War Ghoul")
+        %}
+        The Tzimisce and their unique {{ vic }} discipline also have the quite rare
+        {{ AUS }}{{ ANI }} combination, making them excellent blockers.
+        They have given birth to the {{ tzimisce_wall }} and the
+        {{ tzimisce_toolbox }} archetypes, but also to the {{ war_ghouls }} archetype,
+        using {{ war_ghoul }} to rush opponents vampires.
+        {% endtrans %}
+    </p>
+</div>
+
+{% call layout.card_column("Chiropteran Marauder", decks=60, copies="3-10") %}
+{% trans trimmed immortal_grapple=card("Immortal Grapple")%}
+An excellent combat card offering both maneuverability and aggravated damage.
+As a bonus, the strike stays a hand strike and can be used even if
+{{ immortal_grapple }} has been played.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Breath of the Dragon", decks=53, copies="1-6") %}
+{% trans trimmed chiropteran_marauder=card("Chiropteran Marauder") %}
+The <em>other</em> aggravated strike available through {{ vic }},
+it makes for a dreadful combination with {{ chiropteran_marauder }},
+as no range is safe for the opponent.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Caliban", decks=52, copies="1-2") %}
+{% trans trimmed %}
+All clan disciplines {{ AUS }}{{ ANI }}{{ VIC }} at superior for only 6 pool: a bargain.
+He finds his spot in many Tzimisce crypts.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Devin Bisley", decks=50, copies="1-2") %}
+{% trans trimmed %}
+Although she has inferior {{ vic }}, having {{ AUS }}{{ ANI }} for just 5 pool
+makes an excellent blocker out of her.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Changeling", decks=49, copies="3-8") %}
+{% trans trimmed %}
+Choice between stealth and bleed enhancement, a versatile tool for {{ vic }}.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Piotr Andreikov", decks=43, copies="1-2") %}
+{% trans trimmed %}
+A cheap 2 pool for {{ aus }}, he is included in many decks using this discipline.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("Horatio", decks=43, copies="1-2") %}
+{% trans trimmed war_ghoul=card("War Ghoul") %}
+Yet another cheap sidekick, {{ vic }} is less useful than {{ aus }} but, still,
+having cheap Tzimisce to recruit some {{ war_ghoul }} is great.
+{% endtrans %}
+{% endcall %}
+
+{% call layout.card_column("War Ghoul", decks=41, copies="2-8") %}
+{% trans trimmed %}
+One of the most dreadful allies of the game, it is an excellent combatant
+and can grind vampires down all around the table in a few turns.
+The trick is to work around its downside by getting cheap allies and retainers
+to sacrifice to it.
+{% endtrans %}
+{% endcall %}
+{% endblock %}
