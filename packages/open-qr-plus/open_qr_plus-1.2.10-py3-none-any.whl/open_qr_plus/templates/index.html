@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Pro</title>
+    <style>
+        /* Custom fonts */
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    /* Light Mode Colors */
+    --bg-gradient-start: #667eea;
+    --bg-gradient-end: #764ba2;
+    --container-bg: rgba(255, 255, 255, 0.95);
+    --text-primary: #333;
+    --text-secondary: #555;
+    --accent-color: #764ba2;
+    --accent-color-hover: #653d96;
+    --button-bg: #fff;
+    --button-border: #764ba2;
+    --button-text: #764ba2;
+    --header-bg: rgba(255, 255, 255, 0.1);
+    --footer-bg: rgba(0, 0, 0, 0.7);
+    --background-words-color: rgba(255, 255, 255, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark Mode Colors */
+        --bg-gradient-start: #2c3e50;
+        --bg-gradient-end: #3498db;
+        --container-bg: rgba(45, 45, 45, 0.9);
+        --text-primary: #f0f0f0;
+        --text-secondary: #cccccc;
+        --accent-color: #3498db;
+        --accent-color-hover: #2980b9;
+        --button-bg: #444;
+        --button-border: #3498db;
+        --button-text: #ffffff;
+        --header-bg: rgba(0, 0, 0, 0.3);
+        --footer-bg: rgba(255, 255, 255, 0.1);
+        --background-words-color: rgba(255, 255, 255, 0.05);
+    }
+}
+
+* {
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+header {
+    background: var(--header-bg);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #fff;
+    font-family: 'Pacifico', cursive;
+    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+header .logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm8-2h8V3h-8v8zm2-6h4v4h-4V5zm8 16h-4v-4h4v4zm2-6h-8v8h8v-8zm-2 4h-4v-4h4v4zM9 13l-2 2v2l2-2 2 2h2l-2-2 2-2h-2z"/></svg>') no-repeat center;
+    background-size: contain;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 15px;
+    position: relative;
+}
+
+.container {
+    background: var(--container-bg);
+    padding: 40px 20px;
+    border-radius: 25px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.floating-shape {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: rgba(118, 75, 162, 0.1);
+    border-radius: 50%;
+    animation: float 10s infinite ease-in-out;
+}
+
+.shape1 {
+    top: -50px;
+    left: -50px;
+}
+
+.shape2 {
+    bottom: -50px;
+    right: -50px;
+    animation-delay: 5s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-30px) translateX(30px); }
+}
+
+.background-words {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.background-words span {
+    position: absolute;
+    font-size: 3em;
+    color: var(--background-words-color);
+    animation: moveWords 20s infinite linear;
+    white-space: nowrap;
+}
+
+@keyframes moveWords {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--accent-color);
+    font-size: 1.8em;
+}
+
+.option-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.option-buttons button {
+    background: var(--button-bg);
+    color: var(--button-text);
+    border: 2px solid var(--button-border);
+    padding: 10px 20px;
+    margin: 8px;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-buttons button.active,
+.option-buttons button:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+form {
+    display: none;
+    animation: fadeIn 0.5s forwards;
+}
+
+form.form-active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="file"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9em;
+    transition: border-color 0.3s;
+    background-color: var(--button-bg);
+    color: var(--text-primary);
+}
+.urlinput{
+    width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+            transition: border-color 0.3s;
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+button.submit-btn,
+#start-scan {
+    background: linear-gradient(45deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    font-size: 1em;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s, transform 0.3s;
+}
+
+button.submit-btn:hover,
+#start-scan:hover {
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-color-hover));
+    transform: translateY(-2px);
+}
+
+.error {
+    display: none;
+    color: #e74c3c;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#loading-spinner {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#qr-loading {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at 25px 25px, var(--accent-color) 25%, transparent 26%), 
+                radial-gradient(circle at 75px 75px, var(--accent-color) 25%, transparent 26%),
+                radial-gradient(circle at 25px 75px, var(--accent-color) 25%, transparent 26%),
+                radial-gradient(circle at 75px 25px, var(--accent-color) 25%, transparent 26%);
+    background-size: 50px 50px;
+    background-position: 0 0, 50px 50px, 0 50px, 50px 0;
+    animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.qr-result {
+    display: none;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.qr-result h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: var(--text-primary);
+}
+
+.qr-result img {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    padding: 10px;
+}
+
+.qr-result a {
+    text-decoration: none;
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1em;
+}
+
+footer {
+    background: var(--footer-bg);
+    padding: 12px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    z-index: 2;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.8em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media screen and (max-width: 600px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    header .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .container {
+        padding: 30px 15px;
+        border-radius: 15px;
+    }
+
+    .option-buttons button {
+        margin: 5px;
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .floating-shape {
+        display: none;
+    }
+
+    .background-words span {
+        font-size: 2em;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="background-words">
+        <span style="top: 20%; left: -50%;">GENERATOR PRO </span>
+        <span style="top: 50%; left: -70%;">QR CODES </span>
+        <span style="top: 80%; left: -60%;">CREATE NOW </span>
+    </div>
+    <header>
+        <div class="logo"></div>
+        <h1>Generator Pro</h1>
+    </header>
+    <main>
+        <div class="container">
+            <div class="floating-shape shape1"></div>
+            <div class="floating-shape shape2"></div>
+            <h2>QR Code Operations</h2>
+            <div id="error-message" class="error"></div>
+            <div class="option-buttons">
+                <button id="btn-url" onclick="showForm('url')">Embed URL</button>
+                <button id="btn-data" onclick="showForm('data')">Embed Data</button>
+                <button id="btn-scan" onclick="showForm('scan')">Scan QR Code</button>
+            </div>
+            
+            <form id="form-url">
+                <input type="hidden" name="embed_type" value="url">
+                <div class                 <div class="form-group">
+                    <label for="url" >Enter URL:</label>
+                    <input type="url"  class = "urlinput" name="data" id="url" placeholder="https://example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="file-url">Upload Custom Image (Optional):</label>
+                    <input type="file" name="file" id="file-url" accept="image/*">
+                </div>
+                <button type="submit" class="submit-btn">Generate QR Code</button>
+            </form>
+
+            <form id="form-data">
+                <input type="hidden" name="embed_type" value="data">
+                <div class="form-group">
+                    <label for="data-input">Enter Data:</label>
+                    <input type="text" name="data" id="data-input" placeholder="Your text here..." required>
+                </div>
+                <div class="form-group">
+                    <label for="file-data">Upload Custom Image (Optional):</label>
+                    <input type="file" name="file" id="file-data" accept="image/*">
+                </div>
+                <button type="submit" class="submit-btn">Generate QR Code</button>
+            </form>
+
+            <form id="form-scan">
+                <div class="form-group">
+                    <label for="scan-source">Select Source:</label>
+                    <select id="scan-source" name="source" required>
+                        <option value="camera">Camera</option>
+                        <option value="file">File</option>
+                    </select>
+                </div>
+                <div id="scanner-container" style="display: none;">
+                    <video id="preview" style="width: 100%; max-width: 300px; display: none;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                <div class="form-group">
+                    <label for="file-scan" id="file-scan-label">Choose a file to scan:</label>
+                    <input type="file" id="file-scan" name="file" accept="image/*" style="display: none;">
+                </div>
+                <button type="button" id="start-scan" class="submit-btn">Start Scan</button>
+            </form>
+
+            <div id="loading-spinner">
+                <div id="qr-loading"></div>
+            </div>
+            <div class="qr-result" id="qr-result">
+                <h2 id="result-title">Your QR Code:</h2>
+                <div id="qr-display-area">
+                    <img id="qr-code-image" src="" alt="QR Code" style="display: none;">
+                    <p id="scanned-content" style="display: none;"></p>
+                </div>
+                <p><a id="download-link" href="#" download="qr_code.png" style="display: none;">Download Image</a></p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 Generator Pro. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // CSRF token retrieval (if required)
+        function getCSRFToken() {
+            return '{{ csrf_token() }}';
+        }
+
+        function showForm(type) {
+            const formUrl = document.getElementById('form-url');
+            const formData = document.getElementById('form-data');
+            const formScan = document.getElementById('form-scan');
+            const btnUrl = document.getElementById('btn-url');
+            const btnData = document.getElementById('btn-data');
+            const btnScan = document.getElementById('btn-scan');
+
+            formUrl.classList.remove('form-active');
+            formData.classList.remove('form-active');
+            formScan.classList.remove('form-active');
+            btnUrl.classList.remove('active');
+            btnData.classList.remove('active');
+            btnScan.classList.remove('active');
+
+            if (type === 'url') {
+                formUrl.classList.add('form-active');
+                btnUrl.classList.add('active');
+            } else if (type === 'data') {
+                formData.classList.add('form-active');
+                btnData.classList.add('active');
+            } else if (type === 'scan') {
+                formScan.classList.add('form-active');
+                btnScan.classList.add('active');
+            }
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('qr-result').style.display = 'none';
+        }
+
+        window.onload = function() {
+            showForm('url');
+            setupScanner();
+        };
+
+        // Handle form submission for URL and Data
+        document.getElementById('form-url').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm(this);
+        });
+
+        document.getElementById('form-data').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm(this);
+        });
+
+        function submitForm(form) {
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/generate_qr', true);
+            xhr.setRequestHeader('X-CSRFToken', getCSRFToken());
+
+            xhr.onload = function() {
+                document.getElementById('loading-spinner').style.display = 'none';
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.qr_code_data && response.qr_id) {
+                        displayQRCode(response.qr_code_data, response.qr_id);
+                    } else if (response.error) {
+                        displayError(response.error);
+                    }
+                } else {
+                    displayError('An error occurred while generating the QR code.');
+                }
+            };
+
+            xhr.onerror = function() {
+                document.getElementById('loading-spinner').style.display = 'none';
+                displayError('An error occurred while generating the QR code.');
+            };
+
+            // Show loading spinner
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('qr-result').style.display = 'none';
+            document.getElementById('loading-spinner').style.display = 'block';
+
+            xhr.send(formData);
+        }
+
+        function setupScanner() {
+            const scanSource = document.getElementById('scan-source');
+            const scannerContainer = document.getElementById('scanner-container');
+            const fileScanLabel = document.getElementById('file-scan-label');
+            const fileScanInput = document.getElementById('file-scan');
+            const startScanBtn = document.getElementById('start-scan');
+
+            scanSource.addEventListener('change', function() {
+                if (this.value === 'camera') {
+                    scannerContainer.style.display = 'block';
+                    fileScanLabel.style.display = 'none';
+                    fileScanInput.style.display = 'none';
+                } else if (this.value === 'file') {
+                    scannerContainer.style.display = 'none';
+                    fileScanLabel.style.display = 'block';
+                    fileScanInput.style.display = 'block';
+                }
+            });
+
+            startScanBtn.addEventListener('click', function() {
+                if (scanSource.value === 'camera') {
+                    startCameraScan();
+                } else {
+                    fileScanInput.click();
+                }
+            });
+
+            fileScanInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    scanFromFile(this.files[0]);
+                }
+            });
+        }
+
+        function startCameraScan() {
+            const video = document.getElementById('preview');
+            const canvas = document.getElementById('canvas');
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+                video.style.display = 'block';
+                
+                setInterval(function() {
+                    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                    let data = canvas.toDataURL('image/png');
+                    scanFromDataURL(data);
+                }, 1000); // Scan every second
+            }).catch(function(err) {
+                console.error("Error accessing camera:", err);
+                displayError("Camera access denied or not available.");
+            });
+        }
+
+        function scanFromDataURL(dataURL) {
+            fetch('/scan_qr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({ data: dataURL })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.decoded) {
+                    displayScannedData(data.decoded);
+                } else {
+                    displayError(data.error || "Could not scan QR code.");
+                }
+            }).catch(error => {
+                displayError("An error occurred while scanning.");
+            });
+        }
+
+        function scanFromFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                scanFromDataURL(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayQRCode(qrCodeData, qrId) {
+            const qrResult = document.getElementById('qr-result');
+            const qrCodeImage = document.getElementById('qr-code-image');
+            const downloadLink = document.getElementById('download-link');
+            const scannedContent = document.getElementById('scanned-content');
+
+            qrCodeImage.src = 'data:image/png;base64,' + qrCodeData;
+            qrCodeImage.style.display = 'block';
+            scannedContent.style.display = 'none';
+            downloadLink.href = `/download_qr/${qrId}`;
+            downloadLink.download = `qr_code_${qrId}.png`;
+            downloadLink.style.display = 'block';
+
+            qrResult.style.display = 'block';
+            document.getElementById('result-title').textContent = "Your QR Code:";
+        }
+
+        function displayScannedData(content) {
+            const qrResult = document.getElementById('qr-result');
+            const scannedContent = document.getElementById('scanned-content');
+            const qrCodeImage = document.getElementById('qr-code-image');
+            const downloadLink = document.getElementById('download-link');
+
+            qrCodeImage.style.display = 'none';
+            scannedContent.textContent = content;
+            scannedContent.style.display = 'block';
+            downloadLink.style.display = 'none';
+
+            qrResult.style.display = 'block';
+            document.getElementById('result-title').textContent = "Scanned Content:";
+        }
+
+        function displayError(message) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.innerText = message;
+            errorMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
