@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "inspari_logging"
+version = "0.1.3"
+description = "Inspari logging utilities"
+authors = ["emilhe <emil.h.eriksen@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "inspari" }
+]
+
+[tool.poetry.scripts]
+streamlogs = "inspari.logging.streamlogs:stream_logs_entrypoint"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.10.1"
+typer = "^0.13.1"
+azure-identity = {version="^1.19.0", optional= true} 
+azure-storage-blob = {version="^12.24.0", optional= true} 
+inspari-config = "^0.1.3"
+colorama = "^0.4.6"
+
+[tool.poetry.extras]
+azure = ["azure-storage-blob", "azure-identity"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
