@@ -1,0 +1,136 @@
+[build-system]
+requires = [
+  'setuptools', 
+  'wheel',
+  'arrow             >= 1.2.3',
+  'asks              >= 3.0.0',
+  'cmake             >= 3.25.0',
+  'coverage          >= 7.0.0',
+  'cython            >= 0.29.32',
+  'deprecation       >= 2.1.0',
+  'elasticsearch     >= 6.3.1',
+  'elasticsearch-dsl >= 6.1.0',
+  'fqdn              >= 1.5.1',
+  'ipykernel         >= 6.19.4',
+  'isoduration       >= 20.11.0',
+  'jsonpointer       >= 2.0',
+  'jupyter           >= 1.0.0',
+  'jupyterlab        >= 3.5.2',
+  'matplotlib        >= 3.6.2',
+  'nbval             >= 0.9.6',
+  'nptyping          >= 2.4.1',
+  'numdifftools      >= 0.9.41',
+  'numpy             >= 1.24.0',
+  'openpyxl          >= 3.0.10',
+  'pandas            >= 1.5.2',
+  'pytest            >= 7.2.0',
+  'pytest-cov        >= 4.0.0',
+  'qtconsole         >= 5.4.0',
+  'qtpy              >= 2.3.0',
+  'rfc3339-validator >= 0.1.4',
+  'rfc3986-validator >= 0.1.1',
+  'scipy             >= 1.9.3',
+  'seaborn           >= 0.12.1',
+  'statsmodels       >= 0.13.5',
+  # 'sulfLiq           >= 1.0.3',
+  'sympy             >= 1.11.1',
+  'trio              >= 0.22.0',
+  'uri-template      >= 1.2.0', 
+  'webcolors         >= 1.12',
+  ]
+build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel.linux]
+skip = "pp*"
+# DEBUG aarch64 install using dind locally
+# archs = ["aarch64", "x86_64"]
+archs = "x86_64"
+before-build = "yum install -y clang gsl-devel gcc"
+
+[[tool.cibuildwheel.overrides]]
+select = "*-musllinux*"
+before-build = "apk add clang gsl-dev gcc"
+
+###############
+# DEBUG aarch64 by manually linking libraries per this stack overflow answer
+#  - https://stackoverflow.com/questions/73776689/cross-compiling-with-clang-crtbegins-o-no-such-file-or-directory
+###############
+
+# [[tool.cibuildwheel.overrides]]
+# select = "*aarch64"
+# before-build = "apk add clang gsl-dev gcc && "
+
+
+
+[project]
+name = "thermoengine"
+version = "1.5.0"
+authors = [
+  { name="Aaron S. Wolf", email="aswolf@seti.org" },
+  { name="Mark S. Ghiorso", email="ghiorso@ofm-research.org" },
+  { name="Simon W. Matthews", email="simonm@hi.is" },
+]
+description = "Foundational Python package for ENKI thermodynamics modeling"
+readme = "README.md"
+requires-python = ">=3.10, <3.11"
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Environment :: Plugins',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Education',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: GNU Affero General Public License v3',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Topic :: Scientific/Engineering',
+    'Topic :: Scientific/Engineering :: Chemistry',
+    'Topic :: Scientific/Engineering :: Mathematics',
+    'Topic :: Scientific/Engineering :: Physics',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+]
+license = { file = "LICENSE" }
+dependencies = [
+  'setuptools', 
+  'wheel',
+  'arrow             >= 1.2.3',
+  'asks              >= 3.0.0',
+  'cmake             >= 3.25.0',
+  'coverage          >= 7.0.0',
+  'cython            >= 0.29.32',
+  'deprecation       >= 2.1.0',
+  'dill              >= 0.3.7',
+  'elasticsearch     >= 6.3.1',
+  'elasticsearch-dsl >= 6.1.0',
+  'fqdn              >= 1.5.1',
+  'ipykernel         >= 6.19.4',
+  'isoduration       >= 20.11.0',
+  'jsonpointer       >= 2.0',
+  'jupyter           >= 1.0.0',
+  'jupyterlab        >= 3.5.2',
+  'matplotlib        >= 3.6.2',
+  'nbval             >= 0.9.6',
+  'nptyping          >= 2.4.1',
+  'numdifftools      >= 0.9.41',
+  'numpy             >= 1.24.0',
+  'openpyxl          >= 3.0.10',
+  'pandas            >= 1.5.2',
+  'pytest            >= 7.2.0',
+  'pytest-cov        >= 4.0.0',
+  'qtconsole         >= 5.4.0',
+  'qtpy              >= 2.3.0',
+  'rfc3339-validator >= 0.1.4',
+  'rfc3986-validator >= 0.1.1',
+  'scipy             >= 1.9.3',
+  'seaborn           >= 0.12.1',
+  'statsmodels       >= 0.13.5',
+  #'sulfLiq           >= 1.0.3',
+  'sympy             >= 1.11.1',
+  'trio              >= 0.22.0',
+  'uri-template      >= 1.2.0', 
+  'webcolors         >= 1.12',
+]
+
+[project.urls]
+"Homepage" = "https://gitlab.com/ENKI-portal/ThermoEngine"
+"Bug Tracker" = "https://gitlab.com/ENKI-portal/ThermoEngine/-/issues/new"
