@@ -1,0 +1,86 @@
+[tool.poetry]
+authors = ["Sylvain Boissel <sylvain.boissel@beta.gouv.fr>"]
+description = "Integrate the French government Design System into a Django app"
+license = "MIT"
+name = "django-dsfr"
+version = "1.4.4"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Utilities",
+]
+documentation = "https://numerique-gouv.github.io/django-dsfr"
+homepage = "https://github.com/numerique-gouv/django-dsfr"
+keywords = ["django"]
+readme = "README.md"
+repository = "https://github.com/numerique-gouv/django-dsfr"
+
+packages = [
+  {include = "dsfr"},
+]
+
+include = ["LICENSE", "README.md", "dsfr/static/dsfr/dist/*/*.*"]
+
+[tool.poetry.dependencies]
+Django = ">3.2.5"
+python = "^3.8"
+requests = "^2.26.0"
+django-widget-tweaks = "^1.4.12"
+django-crispy-forms = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^5.5"
+django-distill = "^2.9.0"
+docutils = "^0.17.1"
+pytest = "^7.2.0"
+djlint = "^1.12.0"
+black = ">=22.6,<25.0"
+django-csp = "^3.7"
+django-extensions = "^3.2.1"
+pre-commit = "^3.5.0"
+bandit = "^1.7.5"
+ruff = "^0.1.2"
+markdown = "^3.5"
+pygments = "^2.16.1"
+beautifulsoup4 = "^4.12.2"
+lxml = "^5.1.0"
+setuptools = "^70.0.0"
+twine = "^5.1.1"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool.djlint]
+line_break_after_multiline_tag = true
+max_blank_lines = 1
+ignore = "H030,H031,H006"
+indent = 2
+
+[tool.djlint.per-file-ignores]
+"header.html" = "D018"
+"footer.html" = "D018"
+"page_pictograms.html" = "D018"
+"page_component.html" = "T002"
+
+[tool.pyright]
+reportAttributeAccessIssue = false
+reportOperatorIssue = false
+reportOptionalMemberAccess = false
