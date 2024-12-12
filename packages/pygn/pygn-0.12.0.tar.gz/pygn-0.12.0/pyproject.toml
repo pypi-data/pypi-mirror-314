@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pygn"
+authors = [
+    {name = "Cosimo Alfarano", email = "kalfa@debian.org"},
+    {name = "Matěj Cepl", email = "mcepl@cepl.eu"},
+]
+description = 'The Python Gateway Script: news2mail mail2news gateway'
+keywords=["nntp", "email", "gateway"]
+requires-python = ">=3.6"
+license = {text = "GPL-3.0"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: System Administrators',
+    'Topic :: Utilities',
+    'Topic :: Communications :: Usenet News',
+    'Environment :: Console',
+    'Operating System :: OS Independent',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+]
+dependencies = [
+    'rply',
+    'pynntp; python_version>="3.12"'
+]
+dynamic = ["version", "readme"]
+
+[project.urls]
+Homepage = "https://sr.ht/~mcepl/pyg"
+Communication = "https://lists.sr.ht/~mcepl/devel"
+
+[project.scripts]
+pygm2n = "mail2news:main"
+pygn2m = "news2mail:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "mail2news.__version__"}
+readme = {file = "README.md"}

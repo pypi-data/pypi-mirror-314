@@ -1,0 +1,31 @@
+News2Mail:
+
+Using whitelist.example you can try to post articletest.accepted and
+articletest.denied.
+The first one will be accepted by pygs, second one rejected
+
+try to type something like (as normal user):
+
+$ pygn2m -TVt your@local.address -s your@local.address -e your@local.address \
+	-w /usr/share/doc/pyg/example/whitelist.example -l /tmp/pyg.log  \
+	< /usr/share/doc/pyg/example/one_article_example
+
+It will reject to post articletest.denied because there are no 'From:' command
+in any section of whitelist.example.
+While it will post articletest.accepted because in the third section
+there is "From: = 'kame@inwind.it'" command.
+
+using -T option will only test, without opening a connection to your
+MTA. -V will change in verbose mode. see manpage for more info.
+
+
+
+Mail2News:
+
+/usr/share/doc/pyg/example/mail is a simple mail in unix mbox format,
+you can use it to test m2n functionality.
+
+$ pygm2n -TVn local.news.group < /usr/share/doc/pyg/example/mail
+
+format a news article to be posted to local.news.group newsgroup. Since
+-TV is present, it doen't open any connection.

@@ -1,0 +1,70 @@
+#!/usr/bin/python
+import re
+import unittest
+
+import mail2news
+import news2mail
+
+
+@unittest.skip('not ready')
+class TestM2N(unittest.TestCase):
+    expected_output = f"""Newsgroups: pyg.test
+From: Pyg <pyg@localhost.com>
+To: User <user@localhost.com>
+Subject: test
+Date: Fri, 01 Feb 2002 16:40:40 +0200
+Message-Id: <20001001164040.Aa8326@localhost>
+Return-Path: <pyg@localhost>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mutt/1.2.5i
+X-Multiline: this header probably broke RFC, but is frequent.
+X-Gateway: pyg {mail2news.__version__} {mail2news.__description__}
+
+one line test
+
+"""
+
+    def test_m2n(self):
+        out = mail2news.main(['-T', '-v',
+                              '-i', 'examples/mail', '-n', 'pyg.test'])
+        self.assertEqual(out, self.expected_output)
+
+
+@unittest.skip('not ready')
+class TestN2M(unittest.TestCase):
+    expected_output = f"""Received: from GATEWAY by mitmanek.ceplovi.cz with pyg
+    for <test@example.com> ; Mon Dec 15 17:13:30 2014 (CEST)
+From: kame@inwind.it (PYG)
+To: test@example.com
+Subject: pyg's article test
+Date: 10 Jun 2000 23:20:47 +0200
+Organization: Debian GNU/Linux
+Reply-To: pyg@localhost
+Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Trace: pyg.server.tld 960672047 927 192.168.1.2 (10 Jun 2000 21:20:47 GMT)
+X-Newsgroups: local.moderated
+X-Gateway: pyg {mail2news.__version__} {mail2news.__description__}
+X-NNTP-Posting-Host: pyg.server.tld
+Resent-From: sender@example.com
+Resent-Sender: sender@example.com
+"""
+
+    def test_n2m(self):
+        out = news2mail.main(['-T', '-v', '-t', 'test@example.com',
+                                '-s', 'sender@example.com',
+                                '-w', 'examples/whitelist.example'])
+        out = re.sub(r'^Message-Id:.*$', '', out)
+        # Not sure how to compare two email mesages (with different
+        # times, etc.) so for now just to make sure the script doesn’t
+        # blow up and gives some output
+        # otherwise it would be
+        # self.assertEqual(out, expected_output)
+        # self.assertEqual(pid.returncode, 0)
+        self.assertGreater(len(out), 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

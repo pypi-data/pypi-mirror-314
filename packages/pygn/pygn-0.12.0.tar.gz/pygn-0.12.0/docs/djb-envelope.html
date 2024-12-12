@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body>
+<a href="http://cr.yp.to/djb.html">D. J. Bernstein</a>
+<br><a href="http://cr.yp.to/mail.html">Internet mail</a>
+<br><a href="http://cr.yp.to/immhf.html">Internet mail message header format</a>
+<h1>Envelope information: Return-Path, Received</h1>
+<h2><a name="return-path"></a>Return-Path</h2>
+The value of a Return-Path field is 
+<a href="http://cr.yp.to/immhf/token.html">tokenizable</a>.
+It shows the return path of the message,
+i.e., the address that
+<a href="http://cr.yp.to/im/responsibility.html">bounces</a> will be sent to.
+It is either
+(1) a <tt>&lt;</tt> token followed by a <tt>&gt;</tt> token,
+indicating an empty return path, or
+(2)
+a <a href="http://cr.yp.to/immhf/addrlist.html#bracketed">bracketed address</a>.
+Two examples:
+<pre>     Return-Path: &lt;&gt;
+     Return-Path: &lt;God@heaven.af.mil&gt;
+</pre>
+<p>
+Messages transmitted through
+<a href="http://cr.yp.to/smtp.html">SMTP</a> generally do not have Return-Path fields;
+the return path is transmitted out-of-band
+in the SMTP MAIL request.
+When a message is stored in a mailbox,
+the return path is stored in a Return-Path field.
+If the message is then retrieved (e.g., through POP)
+and sent through another SMTP hop,
+the Return-Path is removed and the return path is again sent out-of-band.
+</p><p>
+Some mailers,
+in violation of RFC 1123, fail to record the return path of a message.
+Subsequent bounces
+are sent to an invented return path,
+typically the header From address.
+This behavior is a disaster for mailing-list messages,
+where the correct return path is the mailing list manager,
+and the From address is an innocent subscriber
+who has no way to remove bad addresses from the mailing list.
+Every mailer is
+<a href="http://cr.yp.to/im/responsibility.html">responsible</a>
+for using the correct return path.
+</p><h2><a name="received"></a>Received</h2>
+In theory, the value of a Received field is
+<a href="http://cr.yp.to/immhf/token.html">tokenizable</a>.
+It contains
+<ol>
+<li>optionally, a <tt>"from"</tt> atom followed by an
+<a href="http://cr.yp.to/immhf/addrlist.html#encoded-domain">encoded domain name</a>;
+</li><li>optionally, a <tt>"by"</tt> atom followed by an encoded domain name;
+</li><li>optionally, a <tt>"via"</tt> atom followed by another atom;
+</li><li>zero or more of the following: a "with" atom followed by another atom;
+</li><li>optionally, an <tt>"id"</tt> atom followed by either (1) an atom
+or (2) a <tt>&lt;</tt> token, an
+<a href="http://cr.yp.to/immhf/addrlist.html#encoded-address">encoded address</a>,
+and a <tt>&gt;</tt> token;
+</li><li>optionally, a <tt>"for"</tt> atom followed by an encoded address;
+</li><li>a semicolon; and
+</li><li>a
+<a href="http://cr.yp.to/immhf/date.html#timestamp">timestamp</a>.
+</li></ol>
+Each SMTP server
+adds a Received field to the top of each incoming message,
+giving details of how it received the message,
+most importantly the client's IP address:
+<pre>     Received: from mail-relay.af.mil (127.193.178.241)
+       by silverton.berkeley.edu with SMTP; 4 May 1998 14:57:55 -0000
+     Received: (qmail 2227 invoked from network); 4 May 1998 14:57:37 -0000
+     Received: from heaven.af.mil (127.193.178.247)
+       by mail-relay.af.mil with SMTP; 4 May 1998 14:57:37 -0000
+</pre>
+In practice,
+SMTP servers put all sorts of badly formatted information into Received lines.
+It is probably best for readers
+to treat everything before the final semicolon as unstructured text,
+purely for human consumption.
+<p>
+A few SMTP servers don't even format the date correctly.
+For example:
+</p><pre>     Received: by MicroMailer 3.50a on Wednesday, 24 January 1996, 17:15:16 EST
+       (WRONG)
+</pre>
+Invalid Received fields are also produced by the cucipop POP server.
+<h2><a name="hop-counting"></a>Hop counting</h2>
+Most SMTP servers refuse messages with ``too many'' Received fields.
+For example, sendmail is typically configured to refuse messages
+with more than 25 Received fields.
+qmail refuses messages with more than 100 Received or Delivered-To fields.
+Some messages legitimately have 20 or more Received fields.
+<p>
+Hop counting is a last-resort method of preventing loops:
+a message will bounce if it passes through too many SMTP servers.
+
+
+</p></body></html>

@@ -1,0 +1,79 @@
+.\" wing requests are required for all man pages.
+.TH pygn2m 1 "Sun Sep  12 22:40:00 CEST 2000" "" "Python Gateway news to mail"
+.SH NAME
+pygn2m - Python Gateway news to mail
+.SH SYNOPSIS
+.B pygs
+.BR -t 
+.IR recipient@domain1
+.BR -s
+.IR sender@domain2
+[
+.BR -e
+.IR envelope@domain3
+]
+[
+.BR -h
+]
+
+.SH DESCRIPTION
+.B IMPORTANT:
+this man page is to be continued. The Whole pyg gateway is in
+.B devel.\ state.
+try -h option for more detailed option.
+
+pygn2m reads from stdin a nntp article, sending it to recipient@domain1
+a rfc822 compliant email setting Resent-Sender: sender@domain2
+and envelope envelope@domain3 if exists, else sender@domain2.
+
+If pygn2m reads from stdin a sigle line starting with /, it is
+considered an absolute path to an article (ie in a spool),
+so pygn2m will open and read it.
+
+\" The following requests should be uncommented and
+.\" used where appropriate.  This next request is
+.\" for sections 2 and 3 function return values only.
+.\" .Sh RETURN VALUES
+.\" This next request is for sections 1, 6, 7 & 8 only
+.\" .Sh ENVIRONMENT
+.\" .Sh FILES
+.SH EXAMPLES
+There is some documetation in /urs/share/doc/pyg
+
+I created mailgate user (moderator of local.moderated ng).
+Every article posted in local.moderated is sent to mailgate, 
+in its .procmailrc I've put:
+
+:0 bhc
+* ^To: *local-moderated
+| $HOME/pygs -t kalfa@localhost -e mailgate@students.cs.unibo.it -s 'cosimo@students.cs.unibo.it'
+
+
+where kalfa@localhost is the recipient (usually a mailing list)
+
+Here is an header extract from kalfa@localhost mbox:
+
+From mailgate@students.cs.unibo.it
+From: whosentnntparticle@domain4
+To: kalfa@localhost
+Resent-Sender: cosimo@students.cs.unibo.it
+
+note that sender and envelope are different. rfc822 says that Sender: have to be a human user (not a program or similia). envelope can mailgate user.
+
+
+.\" This next request is for sections 1, 6, 7 & 8 only
+.\"     (command return values (to shell) and
+.\"       fprintf/stderr type diagnostics)
+.\" .Sh DIAGNOSTICS
+.\" The next request is for sections 2 and 3 error
+.\" and signal handling only.
+.\" .Sh ERRORS
+.\" .Sh SEE ALSO
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.SH AUTHOR
+Cosimo Alfarano <alfarano@students.cs.unibo.it>
+
+.SH BUGS
+Boh. send any bug to the author, please.
+

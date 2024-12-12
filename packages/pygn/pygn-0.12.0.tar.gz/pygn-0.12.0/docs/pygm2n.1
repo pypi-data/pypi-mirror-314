@@ -1,0 +1,68 @@
+.\" wing requests are required for all man pages.
+.TH pygm2n 1 "Sun Sep  12 18:10:00 CEST 2000" "" "Python Gateway mail to news"
+.SH NAME
+pygm2n - Python Gateway mail to news
+.SH SYNOPSIS
+.B pygm2n
+.BR -n
+.IR newsgroups
+[
+.BR -s
+.IR newsserver
+]
+[
+.BR -h
+]
+
+.SH DESCRIPTION
+.B IMPORTANT:
+this man page is to be continued. The Whole pyg gateway is in
+.B devel.\ state.
+try -h option for more detailed option.
+
+pygm2n reads from stdin an email, sending it to newsgroups, a comma separated list without spaces of newsgroup names (at least one), rfc799 compliant.
+
+If pygm2n reads from stdin a sigle line starting with /, it is
+considered an absolute path to a single-email mailbox,
+so pygm2n will open and read it.
+
+.B Note
+that now pyg can't read a real mailbox, with many emails. If you
+give it in input, pyg will post the whole mailbox as a single email.
+
+\" The following requests should be uncommented and
+.\" used where appropriate.  This next request is
+.\" for sections 2 and 3 function return values only.
+.\" .Sh RETURN VALUES
+.\" This next request is for sections 1, 6, 7 & 8 only
+.\" .Sh ENVIRONMENT
+.\" .Sh FILES
+.SH EXAMPLES
+There is some documetation in /urs/share/doc/pyg
+
+I created mailgate user (moderator of local.moderated ng).
+Subscribe to a list with this user (or simply email one message to).
+Every email posted to this user will send to newsgroups, 
+in its .procmailrc I've put something like:
+
+:0 bh
+* ^From *mailinglist-request@lists.debian.org
+| $HOME/pygm2n -n local.debian.mailinglist 
+
+
+.\" This next request is for sections 1, 6, 7 & 8 only
+.\"     (command return values (to shell) and
+.\"       fprintf/stderr type diagnostics)
+.\" .Sh DIAGNOSTICS
+.\" The next request is for sections 2 and 3 error
+.\" and signal handling only.
+.\" .Sh ERRORS
+.\" .Sh SEE ALSO
+.\" .Sh STANDARDS
+.\" .Sh HISTORY
+.SH AUTHORS
+Cosimo Alfarano <alfarano@students.cs.unibo.it>
+
+.SH BUGS
+Boh. send any bug, advice or opinion to the author, please.
+

@@ -1,0 +1,268 @@
+From ceplm@seznam.cz  Fri Sep  1 13:51:25 2006
+Message-Id: <pslks3xh02.ln2@chelcicky.vysocina>
+From: Matej Cepl <ceplm@seznam.cz>
+Subject: pygn as a mail2news gateway
+Newsgroups: gmane.network.leafnode
+Date: Thu, 31 Aug 2006 23:26:49 -0400
+User-Agent: KNode/0.10.2
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="nextPart1312693.60ImoN5RI4"
+Content-Transfer-Encoding: 7Bit
+Status: RO
+Content-Length: 7709
+Lines: 247
+
+--nextPart1312693.60ImoN5RI4
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8Bit
+
+Hi,
+
+so now the real problem I am dealing with -- mail2news bidirectional
+gateway.
+
+On leafnode 1.* I used mail2news patch by Nikita Youschenko
+(http://zigzag.lvk.cs.msu.su/leafnode/ -- I wonder something like that has
+not been included in leafnode 2.*, it would make great fit IMHO, but I know
+I am not a programmer, and I won't do it, so I shut up on this), so I have
+to install some mail2news gateway. I tried pygn (just because it is
+packaged for Debian; any other suggestions?), but I haven't managed to
+configured it yet. This is what I did (with expected workflow):
+
+1) mail is read by my kmail (user matej) and if it is list message which
+should be gatewayed to news, it is bounced to news@localhost -- this step
+has been working perfectly for couple of years and it has not been changed.
+
+2) news' .procmailrc contains a lot of rules like this (for news2mail):
+
+ARG = $1
+
+:0 bh:
+* ARG ?? local-mail-comp-boston
+| pygn2m -l $HOME/log-pygn2m -d -t discuss@blu.org -s ceplm@seznam.cz
+
+and like this (for mail2news):
+
+:0 bh:
+* ^List-Id:.*pkg-lyx-devel.lists.alioth.debian.org
+| pygm2n  -l $HOME/log-pygm2n -d -n local.mail.comp.lyx-debian
+
+/etc/news/local.groups is this:
+
+local.mail.comp.cambridge       m       Cambridge (UK) LUG
+local.mail.comp.boston  m       Boston LUG
+local.mail.comp.surrey  m       Surrey LUG
+local.mail.comp.bosto-admin     m       Boston admins
+local.mail.comp.oxford  m       Oxford LUG
+local.mail.comp.lyx-debian      m       Maintainer of LyX on Debian
+local.mail.comp.scottish        m       Scottish LUG
+local.mail.comp.northwales      m       NWales LUG
+local.mail.comp.southwales      m       SWales LUG
+local.mail.comp.czdebian        m       Diskuse českých uživatel Debianu
+local.mail.vcfc.random  m       Random list z VCFC
+local.mail.vcfc.branik  m       Diskuse ČCE Braník
+local.mail.soc.oakeshott        m       Conversation -- discussion about Oakeshott
+local.mail.soc.read-only        m       různá RO sociologie
+local.mail.zpravy       m       NG pro různé zpravodajství
+local.test      m       testing group
+
+and this is /etc/news/moderators (w/o comments):
+
+## Public hierarchies with exceptions.
+fido7.*:%s@fido7.ru
+ffm.*:%s@moderators.arcornews.de
+fj.*:%s@moderators.fj-news.org
+medlux.*:%s@news.medlux.ru
+nl.*:%s@nl.net
+relcom.*:%s@moderators.relcom.ru
+ukr.*:%s@sita.kiev.ua
+
+# local groups are moderated by news@localhost
+local.*:news+%s@localhost
+
+# and all gmane stuff should be posted directly
+# gmane does its own thing on it
+gmane.*:
+
+## Direct all other public hierarchies to the master moderator database.
+*:%s@moderators.isc.org
+
+Even though (according to ~news/log-procmail) all messages seem to be
+running correctly, I don't get a message with moderated newsgroups.
+However, without moderating newsgroups, I don't know how to make work
+sending emails from leafnode to email.
+
+Any thoughts or help, please?
+
+Best,
+
+Matěj
+
+-- 
+GPG Finger: 89EF 4BC6 288A BF43 1BAB  25C3 E09F EF25 D964 84AC
+http://www.ceplovi.cz/matej/blog/, Jabber: ceplma@jabber.cz
+23 Marion St. #3, (617) 876-1259, ICQ 132822213
+ 
+Home is where ~/.bashrc is.
+   -- from Usenet
+
+--nextPart1312693.60ImoN5RI4
+Content-Type: text/plain; name=".procmailrc"
+Content-Transfer-Encoding: 8Bit
+Content-Disposition: attachment; filename=".procmailrc"
+
+PATH=/bin:/usr/bin:/usr/bin
+LOGFILE=$HOME/log-procmail
+VERBOSE=yes
+
+#   Note: The $1 contains value only _IF_ procmail
+#   is invoked with option -m or -a (with an argument).
+#   Be sure procmail is invoked with that oprion either as from
+#   LDA or ~/.forward.
+#
+#   $1 is pseudo variable and it can't be used in condition line,
+#   so we copy the value to ARG.
+
+ARG = $1
+
+#:0 fwh
+#* ! ^List-Post:
+#* ^Mailing-List:
+#| sed -e '/^-\{6,\}\s*Yahoo\!\s*Groups\s*Sponsor/,$d' yahoo-groups-message.txt \
+#| sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' 
+
+:0 bh:
+* ARG ?? local-mail-comp-boston
+| pygn2m -l $HOME/log-pygn2m -d -t discuss@blu.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-lyx-debian
+| pygn2m -l $HOME/log-pygn2m -d -t pkg-lyx-devel@lists.alioth.debian.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-boston
+| pygn2m -l $HOME/log-pygn2m -d -t discuss@blu.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-bosto-admin
+| pygn2m -l $HOME/log-pygn2m -d -t bblisa@bblisa.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-surrey
+| pygn2m -l $HOME/log-pygn2m -d -t surrey@mailman.lug.org.uk -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-scottish
+| pygn2m -l $HOME/log-pygn2m -d -t scottish@mailman.lug.org.uk -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-northwales
+| pygn2m -l $HOME/log-pygn2m -d -t northwales@mailman.lug.org.uk -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-southwales
+| pygn2m -l $HOME/log-pygn2m -d -t discuss@swlug.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-oxford
+| pygn2m -l $HOME/log-pygn2m -d -t oxlug@lists.oxlug.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-cambridge
+| pygn2m -l $HOME/log-pygn2m -d -t clug@cambridge-lug.org -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-comp-czdebian
+| pygn2m -l $HOME/log-pygn2m -d -t czdebian-l@debian.cz -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-vcfc-random
+| pygn2m -l $HOME/log-pygn2m -d -t vcfgb-random@yahoogroups.com -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-vcfc-branik
+| pygn2m -l $HOME/log-pygn2m -d -t cebranik@pandora.cz -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-soc-goffman
+| pygn2m -l $HOME/log-pygn2m -d -t goffman@mail.lsit.ucsb.edu -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-mail-soc-oakeshott
+| pygn2m -l $HOME/log-pygn2m -d -t conversation@jiscmail.ac.uk -s ceplm@seznam.cz
+
+:0 bh:
+* ARG ?? local-test
+| pygn2m -l $HOME/log-pygn2m -d -t matej@localhost -s ceplm@seznam.cz
+
+:0 bh:
+* ^Subject: *test
+| pygm2n -l $HOME/log-pygm2n -d -n local.test
+
+:0 bh:
+* ^List-Id:.*pkg-lyx-devel.lists.alioth.debian.org
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.lyx-debian
+
+:0 bh:
+* ^List-Id:.*discuss.blu.org
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.boston
+
+:0 bh:
+* ^List-Id:.*bblisa.bblisa.org
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.bosto-admin
+
+:0 bh:
+* ^List-Id:.*surrey.mailman.lug.org.uk
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.surrey
+
+:0 bh:
+* ^List-Id:.*scottish.mailman.lug.org.uk
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.scottish
+
+:0 bh:
+* ^List-Id:.*northwales.mailman.lug.org.uk
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.northwales
+
+:0 bh:
+* ^List-Id:.*discuss.swlug.org
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.southwales
+
+:0 bh:
+* ^List-Id:.*oxlug.lists.oxlug.org
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.oxford
+
+:0 bh:
+* ^List-Id:.*clug.cambridge-lug.org
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.cambridge
+
+:0 bh:
+* ^List-Id:.*czdebian-l.debian.cz
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.comp.czdebian
+
+:0 bh:
+* ^Mailing-List:.*(vcfgb|vcfc)-(announce|random)@yahoogroups.com
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.vcfc.random
+
+:0 bh:
+* ^List-Post:.*cebranik@pandora.cz
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.vcfc.branik
+
+:0 bh:
+* ^List-Post:.*goffman.mail.lsit.ucsb.edu
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.soc.goffman
+
+:0 bh:
+* ^To:.*CONVERSATION@JISCMAIL.AC.UK
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.soc.oakeshott
+
+:0 bh:
+* ^To:.*(@JISCMAIL.AC.UK|PILN@COLUMBIA.EDU|UMD-LPBR-FULL@LISTSERV.UMD.EDU)
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.soc.read-only
+
+:0 bh:
+* ^From:.*(googlealerts-noreply@google.com|alerts@yahoo-inc.com|robot@radio.cz)
+| pygm2n -l $HOME/log-pygm2n -d -n local.mail.zpravy
+
+--nextPart1312693.60ImoN5RI4--
+ 
+

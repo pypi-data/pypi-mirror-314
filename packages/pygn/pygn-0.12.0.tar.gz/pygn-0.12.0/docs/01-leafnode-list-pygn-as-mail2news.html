@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [leafnode-list]  pygn as a mail2news gateway
+   </TITLE>
+   <LINK REL="Index" HREF="index.html" >
+   <LINK REL="made" HREF="mailto:leafnode-list%40dt.e-technik.uni-dortmund.de?Subject=%5Bleafnode-list%5D%20%20pygn%20as%20a%20mail2news%20gateway&In-Reply-To=">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001361.html">
+   <LINK REL="Next"  HREF="001368.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[leafnode-list]  pygn as a mail2news gateway</H1>
+    <B>Matej Cepl</B> 
+    <A HREF="mailto:leafnode-list%40dt.e-technik.uni-dortmund.de?Subject=%5Bleafnode-list%5D%20%20pygn%20as%20a%20mail2news%20gateway&In-Reply-To="
+       TITLE="[leafnode-list]  pygn as a mail2news gateway">ceplm at seznam.cz
+       </A><BR>
+    <I>Fri Sep  1 05:26:49 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001361.html">[leafnode-list]  leafnode-2.0.0.alpha20060831a snapshot available
+</A></li>
+        <LI>Next message: <A HREF="001368.html">[leafnode-list] Re: pygn as a mail2news gateway
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1364">[ date ]</a>
+              <a href="thread.html#1364">[ thread ]</a>
+              <a href="subject.html#1364">[ subject ]</a>
+              <a href="author.html#1364">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+so now the real problem I am dealing with -- mail2news bidirectional
+gateway.
+
+On leafnode 1.* I used mail2news patch by Nikita Youschenko
+(<A HREF="http://zigzag.lvk.cs.msu.su/leafnode/">http://zigzag.lvk.cs.msu.su/leafnode/</A> -- I wonder something like that has
+not been included in leafnode 2.*, it would make great fit IMHO, but I know
+I am not a programmer, and I won't do it, so I shut up on this), so I have
+to install some mail2news gateway. I tried pygn (just because it is
+packaged for Debian; any other suggestions?), but I haven't managed to
+configured it yet. This is what I did (with expected workflow):
+
+1) mail is read by my kmail (user matej) and if it is list message which
+should be gatewayed to news, it is bounced to <A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">news at localhost</A> -- this step
+has been working perfectly for couple of years and it has not been changed.
+
+2) news' .procmailrc contains a lot of rules like this (for news2mail):
+
+ARG = $1
+
+:<i>0 bh:
+</I>* ARG ?? local-mail-comp-boston
+|<i> pygn2m -l $HOME/log-pygn2m -d -t <A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">discuss at blu.org</A> -s <A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">ceplm at seznam.cz</A>
+</I>
+and like this (for mail2news):
+
+:<i>0 bh:
+</I>* ^List-Id:.*pkg-lyx-devel.lists.alioth.debian.org
+|<i> pygm2n  -l $HOME/log-pygm2n -d -n local.mail.comp.lyx-debian
+</I>
+/etc/news/local.groups is this:
+
+local.mail.comp.cambridge       m       Cambridge (UK) LUG
+local.mail.comp.boston  m       Boston LUG
+local.mail.comp.surrey  m       Surrey LUG
+local.mail.comp.bosto-admin     m       Boston admins
+local.mail.comp.oxford  m       Oxford LUG
+local.mail.comp.lyx-debian      m       Maintainer of LyX on Debian
+local.mail.comp.scottish        m       Scottish LUG
+local.mail.comp.northwales      m       NWales LUG
+local.mail.comp.southwales      m       SWales LUG
+local.mail.comp.czdebian        m       Diskuse &#269;esk&#253;ch u&#382;ivatel Debianu
+local.mail.vcfc.random  m       Random list z VCFC
+local.mail.vcfc.branik  m       Diskuse &#268;CE Bran&#237;k
+local.mail.soc.oakeshott        m       Conversation -- discussion about Oakeshott
+local.mail.soc.read-only        m       r&#367;zn&#225; RO sociologie
+local.mail.zpravy       m       NG pro r&#367;zn&#233; zpravodajstv&#237;
+local.test      m       testing group
+
+and this is /etc/news/moderators (w/o comments):
+
+## Public hierarchies with exceptions.
+fido7.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at fido7.ru</A>
+ffm.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at moderators.arcornews.de</A>
+fj.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at moderators.fj-news.org</A>
+medlux.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at news.medlux.ru</A>
+nl.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at nl.net</A>
+relcom.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at moderators.relcom.ru</A>
+ukr.*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at sita.kiev.ua</A>
+
+# local groups are moderated by <A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">news at localhost</A>
+local.*:news+%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at localhost</A>
+
+# and all gmane stuff should be posted directly
+# gmane does its own thing on it
+gmane.*:
+
+## Direct all other public hierarchies to the master moderator database.
+*:%<A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">s at moderators.isc.org</A>
+
+Even though (according to ~news/log-procmail) all messages seem to be
+running correctly, I don't get a message with moderated newsgroups.
+However, without moderating newsgroups, I don't know how to make work
+sending emails from leafnode to email.
+
+Any thoughts or help, please?
+
+Best,
+
+Mat&#283;j
+
+-- 
+GPG Finger: 89EF 4BC6 288A BF43 1BAB  25C3 E09F EF25 D964 84AC
+<A HREF="http://www.ceplovi.cz/matej/blog/,">http://www.ceplovi.cz/matej/blog/,</A> Jabber: <A HREF="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">ceplma at jabber.cz</A>
+23 Marion St. #3, (617) 876-1259, ICQ 132822213
+ 
+Home is where ~/.bashrc is.
+   -- from Usenet
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .procmailrc
+Url: <A HREF="http://www.dt.e-technik.uni-dortmund.de/pipermail/leafnode-list/attachments/20060831/47d485c1/attachment.txt">http://www.dt.e-technik.uni-dortmund.de/pipermail/leafnode-list/attachments/20060831/47d485c1/attachment.txt</A> 
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001361.html">[leafnode-list]  leafnode-2.0.0.alpha20060831a snapshot available
+</A></li>
+	<LI>Next message: <A HREF="001368.html">[leafnode-list] Re: pygn as a mail2news gateway
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1364">[ date ]</a>
+              <a href="thread.html#1364">[ thread ]</a>
+              <a href="subject.html#1364">[ subject ]</a>
+              <a href="author.html#1364">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://www.dt.e-technik.uni-dortmund.de/mailman/listinfo/leafnode-list">More information about the leafnode-list
+mailing list</a><br>
+</body></html>
