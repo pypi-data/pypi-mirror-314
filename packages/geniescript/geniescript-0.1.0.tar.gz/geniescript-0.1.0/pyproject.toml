@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "geniescript"
+version = "0.1.0"
+description = "A Python package for generating and executing data processing scripts using AI language models"
+authors = ["Jeremy Magland <jmagland@flatironinstitute.org>"]
+readme = "README.md"
+packages = [{include = "geniescript"}]
+license = "Apache-2.0"
+repository = "https://github.com/magland/geniescript"
+keywords = ["ai", "llm", "data-processing", "scientific-computing", "research-tools", "code-generation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+click = "^8.0.0"
+openai = "^1.0.0"
+
+[tool.poetry.scripts]
+geniescript = "geniescript.cli:cli"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+pylint = "^3.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.messages_control]
+disable = ["line-too-long", "redefined-outer-name"]
