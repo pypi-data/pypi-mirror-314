@@ -1,0 +1,36 @@
+
+
+[project]
+name = "opencos-eda"
+version = "0.1.4"
+dependencies = [
+  # opencos/eda.py dependencies
+  "pyyaml",
+  "yamllint",
+  "peakrdl",
+  # opencos/oc_cli.py dependencies
+  "PySerial",
+]
+requires-python = ">= 3.8"
+authors = [
+  {name = "Simon Sabato", email = "simon@cognichip.ai"},
+  {name = "Drew Ranck", email = "drew@cognichip.ai"},
+]
+description = "A simple Python package for wrapping RTL simuliatons and synthesis"
+
+[project.urls]
+Homepage = "https://github.com/netchipguy/opencos"
+
+[tool.setuptools]
+packages = ["opencos"]
+
+[tool.setuptools.package-dir]
+opencos = "opencos"
+
+[project.scripts]
+eda = "opencos.eda:main_cli"
+oc_cli = "opencos.oc_cli:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
