@@ -1,0 +1,47 @@
+[tool.poetry]
+authors = ["Christoph Görn <goern@b4mad.net>"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.12",
+]
+description = "A bot, to build toolbx container images"
+license = "GPLv3"
+name = "bxbdbt"
+readme = "README.md"
+version = "0.4.1"
+
+[tool.poetry.scripts]
+list-tags = "bxbdbt.list-tags:main"
+update-containerfile = "bxbdbt.update-containerfile:main"
+
+[project.urls]
+"Bug Tracker" = "https://codeberg.org/goern/bxbdbt/issues"
+"Homepage" = "https://codeberg.org/goern/bxbdbt"
+
+[tool.poetry.dependencies]
+click = "^8.1.7"
+python = "^3.12"
+python-dotenv = "^1.0.1"
+requests = "^2.32.3"
+requests-cache = "^1.2.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false
+
+[tool.semantic_release]
+commit_author = "Christoph Görn <goern@b4mad.net>"
+version_toml = ["pyproject.toml:tool.poetry.version"]
+version_variables = [
+  "src/bxbdbt/__init__.py:__version__",
+]
