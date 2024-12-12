@@ -1,0 +1,112 @@
+# yaml-language-server: $schema=https://apps.kelvininc.com/schemas/kelvin/4.13.0/app/app.json
+
+environment:
+  node_name: bignode
+  workload_name: bigworkload
+
+app:
+  kelvin:
+    logging_level: DEBUG
+    assets:
+      - name: asset1
+        parameters:
+          param-number:
+            value: 7.8
+          param-string:
+            value: goodbyes
+          param-no-default:
+            value: non-default
+        properties:
+          tubing_length: 21
+          area: 11
+          field: Eagle Ford
+          plc_type: ABB
+
+
+    language:
+      type: python
+      python:
+        entry_point: the_kapp:App
+        requirements: requirements.txt
+    inputs:
+      - name: input-number
+        data_type: number
+        sources:
+          - names: [input-number-datastream]
+      - name: input-boolean
+        data_type: boolean
+        sources:
+          - names: [input-boolean-datastream]
+      - name: input-string
+        data_type: string
+        sources:
+          - names: [input-string-datastream]
+      - name: input-cc-number
+        data_type: number
+        control_change: true
+        sources:
+          - names: [input-cc-number-datastream]
+
+    outputs:
+      - name: output-number
+        data_type: number
+        targets:
+          - names: [output-number-datastream]
+
+      - name: output-random-number
+        data_type: number
+        storage: node-and-cloud
+        targets:
+          - names: [output-random-number-datastream]
+
+      - name: output-random-boolean
+        data_type: boolean
+        storage: node
+        targets:
+          - names: [output-random-boolean-datastream]
+
+      - name: output-random-string
+        data_type: string
+        storage: none
+        targets:
+          - names: [output-random-string-datastream]
+
+      - name: output-cc-number
+        data_type: number
+        control_change: true
+        targets:
+          - names: [output-cc-number-datastream]
+
+    parameters:
+      - name: kelvin_closed_loop
+        data_type: boolean
+        default:
+          value: false
+      - name: param-number
+        data_type: number
+        default:
+          value: 3.5
+      - name: param-string
+        data_type: string
+        default:
+          value: hello world
+      - name: param-no-default
+        data_type: string
+
+    configuration:
+      foo:
+        bar: hello world
+        number: 21
+        bool: false
+
+  type: kelvin
+info:
+  description: example apps
+  name: example-app
+  title: example-app
+  version: 1.0.1
+spec_version: 4.10.0
+system:
+  environment_vars:
+  - name: KELVIN_GW_MODE
+    value: SOCKETS

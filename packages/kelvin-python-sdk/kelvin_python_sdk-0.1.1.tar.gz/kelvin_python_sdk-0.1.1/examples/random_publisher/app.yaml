@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=https://apps.kelvininc.com/schemas/kelvin/4.13.0/app/app.json
+environment:
+  node_name: randomnode
+  workload_name: randomworkload
+
+
+spec_version: 4.12.0
+info:
+  name: random-publisher
+  title: random-publisher
+  version: 1.0.0
+  description: random-publisher
+app:
+  type: bridge
+  bridge:
+    language:
+      type: python
+      python:
+        entry_point: kelvin_python_sdk
+    metrics_map:
+      - name: output-number
+        asset_name: asset1
+        data_type: number
+        configuration:
+          metric_config: big-metric-config
+
+      - name: output-boolean
+        asset_name: asset1
+        data_type: boolean
+
+      - name: output-string
+        asset_name: asset1
+        data_type: string
+
+      - name: output-number
+        asset_name: asset2
+        data_type: number
+        access: RW
+
+      - name: output-boolean
+        asset_name: asset2
+        data_type: boolean
+        access: RW
+
+      - name: output-string
+        asset_name: asset2
+        data_type: string
+        access: RW
+    configuration:
+      period: 10
+      min: 0
+      max: 100
+      random: True # set False to counter
+system:
+  environment_vars:
+    - name: KELVIN_GW_MODE
+      value: SOCKETS

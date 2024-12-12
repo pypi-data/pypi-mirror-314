@@ -1,0 +1,133 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  nodeSelector:
+    node.kelvininc.com/role: agent
+  tolerations:
+  - key: node.kelvininc.com/role
+    value: agent
+    effect: NoSchedule
+  containers:
+  - name: python38
+    image: python:3.8.10
+    command: [tail, -f, /dev/null]
+    resources:
+      requests:
+        memory: "1000Mi"
+        cpu: "500m"
+    tty: true
+  - name: python39
+    image: python:3.9
+    command: [tail, -f, /dev/null]
+    resources:
+      requests:
+        memory: "1000Mi"
+        cpu: "500m"
+    tty: true
+  - name: python310
+    image: python:3.10
+    command: [tail, -f, /dev/null]
+    resources:
+      requests:
+        memory: "1000Mi"
+        cpu: "500m"
+    tty: true
+  - name: python312
+    image: python:3.12
+    command: [tail, -f, /dev/null]
+    resources:
+      requests:
+        memory: "1000Mi"
+        cpu: "500m"
+    tty: true
+"""
+        }
+    }
+    options {
+        parallelsAlwaysFailFast()
+    }
+    environment {
+        NEXUS = credentials('jenkins-nexus')
+        NEXUS_USER = "${NEXUS_USR}"
+        NEXUS_PASSWORD = "${NEXUS_PSW}"
+        NEXUS_HOST = "nexus.kelvininc.com"
+        PYPI_ORG = credentials('jenkins-pypi-prod')
+        PYPI_ORG_USER = "${PYPI_ORG_USR}"
+        PYPI_ORG_PASSWORD = "${PYPI_ORG_PSW}"
+        PIP_EXTRA_INDEX_URL = "https://${NEXUS_USER}:${NEXUS_PASSWORD}@nexus.kelvininc.com/repository/pypi-internal/simple"
+    }
+    stages {
+        stage('Setup') {
+            steps {
+                container('python312'){
+                    sh """
+                    pip install tox setuptools_scm
+                    git config --global --add safe.directory $WORKSPACE
+                    """
+                    defineVersions()
+                }
+            }
+        }
+        stage('Format') {
+            steps {
+                container('python312'){
+                    sh 'tox -e format'
+                }
+            }
+        }
+        stage('Lint') {
+            steps {
+                container('python312'){
+                    sh 'tox -e lint'
+                }
+            }
+        }
+        stage('Unit Tests') {
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values '38', '39', '310', '312'
+                    }
+                }
+                stages {
+                    stage('Install') {
+                        steps {
+                            container("python${PYTHON_VERSION}"){
+                                sh "pip install tox"
+                            }
+                        }
+                    }
+                    stage("Tox") {
+                        steps {
+                            container("python${PYTHON_VERSION}"){
+                              sh "tox -e py${PYTHON_VERSION}"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            slackSend (channel: CHANNEL, color: '#00FF00', message: "SUCCESSFUL: ${NAME} [${currentBuild.displayName}] (${env.BUILD_URL})")
+        }
+        failure {
+            slackSend (channel: CHANNEL, color: '#FF0000', message: "FAILED: ${NAME} [${currentBuild.displayName}] (${env.BUILD_URL})")
+        }
+    }
+}
+
+def defineVersions() {
+    NAME = 'kelvin-python-sdk'
+    VERSION = sh(script: 'python -m setuptools_scm', returnStdout: true).trim()
+    CHANNEL = "#bb-${NAME}"
+    LINK = "`${NAME}==${VERSION}` [<${env.BUILD_URL}|${env.BUILD_NUMBER}>]"
+    currentBuild.displayName = "#${BUILD_NUMBER} - ${NAME}==${VERSION}"
+    slackSend(message: "*Started*: ${LINK}", channel: "${CHANNEL}", color: '#FFFF00')
+}

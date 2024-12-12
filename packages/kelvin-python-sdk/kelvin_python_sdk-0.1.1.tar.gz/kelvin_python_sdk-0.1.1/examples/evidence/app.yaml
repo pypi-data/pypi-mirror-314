@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://apps.kelvininc.com/schemas/kelvin/4.13.0/app/app.json
+spec_version: 4.13.0
+info:
+  name: evidence-app
+  title: evidence-app
+  version: 1.0.5
+  description: evidence-app
+app:
+  type: kelvin
+  kelvin:
+    logging_level: DEBUG
+    language:
+      type: python
+      python:
+        entry_point: kelvin_python_sdk
+    inputs:
+      - name: input-temperature
+        data_type: number
+    outputs:
+      - name: out-temperature-setpoint
+        data_type: number
+        control_change: true
+    parameters:
+      - name: temperature-limit
+        data_type: number
+        default:
+          value: 50
+      - name: auto_accept
+        data_type: boolean
+        default:
+          value: false
+    configuration: {}
+system:
+  environment_vars:
+  - name: KELVIN_GW_MODE
+    value: SOCKETS

@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://apps.kelvininc.com/schemas/kelvin/4.11.0/app/app.json
+
+app:
+  kelvin:
+    language:
+      type: python
+      python:
+        entry_point: kelvin_python_sdk
+
+    outputs:
+      - name: output-number
+        data_type: number
+
+      - name: output-boolean
+        data_type: boolean
+
+      - name: output-string
+        data_type: string
+
+    configuration:
+      csv: data.csv
+      replay: true
+
+  type: kelvin
+info:
+  description: csv-publisher
+  name: csv-publisher
+  title: csv-publisher
+  version: 1.0.1
+spec_version: 4.10.0
+system:
+  environment_vars:
+    - name: KELVIN_GW_MODE
+      value: SOCKETS
