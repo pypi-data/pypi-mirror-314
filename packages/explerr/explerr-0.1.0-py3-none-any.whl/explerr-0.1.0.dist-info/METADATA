@@ -1,0 +1,44 @@
+Metadata-Version: 2.4
+Name: explerr
+Version: 0.1.0
+Summary: Error explainer using LLMs
+Author-Email: Honghua Dong <dhh19951@gmail.com>
+License-Expression: MIT
+Requires-Python: >=3.8
+Requires-Dist: applang>=0.1.5
+Requires-Dist: rich
+Description-Content-Type: text/markdown
+
+# ExplErr
+
+A Python package that provides LLM-powered exception explanations.
+
+Implemented using [APPL](https://github.com/appl-team/appl).
+
+## Installation
+
+```bash
+pip install explerr
+```
+
+## Usage
+
+### As a CLI tool
+
+Instead of running your Python script with `python`, use `expython`:
+
+```bash
+expython your_script.py
+```
+
+### As a Python package
+
+```python
+from explerr import ExceptionWithExplanation
+
+try:
+    # Your code here
+    result = 1 / 0
+except Exception as e:
+    raise ExceptionWithExplanation(e)
+```
