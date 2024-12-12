@@ -1,0 +1,110 @@
+# this is the main app grid
+<MainGrid>
+    current_player: 'X'
+    cols: 1
+    grid_size: 5
+    grid: []
+    ai_player: 'Player'
+    ai_difficulty: 'Easy'
+    win_count: 3
+    Label:
+        text: 'Tic Tac Toe'
+        font_size: 50
+        size_hint_y: None
+        size_hint: (1, 0.2)
+    Label:
+        id: currentPlayer
+        text: 'Current Player: ' + root.current_player
+        font_size: 30
+        size_hint_y: None
+        size_hint: (1, 0.1)
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: (1, 0.7)
+        GridLayout:
+            id: gameGrid
+            size_hint: (1, 1)
+            cols: root.fill_grid()
+            padding: 10
+            spacing: 10
+    GridLayout:
+        cols: 2
+        padding: 10
+        size_hint: (1, 0.1)
+        Button:
+            text: 'Reset'
+            font_size: 20
+            on_press: root.reset()
+        Button:
+            text: 'Settings'
+            font_size: 20
+            on_press: root.settings()
+
+# this is a popup used for the settings
+<SettingsPopup>
+    title: 'Settings'
+    size_hint: (0.7, 0.7)
+    auto_dismiss: False
+    caller: None
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Settings'
+            font_size: 30
+            size_hint: (1, 0.2)
+        GridLayout:
+            cols: 2
+            padding: 10
+            spacing: 10
+            size_hint: (1, 0.7)
+            Label:
+                text: 'Grid Size'
+                font_size: 20
+            TextInput:
+                id: gridSize
+                font_size: 20
+                halign: 'right'
+                input_filter: 'int'
+            Label:
+                text: 'Number of tiles needed to win'
+                font_size: 20
+            TextInput:
+                id: winCount
+                font_size: 20
+                halign: 'right'
+                input_filter: 'int'
+            Label:
+                text: 'AI or Player enemy'
+                font_size: 20
+            Spinner:
+                id: aiPlayer
+                text: 'Player'
+                values: ['Player', 'AI'] # the Ai will be added later
+                font_size: 20
+            Label:
+                text: 'AI Difficulty'
+                font_size: 20
+            Spinner:
+                id: aiDifficulty
+                text: 'Easy'
+                values: ['Easy', 'Medium', 'Hard']
+                font_size: 20
+        GridLayout:
+            cols: 2
+            padding: 10
+            size_hint: (1, 0.2)
+            Button:
+                text: 'Close'
+                font_size: 20
+                on_press: root.dismiss()
+            Button:
+                text: 'Apply'
+                font_size: 20
+                on_press: root.apply_settings()
+
+<GridButton>
+    caller: None
+    row: 0
+    col: 0
+    font_size: 50
+    on_press: root.click()
