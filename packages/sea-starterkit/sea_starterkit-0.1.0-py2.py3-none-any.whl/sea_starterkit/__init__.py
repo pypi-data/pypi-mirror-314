@@ -1,0 +1,7 @@
+"""
+A module to designed to perform package installations, and verification of install,
+in preparation for the StructuralPython "Python for Structural Engineers" ("PfSE") 
+Accelerated
+course.
+"""
+__version__ = "0.1.0"
