@@ -1,0 +1,194 @@
+[build-system]
+requires = [ "setuptools>=41", "wheel", "setuptools-git-versioning<2", ]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true
+# dirty_template = "{tag}+{sha}"
+# dev_template = "{tag}+{sha}"
+# template = "{tag}+{sha}"
+
+[tool.setuptools.package-data]
+# include VERSION file to a package
+my_module = ["VERSION"]
+
+[project]
+name = "borch"
+dynamic = ["version"]
+authors = [
+    {name = "Desupervised", email = "info@desupervised.io"},
+]
+description="Probabilistic programming using pytorch."
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "numpy>=1.17.5",
+    "scipy>=1.2.0",
+    "torch>=2.0.0",
+]
+
+license = {text = "Apache-2.0"}
+
+[project.urls]
+Documentaion= "https://borch.readthedocs.io/en/latest/"
+Issues= "https://github.com/pypa/sampleproject/issues"
+
+[project.optional-dependencies]
+docs= [
+    "matplotlib==2.2.3",
+    "nbsphinx",
+    "sphinx==2.2.2",
+    "sphinx_gallery",
+    "sphinx_rtd_theme",
+    "sphinxcontrib-bibtex<2.0.0",
+    "sphinx-versions==1.0.1",
+    "recommonmark",
+    "pillow",
+    # pytorch lightening tutorial
+    "pytorch_lightning",
+    # graph neural networks tutorial
+    "torch",
+    "torchvision",
+    "torch-sparse",
+    "torch-geometric",
+]
+examples= ["notebook"]
+lint= ["ruff==0.8"]
+test= ["coverage==7.6", "pytest-cov==6.0"]
+
+[tool.ruff]
+lint.select = [
+    "E",
+    "F",
+    "B",
+    "PL",
+    "W",
+    "I",
+    "N",
+    "UP",
+    "N",
+    "D",
+    "C90",
+    "A",
+    "COM",
+    "C4",
+    "DTZ",
+    "BLE",
+    "ASYNC",
+    "S",
+    "FBT",
+    "T10",
+    "EM",
+    "EXE",
+    "ISC",
+    "ICN",
+    "G",
+    "INP",
+    "PIE",
+    "T20",
+    "PYI",
+    # "PT",
+    "Q",
+    "RSE",
+    "RET",
+    "SLF",
+    "SIM",
+    "TID",
+    "TCH",
+    "INT",
+    "ARG",
+    # "PTH", # look in to why this is needed?
+    # "TD", # should be enabled when the TODO is sorted out
+    "ERA",
+    "PD",
+    "PGH",
+    "PLE",
+    "PLR",
+    "PLW",
+    "TRY",
+    "FLY",
+    "NPY",
+    "RUF",
+    ]
+lint.ignore = [
+    "RUF013",
+    "PLW2901",
+    "B904",
+    "PLC3002",
+    "F403",
+    "B028",
+    "UP007",
+    "TRY004",
+    "B008",
+    "D105",
+    "D107",
+    "PLR2004",
+    "D205",
+    "D415",
+    "D417",
+    "FBT002",
+    "FBT003",
+    "NPY002",
+    "S301",
+    "S311",
+    "TRY300",
+    "N803",
+    "E741",
+    "FBT001",
+    "N806",
+    "RUF100", # noqa
+    "B023",
+    "E501",
+    "S101",
+    "PLE1205",
+    "A001", "A002", "A003", # allpw using id
+    "G004", # Logging statement uses f-string
+    "PD901", # allow df as variable name
+    "BLE001", # not recommend, but we do a lot of defencive code, ignore broad exceptions
+    "PLR0913", #  PLR0913 Too many arguments in function definition 
+    ]
+
+
+lint.per-file-ignores = {"__init__.py" = ["F401"],"tests/*"=["RUF012", "PLR0133","ARG001","N802","B018","PT009","PT011","SIM117","PT008","PT012","PT019","ERA001","D101", "D102","N801","ARG005","D104","PLR2004", "D103", "D100", "S101", "INP001", "SLF001"], "src/borch/rv_factories.py"=["ARG001", "ARG005", "PLW2901"], "src/borch/posterior/*"=["ARG002","D102"], "src/borch/nn/torch_proxies.py"=["F822"], "src/borch/infer/*"=["ARG001"], "src/borch/distributions/*"=["D101","D102", "RUF012"], "src/borch/distributions/__init__.py"=["I001"]}
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 100
+
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+    ]
+
+omit = [
+    "*__init__.py",
+    "*/test_*.py",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
