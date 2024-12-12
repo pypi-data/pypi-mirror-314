@@ -1,0 +1,29 @@
+{% extends "admin/delete_confirmation.html" %}
+{% load i18n admin_urls static django_admin_index %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="{% static "admin/css/admin-index.css" %}">{% endblock %}
+
+{% block extrahead %}
+    {# NOTE: Switched these 2 variables around to allow overrides #}
+    {{ media }}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'admin/js/cancel.js' %}"></script>
+{% endblock %}
+
+{% block nav-global %}{% include "django_admin_index/includes/app_list.html" %}{% endblock nav-global %}
+
+{% block breadcrumbs %}
+{% admin_index_settings as admin_index_settings %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+{# NOTE: Remove app groups if needed #}
+{% if not admin_index_settings.HIDE_APP_INDEX_PAGES %}
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+{% endif %}
+{% block breadcrumbs_pre_changelist %}{% endblock %}
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+&rsaquo; {% trans 'Delete' %}
+</div>
+{% endblock %}
