@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "opinions"
+version = "2.0.0"
+description = "The correct way to configure your project"
+authors = ["William Hughes <will@willhughes.name>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4"
+tomlkit = "^0.12.3"
+
+# ruff
+ruff = "^0.8.2"
+pytest-ruff = "^0.4.1"
+
+# mypy
+mypy = "^1.13.0"
+pytest-mypy = "^0.10.3"
+
+# pytest
+pytest = "^8.3.4"
+
+# dynamic versioning
+poetry-dynamic-versioning = "^1.4.0"
+
+# pep517 build backend
+build = "^1.2.1"
+poethepoet = "^0.26.1"
+
+[tool.poetry.scripts]
+opinions = "opinions.cli:main"
+
+[tool.poetry.plugins]
+pytest11 = { opinions = "opinions.pytest_self_check" }
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[tool.ruff]
+line-length = 120
+select = ["E4", "E7", "E9", "F", "UP", "S", "A", "I"]
+
+[tool.ruff.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
+[tool.pytest.ini_options]
+addopts = "--ruff --ruff-format --mypy"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+
+[tool.poe.tasks]
+build = "python -m build"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
