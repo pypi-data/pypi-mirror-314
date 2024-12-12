@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+target-version = ["py38"]
+line-length = 88
+include = "\\.py$"
+
+[tool.pylint.messages_control]
+max-line-length = 88
+disable = [
+    "useless-option-value",
+    "bad-continuation",
+    "too-many-instance-attributes",
+    "too-many-locals",
+    "too-many-nested-blocks",
+    "too-many-public-methods",
+    "too-few-public-methods",
+    "too-many-positional-arguments",
+    "too-many-arguments",
+    "too-many-branches",
+    "duplicate-code",
+    "too-many-statements",
+    "line-too-long"
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = true
