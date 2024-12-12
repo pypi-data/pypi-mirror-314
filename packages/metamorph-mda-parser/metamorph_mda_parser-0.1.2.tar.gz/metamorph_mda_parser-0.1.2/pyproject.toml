@@ -1,0 +1,125 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "metamorph-mda-parser"
+dynamic = ["version"]
+description = 'Light-weight parsing of Metamorph/VisiView .nd files.'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "BSD-3-Clause"
+keywords = []
+authors = [
+  { name = "Jan Eglinger", email = "jan.eglinger@fmi.ch" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "lark",
+  "pandas",
+  "pydantic",
+]
+
+[project.optional-dependencies]
+xarray = [
+  "dask",
+  "numpy<2",
+  "tifffile",
+  "xarray",
+  "zarr",
+]
+
+[project.urls]
+Documentation = "https://github.com/fmi-faim/metamorph-mda-parser#readme"
+Issues = "https://github.com/fmi-faim/metamorph-mda-parser/issues"
+Source = "https://github.com/fmi-faim/metamorph-mda-parser"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+]
+
+[tool.coverage.run]
+source_pkgs = ["metamorph_mda_parser", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/metamorph_mda_parser/__about__.py",
+]
+
+[tool.coverage.paths]
+metamorph_mda_parser = ["src/metamorph_mda_parser", "*/metamorph-mda-parser/src/metamorph_mda_parser"]
+tests = ["tests", "*/metamorph-mda-parser/tests"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/tests/*" = ["INP001"]
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+metamorph-mda-parser = { path = ".", editable = true }
+
+[tool.pixi.environments]
+default = { solve-group = "py312" }
+xarray = { features = ["xarray"], solve-group = "py312" }
+jupyter = { features = ["jupyter", "xarray"], solve-group = "py312" }
+py310-base = { features = ["py310", "test"], solve-group = "py310" }
+py310-xarray = { features = ["py310", "test", "xarray"], solve-group = "py310" }
+py311-base = { features = ["py311", "test"], solve-group = "py311" }
+py311-xarray = { features = ["py311", "test", "xarray"], solve-group = "py311" }
+py312-base = { features = ["py312", "test"], solve-group = "py312" }
+py312-xarray = { features = ["py312", "test", "xarray"], solve-group = "py312" }
+
+[tool.pixi.tasks]
+
+[tool.pixi.feature.jupyter.dependencies]
+jupyter = "*"
+
+[tool.pixi.feature.jupyter.tasks]
+jupyter = "jupyter lab"
+
+[tool.pixi.feature.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+
+[tool.pixi.feature.test.tasks]
+test = "pytest"
+
+[tool.pixi.feature.py310.dependencies]
+python = "==3.10"
+
+[tool.pixi.feature.py311.dependencies]
+python = "==3.11"
+
+[tool.pixi.feature.py312.dependencies]
+python = "==3.12"
