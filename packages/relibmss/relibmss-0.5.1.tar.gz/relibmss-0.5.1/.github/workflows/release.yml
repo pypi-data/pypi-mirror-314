@@ -1,0 +1,74 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+
+    - name: Add Rust targets
+      run: |
+        rustup target add x86_64-unknown-linux-gnu
+        rustup target add aarch64-unknown-linux-gnu
+
+    - name: Install Zig
+      run: |
+        curl -fsSL https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz | tar -xJ
+        echo "$PWD/zig-linux-x86_64-0.11.0" >> $GITHUB_PATH
+
+    - name: Verify Zig Installation
+      run: |
+        zig version
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3 python3-pip python3.9 python3.10 python3.11
+        pip install maturin==1.7.8
+        pip install twine
+
+    - name: Build for x86_64
+      run: |
+        mkdir -p dist
+        maturin build --release --target x86_64-unknown-linux-gnu -i python3.9 -i python3.10 -i python3.11 --zig --out dist
+
+    - name: Build for ARM (aarch64)
+      run: |
+        maturin build --release --target aarch64-unknown-linux-gnu -i python3.9 -i python3.10 -i python3.11 --zig --out dist
+
+    - name: Build source distribution
+      run: |
+        maturin sdist --out dist
+
+    - name: Show dist folder contents
+      run: |
+        echo "Contents of dist folder:"
+        ls -lh dist
+
+    - name: Upload dist folder as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist-folder
+        path: dist/
+
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        PYTHON_KEYRING_BACKEND: "keyring.backends.null.Keyring"
+      run: |
+        twine upload dist/*.whl dist/*.tar.gz
