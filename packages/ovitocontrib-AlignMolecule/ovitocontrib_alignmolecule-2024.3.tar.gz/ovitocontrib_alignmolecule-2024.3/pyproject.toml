@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovitocontrib-AlignMolecule"
+version = "2024.3"
+description = "Align molecules using the Kabsch algorithm."
+keywords = ["ovito", "ovito-extension"]
+authors = [{name = "Daniel Utt", email = "utt@ovito.org"}]
+maintainers = [{name = "Daniel Utt", email = "utt@ovito.org"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "ovito >= 3.9.1",
+]
+
+[project.urls]
+repository = "https://github.com/ovito-org/AlignMolecule"
+
+[project.entry-points.'OVITO.Modifier']
+"Align Molecule" = "AlignMolecule:AlignMolecule"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore:module 'sre_parse' is deprecated:DeprecationWarning",
+    "ignore:module 'sre_constants' is deprecated:DeprecationWarning",
+]
