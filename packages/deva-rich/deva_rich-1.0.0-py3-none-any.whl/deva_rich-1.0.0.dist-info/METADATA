@@ -1,0 +1,98 @@
+Metadata-Version: 2.3
+Name: deva_rich
+Version: 1.0.0
+Summary: Tracking Anything with Decoupled Video Segmentation (DEVA), ICCV 2023
+Project-URL: Homepage, http://git.d-tech.site/brsp/deva_pypi.git
+Project-URL: Bug Tracker, http://git.d-tech.site/brsp/deva_pypi.git/issues
+Author-email: Richard Khabarov <zir3girder@gmail.com>
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Requires-Dist: diffusers
+Requires-Dist: fairscale
+Requires-Dist: gdown>=4.7.1
+Requires-Dist: gitpython>=3.1
+Requires-Dist: gradio>=3.44
+Requires-Dist: groundingdino-py
+Requires-Dist: gurobipy>=10.0.3
+Requires-Dist: hickle>=5.0
+Requires-Dist: huggingface-hub
+Requires-Dist: matplotlib
+Requires-Dist: nltk
+Requires-Dist: numpy>=1.22
+Requires-Dist: onnx
+Requires-Dist: onnxruntime
+Requires-Dist: onnxruntime-gpu
+Requires-Dist: opencv-python>=4.8
+Requires-Dist: pillow>=9.5
+Requires-Dist: pulp>=2.7
+Requires-Dist: pycocotools>=2.0.7
+Requires-Dist: pyyaml
+Requires-Dist: requests
+Requires-Dist: scipy>=1.11.2
+Requires-Dist: setuptools
+Requires-Dist: shapely
+Requires-Dist: supervision==0.6.0
+Requires-Dist: tensorboard>=2.12
+Requires-Dist: termcolor
+Requires-Dist: thin-plate-spline>=1.1.1
+Requires-Dist: timm==1.0.8
+Requires-Dist: torch
+Requires-Dist: torchvision
+Requires-Dist: tqdm>=4.66.1
+Requires-Dist: transformers
+Requires-Dist: ultralytics
+Requires-Dist: ultralytics-thop
+Requires-Dist: yapf
+Provides-Extra: all
+Requires-Dist: grounded; extra == 'all'
+Requires-Dist: tracking; extra == 'all'
+Provides-Extra: grounded
+Requires-Dist: diffusers; extra == 'grounded'
+Requires-Dist: fairscale; extra == 'grounded'
+Requires-Dist: huggingface-hub; extra == 'grounded'
+Requires-Dist: matplotlib; extra == 'grounded'
+Requires-Dist: nltk; extra == 'grounded'
+Requires-Dist: onnxruntime; extra == 'grounded'
+Requires-Dist: pyyaml; extra == 'grounded'
+Requires-Dist: requests; extra == 'grounded'
+Requires-Dist: setuptools; extra == 'grounded'
+Requires-Dist: termcolor; extra == 'grounded'
+Requires-Dist: timm==1.0.8; extra == 'grounded'
+Requires-Dist: transformers; extra == 'grounded'
+Requires-Dist: yapf; extra == 'grounded'
+Provides-Extra: tracking
+Requires-Dist: gdown>=4.7.1; extra == 'tracking'
+Requires-Dist: gitpython>=3.1; extra == 'tracking'
+Requires-Dist: gurobipy>=10.0.3; extra == 'tracking'
+Requires-Dist: hickle>=5.0; extra == 'tracking'
+Requires-Dist: pulp>=2.7; extra == 'tracking'
+Requires-Dist: scipy>=1.11.2; extra == 'tracking'
+Requires-Dist: tensorboard>=2.12; extra == 'tracking'
+Requires-Dist: thin-plate-spline>=1.1.1; extra == 'tracking'
+Requires-Dist: tqdm>=4.66.1; extra == 'tracking'
+Description-Content-Type: text/markdown
+
+# Установка
+Для установки и сборке зависимостей модуля Deva для начала потребуется создать виртуальное окружение:
+
+```shell
+python3 -m venv .venv
+```
+
+После этого нужно активировать окружение и выполнить следующие шаги, последовательно:
+
+```shell
+pip install setuptools wheel twine build
+pip install .
+```
+
+Тепрерь можно собрать модуль при помощи команды
+```shell
+python -m build
+```
+
+В случае если есть возможность вынести в облачное хранилище pip можно выполнить следующую команду
+```shell
+twine upload dist/*
+```
