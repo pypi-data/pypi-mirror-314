@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Ángel García de la Chica Herrera <angel.garcia@sygel.es>
+ License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record
+        id="product_category_old_migration_fields_product_category_form_view"
+        model="ir.ui.view"
+    >
+        <field
+            name="name"
+        >product.category.old.migration.fields.product.category.form.view</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position='inside'>
+                <notebook>
+                    <page
+                        string="Migration Info"
+                        name="migration_info"
+                        groups="base_old_migration_fields.group_old_migration_fields_manager"
+                    >
+                        <group>
+                            <group>
+                                <field
+                                    name="old_category_id"
+                                    groups="base_old_migration_fields.group_old_migration_fields_manager"
+                                />
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>
