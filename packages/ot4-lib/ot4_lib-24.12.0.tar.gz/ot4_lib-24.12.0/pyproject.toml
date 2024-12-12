@@ -1,0 +1,36 @@
+[project]
+name = "ot4-lib"
+version = "24.12.0"
+description = "Shared stuff for Outlaw projects"
+authors = [
+    { name = "yokotoka", email = "hey@yokotoka.is" }
+]
+dependencies = [
+    "django",
+    "shortuuid==1.0.13",
+    "django-extensions>=3.2.3",
+    "django-cacheops>=7.0.2",
+    "celery>=5.4.0",
+    "loguru>=0.7.2",
+    "django-environ>=0.11.2",
+    "niquests>=3.11.2",
+]
+readme = "README.md"
+requires-python = ">= 3.10"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "black[d]>=24.8.0",
+    "ruff>=0.6.5",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ot4_lib"]
