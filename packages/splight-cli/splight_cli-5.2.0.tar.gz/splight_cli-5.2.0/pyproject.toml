@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "splight-cli"
+version = "5.2.0"
+description = "Splight Command Line Interface"
+authors = ["Splight Dev <dev@splight-ae.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4"
+case-converter = "1.1.0"
+click = "8.0.4"
+click-default-group = "1.2.2"
+setuptools = "70.0.0"
+splight-lib = "^5.12.0"
+py7zr = "0.20.8"
+typer = "0.9.0"
+colorama = "0.4.4"
+requests = "2.32.2"
+PyYAML = "6.0.1"
+rich = "13.0.1"
+pathspec = "0.11.1"
+packaging = "23.0"
+toposort = "^1.10"
+docker = "7.1.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "24.3.0"
+isort = "5.12.0"
+ipdb = "^0.13.13"
+ipython = "8.12.2"
+flake8 = "^6.1.0"
+pre-commit = "3.2.2"
+pytest = "^7.4.3"
+coverage = "^7.3.2"
+mock = "^5.1.0"
+ruff = "^0.3.5"
+
+[tool.poetry.scripts]
+splight = "splight_cli.cli:app"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+force-exclude = ".*/component/templates/.*py"
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.ruff]
+line-length = 79
+exclude = ["*/component/templates/*"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore::RuntimeWarning",
+    "ignore::UserWarning",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+    "ignore::pytest.PytestUnhandledThreadExceptionWarning",
+    "ignore::pytest.PytestAssertRewriteWarning",
+]
+
+[tool.coverage.run]
+omit = [
+    "*/tests/*",
+]
