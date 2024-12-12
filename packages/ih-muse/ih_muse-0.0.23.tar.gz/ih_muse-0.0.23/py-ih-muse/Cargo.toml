@@ -1,0 +1,18 @@
+
+[package]
+name = "py-ih-muse"
+version = { workspace = true }
+authors = { workspace = true }
+edition = { workspace = true }
+
+[lib]
+name = "ih_muse"
+crate-type = ["cdylib"]
+
+[dependencies]
+ih-muse-python = { path = "../crates/ih-muse-python", features = ["pymethods"] }
+
+pyo3 = { workspace = true, features = ["extension-module", "experimental-async"] }
+
+[package.metadata.maturin]
+module-name = "ih_muse"
