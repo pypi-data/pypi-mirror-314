@@ -1,0 +1,130 @@
+Changelog
+=========
+
+3.0.13 - 2024-12-11
+-------------------
+
+- [CHANGE] The finalize method is now called before the connection
+  to mosaik is closed.
+
+3.0.12 - 2024-08-19
+-------------------
+
+- [FIX] Remote exceptions occurring during calls to mosaik are now
+  correctly reported to the calling simulator.
+
+3.0.11 - 2024-07-17
+-------------------
+
+- [CHANGE] Set default logging level back to info
+- [NEW] `configure_logging` flag on `start_simulation` to control
+  automatic logger setup
+
+3.0.10 - 2024-05-17
+-------------------
+
+- [CHANGE] Simulators return a stacktrace to mosaik when running
+  into an exception
+- [FIX] Type for ModelDescription was missing fields
+
+3.0.9 - 2024-03-28
+------------------
+
+- [CHANGE] We don't overwrite the logging system in `start_simulation`
+  anymore, except when the user explicitly sets `--log-level` on the
+  command line. This also changed the default level to `debug`.
+
+3.0.8 - 2024-03-25
+------------------
+
+- [FIX] Enable yielding coroutines in finalize
+
+3.0.7 - 2023-12-19
+------------------
+
+- [FIX] Make example_sim's meta legal
+
+3.0.6 - 2023-12-13
+------------------
+
+- [FIX] Close asyncio.StreamWriters properly
+
+3.0.5 - 2023-11-08
+------------------
+
+- [CHANGE] Improve typing support: package is marked with py.typed file,
+  types are exported from mosaik_api_v3, Meta and CreateResult are split
+  into optional and required fields
+
+3.0.4 - 2023-08-31
+------------------
+
+- [NEW] Use loguru for logging
+- [CHANGE] Remove simpy.io
+
+3.0.3 - 2022-12-14
+------------------
+
+- [NEW] Add datetime utility
+
+3.0.2 - 2022-06-01
+------------------
+
+- [CHANGE] Use internal mosaik-simpy-io>=0.2.4 instead of simpy.io
+
+3.0.1 - 2022-04-22
+------------------
+
+- [CHANGE] Set external events via highlevel function call
+
+3.0.0 - 2021-05-02
+------------------
+
+- [CHANGE] Added time_resolution to init function
+- [CHANGE] Added max_advance to step function
+- [NEW] Implemented set_events capability (external events)
+
+2.4.2 - 2020-11-24
+------------------
+
+- [FIX] Constrain simpy to version <4 due to simpy.io incompatibility
+
+2.4 - 2019-02-05
+----------------
+
+- [NEW] Simulator can now be started on a different node than mosaik, using the
+  remote flag "-r" and the timeout flag "-t". Mosaik can the integrate the simulator
+  using the "connect" method of the simmanager.
+
+2.3 – 2019-01-24
+----------------
+
+- [BugFix] Bugfix Tests
+
+
+2.2 – 2016-02-15
+----------------
+
+- [NEW] API version 2.2: Added an optional "setup_done()" method.
+
+- [CHANGE] API version validation: The API version is no longer an integer but
+  a "major.minor" string.  The *major* part has to math with mosaiks major
+  version.  The *minor* part may be lower or equal to mosaik's minor version.
+
+- [FIX] Various minor fixes and stability improvements.
+
+
+2.1 – 2014-10-24
+----------------
+
+- [NEW] Allow extra API methods to be called. See
+  http://mosaik.readthedocs.org/en/2.0/mosaik-api/high-level.html#mosaik_api.Simulator
+
+- [CHANGE] The *rel* entry in the entity description returned by *create()* is
+  now optional.
+
+
+2.0 – 2014-09-22
+----------------
+
+- Initial release of the mosaik 2 Sim API for Python.
