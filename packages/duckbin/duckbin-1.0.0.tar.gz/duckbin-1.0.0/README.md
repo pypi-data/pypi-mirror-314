@@ -1,0 +1,17 @@
+# DuckBin
+
+DuckBin is a simple Python package that allows you to store any text for free on our servers. Whether it's a note, article, or any other type of content, DuckBin makes it easy to save and retrieve your texts with minimal effort.
+
+## Features
+
+- **Free Storage**: Save any text content without any cost.
+- **Easy to Use**: Simple API to upload and retrieve text data.
+- **Fast & Secure**: Store your texts securely on our servers.
+
+## Installation
+
+You can install DuckBin via pip:
+
+```bash
+pip install duckbin
+```
