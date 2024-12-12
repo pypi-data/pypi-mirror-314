@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orgecc-pylib"
+dynamic = ["version"]
+description = "Misc. helper functions"
+authors = [{ name = "Elifarley", email = "cedarscript@orgecc.com" }]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = []
+dependencies = [
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/elifarley/pylib/blob/main/types"
+Repository = "https://github.com/elifarley/pylib.git"
+
+[project.optional-dependencies]
+tree-sitter = [
+    # https://github.com/tree-sitter/py-tree-sitter/issues/303
+    # https://github.com/grantjenks/py-tree-sitter-languages/issues/64
+    "tree-sitter==0.21.3", # 0.22 breaks tree-sitter-languages
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.1",
+    "twine>=6.0.1",
+    "black>=22.0",
+    "isort>=5.0",
+    "flake8>=4.0",
+    "mypy>=0.900",
+    "coverage>=6.0",
+    "tox>=3.24",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["version*", "pylibtypes*", "pylibtreesitter*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.rst"]
+
+[tool.setuptools_scm]
+# To override version:
+# >>> SETUPTOOLS_SCM_PRETEND_VERSION=0.0.2 python -m build
+# To dry-run and see version:
+# >>> python -m setuptools_scm
+write_to = "src/version/_version.py"
+# Append .post{number of commits} to your version if there are commits after the last tag.
+version_scheme = "post-release"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
