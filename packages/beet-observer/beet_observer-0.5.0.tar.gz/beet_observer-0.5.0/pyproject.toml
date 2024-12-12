@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "beet-observer"
+version = "0.5.0"
+description = "A beet plugin to automatically generate overlays from previous datapacks"
+authors = ["BPR02 <dev@bpr02.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+beet = ">=0.108.5"
+pillow = "^11.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+black = "^22.6.0"
+isort = "^5.10.1"
+python-semantic-release = "^9.14.0"
+pyright = "^1.1.389"
+twine = "^5.1.1"
+lectern = "^0.34.0"
+pytest-insta = "^0.3.0"
+
+[tool.semantic_release]
+branch = "main"
+version_variables = ["beet_observer/__init__.py:__version__"]
+version_toml = ["pyproject.toml:tool.poetry.version"]
+major_on_zero = true
+build_command = "poetry build"
+commit_author = "github-actions <action@github.com>"
+
+[tool.isort]
+profile = "black"
+
+[tool.pyright]
+typeCheckingMode = "strict"
+
+[tool.poe.tasks]
+format = {shell = "isort beet_observer & black beet_observer"}
+check = {shell = "isort --check-only beet_observer & black --check beet_observer"}
+typing = {shell = "pyright"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
