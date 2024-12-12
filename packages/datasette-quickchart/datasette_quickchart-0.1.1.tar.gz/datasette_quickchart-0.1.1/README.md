@@ -1,0 +1,54 @@
+# datasette-quickchart
+
+[![PyPI](https://img.shields.io/pypi/v/datasette-quickchart.svg)](https://pypi.org/project/datasette-quickchart/)
+[![Changelog](https://img.shields.io/github/v/release/commongeek/datasette-quickchart?include_prereleases&label=changelog)](https://github.com/commongeek/datasette-quickchart/releases)
+[![Tests](https://github.com/commongeek/datasette-quickchart/actions/workflows/test.yml/badge.svg)](https://github.com/commongeek/datasette-quickchart/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/commongeek/datasette-quickchart/blob/main/LICENSE)
+
+Datasette plugin for making quick charts from tables and SQL queries using Apex Charts
+
+## Installation
+
+To add this to your Datasette installation, install the plugin like so:
+```bash
+pip install datasette-quickchart
+```
+The plugin will then add itself to every Datasette table and query view.
+
+## Features
+
+| Feature | Status | Description |
+| --- | --- | --- |
+| Many types of charts | + | Line, scatter, area, bar, stacked bar and pie.  |
+| Works in both table and query wievs | + ||
+| Fast | + | Data is loaded only once. Nothing is loaded or processed until you click 'Open Quick Chart', so normal operations in Datasette will not be slowed down in any way. |
+| Keeps settings | + | With the current settings saved in sessionStorage, the chart persists across actions like sorting, moving to the next page of results, and so on. |
+| Interactive | + | The chart supports zooming, scrolling, and other interactions. |
+| Export | + | The chart supports exporting to PNG or SVG formats. |
+| Aggregation | + | Data can be aggregated as a sum or an average. More advanced aggregations are possible through appropriate SQL queries or views. |
+| Considers all data | + | The chart shows all data (retrieved by the plugin using Datasette's JSON API with the _size=max option), not just the data visible on the current results page. |
+| Recognition of data types | + | The plugin analyzes all data in each column and assigns it one of the following types: numeric, categorical, date/time or null (if all values in the column are null). Timestamps are interpreted as numbers. I don’t know how to change that yet. |
+
+## Screenshots
+
+![Bar demo](assets/bar_demo.png)
+![Line demo](assets/line_demo.png)
+![Scatter demo](assets/scatter_demo.png)
+![Pie demo](assets/pie_demo.png)
+
+## Development
+
+To set up this plugin locally, first checkout the code. Then create a new virtual environment:
+```bash
+cd datasette-quickchart
+python -m venv venv
+source venv/bin/activate
+```
+Now install the dependencies and test dependencies:
+```bash
+pip install -e '.[test]'
+```
+To run the tests:
+```bash
+python -m pytest
+```
