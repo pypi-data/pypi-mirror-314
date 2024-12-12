@@ -1,0 +1,808 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ifm_contrib API Documentation &mdash; ifm_contrib 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="FEFLOW ifm_contrib" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ifm_contrib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ifm_contrib API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-content">ifm.c.content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-dfe">ifm.c.dfe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-diag">ifm.c.diag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-hist">ifm.c.hist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-mesh">ifm.c.mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-obs">ifm.c.obs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-plot">ifm.c.plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-sel">ifm.c.sel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-settings">ifm.c.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-sim">ifm.c.sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-ts">ifm.c.ts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ifm-c-user">ifm.c.user</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ifm_contrib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>ifm_contrib API Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ifm-contrib-api-documentation">
+<h1>ifm_contrib API Documentation<a class="headerlink" href="#ifm-contrib-api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ifm-c-content">
+<h2>ifm.c.content<a class="headerlink" href="#ifm-c-content" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.content">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">content</code><a class="headerlink" href="#contrib_lib.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.content" title="contrib_lib.content"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.content</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.content.ContentPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.content.</code><code class="sig-name descname">ContentPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.content.ContentPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions regarding accessing information from the Content Panel as pandas.DataFrames.</p>
+<dl class="py method">
+<dt id="contrib_lib.content.ContentPd.content">
+<code class="sig-name descname">content</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_domain</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">content_types</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.content.ContentPd.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the model domains content (all content items).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>DataFrame with all contents</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.content.ContentPd.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.content.ContentPd.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return infomation on available content items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>information on content items</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-dfe">
+<h2>ifm.c.dfe<a class="headerlink" href="#ifm-c-dfe" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.dfe">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">dfe</code><a class="headerlink" href="#contrib_lib.dfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.dfe" title="contrib_lib.dfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.dfe</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.dfe.DfePd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.dfe.</code><code class="sig-name descname">DfePd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.dfe.DfePd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions regarding Discrete Feature Elements using Pandas.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-diag">
+<h2>ifm.c.diag<a class="headerlink" href="#ifm-c-diag" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.diag">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">diag</code><a class="headerlink" href="#contrib_lib.diag" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.diag" title="contrib_lib.diag"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.diag</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-hist">
+<h2>ifm.c.hist<a class="headerlink" href="#ifm-c-hist" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.hist">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">hist</code><a class="headerlink" href="#contrib_lib.hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.hist" title="contrib_lib.hist"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.hist</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.hist.HistPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.hist.</code><code class="sig-name descname">HistPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.hist.HistPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions to obtain data of FEFLOWs chart panels as pandas.DataFrames</p>
+<dl class="py method">
+<dt id="contrib_lib.hist.HistPd.history">
+<code class="sig-name descname">history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hist_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hist_subtype</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">force_time_axis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">reference_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sync_to_index</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.hist.HistPd.history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the values of any history charting window as a dataframe. Calling the function without arguments
+returns a dictionary of all available histories</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist_type</strong> (<em>str</em><em>, </em><em>int</em><em>, </em><em>ifm.Enum</em><em> or </em><em>None.</em>) – History Type.</p></li>
+<li><p><strong>hist_subtype</strong> (<em>int</em>) – History Sub-Type (int)</p></li>
+<li><p><strong>force_time_axis</strong> (<em>bool</em>) – If True, the index of the dataframe will be the simulation time in days.
+If False (default), the index type will be of type datetime if a reference time is set
+in the model, and simulation time in days otherwise.</p></li>
+<li><p><strong>reference_time</strong> (<em>datetime.datetime</em>) – Specify (or override) a reference time. Note that this only accounts for this export and
+is not a permanent change of the model settings.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-mesh">
+<h2>ifm.c.mesh<a class="headerlink" href="#ifm-c-mesh" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.mesh">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">mesh</code><a class="headerlink" href="#contrib_lib.mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.mesh" title="contrib_lib.mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.mesh</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.mesh.MeshPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.mesh.</code><code class="sig-name descname">MeshPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions to obtain data of FEFLOWs Data Panel as geopandas.GeoDataFrames</p>
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.dfe">
+<code class="sig-name descname">dfe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.dfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reutrn a DataFrame with information on Discrete Feature Elements in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>DataFrame with information on DFE</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.edges">
+<code class="sig-name descname">edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a DataFrame with Edges and corresponding properties.
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.elements">
+<code class="sig-name descname">elements</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">expr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">layer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">centroids</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">content</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Pandas Dataframe with information on the model elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>par</strong> (<em>dict</em><em>, </em><em>list</em><em> or </em><em>ifm.Enum</em>) – Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+columns are created if a list is provided.  Columns can be givens custom names if a dict
+{column name : parid} is provided.</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user distributions. For each uer distribution provided, a column
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>expr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user expressions. For each uer expression provided, a column with
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>layer</strong> (<em>int</em>) – if provided in a 3D model, return only elements of this layer</p></li>
+<li><p><strong>selection</strong> (<em>str</em>) – if provided in a 3D model, return only elements of this selection</p></li>
+<li><p><strong>centroids</strong> (<em>bool</em>) – if True, add coordinates of centroids to DataFrame.</p></li>
+<li><p><strong>content</strong> (<em>None</em><em>, </em><em>bool</em><em>, </em><em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em>) – Add elemental content to datafrane. see doc.c.conent.df.info for available items.
+If True, all content items are returned. if int or list(int), specific items are returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame, index of element index, all requested information as columns.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.faces">
+<code class="sig-name descname">faces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.faces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a DataFrame with Faces properties.
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.get_available_items">
+<code class="sig-name descname">get_available_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.get_available_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of available Parameters that can be obtained by calling doc.c.mesh.df.nodes or
+doc.c.mesh.df.elements, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Type</strong> (<em>str</em>) – Filter by Type (“elemental” or “nodal”)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame with available items</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.mlw">
+<code class="sig-name descname">mlw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">global_cos</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.mlw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pandas.DataFrame with information on all Multi-Layer wells in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dataframe with information on Mullti-Layer-wells</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshPd.nodes">
+<code class="sig-name descname">nodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">expr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">global_cos</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">slice</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">budget</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">velocity</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshPd.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Pandas Dataframe with information on the model nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>par</strong> (<em>dict</em><em>, </em><em>list</em><em> or </em><em>ifm.Enum</em>) – Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+columns are created if a list is provided.  Columns can be givens custom names if a dict
+{column name : parid} is provided.</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user distributions. For each uer distribution provided, a column
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>expr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user expressions. For each uer expression provided, a column with
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>global_cos</strong> (<em>bool</em>) – if True (default), use global instead of local coordinate system</p></li>
+<li><p><strong>slice</strong> (<em>int</em>) – if provided in a 3D model, return only nodes of this slice</p></li>
+<li><p><strong>selection</strong> (<em>str</em>) – if provided, return only nodes of this selection</p></li>
+<li><p><strong>budget</strong> (<em>bool</em><em>, </em><em>str</em><em> or </em><em>[</em><em>str</em><em>]</em><em>, </em><em>None.</em>) – add nodal budget values to dataframe. Can be “flow”, “mass”, “heat”, or a list like [“flow”, “mass].
+If True, all available budgets will be created. If None, no budget is calculated (default).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame, index of element nodes, all requested information as columns.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.mesh.MeshGpd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.mesh.</code><code class="sig-name descname">MeshGpd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions to obtain data of FEFLOWs Data Panel as geopandas.GeoDataFrames.</p>
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshGpd.dfe">
+<code class="sig-name descname">dfe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd.dfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a geoPandas.GeoDataFrame with information on all DFE in the model.
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshGpd.elements">
+<code class="sig-name descname">elements</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">expr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">global_cos</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">layer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">as_2d</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">content</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">polygons_as_2d</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a GeoPandas GeoDataframe with information on the model elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>par</strong> (<em>dict</em><em>, </em><em>list</em><em> or </em><em>ifm.Enum</em>) – Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+columns are created if a list is provided.  Columns can be givens custom names if a dict
+{column name : parid} is provided.</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user distributions. For each uer distribution provided, a column
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>expr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user expressions. For each uer expression provided, a column with
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>global_cos</strong> (<em>bool</em>) – If True (default), use global instead of local coordinate system.</p></li>
+<li><p><strong>layer</strong> (<em>int</em>) – if provided in a 3D model, return only elements of this layer</p></li>
+<li><p><strong>selection</strong> (<em>str</em>) – if provided in a 3D model, return only elements of this selection</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>geopandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshGpd.mlw">
+<code class="sig-name descname">mlw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">global_cos</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd.mlw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a geoPandas.GeoDataFrame with information on all Multi-Layer wells in the model.
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshGpd.model_area">
+<code class="sig-name descname">model_area</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">selection</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd.model_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the model area as a single 2D polygon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>selection</strong> (<em>str</em>) – if provided, return model area related to this elemental selection.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>geopandas.GeoDataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshGpd.model_borders">
+<code class="sig-name descname">model_borders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd.model_borders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a GeoDataFrame with all model borders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>shapely.geometry.LinearRing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.mesh.MeshGpd.nodes">
+<code class="sig-name descname">nodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.mesh.MeshGpd.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Pandas Dataframe with information on the model nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>par</strong> (<em>dict</em><em>, </em><em>list</em><em> or </em><em>ifm.Enum</em>) – Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+columns are created if a list is provided.  Columns can be givens custom names if a dict
+{column name : parid} is provided.</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user distributions. For each uer distribution provided, a column
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>expr</strong> (<em>str</em><em> or </em><em>list</em>) – Name or list of names of user expressions. For each uer expression provided, a column with
+with distribution values will be added to the DataFrame.</p></li>
+<li><p><strong>global_cos</strong> (<em>bool</em>) – if True (default), use global instead of local coordinate system</p></li>
+<li><p><strong>slice</strong> (<em>int</em>) – if provided in a 3D model, return only nodes of this slice</p></li>
+<li><p><strong>selection</strong> (<em>str</em>) – if provided, return only nodes of this selection</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>geopandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-obs">
+<h2>ifm.c.obs<a class="headerlink" href="#ifm-c-obs" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.obs">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">obs</code><a class="headerlink" href="#contrib_lib.obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.obs" title="contrib_lib.obs"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.obs</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.obs.ObsGpd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.obs.</code><code class="sig-name descname">ObsGpd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.obs.ObsGpd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions to obtain data of Observation Points as geoPandas.GeoDataFrames.</p>
+<dl class="py method">
+<dt id="contrib_lib.obs.ObsGpd.obspoints">
+<code class="sig-name descname">obspoints</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">global_cos</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">filter_by</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.obs.ObsGpd.obspoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the observation points as a GeoPandas GeoDataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>global_cos</strong> (<em>Bool</em>) – If True, use global coordinate system (default)</p></li>
+<li><p><strong>filter_by</strong> (<em>dict {str : list}</em>) – dictionary {str : list} defining a filter. Return only observation points whose attributes
+defined by the key of the dictionary is member of a list provided as the value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>geopandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-plot">
+<h2>ifm.c.plot<a class="headerlink" href="#ifm-c-plot" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.plot">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">plot</code><a class="headerlink" href="#contrib_lib.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.plot" title="contrib_lib.plot"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.plot</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.plot.PlotGpd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.plot.</code><code class="sig-name descname">PlotGpd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.plot.PlotGpd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions for exporting plotted data like isocontours as GeoDataFrame. Results are similar to the
+output of the View Components Panel of the FEFLOW GUI.</p>
+<dl class="py method">
+<dt id="contrib_lib.plot.PlotGpd.fringes">
+<code class="sig-name descname">fringes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attribute_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suppress_output</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.plot.PlotGpd.fringes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create fringes polygons of a given nodal parameter, expression or distribution. Return the plot as a polygonal
+GeoDataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>geopandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.plot.PlotGpd.isolines">
+<code class="sig-name descname">isolines</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attribute_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suppress_output</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.plot.PlotGpd.isolines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create isolines of a given nodal parameter, expression or distribution. Return the plot as a LineString geometry-type
+GeoDataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>par</strong> (<em>ifm.Enum</em>) – Type of parameter to evaluate. Parameter are provided as ifm.Enum.</p></li>
+<li><p><strong>distr</strong> (<em>str</em>) – Name of user distribution to evaluate.</p></li>
+<li><p><strong>expr</strong> (<em>str</em>) – Name of user expression to evaluate.</p></li>
+<li><p><strong>slice</strong> – if provided in a 3D model, create isolines on this slice.</p></li>
+<li><p><strong>global_cos</strong> (<em>bool</em>) – If True, use global coordinate system (default: local)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>geopandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-sel">
+<h2>ifm.c.sel<a class="headerlink" href="#ifm-c-sel" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.sel">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">sel</code><a class="headerlink" href="#contrib_lib.sel" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.sel" title="contrib_lib.sel"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.sel</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.sel.SelPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.sel.</code><code class="sig-name descname">SelPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.sel.SelPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions for getting informations on Selections in Pandas</p>
+<dl class="py method">
+<dt id="contrib_lib.sel.SelPd.selections">
+<code class="sig-name descname">selections</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seltype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">selections</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">budget</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">area</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.sel.SelPd.selections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with information on selections of the selected type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seltype</strong> – One of ifm.Enum.SEL_*</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame with information on selections</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-settings">
+<h2>ifm.c.settings<a class="headerlink" href="#ifm-c-settings" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.settings">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">settings</code><a class="headerlink" href="#contrib_lib.settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.settings" title="contrib_lib.settings"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.settings</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.settings.SettingsPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.settings.</code><code class="sig-name descname">SettingsPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.settings.SettingsPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions for reading and writing global settings as pandas.DataFrames</p>
+<dl class="py method">
+<dt id="contrib_lib.settings.SettingsPd.species">
+<code class="sig-name descname">species</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.settings.SettingsPd.species" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a table with information on available species
+:return: DataFrame with Species Information</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-sim">
+<h2>ifm.c.sim<a class="headerlink" href="#ifm-c-sim" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.simulator">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">simulator</code><a class="headerlink" href="#contrib_lib.simulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.simulator" title="contrib_lib.simulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.simulator</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.simulator.SimPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.simulator.</code><code class="sig-name descname">SimPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.simulator.SimPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions regarding the simulator and data specific to results files, using Pandas</p>
+<dl class="py method">
+<dt id="contrib_lib.simulator.SimPd.time_steps">
+<code class="sig-name descname">time_steps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.simulator.SimPd.time_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a DataFrame with information on timesteps saved in the dacfile.
+:return: DataFrame</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-ts">
+<h2>ifm.c.ts<a class="headerlink" href="#ifm-c-ts" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.ts">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">ts</code><a class="headerlink" href="#contrib_lib.ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.ts" title="contrib_lib.ts"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.ts</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.ts.TsPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.ts.</code><code class="sig-name descname">TsPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.ts.TsPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions regarding time series (aka power functions)</p>
+<dl class="py method">
+<dt id="contrib_lib.ts.TsPd.create_from_series">
+<code class="sig-name descname">create_from_series</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsid</span></em>, <em class="sig-param"><span class="n">series</span></em>, <em class="sig-param"><span class="n">comment</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cyclic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">interpolation</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">warn_on_overwrite</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">error_on_overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.ts.TsPd.create_from_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a FEFLOW time series from a pandas.Series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tsid</strong> – time series id</p></li>
+<li><p><strong>series</strong> – pd.Series. index will be</p></li>
+<li><p><strong>comment</strong> – comment to be set</p></li>
+<li><p><strong>cyclic</strong> – True of cyclic (default: False)</p></li>
+<li><p><strong>interpolation</strong> – Interpolation kind (default: ifm.Enum.INTERPOL_LINEAR)</p></li>
+<li><p><strong>warn_on_overwrite</strong> – warn if ts id is occupied (default: True)</p></li>
+<li><p><strong>error_on_overwrite</strong> – raise error if ts id is occupied (default: False)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.ts.TsPd.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.ts.TsPd.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a pandas.DataFrame with information on existing time series (formerly power functions).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="contrib_lib.ts.TsPd.points">
+<code class="sig-name descname">points</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsid</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force_time_axis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">reference_time</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.ts.TsPd.points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the values of a given time series (formerly power function) as a dataframe. Time Series can be
+identified by id or comment (will raise Warning if comment is not unique). Returns a DataFrame with multiple
+timeseries if tsid is provided as a list (will have nan-values if indices do not match).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tsid</strong> (<em>int</em><em>, or </em><em>str</em><em>, or </em><em>[</em><em>int</em><em> or </em><em>str</em><em>]</em>) – time series ID or list of time series IDs, or None (default, return all)</p></li>
+<li><p><strong>force_time_axis</strong> (<em>bool</em>) – If True, the index of the dataframe will be the simulation time in days.
+If False (default), the index type will be of type datetime if a reference time is set
+in the model, and simulation time in days otherwise.</p></li>
+<li><p><strong>reference_time</strong> (<em>datetime.datetime</em>) – Specify (or override) a reference time. Note that this only accounts for this export
+and is not a permanent change of the model settings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series as a pandas.DataFrame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifm-c-user">
+<h2>ifm.c.user<a class="headerlink" href="#ifm-c-user" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt id="contrib_lib.user">
+<code class="sig-prename descclassname">contrib_lib.</code><code class="sig-name descname">user</code><a class="headerlink" href="#contrib_lib.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#contrib_lib.user" title="contrib_lib.user"><code class="xref py py-class docutils literal notranslate"><span class="pre">contrib_lib.user</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="contrib_lib.user.UserPd">
+<em class="property">class </em><code class="sig-prename descclassname">contrib_lib.user.</code><code class="sig-name descname">UserPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.user.UserPd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions regarding User Data (Distributions and Expressions)</p>
+<dl class="py method">
+<dt id="contrib_lib.user.UserPd.distributions">
+<code class="sig-name descname">distributions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contrib_lib.user.UserPd.distributions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a pandas.DataFrame with information on existing user distributions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="FEFLOW ifm_contrib" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, Alexander Renz
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

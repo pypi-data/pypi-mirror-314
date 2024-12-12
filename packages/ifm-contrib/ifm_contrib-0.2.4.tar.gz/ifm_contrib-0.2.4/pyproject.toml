@@ -1,0 +1,45 @@
+[build-system]
+requires = [
+    "setuptools>=60",
+    "setuptools-scm>=8.0"]
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = "ifm_contrib"
+dynamic = ["version"]
+description = "*ifm_contrib* is an Open-Source Extension of the IFM, the Python API of the groundwater modellierung software [FEFLOW](https://en.wikipedia.org/wiki/FEFLOW) by [DHI](https://www.dhigroup.com)."
+authors = [{ name = 'Alexander Renz', email = 'alex.renz@gmx.net' }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = '<3.13'
+dependencies = ["geopandas", "matplotlib", "numpy", "pandas", "shapely"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+doc = ["sphinx", "sphinx_rtd_theme", "sphinxcontrib-apidoc", "ipython", "ipywidgets"]
+
+[project.urls]
+# "Documentation" = 'TODO'
+"Bug Tracker" = 'https://github.com/red5alex/ifm_contrib/issues'
+"Source Code" = 'https://github.com/red5alex/ifm_contrib'
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ifm_contrib*"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+  "-ra",
+  "--showlocals",
+  "--strict-markers",
+  "--strict-config",
+  "--import-mode=importlib",
+]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "info"
+testpaths = ["unittests"]
+
+[tool.setuptools_scm]
+version_file = "ifm_contrib/_version.py"
