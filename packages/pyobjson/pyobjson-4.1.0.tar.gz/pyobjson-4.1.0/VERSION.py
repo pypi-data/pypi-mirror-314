@@ -1,0 +1,2 @@
+# DO NOT EDIT - VERSIONING CONTROLLED BY GIT TAGS
+__version__ = "4.1.0"
