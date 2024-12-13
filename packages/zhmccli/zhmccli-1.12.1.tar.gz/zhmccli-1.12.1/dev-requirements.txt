@@ -1,0 +1,119 @@
+# Pip requirements file for development dependencies.
+
+
+# Direct dependencies for development and indirect dependencies for development
+# that are needed for some reason (must be consistent with minimum-constraints-develop.txt)
+
+# six
+# python-dateutil 2.8 requires six>=1.5
+# sphinx-git 11.0 requires six (any version)
+# coverage imports six when testing, but does not declare it in its dependencies. check_reqs still needs it.
+six>=1.16.0
+
+# Tox
+tox>=4.15.0
+
+# PEP517 package builder, used in Makefile
+build>=1.0.0
+# build requires virtualenv.cli_run which was added in virtualenv 20.1
+virtualenv>=20.26.6
+pyproject-hooks>=1.1.0
+
+# Change log
+towncrier>=22.8.0
+
+# Safety CI by pyup.io
+# Safety 3.0.0 requires exact versions of authlib==1.2.0 and jwt==1.3.1.
+# Safety 3.0.x pins pydantic to <2.0, preventing bug fixes.
+# pydantic 2.8.0 fixes an install issue on Python 3.13.
+safety>=3.1.0
+safety-schemas>=0.0.2,!=0.0.7
+# TODO: Change to dparse 0.6.4 once released
+dparse>=0.6.4b0
+ruamel.yaml>=0.17.21
+# click is covered in requirements.txt
+Authlib>=1.2.0
+marshmallow>=3.15.0
+pydantic>=2.8.0
+typer>=0.12.0
+typer-cli>=0.12.0
+typer-slim>=0.12.0
+psutil>=6.0.0
+
+# Bandit checker
+bandit>=1.7.8
+
+# Unit test:
+pytest>=6.2.5
+# flake8 up to 6.0.0 has not yet adjusted to the removed interfaces of importlib-metadata 5.0
+importlib-metadata>=4.8.3
+colorama>=0.4.6
+
+# packaging is used by pytest, pip-check-reqs, sphinx, tox
+packaging>=23.2
+
+# Coverage reporting (no imports, invoked via coveralls script):
+# coveralls pins coverage to <7.0, causing pip backtracking to happen. Pinning
+# it to <7.0 in this file saves the time for backtracking, but requires to
+# occasionally check for new versions of coveralls without pinning.
+coverage>=5.5,<7.0
+pytest-cov>=2.12.1
+coveralls>=3.3.0
+
+# Sphinx (no imports, invoked via sphinx-build script):
+# Sphinx 7.2.0 started requiring Python>=3.9
+Sphinx>=7.1.0; python_version == '3.8'
+Sphinx>=7.2.0; python_version >= '3.9'
+# Sphinx 7.1.0 pins docutils to <0.21
+docutils>=0.18.1,<0.21; python_version == '3.8'
+docutils>=0.18.1; python_version >= '3.9'
+sphinx-git>=10.1.1
+GitPython>=3.1.41
+Pygments>=2.15.0
+sphinx-rtd-theme>=2.0.0
+sphinxcontrib-applehelp>=1.0.4
+sphinxcontrib-devhelp>=1.0.2
+sphinxcontrib-htmlhelp>=2.0.1
+sphinxcontrib-jquery>=4.1
+sphinxcontrib-jsmath>=1.0.1
+sphinxcontrib-qthelp>=1.0.3
+sphinxcontrib-serializinghtml>=1.1.5; python_version == '3.8'
+sphinxcontrib-serializinghtml>=1.1.9; python_version >= '3.9'
+sphinxcontrib-websupport>=1.2.4
+autodocsumm>=0.2.12
+Babel>=2.11.0
+
+# PyLint (no imports, invoked via pylint script)
+pylint>=3.0.1; python_version == '3.8'
+pylint>=3.3.1; python_version >= '3.9'
+astroid>=3.0.1; python_version == '3.8'
+astroid>=3.3.5; python_version >= '3.9'
+lazy-object-proxy>=1.4.3
+wrapt>=1.15
+# platformdirs is also used by tox
+platformdirs>=4.1.0
+# isort 4.3.8 fixes an issue with py310 and works on py310 (Note that isort 5.10.0 has official support for py310)
+isort>=4.3.8
+tomlkit>=0.10.1
+dill>=0.3.7
+
+# Flake8 and dependents (no imports, invoked via flake8 script):
+flake8>=6.1.0
+mccabe>=0.7.0
+pycodestyle>=2.11.0
+pyflakes>=3.1.0
+entrypoints>=0.3.0
+
+# Ruff checker (no imports, invoked via ruff script):
+ruff>=0.3.5
+
+# Unit test (indirect dependencies):
+pluggy>=1.3.0
+
+# Package dependency management tools (not used by any make rules)
+pipdeptree>=2.2.0
+# pip-check-reqs 2.4.3 fixes a speed issue on Python 3.11 and requires pip>=21.2.4
+# pip-check-reqs 2.5.0 dropped support for py38
+# pip-check-reqs 2.5.0 has issue https://github.com/r1chardj0n3s/pip-check-reqs/issues/143
+pip-check-reqs>=2.4.3,!=2.5.0; python_version == '3.8'
+pip-check-reqs>=2.5.1; python_version >= '3.9'

@@ -1,0 +1,46 @@
+# Pip requirements file for install dependencies.
+
+# Note: The dependencies in this file will become the dependencies stated
+# in the Pypi package metadata.
+
+
+# Direct dependencies for install (must be consistent with minimum-constraints-install.txt)
+
+# zhmcclient @ git+https://github.com/zhmcclient/python-zhmcclient.git@master
+zhmcclient>=1.18.0
+
+# safety 2.2.0 depends on click>=8.0.2
+click>=8.0.2
+
+# click-repl 0.2 is needed for compatibility with Click 8.0 (see click-repl issue #819)
+click-repl>=0.2
+
+# click-spinner 0.1.10 is needed to support Python 3.12
+click-spinner>=0.1.6; python_version <= '3.11'
+click-spinner>=0.1.10; python_version >= '3.12'
+progressbar2>=3.12.0
+tabulate>=0.8.2; python_version <= '3.9'
+tabulate>=0.8.8; python_version >= '3.10'
+python-dateutil>=2.8.2
+click-option-group>=0.5.6
+
+prompt-toolkit>=3.0.13
+
+# PyYAML is pulled in by zhmccli, zhmcclient, yamlloader
+# PyYAML 6.0 has wheel archives for Python 3.6 - 3.11
+# PyYAML versions without wheel archives fail install since Cython 3 was
+#   released, see https://github.com/yaml/pyyaml/issues/724.
+# PyYAML 6.0.2 provides wheel archives for Python 3.13 on Windows
+PyYAML>=6.0.2
+
+jsonschema>=4.18.0
+yamlloader>=0.5.5
+
+urllib3>=1.26.19
+
+
+# Indirect dependencies for install that are needed for some reason (must be consistent with minimum-constraints-install.txt)
+
+# pyrsistent is used by jsonschema 3.x (no longer by jsonschema 4.x)
+# pyrsistent 0.20.0 has official support for Python 3.12
+pyrsistent>=0.20.0

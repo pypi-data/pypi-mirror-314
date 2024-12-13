@@ -1,0 +1,57 @@
+# Pip constraints file for install dependencies.
+
+
+# Base dependencies (must be consistent with base-requirements.txt)
+
+pip==23.3
+setuptools==70.0.0
+# Note on not specifying 'setuptools-scm[toml]': Extras cannot be in constraints files
+setuptools-scm==8.1.0
+wheel==0.41.3
+
+
+# Direct dependencies for install (must be consistent with requirements.txt)
+
+zhmcclient==1.18.0
+
+click==8.0.2
+click-repl==0.2
+click-spinner==0.1.6; python_version <= '3.11'
+click-spinner==0.1.10; python_version >= '3.12'
+progressbar2==3.12.0
+tabulate==0.8.2; python_version <= '3.9'
+tabulate==0.8.8; python_version >= '3.10'
+python-dateutil==2.8.2
+click-option-group==0.5.6
+
+# prompt-toolkit is pulled in by click-repl.
+prompt-toolkit==3.0.13
+
+# PyYAML is pulled in by zhmccli, zhmcclient, yamlloader
+PyYAML==6.0.2
+
+jsonschema==4.18.0
+yamlloader==0.5.5
+
+# urllib3 is used to disable warnings
+urllib3==1.26.19
+
+
+# Indirect dependencies for install that are needed for some reason (must be consistent with requirements.txt)
+
+pyrsistent==0.20.0
+
+
+# All other indirect dependencies for install that are not in requirements.txt
+
+certifi==2024.07.04
+chardet==5.2.0
+decorator==4.0.11
+docopt==0.6.2
+# idna>3 requires using requests >=2.26.0
+idna==3.7
+python-utils==2.0.1
+pytz==2019.1
+stomp-py==8.1.1
+wcwidth==0.2.6
+requests==2.32.2

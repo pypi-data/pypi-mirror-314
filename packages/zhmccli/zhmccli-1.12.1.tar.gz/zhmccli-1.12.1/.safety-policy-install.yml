@@ -1,0 +1,35 @@
+# Safety policy file for packages needed for installation.
+# For documentation, see https://docs.pyup.io/docs/safety-20-policy-file
+
+# Note: This policy file is used against the versions in minimum-constraints-install.txt.
+
+# Configuration for the 'safety check' command
+security:
+
+    # Ignore certain severities.
+    # A number between 0 and 10, with the following significant values:
+    # - 9: ignore all vulnerabilities except CRITICAL severity
+    # - 7: ignore all vulnerabilities except CRITICAL & HIGH severity
+    # - 4: ignore all vulnerabilities except CRITICAL, HIGH & MEDIUM severity
+    ignore-cvss-severity-below: 0
+
+    # Ignore unknown severities.
+    # Should be set to False.
+    ignore-cvss-unknown-severity: False
+
+    # Ignore unpinned requirements.
+    # Should be set to False.
+    ignore-unpinned-requirements: False
+
+    # List of specific vulnerabilities to ignore.
+    # {id}:                 # vulnerability ID
+    #     reason: {text}    # optional: Reason for ignoring it. Will be reported in the Safety reports
+    #     expires: {date}   # optional: Date when this ignore will expire
+    ignore-vulnerabilities:
+        39611:
+            reason: Fixed version PyYAML 5.4.0 (and 6.0.0) fails to install since Cython 3 was released; No risk since full_load method and FullLoader are not used
+        67599:
+            reason: There is no fixed pip version
+
+    # Continue with exit code 0 when vulnerabilities are found.
+    continue-on-vulnerability-error: False
