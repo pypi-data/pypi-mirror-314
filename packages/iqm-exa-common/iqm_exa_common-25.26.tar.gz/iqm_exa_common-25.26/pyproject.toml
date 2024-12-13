@@ -1,0 +1,86 @@
+# This file is managed by monotool.py, do not edit by hand
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools", "setuptools_scm[toml]",]
+
+[project]
+classifiers = [ "Development Status :: 4 - Beta", "Programming Language :: Python :: 3 :: Only", "Topic :: Scientific/Engineering :: Physics", "Intended Audience :: Science/Research",]
+description = "Framework for control and measurement of superconducting qubits: common library"
+dynamic = [ "version", "dependencies",]
+name = "iqm-exa-common"
+readme = "README.rst"
+requires-python = ">=3.11"
+[[project.authors]]
+name = "IQM Finland Oy"
+email = "info@meetiqm.com"
+
+[project.license]
+file = "LICENSE.txt"
+
+[project.urls]
+Documentation = "https://iqm.gitlab-pages.iqm.fi/qccsw/exa/exa-repo/exa-common/"
+Homepage = "https://gitlab.iqm.fi/iqm/qccsw/exa/exa-repo"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+balanced_wrapping = true
+force_sort_within_sections = true
+group_by_package = true
+known_first_party = [ "exa.common", "tests",]
+known_third_party = [ "exa",]
+line_length = 120
+order_by_type = true
+profile = "black"
+reverse_relative = true
+use_parentheses = true
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.setuptools_scm]
+fallback_version = "0.1"
+
+[tool.coverage.paths]
+source = [ "src/", "*/site-packages/",]
+
+[tool.coverage.report]
+exclude_lines = [ "pragma: no cover", "def __repr__", "if self\\.debug", "raise AssertionError", "raise NotImplementedError", "if 0:", "if __name__ == .__main__.:",]
+
+[tool.coverage.run]
+branch = true
+source = [ "exa.common",]
+
+[tool.pylint.basic]
+good-names = [ "i", "j", "k", "ex", "Run", "_", "pk", "x", "y", "z", "g", "T1", "T2", "ax", "cz", "vz", "rz",]
+
+[tool.pylint.design]
+max-args = 15
+max-locals = 50
+max-public-methods = 30
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.main]
+init-hook = "import sys; sys.path.append('.')"
+
+[tool.pylint."message control"]
+disable = [ "ungrouped-imports", "wrong-import-order", "fixme", "arguments-differ", "arguments-renamed",]
+
+[tool.pylint.miscellaneous]
+notes = [ "TODO",]
+
+[tool.pylint.similarities]
+ignore-imports = true
+min-similarity-lines = 20
+
+[tool.pylint.string]
+check-quote-consistency = true
+
+[tool.pytest.ini_options]
+nb_diff_ignore = [ "/metadata/language_info", "/metadata/widgets", "/cells/*/execution_count", "/cells/*/outputs",]
+
+[tool.setuptools.dynamic.dependencies]
+file = "requirements/base.txt"
