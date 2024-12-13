@@ -1,0 +1,45 @@
+# Specify the build system for the project.
+[build-system]
+requires = ["sip >=6.9, <7", "PyQt-builder >=1.17, <2"]
+build-backend = "sipbuild.api"
+
+[project]
+name = "PyQt6-3D"
+version = "6.8.0"
+description = "Python bindings for the Qt 3D framework"
+readme = "README.md"
+urls.homepage = "https://www.riverbankcomputing.com/software/pyqt3d/"
+dependencies = ["PyQt6 (>=6.2.0)"]
+license = {text = "GPL v3"}
+
+[[project.authors]]
+name = "Riverbank Computing Limited"
+email = "info@riverbankcomputing.com"
+
+
+# Specify a PyQt-based project.
+[tool.sip]
+project-factory = "pyqtbuild:PyQtProject"
+
+# Configure the project.
+[tool.sip.project]
+tag-prefix = "Qt3D"
+
+# Define and configure each set of bindings.
+[tool.sip.bindings.Qt3DCore]
+qmake-QT = ["3dcore"]
+
+[tool.sip.bindings.Qt3DInput]
+qmake-QT = ["3dinput"]
+
+[tool.sip.bindings.Qt3DLogic]
+qmake-QT = ["3dlogic"]
+
+[tool.sip.bindings.Qt3DRender]
+qmake-QT = ["3drender"]
+
+[tool.sip.bindings.Qt3DAnimation]
+qmake-QT = ["3danimation"]
+
+[tool.sip.bindings.Qt3DExtras]
+qmake-QT = ["3dextras", "3dinput"]
