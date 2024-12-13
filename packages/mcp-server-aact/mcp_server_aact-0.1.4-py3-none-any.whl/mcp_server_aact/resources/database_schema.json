@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.1",
+  "database": "aact",
+  "tables": {
+    "all_cities": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view combining all city names where a trial is conducted. Useful for geographic analysis and site location searches."
+    },
+    "all_countries": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all countries per trial. Use for quick country-based trial filtering and geographic distribution analysis."
+    },
+    "all_facilities": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of facility names. Combines multiple facility records per trial for simplified searching."
+    },
+    "all_group_types": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of study group types. Useful for analyzing trial arm structures and intervention group patterns."
+    },
+    "all_id_information": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all identifying numbers/codes associated with each trial. Includes registry IDs, grant numbers, etc."
+    },
+    "all_intervention_types": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view listing all intervention types per trial. Use for categorizing trials by intervention approach."
+    },
+    "all_keywords": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all keywords associated with each trial. Useful for full-text and thematic searches."
+    },
+    "all_overall_official_affiliations": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all investigator affiliations. Useful for institutional analysis and investigator network mapping."
+    },
+    "all_overall_officials": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view combining all study officials. Simplifies searching for trials by investigator."
+    },
+    "all_primary_outcome_measures": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of primary outcome measures. Useful for analyzing trial endpoints and outcome patterns."
+    },
+    "all_secondary_outcome_measures": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of secondary outcome measures. Complements primary outcomes for comprehensive endpoint analysis."
+    },
+    "all_states": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all states/provinces where trials are conducted. Useful for regional analysis within countries."
+    },
+    "baseline_counts": {
+      "columns": "{id,nct_id,result_group_id,ctgov_group_code,units,scope,count}",
+      "instruction": "Contains participant counts for baseline characteristics by study group. Links to result_groups table for group context."
+    },
+    "central_contacts": {
+      "columns": "{id,nct_id,contact_type,name,phone,email,phone_extension,role}",
+      "instruction": "Central study contacts distinct from facility-specific contacts. Important for trial communication and oversight."
+    },
+    "countries": {
+      "columns": "{id,nct_id,name,removed}",
+      "instruction": "List of countries involved in each trial. The removed flag indicates if a country was later removed from the trial."
+    },
+    "documents": {
+      "columns": "{id,nct_id,document_id,document_type,url,comment}",
+      "instruction": "Links to study-related documents like protocols and results. Different from provided_documents table."
+    },
+    "intervention_other_names": {
+      "columns": "{id,nct_id,intervention_id,name}",
+      "instruction": "Alternative names for interventions, including brand names and synonyms. Links to interventions table."
+    },
+    "ipd_information_types": {
+      "columns": "{id,nct_id,name}",
+      "instruction": "Types of Individual Participant Data (IPD) available. Related to data sharing plans and agreements."
+    },
+    "outcome_analysis_groups": {
+      "columns": "{id,nct_id,outcome_analysis_id,result_group_id,ctgov_group_code}",
+      "instruction": "Links outcome analyses to specific result groups. Junction table for complex statistical analyses."
+    },
+    "outcome_counts": {
+      "columns": "{id,nct_id,outcome_id,result_group_id,ctgov_group_code,scope,units,count}",
+      "instruction": "Participant counts for outcome measurements by study group. Essential for understanding outcome data completeness."
+    },
+    "reported_event_totals": {
+      "columns": "{id,nct_id,ctgov_group_code,event_type,classification,subjects_affected,subjects_at_risk,created_at,updated_at}",
+      "instruction": "Summary statistics for adverse events by group. Provides overview of safety data before detailed event analysis."
+    },
+    "result_contacts": {
+      "columns": "{id,nct_id,organization,name,phone,email,extension}",
+      "instruction": "Contacts specifically responsible for results reporting. Important for results-related communications."
+    },
+    "search_results": {
+      "columns": "{id,nct_id,name,created_at,updated_at,grouping,study_search_id}",
+      "instruction": "Stored search results referencing trials. Links to study_searches table for search criteria."
+    },
+    "study_searches": {
+      "columns": "{id,save_tsv,query,grouping,name,beta_api,created_at,updated_at,active}",
+      "instruction": "Saved search criteria and parameters. Used with search_results table for persistent search functionality."
+    },
+    "all_browse_conditions": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of standardized condition terms (MeSH). Combines multiple browse_conditions records for easier searching."
+    },
+    "all_browse_interventions": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of standardized intervention terms (MeSH). Useful for intervention-based trial categorization."
+    },
+    "all_conditions": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view combining all condition names (standardized and free text). Comprehensive condition search support."
+    },
+    "all_design_outcomes": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all planned outcome measures. Useful for analyzing intended trial measurements."
+    },
+    "all_interventions": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view combining all intervention names. Supports comprehensive intervention searches."
+    },
+    "all_sponsors": {
+      "columns": "{nct_id,names}",
+      "instruction": "Denormalized view of all sponsor names. Facilitates sponsor-based trial searches and analysis."
+    }
+  }
+}
