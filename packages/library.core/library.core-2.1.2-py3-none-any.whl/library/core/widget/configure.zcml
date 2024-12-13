@@ -1,0 +1,55 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="library.core">
+
+  <adapter factory=".textdate.TextDateConverter" />
+
+  <class class=".title.TextTitleWidget">
+    <require
+        permission="zope.Public"
+        interface=".title.ITextTitleWidget"
+        />
+  </class>
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".title.ITextTitleWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="title.pt"
+      />
+
+  <class class=".hidden_honeypot.HiddenHoneyPotWidget">
+    <require
+        permission="zope.Public"
+        interface=".hidden_honeypot.IHiddenHoneyPotWidget"
+        />
+  </class>
+  <configure package="z3c.form.browser">
+    <z3c:widgetTemplate
+        mode="input"
+        widget="library.core.widget.hidden_honeypot.IHiddenHoneyPotWidget"
+        layer="z3c.form.interfaces.IFormLayer"
+        template="text_input.pt"
+        />
+  </configure>
+
+  <!-- Use collective.z3cform.select2 widgets for collective.taxonomy field selections -->
+
+  <!-- Simple choice taxonomy -->
+  <adapter
+      factory=".overrides.ChoiceWidgetDispatcher"
+      />
+
+   <!-- Multiple choice taxonomy -->
+  <include package="collective.monkeypatcher" />
+  <monkey:patch zcml:condition="installed collective.taxonomy"
+      description="Replace collective.taxonomy.widget.TaxonomySelectFieldWidget by collective.z3cform.select2.widget.widget.MultiSelect2FieldWidget"
+      module="collective.taxonomy.widget"
+      original="TaxonomySelectFieldWidget"
+      replacement="collective.z3cform.select2.widget.widget.MultiSelect2FieldWidget"
+      />
+
+</configure>
