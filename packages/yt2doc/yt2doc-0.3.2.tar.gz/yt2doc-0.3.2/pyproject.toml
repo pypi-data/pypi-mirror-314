@@ -1,0 +1,53 @@
+[project]
+name = "yt2doc"
+dynamic = ["version"]
+description = "Transcribe any YouTube video into a structural Markdown document"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"  # Pending resolution for https://github.com/pytorch/pytorch/issues/130249
+dependencies = [
+    "emoji>=2.13.0",
+    "faster-whisper>=1.0.3",
+    "ffmpeg-python>=0.2.0",
+    "instructor>=1.5.1",
+    "jinja2>=3.1.4",
+    "openai>=1.51.0",
+    "pathvalidate>=3.2.1",
+    "pydantic>=2.9.1",
+    "python-slugify>=8.0.4",
+    "torch>=2.4.1",
+    "tqdm>=4.66.5",
+    "typer-slim>=0.12.5",
+    "wtpsplit>=2.0.8",
+    "yt-dlp>=2024.10.07",
+]
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"  # Use version control (e.g., git) for versioning
+
+[tool.uv]
+dev-dependencies = [
+    "ipython>=8.27.0",
+    "mypy>=1.11.2",
+    "pytest>=8.3.3",
+    "ruff>=0.6.3",
+    "types-tqdm>=4.66.0.20240417",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "yt_dlp",
+    "faster_whisper",
+    "ffmpeg",
+    "wtpsplit",
+]
+ignore_missing_imports = true
+
+[project.scripts]
+yt2doc = "yt2doc.cli:app"
+
+[project.entry-points."pipx.run"]
+yt2doc = "yt2doc.cli:app"
