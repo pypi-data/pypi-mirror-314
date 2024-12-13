@@ -1,0 +1,21 @@
+stages:
+  - test
+
+cache:
+  paths:
+    - .pip
+
+before_script:
+  - mkdir -p .pip
+
+test_python37:
+  image: python:3.7
+  stage: test
+  script:
+    - pip install --upgrade pip
+    - pip --cache-dir=.pip install -r requirements.txt
+    - pip install --upgrade pytest
+    - pytest --version
+    - python3 -m pytest tests/
+  tags:
+    - my_tag
