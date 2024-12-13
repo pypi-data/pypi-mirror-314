@@ -1,0 +1,196 @@
+"""AGMAGleasonConicalGear"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
+
+from mastapy._private._internal import utility
+from mastapy._private._internal.cast_exception import CastException
+from mastapy._private._internal.dataclasses import extended_dataclass
+from mastapy._private._internal.python_net import python_net_import
+from mastapy._private.system_model.part_model.gears import _2584
+
+_AGMA_GLEASON_CONICAL_GEAR = python_net_import(
+    "SMT.MastaAPI.SystemModel.PartModel.Gears", "AGMAGleasonConicalGear"
+)
+
+if TYPE_CHECKING:
+    from typing import Any, Type, TypeVar
+
+    from mastapy._private.system_model import _2260
+    from mastapy._private.system_model.part_model import _2502, _2524, _2528
+    from mastapy._private.system_model.part_model.gears import (
+        _2576,
+        _2578,
+        _2579,
+        _2580,
+        _2591,
+        _2595,
+        _2604,
+        _2606,
+        _2608,
+        _2610,
+        _2611,
+        _2614,
+    )
+
+    Self = TypeVar("Self", bound="AGMAGleasonConicalGear")
+    CastSelf = TypeVar(
+        "CastSelf", bound="AGMAGleasonConicalGear._Cast_AGMAGleasonConicalGear"
+    )
+
+
+__docformat__ = "restructuredtext en"
+__all__ = ("AGMAGleasonConicalGear",)
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class _Cast_AGMAGleasonConicalGear:
+    """Special nested class for casting AGMAGleasonConicalGear to subclasses."""
+
+    __parent__: "AGMAGleasonConicalGear"
+
+    @property
+    def conical_gear(self: "CastSelf") -> "_2584.ConicalGear":
+        return self.__parent__._cast(_2584.ConicalGear)
+
+    @property
+    def gear(self: "CastSelf") -> "_2591.Gear":
+        from mastapy._private.system_model.part_model.gears import _2591
+
+        return self.__parent__._cast(_2591.Gear)
+
+    @property
+    def mountable_component(self: "CastSelf") -> "_2524.MountableComponent":
+        from mastapy._private.system_model.part_model import _2524
+
+        return self.__parent__._cast(_2524.MountableComponent)
+
+    @property
+    def component(self: "CastSelf") -> "_2502.Component":
+        from mastapy._private.system_model.part_model import _2502
+
+        return self.__parent__._cast(_2502.Component)
+
+    @property
+    def part(self: "CastSelf") -> "_2528.Part":
+        from mastapy._private.system_model.part_model import _2528
+
+        return self.__parent__._cast(_2528.Part)
+
+    @property
+    def design_entity(self: "CastSelf") -> "_2260.DesignEntity":
+        from mastapy._private.system_model import _2260
+
+        return self.__parent__._cast(_2260.DesignEntity)
+
+    @property
+    def bevel_differential_gear(self: "CastSelf") -> "_2576.BevelDifferentialGear":
+        from mastapy._private.system_model.part_model.gears import _2576
+
+        return self.__parent__._cast(_2576.BevelDifferentialGear)
+
+    @property
+    def bevel_differential_planet_gear(
+        self: "CastSelf",
+    ) -> "_2578.BevelDifferentialPlanetGear":
+        from mastapy._private.system_model.part_model.gears import _2578
+
+        return self.__parent__._cast(_2578.BevelDifferentialPlanetGear)
+
+    @property
+    def bevel_differential_sun_gear(
+        self: "CastSelf",
+    ) -> "_2579.BevelDifferentialSunGear":
+        from mastapy._private.system_model.part_model.gears import _2579
+
+        return self.__parent__._cast(_2579.BevelDifferentialSunGear)
+
+    @property
+    def bevel_gear(self: "CastSelf") -> "_2580.BevelGear":
+        from mastapy._private.system_model.part_model.gears import _2580
+
+        return self.__parent__._cast(_2580.BevelGear)
+
+    @property
+    def hypoid_gear(self: "CastSelf") -> "_2595.HypoidGear":
+        from mastapy._private.system_model.part_model.gears import _2595
+
+        return self.__parent__._cast(_2595.HypoidGear)
+
+    @property
+    def spiral_bevel_gear(self: "CastSelf") -> "_2604.SpiralBevelGear":
+        from mastapy._private.system_model.part_model.gears import _2604
+
+        return self.__parent__._cast(_2604.SpiralBevelGear)
+
+    @property
+    def straight_bevel_diff_gear(self: "CastSelf") -> "_2606.StraightBevelDiffGear":
+        from mastapy._private.system_model.part_model.gears import _2606
+
+        return self.__parent__._cast(_2606.StraightBevelDiffGear)
+
+    @property
+    def straight_bevel_gear(self: "CastSelf") -> "_2608.StraightBevelGear":
+        from mastapy._private.system_model.part_model.gears import _2608
+
+        return self.__parent__._cast(_2608.StraightBevelGear)
+
+    @property
+    def straight_bevel_planet_gear(self: "CastSelf") -> "_2610.StraightBevelPlanetGear":
+        from mastapy._private.system_model.part_model.gears import _2610
+
+        return self.__parent__._cast(_2610.StraightBevelPlanetGear)
+
+    @property
+    def straight_bevel_sun_gear(self: "CastSelf") -> "_2611.StraightBevelSunGear":
+        from mastapy._private.system_model.part_model.gears import _2611
+
+        return self.__parent__._cast(_2611.StraightBevelSunGear)
+
+    @property
+    def zerol_bevel_gear(self: "CastSelf") -> "_2614.ZerolBevelGear":
+        from mastapy._private.system_model.part_model.gears import _2614
+
+        return self.__parent__._cast(_2614.ZerolBevelGear)
+
+    @property
+    def agma_gleason_conical_gear(self: "CastSelf") -> "AGMAGleasonConicalGear":
+        return self.__parent__
+
+    def __getattr__(self: "CastSelf", name: str) -> "Any":
+        try:
+            return self.__getattribute__(name)
+        except AttributeError:
+            class_name = utility.camel(name)
+            raise CastException(
+                f'Detected an invalid cast. Cannot cast to type "{class_name}"'
+            ) from None
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class AGMAGleasonConicalGear(_2584.ConicalGear):
+    """AGMAGleasonConicalGear
+
+    This is a mastapy class.
+    """
+
+    TYPE: ClassVar["Type"] = _AGMA_GLEASON_CONICAL_GEAR
+
+    wrapped: "Any"
+
+    def __post_init__(self: "Self") -> None:
+        """Override of the post initialisation magic method."""
+        if not hasattr(self.wrapped, "reference_count"):
+            self.wrapped.reference_count = 0
+
+        self.wrapped.reference_count += 1
+
+    @property
+    def cast_to(self: "Self") -> "_Cast_AGMAGleasonConicalGear":
+        """Cast to another type.
+
+        Returns:
+            _Cast_AGMAGleasonConicalGear
+        """
+        return _Cast_AGMAGleasonConicalGear(self)

@@ -1,0 +1,261 @@
+"""BevelGearMeshModalAnalysisAtASpeed"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
+
+from mastapy._private._internal import constructor, utility
+from mastapy._private._internal.cast_exception import CastException
+from mastapy._private._internal.dataclasses import extended_dataclass
+from mastapy._private._internal.python_net import (
+    python_net_import,
+    pythonnet_property_get,
+)
+from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+    _5246,
+)
+
+_BEVEL_GEAR_MESH_MODAL_ANALYSIS_AT_A_SPEED = python_net_import(
+    "SMT.MastaAPI.SystemModel.AnalysesAndResults.ModalAnalysesAtASpeed",
+    "BevelGearMeshModalAnalysisAtASpeed",
+)
+
+if TYPE_CHECKING:
+    from typing import Any, Type, TypeVar
+
+    from mastapy._private.system_model.analyses_and_results import _2738, _2740, _2742
+    from mastapy._private.system_model.analyses_and_results.analysis_cases import (
+        _7712,
+        _7715,
+    )
+    from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+        _5253,
+        _5274,
+        _5277,
+        _5300,
+        _5307,
+        _5344,
+        _5350,
+        _5353,
+        _5371,
+    )
+    from mastapy._private.system_model.connections_and_sockets.gears import _2360
+
+    Self = TypeVar("Self", bound="BevelGearMeshModalAnalysisAtASpeed")
+    CastSelf = TypeVar(
+        "CastSelf",
+        bound="BevelGearMeshModalAnalysisAtASpeed._Cast_BevelGearMeshModalAnalysisAtASpeed",
+    )
+
+
+__docformat__ = "restructuredtext en"
+__all__ = ("BevelGearMeshModalAnalysisAtASpeed",)
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class _Cast_BevelGearMeshModalAnalysisAtASpeed:
+    """Special nested class for casting BevelGearMeshModalAnalysisAtASpeed to subclasses."""
+
+    __parent__: "BevelGearMeshModalAnalysisAtASpeed"
+
+    @property
+    def agma_gleason_conical_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5246.AGMAGleasonConicalGearMeshModalAnalysisAtASpeed":
+        return self.__parent__._cast(
+            _5246.AGMAGleasonConicalGearMeshModalAnalysisAtASpeed
+        )
+
+    @property
+    def conical_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5274.ConicalGearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5274,
+        )
+
+        return self.__parent__._cast(_5274.ConicalGearMeshModalAnalysisAtASpeed)
+
+    @property
+    def gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5300.GearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5300,
+        )
+
+        return self.__parent__._cast(_5300.GearMeshModalAnalysisAtASpeed)
+
+    @property
+    def inter_mountable_component_connection_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5307.InterMountableComponentConnectionModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5307,
+        )
+
+        return self.__parent__._cast(
+            _5307.InterMountableComponentConnectionModalAnalysisAtASpeed
+        )
+
+    @property
+    def connection_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5277.ConnectionModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5277,
+        )
+
+        return self.__parent__._cast(_5277.ConnectionModalAnalysisAtASpeed)
+
+    @property
+    def connection_static_load_analysis_case(
+        self: "CastSelf",
+    ) -> "_7715.ConnectionStaticLoadAnalysisCase":
+        from mastapy._private.system_model.analyses_and_results.analysis_cases import (
+            _7715,
+        )
+
+        return self.__parent__._cast(_7715.ConnectionStaticLoadAnalysisCase)
+
+    @property
+    def connection_analysis_case(self: "CastSelf") -> "_7712.ConnectionAnalysisCase":
+        from mastapy._private.system_model.analyses_and_results.analysis_cases import (
+            _7712,
+        )
+
+        return self.__parent__._cast(_7712.ConnectionAnalysisCase)
+
+    @property
+    def connection_analysis(self: "CastSelf") -> "_2738.ConnectionAnalysis":
+        from mastapy._private.system_model.analyses_and_results import _2738
+
+        return self.__parent__._cast(_2738.ConnectionAnalysis)
+
+    @property
+    def design_entity_single_context_analysis(
+        self: "CastSelf",
+    ) -> "_2742.DesignEntitySingleContextAnalysis":
+        from mastapy._private.system_model.analyses_and_results import _2742
+
+        return self.__parent__._cast(_2742.DesignEntitySingleContextAnalysis)
+
+    @property
+    def design_entity_analysis(self: "CastSelf") -> "_2740.DesignEntityAnalysis":
+        from mastapy._private.system_model.analyses_and_results import _2740
+
+        return self.__parent__._cast(_2740.DesignEntityAnalysis)
+
+    @property
+    def bevel_differential_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5253.BevelDifferentialGearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5253,
+        )
+
+        return self.__parent__._cast(
+            _5253.BevelDifferentialGearMeshModalAnalysisAtASpeed
+        )
+
+    @property
+    def spiral_bevel_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5344.SpiralBevelGearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5344,
+        )
+
+        return self.__parent__._cast(_5344.SpiralBevelGearMeshModalAnalysisAtASpeed)
+
+    @property
+    def straight_bevel_diff_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5350.StraightBevelDiffGearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5350,
+        )
+
+        return self.__parent__._cast(
+            _5350.StraightBevelDiffGearMeshModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5353.StraightBevelGearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5353,
+        )
+
+        return self.__parent__._cast(_5353.StraightBevelGearMeshModalAnalysisAtASpeed)
+
+    @property
+    def zerol_bevel_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5371.ZerolBevelGearMeshModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed import (
+            _5371,
+        )
+
+        return self.__parent__._cast(_5371.ZerolBevelGearMeshModalAnalysisAtASpeed)
+
+    @property
+    def bevel_gear_mesh_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "BevelGearMeshModalAnalysisAtASpeed":
+        return self.__parent__
+
+    def __getattr__(self: "CastSelf", name: str) -> "Any":
+        try:
+            return self.__getattribute__(name)
+        except AttributeError:
+            class_name = utility.camel(name)
+            raise CastException(
+                f'Detected an invalid cast. Cannot cast to type "{class_name}"'
+            ) from None
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class BevelGearMeshModalAnalysisAtASpeed(
+    _5246.AGMAGleasonConicalGearMeshModalAnalysisAtASpeed
+):
+    """BevelGearMeshModalAnalysisAtASpeed
+
+    This is a mastapy class.
+    """
+
+    TYPE: ClassVar["Type"] = _BEVEL_GEAR_MESH_MODAL_ANALYSIS_AT_A_SPEED
+
+    wrapped: "Any"
+
+    def __post_init__(self: "Self") -> None:
+        """Override of the post initialisation magic method."""
+        if not hasattr(self.wrapped, "reference_count"):
+            self.wrapped.reference_count = 0
+
+        self.wrapped.reference_count += 1
+
+    @property
+    def connection_design(self: "Self") -> "_2360.BevelGearMesh":
+        """mastapy.system_model.connections_and_sockets.gears.BevelGearMesh
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "ConnectionDesign")
+
+        if temp is None:
+            return None
+
+        type_ = temp.GetType()
+        return constructor.new(type_.Namespace, type_.Name)(temp)
+
+    @property
+    def cast_to(self: "Self") -> "_Cast_BevelGearMeshModalAnalysisAtASpeed":
+        """Cast to another type.
+
+        Returns:
+            _Cast_BevelGearMeshModalAnalysisAtASpeed
+        """
+        return _Cast_BevelGearMeshModalAnalysisAtASpeed(self)

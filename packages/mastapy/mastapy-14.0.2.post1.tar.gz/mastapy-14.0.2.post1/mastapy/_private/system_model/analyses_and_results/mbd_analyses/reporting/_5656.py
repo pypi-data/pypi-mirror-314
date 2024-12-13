@@ -1,0 +1,149 @@
+"""AbstractMeasuredDynamicResponseAtTime"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
+
+from mastapy._private import _0
+from mastapy._private._internal import utility
+from mastapy._private._internal.cast_exception import CastException
+from mastapy._private._internal.dataclasses import extended_dataclass
+from mastapy._private._internal.python_net import (
+    python_net_import,
+    pythonnet_property_get,
+)
+
+_ABSTRACT_MEASURED_DYNAMIC_RESPONSE_AT_TIME = python_net_import(
+    "SMT.MastaAPI.SystemModel.AnalysesAndResults.MBDAnalyses.Reporting",
+    "AbstractMeasuredDynamicResponseAtTime",
+)
+
+if TYPE_CHECKING:
+    from typing import Any, Type, TypeVar
+
+    from mastapy._private.system_model.analyses_and_results.mbd_analyses.reporting import (
+        _5657,
+        _5659,
+    )
+
+    Self = TypeVar("Self", bound="AbstractMeasuredDynamicResponseAtTime")
+    CastSelf = TypeVar(
+        "CastSelf",
+        bound="AbstractMeasuredDynamicResponseAtTime._Cast_AbstractMeasuredDynamicResponseAtTime",
+    )
+
+
+__docformat__ = "restructuredtext en"
+__all__ = ("AbstractMeasuredDynamicResponseAtTime",)
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class _Cast_AbstractMeasuredDynamicResponseAtTime:
+    """Special nested class for casting AbstractMeasuredDynamicResponseAtTime to subclasses."""
+
+    __parent__: "AbstractMeasuredDynamicResponseAtTime"
+
+    @property
+    def dynamic_force_result_at_time(
+        self: "CastSelf",
+    ) -> "_5657.DynamicForceResultAtTime":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.reporting import (
+            _5657,
+        )
+
+        return self.__parent__._cast(_5657.DynamicForceResultAtTime)
+
+    @property
+    def dynamic_torque_result_at_time(
+        self: "CastSelf",
+    ) -> "_5659.DynamicTorqueResultAtTime":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.reporting import (
+            _5659,
+        )
+
+        return self.__parent__._cast(_5659.DynamicTorqueResultAtTime)
+
+    @property
+    def abstract_measured_dynamic_response_at_time(
+        self: "CastSelf",
+    ) -> "AbstractMeasuredDynamicResponseAtTime":
+        return self.__parent__
+
+    def __getattr__(self: "CastSelf", name: str) -> "Any":
+        try:
+            return self.__getattribute__(name)
+        except AttributeError:
+            class_name = utility.camel(name)
+            raise CastException(
+                f'Detected an invalid cast. Cannot cast to type "{class_name}"'
+            ) from None
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class AbstractMeasuredDynamicResponseAtTime(_0.APIBase):
+    """AbstractMeasuredDynamicResponseAtTime
+
+    This is a mastapy class.
+    """
+
+    TYPE: ClassVar["Type"] = _ABSTRACT_MEASURED_DYNAMIC_RESPONSE_AT_TIME
+
+    wrapped: "Any"
+
+    def __post_init__(self: "Self") -> None:
+        """Override of the post initialisation magic method."""
+        if not hasattr(self.wrapped, "reference_count"):
+            self.wrapped.reference_count = 0
+
+        self.wrapped.reference_count += 1
+
+    @property
+    def name(self: "Self") -> "str":
+        """str
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "Name")
+
+        if temp is None:
+            return ""
+
+        return temp
+
+    @property
+    def percentage_increase(self: "Self") -> "float":
+        """float
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "PercentageIncrease")
+
+        if temp is None:
+            return 0.0
+
+        return temp
+
+    @property
+    def time(self: "Self") -> "float":
+        """float
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "Time")
+
+        if temp is None:
+            return 0.0
+
+        return temp
+
+    @property
+    def cast_to(self: "Self") -> "_Cast_AbstractMeasuredDynamicResponseAtTime":
+        """Cast to another type.
+
+        Returns:
+            _Cast_AbstractMeasuredDynamicResponseAtTime
+        """
+        return _Cast_AbstractMeasuredDynamicResponseAtTime(self)

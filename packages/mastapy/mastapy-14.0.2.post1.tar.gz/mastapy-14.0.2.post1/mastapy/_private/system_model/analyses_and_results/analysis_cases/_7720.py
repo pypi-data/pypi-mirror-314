@@ -1,0 +1,19851 @@
+"""PartCompoundAnalysis"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
+
+from PIL.Image import Image
+
+from mastapy._private._internal import conversion, utility
+from mastapy._private._internal.cast_exception import CastException
+from mastapy._private._internal.dataclasses import extended_dataclass
+from mastapy._private._internal.python_net import (
+    python_net_import,
+    pythonnet_property_get,
+)
+from mastapy._private.system_model.analyses_and_results.analysis_cases import _7717
+
+_PART_COMPOUND_ANALYSIS = python_net_import(
+    "SMT.MastaAPI.SystemModel.AnalysesAndResults.AnalysisCases", "PartCompoundAnalysis"
+)
+
+if TYPE_CHECKING:
+    from typing import Any, Type, TypeVar
+
+    from mastapy._private.system_model.analyses_and_results import _2740
+    from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+        _7566,
+        _7567,
+        _7568,
+        _7570,
+        _7572,
+        _7573,
+        _7574,
+        _7576,
+        _7577,
+        _7579,
+        _7580,
+        _7581,
+        _7582,
+        _7584,
+        _7585,
+        _7586,
+        _7587,
+        _7589,
+        _7591,
+        _7592,
+        _7594,
+        _7595,
+        _7597,
+        _7598,
+        _7600,
+        _7602,
+        _7603,
+        _7605,
+        _7607,
+        _7608,
+        _7609,
+        _7611,
+        _7613,
+        _7615,
+        _7616,
+        _7617,
+        _7618,
+        _7619,
+        _7621,
+        _7622,
+        _7623,
+        _7624,
+        _7626,
+        _7627,
+        _7628,
+        _7630,
+        _7632,
+        _7634,
+        _7635,
+        _7637,
+        _7638,
+        _7640,
+        _7641,
+        _7642,
+        _7643,
+        _7644,
+        _7645,
+        _7646,
+        _7647,
+        _7648,
+        _7650,
+        _7652,
+        _7653,
+        _7654,
+        _7655,
+        _7656,
+        _7657,
+        _7659,
+        _7660,
+        _7662,
+        _7663,
+        _7664,
+        _7666,
+        _7667,
+        _7669,
+        _7670,
+        _7672,
+        _7673,
+        _7675,
+        _7676,
+        _7678,
+        _7679,
+        _7680,
+        _7681,
+        _7682,
+        _7683,
+        _7684,
+        _7685,
+        _7687,
+        _7688,
+        _7689,
+        _7690,
+        _7691,
+        _7693,
+        _7694,
+        _7696,
+    )
+    from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+        _7297,
+        _7298,
+        _7299,
+        _7301,
+        _7303,
+        _7304,
+        _7305,
+        _7307,
+        _7308,
+        _7310,
+        _7311,
+        _7312,
+        _7313,
+        _7315,
+        _7316,
+        _7317,
+        _7318,
+        _7320,
+        _7322,
+        _7323,
+        _7325,
+        _7326,
+        _7328,
+        _7329,
+        _7331,
+        _7333,
+        _7334,
+        _7336,
+        _7338,
+        _7339,
+        _7340,
+        _7342,
+        _7344,
+        _7346,
+        _7347,
+        _7348,
+        _7349,
+        _7350,
+        _7352,
+        _7353,
+        _7354,
+        _7355,
+        _7357,
+        _7358,
+        _7359,
+        _7361,
+        _7363,
+        _7365,
+        _7366,
+        _7368,
+        _7369,
+        _7371,
+        _7372,
+        _7373,
+        _7374,
+        _7375,
+        _7376,
+        _7377,
+        _7378,
+        _7379,
+        _7381,
+        _7383,
+        _7384,
+        _7385,
+        _7386,
+        _7387,
+        _7388,
+        _7390,
+        _7391,
+        _7393,
+        _7394,
+        _7395,
+        _7397,
+        _7398,
+        _7400,
+        _7401,
+        _7403,
+        _7404,
+        _7406,
+        _7407,
+        _7409,
+        _7410,
+        _7411,
+        _7412,
+        _7413,
+        _7414,
+        _7415,
+        _7416,
+        _7418,
+        _7419,
+        _7420,
+        _7421,
+        _7422,
+        _7424,
+        _7425,
+        _7427,
+    )
+    from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+        _6825,
+        _6826,
+        _6827,
+        _6829,
+        _6831,
+        _6832,
+        _6833,
+        _6835,
+        _6836,
+        _6838,
+        _6839,
+        _6840,
+        _6841,
+        _6843,
+        _6844,
+        _6845,
+        _6846,
+        _6848,
+        _6850,
+        _6851,
+        _6853,
+        _6854,
+        _6856,
+        _6857,
+        _6859,
+        _6861,
+        _6862,
+        _6864,
+        _6866,
+        _6867,
+        _6868,
+        _6870,
+        _6872,
+        _6874,
+        _6875,
+        _6876,
+        _6877,
+        _6878,
+        _6880,
+        _6881,
+        _6882,
+        _6883,
+        _6885,
+        _6886,
+        _6887,
+        _6889,
+        _6891,
+        _6893,
+        _6894,
+        _6896,
+        _6897,
+        _6899,
+        _6900,
+        _6901,
+        _6902,
+        _6903,
+        _6904,
+        _6905,
+        _6906,
+        _6907,
+        _6909,
+        _6911,
+        _6912,
+        _6913,
+        _6914,
+        _6915,
+        _6916,
+        _6918,
+        _6919,
+        _6921,
+        _6922,
+        _6923,
+        _6925,
+        _6926,
+        _6928,
+        _6929,
+        _6931,
+        _6932,
+        _6934,
+        _6935,
+        _6937,
+        _6938,
+        _6939,
+        _6940,
+        _6941,
+        _6942,
+        _6943,
+        _6944,
+        _6946,
+        _6947,
+        _6948,
+        _6949,
+        _6950,
+        _6952,
+        _6953,
+        _6955,
+    )
+    from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+        _6554,
+        _6555,
+        _6556,
+        _6558,
+        _6560,
+        _6561,
+        _6562,
+        _6564,
+        _6565,
+        _6567,
+        _6568,
+        _6569,
+        _6570,
+        _6572,
+        _6573,
+        _6574,
+        _6575,
+        _6577,
+        _6579,
+        _6580,
+        _6582,
+        _6583,
+        _6585,
+        _6586,
+        _6588,
+        _6590,
+        _6591,
+        _6593,
+        _6595,
+        _6596,
+        _6597,
+        _6599,
+        _6601,
+        _6603,
+        _6604,
+        _6605,
+        _6606,
+        _6607,
+        _6609,
+        _6610,
+        _6611,
+        _6612,
+        _6614,
+        _6615,
+        _6616,
+        _6618,
+        _6620,
+        _6622,
+        _6623,
+        _6625,
+        _6626,
+        _6628,
+        _6629,
+        _6630,
+        _6631,
+        _6632,
+        _6633,
+        _6634,
+        _6635,
+        _6636,
+        _6638,
+        _6640,
+        _6641,
+        _6642,
+        _6643,
+        _6644,
+        _6645,
+        _6647,
+        _6648,
+        _6650,
+        _6651,
+        _6652,
+        _6654,
+        _6655,
+        _6657,
+        _6658,
+        _6660,
+        _6661,
+        _6663,
+        _6664,
+        _6666,
+        _6667,
+        _6668,
+        _6669,
+        _6670,
+        _6671,
+        _6672,
+        _6673,
+        _6675,
+        _6676,
+        _6677,
+        _6678,
+        _6679,
+        _6681,
+        _6682,
+        _6684,
+    )
+    from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+        _6017,
+        _6018,
+        _6019,
+        _6021,
+        _6023,
+        _6024,
+        _6025,
+        _6027,
+        _6028,
+        _6030,
+        _6031,
+        _6032,
+        _6033,
+        _6035,
+        _6036,
+        _6037,
+        _6038,
+        _6040,
+        _6042,
+        _6043,
+        _6045,
+        _6046,
+        _6048,
+        _6049,
+        _6051,
+        _6053,
+        _6054,
+        _6056,
+        _6058,
+        _6059,
+        _6060,
+        _6062,
+        _6064,
+        _6066,
+        _6067,
+        _6068,
+        _6069,
+        _6070,
+        _6072,
+        _6073,
+        _6074,
+        _6075,
+        _6077,
+        _6078,
+        _6079,
+        _6081,
+        _6083,
+        _6085,
+        _6086,
+        _6088,
+        _6089,
+        _6091,
+        _6092,
+        _6093,
+        _6094,
+        _6095,
+        _6096,
+        _6097,
+        _6098,
+        _6099,
+        _6101,
+        _6103,
+        _6104,
+        _6105,
+        _6106,
+        _6107,
+        _6108,
+        _6110,
+        _6111,
+        _6113,
+        _6114,
+        _6115,
+        _6117,
+        _6118,
+        _6120,
+        _6121,
+        _6123,
+        _6124,
+        _6126,
+        _6127,
+        _6129,
+        _6130,
+        _6131,
+        _6132,
+        _6133,
+        _6134,
+        _6135,
+        _6136,
+        _6138,
+        _6139,
+        _6140,
+        _6141,
+        _6142,
+        _6144,
+        _6145,
+        _6147,
+    )
+    from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+        _6281,
+        _6282,
+        _6283,
+        _6285,
+        _6287,
+        _6288,
+        _6289,
+        _6291,
+        _6292,
+        _6294,
+        _6295,
+        _6296,
+        _6297,
+        _6299,
+        _6300,
+        _6301,
+        _6302,
+        _6304,
+        _6306,
+        _6307,
+        _6309,
+        _6310,
+        _6312,
+        _6313,
+        _6315,
+        _6317,
+        _6318,
+        _6320,
+        _6322,
+        _6323,
+        _6324,
+        _6326,
+        _6328,
+        _6330,
+        _6331,
+        _6332,
+        _6333,
+        _6334,
+        _6336,
+        _6337,
+        _6338,
+        _6339,
+        _6341,
+        _6342,
+        _6343,
+        _6345,
+        _6347,
+        _6349,
+        _6350,
+        _6352,
+        _6353,
+        _6355,
+        _6356,
+        _6357,
+        _6358,
+        _6359,
+        _6360,
+        _6361,
+        _6362,
+        _6363,
+        _6365,
+        _6367,
+        _6368,
+        _6369,
+        _6370,
+        _6371,
+        _6372,
+        _6374,
+        _6375,
+        _6377,
+        _6378,
+        _6379,
+        _6381,
+        _6382,
+        _6384,
+        _6385,
+        _6387,
+        _6388,
+        _6390,
+        _6391,
+        _6393,
+        _6394,
+        _6395,
+        _6396,
+        _6397,
+        _6398,
+        _6399,
+        _6400,
+        _6402,
+        _6403,
+        _6404,
+        _6405,
+        _6406,
+        _6408,
+        _6409,
+        _6411,
+    )
+    from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+        _5663,
+        _5664,
+        _5665,
+        _5667,
+        _5669,
+        _5670,
+        _5671,
+        _5673,
+        _5674,
+        _5676,
+        _5677,
+        _5678,
+        _5679,
+        _5681,
+        _5682,
+        _5683,
+        _5684,
+        _5686,
+        _5688,
+        _5689,
+        _5691,
+        _5692,
+        _5694,
+        _5695,
+        _5697,
+        _5699,
+        _5700,
+        _5702,
+        _5704,
+        _5705,
+        _5706,
+        _5708,
+        _5710,
+        _5712,
+        _5713,
+        _5714,
+        _5715,
+        _5716,
+        _5718,
+        _5719,
+        _5720,
+        _5721,
+        _5723,
+        _5724,
+        _5725,
+        _5727,
+        _5729,
+        _5731,
+        _5732,
+        _5734,
+        _5735,
+        _5737,
+        _5738,
+        _5739,
+        _5740,
+        _5741,
+        _5742,
+        _5743,
+        _5744,
+        _5745,
+        _5747,
+        _5749,
+        _5750,
+        _5751,
+        _5752,
+        _5753,
+        _5754,
+        _5756,
+        _5757,
+        _5759,
+        _5760,
+        _5761,
+        _5763,
+        _5764,
+        _5766,
+        _5767,
+        _5769,
+        _5770,
+        _5772,
+        _5773,
+        _5775,
+        _5776,
+        _5777,
+        _5778,
+        _5779,
+        _5780,
+        _5781,
+        _5782,
+        _5784,
+        _5785,
+        _5786,
+        _5787,
+        _5788,
+        _5790,
+        _5791,
+        _5793,
+    )
+    from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+        _4847,
+        _4848,
+        _4849,
+        _4851,
+        _4853,
+        _4854,
+        _4855,
+        _4857,
+        _4858,
+        _4860,
+        _4861,
+        _4862,
+        _4863,
+        _4865,
+        _4866,
+        _4867,
+        _4868,
+        _4870,
+        _4872,
+        _4873,
+        _4875,
+        _4876,
+        _4878,
+        _4879,
+        _4881,
+        _4883,
+        _4884,
+        _4886,
+        _4888,
+        _4889,
+        _4890,
+        _4892,
+        _4894,
+        _4896,
+        _4897,
+        _4898,
+        _4899,
+        _4900,
+        _4902,
+        _4903,
+        _4904,
+        _4905,
+        _4907,
+        _4908,
+        _4909,
+        _4911,
+        _4913,
+        _4915,
+        _4916,
+        _4918,
+        _4919,
+        _4921,
+        _4922,
+        _4923,
+        _4924,
+        _4925,
+        _4926,
+        _4927,
+        _4928,
+        _4929,
+        _4931,
+        _4933,
+        _4934,
+        _4935,
+        _4936,
+        _4937,
+        _4938,
+        _4940,
+        _4941,
+        _4943,
+        _4944,
+        _4945,
+        _4947,
+        _4948,
+        _4950,
+        _4951,
+        _4953,
+        _4954,
+        _4956,
+        _4957,
+        _4959,
+        _4960,
+        _4961,
+        _4962,
+        _4963,
+        _4964,
+        _4965,
+        _4966,
+        _4968,
+        _4969,
+        _4970,
+        _4971,
+        _4972,
+        _4974,
+        _4975,
+        _4977,
+    )
+    from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+        _5374,
+        _5375,
+        _5376,
+        _5378,
+        _5380,
+        _5381,
+        _5382,
+        _5384,
+        _5385,
+        _5387,
+        _5388,
+        _5389,
+        _5390,
+        _5392,
+        _5393,
+        _5394,
+        _5395,
+        _5397,
+        _5399,
+        _5400,
+        _5402,
+        _5403,
+        _5405,
+        _5406,
+        _5408,
+        _5410,
+        _5411,
+        _5413,
+        _5415,
+        _5416,
+        _5417,
+        _5419,
+        _5421,
+        _5423,
+        _5424,
+        _5425,
+        _5426,
+        _5427,
+        _5429,
+        _5430,
+        _5431,
+        _5432,
+        _5434,
+        _5435,
+        _5436,
+        _5438,
+        _5440,
+        _5442,
+        _5443,
+        _5445,
+        _5446,
+        _5448,
+        _5449,
+        _5450,
+        _5451,
+        _5452,
+        _5453,
+        _5454,
+        _5455,
+        _5456,
+        _5458,
+        _5460,
+        _5461,
+        _5462,
+        _5463,
+        _5464,
+        _5465,
+        _5467,
+        _5468,
+        _5470,
+        _5471,
+        _5472,
+        _5474,
+        _5475,
+        _5477,
+        _5478,
+        _5480,
+        _5481,
+        _5483,
+        _5484,
+        _5486,
+        _5487,
+        _5488,
+        _5489,
+        _5490,
+        _5491,
+        _5492,
+        _5493,
+        _5495,
+        _5496,
+        _5497,
+        _5498,
+        _5499,
+        _5501,
+        _5502,
+        _5504,
+    )
+    from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+        _5111,
+        _5112,
+        _5113,
+        _5115,
+        _5117,
+        _5118,
+        _5119,
+        _5121,
+        _5122,
+        _5124,
+        _5125,
+        _5126,
+        _5127,
+        _5129,
+        _5130,
+        _5131,
+        _5132,
+        _5134,
+        _5136,
+        _5137,
+        _5139,
+        _5140,
+        _5142,
+        _5143,
+        _5145,
+        _5147,
+        _5148,
+        _5150,
+        _5152,
+        _5153,
+        _5154,
+        _5156,
+        _5158,
+        _5160,
+        _5161,
+        _5162,
+        _5163,
+        _5164,
+        _5166,
+        _5167,
+        _5168,
+        _5169,
+        _5171,
+        _5172,
+        _5173,
+        _5175,
+        _5177,
+        _5179,
+        _5180,
+        _5182,
+        _5183,
+        _5185,
+        _5186,
+        _5187,
+        _5188,
+        _5189,
+        _5190,
+        _5191,
+        _5192,
+        _5193,
+        _5195,
+        _5197,
+        _5198,
+        _5199,
+        _5200,
+        _5201,
+        _5202,
+        _5204,
+        _5205,
+        _5207,
+        _5208,
+        _5209,
+        _5211,
+        _5212,
+        _5214,
+        _5215,
+        _5217,
+        _5218,
+        _5220,
+        _5221,
+        _5223,
+        _5224,
+        _5225,
+        _5226,
+        _5227,
+        _5228,
+        _5229,
+        _5230,
+        _5232,
+        _5233,
+        _5234,
+        _5235,
+        _5236,
+        _5238,
+        _5239,
+        _5241,
+    )
+    from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+        _4558,
+        _4559,
+        _4560,
+        _4562,
+        _4564,
+        _4565,
+        _4566,
+        _4568,
+        _4569,
+        _4571,
+        _4572,
+        _4573,
+        _4574,
+        _4576,
+        _4577,
+        _4578,
+        _4579,
+        _4581,
+        _4583,
+        _4584,
+        _4586,
+        _4587,
+        _4589,
+        _4590,
+        _4592,
+        _4594,
+        _4595,
+        _4597,
+        _4599,
+        _4600,
+        _4601,
+        _4603,
+        _4605,
+        _4607,
+        _4608,
+        _4609,
+        _4610,
+        _4611,
+        _4613,
+        _4614,
+        _4615,
+        _4616,
+        _4618,
+        _4619,
+        _4620,
+        _4622,
+        _4624,
+        _4626,
+        _4627,
+        _4629,
+        _4630,
+        _4632,
+        _4633,
+        _4634,
+        _4635,
+        _4636,
+        _4637,
+        _4638,
+        _4639,
+        _4640,
+        _4642,
+        _4644,
+        _4645,
+        _4646,
+        _4647,
+        _4648,
+        _4649,
+        _4651,
+        _4652,
+        _4654,
+        _4655,
+        _4656,
+        _4658,
+        _4659,
+        _4661,
+        _4662,
+        _4664,
+        _4665,
+        _4667,
+        _4668,
+        _4670,
+        _4671,
+        _4672,
+        _4673,
+        _4674,
+        _4675,
+        _4676,
+        _4677,
+        _4679,
+        _4680,
+        _4681,
+        _4682,
+        _4683,
+        _4685,
+        _4686,
+        _4688,
+    )
+    from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+        _4278,
+        _4279,
+        _4280,
+        _4282,
+        _4284,
+        _4285,
+        _4286,
+        _4288,
+        _4289,
+        _4291,
+        _4292,
+        _4293,
+        _4294,
+        _4296,
+        _4297,
+        _4298,
+        _4299,
+        _4301,
+        _4303,
+        _4304,
+        _4306,
+        _4307,
+        _4309,
+        _4310,
+        _4312,
+        _4314,
+        _4315,
+        _4317,
+        _4319,
+        _4320,
+        _4321,
+        _4323,
+        _4325,
+        _4327,
+        _4328,
+        _4329,
+        _4330,
+        _4331,
+        _4333,
+        _4334,
+        _4335,
+        _4336,
+        _4338,
+        _4339,
+        _4340,
+        _4342,
+        _4344,
+        _4346,
+        _4347,
+        _4349,
+        _4350,
+        _4352,
+        _4353,
+        _4354,
+        _4355,
+        _4356,
+        _4357,
+        _4358,
+        _4359,
+        _4360,
+        _4362,
+        _4364,
+        _4365,
+        _4366,
+        _4367,
+        _4368,
+        _4369,
+        _4371,
+        _4372,
+        _4374,
+        _4375,
+        _4376,
+        _4378,
+        _4379,
+        _4381,
+        _4382,
+        _4384,
+        _4385,
+        _4387,
+        _4388,
+        _4390,
+        _4391,
+        _4392,
+        _4393,
+        _4394,
+        _4395,
+        _4396,
+        _4397,
+        _4399,
+        _4400,
+        _4401,
+        _4402,
+        _4403,
+        _4405,
+        _4406,
+        _4408,
+    )
+    from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+        _4004,
+        _4005,
+        _4006,
+        _4008,
+        _4010,
+        _4011,
+        _4012,
+        _4014,
+        _4015,
+        _4017,
+        _4018,
+        _4019,
+        _4020,
+        _4022,
+        _4023,
+        _4024,
+        _4025,
+        _4027,
+        _4029,
+        _4030,
+        _4032,
+        _4033,
+        _4035,
+        _4036,
+        _4038,
+        _4040,
+        _4041,
+        _4043,
+        _4045,
+        _4046,
+        _4047,
+        _4049,
+        _4051,
+        _4053,
+        _4054,
+        _4055,
+        _4056,
+        _4057,
+        _4059,
+        _4060,
+        _4061,
+        _4062,
+        _4064,
+        _4065,
+        _4066,
+        _4068,
+        _4070,
+        _4072,
+        _4073,
+        _4075,
+        _4076,
+        _4078,
+        _4079,
+        _4080,
+        _4081,
+        _4082,
+        _4083,
+        _4084,
+        _4085,
+        _4086,
+        _4088,
+        _4090,
+        _4091,
+        _4092,
+        _4093,
+        _4094,
+        _4095,
+        _4097,
+        _4098,
+        _4100,
+        _4101,
+        _4102,
+        _4104,
+        _4105,
+        _4107,
+        _4108,
+        _4110,
+        _4111,
+        _4113,
+        _4114,
+        _4116,
+        _4117,
+        _4118,
+        _4119,
+        _4120,
+        _4121,
+        _4122,
+        _4123,
+        _4125,
+        _4126,
+        _4127,
+        _4128,
+        _4129,
+        _4131,
+        _4132,
+        _4134,
+    )
+    from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+        _3211,
+        _3212,
+        _3213,
+        _3215,
+        _3217,
+        _3218,
+        _3219,
+        _3221,
+        _3222,
+        _3224,
+        _3225,
+        _3226,
+        _3227,
+        _3229,
+        _3230,
+        _3231,
+        _3232,
+        _3234,
+        _3236,
+        _3237,
+        _3239,
+        _3240,
+        _3242,
+        _3243,
+        _3245,
+        _3247,
+        _3248,
+        _3250,
+        _3252,
+        _3253,
+        _3254,
+        _3256,
+        _3258,
+        _3260,
+        _3261,
+        _3262,
+        _3263,
+        _3264,
+        _3266,
+        _3267,
+        _3268,
+        _3269,
+        _3271,
+        _3272,
+        _3273,
+        _3275,
+        _3277,
+        _3279,
+        _3280,
+        _3282,
+        _3283,
+        _3285,
+        _3286,
+        _3287,
+        _3288,
+        _3289,
+        _3290,
+        _3291,
+        _3292,
+        _3293,
+        _3295,
+        _3297,
+        _3298,
+        _3299,
+        _3300,
+        _3301,
+        _3302,
+        _3304,
+        _3305,
+        _3307,
+        _3308,
+        _3309,
+        _3311,
+        _3312,
+        _3314,
+        _3315,
+        _3317,
+        _3318,
+        _3320,
+        _3321,
+        _3323,
+        _3324,
+        _3325,
+        _3326,
+        _3327,
+        _3328,
+        _3329,
+        _3330,
+        _3332,
+        _3333,
+        _3334,
+        _3335,
+        _3336,
+        _3338,
+        _3339,
+        _3341,
+    )
+    from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+        _3737,
+        _3738,
+        _3739,
+        _3741,
+        _3743,
+        _3744,
+        _3745,
+        _3747,
+        _3748,
+        _3750,
+        _3751,
+        _3752,
+        _3753,
+        _3755,
+        _3756,
+        _3757,
+        _3758,
+        _3760,
+        _3762,
+        _3763,
+        _3765,
+        _3766,
+        _3768,
+        _3769,
+        _3771,
+        _3773,
+        _3774,
+        _3776,
+        _3778,
+        _3779,
+        _3780,
+        _3782,
+        _3784,
+        _3786,
+        _3787,
+        _3788,
+        _3789,
+        _3790,
+        _3792,
+        _3793,
+        _3794,
+        _3795,
+        _3797,
+        _3798,
+        _3799,
+        _3801,
+        _3803,
+        _3805,
+        _3806,
+        _3808,
+        _3809,
+        _3811,
+        _3812,
+        _3813,
+        _3814,
+        _3815,
+        _3816,
+        _3817,
+        _3818,
+        _3819,
+        _3821,
+        _3823,
+        _3824,
+        _3825,
+        _3826,
+        _3827,
+        _3828,
+        _3830,
+        _3831,
+        _3833,
+        _3834,
+        _3835,
+        _3837,
+        _3838,
+        _3840,
+        _3841,
+        _3843,
+        _3844,
+        _3846,
+        _3847,
+        _3849,
+        _3850,
+        _3851,
+        _3852,
+        _3853,
+        _3854,
+        _3855,
+        _3856,
+        _3858,
+        _3859,
+        _3860,
+        _3861,
+        _3862,
+        _3864,
+        _3865,
+        _3867,
+    )
+    from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+        _3474,
+        _3475,
+        _3476,
+        _3478,
+        _3480,
+        _3481,
+        _3482,
+        _3484,
+        _3485,
+        _3487,
+        _3488,
+        _3489,
+        _3490,
+        _3492,
+        _3493,
+        _3494,
+        _3495,
+        _3497,
+        _3499,
+        _3500,
+        _3502,
+        _3503,
+        _3505,
+        _3506,
+        _3508,
+        _3510,
+        _3511,
+        _3513,
+        _3515,
+        _3516,
+        _3517,
+        _3519,
+        _3521,
+        _3523,
+        _3524,
+        _3525,
+        _3526,
+        _3527,
+        _3529,
+        _3530,
+        _3531,
+        _3532,
+        _3534,
+        _3535,
+        _3536,
+        _3538,
+        _3540,
+        _3542,
+        _3543,
+        _3545,
+        _3546,
+        _3548,
+        _3549,
+        _3550,
+        _3551,
+        _3552,
+        _3553,
+        _3554,
+        _3555,
+        _3556,
+        _3558,
+        _3560,
+        _3561,
+        _3562,
+        _3563,
+        _3564,
+        _3565,
+        _3567,
+        _3568,
+        _3570,
+        _3571,
+        _3572,
+        _3574,
+        _3575,
+        _3577,
+        _3578,
+        _3580,
+        _3581,
+        _3583,
+        _3584,
+        _3586,
+        _3587,
+        _3588,
+        _3589,
+        _3590,
+        _3591,
+        _3592,
+        _3593,
+        _3595,
+        _3596,
+        _3597,
+        _3598,
+        _3599,
+        _3601,
+        _3602,
+        _3604,
+    )
+    from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+        _2942,
+        _2943,
+        _2944,
+        _2946,
+        _2948,
+        _2949,
+        _2950,
+        _2952,
+        _2953,
+        _2955,
+        _2956,
+        _2957,
+        _2958,
+        _2960,
+        _2961,
+        _2962,
+        _2963,
+        _2965,
+        _2967,
+        _2968,
+        _2970,
+        _2971,
+        _2973,
+        _2974,
+        _2976,
+        _2978,
+        _2979,
+        _2981,
+        _2983,
+        _2984,
+        _2985,
+        _2987,
+        _2989,
+        _2991,
+        _2992,
+        _2993,
+        _2995,
+        _2996,
+        _2998,
+        _2999,
+        _3000,
+        _3001,
+        _3003,
+        _3004,
+        _3005,
+        _3007,
+        _3009,
+        _3011,
+        _3012,
+        _3014,
+        _3015,
+        _3017,
+        _3018,
+        _3019,
+        _3020,
+        _3021,
+        _3022,
+        _3023,
+        _3024,
+        _3025,
+        _3027,
+        _3029,
+        _3030,
+        _3031,
+        _3032,
+        _3033,
+        _3034,
+        _3036,
+        _3037,
+        _3039,
+        _3040,
+        _3042,
+        _3044,
+        _3045,
+        _3047,
+        _3048,
+        _3050,
+        _3051,
+        _3053,
+        _3054,
+        _3056,
+        _3057,
+        _3058,
+        _3059,
+        _3060,
+        _3061,
+        _3062,
+        _3063,
+        _3065,
+        _3066,
+        _3067,
+        _3068,
+        _3069,
+        _3071,
+        _3072,
+        _3074,
+    )
+
+    Self = TypeVar("Self", bound="PartCompoundAnalysis")
+    CastSelf = TypeVar(
+        "CastSelf", bound="PartCompoundAnalysis._Cast_PartCompoundAnalysis"
+    )
+
+
+__docformat__ = "restructuredtext en"
+__all__ = ("PartCompoundAnalysis",)
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class _Cast_PartCompoundAnalysis:
+    """Special nested class for casting PartCompoundAnalysis to subclasses."""
+
+    __parent__: "PartCompoundAnalysis"
+
+    @property
+    def design_entity_compound_analysis(
+        self: "CastSelf",
+    ) -> "_7717.DesignEntityCompoundAnalysis":
+        return self.__parent__._cast(_7717.DesignEntityCompoundAnalysis)
+
+    @property
+    def design_entity_analysis(self: "CastSelf") -> "_2740.DesignEntityAnalysis":
+        from mastapy._private.system_model.analyses_and_results import _2740
+
+        return self.__parent__._cast(_2740.DesignEntityAnalysis)
+
+    @property
+    def abstract_assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2942.AbstractAssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2942,
+        )
+
+        return self.__parent__._cast(_2942.AbstractAssemblyCompoundSystemDeflection)
+
+    @property
+    def abstract_shaft_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2943.AbstractShaftCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2943,
+        )
+
+        return self.__parent__._cast(_2943.AbstractShaftCompoundSystemDeflection)
+
+    @property
+    def abstract_shaft_or_housing_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2944.AbstractShaftOrHousingCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2944,
+        )
+
+        return self.__parent__._cast(
+            _2944.AbstractShaftOrHousingCompoundSystemDeflection
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2946.AGMAGleasonConicalGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2946,
+        )
+
+        return self.__parent__._cast(
+            _2946.AGMAGleasonConicalGearCompoundSystemDeflection
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2948.AGMAGleasonConicalGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2948,
+        )
+
+        return self.__parent__._cast(
+            _2948.AGMAGleasonConicalGearSetCompoundSystemDeflection
+        )
+
+    @property
+    def assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2949.AssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2949,
+        )
+
+        return self.__parent__._cast(_2949.AssemblyCompoundSystemDeflection)
+
+    @property
+    def bearing_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2950.BearingCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2950,
+        )
+
+        return self.__parent__._cast(_2950.BearingCompoundSystemDeflection)
+
+    @property
+    def belt_drive_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2952.BeltDriveCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2952,
+        )
+
+        return self.__parent__._cast(_2952.BeltDriveCompoundSystemDeflection)
+
+    @property
+    def bevel_differential_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2953.BevelDifferentialGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2953,
+        )
+
+        return self.__parent__._cast(
+            _2953.BevelDifferentialGearCompoundSystemDeflection
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2955.BevelDifferentialGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2955,
+        )
+
+        return self.__parent__._cast(
+            _2955.BevelDifferentialGearSetCompoundSystemDeflection
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2956.BevelDifferentialPlanetGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2956,
+        )
+
+        return self.__parent__._cast(
+            _2956.BevelDifferentialPlanetGearCompoundSystemDeflection
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2957.BevelDifferentialSunGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2957,
+        )
+
+        return self.__parent__._cast(
+            _2957.BevelDifferentialSunGearCompoundSystemDeflection
+        )
+
+    @property
+    def bevel_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2958.BevelGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2958,
+        )
+
+        return self.__parent__._cast(_2958.BevelGearCompoundSystemDeflection)
+
+    @property
+    def bevel_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2960.BevelGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2960,
+        )
+
+        return self.__parent__._cast(_2960.BevelGearSetCompoundSystemDeflection)
+
+    @property
+    def bolt_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2961.BoltCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2961,
+        )
+
+        return self.__parent__._cast(_2961.BoltCompoundSystemDeflection)
+
+    @property
+    def bolted_joint_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2962.BoltedJointCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2962,
+        )
+
+        return self.__parent__._cast(_2962.BoltedJointCompoundSystemDeflection)
+
+    @property
+    def clutch_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2963.ClutchCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2963,
+        )
+
+        return self.__parent__._cast(_2963.ClutchCompoundSystemDeflection)
+
+    @property
+    def clutch_half_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2965.ClutchHalfCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2965,
+        )
+
+        return self.__parent__._cast(_2965.ClutchHalfCompoundSystemDeflection)
+
+    @property
+    def component_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2967.ComponentCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2967,
+        )
+
+        return self.__parent__._cast(_2967.ComponentCompoundSystemDeflection)
+
+    @property
+    def concept_coupling_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2968.ConceptCouplingCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2968,
+        )
+
+        return self.__parent__._cast(_2968.ConceptCouplingCompoundSystemDeflection)
+
+    @property
+    def concept_coupling_half_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2970.ConceptCouplingHalfCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2970,
+        )
+
+        return self.__parent__._cast(_2970.ConceptCouplingHalfCompoundSystemDeflection)
+
+    @property
+    def concept_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2971.ConceptGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2971,
+        )
+
+        return self.__parent__._cast(_2971.ConceptGearCompoundSystemDeflection)
+
+    @property
+    def concept_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2973.ConceptGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2973,
+        )
+
+        return self.__parent__._cast(_2973.ConceptGearSetCompoundSystemDeflection)
+
+    @property
+    def conical_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2974.ConicalGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2974,
+        )
+
+        return self.__parent__._cast(_2974.ConicalGearCompoundSystemDeflection)
+
+    @property
+    def conical_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2976.ConicalGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2976,
+        )
+
+        return self.__parent__._cast(_2976.ConicalGearSetCompoundSystemDeflection)
+
+    @property
+    def connector_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2978.ConnectorCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2978,
+        )
+
+        return self.__parent__._cast(_2978.ConnectorCompoundSystemDeflection)
+
+    @property
+    def coupling_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2979.CouplingCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2979,
+        )
+
+        return self.__parent__._cast(_2979.CouplingCompoundSystemDeflection)
+
+    @property
+    def coupling_half_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2981.CouplingHalfCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2981,
+        )
+
+        return self.__parent__._cast(_2981.CouplingHalfCompoundSystemDeflection)
+
+    @property
+    def cvt_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2983.CVTCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2983,
+        )
+
+        return self.__parent__._cast(_2983.CVTCompoundSystemDeflection)
+
+    @property
+    def cvt_pulley_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2984.CVTPulleyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2984,
+        )
+
+        return self.__parent__._cast(_2984.CVTPulleyCompoundSystemDeflection)
+
+    @property
+    def cycloidal_assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2985.CycloidalAssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2985,
+        )
+
+        return self.__parent__._cast(_2985.CycloidalAssemblyCompoundSystemDeflection)
+
+    @property
+    def cycloidal_disc_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2987.CycloidalDiscCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2987,
+        )
+
+        return self.__parent__._cast(_2987.CycloidalDiscCompoundSystemDeflection)
+
+    @property
+    def cylindrical_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2989.CylindricalGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2989,
+        )
+
+        return self.__parent__._cast(_2989.CylindricalGearCompoundSystemDeflection)
+
+    @property
+    def cylindrical_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2991.CylindricalGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2991,
+        )
+
+        return self.__parent__._cast(_2991.CylindricalGearSetCompoundSystemDeflection)
+
+    @property
+    def cylindrical_planet_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2992.CylindricalPlanetGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2992,
+        )
+
+        return self.__parent__._cast(
+            _2992.CylindricalPlanetGearCompoundSystemDeflection
+        )
+
+    @property
+    def datum_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2993.DatumCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2993,
+        )
+
+        return self.__parent__._cast(_2993.DatumCompoundSystemDeflection)
+
+    @property
+    def external_cad_model_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2995.ExternalCADModelCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2995,
+        )
+
+        return self.__parent__._cast(_2995.ExternalCADModelCompoundSystemDeflection)
+
+    @property
+    def face_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2996.FaceGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2996,
+        )
+
+        return self.__parent__._cast(_2996.FaceGearCompoundSystemDeflection)
+
+    @property
+    def face_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2998.FaceGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2998,
+        )
+
+        return self.__parent__._cast(_2998.FaceGearSetCompoundSystemDeflection)
+
+    @property
+    def fe_part_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_2999.FEPartCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _2999,
+        )
+
+        return self.__parent__._cast(_2999.FEPartCompoundSystemDeflection)
+
+    @property
+    def flexible_pin_assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3000.FlexiblePinAssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3000,
+        )
+
+        return self.__parent__._cast(_3000.FlexiblePinAssemblyCompoundSystemDeflection)
+
+    @property
+    def gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3001.GearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3001,
+        )
+
+        return self.__parent__._cast(_3001.GearCompoundSystemDeflection)
+
+    @property
+    def gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3003.GearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3003,
+        )
+
+        return self.__parent__._cast(_3003.GearSetCompoundSystemDeflection)
+
+    @property
+    def guide_dxf_model_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3004.GuideDxfModelCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3004,
+        )
+
+        return self.__parent__._cast(_3004.GuideDxfModelCompoundSystemDeflection)
+
+    @property
+    def hypoid_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3005.HypoidGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3005,
+        )
+
+        return self.__parent__._cast(_3005.HypoidGearCompoundSystemDeflection)
+
+    @property
+    def hypoid_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3007.HypoidGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3007,
+        )
+
+        return self.__parent__._cast(_3007.HypoidGearSetCompoundSystemDeflection)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3009.KlingelnbergCycloPalloidConicalGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3009,
+        )
+
+        return self.__parent__._cast(
+            _3009.KlingelnbergCycloPalloidConicalGearCompoundSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3011.KlingelnbergCycloPalloidConicalGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3011,
+        )
+
+        return self.__parent__._cast(
+            _3011.KlingelnbergCycloPalloidConicalGearSetCompoundSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3012.KlingelnbergCycloPalloidHypoidGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3012,
+        )
+
+        return self.__parent__._cast(
+            _3012.KlingelnbergCycloPalloidHypoidGearCompoundSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3014.KlingelnbergCycloPalloidHypoidGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3014,
+        )
+
+        return self.__parent__._cast(
+            _3014.KlingelnbergCycloPalloidHypoidGearSetCompoundSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3015.KlingelnbergCycloPalloidSpiralBevelGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3015,
+        )
+
+        return self.__parent__._cast(
+            _3015.KlingelnbergCycloPalloidSpiralBevelGearCompoundSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3017.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3017,
+        )
+
+        return self.__parent__._cast(
+            _3017.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSystemDeflection
+        )
+
+    @property
+    def mass_disc_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3018.MassDiscCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3018,
+        )
+
+        return self.__parent__._cast(_3018.MassDiscCompoundSystemDeflection)
+
+    @property
+    def measurement_component_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3019.MeasurementComponentCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3019,
+        )
+
+        return self.__parent__._cast(_3019.MeasurementComponentCompoundSystemDeflection)
+
+    @property
+    def microphone_array_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3020.MicrophoneArrayCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3020,
+        )
+
+        return self.__parent__._cast(_3020.MicrophoneArrayCompoundSystemDeflection)
+
+    @property
+    def microphone_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3021.MicrophoneCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3021,
+        )
+
+        return self.__parent__._cast(_3021.MicrophoneCompoundSystemDeflection)
+
+    @property
+    def mountable_component_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3022.MountableComponentCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3022,
+        )
+
+        return self.__parent__._cast(_3022.MountableComponentCompoundSystemDeflection)
+
+    @property
+    def oil_seal_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3023.OilSealCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3023,
+        )
+
+        return self.__parent__._cast(_3023.OilSealCompoundSystemDeflection)
+
+    @property
+    def part_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3024.PartCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3024,
+        )
+
+        return self.__parent__._cast(_3024.PartCompoundSystemDeflection)
+
+    @property
+    def part_to_part_shear_coupling_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3025.PartToPartShearCouplingCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3025,
+        )
+
+        return self.__parent__._cast(
+            _3025.PartToPartShearCouplingCompoundSystemDeflection
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3027.PartToPartShearCouplingHalfCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3027,
+        )
+
+        return self.__parent__._cast(
+            _3027.PartToPartShearCouplingHalfCompoundSystemDeflection
+        )
+
+    @property
+    def planetary_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3029.PlanetaryGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3029,
+        )
+
+        return self.__parent__._cast(_3029.PlanetaryGearSetCompoundSystemDeflection)
+
+    @property
+    def planet_carrier_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3030.PlanetCarrierCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3030,
+        )
+
+        return self.__parent__._cast(_3030.PlanetCarrierCompoundSystemDeflection)
+
+    @property
+    def point_load_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3031.PointLoadCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3031,
+        )
+
+        return self.__parent__._cast(_3031.PointLoadCompoundSystemDeflection)
+
+    @property
+    def power_load_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3032.PowerLoadCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3032,
+        )
+
+        return self.__parent__._cast(_3032.PowerLoadCompoundSystemDeflection)
+
+    @property
+    def pulley_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3033.PulleyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3033,
+        )
+
+        return self.__parent__._cast(_3033.PulleyCompoundSystemDeflection)
+
+    @property
+    def ring_pins_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3034.RingPinsCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3034,
+        )
+
+        return self.__parent__._cast(_3034.RingPinsCompoundSystemDeflection)
+
+    @property
+    def rolling_ring_assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3036.RollingRingAssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3036,
+        )
+
+        return self.__parent__._cast(_3036.RollingRingAssemblyCompoundSystemDeflection)
+
+    @property
+    def rolling_ring_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3037.RollingRingCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3037,
+        )
+
+        return self.__parent__._cast(_3037.RollingRingCompoundSystemDeflection)
+
+    @property
+    def root_assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3039.RootAssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3039,
+        )
+
+        return self.__parent__._cast(_3039.RootAssemblyCompoundSystemDeflection)
+
+    @property
+    def shaft_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3040.ShaftCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3040,
+        )
+
+        return self.__parent__._cast(_3040.ShaftCompoundSystemDeflection)
+
+    @property
+    def shaft_hub_connection_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3042.ShaftHubConnectionCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3042,
+        )
+
+        return self.__parent__._cast(_3042.ShaftHubConnectionCompoundSystemDeflection)
+
+    @property
+    def specialised_assembly_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3044.SpecialisedAssemblyCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3044,
+        )
+
+        return self.__parent__._cast(_3044.SpecialisedAssemblyCompoundSystemDeflection)
+
+    @property
+    def spiral_bevel_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3045.SpiralBevelGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3045,
+        )
+
+        return self.__parent__._cast(_3045.SpiralBevelGearCompoundSystemDeflection)
+
+    @property
+    def spiral_bevel_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3047.SpiralBevelGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3047,
+        )
+
+        return self.__parent__._cast(_3047.SpiralBevelGearSetCompoundSystemDeflection)
+
+    @property
+    def spring_damper_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3048.SpringDamperCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3048,
+        )
+
+        return self.__parent__._cast(_3048.SpringDamperCompoundSystemDeflection)
+
+    @property
+    def spring_damper_half_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3050.SpringDamperHalfCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3050,
+        )
+
+        return self.__parent__._cast(_3050.SpringDamperHalfCompoundSystemDeflection)
+
+    @property
+    def straight_bevel_diff_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3051.StraightBevelDiffGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3051,
+        )
+
+        return self.__parent__._cast(
+            _3051.StraightBevelDiffGearCompoundSystemDeflection
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3053.StraightBevelDiffGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3053,
+        )
+
+        return self.__parent__._cast(
+            _3053.StraightBevelDiffGearSetCompoundSystemDeflection
+        )
+
+    @property
+    def straight_bevel_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3054.StraightBevelGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3054,
+        )
+
+        return self.__parent__._cast(_3054.StraightBevelGearCompoundSystemDeflection)
+
+    @property
+    def straight_bevel_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3056.StraightBevelGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3056,
+        )
+
+        return self.__parent__._cast(_3056.StraightBevelGearSetCompoundSystemDeflection)
+
+    @property
+    def straight_bevel_planet_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3057.StraightBevelPlanetGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3057,
+        )
+
+        return self.__parent__._cast(
+            _3057.StraightBevelPlanetGearCompoundSystemDeflection
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3058.StraightBevelSunGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3058,
+        )
+
+        return self.__parent__._cast(_3058.StraightBevelSunGearCompoundSystemDeflection)
+
+    @property
+    def synchroniser_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3059.SynchroniserCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3059,
+        )
+
+        return self.__parent__._cast(_3059.SynchroniserCompoundSystemDeflection)
+
+    @property
+    def synchroniser_half_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3060.SynchroniserHalfCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3060,
+        )
+
+        return self.__parent__._cast(_3060.SynchroniserHalfCompoundSystemDeflection)
+
+    @property
+    def synchroniser_part_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3061.SynchroniserPartCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3061,
+        )
+
+        return self.__parent__._cast(_3061.SynchroniserPartCompoundSystemDeflection)
+
+    @property
+    def synchroniser_sleeve_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3062.SynchroniserSleeveCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3062,
+        )
+
+        return self.__parent__._cast(_3062.SynchroniserSleeveCompoundSystemDeflection)
+
+    @property
+    def torque_converter_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3063.TorqueConverterCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3063,
+        )
+
+        return self.__parent__._cast(_3063.TorqueConverterCompoundSystemDeflection)
+
+    @property
+    def torque_converter_pump_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3065.TorqueConverterPumpCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3065,
+        )
+
+        return self.__parent__._cast(_3065.TorqueConverterPumpCompoundSystemDeflection)
+
+    @property
+    def torque_converter_turbine_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3066.TorqueConverterTurbineCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3066,
+        )
+
+        return self.__parent__._cast(
+            _3066.TorqueConverterTurbineCompoundSystemDeflection
+        )
+
+    @property
+    def unbalanced_mass_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3067.UnbalancedMassCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3067,
+        )
+
+        return self.__parent__._cast(_3067.UnbalancedMassCompoundSystemDeflection)
+
+    @property
+    def virtual_component_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3068.VirtualComponentCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3068,
+        )
+
+        return self.__parent__._cast(_3068.VirtualComponentCompoundSystemDeflection)
+
+    @property
+    def worm_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3069.WormGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3069,
+        )
+
+        return self.__parent__._cast(_3069.WormGearCompoundSystemDeflection)
+
+    @property
+    def worm_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3071.WormGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3071,
+        )
+
+        return self.__parent__._cast(_3071.WormGearSetCompoundSystemDeflection)
+
+    @property
+    def zerol_bevel_gear_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3072.ZerolBevelGearCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3072,
+        )
+
+        return self.__parent__._cast(_3072.ZerolBevelGearCompoundSystemDeflection)
+
+    @property
+    def zerol_bevel_gear_set_compound_system_deflection(
+        self: "CastSelf",
+    ) -> "_3074.ZerolBevelGearSetCompoundSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.system_deflections.compound import (
+            _3074,
+        )
+
+        return self.__parent__._cast(_3074.ZerolBevelGearSetCompoundSystemDeflection)
+
+    @property
+    def abstract_assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3211.AbstractAssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3211,
+        )
+
+        return self.__parent__._cast(
+            _3211.AbstractAssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def abstract_shaft_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3212.AbstractShaftCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3212,
+        )
+
+        return self.__parent__._cast(
+            _3212.AbstractShaftCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3213.AbstractShaftOrHousingCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3213,
+        )
+
+        return self.__parent__._cast(
+            _3213.AbstractShaftOrHousingCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3215.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3215,
+        )
+
+        return self.__parent__._cast(
+            _3215.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3217.AGMAGleasonConicalGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3217,
+        )
+
+        return self.__parent__._cast(
+            _3217.AGMAGleasonConicalGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3218.AssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3218,
+        )
+
+        return self.__parent__._cast(
+            _3218.AssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bearing_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3219.BearingCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3219,
+        )
+
+        return self.__parent__._cast(
+            _3219.BearingCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def belt_drive_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3221.BeltDriveCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3221,
+        )
+
+        return self.__parent__._cast(
+            _3221.BeltDriveCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3222.BevelDifferentialGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3222,
+        )
+
+        return self.__parent__._cast(
+            _3222.BevelDifferentialGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3224.BevelDifferentialGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3224,
+        )
+
+        return self.__parent__._cast(
+            _3224.BevelDifferentialGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3225.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3225,
+        )
+
+        return self.__parent__._cast(
+            _3225.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3226.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3226,
+        )
+
+        return self.__parent__._cast(
+            _3226.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3227.BevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3227,
+        )
+
+        return self.__parent__._cast(
+            _3227.BevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3229.BevelGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3229,
+        )
+
+        return self.__parent__._cast(
+            _3229.BevelGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bolt_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3230.BoltCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3230,
+        )
+
+        return self.__parent__._cast(_3230.BoltCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def bolted_joint_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3231.BoltedJointCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3231,
+        )
+
+        return self.__parent__._cast(
+            _3231.BoltedJointCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def clutch_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3232.ClutchCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3232,
+        )
+
+        return self.__parent__._cast(_3232.ClutchCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def clutch_half_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3234.ClutchHalfCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3234,
+        )
+
+        return self.__parent__._cast(
+            _3234.ClutchHalfCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def component_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3236.ComponentCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3236,
+        )
+
+        return self.__parent__._cast(
+            _3236.ComponentCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def concept_coupling_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3237.ConceptCouplingCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3237,
+        )
+
+        return self.__parent__._cast(
+            _3237.ConceptCouplingCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def concept_coupling_half_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3239.ConceptCouplingHalfCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3239,
+        )
+
+        return self.__parent__._cast(
+            _3239.ConceptCouplingHalfCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def concept_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3240.ConceptGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3240,
+        )
+
+        return self.__parent__._cast(
+            _3240.ConceptGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def concept_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3242.ConceptGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3242,
+        )
+
+        return self.__parent__._cast(
+            _3242.ConceptGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def conical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3243.ConicalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3243,
+        )
+
+        return self.__parent__._cast(
+            _3243.ConicalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def conical_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3245.ConicalGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3245,
+        )
+
+        return self.__parent__._cast(
+            _3245.ConicalGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def connector_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3247.ConnectorCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3247,
+        )
+
+        return self.__parent__._cast(
+            _3247.ConnectorCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def coupling_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3248.CouplingCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3248,
+        )
+
+        return self.__parent__._cast(
+            _3248.CouplingCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def coupling_half_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3250.CouplingHalfCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3250,
+        )
+
+        return self.__parent__._cast(
+            _3250.CouplingHalfCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cvt_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3252.CVTCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3252,
+        )
+
+        return self.__parent__._cast(_3252.CVTCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def cvt_pulley_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3253.CVTPulleyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3253,
+        )
+
+        return self.__parent__._cast(
+            _3253.CVTPulleyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cycloidal_assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3254.CycloidalAssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3254,
+        )
+
+        return self.__parent__._cast(
+            _3254.CycloidalAssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cycloidal_disc_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3256.CycloidalDiscCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3256,
+        )
+
+        return self.__parent__._cast(
+            _3256.CycloidalDiscCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cylindrical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3258.CylindricalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3258,
+        )
+
+        return self.__parent__._cast(
+            _3258.CylindricalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cylindrical_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3260.CylindricalGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3260,
+        )
+
+        return self.__parent__._cast(
+            _3260.CylindricalGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3261.CylindricalPlanetGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3261,
+        )
+
+        return self.__parent__._cast(
+            _3261.CylindricalPlanetGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def datum_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3262.DatumCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3262,
+        )
+
+        return self.__parent__._cast(_3262.DatumCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def external_cad_model_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3263.ExternalCADModelCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3263,
+        )
+
+        return self.__parent__._cast(
+            _3263.ExternalCADModelCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def face_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3264.FaceGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3264,
+        )
+
+        return self.__parent__._cast(
+            _3264.FaceGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def face_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3266.FaceGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3266,
+        )
+
+        return self.__parent__._cast(
+            _3266.FaceGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def fe_part_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3267.FEPartCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3267,
+        )
+
+        return self.__parent__._cast(_3267.FEPartCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def flexible_pin_assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3268.FlexiblePinAssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3268,
+        )
+
+        return self.__parent__._cast(
+            _3268.FlexiblePinAssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3269.GearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3269,
+        )
+
+        return self.__parent__._cast(_3269.GearCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3271.GearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3271,
+        )
+
+        return self.__parent__._cast(
+            _3271.GearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def guide_dxf_model_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3272.GuideDxfModelCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3272,
+        )
+
+        return self.__parent__._cast(
+            _3272.GuideDxfModelCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def hypoid_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3273.HypoidGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3273,
+        )
+
+        return self.__parent__._cast(
+            _3273.HypoidGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def hypoid_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3275.HypoidGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3275,
+        )
+
+        return self.__parent__._cast(
+            _3275.HypoidGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3277.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3277,
+        )
+
+        return self.__parent__._cast(
+            _3277.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3279.KlingelnbergCycloPalloidConicalGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3279,
+        )
+
+        return self.__parent__._cast(
+            _3279.KlingelnbergCycloPalloidConicalGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> (
+        "_3280.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponse"
+    ):
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3280,
+        )
+
+        return self.__parent__._cast(
+            _3280.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3282.KlingelnbergCycloPalloidHypoidGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3282,
+        )
+
+        return self.__parent__._cast(
+            _3282.KlingelnbergCycloPalloidHypoidGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3283.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3283,
+        )
+
+        return self.__parent__._cast(
+            _3283.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3285.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3285,
+        )
+
+        return self.__parent__._cast(
+            _3285.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def mass_disc_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3286.MassDiscCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3286,
+        )
+
+        return self.__parent__._cast(
+            _3286.MassDiscCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def measurement_component_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3287.MeasurementComponentCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3287,
+        )
+
+        return self.__parent__._cast(
+            _3287.MeasurementComponentCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def microphone_array_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3288.MicrophoneArrayCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3288,
+        )
+
+        return self.__parent__._cast(
+            _3288.MicrophoneArrayCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def microphone_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3289.MicrophoneCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3289,
+        )
+
+        return self.__parent__._cast(
+            _3289.MicrophoneCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def mountable_component_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3290.MountableComponentCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3290,
+        )
+
+        return self.__parent__._cast(
+            _3290.MountableComponentCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def oil_seal_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3291.OilSealCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3291,
+        )
+
+        return self.__parent__._cast(
+            _3291.OilSealCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def part_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3292.PartCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3292,
+        )
+
+        return self.__parent__._cast(_3292.PartCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def part_to_part_shear_coupling_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3293.PartToPartShearCouplingCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3293,
+        )
+
+        return self.__parent__._cast(
+            _3293.PartToPartShearCouplingCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3295.PartToPartShearCouplingHalfCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3295,
+        )
+
+        return self.__parent__._cast(
+            _3295.PartToPartShearCouplingHalfCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def planetary_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3297.PlanetaryGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3297,
+        )
+
+        return self.__parent__._cast(
+            _3297.PlanetaryGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def planet_carrier_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3298.PlanetCarrierCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3298,
+        )
+
+        return self.__parent__._cast(
+            _3298.PlanetCarrierCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def point_load_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3299.PointLoadCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3299,
+        )
+
+        return self.__parent__._cast(
+            _3299.PointLoadCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def power_load_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3300.PowerLoadCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3300,
+        )
+
+        return self.__parent__._cast(
+            _3300.PowerLoadCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def pulley_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3301.PulleyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3301,
+        )
+
+        return self.__parent__._cast(_3301.PulleyCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def ring_pins_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3302.RingPinsCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3302,
+        )
+
+        return self.__parent__._cast(
+            _3302.RingPinsCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def rolling_ring_assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3304.RollingRingAssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3304,
+        )
+
+        return self.__parent__._cast(
+            _3304.RollingRingAssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def rolling_ring_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3305.RollingRingCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3305,
+        )
+
+        return self.__parent__._cast(
+            _3305.RollingRingCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def root_assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3307.RootAssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3307,
+        )
+
+        return self.__parent__._cast(
+            _3307.RootAssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def shaft_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3308.ShaftCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3308,
+        )
+
+        return self.__parent__._cast(_3308.ShaftCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def shaft_hub_connection_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3309.ShaftHubConnectionCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3309,
+        )
+
+        return self.__parent__._cast(
+            _3309.ShaftHubConnectionCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def specialised_assembly_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3311.SpecialisedAssemblyCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3311,
+        )
+
+        return self.__parent__._cast(
+            _3311.SpecialisedAssemblyCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def spiral_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3312.SpiralBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3312,
+        )
+
+        return self.__parent__._cast(
+            _3312.SpiralBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3314.SpiralBevelGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3314,
+        )
+
+        return self.__parent__._cast(
+            _3314.SpiralBevelGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def spring_damper_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3315.SpringDamperCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3315,
+        )
+
+        return self.__parent__._cast(
+            _3315.SpringDamperCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def spring_damper_half_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3317.SpringDamperHalfCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3317,
+        )
+
+        return self.__parent__._cast(
+            _3317.SpringDamperHalfCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3318.StraightBevelDiffGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3318,
+        )
+
+        return self.__parent__._cast(
+            _3318.StraightBevelDiffGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3320.StraightBevelDiffGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3320,
+        )
+
+        return self.__parent__._cast(
+            _3320.StraightBevelDiffGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3321.StraightBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3321,
+        )
+
+        return self.__parent__._cast(
+            _3321.StraightBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3323.StraightBevelGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3323,
+        )
+
+        return self.__parent__._cast(
+            _3323.StraightBevelGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3324.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3324,
+        )
+
+        return self.__parent__._cast(
+            _3324.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3325.StraightBevelSunGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3325,
+        )
+
+        return self.__parent__._cast(
+            _3325.StraightBevelSunGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def synchroniser_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3326.SynchroniserCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3326,
+        )
+
+        return self.__parent__._cast(
+            _3326.SynchroniserCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def synchroniser_half_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3327.SynchroniserHalfCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3327,
+        )
+
+        return self.__parent__._cast(
+            _3327.SynchroniserHalfCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def synchroniser_part_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3328.SynchroniserPartCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3328,
+        )
+
+        return self.__parent__._cast(
+            _3328.SynchroniserPartCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def synchroniser_sleeve_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3329.SynchroniserSleeveCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3329,
+        )
+
+        return self.__parent__._cast(
+            _3329.SynchroniserSleeveCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def torque_converter_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3330.TorqueConverterCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3330,
+        )
+
+        return self.__parent__._cast(
+            _3330.TorqueConverterCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def torque_converter_pump_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3332.TorqueConverterPumpCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3332,
+        )
+
+        return self.__parent__._cast(
+            _3332.TorqueConverterPumpCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def torque_converter_turbine_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3333.TorqueConverterTurbineCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3333,
+        )
+
+        return self.__parent__._cast(
+            _3333.TorqueConverterTurbineCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def unbalanced_mass_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3334.UnbalancedMassCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3334,
+        )
+
+        return self.__parent__._cast(
+            _3334.UnbalancedMassCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def virtual_component_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3335.VirtualComponentCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3335,
+        )
+
+        return self.__parent__._cast(
+            _3335.VirtualComponentCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def worm_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3336.WormGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3336,
+        )
+
+        return self.__parent__._cast(
+            _3336.WormGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def worm_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3338.WormGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3338,
+        )
+
+        return self.__parent__._cast(
+            _3338.WormGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def zerol_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3339.ZerolBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3339,
+        )
+
+        return self.__parent__._cast(
+            _3339.ZerolBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3341.ZerolBevelGearSetCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3341,
+        )
+
+        return self.__parent__._cast(
+            _3341.ZerolBevelGearSetCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def abstract_assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3474.AbstractAssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3474,
+        )
+
+        return self.__parent__._cast(
+            _3474.AbstractAssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def abstract_shaft_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3475.AbstractShaftCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3475,
+        )
+
+        return self.__parent__._cast(
+            _3475.AbstractShaftCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3476.AbstractShaftOrHousingCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3476,
+        )
+
+        return self.__parent__._cast(
+            _3476.AbstractShaftOrHousingCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3478.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3478,
+        )
+
+        return self.__parent__._cast(
+            _3478.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> (
+        "_3480.AGMAGleasonConicalGearSetCompoundSteadyStateSynchronousResponseOnAShaft"
+    ):
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3480,
+        )
+
+        return self.__parent__._cast(
+            _3480.AGMAGleasonConicalGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3481.AssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3481,
+        )
+
+        return self.__parent__._cast(
+            _3481.AssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bearing_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3482.BearingCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3482,
+        )
+
+        return self.__parent__._cast(
+            _3482.BearingCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def belt_drive_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3484.BeltDriveCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3484,
+        )
+
+        return self.__parent__._cast(
+            _3484.BeltDriveCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bevel_differential_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3485.BevelDifferentialGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3485,
+        )
+
+        return self.__parent__._cast(
+            _3485.BevelDifferentialGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3487.BevelDifferentialGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3487,
+        )
+
+        return self.__parent__._cast(
+            _3487.BevelDifferentialGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3488.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3488,
+        )
+
+        return self.__parent__._cast(
+            _3488.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3489.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3489,
+        )
+
+        return self.__parent__._cast(
+            _3489.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bevel_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3490.BevelGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3490,
+        )
+
+        return self.__parent__._cast(
+            _3490.BevelGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bevel_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3492.BevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3492,
+        )
+
+        return self.__parent__._cast(
+            _3492.BevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bolt_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3493.BoltCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3493,
+        )
+
+        return self.__parent__._cast(
+            _3493.BoltCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def bolted_joint_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3494.BoltedJointCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3494,
+        )
+
+        return self.__parent__._cast(
+            _3494.BoltedJointCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def clutch_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3495.ClutchCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3495,
+        )
+
+        return self.__parent__._cast(
+            _3495.ClutchCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def clutch_half_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3497.ClutchHalfCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3497,
+        )
+
+        return self.__parent__._cast(
+            _3497.ClutchHalfCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def component_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3499.ComponentCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3499,
+        )
+
+        return self.__parent__._cast(
+            _3499.ComponentCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def concept_coupling_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3500.ConceptCouplingCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3500,
+        )
+
+        return self.__parent__._cast(
+            _3500.ConceptCouplingCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def concept_coupling_half_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3502.ConceptCouplingHalfCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3502,
+        )
+
+        return self.__parent__._cast(
+            _3502.ConceptCouplingHalfCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def concept_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3503.ConceptGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3503,
+        )
+
+        return self.__parent__._cast(
+            _3503.ConceptGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def concept_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3505.ConceptGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3505,
+        )
+
+        return self.__parent__._cast(
+            _3505.ConceptGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def conical_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3506.ConicalGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3506,
+        )
+
+        return self.__parent__._cast(
+            _3506.ConicalGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def conical_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3508.ConicalGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3508,
+        )
+
+        return self.__parent__._cast(
+            _3508.ConicalGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def connector_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3510.ConnectorCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3510,
+        )
+
+        return self.__parent__._cast(
+            _3510.ConnectorCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def coupling_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3511.CouplingCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3511,
+        )
+
+        return self.__parent__._cast(
+            _3511.CouplingCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def coupling_half_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3513.CouplingHalfCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3513,
+        )
+
+        return self.__parent__._cast(
+            _3513.CouplingHalfCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cvt_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3515.CVTCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3515,
+        )
+
+        return self.__parent__._cast(
+            _3515.CVTCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cvt_pulley_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3516.CVTPulleyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3516,
+        )
+
+        return self.__parent__._cast(
+            _3516.CVTPulleyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cycloidal_assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3517.CycloidalAssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3517,
+        )
+
+        return self.__parent__._cast(
+            _3517.CycloidalAssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cycloidal_disc_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3519.CycloidalDiscCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3519,
+        )
+
+        return self.__parent__._cast(
+            _3519.CycloidalDiscCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cylindrical_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3521.CylindricalGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3521,
+        )
+
+        return self.__parent__._cast(
+            _3521.CylindricalGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cylindrical_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3523.CylindricalGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3523,
+        )
+
+        return self.__parent__._cast(
+            _3523.CylindricalGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3524.CylindricalPlanetGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3524,
+        )
+
+        return self.__parent__._cast(
+            _3524.CylindricalPlanetGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def datum_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3525.DatumCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3525,
+        )
+
+        return self.__parent__._cast(
+            _3525.DatumCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def external_cad_model_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3526.ExternalCADModelCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3526,
+        )
+
+        return self.__parent__._cast(
+            _3526.ExternalCADModelCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def face_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3527.FaceGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3527,
+        )
+
+        return self.__parent__._cast(
+            _3527.FaceGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def face_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3529.FaceGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3529,
+        )
+
+        return self.__parent__._cast(
+            _3529.FaceGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def fe_part_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3530.FEPartCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3530,
+        )
+
+        return self.__parent__._cast(
+            _3530.FEPartCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def flexible_pin_assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3531.FlexiblePinAssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3531,
+        )
+
+        return self.__parent__._cast(
+            _3531.FlexiblePinAssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3532.GearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3532,
+        )
+
+        return self.__parent__._cast(
+            _3532.GearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3534.GearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3534,
+        )
+
+        return self.__parent__._cast(
+            _3534.GearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def guide_dxf_model_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3535.GuideDxfModelCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3535,
+        )
+
+        return self.__parent__._cast(
+            _3535.GuideDxfModelCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def hypoid_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3536.HypoidGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3536,
+        )
+
+        return self.__parent__._cast(
+            _3536.HypoidGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def hypoid_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3538.HypoidGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3538,
+        )
+
+        return self.__parent__._cast(
+            _3538.HypoidGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3540.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3540,
+        )
+
+        return self.__parent__._cast(
+            _3540.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3542.KlingelnbergCycloPalloidConicalGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3542,
+        )
+
+        return self.__parent__._cast(
+            _3542.KlingelnbergCycloPalloidConicalGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3543.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3543,
+        )
+
+        return self.__parent__._cast(
+            _3543.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3545.KlingelnbergCycloPalloidHypoidGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3545,
+        )
+
+        return self.__parent__._cast(
+            _3545.KlingelnbergCycloPalloidHypoidGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3546.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3546,
+        )
+
+        return self.__parent__._cast(
+            _3546.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3548.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3548,
+        )
+
+        return self.__parent__._cast(
+            _3548.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def mass_disc_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3549.MassDiscCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3549,
+        )
+
+        return self.__parent__._cast(
+            _3549.MassDiscCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def measurement_component_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3550.MeasurementComponentCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3550,
+        )
+
+        return self.__parent__._cast(
+            _3550.MeasurementComponentCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def microphone_array_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3551.MicrophoneArrayCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3551,
+        )
+
+        return self.__parent__._cast(
+            _3551.MicrophoneArrayCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def microphone_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3552.MicrophoneCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3552,
+        )
+
+        return self.__parent__._cast(
+            _3552.MicrophoneCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def mountable_component_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3553.MountableComponentCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3553,
+        )
+
+        return self.__parent__._cast(
+            _3553.MountableComponentCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def oil_seal_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3554.OilSealCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3554,
+        )
+
+        return self.__parent__._cast(
+            _3554.OilSealCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def part_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3555.PartCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3555,
+        )
+
+        return self.__parent__._cast(
+            _3555.PartCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def part_to_part_shear_coupling_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3556.PartToPartShearCouplingCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3556,
+        )
+
+        return self.__parent__._cast(
+            _3556.PartToPartShearCouplingCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3558.PartToPartShearCouplingHalfCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3558,
+        )
+
+        return self.__parent__._cast(
+            _3558.PartToPartShearCouplingHalfCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def planetary_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3560.PlanetaryGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3560,
+        )
+
+        return self.__parent__._cast(
+            _3560.PlanetaryGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def planet_carrier_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3561.PlanetCarrierCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3561,
+        )
+
+        return self.__parent__._cast(
+            _3561.PlanetCarrierCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def point_load_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3562.PointLoadCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3562,
+        )
+
+        return self.__parent__._cast(
+            _3562.PointLoadCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def power_load_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3563.PowerLoadCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3563,
+        )
+
+        return self.__parent__._cast(
+            _3563.PowerLoadCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def pulley_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3564.PulleyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3564,
+        )
+
+        return self.__parent__._cast(
+            _3564.PulleyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def ring_pins_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3565.RingPinsCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3565,
+        )
+
+        return self.__parent__._cast(
+            _3565.RingPinsCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def rolling_ring_assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3567.RollingRingAssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3567,
+        )
+
+        return self.__parent__._cast(
+            _3567.RollingRingAssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def rolling_ring_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3568.RollingRingCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3568,
+        )
+
+        return self.__parent__._cast(
+            _3568.RollingRingCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def root_assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3570.RootAssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3570,
+        )
+
+        return self.__parent__._cast(
+            _3570.RootAssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def shaft_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3571.ShaftCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3571,
+        )
+
+        return self.__parent__._cast(
+            _3571.ShaftCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def shaft_hub_connection_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3572.ShaftHubConnectionCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3572,
+        )
+
+        return self.__parent__._cast(
+            _3572.ShaftHubConnectionCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def specialised_assembly_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3574.SpecialisedAssemblyCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3574,
+        )
+
+        return self.__parent__._cast(
+            _3574.SpecialisedAssemblyCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def spiral_bevel_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3575.SpiralBevelGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3575,
+        )
+
+        return self.__parent__._cast(
+            _3575.SpiralBevelGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3577.SpiralBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3577,
+        )
+
+        return self.__parent__._cast(
+            _3577.SpiralBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def spring_damper_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3578.SpringDamperCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3578,
+        )
+
+        return self.__parent__._cast(
+            _3578.SpringDamperCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def spring_damper_half_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3580.SpringDamperHalfCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3580,
+        )
+
+        return self.__parent__._cast(
+            _3580.SpringDamperHalfCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3581.StraightBevelDiffGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3581,
+        )
+
+        return self.__parent__._cast(
+            _3581.StraightBevelDiffGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3583.StraightBevelDiffGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3583,
+        )
+
+        return self.__parent__._cast(
+            _3583.StraightBevelDiffGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def straight_bevel_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3584.StraightBevelGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3584,
+        )
+
+        return self.__parent__._cast(
+            _3584.StraightBevelGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3586.StraightBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3586,
+        )
+
+        return self.__parent__._cast(
+            _3586.StraightBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3587.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3587,
+        )
+
+        return self.__parent__._cast(
+            _3587.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3588.StraightBevelSunGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3588,
+        )
+
+        return self.__parent__._cast(
+            _3588.StraightBevelSunGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def synchroniser_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3589.SynchroniserCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3589,
+        )
+
+        return self.__parent__._cast(
+            _3589.SynchroniserCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def synchroniser_half_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3590.SynchroniserHalfCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3590,
+        )
+
+        return self.__parent__._cast(
+            _3590.SynchroniserHalfCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def synchroniser_part_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3591.SynchroniserPartCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3591,
+        )
+
+        return self.__parent__._cast(
+            _3591.SynchroniserPartCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def synchroniser_sleeve_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3592.SynchroniserSleeveCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3592,
+        )
+
+        return self.__parent__._cast(
+            _3592.SynchroniserSleeveCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def torque_converter_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3593.TorqueConverterCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3593,
+        )
+
+        return self.__parent__._cast(
+            _3593.TorqueConverterCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def torque_converter_pump_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3595.TorqueConverterPumpCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3595,
+        )
+
+        return self.__parent__._cast(
+            _3595.TorqueConverterPumpCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def torque_converter_turbine_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3596.TorqueConverterTurbineCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3596,
+        )
+
+        return self.__parent__._cast(
+            _3596.TorqueConverterTurbineCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def unbalanced_mass_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3597.UnbalancedMassCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3597,
+        )
+
+        return self.__parent__._cast(
+            _3597.UnbalancedMassCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def virtual_component_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3598.VirtualComponentCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3598,
+        )
+
+        return self.__parent__._cast(
+            _3598.VirtualComponentCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def worm_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3599.WormGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3599,
+        )
+
+        return self.__parent__._cast(
+            _3599.WormGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def worm_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3601.WormGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3601,
+        )
+
+        return self.__parent__._cast(
+            _3601.WormGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def zerol_bevel_gear_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3602.ZerolBevelGearCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3602,
+        )
+
+        return self.__parent__._cast(
+            _3602.ZerolBevelGearCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_steady_state_synchronous_response_on_a_shaft(
+        self: "CastSelf",
+    ) -> "_3604.ZerolBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_on_a_shaft.compound import (
+            _3604,
+        )
+
+        return self.__parent__._cast(
+            _3604.ZerolBevelGearSetCompoundSteadyStateSynchronousResponseOnAShaft
+        )
+
+    @property
+    def abstract_assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3737.AbstractAssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3737,
+        )
+
+        return self.__parent__._cast(
+            _3737.AbstractAssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def abstract_shaft_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3738.AbstractShaftCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3738,
+        )
+
+        return self.__parent__._cast(
+            _3738.AbstractShaftCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3739.AbstractShaftOrHousingCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3739,
+        )
+
+        return self.__parent__._cast(
+            _3739.AbstractShaftOrHousingCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3741.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3741,
+        )
+
+        return self.__parent__._cast(
+            _3741.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> (
+        "_3743.AGMAGleasonConicalGearSetCompoundSteadyStateSynchronousResponseAtASpeed"
+    ):
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3743,
+        )
+
+        return self.__parent__._cast(
+            _3743.AGMAGleasonConicalGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3744.AssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3744,
+        )
+
+        return self.__parent__._cast(
+            _3744.AssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bearing_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3745.BearingCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3745,
+        )
+
+        return self.__parent__._cast(
+            _3745.BearingCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def belt_drive_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3747.BeltDriveCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3747,
+        )
+
+        return self.__parent__._cast(
+            _3747.BeltDriveCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bevel_differential_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3748.BevelDifferentialGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3748,
+        )
+
+        return self.__parent__._cast(
+            _3748.BevelDifferentialGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3750.BevelDifferentialGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3750,
+        )
+
+        return self.__parent__._cast(
+            _3750.BevelDifferentialGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3751.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3751,
+        )
+
+        return self.__parent__._cast(
+            _3751.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3752.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3752,
+        )
+
+        return self.__parent__._cast(
+            _3752.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bevel_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3753.BevelGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3753,
+        )
+
+        return self.__parent__._cast(
+            _3753.BevelGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bevel_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3755.BevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3755,
+        )
+
+        return self.__parent__._cast(
+            _3755.BevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bolt_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3756.BoltCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3756,
+        )
+
+        return self.__parent__._cast(
+            _3756.BoltCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def bolted_joint_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3757.BoltedJointCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3757,
+        )
+
+        return self.__parent__._cast(
+            _3757.BoltedJointCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def clutch_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3758.ClutchCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3758,
+        )
+
+        return self.__parent__._cast(
+            _3758.ClutchCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def clutch_half_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3760.ClutchHalfCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3760,
+        )
+
+        return self.__parent__._cast(
+            _3760.ClutchHalfCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def component_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3762.ComponentCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3762,
+        )
+
+        return self.__parent__._cast(
+            _3762.ComponentCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def concept_coupling_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3763.ConceptCouplingCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3763,
+        )
+
+        return self.__parent__._cast(
+            _3763.ConceptCouplingCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def concept_coupling_half_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3765.ConceptCouplingHalfCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3765,
+        )
+
+        return self.__parent__._cast(
+            _3765.ConceptCouplingHalfCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def concept_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3766.ConceptGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3766,
+        )
+
+        return self.__parent__._cast(
+            _3766.ConceptGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def concept_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3768.ConceptGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3768,
+        )
+
+        return self.__parent__._cast(
+            _3768.ConceptGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def conical_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3769.ConicalGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3769,
+        )
+
+        return self.__parent__._cast(
+            _3769.ConicalGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def conical_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3771.ConicalGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3771,
+        )
+
+        return self.__parent__._cast(
+            _3771.ConicalGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def connector_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3773.ConnectorCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3773,
+        )
+
+        return self.__parent__._cast(
+            _3773.ConnectorCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def coupling_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3774.CouplingCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3774,
+        )
+
+        return self.__parent__._cast(
+            _3774.CouplingCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def coupling_half_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3776.CouplingHalfCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3776,
+        )
+
+        return self.__parent__._cast(
+            _3776.CouplingHalfCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cvt_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3778.CVTCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3778,
+        )
+
+        return self.__parent__._cast(
+            _3778.CVTCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cvt_pulley_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3779.CVTPulleyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3779,
+        )
+
+        return self.__parent__._cast(
+            _3779.CVTPulleyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cycloidal_assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3780.CycloidalAssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3780,
+        )
+
+        return self.__parent__._cast(
+            _3780.CycloidalAssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cycloidal_disc_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3782.CycloidalDiscCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3782,
+        )
+
+        return self.__parent__._cast(
+            _3782.CycloidalDiscCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cylindrical_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3784.CylindricalGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3784,
+        )
+
+        return self.__parent__._cast(
+            _3784.CylindricalGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cylindrical_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3786.CylindricalGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3786,
+        )
+
+        return self.__parent__._cast(
+            _3786.CylindricalGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3787.CylindricalPlanetGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3787,
+        )
+
+        return self.__parent__._cast(
+            _3787.CylindricalPlanetGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def datum_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3788.DatumCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3788,
+        )
+
+        return self.__parent__._cast(
+            _3788.DatumCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def external_cad_model_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3789.ExternalCADModelCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3789,
+        )
+
+        return self.__parent__._cast(
+            _3789.ExternalCADModelCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def face_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3790.FaceGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3790,
+        )
+
+        return self.__parent__._cast(
+            _3790.FaceGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def face_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3792.FaceGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3792,
+        )
+
+        return self.__parent__._cast(
+            _3792.FaceGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def fe_part_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3793.FEPartCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3793,
+        )
+
+        return self.__parent__._cast(
+            _3793.FEPartCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def flexible_pin_assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3794.FlexiblePinAssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3794,
+        )
+
+        return self.__parent__._cast(
+            _3794.FlexiblePinAssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3795.GearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3795,
+        )
+
+        return self.__parent__._cast(
+            _3795.GearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3797.GearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3797,
+        )
+
+        return self.__parent__._cast(
+            _3797.GearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def guide_dxf_model_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3798.GuideDxfModelCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3798,
+        )
+
+        return self.__parent__._cast(
+            _3798.GuideDxfModelCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def hypoid_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3799.HypoidGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3799,
+        )
+
+        return self.__parent__._cast(
+            _3799.HypoidGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def hypoid_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3801.HypoidGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3801,
+        )
+
+        return self.__parent__._cast(
+            _3801.HypoidGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3803.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3803,
+        )
+
+        return self.__parent__._cast(
+            _3803.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3805.KlingelnbergCycloPalloidConicalGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3805,
+        )
+
+        return self.__parent__._cast(
+            _3805.KlingelnbergCycloPalloidConicalGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3806.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3806,
+        )
+
+        return self.__parent__._cast(
+            _3806.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3808.KlingelnbergCycloPalloidHypoidGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3808,
+        )
+
+        return self.__parent__._cast(
+            _3808.KlingelnbergCycloPalloidHypoidGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3809.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3809,
+        )
+
+        return self.__parent__._cast(
+            _3809.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3811.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3811,
+        )
+
+        return self.__parent__._cast(
+            _3811.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def mass_disc_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3812.MassDiscCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3812,
+        )
+
+        return self.__parent__._cast(
+            _3812.MassDiscCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def measurement_component_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3813.MeasurementComponentCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3813,
+        )
+
+        return self.__parent__._cast(
+            _3813.MeasurementComponentCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def microphone_array_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3814.MicrophoneArrayCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3814,
+        )
+
+        return self.__parent__._cast(
+            _3814.MicrophoneArrayCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def microphone_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3815.MicrophoneCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3815,
+        )
+
+        return self.__parent__._cast(
+            _3815.MicrophoneCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def mountable_component_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3816.MountableComponentCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3816,
+        )
+
+        return self.__parent__._cast(
+            _3816.MountableComponentCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def oil_seal_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3817.OilSealCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3817,
+        )
+
+        return self.__parent__._cast(
+            _3817.OilSealCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def part_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3818.PartCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3818,
+        )
+
+        return self.__parent__._cast(
+            _3818.PartCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def part_to_part_shear_coupling_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3819.PartToPartShearCouplingCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3819,
+        )
+
+        return self.__parent__._cast(
+            _3819.PartToPartShearCouplingCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3821.PartToPartShearCouplingHalfCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3821,
+        )
+
+        return self.__parent__._cast(
+            _3821.PartToPartShearCouplingHalfCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def planetary_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3823.PlanetaryGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3823,
+        )
+
+        return self.__parent__._cast(
+            _3823.PlanetaryGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def planet_carrier_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3824.PlanetCarrierCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3824,
+        )
+
+        return self.__parent__._cast(
+            _3824.PlanetCarrierCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def point_load_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3825.PointLoadCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3825,
+        )
+
+        return self.__parent__._cast(
+            _3825.PointLoadCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def power_load_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3826.PowerLoadCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3826,
+        )
+
+        return self.__parent__._cast(
+            _3826.PowerLoadCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def pulley_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3827.PulleyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3827,
+        )
+
+        return self.__parent__._cast(
+            _3827.PulleyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def ring_pins_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3828.RingPinsCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3828,
+        )
+
+        return self.__parent__._cast(
+            _3828.RingPinsCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def rolling_ring_assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3830.RollingRingAssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3830,
+        )
+
+        return self.__parent__._cast(
+            _3830.RollingRingAssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def rolling_ring_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3831.RollingRingCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3831,
+        )
+
+        return self.__parent__._cast(
+            _3831.RollingRingCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def root_assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3833.RootAssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3833,
+        )
+
+        return self.__parent__._cast(
+            _3833.RootAssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def shaft_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3834.ShaftCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3834,
+        )
+
+        return self.__parent__._cast(
+            _3834.ShaftCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def shaft_hub_connection_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3835.ShaftHubConnectionCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3835,
+        )
+
+        return self.__parent__._cast(
+            _3835.ShaftHubConnectionCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def specialised_assembly_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3837.SpecialisedAssemblyCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3837,
+        )
+
+        return self.__parent__._cast(
+            _3837.SpecialisedAssemblyCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def spiral_bevel_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3838.SpiralBevelGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3838,
+        )
+
+        return self.__parent__._cast(
+            _3838.SpiralBevelGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3840.SpiralBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3840,
+        )
+
+        return self.__parent__._cast(
+            _3840.SpiralBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def spring_damper_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3841.SpringDamperCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3841,
+        )
+
+        return self.__parent__._cast(
+            _3841.SpringDamperCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def spring_damper_half_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3843.SpringDamperHalfCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3843,
+        )
+
+        return self.__parent__._cast(
+            _3843.SpringDamperHalfCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3844.StraightBevelDiffGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3844,
+        )
+
+        return self.__parent__._cast(
+            _3844.StraightBevelDiffGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3846.StraightBevelDiffGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3846,
+        )
+
+        return self.__parent__._cast(
+            _3846.StraightBevelDiffGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def straight_bevel_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3847.StraightBevelGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3847,
+        )
+
+        return self.__parent__._cast(
+            _3847.StraightBevelGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3849.StraightBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3849,
+        )
+
+        return self.__parent__._cast(
+            _3849.StraightBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3850.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3850,
+        )
+
+        return self.__parent__._cast(
+            _3850.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3851.StraightBevelSunGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3851,
+        )
+
+        return self.__parent__._cast(
+            _3851.StraightBevelSunGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def synchroniser_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3852.SynchroniserCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3852,
+        )
+
+        return self.__parent__._cast(
+            _3852.SynchroniserCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def synchroniser_half_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3853.SynchroniserHalfCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3853,
+        )
+
+        return self.__parent__._cast(
+            _3853.SynchroniserHalfCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def synchroniser_part_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3854.SynchroniserPartCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3854,
+        )
+
+        return self.__parent__._cast(
+            _3854.SynchroniserPartCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def synchroniser_sleeve_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3855.SynchroniserSleeveCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3855,
+        )
+
+        return self.__parent__._cast(
+            _3855.SynchroniserSleeveCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def torque_converter_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3856.TorqueConverterCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3856,
+        )
+
+        return self.__parent__._cast(
+            _3856.TorqueConverterCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def torque_converter_pump_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3858.TorqueConverterPumpCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3858,
+        )
+
+        return self.__parent__._cast(
+            _3858.TorqueConverterPumpCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def torque_converter_turbine_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3859.TorqueConverterTurbineCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3859,
+        )
+
+        return self.__parent__._cast(
+            _3859.TorqueConverterTurbineCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def unbalanced_mass_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3860.UnbalancedMassCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3860,
+        )
+
+        return self.__parent__._cast(
+            _3860.UnbalancedMassCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def virtual_component_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3861.VirtualComponentCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3861,
+        )
+
+        return self.__parent__._cast(
+            _3861.VirtualComponentCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def worm_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3862.WormGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3862,
+        )
+
+        return self.__parent__._cast(
+            _3862.WormGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def worm_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3864.WormGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3864,
+        )
+
+        return self.__parent__._cast(
+            _3864.WormGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def zerol_bevel_gear_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3865.ZerolBevelGearCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3865,
+        )
+
+        return self.__parent__._cast(
+            _3865.ZerolBevelGearCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_steady_state_synchronous_response_at_a_speed(
+        self: "CastSelf",
+    ) -> "_3867.ZerolBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses_at_a_speed.compound import (
+            _3867,
+        )
+
+        return self.__parent__._cast(
+            _3867.ZerolBevelGearSetCompoundSteadyStateSynchronousResponseAtASpeed
+        )
+
+    @property
+    def abstract_assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4004.AbstractAssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4004,
+        )
+
+        return self.__parent__._cast(_4004.AbstractAssemblyCompoundStabilityAnalysis)
+
+    @property
+    def abstract_shaft_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4005.AbstractShaftCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4005,
+        )
+
+        return self.__parent__._cast(_4005.AbstractShaftCompoundStabilityAnalysis)
+
+    @property
+    def abstract_shaft_or_housing_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4006.AbstractShaftOrHousingCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4006,
+        )
+
+        return self.__parent__._cast(
+            _4006.AbstractShaftOrHousingCompoundStabilityAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4008.AGMAGleasonConicalGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4008,
+        )
+
+        return self.__parent__._cast(
+            _4008.AGMAGleasonConicalGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4010.AGMAGleasonConicalGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4010,
+        )
+
+        return self.__parent__._cast(
+            _4010.AGMAGleasonConicalGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4011.AssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4011,
+        )
+
+        return self.__parent__._cast(_4011.AssemblyCompoundStabilityAnalysis)
+
+    @property
+    def bearing_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4012.BearingCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4012,
+        )
+
+        return self.__parent__._cast(_4012.BearingCompoundStabilityAnalysis)
+
+    @property
+    def belt_drive_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4014.BeltDriveCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4014,
+        )
+
+        return self.__parent__._cast(_4014.BeltDriveCompoundStabilityAnalysis)
+
+    @property
+    def bevel_differential_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4015.BevelDifferentialGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4015,
+        )
+
+        return self.__parent__._cast(
+            _4015.BevelDifferentialGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4017.BevelDifferentialGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4017,
+        )
+
+        return self.__parent__._cast(
+            _4017.BevelDifferentialGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4018.BevelDifferentialPlanetGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4018,
+        )
+
+        return self.__parent__._cast(
+            _4018.BevelDifferentialPlanetGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4019.BevelDifferentialSunGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4019,
+        )
+
+        return self.__parent__._cast(
+            _4019.BevelDifferentialSunGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def bevel_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4020.BevelGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4020,
+        )
+
+        return self.__parent__._cast(_4020.BevelGearCompoundStabilityAnalysis)
+
+    @property
+    def bevel_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4022.BevelGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4022,
+        )
+
+        return self.__parent__._cast(_4022.BevelGearSetCompoundStabilityAnalysis)
+
+    @property
+    def bolt_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4023.BoltCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4023,
+        )
+
+        return self.__parent__._cast(_4023.BoltCompoundStabilityAnalysis)
+
+    @property
+    def bolted_joint_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4024.BoltedJointCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4024,
+        )
+
+        return self.__parent__._cast(_4024.BoltedJointCompoundStabilityAnalysis)
+
+    @property
+    def clutch_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4025.ClutchCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4025,
+        )
+
+        return self.__parent__._cast(_4025.ClutchCompoundStabilityAnalysis)
+
+    @property
+    def clutch_half_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4027.ClutchHalfCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4027,
+        )
+
+        return self.__parent__._cast(_4027.ClutchHalfCompoundStabilityAnalysis)
+
+    @property
+    def component_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4029.ComponentCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4029,
+        )
+
+        return self.__parent__._cast(_4029.ComponentCompoundStabilityAnalysis)
+
+    @property
+    def concept_coupling_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4030.ConceptCouplingCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4030,
+        )
+
+        return self.__parent__._cast(_4030.ConceptCouplingCompoundStabilityAnalysis)
+
+    @property
+    def concept_coupling_half_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4032.ConceptCouplingHalfCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4032,
+        )
+
+        return self.__parent__._cast(_4032.ConceptCouplingHalfCompoundStabilityAnalysis)
+
+    @property
+    def concept_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4033.ConceptGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4033,
+        )
+
+        return self.__parent__._cast(_4033.ConceptGearCompoundStabilityAnalysis)
+
+    @property
+    def concept_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4035.ConceptGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4035,
+        )
+
+        return self.__parent__._cast(_4035.ConceptGearSetCompoundStabilityAnalysis)
+
+    @property
+    def conical_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4036.ConicalGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4036,
+        )
+
+        return self.__parent__._cast(_4036.ConicalGearCompoundStabilityAnalysis)
+
+    @property
+    def conical_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4038.ConicalGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4038,
+        )
+
+        return self.__parent__._cast(_4038.ConicalGearSetCompoundStabilityAnalysis)
+
+    @property
+    def connector_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4040.ConnectorCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4040,
+        )
+
+        return self.__parent__._cast(_4040.ConnectorCompoundStabilityAnalysis)
+
+    @property
+    def coupling_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4041.CouplingCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4041,
+        )
+
+        return self.__parent__._cast(_4041.CouplingCompoundStabilityAnalysis)
+
+    @property
+    def coupling_half_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4043.CouplingHalfCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4043,
+        )
+
+        return self.__parent__._cast(_4043.CouplingHalfCompoundStabilityAnalysis)
+
+    @property
+    def cvt_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4045.CVTCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4045,
+        )
+
+        return self.__parent__._cast(_4045.CVTCompoundStabilityAnalysis)
+
+    @property
+    def cvt_pulley_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4046.CVTPulleyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4046,
+        )
+
+        return self.__parent__._cast(_4046.CVTPulleyCompoundStabilityAnalysis)
+
+    @property
+    def cycloidal_assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4047.CycloidalAssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4047,
+        )
+
+        return self.__parent__._cast(_4047.CycloidalAssemblyCompoundStabilityAnalysis)
+
+    @property
+    def cycloidal_disc_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4049.CycloidalDiscCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4049,
+        )
+
+        return self.__parent__._cast(_4049.CycloidalDiscCompoundStabilityAnalysis)
+
+    @property
+    def cylindrical_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4051.CylindricalGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4051,
+        )
+
+        return self.__parent__._cast(_4051.CylindricalGearCompoundStabilityAnalysis)
+
+    @property
+    def cylindrical_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4053.CylindricalGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4053,
+        )
+
+        return self.__parent__._cast(_4053.CylindricalGearSetCompoundStabilityAnalysis)
+
+    @property
+    def cylindrical_planet_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4054.CylindricalPlanetGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4054,
+        )
+
+        return self.__parent__._cast(
+            _4054.CylindricalPlanetGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def datum_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4055.DatumCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4055,
+        )
+
+        return self.__parent__._cast(_4055.DatumCompoundStabilityAnalysis)
+
+    @property
+    def external_cad_model_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4056.ExternalCADModelCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4056,
+        )
+
+        return self.__parent__._cast(_4056.ExternalCADModelCompoundStabilityAnalysis)
+
+    @property
+    def face_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4057.FaceGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4057,
+        )
+
+        return self.__parent__._cast(_4057.FaceGearCompoundStabilityAnalysis)
+
+    @property
+    def face_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4059.FaceGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4059,
+        )
+
+        return self.__parent__._cast(_4059.FaceGearSetCompoundStabilityAnalysis)
+
+    @property
+    def fe_part_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4060.FEPartCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4060,
+        )
+
+        return self.__parent__._cast(_4060.FEPartCompoundStabilityAnalysis)
+
+    @property
+    def flexible_pin_assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4061.FlexiblePinAssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4061,
+        )
+
+        return self.__parent__._cast(_4061.FlexiblePinAssemblyCompoundStabilityAnalysis)
+
+    @property
+    def gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4062.GearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4062,
+        )
+
+        return self.__parent__._cast(_4062.GearCompoundStabilityAnalysis)
+
+    @property
+    def gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4064.GearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4064,
+        )
+
+        return self.__parent__._cast(_4064.GearSetCompoundStabilityAnalysis)
+
+    @property
+    def guide_dxf_model_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4065.GuideDxfModelCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4065,
+        )
+
+        return self.__parent__._cast(_4065.GuideDxfModelCompoundStabilityAnalysis)
+
+    @property
+    def hypoid_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4066.HypoidGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4066,
+        )
+
+        return self.__parent__._cast(_4066.HypoidGearCompoundStabilityAnalysis)
+
+    @property
+    def hypoid_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4068.HypoidGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4068,
+        )
+
+        return self.__parent__._cast(_4068.HypoidGearSetCompoundStabilityAnalysis)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4070.KlingelnbergCycloPalloidConicalGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4070,
+        )
+
+        return self.__parent__._cast(
+            _4070.KlingelnbergCycloPalloidConicalGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4072.KlingelnbergCycloPalloidConicalGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4072,
+        )
+
+        return self.__parent__._cast(
+            _4072.KlingelnbergCycloPalloidConicalGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4073.KlingelnbergCycloPalloidHypoidGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4073,
+        )
+
+        return self.__parent__._cast(
+            _4073.KlingelnbergCycloPalloidHypoidGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4075.KlingelnbergCycloPalloidHypoidGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4075,
+        )
+
+        return self.__parent__._cast(
+            _4075.KlingelnbergCycloPalloidHypoidGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4076.KlingelnbergCycloPalloidSpiralBevelGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4076,
+        )
+
+        return self.__parent__._cast(
+            _4076.KlingelnbergCycloPalloidSpiralBevelGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4078.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4078,
+        )
+
+        return self.__parent__._cast(
+            _4078.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def mass_disc_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4079.MassDiscCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4079,
+        )
+
+        return self.__parent__._cast(_4079.MassDiscCompoundStabilityAnalysis)
+
+    @property
+    def measurement_component_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4080.MeasurementComponentCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4080,
+        )
+
+        return self.__parent__._cast(
+            _4080.MeasurementComponentCompoundStabilityAnalysis
+        )
+
+    @property
+    def microphone_array_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4081.MicrophoneArrayCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4081,
+        )
+
+        return self.__parent__._cast(_4081.MicrophoneArrayCompoundStabilityAnalysis)
+
+    @property
+    def microphone_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4082.MicrophoneCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4082,
+        )
+
+        return self.__parent__._cast(_4082.MicrophoneCompoundStabilityAnalysis)
+
+    @property
+    def mountable_component_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4083.MountableComponentCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4083,
+        )
+
+        return self.__parent__._cast(_4083.MountableComponentCompoundStabilityAnalysis)
+
+    @property
+    def oil_seal_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4084.OilSealCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4084,
+        )
+
+        return self.__parent__._cast(_4084.OilSealCompoundStabilityAnalysis)
+
+    @property
+    def part_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4085.PartCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4085,
+        )
+
+        return self.__parent__._cast(_4085.PartCompoundStabilityAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4086.PartToPartShearCouplingCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4086,
+        )
+
+        return self.__parent__._cast(
+            _4086.PartToPartShearCouplingCompoundStabilityAnalysis
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4088.PartToPartShearCouplingHalfCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4088,
+        )
+
+        return self.__parent__._cast(
+            _4088.PartToPartShearCouplingHalfCompoundStabilityAnalysis
+        )
+
+    @property
+    def planetary_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4090.PlanetaryGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4090,
+        )
+
+        return self.__parent__._cast(_4090.PlanetaryGearSetCompoundStabilityAnalysis)
+
+    @property
+    def planet_carrier_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4091.PlanetCarrierCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4091,
+        )
+
+        return self.__parent__._cast(_4091.PlanetCarrierCompoundStabilityAnalysis)
+
+    @property
+    def point_load_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4092.PointLoadCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4092,
+        )
+
+        return self.__parent__._cast(_4092.PointLoadCompoundStabilityAnalysis)
+
+    @property
+    def power_load_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4093.PowerLoadCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4093,
+        )
+
+        return self.__parent__._cast(_4093.PowerLoadCompoundStabilityAnalysis)
+
+    @property
+    def pulley_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4094.PulleyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4094,
+        )
+
+        return self.__parent__._cast(_4094.PulleyCompoundStabilityAnalysis)
+
+    @property
+    def ring_pins_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4095.RingPinsCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4095,
+        )
+
+        return self.__parent__._cast(_4095.RingPinsCompoundStabilityAnalysis)
+
+    @property
+    def rolling_ring_assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4097.RollingRingAssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4097,
+        )
+
+        return self.__parent__._cast(_4097.RollingRingAssemblyCompoundStabilityAnalysis)
+
+    @property
+    def rolling_ring_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4098.RollingRingCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4098,
+        )
+
+        return self.__parent__._cast(_4098.RollingRingCompoundStabilityAnalysis)
+
+    @property
+    def root_assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4100.RootAssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4100,
+        )
+
+        return self.__parent__._cast(_4100.RootAssemblyCompoundStabilityAnalysis)
+
+    @property
+    def shaft_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4101.ShaftCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4101,
+        )
+
+        return self.__parent__._cast(_4101.ShaftCompoundStabilityAnalysis)
+
+    @property
+    def shaft_hub_connection_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4102.ShaftHubConnectionCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4102,
+        )
+
+        return self.__parent__._cast(_4102.ShaftHubConnectionCompoundStabilityAnalysis)
+
+    @property
+    def specialised_assembly_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4104.SpecialisedAssemblyCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4104,
+        )
+
+        return self.__parent__._cast(_4104.SpecialisedAssemblyCompoundStabilityAnalysis)
+
+    @property
+    def spiral_bevel_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4105.SpiralBevelGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4105,
+        )
+
+        return self.__parent__._cast(_4105.SpiralBevelGearCompoundStabilityAnalysis)
+
+    @property
+    def spiral_bevel_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4107.SpiralBevelGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4107,
+        )
+
+        return self.__parent__._cast(_4107.SpiralBevelGearSetCompoundStabilityAnalysis)
+
+    @property
+    def spring_damper_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4108.SpringDamperCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4108,
+        )
+
+        return self.__parent__._cast(_4108.SpringDamperCompoundStabilityAnalysis)
+
+    @property
+    def spring_damper_half_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4110.SpringDamperHalfCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4110,
+        )
+
+        return self.__parent__._cast(_4110.SpringDamperHalfCompoundStabilityAnalysis)
+
+    @property
+    def straight_bevel_diff_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4111.StraightBevelDiffGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4111,
+        )
+
+        return self.__parent__._cast(
+            _4111.StraightBevelDiffGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4113.StraightBevelDiffGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4113,
+        )
+
+        return self.__parent__._cast(
+            _4113.StraightBevelDiffGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4114.StraightBevelGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4114,
+        )
+
+        return self.__parent__._cast(_4114.StraightBevelGearCompoundStabilityAnalysis)
+
+    @property
+    def straight_bevel_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4116.StraightBevelGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4116,
+        )
+
+        return self.__parent__._cast(
+            _4116.StraightBevelGearSetCompoundStabilityAnalysis
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4117.StraightBevelPlanetGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4117,
+        )
+
+        return self.__parent__._cast(
+            _4117.StraightBevelPlanetGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4118.StraightBevelSunGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4118,
+        )
+
+        return self.__parent__._cast(
+            _4118.StraightBevelSunGearCompoundStabilityAnalysis
+        )
+
+    @property
+    def synchroniser_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4119.SynchroniserCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4119,
+        )
+
+        return self.__parent__._cast(_4119.SynchroniserCompoundStabilityAnalysis)
+
+    @property
+    def synchroniser_half_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4120.SynchroniserHalfCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4120,
+        )
+
+        return self.__parent__._cast(_4120.SynchroniserHalfCompoundStabilityAnalysis)
+
+    @property
+    def synchroniser_part_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4121.SynchroniserPartCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4121,
+        )
+
+        return self.__parent__._cast(_4121.SynchroniserPartCompoundStabilityAnalysis)
+
+    @property
+    def synchroniser_sleeve_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4122.SynchroniserSleeveCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4122,
+        )
+
+        return self.__parent__._cast(_4122.SynchroniserSleeveCompoundStabilityAnalysis)
+
+    @property
+    def torque_converter_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4123.TorqueConverterCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4123,
+        )
+
+        return self.__parent__._cast(_4123.TorqueConverterCompoundStabilityAnalysis)
+
+    @property
+    def torque_converter_pump_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4125.TorqueConverterPumpCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4125,
+        )
+
+        return self.__parent__._cast(_4125.TorqueConverterPumpCompoundStabilityAnalysis)
+
+    @property
+    def torque_converter_turbine_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4126.TorqueConverterTurbineCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4126,
+        )
+
+        return self.__parent__._cast(
+            _4126.TorqueConverterTurbineCompoundStabilityAnalysis
+        )
+
+    @property
+    def unbalanced_mass_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4127.UnbalancedMassCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4127,
+        )
+
+        return self.__parent__._cast(_4127.UnbalancedMassCompoundStabilityAnalysis)
+
+    @property
+    def virtual_component_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4128.VirtualComponentCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4128,
+        )
+
+        return self.__parent__._cast(_4128.VirtualComponentCompoundStabilityAnalysis)
+
+    @property
+    def worm_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4129.WormGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4129,
+        )
+
+        return self.__parent__._cast(_4129.WormGearCompoundStabilityAnalysis)
+
+    @property
+    def worm_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4131.WormGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4131,
+        )
+
+        return self.__parent__._cast(_4131.WormGearSetCompoundStabilityAnalysis)
+
+    @property
+    def zerol_bevel_gear_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4132.ZerolBevelGearCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4132,
+        )
+
+        return self.__parent__._cast(_4132.ZerolBevelGearCompoundStabilityAnalysis)
+
+    @property
+    def zerol_bevel_gear_set_compound_stability_analysis(
+        self: "CastSelf",
+    ) -> "_4134.ZerolBevelGearSetCompoundStabilityAnalysis":
+        from mastapy._private.system_model.analyses_and_results.stability_analyses.compound import (
+            _4134,
+        )
+
+        return self.__parent__._cast(_4134.ZerolBevelGearSetCompoundStabilityAnalysis)
+
+    @property
+    def abstract_assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4278.AbstractAssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4278,
+        )
+
+        return self.__parent__._cast(_4278.AbstractAssemblyCompoundPowerFlow)
+
+    @property
+    def abstract_shaft_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4279.AbstractShaftCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4279,
+        )
+
+        return self.__parent__._cast(_4279.AbstractShaftCompoundPowerFlow)
+
+    @property
+    def abstract_shaft_or_housing_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4280.AbstractShaftOrHousingCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4280,
+        )
+
+        return self.__parent__._cast(_4280.AbstractShaftOrHousingCompoundPowerFlow)
+
+    @property
+    def agma_gleason_conical_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4282.AGMAGleasonConicalGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4282,
+        )
+
+        return self.__parent__._cast(_4282.AGMAGleasonConicalGearCompoundPowerFlow)
+
+    @property
+    def agma_gleason_conical_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4284.AGMAGleasonConicalGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4284,
+        )
+
+        return self.__parent__._cast(_4284.AGMAGleasonConicalGearSetCompoundPowerFlow)
+
+    @property
+    def assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4285.AssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4285,
+        )
+
+        return self.__parent__._cast(_4285.AssemblyCompoundPowerFlow)
+
+    @property
+    def bearing_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4286.BearingCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4286,
+        )
+
+        return self.__parent__._cast(_4286.BearingCompoundPowerFlow)
+
+    @property
+    def belt_drive_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4288.BeltDriveCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4288,
+        )
+
+        return self.__parent__._cast(_4288.BeltDriveCompoundPowerFlow)
+
+    @property
+    def bevel_differential_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4289.BevelDifferentialGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4289,
+        )
+
+        return self.__parent__._cast(_4289.BevelDifferentialGearCompoundPowerFlow)
+
+    @property
+    def bevel_differential_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4291.BevelDifferentialGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4291,
+        )
+
+        return self.__parent__._cast(_4291.BevelDifferentialGearSetCompoundPowerFlow)
+
+    @property
+    def bevel_differential_planet_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4292.BevelDifferentialPlanetGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4292,
+        )
+
+        return self.__parent__._cast(_4292.BevelDifferentialPlanetGearCompoundPowerFlow)
+
+    @property
+    def bevel_differential_sun_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4293.BevelDifferentialSunGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4293,
+        )
+
+        return self.__parent__._cast(_4293.BevelDifferentialSunGearCompoundPowerFlow)
+
+    @property
+    def bevel_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4294.BevelGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4294,
+        )
+
+        return self.__parent__._cast(_4294.BevelGearCompoundPowerFlow)
+
+    @property
+    def bevel_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4296.BevelGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4296,
+        )
+
+        return self.__parent__._cast(_4296.BevelGearSetCompoundPowerFlow)
+
+    @property
+    def bolt_compound_power_flow(self: "CastSelf") -> "_4297.BoltCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4297,
+        )
+
+        return self.__parent__._cast(_4297.BoltCompoundPowerFlow)
+
+    @property
+    def bolted_joint_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4298.BoltedJointCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4298,
+        )
+
+        return self.__parent__._cast(_4298.BoltedJointCompoundPowerFlow)
+
+    @property
+    def clutch_compound_power_flow(self: "CastSelf") -> "_4299.ClutchCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4299,
+        )
+
+        return self.__parent__._cast(_4299.ClutchCompoundPowerFlow)
+
+    @property
+    def clutch_half_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4301.ClutchHalfCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4301,
+        )
+
+        return self.__parent__._cast(_4301.ClutchHalfCompoundPowerFlow)
+
+    @property
+    def component_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4303.ComponentCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4303,
+        )
+
+        return self.__parent__._cast(_4303.ComponentCompoundPowerFlow)
+
+    @property
+    def concept_coupling_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4304.ConceptCouplingCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4304,
+        )
+
+        return self.__parent__._cast(_4304.ConceptCouplingCompoundPowerFlow)
+
+    @property
+    def concept_coupling_half_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4306.ConceptCouplingHalfCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4306,
+        )
+
+        return self.__parent__._cast(_4306.ConceptCouplingHalfCompoundPowerFlow)
+
+    @property
+    def concept_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4307.ConceptGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4307,
+        )
+
+        return self.__parent__._cast(_4307.ConceptGearCompoundPowerFlow)
+
+    @property
+    def concept_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4309.ConceptGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4309,
+        )
+
+        return self.__parent__._cast(_4309.ConceptGearSetCompoundPowerFlow)
+
+    @property
+    def conical_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4310.ConicalGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4310,
+        )
+
+        return self.__parent__._cast(_4310.ConicalGearCompoundPowerFlow)
+
+    @property
+    def conical_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4312.ConicalGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4312,
+        )
+
+        return self.__parent__._cast(_4312.ConicalGearSetCompoundPowerFlow)
+
+    @property
+    def connector_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4314.ConnectorCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4314,
+        )
+
+        return self.__parent__._cast(_4314.ConnectorCompoundPowerFlow)
+
+    @property
+    def coupling_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4315.CouplingCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4315,
+        )
+
+        return self.__parent__._cast(_4315.CouplingCompoundPowerFlow)
+
+    @property
+    def coupling_half_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4317.CouplingHalfCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4317,
+        )
+
+        return self.__parent__._cast(_4317.CouplingHalfCompoundPowerFlow)
+
+    @property
+    def cvt_compound_power_flow(self: "CastSelf") -> "_4319.CVTCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4319,
+        )
+
+        return self.__parent__._cast(_4319.CVTCompoundPowerFlow)
+
+    @property
+    def cvt_pulley_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4320.CVTPulleyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4320,
+        )
+
+        return self.__parent__._cast(_4320.CVTPulleyCompoundPowerFlow)
+
+    @property
+    def cycloidal_assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4321.CycloidalAssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4321,
+        )
+
+        return self.__parent__._cast(_4321.CycloidalAssemblyCompoundPowerFlow)
+
+    @property
+    def cycloidal_disc_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4323.CycloidalDiscCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4323,
+        )
+
+        return self.__parent__._cast(_4323.CycloidalDiscCompoundPowerFlow)
+
+    @property
+    def cylindrical_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4325.CylindricalGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4325,
+        )
+
+        return self.__parent__._cast(_4325.CylindricalGearCompoundPowerFlow)
+
+    @property
+    def cylindrical_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4327.CylindricalGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4327,
+        )
+
+        return self.__parent__._cast(_4327.CylindricalGearSetCompoundPowerFlow)
+
+    @property
+    def cylindrical_planet_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4328.CylindricalPlanetGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4328,
+        )
+
+        return self.__parent__._cast(_4328.CylindricalPlanetGearCompoundPowerFlow)
+
+    @property
+    def datum_compound_power_flow(self: "CastSelf") -> "_4329.DatumCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4329,
+        )
+
+        return self.__parent__._cast(_4329.DatumCompoundPowerFlow)
+
+    @property
+    def external_cad_model_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4330.ExternalCADModelCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4330,
+        )
+
+        return self.__parent__._cast(_4330.ExternalCADModelCompoundPowerFlow)
+
+    @property
+    def face_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4331.FaceGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4331,
+        )
+
+        return self.__parent__._cast(_4331.FaceGearCompoundPowerFlow)
+
+    @property
+    def face_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4333.FaceGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4333,
+        )
+
+        return self.__parent__._cast(_4333.FaceGearSetCompoundPowerFlow)
+
+    @property
+    def fe_part_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4334.FEPartCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4334,
+        )
+
+        return self.__parent__._cast(_4334.FEPartCompoundPowerFlow)
+
+    @property
+    def flexible_pin_assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4335.FlexiblePinAssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4335,
+        )
+
+        return self.__parent__._cast(_4335.FlexiblePinAssemblyCompoundPowerFlow)
+
+    @property
+    def gear_compound_power_flow(self: "CastSelf") -> "_4336.GearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4336,
+        )
+
+        return self.__parent__._cast(_4336.GearCompoundPowerFlow)
+
+    @property
+    def gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4338.GearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4338,
+        )
+
+        return self.__parent__._cast(_4338.GearSetCompoundPowerFlow)
+
+    @property
+    def guide_dxf_model_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4339.GuideDxfModelCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4339,
+        )
+
+        return self.__parent__._cast(_4339.GuideDxfModelCompoundPowerFlow)
+
+    @property
+    def hypoid_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4340.HypoidGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4340,
+        )
+
+        return self.__parent__._cast(_4340.HypoidGearCompoundPowerFlow)
+
+    @property
+    def hypoid_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4342.HypoidGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4342,
+        )
+
+        return self.__parent__._cast(_4342.HypoidGearSetCompoundPowerFlow)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4344.KlingelnbergCycloPalloidConicalGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4344,
+        )
+
+        return self.__parent__._cast(
+            _4344.KlingelnbergCycloPalloidConicalGearCompoundPowerFlow
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4346.KlingelnbergCycloPalloidConicalGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4346,
+        )
+
+        return self.__parent__._cast(
+            _4346.KlingelnbergCycloPalloidConicalGearSetCompoundPowerFlow
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4347.KlingelnbergCycloPalloidHypoidGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4347,
+        )
+
+        return self.__parent__._cast(
+            _4347.KlingelnbergCycloPalloidHypoidGearCompoundPowerFlow
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4349.KlingelnbergCycloPalloidHypoidGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4349,
+        )
+
+        return self.__parent__._cast(
+            _4349.KlingelnbergCycloPalloidHypoidGearSetCompoundPowerFlow
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4350.KlingelnbergCycloPalloidSpiralBevelGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4350,
+        )
+
+        return self.__parent__._cast(
+            _4350.KlingelnbergCycloPalloidSpiralBevelGearCompoundPowerFlow
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4352.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4352,
+        )
+
+        return self.__parent__._cast(
+            _4352.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundPowerFlow
+        )
+
+    @property
+    def mass_disc_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4353.MassDiscCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4353,
+        )
+
+        return self.__parent__._cast(_4353.MassDiscCompoundPowerFlow)
+
+    @property
+    def measurement_component_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4354.MeasurementComponentCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4354,
+        )
+
+        return self.__parent__._cast(_4354.MeasurementComponentCompoundPowerFlow)
+
+    @property
+    def microphone_array_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4355.MicrophoneArrayCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4355,
+        )
+
+        return self.__parent__._cast(_4355.MicrophoneArrayCompoundPowerFlow)
+
+    @property
+    def microphone_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4356.MicrophoneCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4356,
+        )
+
+        return self.__parent__._cast(_4356.MicrophoneCompoundPowerFlow)
+
+    @property
+    def mountable_component_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4357.MountableComponentCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4357,
+        )
+
+        return self.__parent__._cast(_4357.MountableComponentCompoundPowerFlow)
+
+    @property
+    def oil_seal_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4358.OilSealCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4358,
+        )
+
+        return self.__parent__._cast(_4358.OilSealCompoundPowerFlow)
+
+    @property
+    def part_compound_power_flow(self: "CastSelf") -> "_4359.PartCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4359,
+        )
+
+        return self.__parent__._cast(_4359.PartCompoundPowerFlow)
+
+    @property
+    def part_to_part_shear_coupling_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4360.PartToPartShearCouplingCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4360,
+        )
+
+        return self.__parent__._cast(_4360.PartToPartShearCouplingCompoundPowerFlow)
+
+    @property
+    def part_to_part_shear_coupling_half_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4362.PartToPartShearCouplingHalfCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4362,
+        )
+
+        return self.__parent__._cast(_4362.PartToPartShearCouplingHalfCompoundPowerFlow)
+
+    @property
+    def planetary_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4364.PlanetaryGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4364,
+        )
+
+        return self.__parent__._cast(_4364.PlanetaryGearSetCompoundPowerFlow)
+
+    @property
+    def planet_carrier_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4365.PlanetCarrierCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4365,
+        )
+
+        return self.__parent__._cast(_4365.PlanetCarrierCompoundPowerFlow)
+
+    @property
+    def point_load_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4366.PointLoadCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4366,
+        )
+
+        return self.__parent__._cast(_4366.PointLoadCompoundPowerFlow)
+
+    @property
+    def power_load_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4367.PowerLoadCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4367,
+        )
+
+        return self.__parent__._cast(_4367.PowerLoadCompoundPowerFlow)
+
+    @property
+    def pulley_compound_power_flow(self: "CastSelf") -> "_4368.PulleyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4368,
+        )
+
+        return self.__parent__._cast(_4368.PulleyCompoundPowerFlow)
+
+    @property
+    def ring_pins_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4369.RingPinsCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4369,
+        )
+
+        return self.__parent__._cast(_4369.RingPinsCompoundPowerFlow)
+
+    @property
+    def rolling_ring_assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4371.RollingRingAssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4371,
+        )
+
+        return self.__parent__._cast(_4371.RollingRingAssemblyCompoundPowerFlow)
+
+    @property
+    def rolling_ring_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4372.RollingRingCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4372,
+        )
+
+        return self.__parent__._cast(_4372.RollingRingCompoundPowerFlow)
+
+    @property
+    def root_assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4374.RootAssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4374,
+        )
+
+        return self.__parent__._cast(_4374.RootAssemblyCompoundPowerFlow)
+
+    @property
+    def shaft_compound_power_flow(self: "CastSelf") -> "_4375.ShaftCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4375,
+        )
+
+        return self.__parent__._cast(_4375.ShaftCompoundPowerFlow)
+
+    @property
+    def shaft_hub_connection_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4376.ShaftHubConnectionCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4376,
+        )
+
+        return self.__parent__._cast(_4376.ShaftHubConnectionCompoundPowerFlow)
+
+    @property
+    def specialised_assembly_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4378.SpecialisedAssemblyCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4378,
+        )
+
+        return self.__parent__._cast(_4378.SpecialisedAssemblyCompoundPowerFlow)
+
+    @property
+    def spiral_bevel_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4379.SpiralBevelGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4379,
+        )
+
+        return self.__parent__._cast(_4379.SpiralBevelGearCompoundPowerFlow)
+
+    @property
+    def spiral_bevel_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4381.SpiralBevelGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4381,
+        )
+
+        return self.__parent__._cast(_4381.SpiralBevelGearSetCompoundPowerFlow)
+
+    @property
+    def spring_damper_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4382.SpringDamperCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4382,
+        )
+
+        return self.__parent__._cast(_4382.SpringDamperCompoundPowerFlow)
+
+    @property
+    def spring_damper_half_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4384.SpringDamperHalfCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4384,
+        )
+
+        return self.__parent__._cast(_4384.SpringDamperHalfCompoundPowerFlow)
+
+    @property
+    def straight_bevel_diff_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4385.StraightBevelDiffGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4385,
+        )
+
+        return self.__parent__._cast(_4385.StraightBevelDiffGearCompoundPowerFlow)
+
+    @property
+    def straight_bevel_diff_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4387.StraightBevelDiffGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4387,
+        )
+
+        return self.__parent__._cast(_4387.StraightBevelDiffGearSetCompoundPowerFlow)
+
+    @property
+    def straight_bevel_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4388.StraightBevelGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4388,
+        )
+
+        return self.__parent__._cast(_4388.StraightBevelGearCompoundPowerFlow)
+
+    @property
+    def straight_bevel_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4390.StraightBevelGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4390,
+        )
+
+        return self.__parent__._cast(_4390.StraightBevelGearSetCompoundPowerFlow)
+
+    @property
+    def straight_bevel_planet_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4391.StraightBevelPlanetGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4391,
+        )
+
+        return self.__parent__._cast(_4391.StraightBevelPlanetGearCompoundPowerFlow)
+
+    @property
+    def straight_bevel_sun_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4392.StraightBevelSunGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4392,
+        )
+
+        return self.__parent__._cast(_4392.StraightBevelSunGearCompoundPowerFlow)
+
+    @property
+    def synchroniser_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4393.SynchroniserCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4393,
+        )
+
+        return self.__parent__._cast(_4393.SynchroniserCompoundPowerFlow)
+
+    @property
+    def synchroniser_half_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4394.SynchroniserHalfCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4394,
+        )
+
+        return self.__parent__._cast(_4394.SynchroniserHalfCompoundPowerFlow)
+
+    @property
+    def synchroniser_part_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4395.SynchroniserPartCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4395,
+        )
+
+        return self.__parent__._cast(_4395.SynchroniserPartCompoundPowerFlow)
+
+    @property
+    def synchroniser_sleeve_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4396.SynchroniserSleeveCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4396,
+        )
+
+        return self.__parent__._cast(_4396.SynchroniserSleeveCompoundPowerFlow)
+
+    @property
+    def torque_converter_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4397.TorqueConverterCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4397,
+        )
+
+        return self.__parent__._cast(_4397.TorqueConverterCompoundPowerFlow)
+
+    @property
+    def torque_converter_pump_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4399.TorqueConverterPumpCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4399,
+        )
+
+        return self.__parent__._cast(_4399.TorqueConverterPumpCompoundPowerFlow)
+
+    @property
+    def torque_converter_turbine_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4400.TorqueConverterTurbineCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4400,
+        )
+
+        return self.__parent__._cast(_4400.TorqueConverterTurbineCompoundPowerFlow)
+
+    @property
+    def unbalanced_mass_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4401.UnbalancedMassCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4401,
+        )
+
+        return self.__parent__._cast(_4401.UnbalancedMassCompoundPowerFlow)
+
+    @property
+    def virtual_component_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4402.VirtualComponentCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4402,
+        )
+
+        return self.__parent__._cast(_4402.VirtualComponentCompoundPowerFlow)
+
+    @property
+    def worm_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4403.WormGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4403,
+        )
+
+        return self.__parent__._cast(_4403.WormGearCompoundPowerFlow)
+
+    @property
+    def worm_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4405.WormGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4405,
+        )
+
+        return self.__parent__._cast(_4405.WormGearSetCompoundPowerFlow)
+
+    @property
+    def zerol_bevel_gear_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4406.ZerolBevelGearCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4406,
+        )
+
+        return self.__parent__._cast(_4406.ZerolBevelGearCompoundPowerFlow)
+
+    @property
+    def zerol_bevel_gear_set_compound_power_flow(
+        self: "CastSelf",
+    ) -> "_4408.ZerolBevelGearSetCompoundPowerFlow":
+        from mastapy._private.system_model.analyses_and_results.power_flows.compound import (
+            _4408,
+        )
+
+        return self.__parent__._cast(_4408.ZerolBevelGearSetCompoundPowerFlow)
+
+    @property
+    def abstract_assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4558.AbstractAssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4558,
+        )
+
+        return self.__parent__._cast(_4558.AbstractAssemblyCompoundParametricStudyTool)
+
+    @property
+    def abstract_shaft_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4559.AbstractShaftCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4559,
+        )
+
+        return self.__parent__._cast(_4559.AbstractShaftCompoundParametricStudyTool)
+
+    @property
+    def abstract_shaft_or_housing_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4560.AbstractShaftOrHousingCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4560,
+        )
+
+        return self.__parent__._cast(
+            _4560.AbstractShaftOrHousingCompoundParametricStudyTool
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4562.AGMAGleasonConicalGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4562,
+        )
+
+        return self.__parent__._cast(
+            _4562.AGMAGleasonConicalGearCompoundParametricStudyTool
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4564.AGMAGleasonConicalGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4564,
+        )
+
+        return self.__parent__._cast(
+            _4564.AGMAGleasonConicalGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4565.AssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4565,
+        )
+
+        return self.__parent__._cast(_4565.AssemblyCompoundParametricStudyTool)
+
+    @property
+    def bearing_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4566.BearingCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4566,
+        )
+
+        return self.__parent__._cast(_4566.BearingCompoundParametricStudyTool)
+
+    @property
+    def belt_drive_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4568.BeltDriveCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4568,
+        )
+
+        return self.__parent__._cast(_4568.BeltDriveCompoundParametricStudyTool)
+
+    @property
+    def bevel_differential_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4569.BevelDifferentialGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4569,
+        )
+
+        return self.__parent__._cast(
+            _4569.BevelDifferentialGearCompoundParametricStudyTool
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4571.BevelDifferentialGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4571,
+        )
+
+        return self.__parent__._cast(
+            _4571.BevelDifferentialGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4572.BevelDifferentialPlanetGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4572,
+        )
+
+        return self.__parent__._cast(
+            _4572.BevelDifferentialPlanetGearCompoundParametricStudyTool
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4573.BevelDifferentialSunGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4573,
+        )
+
+        return self.__parent__._cast(
+            _4573.BevelDifferentialSunGearCompoundParametricStudyTool
+        )
+
+    @property
+    def bevel_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4574.BevelGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4574,
+        )
+
+        return self.__parent__._cast(_4574.BevelGearCompoundParametricStudyTool)
+
+    @property
+    def bevel_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4576.BevelGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4576,
+        )
+
+        return self.__parent__._cast(_4576.BevelGearSetCompoundParametricStudyTool)
+
+    @property
+    def bolt_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4577.BoltCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4577,
+        )
+
+        return self.__parent__._cast(_4577.BoltCompoundParametricStudyTool)
+
+    @property
+    def bolted_joint_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4578.BoltedJointCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4578,
+        )
+
+        return self.__parent__._cast(_4578.BoltedJointCompoundParametricStudyTool)
+
+    @property
+    def clutch_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4579.ClutchCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4579,
+        )
+
+        return self.__parent__._cast(_4579.ClutchCompoundParametricStudyTool)
+
+    @property
+    def clutch_half_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4581.ClutchHalfCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4581,
+        )
+
+        return self.__parent__._cast(_4581.ClutchHalfCompoundParametricStudyTool)
+
+    @property
+    def component_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4583.ComponentCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4583,
+        )
+
+        return self.__parent__._cast(_4583.ComponentCompoundParametricStudyTool)
+
+    @property
+    def concept_coupling_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4584.ConceptCouplingCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4584,
+        )
+
+        return self.__parent__._cast(_4584.ConceptCouplingCompoundParametricStudyTool)
+
+    @property
+    def concept_coupling_half_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4586.ConceptCouplingHalfCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4586,
+        )
+
+        return self.__parent__._cast(
+            _4586.ConceptCouplingHalfCompoundParametricStudyTool
+        )
+
+    @property
+    def concept_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4587.ConceptGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4587,
+        )
+
+        return self.__parent__._cast(_4587.ConceptGearCompoundParametricStudyTool)
+
+    @property
+    def concept_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4589.ConceptGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4589,
+        )
+
+        return self.__parent__._cast(_4589.ConceptGearSetCompoundParametricStudyTool)
+
+    @property
+    def conical_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4590.ConicalGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4590,
+        )
+
+        return self.__parent__._cast(_4590.ConicalGearCompoundParametricStudyTool)
+
+    @property
+    def conical_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4592.ConicalGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4592,
+        )
+
+        return self.__parent__._cast(_4592.ConicalGearSetCompoundParametricStudyTool)
+
+    @property
+    def connector_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4594.ConnectorCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4594,
+        )
+
+        return self.__parent__._cast(_4594.ConnectorCompoundParametricStudyTool)
+
+    @property
+    def coupling_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4595.CouplingCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4595,
+        )
+
+        return self.__parent__._cast(_4595.CouplingCompoundParametricStudyTool)
+
+    @property
+    def coupling_half_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4597.CouplingHalfCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4597,
+        )
+
+        return self.__parent__._cast(_4597.CouplingHalfCompoundParametricStudyTool)
+
+    @property
+    def cvt_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4599.CVTCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4599,
+        )
+
+        return self.__parent__._cast(_4599.CVTCompoundParametricStudyTool)
+
+    @property
+    def cvt_pulley_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4600.CVTPulleyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4600,
+        )
+
+        return self.__parent__._cast(_4600.CVTPulleyCompoundParametricStudyTool)
+
+    @property
+    def cycloidal_assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4601.CycloidalAssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4601,
+        )
+
+        return self.__parent__._cast(_4601.CycloidalAssemblyCompoundParametricStudyTool)
+
+    @property
+    def cycloidal_disc_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4603.CycloidalDiscCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4603,
+        )
+
+        return self.__parent__._cast(_4603.CycloidalDiscCompoundParametricStudyTool)
+
+    @property
+    def cylindrical_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4605.CylindricalGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4605,
+        )
+
+        return self.__parent__._cast(_4605.CylindricalGearCompoundParametricStudyTool)
+
+    @property
+    def cylindrical_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4607.CylindricalGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4607,
+        )
+
+        return self.__parent__._cast(
+            _4607.CylindricalGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4608.CylindricalPlanetGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4608,
+        )
+
+        return self.__parent__._cast(
+            _4608.CylindricalPlanetGearCompoundParametricStudyTool
+        )
+
+    @property
+    def datum_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4609.DatumCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4609,
+        )
+
+        return self.__parent__._cast(_4609.DatumCompoundParametricStudyTool)
+
+    @property
+    def external_cad_model_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4610.ExternalCADModelCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4610,
+        )
+
+        return self.__parent__._cast(_4610.ExternalCADModelCompoundParametricStudyTool)
+
+    @property
+    def face_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4611.FaceGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4611,
+        )
+
+        return self.__parent__._cast(_4611.FaceGearCompoundParametricStudyTool)
+
+    @property
+    def face_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4613.FaceGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4613,
+        )
+
+        return self.__parent__._cast(_4613.FaceGearSetCompoundParametricStudyTool)
+
+    @property
+    def fe_part_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4614.FEPartCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4614,
+        )
+
+        return self.__parent__._cast(_4614.FEPartCompoundParametricStudyTool)
+
+    @property
+    def flexible_pin_assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4615.FlexiblePinAssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4615,
+        )
+
+        return self.__parent__._cast(
+            _4615.FlexiblePinAssemblyCompoundParametricStudyTool
+        )
+
+    @property
+    def gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4616.GearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4616,
+        )
+
+        return self.__parent__._cast(_4616.GearCompoundParametricStudyTool)
+
+    @property
+    def gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4618.GearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4618,
+        )
+
+        return self.__parent__._cast(_4618.GearSetCompoundParametricStudyTool)
+
+    @property
+    def guide_dxf_model_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4619.GuideDxfModelCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4619,
+        )
+
+        return self.__parent__._cast(_4619.GuideDxfModelCompoundParametricStudyTool)
+
+    @property
+    def hypoid_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4620.HypoidGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4620,
+        )
+
+        return self.__parent__._cast(_4620.HypoidGearCompoundParametricStudyTool)
+
+    @property
+    def hypoid_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4622.HypoidGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4622,
+        )
+
+        return self.__parent__._cast(_4622.HypoidGearSetCompoundParametricStudyTool)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4624.KlingelnbergCycloPalloidConicalGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4624,
+        )
+
+        return self.__parent__._cast(
+            _4624.KlingelnbergCycloPalloidConicalGearCompoundParametricStudyTool
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4626.KlingelnbergCycloPalloidConicalGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4626,
+        )
+
+        return self.__parent__._cast(
+            _4626.KlingelnbergCycloPalloidConicalGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4627.KlingelnbergCycloPalloidHypoidGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4627,
+        )
+
+        return self.__parent__._cast(
+            _4627.KlingelnbergCycloPalloidHypoidGearCompoundParametricStudyTool
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4629.KlingelnbergCycloPalloidHypoidGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4629,
+        )
+
+        return self.__parent__._cast(
+            _4629.KlingelnbergCycloPalloidHypoidGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4630.KlingelnbergCycloPalloidSpiralBevelGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4630,
+        )
+
+        return self.__parent__._cast(
+            _4630.KlingelnbergCycloPalloidSpiralBevelGearCompoundParametricStudyTool
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4632.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4632,
+        )
+
+        return self.__parent__._cast(
+            _4632.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def mass_disc_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4633.MassDiscCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4633,
+        )
+
+        return self.__parent__._cast(_4633.MassDiscCompoundParametricStudyTool)
+
+    @property
+    def measurement_component_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4634.MeasurementComponentCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4634,
+        )
+
+        return self.__parent__._cast(
+            _4634.MeasurementComponentCompoundParametricStudyTool
+        )
+
+    @property
+    def microphone_array_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4635.MicrophoneArrayCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4635,
+        )
+
+        return self.__parent__._cast(_4635.MicrophoneArrayCompoundParametricStudyTool)
+
+    @property
+    def microphone_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4636.MicrophoneCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4636,
+        )
+
+        return self.__parent__._cast(_4636.MicrophoneCompoundParametricStudyTool)
+
+    @property
+    def mountable_component_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4637.MountableComponentCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4637,
+        )
+
+        return self.__parent__._cast(
+            _4637.MountableComponentCompoundParametricStudyTool
+        )
+
+    @property
+    def oil_seal_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4638.OilSealCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4638,
+        )
+
+        return self.__parent__._cast(_4638.OilSealCompoundParametricStudyTool)
+
+    @property
+    def part_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4639.PartCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4639,
+        )
+
+        return self.__parent__._cast(_4639.PartCompoundParametricStudyTool)
+
+    @property
+    def part_to_part_shear_coupling_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4640.PartToPartShearCouplingCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4640,
+        )
+
+        return self.__parent__._cast(
+            _4640.PartToPartShearCouplingCompoundParametricStudyTool
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4642.PartToPartShearCouplingHalfCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4642,
+        )
+
+        return self.__parent__._cast(
+            _4642.PartToPartShearCouplingHalfCompoundParametricStudyTool
+        )
+
+    @property
+    def planetary_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4644.PlanetaryGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4644,
+        )
+
+        return self.__parent__._cast(_4644.PlanetaryGearSetCompoundParametricStudyTool)
+
+    @property
+    def planet_carrier_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4645.PlanetCarrierCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4645,
+        )
+
+        return self.__parent__._cast(_4645.PlanetCarrierCompoundParametricStudyTool)
+
+    @property
+    def point_load_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4646.PointLoadCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4646,
+        )
+
+        return self.__parent__._cast(_4646.PointLoadCompoundParametricStudyTool)
+
+    @property
+    def power_load_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4647.PowerLoadCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4647,
+        )
+
+        return self.__parent__._cast(_4647.PowerLoadCompoundParametricStudyTool)
+
+    @property
+    def pulley_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4648.PulleyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4648,
+        )
+
+        return self.__parent__._cast(_4648.PulleyCompoundParametricStudyTool)
+
+    @property
+    def ring_pins_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4649.RingPinsCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4649,
+        )
+
+        return self.__parent__._cast(_4649.RingPinsCompoundParametricStudyTool)
+
+    @property
+    def rolling_ring_assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4651.RollingRingAssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4651,
+        )
+
+        return self.__parent__._cast(
+            _4651.RollingRingAssemblyCompoundParametricStudyTool
+        )
+
+    @property
+    def rolling_ring_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4652.RollingRingCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4652,
+        )
+
+        return self.__parent__._cast(_4652.RollingRingCompoundParametricStudyTool)
+
+    @property
+    def root_assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4654.RootAssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4654,
+        )
+
+        return self.__parent__._cast(_4654.RootAssemblyCompoundParametricStudyTool)
+
+    @property
+    def shaft_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4655.ShaftCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4655,
+        )
+
+        return self.__parent__._cast(_4655.ShaftCompoundParametricStudyTool)
+
+    @property
+    def shaft_hub_connection_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4656.ShaftHubConnectionCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4656,
+        )
+
+        return self.__parent__._cast(
+            _4656.ShaftHubConnectionCompoundParametricStudyTool
+        )
+
+    @property
+    def specialised_assembly_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4658.SpecialisedAssemblyCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4658,
+        )
+
+        return self.__parent__._cast(
+            _4658.SpecialisedAssemblyCompoundParametricStudyTool
+        )
+
+    @property
+    def spiral_bevel_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4659.SpiralBevelGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4659,
+        )
+
+        return self.__parent__._cast(_4659.SpiralBevelGearCompoundParametricStudyTool)
+
+    @property
+    def spiral_bevel_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4661.SpiralBevelGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4661,
+        )
+
+        return self.__parent__._cast(
+            _4661.SpiralBevelGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def spring_damper_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4662.SpringDamperCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4662,
+        )
+
+        return self.__parent__._cast(_4662.SpringDamperCompoundParametricStudyTool)
+
+    @property
+    def spring_damper_half_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4664.SpringDamperHalfCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4664,
+        )
+
+        return self.__parent__._cast(_4664.SpringDamperHalfCompoundParametricStudyTool)
+
+    @property
+    def straight_bevel_diff_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4665.StraightBevelDiffGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4665,
+        )
+
+        return self.__parent__._cast(
+            _4665.StraightBevelDiffGearCompoundParametricStudyTool
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4667.StraightBevelDiffGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4667,
+        )
+
+        return self.__parent__._cast(
+            _4667.StraightBevelDiffGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def straight_bevel_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4668.StraightBevelGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4668,
+        )
+
+        return self.__parent__._cast(_4668.StraightBevelGearCompoundParametricStudyTool)
+
+    @property
+    def straight_bevel_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4670.StraightBevelGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4670,
+        )
+
+        return self.__parent__._cast(
+            _4670.StraightBevelGearSetCompoundParametricStudyTool
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4671.StraightBevelPlanetGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4671,
+        )
+
+        return self.__parent__._cast(
+            _4671.StraightBevelPlanetGearCompoundParametricStudyTool
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4672.StraightBevelSunGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4672,
+        )
+
+        return self.__parent__._cast(
+            _4672.StraightBevelSunGearCompoundParametricStudyTool
+        )
+
+    @property
+    def synchroniser_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4673.SynchroniserCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4673,
+        )
+
+        return self.__parent__._cast(_4673.SynchroniserCompoundParametricStudyTool)
+
+    @property
+    def synchroniser_half_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4674.SynchroniserHalfCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4674,
+        )
+
+        return self.__parent__._cast(_4674.SynchroniserHalfCompoundParametricStudyTool)
+
+    @property
+    def synchroniser_part_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4675.SynchroniserPartCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4675,
+        )
+
+        return self.__parent__._cast(_4675.SynchroniserPartCompoundParametricStudyTool)
+
+    @property
+    def synchroniser_sleeve_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4676.SynchroniserSleeveCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4676,
+        )
+
+        return self.__parent__._cast(
+            _4676.SynchroniserSleeveCompoundParametricStudyTool
+        )
+
+    @property
+    def torque_converter_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4677.TorqueConverterCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4677,
+        )
+
+        return self.__parent__._cast(_4677.TorqueConverterCompoundParametricStudyTool)
+
+    @property
+    def torque_converter_pump_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4679.TorqueConverterPumpCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4679,
+        )
+
+        return self.__parent__._cast(
+            _4679.TorqueConverterPumpCompoundParametricStudyTool
+        )
+
+    @property
+    def torque_converter_turbine_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4680.TorqueConverterTurbineCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4680,
+        )
+
+        return self.__parent__._cast(
+            _4680.TorqueConverterTurbineCompoundParametricStudyTool
+        )
+
+    @property
+    def unbalanced_mass_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4681.UnbalancedMassCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4681,
+        )
+
+        return self.__parent__._cast(_4681.UnbalancedMassCompoundParametricStudyTool)
+
+    @property
+    def virtual_component_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4682.VirtualComponentCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4682,
+        )
+
+        return self.__parent__._cast(_4682.VirtualComponentCompoundParametricStudyTool)
+
+    @property
+    def worm_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4683.WormGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4683,
+        )
+
+        return self.__parent__._cast(_4683.WormGearCompoundParametricStudyTool)
+
+    @property
+    def worm_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4685.WormGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4685,
+        )
+
+        return self.__parent__._cast(_4685.WormGearSetCompoundParametricStudyTool)
+
+    @property
+    def zerol_bevel_gear_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4686.ZerolBevelGearCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4686,
+        )
+
+        return self.__parent__._cast(_4686.ZerolBevelGearCompoundParametricStudyTool)
+
+    @property
+    def zerol_bevel_gear_set_compound_parametric_study_tool(
+        self: "CastSelf",
+    ) -> "_4688.ZerolBevelGearSetCompoundParametricStudyTool":
+        from mastapy._private.system_model.analyses_and_results.parametric_study_tools.compound import (
+            _4688,
+        )
+
+        return self.__parent__._cast(_4688.ZerolBevelGearSetCompoundParametricStudyTool)
+
+    @property
+    def abstract_assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4847.AbstractAssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4847,
+        )
+
+        return self.__parent__._cast(_4847.AbstractAssemblyCompoundModalAnalysis)
+
+    @property
+    def abstract_shaft_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4848.AbstractShaftCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4848,
+        )
+
+        return self.__parent__._cast(_4848.AbstractShaftCompoundModalAnalysis)
+
+    @property
+    def abstract_shaft_or_housing_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4849.AbstractShaftOrHousingCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4849,
+        )
+
+        return self.__parent__._cast(_4849.AbstractShaftOrHousingCompoundModalAnalysis)
+
+    @property
+    def agma_gleason_conical_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4851.AGMAGleasonConicalGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4851,
+        )
+
+        return self.__parent__._cast(_4851.AGMAGleasonConicalGearCompoundModalAnalysis)
+
+    @property
+    def agma_gleason_conical_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4853.AGMAGleasonConicalGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4853,
+        )
+
+        return self.__parent__._cast(
+            _4853.AGMAGleasonConicalGearSetCompoundModalAnalysis
+        )
+
+    @property
+    def assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4854.AssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4854,
+        )
+
+        return self.__parent__._cast(_4854.AssemblyCompoundModalAnalysis)
+
+    @property
+    def bearing_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4855.BearingCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4855,
+        )
+
+        return self.__parent__._cast(_4855.BearingCompoundModalAnalysis)
+
+    @property
+    def belt_drive_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4857.BeltDriveCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4857,
+        )
+
+        return self.__parent__._cast(_4857.BeltDriveCompoundModalAnalysis)
+
+    @property
+    def bevel_differential_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4858.BevelDifferentialGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4858,
+        )
+
+        return self.__parent__._cast(_4858.BevelDifferentialGearCompoundModalAnalysis)
+
+    @property
+    def bevel_differential_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4860.BevelDifferentialGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4860,
+        )
+
+        return self.__parent__._cast(
+            _4860.BevelDifferentialGearSetCompoundModalAnalysis
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4861.BevelDifferentialPlanetGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4861,
+        )
+
+        return self.__parent__._cast(
+            _4861.BevelDifferentialPlanetGearCompoundModalAnalysis
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4862.BevelDifferentialSunGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4862,
+        )
+
+        return self.__parent__._cast(
+            _4862.BevelDifferentialSunGearCompoundModalAnalysis
+        )
+
+    @property
+    def bevel_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4863.BevelGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4863,
+        )
+
+        return self.__parent__._cast(_4863.BevelGearCompoundModalAnalysis)
+
+    @property
+    def bevel_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4865.BevelGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4865,
+        )
+
+        return self.__parent__._cast(_4865.BevelGearSetCompoundModalAnalysis)
+
+    @property
+    def bolt_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4866.BoltCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4866,
+        )
+
+        return self.__parent__._cast(_4866.BoltCompoundModalAnalysis)
+
+    @property
+    def bolted_joint_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4867.BoltedJointCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4867,
+        )
+
+        return self.__parent__._cast(_4867.BoltedJointCompoundModalAnalysis)
+
+    @property
+    def clutch_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4868.ClutchCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4868,
+        )
+
+        return self.__parent__._cast(_4868.ClutchCompoundModalAnalysis)
+
+    @property
+    def clutch_half_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4870.ClutchHalfCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4870,
+        )
+
+        return self.__parent__._cast(_4870.ClutchHalfCompoundModalAnalysis)
+
+    @property
+    def component_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4872.ComponentCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4872,
+        )
+
+        return self.__parent__._cast(_4872.ComponentCompoundModalAnalysis)
+
+    @property
+    def concept_coupling_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4873.ConceptCouplingCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4873,
+        )
+
+        return self.__parent__._cast(_4873.ConceptCouplingCompoundModalAnalysis)
+
+    @property
+    def concept_coupling_half_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4875.ConceptCouplingHalfCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4875,
+        )
+
+        return self.__parent__._cast(_4875.ConceptCouplingHalfCompoundModalAnalysis)
+
+    @property
+    def concept_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4876.ConceptGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4876,
+        )
+
+        return self.__parent__._cast(_4876.ConceptGearCompoundModalAnalysis)
+
+    @property
+    def concept_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4878.ConceptGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4878,
+        )
+
+        return self.__parent__._cast(_4878.ConceptGearSetCompoundModalAnalysis)
+
+    @property
+    def conical_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4879.ConicalGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4879,
+        )
+
+        return self.__parent__._cast(_4879.ConicalGearCompoundModalAnalysis)
+
+    @property
+    def conical_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4881.ConicalGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4881,
+        )
+
+        return self.__parent__._cast(_4881.ConicalGearSetCompoundModalAnalysis)
+
+    @property
+    def connector_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4883.ConnectorCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4883,
+        )
+
+        return self.__parent__._cast(_4883.ConnectorCompoundModalAnalysis)
+
+    @property
+    def coupling_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4884.CouplingCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4884,
+        )
+
+        return self.__parent__._cast(_4884.CouplingCompoundModalAnalysis)
+
+    @property
+    def coupling_half_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4886.CouplingHalfCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4886,
+        )
+
+        return self.__parent__._cast(_4886.CouplingHalfCompoundModalAnalysis)
+
+    @property
+    def cvt_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4888.CVTCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4888,
+        )
+
+        return self.__parent__._cast(_4888.CVTCompoundModalAnalysis)
+
+    @property
+    def cvt_pulley_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4889.CVTPulleyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4889,
+        )
+
+        return self.__parent__._cast(_4889.CVTPulleyCompoundModalAnalysis)
+
+    @property
+    def cycloidal_assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4890.CycloidalAssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4890,
+        )
+
+        return self.__parent__._cast(_4890.CycloidalAssemblyCompoundModalAnalysis)
+
+    @property
+    def cycloidal_disc_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4892.CycloidalDiscCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4892,
+        )
+
+        return self.__parent__._cast(_4892.CycloidalDiscCompoundModalAnalysis)
+
+    @property
+    def cylindrical_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4894.CylindricalGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4894,
+        )
+
+        return self.__parent__._cast(_4894.CylindricalGearCompoundModalAnalysis)
+
+    @property
+    def cylindrical_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4896.CylindricalGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4896,
+        )
+
+        return self.__parent__._cast(_4896.CylindricalGearSetCompoundModalAnalysis)
+
+    @property
+    def cylindrical_planet_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4897.CylindricalPlanetGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4897,
+        )
+
+        return self.__parent__._cast(_4897.CylindricalPlanetGearCompoundModalAnalysis)
+
+    @property
+    def datum_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4898.DatumCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4898,
+        )
+
+        return self.__parent__._cast(_4898.DatumCompoundModalAnalysis)
+
+    @property
+    def external_cad_model_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4899.ExternalCADModelCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4899,
+        )
+
+        return self.__parent__._cast(_4899.ExternalCADModelCompoundModalAnalysis)
+
+    @property
+    def face_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4900.FaceGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4900,
+        )
+
+        return self.__parent__._cast(_4900.FaceGearCompoundModalAnalysis)
+
+    @property
+    def face_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4902.FaceGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4902,
+        )
+
+        return self.__parent__._cast(_4902.FaceGearSetCompoundModalAnalysis)
+
+    @property
+    def fe_part_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4903.FEPartCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4903,
+        )
+
+        return self.__parent__._cast(_4903.FEPartCompoundModalAnalysis)
+
+    @property
+    def flexible_pin_assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4904.FlexiblePinAssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4904,
+        )
+
+        return self.__parent__._cast(_4904.FlexiblePinAssemblyCompoundModalAnalysis)
+
+    @property
+    def gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4905.GearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4905,
+        )
+
+        return self.__parent__._cast(_4905.GearCompoundModalAnalysis)
+
+    @property
+    def gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4907.GearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4907,
+        )
+
+        return self.__parent__._cast(_4907.GearSetCompoundModalAnalysis)
+
+    @property
+    def guide_dxf_model_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4908.GuideDxfModelCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4908,
+        )
+
+        return self.__parent__._cast(_4908.GuideDxfModelCompoundModalAnalysis)
+
+    @property
+    def hypoid_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4909.HypoidGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4909,
+        )
+
+        return self.__parent__._cast(_4909.HypoidGearCompoundModalAnalysis)
+
+    @property
+    def hypoid_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4911.HypoidGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4911,
+        )
+
+        return self.__parent__._cast(_4911.HypoidGearSetCompoundModalAnalysis)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4913.KlingelnbergCycloPalloidConicalGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4913,
+        )
+
+        return self.__parent__._cast(
+            _4913.KlingelnbergCycloPalloidConicalGearCompoundModalAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4915.KlingelnbergCycloPalloidConicalGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4915,
+        )
+
+        return self.__parent__._cast(
+            _4915.KlingelnbergCycloPalloidConicalGearSetCompoundModalAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4916.KlingelnbergCycloPalloidHypoidGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4916,
+        )
+
+        return self.__parent__._cast(
+            _4916.KlingelnbergCycloPalloidHypoidGearCompoundModalAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4918.KlingelnbergCycloPalloidHypoidGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4918,
+        )
+
+        return self.__parent__._cast(
+            _4918.KlingelnbergCycloPalloidHypoidGearSetCompoundModalAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4919.KlingelnbergCycloPalloidSpiralBevelGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4919,
+        )
+
+        return self.__parent__._cast(
+            _4919.KlingelnbergCycloPalloidSpiralBevelGearCompoundModalAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4921.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4921,
+        )
+
+        return self.__parent__._cast(
+            _4921.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundModalAnalysis
+        )
+
+    @property
+    def mass_disc_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4922.MassDiscCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4922,
+        )
+
+        return self.__parent__._cast(_4922.MassDiscCompoundModalAnalysis)
+
+    @property
+    def measurement_component_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4923.MeasurementComponentCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4923,
+        )
+
+        return self.__parent__._cast(_4923.MeasurementComponentCompoundModalAnalysis)
+
+    @property
+    def microphone_array_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4924.MicrophoneArrayCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4924,
+        )
+
+        return self.__parent__._cast(_4924.MicrophoneArrayCompoundModalAnalysis)
+
+    @property
+    def microphone_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4925.MicrophoneCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4925,
+        )
+
+        return self.__parent__._cast(_4925.MicrophoneCompoundModalAnalysis)
+
+    @property
+    def mountable_component_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4926.MountableComponentCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4926,
+        )
+
+        return self.__parent__._cast(_4926.MountableComponentCompoundModalAnalysis)
+
+    @property
+    def oil_seal_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4927.OilSealCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4927,
+        )
+
+        return self.__parent__._cast(_4927.OilSealCompoundModalAnalysis)
+
+    @property
+    def part_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4928.PartCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4928,
+        )
+
+        return self.__parent__._cast(_4928.PartCompoundModalAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4929.PartToPartShearCouplingCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4929,
+        )
+
+        return self.__parent__._cast(_4929.PartToPartShearCouplingCompoundModalAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_half_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4931.PartToPartShearCouplingHalfCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4931,
+        )
+
+        return self.__parent__._cast(
+            _4931.PartToPartShearCouplingHalfCompoundModalAnalysis
+        )
+
+    @property
+    def planetary_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4933.PlanetaryGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4933,
+        )
+
+        return self.__parent__._cast(_4933.PlanetaryGearSetCompoundModalAnalysis)
+
+    @property
+    def planet_carrier_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4934.PlanetCarrierCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4934,
+        )
+
+        return self.__parent__._cast(_4934.PlanetCarrierCompoundModalAnalysis)
+
+    @property
+    def point_load_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4935.PointLoadCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4935,
+        )
+
+        return self.__parent__._cast(_4935.PointLoadCompoundModalAnalysis)
+
+    @property
+    def power_load_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4936.PowerLoadCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4936,
+        )
+
+        return self.__parent__._cast(_4936.PowerLoadCompoundModalAnalysis)
+
+    @property
+    def pulley_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4937.PulleyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4937,
+        )
+
+        return self.__parent__._cast(_4937.PulleyCompoundModalAnalysis)
+
+    @property
+    def ring_pins_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4938.RingPinsCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4938,
+        )
+
+        return self.__parent__._cast(_4938.RingPinsCompoundModalAnalysis)
+
+    @property
+    def rolling_ring_assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4940.RollingRingAssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4940,
+        )
+
+        return self.__parent__._cast(_4940.RollingRingAssemblyCompoundModalAnalysis)
+
+    @property
+    def rolling_ring_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4941.RollingRingCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4941,
+        )
+
+        return self.__parent__._cast(_4941.RollingRingCompoundModalAnalysis)
+
+    @property
+    def root_assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4943.RootAssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4943,
+        )
+
+        return self.__parent__._cast(_4943.RootAssemblyCompoundModalAnalysis)
+
+    @property
+    def shaft_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4944.ShaftCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4944,
+        )
+
+        return self.__parent__._cast(_4944.ShaftCompoundModalAnalysis)
+
+    @property
+    def shaft_hub_connection_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4945.ShaftHubConnectionCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4945,
+        )
+
+        return self.__parent__._cast(_4945.ShaftHubConnectionCompoundModalAnalysis)
+
+    @property
+    def specialised_assembly_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4947.SpecialisedAssemblyCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4947,
+        )
+
+        return self.__parent__._cast(_4947.SpecialisedAssemblyCompoundModalAnalysis)
+
+    @property
+    def spiral_bevel_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4948.SpiralBevelGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4948,
+        )
+
+        return self.__parent__._cast(_4948.SpiralBevelGearCompoundModalAnalysis)
+
+    @property
+    def spiral_bevel_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4950.SpiralBevelGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4950,
+        )
+
+        return self.__parent__._cast(_4950.SpiralBevelGearSetCompoundModalAnalysis)
+
+    @property
+    def spring_damper_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4951.SpringDamperCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4951,
+        )
+
+        return self.__parent__._cast(_4951.SpringDamperCompoundModalAnalysis)
+
+    @property
+    def spring_damper_half_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4953.SpringDamperHalfCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4953,
+        )
+
+        return self.__parent__._cast(_4953.SpringDamperHalfCompoundModalAnalysis)
+
+    @property
+    def straight_bevel_diff_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4954.StraightBevelDiffGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4954,
+        )
+
+        return self.__parent__._cast(_4954.StraightBevelDiffGearCompoundModalAnalysis)
+
+    @property
+    def straight_bevel_diff_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4956.StraightBevelDiffGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4956,
+        )
+
+        return self.__parent__._cast(
+            _4956.StraightBevelDiffGearSetCompoundModalAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4957.StraightBevelGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4957,
+        )
+
+        return self.__parent__._cast(_4957.StraightBevelGearCompoundModalAnalysis)
+
+    @property
+    def straight_bevel_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4959.StraightBevelGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4959,
+        )
+
+        return self.__parent__._cast(_4959.StraightBevelGearSetCompoundModalAnalysis)
+
+    @property
+    def straight_bevel_planet_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4960.StraightBevelPlanetGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4960,
+        )
+
+        return self.__parent__._cast(_4960.StraightBevelPlanetGearCompoundModalAnalysis)
+
+    @property
+    def straight_bevel_sun_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4961.StraightBevelSunGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4961,
+        )
+
+        return self.__parent__._cast(_4961.StraightBevelSunGearCompoundModalAnalysis)
+
+    @property
+    def synchroniser_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4962.SynchroniserCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4962,
+        )
+
+        return self.__parent__._cast(_4962.SynchroniserCompoundModalAnalysis)
+
+    @property
+    def synchroniser_half_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4963.SynchroniserHalfCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4963,
+        )
+
+        return self.__parent__._cast(_4963.SynchroniserHalfCompoundModalAnalysis)
+
+    @property
+    def synchroniser_part_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4964.SynchroniserPartCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4964,
+        )
+
+        return self.__parent__._cast(_4964.SynchroniserPartCompoundModalAnalysis)
+
+    @property
+    def synchroniser_sleeve_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4965.SynchroniserSleeveCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4965,
+        )
+
+        return self.__parent__._cast(_4965.SynchroniserSleeveCompoundModalAnalysis)
+
+    @property
+    def torque_converter_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4966.TorqueConverterCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4966,
+        )
+
+        return self.__parent__._cast(_4966.TorqueConverterCompoundModalAnalysis)
+
+    @property
+    def torque_converter_pump_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4968.TorqueConverterPumpCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4968,
+        )
+
+        return self.__parent__._cast(_4968.TorqueConverterPumpCompoundModalAnalysis)
+
+    @property
+    def torque_converter_turbine_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4969.TorqueConverterTurbineCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4969,
+        )
+
+        return self.__parent__._cast(_4969.TorqueConverterTurbineCompoundModalAnalysis)
+
+    @property
+    def unbalanced_mass_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4970.UnbalancedMassCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4970,
+        )
+
+        return self.__parent__._cast(_4970.UnbalancedMassCompoundModalAnalysis)
+
+    @property
+    def virtual_component_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4971.VirtualComponentCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4971,
+        )
+
+        return self.__parent__._cast(_4971.VirtualComponentCompoundModalAnalysis)
+
+    @property
+    def worm_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4972.WormGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4972,
+        )
+
+        return self.__parent__._cast(_4972.WormGearCompoundModalAnalysis)
+
+    @property
+    def worm_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4974.WormGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4974,
+        )
+
+        return self.__parent__._cast(_4974.WormGearSetCompoundModalAnalysis)
+
+    @property
+    def zerol_bevel_gear_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4975.ZerolBevelGearCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4975,
+        )
+
+        return self.__parent__._cast(_4975.ZerolBevelGearCompoundModalAnalysis)
+
+    @property
+    def zerol_bevel_gear_set_compound_modal_analysis(
+        self: "CastSelf",
+    ) -> "_4977.ZerolBevelGearSetCompoundModalAnalysis":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses.compound import (
+            _4977,
+        )
+
+        return self.__parent__._cast(_4977.ZerolBevelGearSetCompoundModalAnalysis)
+
+    @property
+    def abstract_assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5111.AbstractAssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5111,
+        )
+
+        return self.__parent__._cast(
+            _5111.AbstractAssemblyCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def abstract_shaft_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5112.AbstractShaftCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5112,
+        )
+
+        return self.__parent__._cast(
+            _5112.AbstractShaftCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5113.AbstractShaftOrHousingCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5113,
+        )
+
+        return self.__parent__._cast(
+            _5113.AbstractShaftOrHousingCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5115.AGMAGleasonConicalGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5115,
+        )
+
+        return self.__parent__._cast(
+            _5115.AGMAGleasonConicalGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5117.AGMAGleasonConicalGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5117,
+        )
+
+        return self.__parent__._cast(
+            _5117.AGMAGleasonConicalGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5118.AssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5118,
+        )
+
+        return self.__parent__._cast(_5118.AssemblyCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def bearing_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5119.BearingCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5119,
+        )
+
+        return self.__parent__._cast(_5119.BearingCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def belt_drive_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5121.BeltDriveCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5121,
+        )
+
+        return self.__parent__._cast(_5121.BeltDriveCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def bevel_differential_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5122.BevelDifferentialGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5122,
+        )
+
+        return self.__parent__._cast(
+            _5122.BevelDifferentialGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5124.BevelDifferentialGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5124,
+        )
+
+        return self.__parent__._cast(
+            _5124.BevelDifferentialGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5125.BevelDifferentialPlanetGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5125,
+        )
+
+        return self.__parent__._cast(
+            _5125.BevelDifferentialPlanetGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5126.BevelDifferentialSunGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5126,
+        )
+
+        return self.__parent__._cast(
+            _5126.BevelDifferentialSunGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def bevel_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5127.BevelGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5127,
+        )
+
+        return self.__parent__._cast(_5127.BevelGearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def bevel_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5129.BevelGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5129,
+        )
+
+        return self.__parent__._cast(
+            _5129.BevelGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def bolt_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5130.BoltCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5130,
+        )
+
+        return self.__parent__._cast(_5130.BoltCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def bolted_joint_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5131.BoltedJointCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5131,
+        )
+
+        return self.__parent__._cast(_5131.BoltedJointCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def clutch_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5132.ClutchCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5132,
+        )
+
+        return self.__parent__._cast(_5132.ClutchCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def clutch_half_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5134.ClutchHalfCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5134,
+        )
+
+        return self.__parent__._cast(_5134.ClutchHalfCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def component_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5136.ComponentCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5136,
+        )
+
+        return self.__parent__._cast(_5136.ComponentCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def concept_coupling_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5137.ConceptCouplingCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5137,
+        )
+
+        return self.__parent__._cast(
+            _5137.ConceptCouplingCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def concept_coupling_half_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5139.ConceptCouplingHalfCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5139,
+        )
+
+        return self.__parent__._cast(
+            _5139.ConceptCouplingHalfCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def concept_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5140.ConceptGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5140,
+        )
+
+        return self.__parent__._cast(_5140.ConceptGearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def concept_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5142.ConceptGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5142,
+        )
+
+        return self.__parent__._cast(
+            _5142.ConceptGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def conical_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5143.ConicalGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5143,
+        )
+
+        return self.__parent__._cast(_5143.ConicalGearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def conical_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5145.ConicalGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5145,
+        )
+
+        return self.__parent__._cast(
+            _5145.ConicalGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def connector_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5147.ConnectorCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5147,
+        )
+
+        return self.__parent__._cast(_5147.ConnectorCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def coupling_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5148.CouplingCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5148,
+        )
+
+        return self.__parent__._cast(_5148.CouplingCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def coupling_half_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5150.CouplingHalfCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5150,
+        )
+
+        return self.__parent__._cast(
+            _5150.CouplingHalfCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def cvt_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5152.CVTCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5152,
+        )
+
+        return self.__parent__._cast(_5152.CVTCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def cvt_pulley_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5153.CVTPulleyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5153,
+        )
+
+        return self.__parent__._cast(_5153.CVTPulleyCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def cycloidal_assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5154.CycloidalAssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5154,
+        )
+
+        return self.__parent__._cast(
+            _5154.CycloidalAssemblyCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def cycloidal_disc_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5156.CycloidalDiscCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5156,
+        )
+
+        return self.__parent__._cast(
+            _5156.CycloidalDiscCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def cylindrical_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5158.CylindricalGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5158,
+        )
+
+        return self.__parent__._cast(
+            _5158.CylindricalGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def cylindrical_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5160.CylindricalGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5160,
+        )
+
+        return self.__parent__._cast(
+            _5160.CylindricalGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5161.CylindricalPlanetGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5161,
+        )
+
+        return self.__parent__._cast(
+            _5161.CylindricalPlanetGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def datum_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5162.DatumCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5162,
+        )
+
+        return self.__parent__._cast(_5162.DatumCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def external_cad_model_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5163.ExternalCADModelCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5163,
+        )
+
+        return self.__parent__._cast(
+            _5163.ExternalCADModelCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def face_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5164.FaceGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5164,
+        )
+
+        return self.__parent__._cast(_5164.FaceGearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def face_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5166.FaceGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5166,
+        )
+
+        return self.__parent__._cast(_5166.FaceGearSetCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def fe_part_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5167.FEPartCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5167,
+        )
+
+        return self.__parent__._cast(_5167.FEPartCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def flexible_pin_assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5168.FlexiblePinAssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5168,
+        )
+
+        return self.__parent__._cast(
+            _5168.FlexiblePinAssemblyCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5169.GearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5169,
+        )
+
+        return self.__parent__._cast(_5169.GearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5171.GearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5171,
+        )
+
+        return self.__parent__._cast(_5171.GearSetCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def guide_dxf_model_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5172.GuideDxfModelCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5172,
+        )
+
+        return self.__parent__._cast(
+            _5172.GuideDxfModelCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def hypoid_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5173.HypoidGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5173,
+        )
+
+        return self.__parent__._cast(_5173.HypoidGearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def hypoid_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5175.HypoidGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5175,
+        )
+
+        return self.__parent__._cast(
+            _5175.HypoidGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5177.KlingelnbergCycloPalloidConicalGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5177,
+        )
+
+        return self.__parent__._cast(
+            _5177.KlingelnbergCycloPalloidConicalGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> (
+        "_5179.KlingelnbergCycloPalloidConicalGearSetCompoundModalAnalysisAtAStiffness"
+    ):
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5179,
+        )
+
+        return self.__parent__._cast(
+            _5179.KlingelnbergCycloPalloidConicalGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5180.KlingelnbergCycloPalloidHypoidGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5180,
+        )
+
+        return self.__parent__._cast(
+            _5180.KlingelnbergCycloPalloidHypoidGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5182.KlingelnbergCycloPalloidHypoidGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5182,
+        )
+
+        return self.__parent__._cast(
+            _5182.KlingelnbergCycloPalloidHypoidGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> (
+        "_5183.KlingelnbergCycloPalloidSpiralBevelGearCompoundModalAnalysisAtAStiffness"
+    ):
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5183,
+        )
+
+        return self.__parent__._cast(
+            _5183.KlingelnbergCycloPalloidSpiralBevelGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5185.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5185,
+        )
+
+        return self.__parent__._cast(
+            _5185.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def mass_disc_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5186.MassDiscCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5186,
+        )
+
+        return self.__parent__._cast(_5186.MassDiscCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def measurement_component_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5187.MeasurementComponentCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5187,
+        )
+
+        return self.__parent__._cast(
+            _5187.MeasurementComponentCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def microphone_array_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5188.MicrophoneArrayCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5188,
+        )
+
+        return self.__parent__._cast(
+            _5188.MicrophoneArrayCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def microphone_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5189.MicrophoneCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5189,
+        )
+
+        return self.__parent__._cast(_5189.MicrophoneCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def mountable_component_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5190.MountableComponentCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5190,
+        )
+
+        return self.__parent__._cast(
+            _5190.MountableComponentCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def oil_seal_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5191.OilSealCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5191,
+        )
+
+        return self.__parent__._cast(_5191.OilSealCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def part_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5192.PartCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5192,
+        )
+
+        return self.__parent__._cast(_5192.PartCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def part_to_part_shear_coupling_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5193.PartToPartShearCouplingCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5193,
+        )
+
+        return self.__parent__._cast(
+            _5193.PartToPartShearCouplingCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5195.PartToPartShearCouplingHalfCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5195,
+        )
+
+        return self.__parent__._cast(
+            _5195.PartToPartShearCouplingHalfCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def planetary_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5197.PlanetaryGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5197,
+        )
+
+        return self.__parent__._cast(
+            _5197.PlanetaryGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def planet_carrier_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5198.PlanetCarrierCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5198,
+        )
+
+        return self.__parent__._cast(
+            _5198.PlanetCarrierCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def point_load_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5199.PointLoadCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5199,
+        )
+
+        return self.__parent__._cast(_5199.PointLoadCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def power_load_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5200.PowerLoadCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5200,
+        )
+
+        return self.__parent__._cast(_5200.PowerLoadCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def pulley_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5201.PulleyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5201,
+        )
+
+        return self.__parent__._cast(_5201.PulleyCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def ring_pins_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5202.RingPinsCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5202,
+        )
+
+        return self.__parent__._cast(_5202.RingPinsCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def rolling_ring_assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5204.RollingRingAssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5204,
+        )
+
+        return self.__parent__._cast(
+            _5204.RollingRingAssemblyCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def rolling_ring_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5205.RollingRingCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5205,
+        )
+
+        return self.__parent__._cast(_5205.RollingRingCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def root_assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5207.RootAssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5207,
+        )
+
+        return self.__parent__._cast(
+            _5207.RootAssemblyCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def shaft_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5208.ShaftCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5208,
+        )
+
+        return self.__parent__._cast(_5208.ShaftCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def shaft_hub_connection_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5209.ShaftHubConnectionCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5209,
+        )
+
+        return self.__parent__._cast(
+            _5209.ShaftHubConnectionCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def specialised_assembly_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5211.SpecialisedAssemblyCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5211,
+        )
+
+        return self.__parent__._cast(
+            _5211.SpecialisedAssemblyCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def spiral_bevel_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5212.SpiralBevelGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5212,
+        )
+
+        return self.__parent__._cast(
+            _5212.SpiralBevelGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5214.SpiralBevelGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5214,
+        )
+
+        return self.__parent__._cast(
+            _5214.SpiralBevelGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def spring_damper_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5215.SpringDamperCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5215,
+        )
+
+        return self.__parent__._cast(
+            _5215.SpringDamperCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def spring_damper_half_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5217.SpringDamperHalfCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5217,
+        )
+
+        return self.__parent__._cast(
+            _5217.SpringDamperHalfCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5218.StraightBevelDiffGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5218,
+        )
+
+        return self.__parent__._cast(
+            _5218.StraightBevelDiffGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5220.StraightBevelDiffGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5220,
+        )
+
+        return self.__parent__._cast(
+            _5220.StraightBevelDiffGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def straight_bevel_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5221.StraightBevelGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5221,
+        )
+
+        return self.__parent__._cast(
+            _5221.StraightBevelGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5223.StraightBevelGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5223,
+        )
+
+        return self.__parent__._cast(
+            _5223.StraightBevelGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5224.StraightBevelPlanetGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5224,
+        )
+
+        return self.__parent__._cast(
+            _5224.StraightBevelPlanetGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5225.StraightBevelSunGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5225,
+        )
+
+        return self.__parent__._cast(
+            _5225.StraightBevelSunGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def synchroniser_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5226.SynchroniserCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5226,
+        )
+
+        return self.__parent__._cast(
+            _5226.SynchroniserCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def synchroniser_half_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5227.SynchroniserHalfCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5227,
+        )
+
+        return self.__parent__._cast(
+            _5227.SynchroniserHalfCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def synchroniser_part_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5228.SynchroniserPartCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5228,
+        )
+
+        return self.__parent__._cast(
+            _5228.SynchroniserPartCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def synchroniser_sleeve_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5229.SynchroniserSleeveCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5229,
+        )
+
+        return self.__parent__._cast(
+            _5229.SynchroniserSleeveCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def torque_converter_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5230.TorqueConverterCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5230,
+        )
+
+        return self.__parent__._cast(
+            _5230.TorqueConverterCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def torque_converter_pump_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5232.TorqueConverterPumpCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5232,
+        )
+
+        return self.__parent__._cast(
+            _5232.TorqueConverterPumpCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def torque_converter_turbine_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5233.TorqueConverterTurbineCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5233,
+        )
+
+        return self.__parent__._cast(
+            _5233.TorqueConverterTurbineCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def unbalanced_mass_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5234.UnbalancedMassCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5234,
+        )
+
+        return self.__parent__._cast(
+            _5234.UnbalancedMassCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def virtual_component_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5235.VirtualComponentCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5235,
+        )
+
+        return self.__parent__._cast(
+            _5235.VirtualComponentCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def worm_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5236.WormGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5236,
+        )
+
+        return self.__parent__._cast(_5236.WormGearCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def worm_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5238.WormGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5238,
+        )
+
+        return self.__parent__._cast(_5238.WormGearSetCompoundModalAnalysisAtAStiffness)
+
+    @property
+    def zerol_bevel_gear_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5239.ZerolBevelGearCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5239,
+        )
+
+        return self.__parent__._cast(
+            _5239.ZerolBevelGearCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_modal_analysis_at_a_stiffness(
+        self: "CastSelf",
+    ) -> "_5241.ZerolBevelGearSetCompoundModalAnalysisAtAStiffness":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_stiffness.compound import (
+            _5241,
+        )
+
+        return self.__parent__._cast(
+            _5241.ZerolBevelGearSetCompoundModalAnalysisAtAStiffness
+        )
+
+    @property
+    def abstract_assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5374.AbstractAssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5374,
+        )
+
+        return self.__parent__._cast(
+            _5374.AbstractAssemblyCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def abstract_shaft_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5375.AbstractShaftCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5375,
+        )
+
+        return self.__parent__._cast(_5375.AbstractShaftCompoundModalAnalysisAtASpeed)
+
+    @property
+    def abstract_shaft_or_housing_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5376.AbstractShaftOrHousingCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5376,
+        )
+
+        return self.__parent__._cast(
+            _5376.AbstractShaftOrHousingCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5378.AGMAGleasonConicalGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5378,
+        )
+
+        return self.__parent__._cast(
+            _5378.AGMAGleasonConicalGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5380.AGMAGleasonConicalGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5380,
+        )
+
+        return self.__parent__._cast(
+            _5380.AGMAGleasonConicalGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5381.AssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5381,
+        )
+
+        return self.__parent__._cast(_5381.AssemblyCompoundModalAnalysisAtASpeed)
+
+    @property
+    def bearing_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5382.BearingCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5382,
+        )
+
+        return self.__parent__._cast(_5382.BearingCompoundModalAnalysisAtASpeed)
+
+    @property
+    def belt_drive_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5384.BeltDriveCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5384,
+        )
+
+        return self.__parent__._cast(_5384.BeltDriveCompoundModalAnalysisAtASpeed)
+
+    @property
+    def bevel_differential_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5385.BevelDifferentialGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5385,
+        )
+
+        return self.__parent__._cast(
+            _5385.BevelDifferentialGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5387.BevelDifferentialGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5387,
+        )
+
+        return self.__parent__._cast(
+            _5387.BevelDifferentialGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5388.BevelDifferentialPlanetGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5388,
+        )
+
+        return self.__parent__._cast(
+            _5388.BevelDifferentialPlanetGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5389.BevelDifferentialSunGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5389,
+        )
+
+        return self.__parent__._cast(
+            _5389.BevelDifferentialSunGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def bevel_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5390.BevelGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5390,
+        )
+
+        return self.__parent__._cast(_5390.BevelGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def bevel_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5392.BevelGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5392,
+        )
+
+        return self.__parent__._cast(_5392.BevelGearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def bolt_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5393.BoltCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5393,
+        )
+
+        return self.__parent__._cast(_5393.BoltCompoundModalAnalysisAtASpeed)
+
+    @property
+    def bolted_joint_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5394.BoltedJointCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5394,
+        )
+
+        return self.__parent__._cast(_5394.BoltedJointCompoundModalAnalysisAtASpeed)
+
+    @property
+    def clutch_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5395.ClutchCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5395,
+        )
+
+        return self.__parent__._cast(_5395.ClutchCompoundModalAnalysisAtASpeed)
+
+    @property
+    def clutch_half_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5397.ClutchHalfCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5397,
+        )
+
+        return self.__parent__._cast(_5397.ClutchHalfCompoundModalAnalysisAtASpeed)
+
+    @property
+    def component_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5399.ComponentCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5399,
+        )
+
+        return self.__parent__._cast(_5399.ComponentCompoundModalAnalysisAtASpeed)
+
+    @property
+    def concept_coupling_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5400.ConceptCouplingCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5400,
+        )
+
+        return self.__parent__._cast(_5400.ConceptCouplingCompoundModalAnalysisAtASpeed)
+
+    @property
+    def concept_coupling_half_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5402.ConceptCouplingHalfCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5402,
+        )
+
+        return self.__parent__._cast(
+            _5402.ConceptCouplingHalfCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def concept_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5403.ConceptGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5403,
+        )
+
+        return self.__parent__._cast(_5403.ConceptGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def concept_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5405.ConceptGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5405,
+        )
+
+        return self.__parent__._cast(_5405.ConceptGearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def conical_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5406.ConicalGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5406,
+        )
+
+        return self.__parent__._cast(_5406.ConicalGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def conical_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5408.ConicalGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5408,
+        )
+
+        return self.__parent__._cast(_5408.ConicalGearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def connector_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5410.ConnectorCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5410,
+        )
+
+        return self.__parent__._cast(_5410.ConnectorCompoundModalAnalysisAtASpeed)
+
+    @property
+    def coupling_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5411.CouplingCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5411,
+        )
+
+        return self.__parent__._cast(_5411.CouplingCompoundModalAnalysisAtASpeed)
+
+    @property
+    def coupling_half_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5413.CouplingHalfCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5413,
+        )
+
+        return self.__parent__._cast(_5413.CouplingHalfCompoundModalAnalysisAtASpeed)
+
+    @property
+    def cvt_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5415.CVTCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5415,
+        )
+
+        return self.__parent__._cast(_5415.CVTCompoundModalAnalysisAtASpeed)
+
+    @property
+    def cvt_pulley_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5416.CVTPulleyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5416,
+        )
+
+        return self.__parent__._cast(_5416.CVTPulleyCompoundModalAnalysisAtASpeed)
+
+    @property
+    def cycloidal_assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5417.CycloidalAssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5417,
+        )
+
+        return self.__parent__._cast(
+            _5417.CycloidalAssemblyCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def cycloidal_disc_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5419.CycloidalDiscCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5419,
+        )
+
+        return self.__parent__._cast(_5419.CycloidalDiscCompoundModalAnalysisAtASpeed)
+
+    @property
+    def cylindrical_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5421.CylindricalGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5421,
+        )
+
+        return self.__parent__._cast(_5421.CylindricalGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def cylindrical_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5423.CylindricalGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5423,
+        )
+
+        return self.__parent__._cast(
+            _5423.CylindricalGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5424.CylindricalPlanetGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5424,
+        )
+
+        return self.__parent__._cast(
+            _5424.CylindricalPlanetGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def datum_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5425.DatumCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5425,
+        )
+
+        return self.__parent__._cast(_5425.DatumCompoundModalAnalysisAtASpeed)
+
+    @property
+    def external_cad_model_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5426.ExternalCADModelCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5426,
+        )
+
+        return self.__parent__._cast(
+            _5426.ExternalCADModelCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def face_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5427.FaceGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5427,
+        )
+
+        return self.__parent__._cast(_5427.FaceGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def face_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5429.FaceGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5429,
+        )
+
+        return self.__parent__._cast(_5429.FaceGearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def fe_part_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5430.FEPartCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5430,
+        )
+
+        return self.__parent__._cast(_5430.FEPartCompoundModalAnalysisAtASpeed)
+
+    @property
+    def flexible_pin_assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5431.FlexiblePinAssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5431,
+        )
+
+        return self.__parent__._cast(
+            _5431.FlexiblePinAssemblyCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5432.GearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5432,
+        )
+
+        return self.__parent__._cast(_5432.GearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5434.GearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5434,
+        )
+
+        return self.__parent__._cast(_5434.GearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def guide_dxf_model_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5435.GuideDxfModelCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5435,
+        )
+
+        return self.__parent__._cast(_5435.GuideDxfModelCompoundModalAnalysisAtASpeed)
+
+    @property
+    def hypoid_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5436.HypoidGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5436,
+        )
+
+        return self.__parent__._cast(_5436.HypoidGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def hypoid_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5438.HypoidGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5438,
+        )
+
+        return self.__parent__._cast(_5438.HypoidGearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5440.KlingelnbergCycloPalloidConicalGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5440,
+        )
+
+        return self.__parent__._cast(
+            _5440.KlingelnbergCycloPalloidConicalGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5442.KlingelnbergCycloPalloidConicalGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5442,
+        )
+
+        return self.__parent__._cast(
+            _5442.KlingelnbergCycloPalloidConicalGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5443.KlingelnbergCycloPalloidHypoidGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5443,
+        )
+
+        return self.__parent__._cast(
+            _5443.KlingelnbergCycloPalloidHypoidGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5445.KlingelnbergCycloPalloidHypoidGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5445,
+        )
+
+        return self.__parent__._cast(
+            _5445.KlingelnbergCycloPalloidHypoidGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5446.KlingelnbergCycloPalloidSpiralBevelGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5446,
+        )
+
+        return self.__parent__._cast(
+            _5446.KlingelnbergCycloPalloidSpiralBevelGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> (
+        "_5448.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundModalAnalysisAtASpeed"
+    ):
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5448,
+        )
+
+        return self.__parent__._cast(
+            _5448.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def mass_disc_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5449.MassDiscCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5449,
+        )
+
+        return self.__parent__._cast(_5449.MassDiscCompoundModalAnalysisAtASpeed)
+
+    @property
+    def measurement_component_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5450.MeasurementComponentCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5450,
+        )
+
+        return self.__parent__._cast(
+            _5450.MeasurementComponentCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def microphone_array_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5451.MicrophoneArrayCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5451,
+        )
+
+        return self.__parent__._cast(_5451.MicrophoneArrayCompoundModalAnalysisAtASpeed)
+
+    @property
+    def microphone_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5452.MicrophoneCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5452,
+        )
+
+        return self.__parent__._cast(_5452.MicrophoneCompoundModalAnalysisAtASpeed)
+
+    @property
+    def mountable_component_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5453.MountableComponentCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5453,
+        )
+
+        return self.__parent__._cast(
+            _5453.MountableComponentCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def oil_seal_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5454.OilSealCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5454,
+        )
+
+        return self.__parent__._cast(_5454.OilSealCompoundModalAnalysisAtASpeed)
+
+    @property
+    def part_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5455.PartCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5455,
+        )
+
+        return self.__parent__._cast(_5455.PartCompoundModalAnalysisAtASpeed)
+
+    @property
+    def part_to_part_shear_coupling_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5456.PartToPartShearCouplingCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5456,
+        )
+
+        return self.__parent__._cast(
+            _5456.PartToPartShearCouplingCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5458.PartToPartShearCouplingHalfCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5458,
+        )
+
+        return self.__parent__._cast(
+            _5458.PartToPartShearCouplingHalfCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def planetary_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5460.PlanetaryGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5460,
+        )
+
+        return self.__parent__._cast(
+            _5460.PlanetaryGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def planet_carrier_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5461.PlanetCarrierCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5461,
+        )
+
+        return self.__parent__._cast(_5461.PlanetCarrierCompoundModalAnalysisAtASpeed)
+
+    @property
+    def point_load_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5462.PointLoadCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5462,
+        )
+
+        return self.__parent__._cast(_5462.PointLoadCompoundModalAnalysisAtASpeed)
+
+    @property
+    def power_load_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5463.PowerLoadCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5463,
+        )
+
+        return self.__parent__._cast(_5463.PowerLoadCompoundModalAnalysisAtASpeed)
+
+    @property
+    def pulley_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5464.PulleyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5464,
+        )
+
+        return self.__parent__._cast(_5464.PulleyCompoundModalAnalysisAtASpeed)
+
+    @property
+    def ring_pins_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5465.RingPinsCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5465,
+        )
+
+        return self.__parent__._cast(_5465.RingPinsCompoundModalAnalysisAtASpeed)
+
+    @property
+    def rolling_ring_assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5467.RollingRingAssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5467,
+        )
+
+        return self.__parent__._cast(
+            _5467.RollingRingAssemblyCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def rolling_ring_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5468.RollingRingCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5468,
+        )
+
+        return self.__parent__._cast(_5468.RollingRingCompoundModalAnalysisAtASpeed)
+
+    @property
+    def root_assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5470.RootAssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5470,
+        )
+
+        return self.__parent__._cast(_5470.RootAssemblyCompoundModalAnalysisAtASpeed)
+
+    @property
+    def shaft_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5471.ShaftCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5471,
+        )
+
+        return self.__parent__._cast(_5471.ShaftCompoundModalAnalysisAtASpeed)
+
+    @property
+    def shaft_hub_connection_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5472.ShaftHubConnectionCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5472,
+        )
+
+        return self.__parent__._cast(
+            _5472.ShaftHubConnectionCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def specialised_assembly_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5474.SpecialisedAssemblyCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5474,
+        )
+
+        return self.__parent__._cast(
+            _5474.SpecialisedAssemblyCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def spiral_bevel_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5475.SpiralBevelGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5475,
+        )
+
+        return self.__parent__._cast(_5475.SpiralBevelGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def spiral_bevel_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5477.SpiralBevelGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5477,
+        )
+
+        return self.__parent__._cast(
+            _5477.SpiralBevelGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def spring_damper_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5478.SpringDamperCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5478,
+        )
+
+        return self.__parent__._cast(_5478.SpringDamperCompoundModalAnalysisAtASpeed)
+
+    @property
+    def spring_damper_half_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5480.SpringDamperHalfCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5480,
+        )
+
+        return self.__parent__._cast(
+            _5480.SpringDamperHalfCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5481.StraightBevelDiffGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5481,
+        )
+
+        return self.__parent__._cast(
+            _5481.StraightBevelDiffGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5483.StraightBevelDiffGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5483,
+        )
+
+        return self.__parent__._cast(
+            _5483.StraightBevelDiffGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5484.StraightBevelGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5484,
+        )
+
+        return self.__parent__._cast(
+            _5484.StraightBevelGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5486.StraightBevelGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5486,
+        )
+
+        return self.__parent__._cast(
+            _5486.StraightBevelGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5487.StraightBevelPlanetGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5487,
+        )
+
+        return self.__parent__._cast(
+            _5487.StraightBevelPlanetGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5488.StraightBevelSunGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5488,
+        )
+
+        return self.__parent__._cast(
+            _5488.StraightBevelSunGearCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def synchroniser_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5489.SynchroniserCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5489,
+        )
+
+        return self.__parent__._cast(_5489.SynchroniserCompoundModalAnalysisAtASpeed)
+
+    @property
+    def synchroniser_half_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5490.SynchroniserHalfCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5490,
+        )
+
+        return self.__parent__._cast(
+            _5490.SynchroniserHalfCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def synchroniser_part_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5491.SynchroniserPartCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5491,
+        )
+
+        return self.__parent__._cast(
+            _5491.SynchroniserPartCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def synchroniser_sleeve_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5492.SynchroniserSleeveCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5492,
+        )
+
+        return self.__parent__._cast(
+            _5492.SynchroniserSleeveCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def torque_converter_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5493.TorqueConverterCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5493,
+        )
+
+        return self.__parent__._cast(_5493.TorqueConverterCompoundModalAnalysisAtASpeed)
+
+    @property
+    def torque_converter_pump_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5495.TorqueConverterPumpCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5495,
+        )
+
+        return self.__parent__._cast(
+            _5495.TorqueConverterPumpCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def torque_converter_turbine_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5496.TorqueConverterTurbineCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5496,
+        )
+
+        return self.__parent__._cast(
+            _5496.TorqueConverterTurbineCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def unbalanced_mass_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5497.UnbalancedMassCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5497,
+        )
+
+        return self.__parent__._cast(_5497.UnbalancedMassCompoundModalAnalysisAtASpeed)
+
+    @property
+    def virtual_component_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5498.VirtualComponentCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5498,
+        )
+
+        return self.__parent__._cast(
+            _5498.VirtualComponentCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def worm_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5499.WormGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5499,
+        )
+
+        return self.__parent__._cast(_5499.WormGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def worm_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5501.WormGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5501,
+        )
+
+        return self.__parent__._cast(_5501.WormGearSetCompoundModalAnalysisAtASpeed)
+
+    @property
+    def zerol_bevel_gear_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5502.ZerolBevelGearCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5502,
+        )
+
+        return self.__parent__._cast(_5502.ZerolBevelGearCompoundModalAnalysisAtASpeed)
+
+    @property
+    def zerol_bevel_gear_set_compound_modal_analysis_at_a_speed(
+        self: "CastSelf",
+    ) -> "_5504.ZerolBevelGearSetCompoundModalAnalysisAtASpeed":
+        from mastapy._private.system_model.analyses_and_results.modal_analyses_at_a_speed.compound import (
+            _5504,
+        )
+
+        return self.__parent__._cast(
+            _5504.ZerolBevelGearSetCompoundModalAnalysisAtASpeed
+        )
+
+    @property
+    def abstract_assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5663.AbstractAssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5663,
+        )
+
+        return self.__parent__._cast(
+            _5663.AbstractAssemblyCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def abstract_shaft_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5664.AbstractShaftCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5664,
+        )
+
+        return self.__parent__._cast(
+            _5664.AbstractShaftCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5665.AbstractShaftOrHousingCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5665,
+        )
+
+        return self.__parent__._cast(
+            _5665.AbstractShaftOrHousingCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5667.AGMAGleasonConicalGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5667,
+        )
+
+        return self.__parent__._cast(
+            _5667.AGMAGleasonConicalGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5669.AGMAGleasonConicalGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5669,
+        )
+
+        return self.__parent__._cast(
+            _5669.AGMAGleasonConicalGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5670.AssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5670,
+        )
+
+        return self.__parent__._cast(_5670.AssemblyCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def bearing_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5671.BearingCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5671,
+        )
+
+        return self.__parent__._cast(_5671.BearingCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def belt_drive_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5673.BeltDriveCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5673,
+        )
+
+        return self.__parent__._cast(_5673.BeltDriveCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def bevel_differential_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5674.BevelDifferentialGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5674,
+        )
+
+        return self.__parent__._cast(
+            _5674.BevelDifferentialGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5676.BevelDifferentialGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5676,
+        )
+
+        return self.__parent__._cast(
+            _5676.BevelDifferentialGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5677.BevelDifferentialPlanetGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5677,
+        )
+
+        return self.__parent__._cast(
+            _5677.BevelDifferentialPlanetGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5678.BevelDifferentialSunGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5678,
+        )
+
+        return self.__parent__._cast(
+            _5678.BevelDifferentialSunGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def bevel_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5679.BevelGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5679,
+        )
+
+        return self.__parent__._cast(_5679.BevelGearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def bevel_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5681.BevelGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5681,
+        )
+
+        return self.__parent__._cast(
+            _5681.BevelGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def bolt_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5682.BoltCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5682,
+        )
+
+        return self.__parent__._cast(_5682.BoltCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def bolted_joint_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5683.BoltedJointCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5683,
+        )
+
+        return self.__parent__._cast(_5683.BoltedJointCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def clutch_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5684.ClutchCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5684,
+        )
+
+        return self.__parent__._cast(_5684.ClutchCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def clutch_half_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5686.ClutchHalfCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5686,
+        )
+
+        return self.__parent__._cast(_5686.ClutchHalfCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def component_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5688.ComponentCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5688,
+        )
+
+        return self.__parent__._cast(_5688.ComponentCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def concept_coupling_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5689.ConceptCouplingCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5689,
+        )
+
+        return self.__parent__._cast(
+            _5689.ConceptCouplingCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def concept_coupling_half_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5691.ConceptCouplingHalfCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5691,
+        )
+
+        return self.__parent__._cast(
+            _5691.ConceptCouplingHalfCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def concept_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5692.ConceptGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5692,
+        )
+
+        return self.__parent__._cast(_5692.ConceptGearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def concept_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5694.ConceptGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5694,
+        )
+
+        return self.__parent__._cast(
+            _5694.ConceptGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def conical_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5695.ConicalGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5695,
+        )
+
+        return self.__parent__._cast(_5695.ConicalGearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def conical_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5697.ConicalGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5697,
+        )
+
+        return self.__parent__._cast(
+            _5697.ConicalGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def connector_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5699.ConnectorCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5699,
+        )
+
+        return self.__parent__._cast(_5699.ConnectorCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def coupling_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5700.CouplingCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5700,
+        )
+
+        return self.__parent__._cast(_5700.CouplingCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def coupling_half_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5702.CouplingHalfCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5702,
+        )
+
+        return self.__parent__._cast(
+            _5702.CouplingHalfCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def cvt_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5704.CVTCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5704,
+        )
+
+        return self.__parent__._cast(_5704.CVTCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def cvt_pulley_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5705.CVTPulleyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5705,
+        )
+
+        return self.__parent__._cast(_5705.CVTPulleyCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def cycloidal_assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5706.CycloidalAssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5706,
+        )
+
+        return self.__parent__._cast(
+            _5706.CycloidalAssemblyCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def cycloidal_disc_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5708.CycloidalDiscCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5708,
+        )
+
+        return self.__parent__._cast(
+            _5708.CycloidalDiscCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def cylindrical_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5710.CylindricalGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5710,
+        )
+
+        return self.__parent__._cast(
+            _5710.CylindricalGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def cylindrical_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5712.CylindricalGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5712,
+        )
+
+        return self.__parent__._cast(
+            _5712.CylindricalGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5713.CylindricalPlanetGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5713,
+        )
+
+        return self.__parent__._cast(
+            _5713.CylindricalPlanetGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def datum_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5714.DatumCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5714,
+        )
+
+        return self.__parent__._cast(_5714.DatumCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def external_cad_model_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5715.ExternalCADModelCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5715,
+        )
+
+        return self.__parent__._cast(
+            _5715.ExternalCADModelCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def face_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5716.FaceGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5716,
+        )
+
+        return self.__parent__._cast(_5716.FaceGearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def face_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5718.FaceGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5718,
+        )
+
+        return self.__parent__._cast(_5718.FaceGearSetCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def fe_part_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5719.FEPartCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5719,
+        )
+
+        return self.__parent__._cast(_5719.FEPartCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def flexible_pin_assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5720.FlexiblePinAssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5720,
+        )
+
+        return self.__parent__._cast(
+            _5720.FlexiblePinAssemblyCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5721.GearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5721,
+        )
+
+        return self.__parent__._cast(_5721.GearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5723.GearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5723,
+        )
+
+        return self.__parent__._cast(_5723.GearSetCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def guide_dxf_model_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5724.GuideDxfModelCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5724,
+        )
+
+        return self.__parent__._cast(
+            _5724.GuideDxfModelCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def hypoid_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5725.HypoidGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5725,
+        )
+
+        return self.__parent__._cast(_5725.HypoidGearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def hypoid_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5727.HypoidGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5727,
+        )
+
+        return self.__parent__._cast(
+            _5727.HypoidGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5729.KlingelnbergCycloPalloidConicalGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5729,
+        )
+
+        return self.__parent__._cast(
+            _5729.KlingelnbergCycloPalloidConicalGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> (
+        "_5731.KlingelnbergCycloPalloidConicalGearSetCompoundMultibodyDynamicsAnalysis"
+    ):
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5731,
+        )
+
+        return self.__parent__._cast(
+            _5731.KlingelnbergCycloPalloidConicalGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5732.KlingelnbergCycloPalloidHypoidGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5732,
+        )
+
+        return self.__parent__._cast(
+            _5732.KlingelnbergCycloPalloidHypoidGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5734.KlingelnbergCycloPalloidHypoidGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5734,
+        )
+
+        return self.__parent__._cast(
+            _5734.KlingelnbergCycloPalloidHypoidGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> (
+        "_5735.KlingelnbergCycloPalloidSpiralBevelGearCompoundMultibodyDynamicsAnalysis"
+    ):
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5735,
+        )
+
+        return self.__parent__._cast(
+            _5735.KlingelnbergCycloPalloidSpiralBevelGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5737.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5737,
+        )
+
+        return self.__parent__._cast(
+            _5737.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def mass_disc_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5738.MassDiscCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5738,
+        )
+
+        return self.__parent__._cast(_5738.MassDiscCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def measurement_component_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5739.MeasurementComponentCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5739,
+        )
+
+        return self.__parent__._cast(
+            _5739.MeasurementComponentCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def microphone_array_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5740.MicrophoneArrayCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5740,
+        )
+
+        return self.__parent__._cast(
+            _5740.MicrophoneArrayCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def microphone_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5741.MicrophoneCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5741,
+        )
+
+        return self.__parent__._cast(_5741.MicrophoneCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def mountable_component_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5742.MountableComponentCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5742,
+        )
+
+        return self.__parent__._cast(
+            _5742.MountableComponentCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def oil_seal_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5743.OilSealCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5743,
+        )
+
+        return self.__parent__._cast(_5743.OilSealCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def part_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5744.PartCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5744,
+        )
+
+        return self.__parent__._cast(_5744.PartCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5745.PartToPartShearCouplingCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5745,
+        )
+
+        return self.__parent__._cast(
+            _5745.PartToPartShearCouplingCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5747.PartToPartShearCouplingHalfCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5747,
+        )
+
+        return self.__parent__._cast(
+            _5747.PartToPartShearCouplingHalfCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def planetary_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5749.PlanetaryGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5749,
+        )
+
+        return self.__parent__._cast(
+            _5749.PlanetaryGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def planet_carrier_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5750.PlanetCarrierCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5750,
+        )
+
+        return self.__parent__._cast(
+            _5750.PlanetCarrierCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def point_load_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5751.PointLoadCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5751,
+        )
+
+        return self.__parent__._cast(_5751.PointLoadCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def power_load_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5752.PowerLoadCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5752,
+        )
+
+        return self.__parent__._cast(_5752.PowerLoadCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def pulley_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5753.PulleyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5753,
+        )
+
+        return self.__parent__._cast(_5753.PulleyCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def ring_pins_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5754.RingPinsCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5754,
+        )
+
+        return self.__parent__._cast(_5754.RingPinsCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def rolling_ring_assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5756.RollingRingAssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5756,
+        )
+
+        return self.__parent__._cast(
+            _5756.RollingRingAssemblyCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def rolling_ring_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5757.RollingRingCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5757,
+        )
+
+        return self.__parent__._cast(_5757.RollingRingCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def root_assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5759.RootAssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5759,
+        )
+
+        return self.__parent__._cast(
+            _5759.RootAssemblyCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def shaft_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5760.ShaftCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5760,
+        )
+
+        return self.__parent__._cast(_5760.ShaftCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def shaft_hub_connection_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5761.ShaftHubConnectionCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5761,
+        )
+
+        return self.__parent__._cast(
+            _5761.ShaftHubConnectionCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def specialised_assembly_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5763.SpecialisedAssemblyCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5763,
+        )
+
+        return self.__parent__._cast(
+            _5763.SpecialisedAssemblyCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def spiral_bevel_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5764.SpiralBevelGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5764,
+        )
+
+        return self.__parent__._cast(
+            _5764.SpiralBevelGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5766.SpiralBevelGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5766,
+        )
+
+        return self.__parent__._cast(
+            _5766.SpiralBevelGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def spring_damper_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5767.SpringDamperCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5767,
+        )
+
+        return self.__parent__._cast(
+            _5767.SpringDamperCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def spring_damper_half_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5769.SpringDamperHalfCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5769,
+        )
+
+        return self.__parent__._cast(
+            _5769.SpringDamperHalfCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5770.StraightBevelDiffGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5770,
+        )
+
+        return self.__parent__._cast(
+            _5770.StraightBevelDiffGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5772.StraightBevelDiffGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5772,
+        )
+
+        return self.__parent__._cast(
+            _5772.StraightBevelDiffGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5773.StraightBevelGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5773,
+        )
+
+        return self.__parent__._cast(
+            _5773.StraightBevelGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5775.StraightBevelGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5775,
+        )
+
+        return self.__parent__._cast(
+            _5775.StraightBevelGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5776.StraightBevelPlanetGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5776,
+        )
+
+        return self.__parent__._cast(
+            _5776.StraightBevelPlanetGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5777.StraightBevelSunGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5777,
+        )
+
+        return self.__parent__._cast(
+            _5777.StraightBevelSunGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def synchroniser_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5778.SynchroniserCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5778,
+        )
+
+        return self.__parent__._cast(
+            _5778.SynchroniserCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def synchroniser_half_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5779.SynchroniserHalfCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5779,
+        )
+
+        return self.__parent__._cast(
+            _5779.SynchroniserHalfCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def synchroniser_part_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5780.SynchroniserPartCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5780,
+        )
+
+        return self.__parent__._cast(
+            _5780.SynchroniserPartCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def synchroniser_sleeve_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5781.SynchroniserSleeveCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5781,
+        )
+
+        return self.__parent__._cast(
+            _5781.SynchroniserSleeveCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def torque_converter_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5782.TorqueConverterCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5782,
+        )
+
+        return self.__parent__._cast(
+            _5782.TorqueConverterCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def torque_converter_pump_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5784.TorqueConverterPumpCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5784,
+        )
+
+        return self.__parent__._cast(
+            _5784.TorqueConverterPumpCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def torque_converter_turbine_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5785.TorqueConverterTurbineCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5785,
+        )
+
+        return self.__parent__._cast(
+            _5785.TorqueConverterTurbineCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def unbalanced_mass_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5786.UnbalancedMassCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5786,
+        )
+
+        return self.__parent__._cast(
+            _5786.UnbalancedMassCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def virtual_component_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5787.VirtualComponentCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5787,
+        )
+
+        return self.__parent__._cast(
+            _5787.VirtualComponentCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def worm_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5788.WormGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5788,
+        )
+
+        return self.__parent__._cast(_5788.WormGearCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def worm_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5790.WormGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5790,
+        )
+
+        return self.__parent__._cast(_5790.WormGearSetCompoundMultibodyDynamicsAnalysis)
+
+    @property
+    def zerol_bevel_gear_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5791.ZerolBevelGearCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5791,
+        )
+
+        return self.__parent__._cast(
+            _5791.ZerolBevelGearCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_multibody_dynamics_analysis(
+        self: "CastSelf",
+    ) -> "_5793.ZerolBevelGearSetCompoundMultibodyDynamicsAnalysis":
+        from mastapy._private.system_model.analyses_and_results.mbd_analyses.compound import (
+            _5793,
+        )
+
+        return self.__parent__._cast(
+            _5793.ZerolBevelGearSetCompoundMultibodyDynamicsAnalysis
+        )
+
+    @property
+    def abstract_assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6017.AbstractAssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6017,
+        )
+
+        return self.__parent__._cast(_6017.AbstractAssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def abstract_shaft_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6018.AbstractShaftCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6018,
+        )
+
+        return self.__parent__._cast(_6018.AbstractShaftCompoundHarmonicAnalysis)
+
+    @property
+    def abstract_shaft_or_housing_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6019.AbstractShaftOrHousingCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6019,
+        )
+
+        return self.__parent__._cast(
+            _6019.AbstractShaftOrHousingCompoundHarmonicAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6021.AGMAGleasonConicalGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6021,
+        )
+
+        return self.__parent__._cast(
+            _6021.AGMAGleasonConicalGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6023.AGMAGleasonConicalGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6023,
+        )
+
+        return self.__parent__._cast(
+            _6023.AGMAGleasonConicalGearSetCompoundHarmonicAnalysis
+        )
+
+    @property
+    def assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6024.AssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6024,
+        )
+
+        return self.__parent__._cast(_6024.AssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def bearing_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6025.BearingCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6025,
+        )
+
+        return self.__parent__._cast(_6025.BearingCompoundHarmonicAnalysis)
+
+    @property
+    def belt_drive_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6027.BeltDriveCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6027,
+        )
+
+        return self.__parent__._cast(_6027.BeltDriveCompoundHarmonicAnalysis)
+
+    @property
+    def bevel_differential_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6028.BevelDifferentialGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6028,
+        )
+
+        return self.__parent__._cast(
+            _6028.BevelDifferentialGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6030.BevelDifferentialGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6030,
+        )
+
+        return self.__parent__._cast(
+            _6030.BevelDifferentialGearSetCompoundHarmonicAnalysis
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6031.BevelDifferentialPlanetGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6031,
+        )
+
+        return self.__parent__._cast(
+            _6031.BevelDifferentialPlanetGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6032.BevelDifferentialSunGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6032,
+        )
+
+        return self.__parent__._cast(
+            _6032.BevelDifferentialSunGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def bevel_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6033.BevelGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6033,
+        )
+
+        return self.__parent__._cast(_6033.BevelGearCompoundHarmonicAnalysis)
+
+    @property
+    def bevel_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6035.BevelGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6035,
+        )
+
+        return self.__parent__._cast(_6035.BevelGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def bolt_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6036.BoltCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6036,
+        )
+
+        return self.__parent__._cast(_6036.BoltCompoundHarmonicAnalysis)
+
+    @property
+    def bolted_joint_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6037.BoltedJointCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6037,
+        )
+
+        return self.__parent__._cast(_6037.BoltedJointCompoundHarmonicAnalysis)
+
+    @property
+    def clutch_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6038.ClutchCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6038,
+        )
+
+        return self.__parent__._cast(_6038.ClutchCompoundHarmonicAnalysis)
+
+    @property
+    def clutch_half_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6040.ClutchHalfCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6040,
+        )
+
+        return self.__parent__._cast(_6040.ClutchHalfCompoundHarmonicAnalysis)
+
+    @property
+    def component_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6042.ComponentCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6042,
+        )
+
+        return self.__parent__._cast(_6042.ComponentCompoundHarmonicAnalysis)
+
+    @property
+    def concept_coupling_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6043.ConceptCouplingCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6043,
+        )
+
+        return self.__parent__._cast(_6043.ConceptCouplingCompoundHarmonicAnalysis)
+
+    @property
+    def concept_coupling_half_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6045.ConceptCouplingHalfCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6045,
+        )
+
+        return self.__parent__._cast(_6045.ConceptCouplingHalfCompoundHarmonicAnalysis)
+
+    @property
+    def concept_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6046.ConceptGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6046,
+        )
+
+        return self.__parent__._cast(_6046.ConceptGearCompoundHarmonicAnalysis)
+
+    @property
+    def concept_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6048.ConceptGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6048,
+        )
+
+        return self.__parent__._cast(_6048.ConceptGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def conical_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6049.ConicalGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6049,
+        )
+
+        return self.__parent__._cast(_6049.ConicalGearCompoundHarmonicAnalysis)
+
+    @property
+    def conical_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6051.ConicalGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6051,
+        )
+
+        return self.__parent__._cast(_6051.ConicalGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def connector_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6053.ConnectorCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6053,
+        )
+
+        return self.__parent__._cast(_6053.ConnectorCompoundHarmonicAnalysis)
+
+    @property
+    def coupling_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6054.CouplingCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6054,
+        )
+
+        return self.__parent__._cast(_6054.CouplingCompoundHarmonicAnalysis)
+
+    @property
+    def coupling_half_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6056.CouplingHalfCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6056,
+        )
+
+        return self.__parent__._cast(_6056.CouplingHalfCompoundHarmonicAnalysis)
+
+    @property
+    def cvt_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6058.CVTCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6058,
+        )
+
+        return self.__parent__._cast(_6058.CVTCompoundHarmonicAnalysis)
+
+    @property
+    def cvt_pulley_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6059.CVTPulleyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6059,
+        )
+
+        return self.__parent__._cast(_6059.CVTPulleyCompoundHarmonicAnalysis)
+
+    @property
+    def cycloidal_assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6060.CycloidalAssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6060,
+        )
+
+        return self.__parent__._cast(_6060.CycloidalAssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def cycloidal_disc_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6062.CycloidalDiscCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6062,
+        )
+
+        return self.__parent__._cast(_6062.CycloidalDiscCompoundHarmonicAnalysis)
+
+    @property
+    def cylindrical_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6064.CylindricalGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6064,
+        )
+
+        return self.__parent__._cast(_6064.CylindricalGearCompoundHarmonicAnalysis)
+
+    @property
+    def cylindrical_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6066.CylindricalGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6066,
+        )
+
+        return self.__parent__._cast(_6066.CylindricalGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def cylindrical_planet_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6067.CylindricalPlanetGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6067,
+        )
+
+        return self.__parent__._cast(
+            _6067.CylindricalPlanetGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def datum_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6068.DatumCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6068,
+        )
+
+        return self.__parent__._cast(_6068.DatumCompoundHarmonicAnalysis)
+
+    @property
+    def external_cad_model_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6069.ExternalCADModelCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6069,
+        )
+
+        return self.__parent__._cast(_6069.ExternalCADModelCompoundHarmonicAnalysis)
+
+    @property
+    def face_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6070.FaceGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6070,
+        )
+
+        return self.__parent__._cast(_6070.FaceGearCompoundHarmonicAnalysis)
+
+    @property
+    def face_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6072.FaceGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6072,
+        )
+
+        return self.__parent__._cast(_6072.FaceGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def fe_part_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6073.FEPartCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6073,
+        )
+
+        return self.__parent__._cast(_6073.FEPartCompoundHarmonicAnalysis)
+
+    @property
+    def flexible_pin_assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6074.FlexiblePinAssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6074,
+        )
+
+        return self.__parent__._cast(_6074.FlexiblePinAssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6075.GearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6075,
+        )
+
+        return self.__parent__._cast(_6075.GearCompoundHarmonicAnalysis)
+
+    @property
+    def gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6077.GearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6077,
+        )
+
+        return self.__parent__._cast(_6077.GearSetCompoundHarmonicAnalysis)
+
+    @property
+    def guide_dxf_model_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6078.GuideDxfModelCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6078,
+        )
+
+        return self.__parent__._cast(_6078.GuideDxfModelCompoundHarmonicAnalysis)
+
+    @property
+    def hypoid_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6079.HypoidGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6079,
+        )
+
+        return self.__parent__._cast(_6079.HypoidGearCompoundHarmonicAnalysis)
+
+    @property
+    def hypoid_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6081.HypoidGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6081,
+        )
+
+        return self.__parent__._cast(_6081.HypoidGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6083.KlingelnbergCycloPalloidConicalGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6083,
+        )
+
+        return self.__parent__._cast(
+            _6083.KlingelnbergCycloPalloidConicalGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6085.KlingelnbergCycloPalloidConicalGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6085,
+        )
+
+        return self.__parent__._cast(
+            _6085.KlingelnbergCycloPalloidConicalGearSetCompoundHarmonicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6086.KlingelnbergCycloPalloidHypoidGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6086,
+        )
+
+        return self.__parent__._cast(
+            _6086.KlingelnbergCycloPalloidHypoidGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6088.KlingelnbergCycloPalloidHypoidGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6088,
+        )
+
+        return self.__parent__._cast(
+            _6088.KlingelnbergCycloPalloidHypoidGearSetCompoundHarmonicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6089.KlingelnbergCycloPalloidSpiralBevelGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6089,
+        )
+
+        return self.__parent__._cast(
+            _6089.KlingelnbergCycloPalloidSpiralBevelGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6091.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6091,
+        )
+
+        return self.__parent__._cast(
+            _6091.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundHarmonicAnalysis
+        )
+
+    @property
+    def mass_disc_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6092.MassDiscCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6092,
+        )
+
+        return self.__parent__._cast(_6092.MassDiscCompoundHarmonicAnalysis)
+
+    @property
+    def measurement_component_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6093.MeasurementComponentCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6093,
+        )
+
+        return self.__parent__._cast(_6093.MeasurementComponentCompoundHarmonicAnalysis)
+
+    @property
+    def microphone_array_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6094.MicrophoneArrayCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6094,
+        )
+
+        return self.__parent__._cast(_6094.MicrophoneArrayCompoundHarmonicAnalysis)
+
+    @property
+    def microphone_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6095.MicrophoneCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6095,
+        )
+
+        return self.__parent__._cast(_6095.MicrophoneCompoundHarmonicAnalysis)
+
+    @property
+    def mountable_component_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6096.MountableComponentCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6096,
+        )
+
+        return self.__parent__._cast(_6096.MountableComponentCompoundHarmonicAnalysis)
+
+    @property
+    def oil_seal_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6097.OilSealCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6097,
+        )
+
+        return self.__parent__._cast(_6097.OilSealCompoundHarmonicAnalysis)
+
+    @property
+    def part_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6098.PartCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6098,
+        )
+
+        return self.__parent__._cast(_6098.PartCompoundHarmonicAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6099.PartToPartShearCouplingCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6099,
+        )
+
+        return self.__parent__._cast(
+            _6099.PartToPartShearCouplingCompoundHarmonicAnalysis
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6101.PartToPartShearCouplingHalfCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6101,
+        )
+
+        return self.__parent__._cast(
+            _6101.PartToPartShearCouplingHalfCompoundHarmonicAnalysis
+        )
+
+    @property
+    def planetary_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6103.PlanetaryGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6103,
+        )
+
+        return self.__parent__._cast(_6103.PlanetaryGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def planet_carrier_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6104.PlanetCarrierCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6104,
+        )
+
+        return self.__parent__._cast(_6104.PlanetCarrierCompoundHarmonicAnalysis)
+
+    @property
+    def point_load_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6105.PointLoadCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6105,
+        )
+
+        return self.__parent__._cast(_6105.PointLoadCompoundHarmonicAnalysis)
+
+    @property
+    def power_load_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6106.PowerLoadCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6106,
+        )
+
+        return self.__parent__._cast(_6106.PowerLoadCompoundHarmonicAnalysis)
+
+    @property
+    def pulley_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6107.PulleyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6107,
+        )
+
+        return self.__parent__._cast(_6107.PulleyCompoundHarmonicAnalysis)
+
+    @property
+    def ring_pins_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6108.RingPinsCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6108,
+        )
+
+        return self.__parent__._cast(_6108.RingPinsCompoundHarmonicAnalysis)
+
+    @property
+    def rolling_ring_assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6110.RollingRingAssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6110,
+        )
+
+        return self.__parent__._cast(_6110.RollingRingAssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def rolling_ring_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6111.RollingRingCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6111,
+        )
+
+        return self.__parent__._cast(_6111.RollingRingCompoundHarmonicAnalysis)
+
+    @property
+    def root_assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6113.RootAssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6113,
+        )
+
+        return self.__parent__._cast(_6113.RootAssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def shaft_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6114.ShaftCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6114,
+        )
+
+        return self.__parent__._cast(_6114.ShaftCompoundHarmonicAnalysis)
+
+    @property
+    def shaft_hub_connection_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6115.ShaftHubConnectionCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6115,
+        )
+
+        return self.__parent__._cast(_6115.ShaftHubConnectionCompoundHarmonicAnalysis)
+
+    @property
+    def specialised_assembly_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6117.SpecialisedAssemblyCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6117,
+        )
+
+        return self.__parent__._cast(_6117.SpecialisedAssemblyCompoundHarmonicAnalysis)
+
+    @property
+    def spiral_bevel_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6118.SpiralBevelGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6118,
+        )
+
+        return self.__parent__._cast(_6118.SpiralBevelGearCompoundHarmonicAnalysis)
+
+    @property
+    def spiral_bevel_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6120.SpiralBevelGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6120,
+        )
+
+        return self.__parent__._cast(_6120.SpiralBevelGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def spring_damper_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6121.SpringDamperCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6121,
+        )
+
+        return self.__parent__._cast(_6121.SpringDamperCompoundHarmonicAnalysis)
+
+    @property
+    def spring_damper_half_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6123.SpringDamperHalfCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6123,
+        )
+
+        return self.__parent__._cast(_6123.SpringDamperHalfCompoundHarmonicAnalysis)
+
+    @property
+    def straight_bevel_diff_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6124.StraightBevelDiffGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6124,
+        )
+
+        return self.__parent__._cast(
+            _6124.StraightBevelDiffGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6126.StraightBevelDiffGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6126,
+        )
+
+        return self.__parent__._cast(
+            _6126.StraightBevelDiffGearSetCompoundHarmonicAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6127.StraightBevelGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6127,
+        )
+
+        return self.__parent__._cast(_6127.StraightBevelGearCompoundHarmonicAnalysis)
+
+    @property
+    def straight_bevel_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6129.StraightBevelGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6129,
+        )
+
+        return self.__parent__._cast(_6129.StraightBevelGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def straight_bevel_planet_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6130.StraightBevelPlanetGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6130,
+        )
+
+        return self.__parent__._cast(
+            _6130.StraightBevelPlanetGearCompoundHarmonicAnalysis
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6131.StraightBevelSunGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6131,
+        )
+
+        return self.__parent__._cast(_6131.StraightBevelSunGearCompoundHarmonicAnalysis)
+
+    @property
+    def synchroniser_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6132.SynchroniserCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6132,
+        )
+
+        return self.__parent__._cast(_6132.SynchroniserCompoundHarmonicAnalysis)
+
+    @property
+    def synchroniser_half_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6133.SynchroniserHalfCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6133,
+        )
+
+        return self.__parent__._cast(_6133.SynchroniserHalfCompoundHarmonicAnalysis)
+
+    @property
+    def synchroniser_part_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6134.SynchroniserPartCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6134,
+        )
+
+        return self.__parent__._cast(_6134.SynchroniserPartCompoundHarmonicAnalysis)
+
+    @property
+    def synchroniser_sleeve_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6135.SynchroniserSleeveCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6135,
+        )
+
+        return self.__parent__._cast(_6135.SynchroniserSleeveCompoundHarmonicAnalysis)
+
+    @property
+    def torque_converter_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6136.TorqueConverterCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6136,
+        )
+
+        return self.__parent__._cast(_6136.TorqueConverterCompoundHarmonicAnalysis)
+
+    @property
+    def torque_converter_pump_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6138.TorqueConverterPumpCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6138,
+        )
+
+        return self.__parent__._cast(_6138.TorqueConverterPumpCompoundHarmonicAnalysis)
+
+    @property
+    def torque_converter_turbine_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6139.TorqueConverterTurbineCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6139,
+        )
+
+        return self.__parent__._cast(
+            _6139.TorqueConverterTurbineCompoundHarmonicAnalysis
+        )
+
+    @property
+    def unbalanced_mass_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6140.UnbalancedMassCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6140,
+        )
+
+        return self.__parent__._cast(_6140.UnbalancedMassCompoundHarmonicAnalysis)
+
+    @property
+    def virtual_component_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6141.VirtualComponentCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6141,
+        )
+
+        return self.__parent__._cast(_6141.VirtualComponentCompoundHarmonicAnalysis)
+
+    @property
+    def worm_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6142.WormGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6142,
+        )
+
+        return self.__parent__._cast(_6142.WormGearCompoundHarmonicAnalysis)
+
+    @property
+    def worm_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6144.WormGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6144,
+        )
+
+        return self.__parent__._cast(_6144.WormGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def zerol_bevel_gear_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6145.ZerolBevelGearCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6145,
+        )
+
+        return self.__parent__._cast(_6145.ZerolBevelGearCompoundHarmonicAnalysis)
+
+    @property
+    def zerol_bevel_gear_set_compound_harmonic_analysis(
+        self: "CastSelf",
+    ) -> "_6147.ZerolBevelGearSetCompoundHarmonicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses.compound import (
+            _6147,
+        )
+
+        return self.__parent__._cast(_6147.ZerolBevelGearSetCompoundHarmonicAnalysis)
+
+    @property
+    def abstract_assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6281.AbstractAssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6281,
+        )
+
+        return self.__parent__._cast(
+            _6281.AbstractAssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def abstract_shaft_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6282.AbstractShaftCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6282,
+        )
+
+        return self.__parent__._cast(
+            _6282.AbstractShaftCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6283.AbstractShaftOrHousingCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6283,
+        )
+
+        return self.__parent__._cast(
+            _6283.AbstractShaftOrHousingCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6285.AGMAGleasonConicalGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6285,
+        )
+
+        return self.__parent__._cast(
+            _6285.AGMAGleasonConicalGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6287.AGMAGleasonConicalGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6287,
+        )
+
+        return self.__parent__._cast(
+            _6287.AGMAGleasonConicalGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6288.AssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6288,
+        )
+
+        return self.__parent__._cast(
+            _6288.AssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bearing_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6289.BearingCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6289,
+        )
+
+        return self.__parent__._cast(
+            _6289.BearingCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def belt_drive_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6291.BeltDriveCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6291,
+        )
+
+        return self.__parent__._cast(
+            _6291.BeltDriveCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bevel_differential_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6292.BevelDifferentialGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6292,
+        )
+
+        return self.__parent__._cast(
+            _6292.BevelDifferentialGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6294.BevelDifferentialGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6294,
+        )
+
+        return self.__parent__._cast(
+            _6294.BevelDifferentialGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6295.BevelDifferentialPlanetGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6295,
+        )
+
+        return self.__parent__._cast(
+            _6295.BevelDifferentialPlanetGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6296.BevelDifferentialSunGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6296,
+        )
+
+        return self.__parent__._cast(
+            _6296.BevelDifferentialSunGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bevel_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6297.BevelGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6297,
+        )
+
+        return self.__parent__._cast(
+            _6297.BevelGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bevel_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6299.BevelGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6299,
+        )
+
+        return self.__parent__._cast(
+            _6299.BevelGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bolt_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6300.BoltCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6300,
+        )
+
+        return self.__parent__._cast(
+            _6300.BoltCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def bolted_joint_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6301.BoltedJointCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6301,
+        )
+
+        return self.__parent__._cast(
+            _6301.BoltedJointCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def clutch_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6302.ClutchCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6302,
+        )
+
+        return self.__parent__._cast(
+            _6302.ClutchCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def clutch_half_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6304.ClutchHalfCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6304,
+        )
+
+        return self.__parent__._cast(
+            _6304.ClutchHalfCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def component_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6306.ComponentCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6306,
+        )
+
+        return self.__parent__._cast(
+            _6306.ComponentCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def concept_coupling_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6307.ConceptCouplingCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6307,
+        )
+
+        return self.__parent__._cast(
+            _6307.ConceptCouplingCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def concept_coupling_half_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6309.ConceptCouplingHalfCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6309,
+        )
+
+        return self.__parent__._cast(
+            _6309.ConceptCouplingHalfCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def concept_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6310.ConceptGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6310,
+        )
+
+        return self.__parent__._cast(
+            _6310.ConceptGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def concept_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6312.ConceptGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6312,
+        )
+
+        return self.__parent__._cast(
+            _6312.ConceptGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def conical_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6313.ConicalGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6313,
+        )
+
+        return self.__parent__._cast(
+            _6313.ConicalGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def conical_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6315.ConicalGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6315,
+        )
+
+        return self.__parent__._cast(
+            _6315.ConicalGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def connector_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6317.ConnectorCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6317,
+        )
+
+        return self.__parent__._cast(
+            _6317.ConnectorCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def coupling_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6318.CouplingCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6318,
+        )
+
+        return self.__parent__._cast(
+            _6318.CouplingCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def coupling_half_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6320.CouplingHalfCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6320,
+        )
+
+        return self.__parent__._cast(
+            _6320.CouplingHalfCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cvt_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6322.CVTCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6322,
+        )
+
+        return self.__parent__._cast(
+            _6322.CVTCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cvt_pulley_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6323.CVTPulleyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6323,
+        )
+
+        return self.__parent__._cast(
+            _6323.CVTPulleyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cycloidal_assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6324.CycloidalAssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6324,
+        )
+
+        return self.__parent__._cast(
+            _6324.CycloidalAssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cycloidal_disc_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6326.CycloidalDiscCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6326,
+        )
+
+        return self.__parent__._cast(
+            _6326.CycloidalDiscCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cylindrical_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6328.CylindricalGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6328,
+        )
+
+        return self.__parent__._cast(
+            _6328.CylindricalGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cylindrical_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6330.CylindricalGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6330,
+        )
+
+        return self.__parent__._cast(
+            _6330.CylindricalGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6331.CylindricalPlanetGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6331,
+        )
+
+        return self.__parent__._cast(
+            _6331.CylindricalPlanetGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def datum_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6332.DatumCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6332,
+        )
+
+        return self.__parent__._cast(
+            _6332.DatumCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def external_cad_model_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6333.ExternalCADModelCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6333,
+        )
+
+        return self.__parent__._cast(
+            _6333.ExternalCADModelCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def face_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6334.FaceGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6334,
+        )
+
+        return self.__parent__._cast(
+            _6334.FaceGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def face_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6336.FaceGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6336,
+        )
+
+        return self.__parent__._cast(
+            _6336.FaceGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def fe_part_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6337.FEPartCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6337,
+        )
+
+        return self.__parent__._cast(
+            _6337.FEPartCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def flexible_pin_assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6338.FlexiblePinAssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6338,
+        )
+
+        return self.__parent__._cast(
+            _6338.FlexiblePinAssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6339.GearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6339,
+        )
+
+        return self.__parent__._cast(
+            _6339.GearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6341.GearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6341,
+        )
+
+        return self.__parent__._cast(
+            _6341.GearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def guide_dxf_model_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6342.GuideDxfModelCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6342,
+        )
+
+        return self.__parent__._cast(
+            _6342.GuideDxfModelCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def hypoid_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6343.HypoidGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6343,
+        )
+
+        return self.__parent__._cast(
+            _6343.HypoidGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def hypoid_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6345.HypoidGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6345,
+        )
+
+        return self.__parent__._cast(
+            _6345.HypoidGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6347.KlingelnbergCycloPalloidConicalGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6347,
+        )
+
+        return self.__parent__._cast(
+            _6347.KlingelnbergCycloPalloidConicalGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6349.KlingelnbergCycloPalloidConicalGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6349,
+        )
+
+        return self.__parent__._cast(
+            _6349.KlingelnbergCycloPalloidConicalGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6350.KlingelnbergCycloPalloidHypoidGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6350,
+        )
+
+        return self.__parent__._cast(
+            _6350.KlingelnbergCycloPalloidHypoidGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6352.KlingelnbergCycloPalloidHypoidGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6352,
+        )
+
+        return self.__parent__._cast(
+            _6352.KlingelnbergCycloPalloidHypoidGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6353.KlingelnbergCycloPalloidSpiralBevelGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6353,
+        )
+
+        return self.__parent__._cast(
+            _6353.KlingelnbergCycloPalloidSpiralBevelGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6355.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6355,
+        )
+
+        return self.__parent__._cast(
+            _6355.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def mass_disc_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6356.MassDiscCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6356,
+        )
+
+        return self.__parent__._cast(
+            _6356.MassDiscCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def measurement_component_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6357.MeasurementComponentCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6357,
+        )
+
+        return self.__parent__._cast(
+            _6357.MeasurementComponentCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def microphone_array_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6358.MicrophoneArrayCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6358,
+        )
+
+        return self.__parent__._cast(
+            _6358.MicrophoneArrayCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def microphone_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6359.MicrophoneCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6359,
+        )
+
+        return self.__parent__._cast(
+            _6359.MicrophoneCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def mountable_component_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6360.MountableComponentCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6360,
+        )
+
+        return self.__parent__._cast(
+            _6360.MountableComponentCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def oil_seal_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6361.OilSealCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6361,
+        )
+
+        return self.__parent__._cast(
+            _6361.OilSealCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def part_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6362.PartCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6362,
+        )
+
+        return self.__parent__._cast(
+            _6362.PartCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def part_to_part_shear_coupling_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6363.PartToPartShearCouplingCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6363,
+        )
+
+        return self.__parent__._cast(
+            _6363.PartToPartShearCouplingCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6365.PartToPartShearCouplingHalfCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6365,
+        )
+
+        return self.__parent__._cast(
+            _6365.PartToPartShearCouplingHalfCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def planetary_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6367.PlanetaryGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6367,
+        )
+
+        return self.__parent__._cast(
+            _6367.PlanetaryGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def planet_carrier_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6368.PlanetCarrierCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6368,
+        )
+
+        return self.__parent__._cast(
+            _6368.PlanetCarrierCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def point_load_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6369.PointLoadCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6369,
+        )
+
+        return self.__parent__._cast(
+            _6369.PointLoadCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def power_load_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6370.PowerLoadCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6370,
+        )
+
+        return self.__parent__._cast(
+            _6370.PowerLoadCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def pulley_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6371.PulleyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6371,
+        )
+
+        return self.__parent__._cast(
+            _6371.PulleyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def ring_pins_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6372.RingPinsCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6372,
+        )
+
+        return self.__parent__._cast(
+            _6372.RingPinsCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def rolling_ring_assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6374.RollingRingAssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6374,
+        )
+
+        return self.__parent__._cast(
+            _6374.RollingRingAssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def rolling_ring_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6375.RollingRingCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6375,
+        )
+
+        return self.__parent__._cast(
+            _6375.RollingRingCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def root_assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6377.RootAssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6377,
+        )
+
+        return self.__parent__._cast(
+            _6377.RootAssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def shaft_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6378.ShaftCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6378,
+        )
+
+        return self.__parent__._cast(
+            _6378.ShaftCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def shaft_hub_connection_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6379.ShaftHubConnectionCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6379,
+        )
+
+        return self.__parent__._cast(
+            _6379.ShaftHubConnectionCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def specialised_assembly_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6381.SpecialisedAssemblyCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6381,
+        )
+
+        return self.__parent__._cast(
+            _6381.SpecialisedAssemblyCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def spiral_bevel_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6382.SpiralBevelGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6382,
+        )
+
+        return self.__parent__._cast(
+            _6382.SpiralBevelGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6384.SpiralBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6384,
+        )
+
+        return self.__parent__._cast(
+            _6384.SpiralBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def spring_damper_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6385.SpringDamperCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6385,
+        )
+
+        return self.__parent__._cast(
+            _6385.SpringDamperCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def spring_damper_half_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6387.SpringDamperHalfCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6387,
+        )
+
+        return self.__parent__._cast(
+            _6387.SpringDamperHalfCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6388.StraightBevelDiffGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6388,
+        )
+
+        return self.__parent__._cast(
+            _6388.StraightBevelDiffGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6390.StraightBevelDiffGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6390,
+        )
+
+        return self.__parent__._cast(
+            _6390.StraightBevelDiffGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def straight_bevel_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6391.StraightBevelGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6391,
+        )
+
+        return self.__parent__._cast(
+            _6391.StraightBevelGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6393.StraightBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6393,
+        )
+
+        return self.__parent__._cast(
+            _6393.StraightBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6394.StraightBevelPlanetGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6394,
+        )
+
+        return self.__parent__._cast(
+            _6394.StraightBevelPlanetGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6395.StraightBevelSunGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6395,
+        )
+
+        return self.__parent__._cast(
+            _6395.StraightBevelSunGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def synchroniser_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6396.SynchroniserCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6396,
+        )
+
+        return self.__parent__._cast(
+            _6396.SynchroniserCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def synchroniser_half_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6397.SynchroniserHalfCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6397,
+        )
+
+        return self.__parent__._cast(
+            _6397.SynchroniserHalfCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def synchroniser_part_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6398.SynchroniserPartCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6398,
+        )
+
+        return self.__parent__._cast(
+            _6398.SynchroniserPartCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def synchroniser_sleeve_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6399.SynchroniserSleeveCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6399,
+        )
+
+        return self.__parent__._cast(
+            _6399.SynchroniserSleeveCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def torque_converter_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6400.TorqueConverterCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6400,
+        )
+
+        return self.__parent__._cast(
+            _6400.TorqueConverterCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def torque_converter_pump_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6402.TorqueConverterPumpCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6402,
+        )
+
+        return self.__parent__._cast(
+            _6402.TorqueConverterPumpCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def torque_converter_turbine_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6403.TorqueConverterTurbineCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6403,
+        )
+
+        return self.__parent__._cast(
+            _6403.TorqueConverterTurbineCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def unbalanced_mass_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6404.UnbalancedMassCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6404,
+        )
+
+        return self.__parent__._cast(
+            _6404.UnbalancedMassCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def virtual_component_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6405.VirtualComponentCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6405,
+        )
+
+        return self.__parent__._cast(
+            _6405.VirtualComponentCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def worm_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6406.WormGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6406,
+        )
+
+        return self.__parent__._cast(
+            _6406.WormGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def worm_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6408.WormGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6408,
+        )
+
+        return self.__parent__._cast(
+            _6408.WormGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def zerol_bevel_gear_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6409.ZerolBevelGearCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6409,
+        )
+
+        return self.__parent__._cast(
+            _6409.ZerolBevelGearCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_harmonic_analysis_of_single_excitation(
+        self: "CastSelf",
+    ) -> "_6411.ZerolBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation":
+        from mastapy._private.system_model.analyses_and_results.harmonic_analyses_single_excitation.compound import (
+            _6411,
+        )
+
+        return self.__parent__._cast(
+            _6411.ZerolBevelGearSetCompoundHarmonicAnalysisOfSingleExcitation
+        )
+
+    @property
+    def abstract_assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6554.AbstractAssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6554,
+        )
+
+        return self.__parent__._cast(_6554.AbstractAssemblyCompoundDynamicAnalysis)
+
+    @property
+    def abstract_shaft_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6555.AbstractShaftCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6555,
+        )
+
+        return self.__parent__._cast(_6555.AbstractShaftCompoundDynamicAnalysis)
+
+    @property
+    def abstract_shaft_or_housing_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6556.AbstractShaftOrHousingCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6556,
+        )
+
+        return self.__parent__._cast(
+            _6556.AbstractShaftOrHousingCompoundDynamicAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6558.AGMAGleasonConicalGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6558,
+        )
+
+        return self.__parent__._cast(
+            _6558.AGMAGleasonConicalGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6560.AGMAGleasonConicalGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6560,
+        )
+
+        return self.__parent__._cast(
+            _6560.AGMAGleasonConicalGearSetCompoundDynamicAnalysis
+        )
+
+    @property
+    def assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6561.AssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6561,
+        )
+
+        return self.__parent__._cast(_6561.AssemblyCompoundDynamicAnalysis)
+
+    @property
+    def bearing_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6562.BearingCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6562,
+        )
+
+        return self.__parent__._cast(_6562.BearingCompoundDynamicAnalysis)
+
+    @property
+    def belt_drive_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6564.BeltDriveCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6564,
+        )
+
+        return self.__parent__._cast(_6564.BeltDriveCompoundDynamicAnalysis)
+
+    @property
+    def bevel_differential_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6565.BevelDifferentialGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6565,
+        )
+
+        return self.__parent__._cast(_6565.BevelDifferentialGearCompoundDynamicAnalysis)
+
+    @property
+    def bevel_differential_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6567.BevelDifferentialGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6567,
+        )
+
+        return self.__parent__._cast(
+            _6567.BevelDifferentialGearSetCompoundDynamicAnalysis
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6568.BevelDifferentialPlanetGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6568,
+        )
+
+        return self.__parent__._cast(
+            _6568.BevelDifferentialPlanetGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6569.BevelDifferentialSunGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6569,
+        )
+
+        return self.__parent__._cast(
+            _6569.BevelDifferentialSunGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def bevel_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6570.BevelGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6570,
+        )
+
+        return self.__parent__._cast(_6570.BevelGearCompoundDynamicAnalysis)
+
+    @property
+    def bevel_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6572.BevelGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6572,
+        )
+
+        return self.__parent__._cast(_6572.BevelGearSetCompoundDynamicAnalysis)
+
+    @property
+    def bolt_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6573.BoltCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6573,
+        )
+
+        return self.__parent__._cast(_6573.BoltCompoundDynamicAnalysis)
+
+    @property
+    def bolted_joint_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6574.BoltedJointCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6574,
+        )
+
+        return self.__parent__._cast(_6574.BoltedJointCompoundDynamicAnalysis)
+
+    @property
+    def clutch_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6575.ClutchCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6575,
+        )
+
+        return self.__parent__._cast(_6575.ClutchCompoundDynamicAnalysis)
+
+    @property
+    def clutch_half_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6577.ClutchHalfCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6577,
+        )
+
+        return self.__parent__._cast(_6577.ClutchHalfCompoundDynamicAnalysis)
+
+    @property
+    def component_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6579.ComponentCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6579,
+        )
+
+        return self.__parent__._cast(_6579.ComponentCompoundDynamicAnalysis)
+
+    @property
+    def concept_coupling_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6580.ConceptCouplingCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6580,
+        )
+
+        return self.__parent__._cast(_6580.ConceptCouplingCompoundDynamicAnalysis)
+
+    @property
+    def concept_coupling_half_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6582.ConceptCouplingHalfCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6582,
+        )
+
+        return self.__parent__._cast(_6582.ConceptCouplingHalfCompoundDynamicAnalysis)
+
+    @property
+    def concept_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6583.ConceptGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6583,
+        )
+
+        return self.__parent__._cast(_6583.ConceptGearCompoundDynamicAnalysis)
+
+    @property
+    def concept_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6585.ConceptGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6585,
+        )
+
+        return self.__parent__._cast(_6585.ConceptGearSetCompoundDynamicAnalysis)
+
+    @property
+    def conical_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6586.ConicalGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6586,
+        )
+
+        return self.__parent__._cast(_6586.ConicalGearCompoundDynamicAnalysis)
+
+    @property
+    def conical_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6588.ConicalGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6588,
+        )
+
+        return self.__parent__._cast(_6588.ConicalGearSetCompoundDynamicAnalysis)
+
+    @property
+    def connector_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6590.ConnectorCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6590,
+        )
+
+        return self.__parent__._cast(_6590.ConnectorCompoundDynamicAnalysis)
+
+    @property
+    def coupling_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6591.CouplingCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6591,
+        )
+
+        return self.__parent__._cast(_6591.CouplingCompoundDynamicAnalysis)
+
+    @property
+    def coupling_half_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6593.CouplingHalfCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6593,
+        )
+
+        return self.__parent__._cast(_6593.CouplingHalfCompoundDynamicAnalysis)
+
+    @property
+    def cvt_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6595.CVTCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6595,
+        )
+
+        return self.__parent__._cast(_6595.CVTCompoundDynamicAnalysis)
+
+    @property
+    def cvt_pulley_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6596.CVTPulleyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6596,
+        )
+
+        return self.__parent__._cast(_6596.CVTPulleyCompoundDynamicAnalysis)
+
+    @property
+    def cycloidal_assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6597.CycloidalAssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6597,
+        )
+
+        return self.__parent__._cast(_6597.CycloidalAssemblyCompoundDynamicAnalysis)
+
+    @property
+    def cycloidal_disc_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6599.CycloidalDiscCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6599,
+        )
+
+        return self.__parent__._cast(_6599.CycloidalDiscCompoundDynamicAnalysis)
+
+    @property
+    def cylindrical_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6601.CylindricalGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6601,
+        )
+
+        return self.__parent__._cast(_6601.CylindricalGearCompoundDynamicAnalysis)
+
+    @property
+    def cylindrical_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6603.CylindricalGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6603,
+        )
+
+        return self.__parent__._cast(_6603.CylindricalGearSetCompoundDynamicAnalysis)
+
+    @property
+    def cylindrical_planet_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6604.CylindricalPlanetGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6604,
+        )
+
+        return self.__parent__._cast(_6604.CylindricalPlanetGearCompoundDynamicAnalysis)
+
+    @property
+    def datum_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6605.DatumCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6605,
+        )
+
+        return self.__parent__._cast(_6605.DatumCompoundDynamicAnalysis)
+
+    @property
+    def external_cad_model_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6606.ExternalCADModelCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6606,
+        )
+
+        return self.__parent__._cast(_6606.ExternalCADModelCompoundDynamicAnalysis)
+
+    @property
+    def face_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6607.FaceGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6607,
+        )
+
+        return self.__parent__._cast(_6607.FaceGearCompoundDynamicAnalysis)
+
+    @property
+    def face_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6609.FaceGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6609,
+        )
+
+        return self.__parent__._cast(_6609.FaceGearSetCompoundDynamicAnalysis)
+
+    @property
+    def fe_part_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6610.FEPartCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6610,
+        )
+
+        return self.__parent__._cast(_6610.FEPartCompoundDynamicAnalysis)
+
+    @property
+    def flexible_pin_assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6611.FlexiblePinAssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6611,
+        )
+
+        return self.__parent__._cast(_6611.FlexiblePinAssemblyCompoundDynamicAnalysis)
+
+    @property
+    def gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6612.GearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6612,
+        )
+
+        return self.__parent__._cast(_6612.GearCompoundDynamicAnalysis)
+
+    @property
+    def gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6614.GearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6614,
+        )
+
+        return self.__parent__._cast(_6614.GearSetCompoundDynamicAnalysis)
+
+    @property
+    def guide_dxf_model_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6615.GuideDxfModelCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6615,
+        )
+
+        return self.__parent__._cast(_6615.GuideDxfModelCompoundDynamicAnalysis)
+
+    @property
+    def hypoid_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6616.HypoidGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6616,
+        )
+
+        return self.__parent__._cast(_6616.HypoidGearCompoundDynamicAnalysis)
+
+    @property
+    def hypoid_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6618.HypoidGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6618,
+        )
+
+        return self.__parent__._cast(_6618.HypoidGearSetCompoundDynamicAnalysis)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6620.KlingelnbergCycloPalloidConicalGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6620,
+        )
+
+        return self.__parent__._cast(
+            _6620.KlingelnbergCycloPalloidConicalGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6622.KlingelnbergCycloPalloidConicalGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6622,
+        )
+
+        return self.__parent__._cast(
+            _6622.KlingelnbergCycloPalloidConicalGearSetCompoundDynamicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6623.KlingelnbergCycloPalloidHypoidGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6623,
+        )
+
+        return self.__parent__._cast(
+            _6623.KlingelnbergCycloPalloidHypoidGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6625.KlingelnbergCycloPalloidHypoidGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6625,
+        )
+
+        return self.__parent__._cast(
+            _6625.KlingelnbergCycloPalloidHypoidGearSetCompoundDynamicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6626.KlingelnbergCycloPalloidSpiralBevelGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6626,
+        )
+
+        return self.__parent__._cast(
+            _6626.KlingelnbergCycloPalloidSpiralBevelGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6628.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6628,
+        )
+
+        return self.__parent__._cast(
+            _6628.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundDynamicAnalysis
+        )
+
+    @property
+    def mass_disc_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6629.MassDiscCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6629,
+        )
+
+        return self.__parent__._cast(_6629.MassDiscCompoundDynamicAnalysis)
+
+    @property
+    def measurement_component_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6630.MeasurementComponentCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6630,
+        )
+
+        return self.__parent__._cast(_6630.MeasurementComponentCompoundDynamicAnalysis)
+
+    @property
+    def microphone_array_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6631.MicrophoneArrayCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6631,
+        )
+
+        return self.__parent__._cast(_6631.MicrophoneArrayCompoundDynamicAnalysis)
+
+    @property
+    def microphone_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6632.MicrophoneCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6632,
+        )
+
+        return self.__parent__._cast(_6632.MicrophoneCompoundDynamicAnalysis)
+
+    @property
+    def mountable_component_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6633.MountableComponentCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6633,
+        )
+
+        return self.__parent__._cast(_6633.MountableComponentCompoundDynamicAnalysis)
+
+    @property
+    def oil_seal_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6634.OilSealCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6634,
+        )
+
+        return self.__parent__._cast(_6634.OilSealCompoundDynamicAnalysis)
+
+    @property
+    def part_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6635.PartCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6635,
+        )
+
+        return self.__parent__._cast(_6635.PartCompoundDynamicAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6636.PartToPartShearCouplingCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6636,
+        )
+
+        return self.__parent__._cast(
+            _6636.PartToPartShearCouplingCompoundDynamicAnalysis
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6638.PartToPartShearCouplingHalfCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6638,
+        )
+
+        return self.__parent__._cast(
+            _6638.PartToPartShearCouplingHalfCompoundDynamicAnalysis
+        )
+
+    @property
+    def planetary_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6640.PlanetaryGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6640,
+        )
+
+        return self.__parent__._cast(_6640.PlanetaryGearSetCompoundDynamicAnalysis)
+
+    @property
+    def planet_carrier_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6641.PlanetCarrierCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6641,
+        )
+
+        return self.__parent__._cast(_6641.PlanetCarrierCompoundDynamicAnalysis)
+
+    @property
+    def point_load_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6642.PointLoadCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6642,
+        )
+
+        return self.__parent__._cast(_6642.PointLoadCompoundDynamicAnalysis)
+
+    @property
+    def power_load_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6643.PowerLoadCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6643,
+        )
+
+        return self.__parent__._cast(_6643.PowerLoadCompoundDynamicAnalysis)
+
+    @property
+    def pulley_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6644.PulleyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6644,
+        )
+
+        return self.__parent__._cast(_6644.PulleyCompoundDynamicAnalysis)
+
+    @property
+    def ring_pins_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6645.RingPinsCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6645,
+        )
+
+        return self.__parent__._cast(_6645.RingPinsCompoundDynamicAnalysis)
+
+    @property
+    def rolling_ring_assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6647.RollingRingAssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6647,
+        )
+
+        return self.__parent__._cast(_6647.RollingRingAssemblyCompoundDynamicAnalysis)
+
+    @property
+    def rolling_ring_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6648.RollingRingCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6648,
+        )
+
+        return self.__parent__._cast(_6648.RollingRingCompoundDynamicAnalysis)
+
+    @property
+    def root_assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6650.RootAssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6650,
+        )
+
+        return self.__parent__._cast(_6650.RootAssemblyCompoundDynamicAnalysis)
+
+    @property
+    def shaft_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6651.ShaftCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6651,
+        )
+
+        return self.__parent__._cast(_6651.ShaftCompoundDynamicAnalysis)
+
+    @property
+    def shaft_hub_connection_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6652.ShaftHubConnectionCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6652,
+        )
+
+        return self.__parent__._cast(_6652.ShaftHubConnectionCompoundDynamicAnalysis)
+
+    @property
+    def specialised_assembly_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6654.SpecialisedAssemblyCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6654,
+        )
+
+        return self.__parent__._cast(_6654.SpecialisedAssemblyCompoundDynamicAnalysis)
+
+    @property
+    def spiral_bevel_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6655.SpiralBevelGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6655,
+        )
+
+        return self.__parent__._cast(_6655.SpiralBevelGearCompoundDynamicAnalysis)
+
+    @property
+    def spiral_bevel_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6657.SpiralBevelGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6657,
+        )
+
+        return self.__parent__._cast(_6657.SpiralBevelGearSetCompoundDynamicAnalysis)
+
+    @property
+    def spring_damper_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6658.SpringDamperCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6658,
+        )
+
+        return self.__parent__._cast(_6658.SpringDamperCompoundDynamicAnalysis)
+
+    @property
+    def spring_damper_half_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6660.SpringDamperHalfCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6660,
+        )
+
+        return self.__parent__._cast(_6660.SpringDamperHalfCompoundDynamicAnalysis)
+
+    @property
+    def straight_bevel_diff_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6661.StraightBevelDiffGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6661,
+        )
+
+        return self.__parent__._cast(_6661.StraightBevelDiffGearCompoundDynamicAnalysis)
+
+    @property
+    def straight_bevel_diff_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6663.StraightBevelDiffGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6663,
+        )
+
+        return self.__parent__._cast(
+            _6663.StraightBevelDiffGearSetCompoundDynamicAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6664.StraightBevelGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6664,
+        )
+
+        return self.__parent__._cast(_6664.StraightBevelGearCompoundDynamicAnalysis)
+
+    @property
+    def straight_bevel_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6666.StraightBevelGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6666,
+        )
+
+        return self.__parent__._cast(_6666.StraightBevelGearSetCompoundDynamicAnalysis)
+
+    @property
+    def straight_bevel_planet_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6667.StraightBevelPlanetGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6667,
+        )
+
+        return self.__parent__._cast(
+            _6667.StraightBevelPlanetGearCompoundDynamicAnalysis
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6668.StraightBevelSunGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6668,
+        )
+
+        return self.__parent__._cast(_6668.StraightBevelSunGearCompoundDynamicAnalysis)
+
+    @property
+    def synchroniser_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6669.SynchroniserCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6669,
+        )
+
+        return self.__parent__._cast(_6669.SynchroniserCompoundDynamicAnalysis)
+
+    @property
+    def synchroniser_half_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6670.SynchroniserHalfCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6670,
+        )
+
+        return self.__parent__._cast(_6670.SynchroniserHalfCompoundDynamicAnalysis)
+
+    @property
+    def synchroniser_part_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6671.SynchroniserPartCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6671,
+        )
+
+        return self.__parent__._cast(_6671.SynchroniserPartCompoundDynamicAnalysis)
+
+    @property
+    def synchroniser_sleeve_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6672.SynchroniserSleeveCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6672,
+        )
+
+        return self.__parent__._cast(_6672.SynchroniserSleeveCompoundDynamicAnalysis)
+
+    @property
+    def torque_converter_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6673.TorqueConverterCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6673,
+        )
+
+        return self.__parent__._cast(_6673.TorqueConverterCompoundDynamicAnalysis)
+
+    @property
+    def torque_converter_pump_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6675.TorqueConverterPumpCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6675,
+        )
+
+        return self.__parent__._cast(_6675.TorqueConverterPumpCompoundDynamicAnalysis)
+
+    @property
+    def torque_converter_turbine_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6676.TorqueConverterTurbineCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6676,
+        )
+
+        return self.__parent__._cast(
+            _6676.TorqueConverterTurbineCompoundDynamicAnalysis
+        )
+
+    @property
+    def unbalanced_mass_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6677.UnbalancedMassCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6677,
+        )
+
+        return self.__parent__._cast(_6677.UnbalancedMassCompoundDynamicAnalysis)
+
+    @property
+    def virtual_component_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6678.VirtualComponentCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6678,
+        )
+
+        return self.__parent__._cast(_6678.VirtualComponentCompoundDynamicAnalysis)
+
+    @property
+    def worm_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6679.WormGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6679,
+        )
+
+        return self.__parent__._cast(_6679.WormGearCompoundDynamicAnalysis)
+
+    @property
+    def worm_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6681.WormGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6681,
+        )
+
+        return self.__parent__._cast(_6681.WormGearSetCompoundDynamicAnalysis)
+
+    @property
+    def zerol_bevel_gear_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6682.ZerolBevelGearCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6682,
+        )
+
+        return self.__parent__._cast(_6682.ZerolBevelGearCompoundDynamicAnalysis)
+
+    @property
+    def zerol_bevel_gear_set_compound_dynamic_analysis(
+        self: "CastSelf",
+    ) -> "_6684.ZerolBevelGearSetCompoundDynamicAnalysis":
+        from mastapy._private.system_model.analyses_and_results.dynamic_analyses.compound import (
+            _6684,
+        )
+
+        return self.__parent__._cast(_6684.ZerolBevelGearSetCompoundDynamicAnalysis)
+
+    @property
+    def abstract_assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6825.AbstractAssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6825,
+        )
+
+        return self.__parent__._cast(
+            _6825.AbstractAssemblyCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def abstract_shaft_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6826.AbstractShaftCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6826,
+        )
+
+        return self.__parent__._cast(_6826.AbstractShaftCompoundCriticalSpeedAnalysis)
+
+    @property
+    def abstract_shaft_or_housing_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6827.AbstractShaftOrHousingCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6827,
+        )
+
+        return self.__parent__._cast(
+            _6827.AbstractShaftOrHousingCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6829.AGMAGleasonConicalGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6829,
+        )
+
+        return self.__parent__._cast(
+            _6829.AGMAGleasonConicalGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6831.AGMAGleasonConicalGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6831,
+        )
+
+        return self.__parent__._cast(
+            _6831.AGMAGleasonConicalGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6832.AssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6832,
+        )
+
+        return self.__parent__._cast(_6832.AssemblyCompoundCriticalSpeedAnalysis)
+
+    @property
+    def bearing_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6833.BearingCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6833,
+        )
+
+        return self.__parent__._cast(_6833.BearingCompoundCriticalSpeedAnalysis)
+
+    @property
+    def belt_drive_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6835.BeltDriveCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6835,
+        )
+
+        return self.__parent__._cast(_6835.BeltDriveCompoundCriticalSpeedAnalysis)
+
+    @property
+    def bevel_differential_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6836.BevelDifferentialGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6836,
+        )
+
+        return self.__parent__._cast(
+            _6836.BevelDifferentialGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6838.BevelDifferentialGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6838,
+        )
+
+        return self.__parent__._cast(
+            _6838.BevelDifferentialGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6839.BevelDifferentialPlanetGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6839,
+        )
+
+        return self.__parent__._cast(
+            _6839.BevelDifferentialPlanetGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6840.BevelDifferentialSunGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6840,
+        )
+
+        return self.__parent__._cast(
+            _6840.BevelDifferentialSunGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def bevel_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6841.BevelGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6841,
+        )
+
+        return self.__parent__._cast(_6841.BevelGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def bevel_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6843.BevelGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6843,
+        )
+
+        return self.__parent__._cast(_6843.BevelGearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def bolt_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6844.BoltCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6844,
+        )
+
+        return self.__parent__._cast(_6844.BoltCompoundCriticalSpeedAnalysis)
+
+    @property
+    def bolted_joint_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6845.BoltedJointCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6845,
+        )
+
+        return self.__parent__._cast(_6845.BoltedJointCompoundCriticalSpeedAnalysis)
+
+    @property
+    def clutch_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6846.ClutchCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6846,
+        )
+
+        return self.__parent__._cast(_6846.ClutchCompoundCriticalSpeedAnalysis)
+
+    @property
+    def clutch_half_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6848.ClutchHalfCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6848,
+        )
+
+        return self.__parent__._cast(_6848.ClutchHalfCompoundCriticalSpeedAnalysis)
+
+    @property
+    def component_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6850.ComponentCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6850,
+        )
+
+        return self.__parent__._cast(_6850.ComponentCompoundCriticalSpeedAnalysis)
+
+    @property
+    def concept_coupling_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6851.ConceptCouplingCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6851,
+        )
+
+        return self.__parent__._cast(_6851.ConceptCouplingCompoundCriticalSpeedAnalysis)
+
+    @property
+    def concept_coupling_half_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6853.ConceptCouplingHalfCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6853,
+        )
+
+        return self.__parent__._cast(
+            _6853.ConceptCouplingHalfCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def concept_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6854.ConceptGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6854,
+        )
+
+        return self.__parent__._cast(_6854.ConceptGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def concept_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6856.ConceptGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6856,
+        )
+
+        return self.__parent__._cast(_6856.ConceptGearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def conical_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6857.ConicalGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6857,
+        )
+
+        return self.__parent__._cast(_6857.ConicalGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def conical_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6859.ConicalGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6859,
+        )
+
+        return self.__parent__._cast(_6859.ConicalGearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def connector_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6861.ConnectorCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6861,
+        )
+
+        return self.__parent__._cast(_6861.ConnectorCompoundCriticalSpeedAnalysis)
+
+    @property
+    def coupling_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6862.CouplingCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6862,
+        )
+
+        return self.__parent__._cast(_6862.CouplingCompoundCriticalSpeedAnalysis)
+
+    @property
+    def coupling_half_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6864.CouplingHalfCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6864,
+        )
+
+        return self.__parent__._cast(_6864.CouplingHalfCompoundCriticalSpeedAnalysis)
+
+    @property
+    def cvt_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6866.CVTCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6866,
+        )
+
+        return self.__parent__._cast(_6866.CVTCompoundCriticalSpeedAnalysis)
+
+    @property
+    def cvt_pulley_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6867.CVTPulleyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6867,
+        )
+
+        return self.__parent__._cast(_6867.CVTPulleyCompoundCriticalSpeedAnalysis)
+
+    @property
+    def cycloidal_assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6868.CycloidalAssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6868,
+        )
+
+        return self.__parent__._cast(
+            _6868.CycloidalAssemblyCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def cycloidal_disc_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6870.CycloidalDiscCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6870,
+        )
+
+        return self.__parent__._cast(_6870.CycloidalDiscCompoundCriticalSpeedAnalysis)
+
+    @property
+    def cylindrical_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6872.CylindricalGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6872,
+        )
+
+        return self.__parent__._cast(_6872.CylindricalGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def cylindrical_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6874.CylindricalGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6874,
+        )
+
+        return self.__parent__._cast(
+            _6874.CylindricalGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6875.CylindricalPlanetGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6875,
+        )
+
+        return self.__parent__._cast(
+            _6875.CylindricalPlanetGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def datum_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6876.DatumCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6876,
+        )
+
+        return self.__parent__._cast(_6876.DatumCompoundCriticalSpeedAnalysis)
+
+    @property
+    def external_cad_model_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6877.ExternalCADModelCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6877,
+        )
+
+        return self.__parent__._cast(
+            _6877.ExternalCADModelCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def face_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6878.FaceGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6878,
+        )
+
+        return self.__parent__._cast(_6878.FaceGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def face_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6880.FaceGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6880,
+        )
+
+        return self.__parent__._cast(_6880.FaceGearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def fe_part_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6881.FEPartCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6881,
+        )
+
+        return self.__parent__._cast(_6881.FEPartCompoundCriticalSpeedAnalysis)
+
+    @property
+    def flexible_pin_assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6882.FlexiblePinAssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6882,
+        )
+
+        return self.__parent__._cast(
+            _6882.FlexiblePinAssemblyCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6883.GearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6883,
+        )
+
+        return self.__parent__._cast(_6883.GearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6885.GearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6885,
+        )
+
+        return self.__parent__._cast(_6885.GearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def guide_dxf_model_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6886.GuideDxfModelCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6886,
+        )
+
+        return self.__parent__._cast(_6886.GuideDxfModelCompoundCriticalSpeedAnalysis)
+
+    @property
+    def hypoid_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6887.HypoidGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6887,
+        )
+
+        return self.__parent__._cast(_6887.HypoidGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def hypoid_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6889.HypoidGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6889,
+        )
+
+        return self.__parent__._cast(_6889.HypoidGearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6891.KlingelnbergCycloPalloidConicalGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6891,
+        )
+
+        return self.__parent__._cast(
+            _6891.KlingelnbergCycloPalloidConicalGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6893.KlingelnbergCycloPalloidConicalGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6893,
+        )
+
+        return self.__parent__._cast(
+            _6893.KlingelnbergCycloPalloidConicalGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6894.KlingelnbergCycloPalloidHypoidGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6894,
+        )
+
+        return self.__parent__._cast(
+            _6894.KlingelnbergCycloPalloidHypoidGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6896.KlingelnbergCycloPalloidHypoidGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6896,
+        )
+
+        return self.__parent__._cast(
+            _6896.KlingelnbergCycloPalloidHypoidGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6897.KlingelnbergCycloPalloidSpiralBevelGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6897,
+        )
+
+        return self.__parent__._cast(
+            _6897.KlingelnbergCycloPalloidSpiralBevelGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> (
+        "_6899.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundCriticalSpeedAnalysis"
+    ):
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6899,
+        )
+
+        return self.__parent__._cast(
+            _6899.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def mass_disc_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6900.MassDiscCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6900,
+        )
+
+        return self.__parent__._cast(_6900.MassDiscCompoundCriticalSpeedAnalysis)
+
+    @property
+    def measurement_component_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6901.MeasurementComponentCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6901,
+        )
+
+        return self.__parent__._cast(
+            _6901.MeasurementComponentCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def microphone_array_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6902.MicrophoneArrayCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6902,
+        )
+
+        return self.__parent__._cast(_6902.MicrophoneArrayCompoundCriticalSpeedAnalysis)
+
+    @property
+    def microphone_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6903.MicrophoneCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6903,
+        )
+
+        return self.__parent__._cast(_6903.MicrophoneCompoundCriticalSpeedAnalysis)
+
+    @property
+    def mountable_component_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6904.MountableComponentCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6904,
+        )
+
+        return self.__parent__._cast(
+            _6904.MountableComponentCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def oil_seal_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6905.OilSealCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6905,
+        )
+
+        return self.__parent__._cast(_6905.OilSealCompoundCriticalSpeedAnalysis)
+
+    @property
+    def part_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6906.PartCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6906,
+        )
+
+        return self.__parent__._cast(_6906.PartCompoundCriticalSpeedAnalysis)
+
+    @property
+    def part_to_part_shear_coupling_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6907.PartToPartShearCouplingCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6907,
+        )
+
+        return self.__parent__._cast(
+            _6907.PartToPartShearCouplingCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6909.PartToPartShearCouplingHalfCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6909,
+        )
+
+        return self.__parent__._cast(
+            _6909.PartToPartShearCouplingHalfCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def planetary_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6911.PlanetaryGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6911,
+        )
+
+        return self.__parent__._cast(
+            _6911.PlanetaryGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def planet_carrier_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6912.PlanetCarrierCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6912,
+        )
+
+        return self.__parent__._cast(_6912.PlanetCarrierCompoundCriticalSpeedAnalysis)
+
+    @property
+    def point_load_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6913.PointLoadCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6913,
+        )
+
+        return self.__parent__._cast(_6913.PointLoadCompoundCriticalSpeedAnalysis)
+
+    @property
+    def power_load_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6914.PowerLoadCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6914,
+        )
+
+        return self.__parent__._cast(_6914.PowerLoadCompoundCriticalSpeedAnalysis)
+
+    @property
+    def pulley_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6915.PulleyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6915,
+        )
+
+        return self.__parent__._cast(_6915.PulleyCompoundCriticalSpeedAnalysis)
+
+    @property
+    def ring_pins_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6916.RingPinsCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6916,
+        )
+
+        return self.__parent__._cast(_6916.RingPinsCompoundCriticalSpeedAnalysis)
+
+    @property
+    def rolling_ring_assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6918.RollingRingAssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6918,
+        )
+
+        return self.__parent__._cast(
+            _6918.RollingRingAssemblyCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def rolling_ring_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6919.RollingRingCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6919,
+        )
+
+        return self.__parent__._cast(_6919.RollingRingCompoundCriticalSpeedAnalysis)
+
+    @property
+    def root_assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6921.RootAssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6921,
+        )
+
+        return self.__parent__._cast(_6921.RootAssemblyCompoundCriticalSpeedAnalysis)
+
+    @property
+    def shaft_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6922.ShaftCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6922,
+        )
+
+        return self.__parent__._cast(_6922.ShaftCompoundCriticalSpeedAnalysis)
+
+    @property
+    def shaft_hub_connection_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6923.ShaftHubConnectionCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6923,
+        )
+
+        return self.__parent__._cast(
+            _6923.ShaftHubConnectionCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def specialised_assembly_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6925.SpecialisedAssemblyCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6925,
+        )
+
+        return self.__parent__._cast(
+            _6925.SpecialisedAssemblyCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def spiral_bevel_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6926.SpiralBevelGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6926,
+        )
+
+        return self.__parent__._cast(_6926.SpiralBevelGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def spiral_bevel_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6928.SpiralBevelGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6928,
+        )
+
+        return self.__parent__._cast(
+            _6928.SpiralBevelGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def spring_damper_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6929.SpringDamperCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6929,
+        )
+
+        return self.__parent__._cast(_6929.SpringDamperCompoundCriticalSpeedAnalysis)
+
+    @property
+    def spring_damper_half_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6931.SpringDamperHalfCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6931,
+        )
+
+        return self.__parent__._cast(
+            _6931.SpringDamperHalfCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6932.StraightBevelDiffGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6932,
+        )
+
+        return self.__parent__._cast(
+            _6932.StraightBevelDiffGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6934.StraightBevelDiffGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6934,
+        )
+
+        return self.__parent__._cast(
+            _6934.StraightBevelDiffGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6935.StraightBevelGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6935,
+        )
+
+        return self.__parent__._cast(
+            _6935.StraightBevelGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6937.StraightBevelGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6937,
+        )
+
+        return self.__parent__._cast(
+            _6937.StraightBevelGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6938.StraightBevelPlanetGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6938,
+        )
+
+        return self.__parent__._cast(
+            _6938.StraightBevelPlanetGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6939.StraightBevelSunGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6939,
+        )
+
+        return self.__parent__._cast(
+            _6939.StraightBevelSunGearCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def synchroniser_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6940.SynchroniserCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6940,
+        )
+
+        return self.__parent__._cast(_6940.SynchroniserCompoundCriticalSpeedAnalysis)
+
+    @property
+    def synchroniser_half_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6941.SynchroniserHalfCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6941,
+        )
+
+        return self.__parent__._cast(
+            _6941.SynchroniserHalfCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def synchroniser_part_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6942.SynchroniserPartCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6942,
+        )
+
+        return self.__parent__._cast(
+            _6942.SynchroniserPartCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def synchroniser_sleeve_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6943.SynchroniserSleeveCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6943,
+        )
+
+        return self.__parent__._cast(
+            _6943.SynchroniserSleeveCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def torque_converter_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6944.TorqueConverterCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6944,
+        )
+
+        return self.__parent__._cast(_6944.TorqueConverterCompoundCriticalSpeedAnalysis)
+
+    @property
+    def torque_converter_pump_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6946.TorqueConverterPumpCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6946,
+        )
+
+        return self.__parent__._cast(
+            _6946.TorqueConverterPumpCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def torque_converter_turbine_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6947.TorqueConverterTurbineCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6947,
+        )
+
+        return self.__parent__._cast(
+            _6947.TorqueConverterTurbineCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def unbalanced_mass_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6948.UnbalancedMassCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6948,
+        )
+
+        return self.__parent__._cast(_6948.UnbalancedMassCompoundCriticalSpeedAnalysis)
+
+    @property
+    def virtual_component_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6949.VirtualComponentCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6949,
+        )
+
+        return self.__parent__._cast(
+            _6949.VirtualComponentCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def worm_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6950.WormGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6950,
+        )
+
+        return self.__parent__._cast(_6950.WormGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def worm_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6952.WormGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6952,
+        )
+
+        return self.__parent__._cast(_6952.WormGearSetCompoundCriticalSpeedAnalysis)
+
+    @property
+    def zerol_bevel_gear_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6953.ZerolBevelGearCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6953,
+        )
+
+        return self.__parent__._cast(_6953.ZerolBevelGearCompoundCriticalSpeedAnalysis)
+
+    @property
+    def zerol_bevel_gear_set_compound_critical_speed_analysis(
+        self: "CastSelf",
+    ) -> "_6955.ZerolBevelGearSetCompoundCriticalSpeedAnalysis":
+        from mastapy._private.system_model.analyses_and_results.critical_speed_analyses.compound import (
+            _6955,
+        )
+
+        return self.__parent__._cast(
+            _6955.ZerolBevelGearSetCompoundCriticalSpeedAnalysis
+        )
+
+    @property
+    def abstract_assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7297.AbstractAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7297,
+        )
+
+        return self.__parent__._cast(
+            _7297.AbstractAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def abstract_shaft_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7298.AbstractShaftCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7298,
+        )
+
+        return self.__parent__._cast(
+            _7298.AbstractShaftCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> (
+        "_7299.AbstractShaftOrHousingCompoundAdvancedTimeSteppingAnalysisForModulation"
+    ):
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7299,
+        )
+
+        return self.__parent__._cast(
+            _7299.AbstractShaftOrHousingCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> (
+        "_7301.AGMAGleasonConicalGearCompoundAdvancedTimeSteppingAnalysisForModulation"
+    ):
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7301,
+        )
+
+        return self.__parent__._cast(
+            _7301.AGMAGleasonConicalGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7303.AGMAGleasonConicalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7303,
+        )
+
+        return self.__parent__._cast(
+            _7303.AGMAGleasonConicalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7304.AssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7304,
+        )
+
+        return self.__parent__._cast(
+            _7304.AssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bearing_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7305.BearingCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7305,
+        )
+
+        return self.__parent__._cast(
+            _7305.BearingCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def belt_drive_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7307.BeltDriveCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7307,
+        )
+
+        return self.__parent__._cast(
+            _7307.BeltDriveCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bevel_differential_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7308.BevelDifferentialGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7308,
+        )
+
+        return self.__parent__._cast(
+            _7308.BevelDifferentialGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7310.BevelDifferentialGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7310,
+        )
+
+        return self.__parent__._cast(
+            _7310.BevelDifferentialGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7311.BevelDifferentialPlanetGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7311,
+        )
+
+        return self.__parent__._cast(
+            _7311.BevelDifferentialPlanetGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7312.BevelDifferentialSunGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7312,
+        )
+
+        return self.__parent__._cast(
+            _7312.BevelDifferentialSunGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bevel_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7313.BevelGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7313,
+        )
+
+        return self.__parent__._cast(
+            _7313.BevelGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bevel_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7315.BevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7315,
+        )
+
+        return self.__parent__._cast(
+            _7315.BevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bolt_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7316.BoltCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7316,
+        )
+
+        return self.__parent__._cast(
+            _7316.BoltCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def bolted_joint_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7317.BoltedJointCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7317,
+        )
+
+        return self.__parent__._cast(
+            _7317.BoltedJointCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def clutch_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7318.ClutchCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7318,
+        )
+
+        return self.__parent__._cast(
+            _7318.ClutchCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def clutch_half_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7320.ClutchHalfCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7320,
+        )
+
+        return self.__parent__._cast(
+            _7320.ClutchHalfCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def component_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7322.ComponentCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7322,
+        )
+
+        return self.__parent__._cast(
+            _7322.ComponentCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def concept_coupling_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7323.ConceptCouplingCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7323,
+        )
+
+        return self.__parent__._cast(
+            _7323.ConceptCouplingCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def concept_coupling_half_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7325.ConceptCouplingHalfCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7325,
+        )
+
+        return self.__parent__._cast(
+            _7325.ConceptCouplingHalfCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def concept_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7326.ConceptGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7326,
+        )
+
+        return self.__parent__._cast(
+            _7326.ConceptGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def concept_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7328.ConceptGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7328,
+        )
+
+        return self.__parent__._cast(
+            _7328.ConceptGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def conical_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7329.ConicalGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7329,
+        )
+
+        return self.__parent__._cast(
+            _7329.ConicalGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def conical_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7331.ConicalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7331,
+        )
+
+        return self.__parent__._cast(
+            _7331.ConicalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def connector_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7333.ConnectorCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7333,
+        )
+
+        return self.__parent__._cast(
+            _7333.ConnectorCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def coupling_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7334.CouplingCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7334,
+        )
+
+        return self.__parent__._cast(
+            _7334.CouplingCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def coupling_half_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7336.CouplingHalfCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7336,
+        )
+
+        return self.__parent__._cast(
+            _7336.CouplingHalfCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cvt_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7338.CVTCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7338,
+        )
+
+        return self.__parent__._cast(
+            _7338.CVTCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cvt_pulley_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7339.CVTPulleyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7339,
+        )
+
+        return self.__parent__._cast(
+            _7339.CVTPulleyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cycloidal_assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7340.CycloidalAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7340,
+        )
+
+        return self.__parent__._cast(
+            _7340.CycloidalAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cycloidal_disc_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7342.CycloidalDiscCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7342,
+        )
+
+        return self.__parent__._cast(
+            _7342.CycloidalDiscCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cylindrical_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7344.CylindricalGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7344,
+        )
+
+        return self.__parent__._cast(
+            _7344.CylindricalGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cylindrical_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7346.CylindricalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7346,
+        )
+
+        return self.__parent__._cast(
+            _7346.CylindricalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7347.CylindricalPlanetGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7347,
+        )
+
+        return self.__parent__._cast(
+            _7347.CylindricalPlanetGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def datum_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7348.DatumCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7348,
+        )
+
+        return self.__parent__._cast(
+            _7348.DatumCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def external_cad_model_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7349.ExternalCADModelCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7349,
+        )
+
+        return self.__parent__._cast(
+            _7349.ExternalCADModelCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def face_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7350.FaceGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7350,
+        )
+
+        return self.__parent__._cast(
+            _7350.FaceGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def face_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7352.FaceGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7352,
+        )
+
+        return self.__parent__._cast(
+            _7352.FaceGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def fe_part_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7353.FEPartCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7353,
+        )
+
+        return self.__parent__._cast(
+            _7353.FEPartCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def flexible_pin_assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7354.FlexiblePinAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7354,
+        )
+
+        return self.__parent__._cast(
+            _7354.FlexiblePinAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7355.GearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7355,
+        )
+
+        return self.__parent__._cast(
+            _7355.GearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7357.GearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7357,
+        )
+
+        return self.__parent__._cast(
+            _7357.GearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def guide_dxf_model_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7358.GuideDxfModelCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7358,
+        )
+
+        return self.__parent__._cast(
+            _7358.GuideDxfModelCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def hypoid_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7359.HypoidGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7359,
+        )
+
+        return self.__parent__._cast(
+            _7359.HypoidGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def hypoid_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7361.HypoidGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7361,
+        )
+
+        return self.__parent__._cast(
+            _7361.HypoidGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7363.KlingelnbergCycloPalloidConicalGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7363,
+        )
+
+        return self.__parent__._cast(
+            _7363.KlingelnbergCycloPalloidConicalGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7365.KlingelnbergCycloPalloidConicalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7365,
+        )
+
+        return self.__parent__._cast(
+            _7365.KlingelnbergCycloPalloidConicalGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7366.KlingelnbergCycloPalloidHypoidGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7366,
+        )
+
+        return self.__parent__._cast(
+            _7366.KlingelnbergCycloPalloidHypoidGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7368.KlingelnbergCycloPalloidHypoidGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7368,
+        )
+
+        return self.__parent__._cast(
+            _7368.KlingelnbergCycloPalloidHypoidGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7369.KlingelnbergCycloPalloidSpiralBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7369,
+        )
+
+        return self.__parent__._cast(
+            _7369.KlingelnbergCycloPalloidSpiralBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7371.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7371,
+        )
+
+        return self.__parent__._cast(
+            _7371.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def mass_disc_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7372.MassDiscCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7372,
+        )
+
+        return self.__parent__._cast(
+            _7372.MassDiscCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def measurement_component_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7373.MeasurementComponentCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7373,
+        )
+
+        return self.__parent__._cast(
+            _7373.MeasurementComponentCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def microphone_array_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7374.MicrophoneArrayCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7374,
+        )
+
+        return self.__parent__._cast(
+            _7374.MicrophoneArrayCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def microphone_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7375.MicrophoneCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7375,
+        )
+
+        return self.__parent__._cast(
+            _7375.MicrophoneCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def mountable_component_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7376.MountableComponentCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7376,
+        )
+
+        return self.__parent__._cast(
+            _7376.MountableComponentCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def oil_seal_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7377.OilSealCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7377,
+        )
+
+        return self.__parent__._cast(
+            _7377.OilSealCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def part_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7378.PartCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7378,
+        )
+
+        return self.__parent__._cast(
+            _7378.PartCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def part_to_part_shear_coupling_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> (
+        "_7379.PartToPartShearCouplingCompoundAdvancedTimeSteppingAnalysisForModulation"
+    ):
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7379,
+        )
+
+        return self.__parent__._cast(
+            _7379.PartToPartShearCouplingCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7381.PartToPartShearCouplingHalfCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7381,
+        )
+
+        return self.__parent__._cast(
+            _7381.PartToPartShearCouplingHalfCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def planetary_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7383.PlanetaryGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7383,
+        )
+
+        return self.__parent__._cast(
+            _7383.PlanetaryGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def planet_carrier_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7384.PlanetCarrierCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7384,
+        )
+
+        return self.__parent__._cast(
+            _7384.PlanetCarrierCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def point_load_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7385.PointLoadCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7385,
+        )
+
+        return self.__parent__._cast(
+            _7385.PointLoadCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def power_load_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7386.PowerLoadCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7386,
+        )
+
+        return self.__parent__._cast(
+            _7386.PowerLoadCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def pulley_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7387.PulleyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7387,
+        )
+
+        return self.__parent__._cast(
+            _7387.PulleyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def ring_pins_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7388.RingPinsCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7388,
+        )
+
+        return self.__parent__._cast(
+            _7388.RingPinsCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def rolling_ring_assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7390.RollingRingAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7390,
+        )
+
+        return self.__parent__._cast(
+            _7390.RollingRingAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def rolling_ring_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7391.RollingRingCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7391,
+        )
+
+        return self.__parent__._cast(
+            _7391.RollingRingCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def root_assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7393.RootAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7393,
+        )
+
+        return self.__parent__._cast(
+            _7393.RootAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def shaft_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7394.ShaftCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7394,
+        )
+
+        return self.__parent__._cast(
+            _7394.ShaftCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def shaft_hub_connection_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7395.ShaftHubConnectionCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7395,
+        )
+
+        return self.__parent__._cast(
+            _7395.ShaftHubConnectionCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def specialised_assembly_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7397.SpecialisedAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7397,
+        )
+
+        return self.__parent__._cast(
+            _7397.SpecialisedAssemblyCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def spiral_bevel_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7398.SpiralBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7398,
+        )
+
+        return self.__parent__._cast(
+            _7398.SpiralBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7400.SpiralBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7400,
+        )
+
+        return self.__parent__._cast(
+            _7400.SpiralBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def spring_damper_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7401.SpringDamperCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7401,
+        )
+
+        return self.__parent__._cast(
+            _7401.SpringDamperCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def spring_damper_half_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7403.SpringDamperHalfCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7403,
+        )
+
+        return self.__parent__._cast(
+            _7403.SpringDamperHalfCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7404.StraightBevelDiffGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7404,
+        )
+
+        return self.__parent__._cast(
+            _7404.StraightBevelDiffGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7406.StraightBevelDiffGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7406,
+        )
+
+        return self.__parent__._cast(
+            _7406.StraightBevelDiffGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def straight_bevel_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7407.StraightBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7407,
+        )
+
+        return self.__parent__._cast(
+            _7407.StraightBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7409.StraightBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7409,
+        )
+
+        return self.__parent__._cast(
+            _7409.StraightBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> (
+        "_7410.StraightBevelPlanetGearCompoundAdvancedTimeSteppingAnalysisForModulation"
+    ):
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7410,
+        )
+
+        return self.__parent__._cast(
+            _7410.StraightBevelPlanetGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7411.StraightBevelSunGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7411,
+        )
+
+        return self.__parent__._cast(
+            _7411.StraightBevelSunGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def synchroniser_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7412.SynchroniserCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7412,
+        )
+
+        return self.__parent__._cast(
+            _7412.SynchroniserCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def synchroniser_half_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7413.SynchroniserHalfCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7413,
+        )
+
+        return self.__parent__._cast(
+            _7413.SynchroniserHalfCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def synchroniser_part_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7414.SynchroniserPartCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7414,
+        )
+
+        return self.__parent__._cast(
+            _7414.SynchroniserPartCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def synchroniser_sleeve_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7415.SynchroniserSleeveCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7415,
+        )
+
+        return self.__parent__._cast(
+            _7415.SynchroniserSleeveCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def torque_converter_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7416.TorqueConverterCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7416,
+        )
+
+        return self.__parent__._cast(
+            _7416.TorqueConverterCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def torque_converter_pump_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7418.TorqueConverterPumpCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7418,
+        )
+
+        return self.__parent__._cast(
+            _7418.TorqueConverterPumpCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def torque_converter_turbine_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> (
+        "_7419.TorqueConverterTurbineCompoundAdvancedTimeSteppingAnalysisForModulation"
+    ):
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7419,
+        )
+
+        return self.__parent__._cast(
+            _7419.TorqueConverterTurbineCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def unbalanced_mass_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7420.UnbalancedMassCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7420,
+        )
+
+        return self.__parent__._cast(
+            _7420.UnbalancedMassCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def virtual_component_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7421.VirtualComponentCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7421,
+        )
+
+        return self.__parent__._cast(
+            _7421.VirtualComponentCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def worm_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7422.WormGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7422,
+        )
+
+        return self.__parent__._cast(
+            _7422.WormGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def worm_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7424.WormGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7424,
+        )
+
+        return self.__parent__._cast(
+            _7424.WormGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def zerol_bevel_gear_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7425.ZerolBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7425,
+        )
+
+        return self.__parent__._cast(
+            _7425.ZerolBevelGearCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_advanced_time_stepping_analysis_for_modulation(
+        self: "CastSelf",
+    ) -> "_7427.ZerolBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation":
+        from mastapy._private.system_model.analyses_and_results.advanced_time_stepping_analyses_for_modulation.compound import (
+            _7427,
+        )
+
+        return self.__parent__._cast(
+            _7427.ZerolBevelGearSetCompoundAdvancedTimeSteppingAnalysisForModulation
+        )
+
+    @property
+    def abstract_assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7566.AbstractAssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7566,
+        )
+
+        return self.__parent__._cast(
+            _7566.AbstractAssemblyCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def abstract_shaft_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7567.AbstractShaftCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7567,
+        )
+
+        return self.__parent__._cast(
+            _7567.AbstractShaftCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def abstract_shaft_or_housing_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7568.AbstractShaftOrHousingCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7568,
+        )
+
+        return self.__parent__._cast(
+            _7568.AbstractShaftOrHousingCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def agma_gleason_conical_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7570.AGMAGleasonConicalGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7570,
+        )
+
+        return self.__parent__._cast(
+            _7570.AGMAGleasonConicalGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def agma_gleason_conical_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7572.AGMAGleasonConicalGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7572,
+        )
+
+        return self.__parent__._cast(
+            _7572.AGMAGleasonConicalGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7573.AssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7573,
+        )
+
+        return self.__parent__._cast(_7573.AssemblyCompoundAdvancedSystemDeflection)
+
+    @property
+    def bearing_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7574.BearingCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7574,
+        )
+
+        return self.__parent__._cast(_7574.BearingCompoundAdvancedSystemDeflection)
+
+    @property
+    def belt_drive_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7576.BeltDriveCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7576,
+        )
+
+        return self.__parent__._cast(_7576.BeltDriveCompoundAdvancedSystemDeflection)
+
+    @property
+    def bevel_differential_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7577.BevelDifferentialGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7577,
+        )
+
+        return self.__parent__._cast(
+            _7577.BevelDifferentialGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def bevel_differential_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7579.BevelDifferentialGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7579,
+        )
+
+        return self.__parent__._cast(
+            _7579.BevelDifferentialGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7580.BevelDifferentialPlanetGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7580,
+        )
+
+        return self.__parent__._cast(
+            _7580.BevelDifferentialPlanetGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7581.BevelDifferentialSunGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7581,
+        )
+
+        return self.__parent__._cast(
+            _7581.BevelDifferentialSunGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def bevel_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7582.BevelGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7582,
+        )
+
+        return self.__parent__._cast(_7582.BevelGearCompoundAdvancedSystemDeflection)
+
+    @property
+    def bevel_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7584.BevelGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7584,
+        )
+
+        return self.__parent__._cast(_7584.BevelGearSetCompoundAdvancedSystemDeflection)
+
+    @property
+    def bolt_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7585.BoltCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7585,
+        )
+
+        return self.__parent__._cast(_7585.BoltCompoundAdvancedSystemDeflection)
+
+    @property
+    def bolted_joint_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7586.BoltedJointCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7586,
+        )
+
+        return self.__parent__._cast(_7586.BoltedJointCompoundAdvancedSystemDeflection)
+
+    @property
+    def clutch_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7587.ClutchCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7587,
+        )
+
+        return self.__parent__._cast(_7587.ClutchCompoundAdvancedSystemDeflection)
+
+    @property
+    def clutch_half_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7589.ClutchHalfCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7589,
+        )
+
+        return self.__parent__._cast(_7589.ClutchHalfCompoundAdvancedSystemDeflection)
+
+    @property
+    def component_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7591.ComponentCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7591,
+        )
+
+        return self.__parent__._cast(_7591.ComponentCompoundAdvancedSystemDeflection)
+
+    @property
+    def concept_coupling_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7592.ConceptCouplingCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7592,
+        )
+
+        return self.__parent__._cast(
+            _7592.ConceptCouplingCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def concept_coupling_half_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7594.ConceptCouplingHalfCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7594,
+        )
+
+        return self.__parent__._cast(
+            _7594.ConceptCouplingHalfCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def concept_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7595.ConceptGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7595,
+        )
+
+        return self.__parent__._cast(_7595.ConceptGearCompoundAdvancedSystemDeflection)
+
+    @property
+    def concept_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7597.ConceptGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7597,
+        )
+
+        return self.__parent__._cast(
+            _7597.ConceptGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def conical_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7598.ConicalGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7598,
+        )
+
+        return self.__parent__._cast(_7598.ConicalGearCompoundAdvancedSystemDeflection)
+
+    @property
+    def conical_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7600.ConicalGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7600,
+        )
+
+        return self.__parent__._cast(
+            _7600.ConicalGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def connector_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7602.ConnectorCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7602,
+        )
+
+        return self.__parent__._cast(_7602.ConnectorCompoundAdvancedSystemDeflection)
+
+    @property
+    def coupling_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7603.CouplingCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7603,
+        )
+
+        return self.__parent__._cast(_7603.CouplingCompoundAdvancedSystemDeflection)
+
+    @property
+    def coupling_half_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7605.CouplingHalfCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7605,
+        )
+
+        return self.__parent__._cast(_7605.CouplingHalfCompoundAdvancedSystemDeflection)
+
+    @property
+    def cvt_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7607.CVTCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7607,
+        )
+
+        return self.__parent__._cast(_7607.CVTCompoundAdvancedSystemDeflection)
+
+    @property
+    def cvt_pulley_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7608.CVTPulleyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7608,
+        )
+
+        return self.__parent__._cast(_7608.CVTPulleyCompoundAdvancedSystemDeflection)
+
+    @property
+    def cycloidal_assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7609.CycloidalAssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7609,
+        )
+
+        return self.__parent__._cast(
+            _7609.CycloidalAssemblyCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def cycloidal_disc_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7611.CycloidalDiscCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7611,
+        )
+
+        return self.__parent__._cast(
+            _7611.CycloidalDiscCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def cylindrical_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7613.CylindricalGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7613,
+        )
+
+        return self.__parent__._cast(
+            _7613.CylindricalGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def cylindrical_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7615.CylindricalGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7615,
+        )
+
+        return self.__parent__._cast(
+            _7615.CylindricalGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7616.CylindricalPlanetGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7616,
+        )
+
+        return self.__parent__._cast(
+            _7616.CylindricalPlanetGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def datum_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7617.DatumCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7617,
+        )
+
+        return self.__parent__._cast(_7617.DatumCompoundAdvancedSystemDeflection)
+
+    @property
+    def external_cad_model_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7618.ExternalCADModelCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7618,
+        )
+
+        return self.__parent__._cast(
+            _7618.ExternalCADModelCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def face_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7619.FaceGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7619,
+        )
+
+        return self.__parent__._cast(_7619.FaceGearCompoundAdvancedSystemDeflection)
+
+    @property
+    def face_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7621.FaceGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7621,
+        )
+
+        return self.__parent__._cast(_7621.FaceGearSetCompoundAdvancedSystemDeflection)
+
+    @property
+    def fe_part_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7622.FEPartCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7622,
+        )
+
+        return self.__parent__._cast(_7622.FEPartCompoundAdvancedSystemDeflection)
+
+    @property
+    def flexible_pin_assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7623.FlexiblePinAssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7623,
+        )
+
+        return self.__parent__._cast(
+            _7623.FlexiblePinAssemblyCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7624.GearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7624,
+        )
+
+        return self.__parent__._cast(_7624.GearCompoundAdvancedSystemDeflection)
+
+    @property
+    def gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7626.GearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7626,
+        )
+
+        return self.__parent__._cast(_7626.GearSetCompoundAdvancedSystemDeflection)
+
+    @property
+    def guide_dxf_model_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7627.GuideDxfModelCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7627,
+        )
+
+        return self.__parent__._cast(
+            _7627.GuideDxfModelCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def hypoid_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7628.HypoidGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7628,
+        )
+
+        return self.__parent__._cast(_7628.HypoidGearCompoundAdvancedSystemDeflection)
+
+    @property
+    def hypoid_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7630.HypoidGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7630,
+        )
+
+        return self.__parent__._cast(
+            _7630.HypoidGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7632.KlingelnbergCycloPalloidConicalGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7632,
+        )
+
+        return self.__parent__._cast(
+            _7632.KlingelnbergCycloPalloidConicalGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7634.KlingelnbergCycloPalloidConicalGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7634,
+        )
+
+        return self.__parent__._cast(
+            _7634.KlingelnbergCycloPalloidConicalGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7635.KlingelnbergCycloPalloidHypoidGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7635,
+        )
+
+        return self.__parent__._cast(
+            _7635.KlingelnbergCycloPalloidHypoidGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7637.KlingelnbergCycloPalloidHypoidGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7637,
+        )
+
+        return self.__parent__._cast(
+            _7637.KlingelnbergCycloPalloidHypoidGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> (
+        "_7638.KlingelnbergCycloPalloidSpiralBevelGearCompoundAdvancedSystemDeflection"
+    ):
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7638,
+        )
+
+        return self.__parent__._cast(
+            _7638.KlingelnbergCycloPalloidSpiralBevelGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7640.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7640,
+        )
+
+        return self.__parent__._cast(
+            _7640.KlingelnbergCycloPalloidSpiralBevelGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def mass_disc_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7641.MassDiscCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7641,
+        )
+
+        return self.__parent__._cast(_7641.MassDiscCompoundAdvancedSystemDeflection)
+
+    @property
+    def measurement_component_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7642.MeasurementComponentCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7642,
+        )
+
+        return self.__parent__._cast(
+            _7642.MeasurementComponentCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def microphone_array_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7643.MicrophoneArrayCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7643,
+        )
+
+        return self.__parent__._cast(
+            _7643.MicrophoneArrayCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def microphone_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7644.MicrophoneCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7644,
+        )
+
+        return self.__parent__._cast(_7644.MicrophoneCompoundAdvancedSystemDeflection)
+
+    @property
+    def mountable_component_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7645.MountableComponentCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7645,
+        )
+
+        return self.__parent__._cast(
+            _7645.MountableComponentCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def oil_seal_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7646.OilSealCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7646,
+        )
+
+        return self.__parent__._cast(_7646.OilSealCompoundAdvancedSystemDeflection)
+
+    @property
+    def part_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7647.PartCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7647,
+        )
+
+        return self.__parent__._cast(_7647.PartCompoundAdvancedSystemDeflection)
+
+    @property
+    def part_to_part_shear_coupling_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7648.PartToPartShearCouplingCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7648,
+        )
+
+        return self.__parent__._cast(
+            _7648.PartToPartShearCouplingCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def part_to_part_shear_coupling_half_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7650.PartToPartShearCouplingHalfCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7650,
+        )
+
+        return self.__parent__._cast(
+            _7650.PartToPartShearCouplingHalfCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def planetary_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7652.PlanetaryGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7652,
+        )
+
+        return self.__parent__._cast(
+            _7652.PlanetaryGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def planet_carrier_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7653.PlanetCarrierCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7653,
+        )
+
+        return self.__parent__._cast(
+            _7653.PlanetCarrierCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def point_load_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7654.PointLoadCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7654,
+        )
+
+        return self.__parent__._cast(_7654.PointLoadCompoundAdvancedSystemDeflection)
+
+    @property
+    def power_load_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7655.PowerLoadCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7655,
+        )
+
+        return self.__parent__._cast(_7655.PowerLoadCompoundAdvancedSystemDeflection)
+
+    @property
+    def pulley_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7656.PulleyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7656,
+        )
+
+        return self.__parent__._cast(_7656.PulleyCompoundAdvancedSystemDeflection)
+
+    @property
+    def ring_pins_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7657.RingPinsCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7657,
+        )
+
+        return self.__parent__._cast(_7657.RingPinsCompoundAdvancedSystemDeflection)
+
+    @property
+    def rolling_ring_assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7659.RollingRingAssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7659,
+        )
+
+        return self.__parent__._cast(
+            _7659.RollingRingAssemblyCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def rolling_ring_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7660.RollingRingCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7660,
+        )
+
+        return self.__parent__._cast(_7660.RollingRingCompoundAdvancedSystemDeflection)
+
+    @property
+    def root_assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7662.RootAssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7662,
+        )
+
+        return self.__parent__._cast(_7662.RootAssemblyCompoundAdvancedSystemDeflection)
+
+    @property
+    def shaft_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7663.ShaftCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7663,
+        )
+
+        return self.__parent__._cast(_7663.ShaftCompoundAdvancedSystemDeflection)
+
+    @property
+    def shaft_hub_connection_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7664.ShaftHubConnectionCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7664,
+        )
+
+        return self.__parent__._cast(
+            _7664.ShaftHubConnectionCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def specialised_assembly_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7666.SpecialisedAssemblyCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7666,
+        )
+
+        return self.__parent__._cast(
+            _7666.SpecialisedAssemblyCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def spiral_bevel_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7667.SpiralBevelGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7667,
+        )
+
+        return self.__parent__._cast(
+            _7667.SpiralBevelGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def spiral_bevel_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7669.SpiralBevelGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7669,
+        )
+
+        return self.__parent__._cast(
+            _7669.SpiralBevelGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def spring_damper_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7670.SpringDamperCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7670,
+        )
+
+        return self.__parent__._cast(_7670.SpringDamperCompoundAdvancedSystemDeflection)
+
+    @property
+    def spring_damper_half_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7672.SpringDamperHalfCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7672,
+        )
+
+        return self.__parent__._cast(
+            _7672.SpringDamperHalfCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7673.StraightBevelDiffGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7673,
+        )
+
+        return self.__parent__._cast(
+            _7673.StraightBevelDiffGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def straight_bevel_diff_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7675.StraightBevelDiffGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7675,
+        )
+
+        return self.__parent__._cast(
+            _7675.StraightBevelDiffGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def straight_bevel_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7676.StraightBevelGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7676,
+        )
+
+        return self.__parent__._cast(
+            _7676.StraightBevelGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def straight_bevel_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7678.StraightBevelGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7678,
+        )
+
+        return self.__parent__._cast(
+            _7678.StraightBevelGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7679.StraightBevelPlanetGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7679,
+        )
+
+        return self.__parent__._cast(
+            _7679.StraightBevelPlanetGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7680.StraightBevelSunGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7680,
+        )
+
+        return self.__parent__._cast(
+            _7680.StraightBevelSunGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def synchroniser_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7681.SynchroniserCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7681,
+        )
+
+        return self.__parent__._cast(_7681.SynchroniserCompoundAdvancedSystemDeflection)
+
+    @property
+    def synchroniser_half_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7682.SynchroniserHalfCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7682,
+        )
+
+        return self.__parent__._cast(
+            _7682.SynchroniserHalfCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def synchroniser_part_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7683.SynchroniserPartCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7683,
+        )
+
+        return self.__parent__._cast(
+            _7683.SynchroniserPartCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def synchroniser_sleeve_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7684.SynchroniserSleeveCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7684,
+        )
+
+        return self.__parent__._cast(
+            _7684.SynchroniserSleeveCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def torque_converter_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7685.TorqueConverterCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7685,
+        )
+
+        return self.__parent__._cast(
+            _7685.TorqueConverterCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def torque_converter_pump_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7687.TorqueConverterPumpCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7687,
+        )
+
+        return self.__parent__._cast(
+            _7687.TorqueConverterPumpCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def torque_converter_turbine_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7688.TorqueConverterTurbineCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7688,
+        )
+
+        return self.__parent__._cast(
+            _7688.TorqueConverterTurbineCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def unbalanced_mass_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7689.UnbalancedMassCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7689,
+        )
+
+        return self.__parent__._cast(
+            _7689.UnbalancedMassCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def virtual_component_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7690.VirtualComponentCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7690,
+        )
+
+        return self.__parent__._cast(
+            _7690.VirtualComponentCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def worm_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7691.WormGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7691,
+        )
+
+        return self.__parent__._cast(_7691.WormGearCompoundAdvancedSystemDeflection)
+
+    @property
+    def worm_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7693.WormGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7693,
+        )
+
+        return self.__parent__._cast(_7693.WormGearSetCompoundAdvancedSystemDeflection)
+
+    @property
+    def zerol_bevel_gear_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7694.ZerolBevelGearCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7694,
+        )
+
+        return self.__parent__._cast(
+            _7694.ZerolBevelGearCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def zerol_bevel_gear_set_compound_advanced_system_deflection(
+        self: "CastSelf",
+    ) -> "_7696.ZerolBevelGearSetCompoundAdvancedSystemDeflection":
+        from mastapy._private.system_model.analyses_and_results.advanced_system_deflections.compound import (
+            _7696,
+        )
+
+        return self.__parent__._cast(
+            _7696.ZerolBevelGearSetCompoundAdvancedSystemDeflection
+        )
+
+    @property
+    def part_compound_analysis(self: "CastSelf") -> "PartCompoundAnalysis":
+        return self.__parent__
+
+    def __getattr__(self: "CastSelf", name: str) -> "Any":
+        try:
+            return self.__getattribute__(name)
+        except AttributeError:
+            class_name = utility.camel(name)
+            raise CastException(
+                f'Detected an invalid cast. Cannot cast to type "{class_name}"'
+            ) from None
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class PartCompoundAnalysis(_7717.DesignEntityCompoundAnalysis):
+    """PartCompoundAnalysis
+
+    This is a mastapy class.
+    """
+
+    TYPE: ClassVar["Type"] = _PART_COMPOUND_ANALYSIS
+
+    wrapped: "Any"
+
+    def __post_init__(self: "Self") -> None:
+        """Override of the post initialisation magic method."""
+        if not hasattr(self.wrapped, "reference_count"):
+            self.wrapped.reference_count = 0
+
+        self.wrapped.reference_count += 1
+
+    @property
+    def two_d_drawing(self: "Self") -> "Image":
+        """Image
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "TwoDDrawing")
+
+        if temp is None:
+            return None
+
+        value = conversion.pn_to_mp_smt_bitmap(temp)
+
+        if value is None:
+            return None
+
+        return value
+
+    @property
+    def cast_to(self: "Self") -> "_Cast_PartCompoundAnalysis":
+        """Cast to another type.
+
+        Returns:
+            _Cast_PartCompoundAnalysis
+        """
+        return _Cast_PartCompoundAnalysis(self)

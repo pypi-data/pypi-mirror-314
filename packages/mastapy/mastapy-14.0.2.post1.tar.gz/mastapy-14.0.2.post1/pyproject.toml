@@ -1,0 +1,333 @@
+[tool.poetry]
+name = "mastapy"
+version = "14.0.2.post1"
+authors = [
+    "George Baron <george.baron@smartmt.com>",
+]
+description = "Python scripting API for MASTA."
+readme = "metadata/README.md"
+keywords = [
+    "mastapy",
+    "smt",
+    "masta",
+]
+license = "MIT"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+homepage = "https://www.smartmt.com/"
+documentation = "https://documentation.smartmt.com/MastaAPI/14.0.2/"
+source = [
+    { name = "internal", url = "https://pip.smartmt.local/", priority = "explicit" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.13"
+numpy = [
+    { version = ">=1.26.0", python = ">=3.12" },
+    { version = ">=1.22.0", python = ">=3.8,<3.12" },
+    { version = "<1.22.0", python = "<3.8" },
+]
+ptvsd = ">=4.2"
+pythonnet = [
+    { version = "^3.0.0", python = ">=3.9" },
+    { version = "<3.0.0", python = "<3.9" },
+]
+pillow = [
+    { version = ">=9.5", python = ">=3.11" },
+    { version = "^8.4.0", python = "<3.11" },
+]
+packaging = ">=20.0"
+lazy-imports = ">=0.3.1"
+
+[tool.poetry.dependencies.typeguard]
+version = ">=4.1.2"
+python = ">=3.7.4"
+
+[tool.poetry.group.dev-minimal.dependencies.argcomplete]
+version = ">=3.2.0"
+python = ">=3.11"
+
+[tool.poetry.group.dev-minimal.dependencies.mastapydev]
+version = ">=1.0.0"
+python = ">=3.11"
+source = "internal"
+
+[tool.poetry.group.dev-minimal.dependencies.packaging]
+version = ">=20.0"
+python = ">=3.11"
+
+[tool.poetry.group.dev-minimal.dependencies.nox]
+version = "^2023.4.22"
+python = ">=3.11"
+
+[tool.poetry.group.dev-minimal.dependencies.pip-system-certs]
+version = ">=4.0"
+python = ">=3.11"
+
+[tool.poetry.group.dev-minimal.dependencies.pip-audit]
+version = ">=2.5.3"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.pre-commit]
+version = "^2.9.3"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.ruff]
+version = ">=0.6.1"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.rope]
+version = "^0.18.0"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.teamcity-messages]
+version = "^1.32"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.twine]
+version = ">=3.6.0"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.rich]
+version = "13.7.1"
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies.importlib-metadata]
+version = ">=6.7.0"
+python = ">=3.7"
+
+[tool.poetry.group.dev.dependencies.platformdirs]
+version = ">=4.0.0"
+python = ">=3.7"
+
+[tool.poetry.group.dev.dependencies.markdown-it-py]
+version = ">=2.2.0"
+python = ">=3.7"
+
+[tool.poetry.group.dev.dependencies.pygments]
+version = ">=2.13.0,<3.0.0"
+python = ">=3.7"
+
+[tool.poetry.group.dev.dependencies.typing-extensions]
+version = ">=4.0.0,<5.0"
+python = ">=3.7"
+
+[tool.poetry.group.stats]
+optional = true
+
+[tool.poetry.group.stats.dependencies.google-api-core]
+version = ">=2.15.0"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.google-cloud-bigquery]
+version = ">=3.14.0"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.tabulate]
+version = ">=0.9.0"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.pandas]
+version = ">=2.0.1"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.seaborn]
+version = ">=0.12.0"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.matplotlib]
+version = ">=3.7.1"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.commonmark]
+version = ">=0.9.1"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.mdpdf]
+version = ">=0.0.18"
+python = ">=3.11"
+
+[tool.poetry.group.stats.dependencies.pycountry]
+version = ">=22.1.10"
+python = ">=3.11"
+
+[tool.poetry.group.build.dependencies.tomli-w]
+version = "1.1.0"
+python = ">=3.9"
+
+[tool.poetry.group.build.dependencies.pytest]
+version = ">=7.0.0"
+python = ">=3.11"
+
+[tool.poetry.group.build.dependencies.autoflake]
+version = ">=2.2.0"
+python = ">=3.11"
+
+[tool.poetry.group.build.dependencies.ruff-api]
+version = ">=0.0.7"
+python = ">=3.11"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+virtualenv = [
+    { version = "~20.17.1", python = "<3.7" },
+    { version = "^20.23.0", python = ">=3.7" },
+]
+wrapt = "^1.15.0"
+teamcity-messages = "^1.32"
+pytest = ">=7.0.0"
+
+[tool.poetry.group.test.dependencies.requests]
+version = ">=2.32.0"
+python = ">=3.8"
+
+[tool.poetry.group.test.dependencies.urllib3]
+version = ">=2.2.2"
+python = ">=3.8"
+
+[tool.poetry.group.test.dependencies.mastapydev]
+version = ">=1.0.0"
+source = "internal"
+
+[tool.poetry.group.test.dependencies.ruff_check_teamcity]
+version = ">=1.0.1"
+python = ">=3.11"
+source = "internal"
+
+[tool.poetry.group.test-mastapy]
+optional = true
+
+[tool.poetry.group.test-mastapy.dependencies]
+matplotlib = [
+    { version = "~3.3.4", python = "<3.8" },
+    { version = ">=3.7.1", python = ">=3.8" },
+]
+pandas = [
+    { version = "~0.25.3", python = "<3.6.1" },
+    { version = "~1.1.5", python = ">=3.6.1,<3.8" },
+    { version = ">=2.0.1", python = ">=3.8,<3.12" },
+    { version = ">=2.1.3", python = ">=3.12" },
+]
+kiwisolver = [
+    { version = "~1.2.0", python = "<3.7" },
+    { version = ">=1.4.4", python = ">=3.7" },
+]
+
+[tool.poetry.group.test-mastapy.dependencies.numpy]
+version = "~1.26.0"
+python = ">=3.9"
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+line-length = 88
+indent-width = 4
+target-version = "py37"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "Q",
+    "I",
+]
+ignore = [
+    "E203",
+    "D107",
+    "D400",
+    "D401",
+    "D403",
+    "I001",
+]
+fixable = [
+    "ALL",
+]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[tool.poe]
+verbosity = -1
+
+[tool.poe.tasks.build]
+help = "Build and format the package."
+script = "tasks.build:run"
+
+[tool.poe.tasks.clean]
+help = "Clean the directory of temporary files and folders."
+script = "tasks.clean:run"
+
+[tool.poe.tasks.download]
+help = "Download the mastapy package instead of building it."
+script = "tasks.download:run"
+
+[tool.poe.tasks.format]
+help = "Format the package."
+script = "tasks.format:run"
+
+[tool.poe.tasks.stats]
+help = "Report on Mastapy package statistics."
+script = "tasks.stats:run"
+
+[tool.poe.tasks.test]
+help = "Run the Nox tests."
+script = "tasks.test:run"
+
+[tool.poe.tasks.upload]
+help = "Upload a built package."
+script = "tasks.upload:run"
+
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+]
+build-backend = "poetry.core.masonry.api"
