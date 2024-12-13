@@ -1,0 +1,90 @@
+Metadata-Version: 2.1
+Name: pylibcugraphops-cu12
+Version: 24.12.0
+Summary: pylibcugraphops - GPU Graph Neural Network operations
+Author: NVIDIA Corporation
+License: Apache 2.0
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Project-URL: Homepage, https://github.com/rapidsai/cugraph-ops
+Project-URL: Documentation, https://docs.rapids.ai/api/cugraph/stable/api_docs/cugraph-ops/
+Requires-Python: >=3.10
+Provides-Extra: test
+Requires-Dist: jupyter; extra == "test"
+Requires-Dist: numpy<3.0a0,>=1.23; extra == "test"
+Requires-Dist: pandas; extra == "test"
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Requires-Dist: pytest-xdist; extra == "test"
+Description-Content-Type: text/markdown
+
+# pylibcugraphops
+
+**pylibcugraphops** is a wrapper around **cugraph-ops** and provides framework-agnostic and lightweight Python-bindings for the custom graph operators of cugraph-ops. For more information on the implemented functionality, check the corresponding documentations.
+
+## Structure
+In terms of structure, the bindings somewhat follow the guidelines of cugraph-ops. The main difference is that pylibcugraphops is more focused on providing reasonable submodules and thus the overall structure is rather flat. The core functionality is placed under `pylibcugraphops.operators` similar to the C++ API with the `<cugraph-ops/operators>` namespace. This includes basic aggregation operators (e.g. for GraphSAGE), specialized operators (e.g. for RGCN), and operators performing pooling-like operations (e.g. readout operations aggregating from a graph-to-scalar level). While the C++ API has a further distinction into operators for message flow graphs and other kinds of graphs which can be represented through CSC, the `pylibcugraphops.operators` is kept as a flat submodule with the function names making the disctiontion.
+
+## Naming Convention
+The name of exposed operators and corresponding files should be self-explanatory to provide an easy overview of all relevant charateristics. Therefore, we adopt the following naming convention for operators.
+
+`<operator family>_<graph type>_<"direction">_(<operator specification>_)<[fwd|bwd|bwd_rev|...]`
+
+Examples
+- `agg_simple_csc_bwd`
+- `pool_csc_n2s_bwd`
+- `agg_hg_basis_mfg_n2n_post_bwd`
+
+Support for different datatypes is achieved through overloading and thus usually not explicitly part of operator names.
+
+### Explanation of Individual Parts
+
+- `<operator family>` denotes the underlying operator, we currently have
+    - `agg_simple`: basic aggregator performing a mean/sum/min/max reduction of the specified set
+    - `agg_concat`: like `agg_simple` but additionally concatenates the self representation of each set member
+    - `agg_dmpnn`: implmements the DMPNN edge-to-edge aggregation
+    - `pool`: sum/mean/min/max pooling, e.g. node-to-scalar readout
+    - `hg_basis`: heterogenous aggregation using different edge types and potentially using a basis decomposition
+    - `mha_gat`: multi-headed attention aggregation, in this case GAT as specific variant
+- `<graph type>` which graph type the operator is intended for
+    - `csc`: simple csc representation of a graph
+    - `bipartite`: simple csc representation of a bipartite graph
+    - `mfg`: message flow graph
+- `<"direction">`: for easier overview of which operators we already have, multiple directions are combined and separated through underscores (e.g. `e2n_n2n`)
+    - `n2n`: node-to-node (basic aggregation)
+    - `e2n`: edge-to-node
+    - `e2e`: edge-to-edge
+    - `n2s`: node-to-scalar
+- `<operator specification>`: some operators define different kinds of "flavors", e.g. the "pre" and the "post" variant of the `hg_basis` operators
+
+
+## Function Signatures
+
+The following pattern should be used
+```
+func(output_vector_arg_0, ..., output_vector_arg_n,
+     input_vector_arg_0, ..., input_vector_arg_n,
+     graph_structure_arg_0, ..., graph_structure_arg_n,
+     *args,
+     **kwargs,
+     cuda_stream=None)
+```
+- `*args`: arguments necessary for `func` but neither a buffer nor a graph structure
+- `**kwargs`: optional arguments or arguments with default values
+- `cuda_stream` should be the last argument in a binding if applicable and defaulted to the null stream
+
+Example for RGCN (hg_basis_pre):
+```python
+def agg_hg_basis_mfg_n2n_pre_bwd(output_gradient,
+                                 input_gradient,
+                                 input_embedding,
+                                 message_flow_graph_hg_csc_int32 graph,
+                                 output_weight_gradient=None,
+                                 weights_combination=None,
+                                 concat_own=False,
+                                 norm_by_degree=False,
+                                 cuda_stream=None):
+```
