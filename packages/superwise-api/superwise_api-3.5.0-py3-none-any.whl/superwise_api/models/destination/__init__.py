@@ -1,0 +1,2 @@
+from superwise_api.models.destination.destination import Destination
+from superwise_api.models.destination.destination import SlackDestinationParams
