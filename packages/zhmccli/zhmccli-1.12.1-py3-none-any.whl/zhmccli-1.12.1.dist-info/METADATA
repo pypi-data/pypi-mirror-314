@@ -1,0 +1,115 @@
+Metadata-Version: 2.1
+Name: zhmccli
+Version: 1.12.1
+Summary: A CLI for the IBM Z HMC, written in pure Python
+Author-email: Juergen Leopold <leopoldj@de.ibm.com>, Andreas Maier <maiera@de.ibm.com>
+Maintainer-email: Andreas Maier <maiera@de.ibm.com>, Kathir Velusamy <kathir.velu@in.ibm.com'>
+License: Apache License, Version 2.0
+Project-URL: Homepage, https://github.com/zhmcclient/zhmccli
+Project-URL: Bug Tracker, https://github.com/zhmcclient/zhmccli/issues
+Project-URL: Documentation, https://zhmccli.readthedocs.io/en/stable/
+Project-URL: Source Code, https://github.com/zhmcclient/zhmccli
+Project-URL: Changelog, https://zhmccli.readthedocs.io/en/stable/changes.html
+Keywords: hmc,prometheus,monitoring
+Platform: any
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Information Technology
+Classifier: Topic :: System :: Systems Administration
+Classifier: Environment :: Console
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: AUTHORS.md
+Requires-Dist: zhmcclient>=1.18.0
+Requires-Dist: click>=8.0.2
+Requires-Dist: click-repl>=0.2
+Requires-Dist: click-spinner>=0.1.6; python_version <= "3.11"
+Requires-Dist: click-spinner>=0.1.10; python_version >= "3.12"
+Requires-Dist: progressbar2>=3.12.0
+Requires-Dist: tabulate>=0.8.2; python_version <= "3.9"
+Requires-Dist: tabulate>=0.8.8; python_version >= "3.10"
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: click-option-group>=0.5.6
+Requires-Dist: prompt-toolkit>=3.0.13
+Requires-Dist: PyYAML>=6.0.2
+Requires-Dist: jsonschema>=4.18.0
+Requires-Dist: yamlloader>=0.5.5
+Requires-Dist: urllib3>=1.26.19
+Requires-Dist: pyrsistent>=0.20.0
+
+# zhmccli - A CLI for the IBM Z HMC, written in pure Python
+
+[![Version on Pypi](https://img.shields.io/pypi/v/zhmccli.svg)](https://pypi.python.org/pypi/zhmccli/)
+[![Test status (master)](https://github.com/zhmcclient/zhmccli/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/zhmcclient/zhmccli/actions/workflows/test.yml?query=branch%3Amaster)
+[![Docs status (master)](https://readthedocs.org/projects/zhmccli/badge/?version=latest)](https://readthedocs.org/projects/zhmccli/builds/)
+[![Test coverage (master)](https://img.shields.io/coveralls/zhmcclient/zhmccli.svg)](https://coveralls.io/r/zhmcclient/zhmccli)
+[![Code Climate](https://codeclimate.com/github/zhmcclient/zhmccli/badges/gpa.svg)](https://codeclimate.com/github/zhmcclient/zhmccli)
+
+# Overview
+
+The zhmccli package is a CLI written in pure Python that interacts with
+the Hardware Management Console (HMC) of
+[IBM Z](http://www.ibm.com/systems/z/) or
+[LinuxONE](http://www.ibm.com/systems/linuxone/) machines. The goal of
+this package is to provide an easy-to-use command line interface for
+operators.
+
+The zhmccli package uses the API provided by the zhmcclient package,
+which interacts with the Web Services API of the HMC. It supports
+management of the lifecycle and configuration of various platform
+resources, such as partitions, CPU, memory, virtual switches, I/O
+adapters, and more.
+
+# Installation
+
+The quick way:
+
+``` bash
+$ pip install zhmccli
+```
+
+For more details, see the
+[Installation section](http://zhmccli.readthedocs.io/en/latest/intro.html#installation)
+in the documentation.
+
+# Quickstart
+
+The following example lists the names of the machines (CPCs) managed by
+an HMC:
+
+``` bash
+$ hmc_host="<IP address or hostname of the HMC>"
+$ hmc_userid="<userid on that HMC>"
+$ zhmc -h $hmc_host -u $hmc_userid cpc list --names-only
+Enter password (for user ... at HMC ...): .......
++----------+
+| name     |
+|----------+
+| P000S67B |
++----------+
+```
+
+# Documentation
+
+- [Documentation](http://zhmccli.readthedocs.io/en/latest/)
+- [Change log](http://zhmccli.readthedocs.io/en/latest/changes.html)
+
+# Contributing
+
+For information on how to contribute to this project, see the
+[Development section](http://zhmccli.readthedocs.io/en/latest/development.html)
+in the documentation.
+
+# License
+
+The zhmccli package is licensed under the
+[Apache 2.0 License](https://github.com/zhmcclient/zhmccli/tree/master/LICENSE).
