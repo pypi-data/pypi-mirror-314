@@ -1,0 +1,146 @@
+.. CNSistent documentation master file, created by
+   sphinx-quickstart on Tue Oct 29 18:11:36 2024.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. _introduction:
+
+.. image:: files/Logo.png
+   :alt: CNSistent Logo
+   :width: 800px
+   :align: center
+
+
+Introduction
+============
+
+CNSistent is a Python tool for processing and analyzing copy number data. 
+It is designed to work with data from a variety of sources, including TCGA, PCAWG, TRACERx, and COSMIC. 
+The tool is designed to be easy to use, and to provide a comprehensive set of analyses and visualizations.
+
+Example of API
+--------------
+
+Files used below sourced directly from the `TRACERx Zenodo archive <https://zenodo.org/records/7649257>`_.
+
+1. Load CNS Data and Display Heatmap
+````````````````````````````````````
+
+Load CNS data from a CSV file and visualize the first 5 rows using a heatmap.
+
+.. code-block:: python
+
+    import cns
+    raw_df = cns.load_cns("./data/20220803_TxPri_mphase_by_sample_df.reduced.csv", cn_columns=["nMajor", "nMinor"], sep=",", print_info=True)
+    cns.fig_heatmap(cns.cns_head(raw_df, 5), max_cn=6)
+
+.. image:: files/intro_1.png
+    :alt: Raw Data Heatmap
+    :width: 800px
+
+2. Impute Missing Segments
+``````````````````````````
+
+Fill in missing segments in the data, impute using the extension method, and display a heatmap for the first 5 rows.
+
+.. code-block:: python
+
+    imp_df = cns.main_fill_imp(raw_df, print_info=True)
+    cns.fig_heatmap(cns.cns_head(imp_df, 5), max_cn=6)
+
+.. image:: files/intro_2.png
+    :alt: Imputed Data Heatmap
+    :width: 800px
+
+3. Create 3 mb Segments and convert to a feature array
+``````````````````````````````````````````````````````
+
+Aggregate the imputed CNS data into 3 MB segments and convert it into a feature array.
+
+.. code-block:: python
+
+   seg_df = cns.main_seg_agg(imp_df, split_size=3_000_000, print_info=True)
+   features, rows, columns = cns.bins_to_features(seg_df)
+   print("Alleles: {0}, samples: {1}, bins: {2}.".format(*features.shape))
+
+``Alleles: 2, samples: 403, bins: 960.``
+
+4. Group Segments by Cancer Type
+````````````````````````````````
+
+Group the CNS data by cancer type, calculate the total CN, and visualize mean linear profiles.
+
+.. code-block:: python
+
+    sample_df = cns.load_samples("./data/20221109_TRACERx421_all_patient_df.tsv")
+    type_groups = {c: cns.select_cns_by_type(seg_df, sample_df, c, "histology_multi_full") for c in ["LUAD", "LUSC"]}
+    groups_df = cns.stack_groups([cns.group_samples(v, group_name=k) for k, v in type_groups.items()])
+    cns.fig_lines(cns.add_total_cn(groups_df), cn_columns="total_cn")
+
+.. image:: files/intro_3.png
+    :alt: Grouped Data Heatmap
+    :width: 800px
+
+The example code is also in `example_API.py <https://bitbucket.org/schwarzlab/cnsistent/src/main/example_API.py>`_.
+
+Example in terminal
+-------------------
+
+CNSistent reads SCNA profiles as ``.tsv`` files. Have an example file ``data.tsv``:
+
+.. code-block:: python
+
+    sample_id    chrom   start   end     total_cn
+    sample1      chr1    100     200     1       
+    ...
+
+.. note::
+    Column naming is fully describe in the :ref:`input_format` section.
+
+To preprocess the segments:
+
+.. code-block:: bash
+
+    cns fill data.tsv --out filled.tsv
+    cns impute filled.tsv --out imputed.csv
+
+To create statistics:
+
+.. code-block:: bash
+
+    cns coverage data.tsv --out samples.tsv
+    cns ploidy imputed.tsv --samples samples.tsv --out samples.tsv
+    cns signatures imputed.tsv --samples samples.tsv --out samples.tsv
+
+To calculate the mean ploidy per chromosome arm:
+
+.. code-block:: bash
+
+    cns segment arms --out arms.bed
+    cns aggregate imputed.tsv --segments --out a_bins.tsv
+
+To conduct breakpoint clustering with 1 mb distance:
+
+.. code-block:: bash
+
+    cns segment imputed.tsv --merge 1000000 --out clust.bed
+    cns aggregate imputed.tsv  --segments clust.bed --out c_bins.tsv
+
+To conduct segmentation using 5 mb bins:
+
+.. code-block:: bash
+
+    cns segment whole --step 5000000 --out clust.bed
+    cns aggregate data.tsv  --segments clust.bed --out c_bins.tsv
+
+Extention of the example is in `example_CLI.py <https://bitbucket.org/schwarzlab/cnsistent/src/main/example_CLI.py>`_.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
+
+   self
+   quickstart
+   CLI
+   API
+   reference
