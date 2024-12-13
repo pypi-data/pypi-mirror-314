@@ -1,0 +1,204 @@
+# 4k Search Engine
+
+Nowhere near as cool or powerful as Google so named accordingly! 
+
+In short, load a list of dictionaries into it and it allows you to filter
+and do substring searching on keys. As a bonus it will help
+you produce drop downs for your filters and is intended to be used with
+web applications searching datasets small enough to fit into memory. 
+
+## Features
+
+  * In Memory
+  * No Additional Dependencies
+  * Filtering
+    * In the list
+    * Not in the list
+  * Substring Search
+  * 100% Python 
+  * NO DB needed
+  * NO file storage needed
+
+## Common Usage
+
+ * Grab dataset
+   * RaaS
+   * File
+   * DB Query
+ * Load data into search
+   * Optionally Build Dropdown Options for Keys
+ * Setup endpoints
+   * Search
+   * Optionally Filter Options
+
+## Example
+
+Below is a contrived example to show basic app usage, 
+[tests/test_search_engine.py](tests/test_search_engine.py) 
+is great for looking at individual features/examples as well.
+
+### Step One: Setup Example
+
+You can start by downloading the [example.py](example.py) and the
+sample dataset HPCharactersDataRaw.json from the **Data Explorer** section of the [Characters in Harry Potter Books](https://www.kaggle.com/datasets/zez000/characters-in-harry-potter-books) and placing them in the
+same directory. 
+
+### Step Two: Load Necessary Packages
+
+We include the helpers for our example and four_k_search_engine_nosrednakram.
+
+```python
+import json
+from flask import Flask, jsonify
+
+from four_k_search_engine_nosrednakram.LoadSearchData import LoadSearchData
+from four_k_search_engine_nosrednakram.FilterSet import FilterSet
+from four_k_search_engine_nosrednakram.Search import Search
+```
+
+### Step Three: Load Date to Search Into a Dictionary
+
+The search uses an in memory list of dictionaries. In this example we load
+the data to search from a JSON. 
+
+```python
+with open('HPCharactersDataRaw.json') as search_json:
+   search_dict = json.load(search_json)
+```
+
+### Step Four: Generate Search Object
+
+This step requires the dictionary from the previous step and a list containing
+the keys you would like to have returned in filter_options. An empty list 
+**[]** can be passed if you do  no wish to populate filter_options with the 
+uniqe values for the provided keys. You can still filter but you're more likely 
+to have key naming issues and harder programatically to sort out. In our example 
+we get two lists returned one with **Gender** unique values and one with 
+**Profession** unique values. This make generate dropdown lists easy.
+
+```python
+SearchData = LoadSearchData(search_dict, ['Gender', 'Profession'])
+```
+
+Below is a truncated version of the output for our filter dropdowns
+for example. 
+
+```json
+"filter_options": {
+    "Gender": [
+      "Female", 
+      "Male", 
+      "NaN"
+    ],
+    "Profession": [
+      "\"Agony Aunt\" advice columnist", 
+      "20th-century Scourer who preached against Magic", 
+      ...
+    ]
+}
+
+```
+
+### Step Five: Setup Web Server
+
+The example uses [Flask](https://pypi.org/project/Flask/) for a very quick 
+and easy example. You should read about how to safely use Flask for a 
+production server if you plan to use it.
+
+```pthon
+app = Flask(__name__)
+```
+
+
+### Step Six: Filter Options End Point
+
+Providing the fiter options to a front end app is as simple as returning the 
+filter_options attribute from the Load_SearchData/SearchData object. It is a 
+dictionary for each included key you requested, see above. 
+[http://127.0.0.1:5000/filter_options](http://127.0.0.1:5000/filter_options)
+
+```python
+@app.route('/filter_options', methods=['GET'])
+def query_subjects():
+   if len(SearchData.filter_options) > 0:
+       return json.dumps({'filter_options': SearchData.filter_options})
+   else:
+       return jsonify({'error': 'data not found'})
+```
+
+### Step Seven: Search End Point
+
+<p>I've hardcoded some values and made this a get instead of a post for a quick
+example. You'll want to convert this to a post and provide the filters and
+search strings from your front end application in reality. The app should
+provide filters and/or substring search lists of dictionaries. The referenced
+field is the key from your dictionary, value is the selected filter value. If
+you want the records matching include is True. If you want to exclude, the
+matching records, include is False. The filters come first to limit the
+amount of string searching needed.</p>
+
+The filtered list is then fed into the search with results returned. The field
+is the key, and the value is the case-insensitive substring to search for. 
+It's easy to add a True/False attribute for optional case sensitivity, but as
+I didn't need and this seems more like expectations I didn't bother.
+
+**IMPORTANT"** The filtered lists are **AND**, 
+i.e., all filters must be met to be in the list.
+
+Now we return the results. With a few lines of code and a data set, you have a 
+filtering search that is fast as it's all in memory. I Initially wrote this 
+for a 
+[course catalogue search](https://info.western.edu/course/Undergraduate-Search) 
+with just over 1k courses and a variety of attributes to search and filter on.
+
+**IMPORTANT** The searchs are **OR** not an and. 
+
+This seems more natural, and when you consider you may be doing lookups on 
+several fields with the same string, this becomes more understandable. 
+Hopefully it will be the correct usage for yourr application as well.
+[http://127.0.0.1:5000/search](http://127.0.0.1:5000/search)
+
+````python
+@app.route('/search', methods=['GET'])
+def query_search():
+   # filters = json.load(request.args.get('filters', type=str))
+   filters = [{
+                   "field": "Gender",
+                   "value": "Female",
+                   "include": True
+             },
+             {
+                   "field": "Profession",
+                   "value": "Auror",
+                   "include": True
+             }]
+   filtered_list = FilterSet(SearchData.master_index, SearchData.master_list, filters).results
+   # searches = json.load(request.args.get('searches',' type=str)
+   searches = [{
+                   "field": 'Name',
+                   "value": "ton"
+               }]
+   # This is any match not exclusive match. Can change easy enough by looping hear and re-feeding the result
+   # and next search filter. I think matching any substring search after filters may be desirable.
+   if len(searches) > 0:
+       filtered_list = Search(filtered_list, searches).results
+
+   if len(filtered_list) > 0:
+       return jsonify(filtered_list)
+   else:
+       return jsonify({'error': 'data not found'})
+````
+
+----
+Misc
+----
+I run this in debug mode to help while developing.
+
+```python
+if __name__ == '__main__':
+   app.run(debug=True)
+```
+
+
+
+
