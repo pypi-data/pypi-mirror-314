@@ -1,0 +1,72 @@
+{% load i18n %}
+
+{% comment %}
+  Parametrit:
+    lomakesarja: Näytettävä lomakesarja
+{% endcomment %}
+
+<span
+  class="lomakesarja"
+  data-prefix="{{ lomakesarja.prefix }}"
+  data-lisaa-painike="{{ lomakesarja.lisaa_painike }}"
+  data-poista-painike="{{ lomakesarja.poista_painike }}"
+  data-poistettava="{{ lomakesarja.can_delete|yesno:"true,false" }}"
+  data-jarjestettava="{{ lomakesarja.can_order|yesno:"true,false" }}"
+  >
+  {% with lomakesarja.riviaihio|default:"pumaska/lomakesarja_rivi.html" as riviaihio %}
+    {# Näytä olemassaolevat lomakkeet. #}
+    {% spaceless %}
+    {% for sisakkainen_lomake in lomakesarja.forms %}
+      <div class="lomakesarja-rivi {{ lomakesarja.riviluokka }}">
+        {% for kentta in sisakkainen_lomake.hidden_fields %}
+          {{ kentta }}
+        {% endfor %}
+        {% include riviaihio with form=sisakkainen_lomake %}
+        {% if lomakesarja.can_order %}
+          {{ sisakkainen_lomake.ORDER }}
+        {% endif %}
+        {% if lomakesarja.can_delete and sisakkainen_lomake.instance.pk %}
+          {{ sisakkainen_lomake.DELETE }}
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    {# Lisää ylimääräinen lomake uusien rivien lisäämispohjaksi. #}
+    {% with lomakesarja.empty_form as sisakkainen_lomake %}
+      <div class="lomakesarja-rivi tarkkailu-estetty {{ lomakesarja.riviluokka }}">
+        {% for kentta in sisakkainen_lomake.hidden_fields %}
+          {{ kentta }}
+        {% endfor %}
+        {% include riviaihio with form=sisakkainen_lomake %}
+        {% if lomakesarja.can_order %}
+          {{ sisakkainen_lomake.ORDER }}
+        {% endif %}
+      </div>
+    {% endwith %}
+    {% endspaceless %}
+
+    {# Lomakesarjan mahdolliset virheet ja hallinnointilomake. #}
+    <div class="container-fluid">
+      {{ lomakesarja.management_form }}
+    </div>
+
+    {% if lomakesarja.non_form_errors %}
+      <script>
+        $(".lomakesarja[data-prefix='{{ lomakesarja.prefix }}']").closest(
+          ".form-group, .row, .container, .container-fluid"
+        ).addClass("has-error").append(
+          {% for virhe in lomakesarja.non_form_errors %}
+            $("<span/>", {class: "help-block datavirhe"}).text("{{ virhe }}"),
+          {% endfor %}
+        );
+      </script>
+    {% endif %}
+  {% endwith %}
+</span>
+
+<script>
+  $(".lomakesarja[data-prefix='{{ lomakesarja.prefix }}']").on(
+    "lisatty", ".lomakesarja-rivi",
+    function () { $(this).removeClass("tarkkailu-estetty"); }
+  );
+</script>
