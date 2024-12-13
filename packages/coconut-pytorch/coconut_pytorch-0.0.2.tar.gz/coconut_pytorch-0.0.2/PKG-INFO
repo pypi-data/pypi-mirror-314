@@ -1,0 +1,86 @@
+Metadata-Version: 2.3
+Name: coconut-pytorch
+Version: 0.0.2
+Summary: Coconut in Pytorch
+Project-URL: Homepage, https://pypi.org/project/coconut-pytorch/
+Project-URL: Repository, https://github.com/lucidrains/coconut-pytorch
+Author-email: Phil Wang <lucidrains@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Phil Wang
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Keywords: artificial intelligence,attention mechanism,continuous latent tokens,deep learning,reasoning,transformers
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.8
+Requires-Dist: einops>=0.8.0
+Requires-Dist: rotary-embedding-torch>=0.5.3
+Requires-Dist: torch>=2.4
+Description-Content-Type: text/markdown
+
+<img src="./coconut.png" width="400px"></img>
+
+## 🥥 Coconut (wip)
+
+Implementation of Coconut, proposed by the paper <a href="https://arxiv.org/abs/2412.06769">Training Large Language Models to Reason in a Continuous Latent Space</a> out of FAIR, in Pytorch
+
+Architecture wise, the closest work to the one proposed here would be <a href="https://github.com/lucidrains/recurrent-memory-transformer-pytorch">RMT</a>, where the memory tokens there could serve as the continuous latent tokens. Both directions are worth exploring
+
+## Install
+
+```bash
+$ pip install coconut-pytorch
+```
+
+## Usage
+
+```python
+import torch
+from coconut_pytorch import Coconut
+
+model = Coconut(
+    num_reasoning_steps = 3,
+    transformer = dict(
+        num_tokens = 256,
+        dim = 512,
+        depth = 2
+    )
+)
+
+prompt = torch.randint(0, 256, (1, 1024))
+answer = torch.randint(0, 256, (1, 64))
+
+prompt_logits, reasoning_tokens, answer_logits = model(prompt, answer)
+
+```
+
+## Citation
+
+```bibtex
+@inproceedings{Hao2024TrainingLL,
+    title   = {Training Large Language Models to Reason in a Continuous Latent Space},
+    author  = {Shibo Hao and Sainbayar Sukhbaatar and DiJia Su and Xian Li and Zhiting Hu and Jason Weston and Yuandong Tian},
+    year    = {2024},
+    url     = {https://api.semanticscholar.org/CorpusID:274610816}
+}
+```
