@@ -1,0 +1,165 @@
+Metadata-Version: 2.1
+Name: moscot
+Version: 0.4.0
+Summary: Multi-omic single-cell optimal transport tools
+Author: Dominik Klein, Giovanni Palla, Michal Klein, Zoe Piran, Marius Lange
+Maintainer-email: Dominik Klein <dominik.klein@helmholtz-muenchen.de>, Giovanni Palla <giovanni.palla@helmholtz-muenchen.de>, Michal Klein <michal.klein@helmholtz-muenchen.de>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2022, Theis Lab
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://github.com/theislab/moscot
+Project-URL: Download, https://moscot.readthedocs.io/en/latest/installation.html
+Project-URL: Bug Tracker, https://github.com/theislab/moscot/issues
+Project-URL: Documentation, https://moscot.readthedocs.io
+Project-URL: Source Code, https://github.com/theislab/moscot
+Keywords: single-cell,bio-informatics,optimal transport
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Typing :: Typed
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: scipy>=1.7.0
+Requires-Dist: pandas>=2.0.1
+Requires-Dist: networkx>=3.2
+Requires-Dist: matplotlib>=3.5.0
+Requires-Dist: anndata>=0.9.1
+Requires-Dist: scanpy>=1.9.3
+Requires-Dist: wrapt>=1.13.2
+Requires-Dist: docrep>=0.3.2
+Requires-Dist: ott-jax[neural]>=0.5.0
+Requires-Dist: cloudpickle>=2.2.0
+Requires-Dist: rich>=13.5
+Requires-Dist: docstring_inheritance>=2.0.0
+Requires-Dist: mudata>=0.2.2
+Provides-Extra: spatial
+Requires-Dist: squidpy>=1.2.3; extra == "spatial"
+Provides-Extra: neural
+Requires-Dist: optax; extra == "neural"
+Requires-Dist: flax; extra == "neural"
+Requires-Dist: diffrax; extra == "neural"
+Provides-Extra: dev
+Requires-Dist: pre-commit>=3.0.0; extra == "dev"
+Requires-Dist: tox>=4; extra == "dev"
+Provides-Extra: test
+Requires-Dist: pytest>=7; extra == "test"
+Requires-Dist: pytest-xdist>=3; extra == "test"
+Requires-Dist: pytest-mock>=3.5.0; extra == "test"
+Requires-Dist: pytest-cov>=4; extra == "test"
+Requires-Dist: coverage[toml]>=7; extra == "test"
+Provides-Extra: docs
+Requires-Dist: sphinx>=5.1.1; extra == "docs"
+Requires-Dist: sphinx_copybutton>=0.5.0; extra == "docs"
+Requires-Dist: sphinxcontrib-bibtex>=2.3.0; extra == "docs"
+Requires-Dist: sphinxcontrib-spelling>=7.6.2; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints; extra == "docs"
+Requires-Dist: furo>=2022.09.29; extra == "docs"
+Requires-Dist: sphinx-tippy>=0.4.1; extra == "docs"
+Requires-Dist: myst-nb>=0.17.1; extra == "docs"
+Requires-Dist: ipython>=7.20.0; extra == "docs"
+Requires-Dist: sphinx_design>=0.3.0; extra == "docs"
+
+|PyPI| |Downloads| |CI| |Pre-commit| |Codecov| |Docs|
+
+moscot - multi-omic single-cell optimal transport tools
+=======================================================
+
+**moscot** is a scalable framework for Optimal Transport (OT) applications in
+single-cell genomics. It can be used for
+
+- trajectory inference (incorporating spatial and lineage information)
+- mapping cells to their spatial organisation
+- aligning spatial transcriptomics slides
+- translating modalities
+- prototyping of new OT models in single-cell genomics
+
+**moscot** is powered by
+`OTT <https://ott-jax.readthedocs.io>`_ which is a JAX-based Optimal
+Transport toolkit that supports just-in-time compilation, GPU acceleration, automatic
+differentiation and linear memory complexity for OT problems.
+
+Installation
+------------
+You can install **moscot** via::
+
+    pip install moscot
+
+In order to install **moscot** from in editable mode, run::
+
+    git clone https://github.com/theislab/moscot
+    cd moscot
+    pip install -e .
+
+For further instructions how to install jax, please refer to https://github.com/google/jax.
+
+Resources
+---------
+
+Please have a look at our `documentation <https://moscot.readthedocs.io>`_
+
+Reference
+---------
+
+Our preprint "Mapping cells through time and space with moscot" can be found `here <https://www.biorxiv.org/content/10.1101/2023.05.11.540374v1>`_.
+
+.. |Codecov| image:: https://codecov.io/gh/theislab/moscot/branch/master/graph/badge.svg?token=Rgtm5Tsblo
+    :target: https://codecov.io/gh/theislab/moscot
+    :alt: Coverage
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/moscot.svg
+    :target: https://pypi.org/project/moscot/
+    :alt: PyPI
+
+.. |CI| image:: https://img.shields.io/github/actions/workflow/status/theislab/moscot/test.yml?branch=main
+    :target: https://github.com/theislab/moscot/actions
+    :alt: CI
+
+.. |Pre-commit| image:: https://results.pre-commit.ci/badge/github/theislab/moscot/main.svg
+   :target: https://results.pre-commit.ci/latest/github/theislab/moscot/main
+   :alt: pre-commit.ci status
+
+.. |Docs| image:: https://img.shields.io/readthedocs/moscot
+    :target: https://moscot.readthedocs.io/en/stable/
+    :alt: Documentation
+
+.. |Downloads| image:: https://static.pepy.tech/badge/moscot
+    :target: https://pepy.tech/project/moscot
+    :alt: Downloads
