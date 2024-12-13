@@ -1,0 +1,470 @@
+"""GearCompoundSteadyStateSynchronousResponse"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
+
+from mastapy._private._internal import conversion, utility
+from mastapy._private._internal.cast_exception import CastException
+from mastapy._private._internal.dataclasses import extended_dataclass
+from mastapy._private._internal.python_net import (
+    python_net_import,
+    pythonnet_property_get,
+)
+from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+    _3290,
+)
+
+_GEAR_COMPOUND_STEADY_STATE_SYNCHRONOUS_RESPONSE = python_net_import(
+    "SMT.MastaAPI.SystemModel.AnalysesAndResults.SteadyStateSynchronousResponses.Compound",
+    "GearCompoundSteadyStateSynchronousResponse",
+)
+
+if TYPE_CHECKING:
+    from typing import Any, List, Type, TypeVar
+
+    from mastapy._private.system_model.analyses_and_results import _2740
+    from mastapy._private.system_model.analyses_and_results.analysis_cases import (
+        _7717,
+        _7720,
+    )
+    from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses import (
+        _3137,
+    )
+    from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+        _3215,
+        _3222,
+        _3225,
+        _3226,
+        _3227,
+        _3236,
+        _3240,
+        _3243,
+        _3258,
+        _3261,
+        _3264,
+        _3273,
+        _3277,
+        _3280,
+        _3283,
+        _3292,
+        _3312,
+        _3318,
+        _3321,
+        _3324,
+        _3325,
+        _3336,
+        _3339,
+    )
+
+    Self = TypeVar("Self", bound="GearCompoundSteadyStateSynchronousResponse")
+    CastSelf = TypeVar(
+        "CastSelf",
+        bound="GearCompoundSteadyStateSynchronousResponse._Cast_GearCompoundSteadyStateSynchronousResponse",
+    )
+
+
+__docformat__ = "restructuredtext en"
+__all__ = ("GearCompoundSteadyStateSynchronousResponse",)
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class _Cast_GearCompoundSteadyStateSynchronousResponse:
+    """Special nested class for casting GearCompoundSteadyStateSynchronousResponse to subclasses."""
+
+    __parent__: "GearCompoundSteadyStateSynchronousResponse"
+
+    @property
+    def mountable_component_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3290.MountableComponentCompoundSteadyStateSynchronousResponse":
+        return self.__parent__._cast(
+            _3290.MountableComponentCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def component_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3236.ComponentCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3236,
+        )
+
+        return self.__parent__._cast(
+            _3236.ComponentCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def part_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3292.PartCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3292,
+        )
+
+        return self.__parent__._cast(_3292.PartCompoundSteadyStateSynchronousResponse)
+
+    @property
+    def part_compound_analysis(self: "CastSelf") -> "_7720.PartCompoundAnalysis":
+        from mastapy._private.system_model.analyses_and_results.analysis_cases import (
+            _7720,
+        )
+
+        return self.__parent__._cast(_7720.PartCompoundAnalysis)
+
+    @property
+    def design_entity_compound_analysis(
+        self: "CastSelf",
+    ) -> "_7717.DesignEntityCompoundAnalysis":
+        from mastapy._private.system_model.analyses_and_results.analysis_cases import (
+            _7717,
+        )
+
+        return self.__parent__._cast(_7717.DesignEntityCompoundAnalysis)
+
+    @property
+    def design_entity_analysis(self: "CastSelf") -> "_2740.DesignEntityAnalysis":
+        from mastapy._private.system_model.analyses_and_results import _2740
+
+        return self.__parent__._cast(_2740.DesignEntityAnalysis)
+
+    @property
+    def agma_gleason_conical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3215.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3215,
+        )
+
+        return self.__parent__._cast(
+            _3215.AGMAGleasonConicalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3222.BevelDifferentialGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3222,
+        )
+
+        return self.__parent__._cast(
+            _3222.BevelDifferentialGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_planet_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3225.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3225,
+        )
+
+        return self.__parent__._cast(
+            _3225.BevelDifferentialPlanetGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_differential_sun_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3226.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3226,
+        )
+
+        return self.__parent__._cast(
+            _3226.BevelDifferentialSunGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3227.BevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3227,
+        )
+
+        return self.__parent__._cast(
+            _3227.BevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def concept_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3240.ConceptGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3240,
+        )
+
+        return self.__parent__._cast(
+            _3240.ConceptGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def conical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3243.ConicalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3243,
+        )
+
+        return self.__parent__._cast(
+            _3243.ConicalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cylindrical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3258.CylindricalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3258,
+        )
+
+        return self.__parent__._cast(
+            _3258.CylindricalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def cylindrical_planet_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3261.CylindricalPlanetGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3261,
+        )
+
+        return self.__parent__._cast(
+            _3261.CylindricalPlanetGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def face_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3264.FaceGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3264,
+        )
+
+        return self.__parent__._cast(
+            _3264.FaceGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def hypoid_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3273.HypoidGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3273,
+        )
+
+        return self.__parent__._cast(
+            _3273.HypoidGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_conical_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3277.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3277,
+        )
+
+        return self.__parent__._cast(
+            _3277.KlingelnbergCycloPalloidConicalGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_hypoid_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> (
+        "_3280.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponse"
+    ):
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3280,
+        )
+
+        return self.__parent__._cast(
+            _3280.KlingelnbergCycloPalloidHypoidGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def klingelnberg_cyclo_palloid_spiral_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3283.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3283,
+        )
+
+        return self.__parent__._cast(
+            _3283.KlingelnbergCycloPalloidSpiralBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def spiral_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3312.SpiralBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3312,
+        )
+
+        return self.__parent__._cast(
+            _3312.SpiralBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_diff_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3318.StraightBevelDiffGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3318,
+        )
+
+        return self.__parent__._cast(
+            _3318.StraightBevelDiffGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3321.StraightBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3321,
+        )
+
+        return self.__parent__._cast(
+            _3321.StraightBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_planet_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3324.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3324,
+        )
+
+        return self.__parent__._cast(
+            _3324.StraightBevelPlanetGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def straight_bevel_sun_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3325.StraightBevelSunGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3325,
+        )
+
+        return self.__parent__._cast(
+            _3325.StraightBevelSunGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def worm_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3336.WormGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3336,
+        )
+
+        return self.__parent__._cast(
+            _3336.WormGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def zerol_bevel_gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "_3339.ZerolBevelGearCompoundSteadyStateSynchronousResponse":
+        from mastapy._private.system_model.analyses_and_results.steady_state_synchronous_responses.compound import (
+            _3339,
+        )
+
+        return self.__parent__._cast(
+            _3339.ZerolBevelGearCompoundSteadyStateSynchronousResponse
+        )
+
+    @property
+    def gear_compound_steady_state_synchronous_response(
+        self: "CastSelf",
+    ) -> "GearCompoundSteadyStateSynchronousResponse":
+        return self.__parent__
+
+    def __getattr__(self: "CastSelf", name: str) -> "Any":
+        try:
+            return self.__getattribute__(name)
+        except AttributeError:
+            class_name = utility.camel(name)
+            raise CastException(
+                f'Detected an invalid cast. Cannot cast to type "{class_name}"'
+            ) from None
+
+
+@extended_dataclass(frozen=True, slots=True, weakref_slot=True)
+class GearCompoundSteadyStateSynchronousResponse(
+    _3290.MountableComponentCompoundSteadyStateSynchronousResponse
+):
+    """GearCompoundSteadyStateSynchronousResponse
+
+    This is a mastapy class.
+    """
+
+    TYPE: ClassVar["Type"] = _GEAR_COMPOUND_STEADY_STATE_SYNCHRONOUS_RESPONSE
+
+    wrapped: "Any"
+
+    def __post_init__(self: "Self") -> None:
+        """Override of the post initialisation magic method."""
+        if not hasattr(self.wrapped, "reference_count"):
+            self.wrapped.reference_count = 0
+
+        self.wrapped.reference_count += 1
+
+    @property
+    def component_analysis_cases(
+        self: "Self",
+    ) -> "List[_3137.GearSteadyStateSynchronousResponse]":
+        """List[mastapy.system_model.analyses_and_results.steady_state_synchronous_responses.GearSteadyStateSynchronousResponse]
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "ComponentAnalysisCases")
+
+        if temp is None:
+            return None
+
+        value = conversion.pn_to_mp_objects_in_list(temp)
+
+        if value is None:
+            return None
+
+        return value
+
+    @property
+    def component_analysis_cases_ready(
+        self: "Self",
+    ) -> "List[_3137.GearSteadyStateSynchronousResponse]":
+        """List[mastapy.system_model.analyses_and_results.steady_state_synchronous_responses.GearSteadyStateSynchronousResponse]
+
+        Note:
+            This property is readonly.
+        """
+        temp = pythonnet_property_get(self.wrapped, "ComponentAnalysisCasesReady")
+
+        if temp is None:
+            return None
+
+        value = conversion.pn_to_mp_objects_in_list(temp)
+
+        if value is None:
+            return None
+
+        return value
+
+    @property
+    def cast_to(self: "Self") -> "_Cast_GearCompoundSteadyStateSynchronousResponse":
+        """Cast to another type.
+
+        Returns:
+            _Cast_GearCompoundSteadyStateSynchronousResponse
+        """
+        return _Cast_GearCompoundSteadyStateSynchronousResponse(self)
