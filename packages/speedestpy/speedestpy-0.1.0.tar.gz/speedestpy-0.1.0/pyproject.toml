@@ -1,0 +1,31 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "speedestpy"
+authors = [
+  { name="Guillaume Havard", email="guill.havard@gmail.com" },
+]
+description = "Tests to improve performance in computationally intensive tasks."
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/guillaume-havard/speedestpy"
+Issues = "https://github.com/guillaume-havard/speedestpy/issues"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "src_python"
