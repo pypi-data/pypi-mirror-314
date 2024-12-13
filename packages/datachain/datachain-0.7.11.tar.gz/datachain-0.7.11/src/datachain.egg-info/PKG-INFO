@@ -1,0 +1,206 @@
+Metadata-Version: 2.1
+Name: datachain
+Version: 0.7.11
+Summary: Wrangle unstructured AI data at scale
+Author-email: Dmitry Petrov <support@dvc.org>
+License: Apache-2.0
+Project-URL: Documentation, https://datachain.dvc.ai
+Project-URL: Issues, https://github.com/iterative/datachain/issues
+Project-URL: Source, https://github.com/iterative/datachain
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Development Status :: 2 - Pre-Alpha
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: pyyaml
+Requires-Dist: tomlkit
+Requires-Dist: tqdm
+Requires-Dist: numpy<3,>=1
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pyarrow
+Requires-Dist: typing-extensions
+Requires-Dist: python-dateutil>=2
+Requires-Dist: attrs>=21.3.0
+Requires-Dist: s3fs>=2024.2.0
+Requires-Dist: gcsfs>=2024.2.0
+Requires-Dist: adlfs>=2024.2.0
+Requires-Dist: dvc-data<4,>=3.10
+Requires-Dist: dvc-objects<6,>=4
+Requires-Dist: shtab<2,>=1.3.4
+Requires-Dist: sqlalchemy>=2
+Requires-Dist: multiprocess==0.70.16
+Requires-Dist: cloudpickle
+Requires-Dist: orjson>=3.10.5
+Requires-Dist: pydantic<3,>=2
+Requires-Dist: jmespath>=1.0
+Requires-Dist: datamodel-code-generator>=0.25
+Requires-Dist: Pillow<12,>=10.0.0
+Requires-Dist: msgpack<2,>=1.0.4
+Requires-Dist: psutil
+Requires-Dist: huggingface_hub
+Requires-Dist: iterative-telemetry>=0.0.9
+Requires-Dist: platformdirs
+Requires-Dist: dvc-studio-client<1,>=0.21
+Requires-Dist: tabulate
+Provides-Extra: docs
+Requires-Dist: mkdocs>=1.5.2; extra == "docs"
+Requires-Dist: mkdocs-gen-files>=0.5.0; extra == "docs"
+Requires-Dist: mkdocs-material>=9.3.1; extra == "docs"
+Requires-Dist: mkdocs-section-index>=0.3.6; extra == "docs"
+Requires-Dist: mkdocstrings-python>=1.6.3; extra == "docs"
+Requires-Dist: mkdocs-literate-nav>=0.6.1; extra == "docs"
+Provides-Extra: torch
+Requires-Dist: torch>=2.1.0; extra == "torch"
+Requires-Dist: torchvision; extra == "torch"
+Requires-Dist: transformers>=4.36.0; extra == "torch"
+Provides-Extra: remote
+Requires-Dist: lz4; extra == "remote"
+Requires-Dist: requests>=2.22.0; extra == "remote"
+Provides-Extra: vector
+Requires-Dist: usearch; extra == "vector"
+Provides-Extra: hf
+Requires-Dist: numba>=0.60.0; extra == "hf"
+Requires-Dist: datasets[audio,vision]>=2.21.0; extra == "hf"
+Provides-Extra: tests
+Requires-Dist: datachain[hf,remote,torch,vector]; extra == "tests"
+Requires-Dist: pytest<9,>=8; extra == "tests"
+Requires-Dist: pytest-sugar>=0.9.6; extra == "tests"
+Requires-Dist: pytest-cov>=4.1.0; extra == "tests"
+Requires-Dist: pytest-mock>=3.12.0; extra == "tests"
+Requires-Dist: pytest-servers[all]>=0.5.8; extra == "tests"
+Requires-Dist: pytest-benchmark[histogram]; extra == "tests"
+Requires-Dist: pytest-xdist>=3.3.1; extra == "tests"
+Requires-Dist: virtualenv; extra == "tests"
+Requires-Dist: dulwich; extra == "tests"
+Requires-Dist: hypothesis; extra == "tests"
+Requires-Dist: open_clip_torch; extra == "tests"
+Requires-Dist: aiotools>=1.7.0; extra == "tests"
+Requires-Dist: requests-mock; extra == "tests"
+Requires-Dist: scipy; extra == "tests"
+Provides-Extra: dev
+Requires-Dist: datachain[docs,tests]; extra == "dev"
+Requires-Dist: mypy==1.13.0; extra == "dev"
+Requires-Dist: types-python-dateutil; extra == "dev"
+Requires-Dist: types-pytz; extra == "dev"
+Requires-Dist: types-PyYAML; extra == "dev"
+Requires-Dist: types-requests; extra == "dev"
+Requires-Dist: types-tabulate; extra == "dev"
+Provides-Extra: examples
+Requires-Dist: datachain[tests]; extra == "examples"
+Requires-Dist: defusedxml; extra == "examples"
+Requires-Dist: accelerate; extra == "examples"
+Requires-Dist: unstructured_ingest[embed-huggingface]; extra == "examples"
+Requires-Dist: unstructured[pdf]; extra == "examples"
+Requires-Dist: pdfplumber==0.11.4; extra == "examples"
+Requires-Dist: huggingface_hub[hf_transfer]; extra == "examples"
+Requires-Dist: onnx==1.16.1; extra == "examples"
+Requires-Dist: ultralytics==8.3.48; extra == "examples"
+
+================
+|logo| DataChain
+================
+
+|PyPI| |Python Version| |Codecov| |Tests|
+
+.. |logo| image:: docs/assets/datachain.svg
+   :height: 24
+.. |PyPI| image:: https://img.shields.io/pypi/v/datachain.svg
+   :target: https://pypi.org/project/datachain/
+   :alt: PyPI
+.. |Python Version| image:: https://img.shields.io/pypi/pyversions/datachain
+   :target: https://pypi.org/project/datachain
+   :alt: Python Version
+.. |Codecov| image:: https://codecov.io/gh/iterative/datachain/graph/badge.svg?token=byliXGGyGB
+   :target: https://codecov.io/gh/iterative/datachain
+   :alt: Codecov
+.. |Tests| image:: https://github.com/iterative/datachain/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/iterative/datachain/actions/workflows/tests.yml
+   :alt: Tests
+
+DataChain is a Python-based AI-data warehouse for transforming and analyzing unstructured
+data like images, audio, videos, text and PDFs. It integrates with external storage
+(e.g. S3) to process data efficiently without data duplication and manages metadata
+in an internal database for easy and efficient querying.
+
+
+Use Cases
+=========
+
+1. **ETL.** Pythonic framework for describing and running unstructured data transformations
+   and enrichments, applying models to data, including LLMs.
+2. **Analytics.** DataChain dataset is a table that combines all the information about data
+   objects in one place + it provides dataframe-like API and vecrorized engine to do analytics
+   on these tables at scale.
+3. **Versioning.** DataChain doesn't store, require moving or copying data (unlike DVC).
+   Perfect use case is a bucket with thousands or millions of images, videos, audio, PDFs.
+
+Getting Started
+===============
+
+Visit `Quick Start <https://docs.datachain.ai/quick-start>`_ and `Docs <https://docs.datachain.ai/>`_
+to get started with `DataChain` and learn more.
+
+Key Features
+============
+
+📂 **Multimodal Dataset Versioning.**
+   - Version unstructured data without moving or creating data copies, by supporting
+     references to S3, GCP, Azure, and local file systems.
+   - Multimodal data support: images, video, text, PDFs, JSONs, CSVs, parquet, etc.
+   - Unite files and metadata together into persistent, versioned, columnar datasets.
+
+🐍 **Python-friendly.**
+   - Operate on Python objects and object fields: float scores, strings, matrixes,
+     LLM response objects.
+   - Run Python code in a high-scale, terabytes size datasets, with built-in
+     parallelization and memory-efficient computing — no SQL or Spark required.
+
+🧠 **Data Enrichment and Processing.**
+   - Generate metadata using local AI models and LLM APIs.
+   - Filter, join, and group datasets by metadata. Search by vector embeddings.
+   - High-performance vectorized operations on Python objects: sum, count, avg, etc.
+   - Pass datasets to Pytorch and Tensorflow, or export them back into storage.
+
+
+Contributing
+============
+
+Contributions are very welcome. To learn more, see the `Contributor Guide`_.
+
+
+Community and Support
+=====================
+
+* `Docs <https://docs.datachain.ai/>`_
+* `File an issue`_ if you encounter any problems
+* `Discord Chat <https://dvc.org/chat>`_
+* `Email <mailto:support@dvc.org>`_
+* `Twitter <https://twitter.com/DVCorg>`_
+
+
+DataChain Studio Platform
+=========================
+
+`DataChain Studio`_ is a proprietary solution for teams that offers:
+
+- **Centralized dataset registry** to manage data, code and dependency
+  dependencies in one place.
+- **Data Lineage** for data sources as well as derivative dataset.
+- **UI for Multimodal Data** like images, videos, and PDFs.
+- **Scalable Compute** to handle large datasets (100M+ files) and in-house
+  AI model inference.
+- **Access control** including SSO and team based collaboration.
+
+.. _PyPI: https://pypi.org/
+.. _file an issue: https://github.com/iterative/datachain/issues
+.. github-only
+.. _Contributor Guide: https://docs.datachain.ai/contributing
+.. _Pydantic: https://github.com/pydantic/pydantic
+.. _publicly available: https://radar.kit.edu/radar/en/dataset/FdJmclKpjHzLfExE.ExpBot%2B-%2BA%2Bdataset%2Bof%2B79%2Bdialogs%2Bwith%2Ban%2Bexperimental%2Bcustomer%2Bservice%2Bchatbot
+.. _SQLite: https://www.sqlite.org/
+.. _Getting Started: https://docs.datachain.ai/
+.. _DataChain Studio: https://studio.datachain.ai/
