@@ -1,0 +1,147 @@
+Metadata-Version: 2.1
+Name: TestLitePytest
+Version: 0.2.0
+Summary: Pytest adaptor for TestLite TMS system
+Author: Dmitry Skryabin
+Author-email: Dmitry Skryabin <skryabind98@gmail.com>
+Maintainer-email: Dmitry Skryabin <skryabind98@gmail.com>
+License: 
+        The MIT License (MIT)
+        
+        Copyright (c) 2024 Dmitry Skryabin
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+        
+Project-URL: Repository, https://github.com/DmitrySkryabin/TestLitePytest
+Classifier: Framework :: Pytest
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Testing
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Framework :: Pytest
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: pytest>=8.3.2
+Requires-Dist: requests>=2.32.3
+
+=====================
+TestLitePytest
+=====================
+
+.. image:: https://img.shields.io/pypi/v/TestLitePytest.svg
+    :target: https://pypi.org/project/TestLitePytest
+    :alt: PyPI version
+
+.. image:: https://img.shields.io/pypi/pyversions/TestLitePytest.svg
+    :target: https://pypi.org/project/TestLitePytest
+    :alt: Python versions
+
+
+Pytest adaptor for TestLite TMS system
+
+----
+
+This `pytest`_ plugin was generated with `Cookiecutter`_ along with `@hackebrot`_'s `cookiecutter-pytest-plugin`_ template.
+
+
+
+Installation
+------------
+
+You can install "pytest-TestLitePytest" via `pip`_ from `PyPI`_::
+
+    $ pip install TestLitePytest
+
+
+Initial setup
+-------------
+
+To use, create a config file: “TestLiteConfig.ini” (be sure to use this
+name, otherwise you will not find the configuration file)
+
+::
+
+   [TestLiteConfig]
+   TESTLITEURL=http://TestLite.test (The address where your TestLite is located)
+   DELETEREPORTSDIR=True/False (Save folder with reports) (Default: True)
+   REPORTSDIRNAME=TestLiteReports (Тame of the folder with reports)
+   REPORTSSAVETYPE=BINARY/TXT (In what format to save reports) (Default: BINARY) (TXT doesn't work))
+
+Use in your tests
+-----------------
+
+::
+
+   import  testlite
+
+   class  TestWithTestLite:
+
+       @testlite.test_key('PROJECT-TC-1')
+       def  test_1(self):
+           pass
+               
+       @testlite.test_key('PROJECT-TC-2')
+       def  test_2(self):
+       pass
+
+Where “PROJECT-TC-1” its test case key in TestLite
+
+Command Line Arguments
+----------------------
+
+1. –testsuite=PROJECT-TS-1 (TestSuite key in TestLite)
+2. –save_json=json_report.json (If so, save the file with the report.)
+
+If you specify testsuite then TestLitePytest will try to send a report
+to your TestLite that you specified
+
+License
+-------
+
+Distributed under the terms of the `MIT`_ license, "TestLitePytest" is free and open source software
+
+
+Issues
+------
+
+If you encounter any problems, please `file an issue`_ along with a detailed description.
+
+.. _`Cookiecutter`: https://github.com/audreyr/cookiecutter
+.. _`@hackebrot`: https://github.com/hackebrot
+.. _`MIT`: https://opensource.org/licenses/MIT
+.. _`BSD-3`: https://opensource.org/licenses/BSD-3-Clause
+.. _`GNU GPL v3.0`: https://www.gnu.org/licenses/gpl-3.0.txt
+.. _`Apache Software License 2.0`: https://www.apache.org/licenses/LICENSE-2.0
+.. _`cookiecutter-pytest-plugin`: https://github.com/pytest-dev/cookiecutter-pytest-plugin
+.. _`file an issue`: https://github.com/DmitrySkryabin/pytest-TestLitePytest/issues
+.. _`pytest`: https://github.com/pytest-dev/pytest
+.. _`tox`: https://tox.readthedocs.io/en/latest/
+.. _`pip`: https://pypi.org/project/pip/
+.. _`PyPI`: https://pypi.org/project
