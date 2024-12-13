@@ -1,0 +1,68 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="library.policy">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <!--
+    Be careful if you use general includeDependencies, it can have sideffects!
+    Better import explicite packages or configurations ;)
+  -->
+  <!--<includeDependencies package="." />-->
+  <include package="plone.app.contentmenu" />
+
+  <include package="eea.facetednavigation" />
+  <include package="eea.jquery" />
+  <include package="collective.big.bang" />
+  <include package="collective.faceted.map" />
+  <include package="collective.geolocationbehavior" />
+  <include package="collective.js.jqueryui" />
+  <include package="collective.taxonomy" />
+  <include package="collective.faceted.taxonomywidget" />
+  <include package="plone.app.imagecropping" />
+  <include package="plone.app.mosaic" />
+  <include package="library.core" />
+  <include package="library.theme" />
+  <include package="collective.behavior.banner" />
+  <include package="collective.behavior.gallery" />
+  <include package="collective.easyform" />
+  <include package="collective.preventactions" />
+  <include package="collective.plausible" />
+  <include package="collective.z3cform.select2" file="minimal.zcml" />
+  <include package="plone.formwidget.recaptcha" />
+
+  <include package=".browser" />
+  <include package=".faceted" />
+  <include package=".upgrades" />
+
+  <include file="permissions.zcml" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="library.policy"
+      directory="profiles/default"
+      description="Installs the library.policy add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.post_install"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="library.policy (uninstall)"
+      directory="profiles/uninstall"
+      description="Uninstalls the library.policy add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.uninstall"
+      />
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="library.policy-hiddenprofiles"
+      />
+
+  <!-- -*- extra stuff goes here -*- -->
+
+</configure>
