@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Galactica D3JS plot demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <link href="http://www.galactica-simulations.eu/static/galactica/css/d3js_plot.css" rel="stylesheet"
+          type="text/css"/>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins)-->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="http://www.galactica-simulations.eu/static/galactica/js/gald3.js"></script>
+</head>
+<body style="background-color: ghostwhite">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div id="content">
+                        <div>
+                            <a data-toggle="modal" href="#modal_chart">
+                                <img src="/img/d3_plot.gif" width="32 px"> Open chart window</a>
+                        </div>
+                        <div class="modal fade" id="modal_chart" tabindex="-1" role="dialog"
+                             aria-labelledby="modal_label_chart">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title" id="modal_label_chart">Chart label</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="GalD3_svg-container">
+                                            <svg id="chart" class="GalD3_svg"
+                                                 viewBox="0 0 800 600"
+                                                 preserveAspectRatio="xMinYMin meet"></svg>
+                                        </div>
+                                        <script language="JavaScript">
+                                            GalD3.show_chart("chart", "/data/plot.json");
+                                        </script>
+                                        <div style="margin: 10px 0 20px 0;text-align: center">
+                                            Chart description
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top: 20px;"><button type="button" onclick="document.location.reload();">
+                            Reload page <span class="glyphicon glyphicon-refresh"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
