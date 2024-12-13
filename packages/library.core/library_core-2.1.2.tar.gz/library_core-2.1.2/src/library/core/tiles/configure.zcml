@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone">
+
+  <include package="z3c.unconfigure" file="meta.zcml" />
+  <include package="plone.tiles" />
+  <include package="plone.app.standardtiles" />
+  <include package="plone.app.tiles" />
+
+  <unconfigure package="plone.app.standardtiles">
+    <plone:tile
+        name="plone.app.standardtiles.existingcontent"
+        title="Existing content"
+        description="A tile which displays a content object"
+        add_permission="cmf.ModifyPortalContent"
+        class=".existingcontent.ExistingContentTile"
+        for="*"
+        permission="zope.Public"
+        schema=".existingcontent.IExistingContentTile"
+        template="templates/existingcontent_view.pt"
+        />
+  </unconfigure>
+
+  <configure package="plone.app.standardtiles">
+    <plone:tile
+        layer="library.core.interfaces.ILibraryCoreLayer"
+        schema="library.core.tiles.existingcontent.ILibraryCoreExistingContentTile"
+        name="plone.app.standardtiles.existingcontent"
+        title="Existing content"
+        description="A tile which displays a content object"
+        add_permission="cmf.ModifyPortalContent"
+        class=".existingcontent.ExistingContentTile"
+        for="*"
+        permission="zope.Public"
+        template="templates/existingcontent_view.pt"
+        />
+  </configure>
+</configure>

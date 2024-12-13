@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:faceted="http://namespaces.zope.org/faceted"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="imio.smartweb">
+
+  <!-- Unconfigure default faceted layout views -->
+  <unconfigure package="eea.facetednavigation.views">
+    <faceted:view
+        name="faceted-preview-items"
+        template="preview-items.pt"
+        title="Faceted items preview"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="faceted-preview-item"
+        for="zope.interface.Interface"
+        template="preview-item.pt"
+        permission="zope2.View"
+        />
+  </unconfigure>
+
+  <faceted:view
+      name="faceted-map"
+      template="map.pt"
+      class=".map.FacetedMapView"
+      title="Faceted map"
+      permission="zope2.View"
+      layer="library.core.interfaces.ILibraryCoreLayer"
+      />
+
+  <!--browser:page
+      for="*"
+      name="faceted-map-geojson"
+      class=".map.FacetedGeoJSON"
+      permission="zope2.View"
+      layer="library.core.interfaces.ILibraryCoreLayer"
+      /-->
+
+</configure>
