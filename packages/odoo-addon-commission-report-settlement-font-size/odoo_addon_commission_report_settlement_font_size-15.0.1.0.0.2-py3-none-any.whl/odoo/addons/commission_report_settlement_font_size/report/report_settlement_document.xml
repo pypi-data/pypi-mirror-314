@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Alberto Martínez <alberto.martinez@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <template
+        id="report_settlement_document_font_size"
+        inherit_id="commission.report_settlement_document"
+    >
+        <xpath expr="//t[@t-call='web.external_layout']" position="before">
+            <t t-set="font_size_custom_normal" t-value="'font-size: 12px;'" />
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="attributes">
+            <attribute name="t-att-style">font_size_custom_normal</attribute>
+        </xpath>
+        <xpath expr="//t[@t-call='web.external_layout']" position="before">
+            <t t-set="font_size_custom_big" t-value="'font-size: 1.6rem;'" />
+        </xpath>
+        <xpath expr="//h2" position="attributes">
+            <attribute name="t-att-style">font_size_custom_big</attribute>
+        </xpath>
+    </template>
+
+</odoo>
