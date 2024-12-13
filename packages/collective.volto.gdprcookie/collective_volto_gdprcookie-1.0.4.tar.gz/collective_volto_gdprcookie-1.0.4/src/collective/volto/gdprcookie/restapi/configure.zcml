@@ -1,0 +1,43 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:cache="http://namespaces.zope.org/cache"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    >
+
+  <include package="plone.restapi" />
+
+  <!-- enable controlpanel on plone.restapi -->
+  <adapter
+      factory=".controlpanel.GDPRCookieSettingsControlpanel"
+      provides="collective.volto.gdprcookie.interfaces.IGDPRCookieSettingsControlpanel"
+      name="gdpr-cookie-settings"
+      />
+
+  <!-- route to retrieve cookie settings from Volto also from anonymous users -->
+  <plone:service
+      method="GET"
+      factory=".get.GDPRCookieSettingsGet"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      permission="zope2.View"
+      layer="collective.volto.gdprcookie.interfaces.ICollectiveVoltoGdprcookieLayer"
+      name="@gdpr-cookie-settings"
+      />
+  <cache:ruleset
+      for=".get.GDPRCookieSettingsGet"
+      ruleset="plone.content.dynamic"
+      />
+
+  <!-- expander -->
+  <adapter
+      factory=".get.GDPRCookieSettings"
+      name="gdpr-cookie-settings"
+      />
+
+
+  <!-- deserializer -->
+  <adapter factory=".deserializer.GDPRCookieSettingsDeserializeFromJson" />
+  <!-- serializer -->
+  <adapter factory=".serializer.GDPRCookieSettingsSerializeToJson" />
+
+</configure>
