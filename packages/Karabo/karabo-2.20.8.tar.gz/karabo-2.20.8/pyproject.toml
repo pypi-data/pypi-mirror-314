@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools"]
+
+[project]
+name = "Karabo"
+version = "2.20.8"
+authors = [
+  { name="Karabo Team", email="karabo@xfel.eu" },
+]
+description = "The Karabo SCADA Framework"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "http://karabo.eu"
+Repository = "https://github.com/European-XFEL/Karabo.git"
+
+[project.entry-points.console_scripts]
+karabo = "karabo.interactive.karabo:main"
+karabo-middlelayerserver = "karabo.middlelayer.device_server:MiddleLayerDeviceServer.main"
+ikarabo = "karabo.interactive.ikarabo:main"
+karabo-macroserver = "karabo.macro_devices.macro_server:MacroServer.main"
+karabo-cli = "karabo.interactive.ideviceclient:main"
+karabo-start = "karabo.interactive.startkarabo:startkarabo"
+karabo-stop = "karabo.interactive.startkarabo:stopkarabo"
+karabo-kill = "karabo.interactive.startkarabo:killkarabo"
+karabo-check = "karabo.interactive.startkarabo:checkkarabo"
+karabo-gterm = "karabo.interactive.startkarabo:gnometermlog"
+karabo-xterm = "karabo.interactive.startkarabo:xtermlog"
+karabo-less = "karabo.interactive.startkarabo:less"
+karabo-add-deviceserver = "karabo.interactive.startkarabo:adddeviceserver"
+karabo-remove-deviceserver = "karabo.interactive.startkarabo:removedeviceserver"
+karabo-create-services = "karabo.interactive.startkarabo:make_service_dir"
+karabo-webserver = "karabo.interactive.webserver:run_webserver"
+karabo-webaggregatorserver = "karabo.interactive.webaggregatorserver:run_webserver"
+migrate-karabo-history = "karabo.influxdb.dl_migrator:main"
+karabo-check-container = "karabo.interactive.container_monitor:main"
+
+[project.entry-points."karabo.middlelayer_device"]
+ProjectManager = "karabo.middlelayer_devices.project_manager:ProjectManager"
+ConfigurationManager = "karabo.middlelayer_devices.configuration_manager:ConfigurationManager"
+DaemonManager = "karabo.middlelayer_devices.daemon_manager:DaemonManager"
+
+[tool.setuptools.packages.find]
+include = [
+    'karabo', 'karabo.common*', 'karabo.native*', 'karabo.testing*',
+    'karabo.interactive*', 'karabo.middlelayer*',
+    'karabo.middlelayer_devices*',
+    'karabo.packaging*',
+]
+
+[tool.setuptools.package-data]
+"karabo.interactive" = [
+            'static/*.css',
+            'static/*.js',
+            'static/*.html',
+            'static/favicon.ico',
+            'templates/*.html',
+]
