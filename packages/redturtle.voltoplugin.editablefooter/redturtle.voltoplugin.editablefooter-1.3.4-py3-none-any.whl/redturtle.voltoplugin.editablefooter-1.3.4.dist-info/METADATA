@@ -1,0 +1,224 @@
+Metadata-Version: 2.1
+Name: redturtle.voltoplugin.editablefooter
+Version: 1.3.4
+Summary: Add-on for Volto to manage four-columns footer
+Home-page: https://github.com/collective/redturtle.voltoplugin.editablefooter
+Author: RedTurtle Techonolgy
+Author-email: sviluppo@redturtle.it
+License: GPL version 2
+Project-URL: PyPI, https://pypi.python.org/pypi/redturtle.voltoplugin.editablefooter
+Project-URL: Source, https://github.com/collective/redturtle.voltoplugin.editablefooter
+Project-URL: Tracker, https://github.com/collective/redturtle.voltoplugin.editablefooter/issues
+Keywords: Python Plone
+Classifier: Environment :: Web Environment
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: Addon
+Classifier: Framework :: Plone :: 5.2
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Requires-Python: >=3.6
+License-File: LICENSE.GPL
+License-File: LICENSE.rst
+Requires-Dist: setuptools
+Requires-Dist: plone.api>=1.8.4
+Requires-Dist: plone.restapi>=9.5.0
+Requires-Dist: plone.volto
+Provides-Extra: test
+Requires-Dist: plone.app.testing; extra == "test"
+Requires-Dist: plone.testing>=5.0.0; extra == "test"
+Requires-Dist: plone.app.contenttypes; extra == "test"
+Requires-Dist: plone.app.robotframework[debug]; extra == "test"
+Requires-Dist: collective.MockMailHost; extra == "test"
+
+
+=====================
+Volto Editable Footer
+=====================
+
+Add-on that allows to edit footer columns in Volto.
+
+Features
+--------
+
+- Control panel for plone registry to manage columns configuration.
+- Restapi view that exposes these settings for Volto.
+
+This addon only add a registry entry where store some configuration data. You need to provide
+the edit interface in your Volto theme.
+
+Volto endpoint
+--------------
+
+Anonymous users can't access registry resources by default with plone.restapi (there is a special permission).
+
+To avoid enabling registry access to everyone, this package exposes a dedicated restapi route with the infos to draw the menu: *@footer-columns*::
+
+    > curl -i http://localhost:8080/Plone/@footer-columns -H 'Accept: application/json'
+
+
+The response is something similar to this::
+
+    [
+        {
+            'text': {'data': '<span>foo</span>'},
+            'title': 'First column'
+        },
+        {
+            'text': {'content-type': 'text/html', 'data': ''},
+            'title': 'Second column'
+        }
+    ]
+
+
+Control panel
+-------------
+
+You can edit settings directly from Volto because the control has been registered on Plone and available with plone.restapi.
+
+
+Volto integration
+-----------------
+
+To use this product in Volto, your Volto project needs to include a new plugin: volto-editablefooter_.
+
+.. _volto-editablefooter: https://github.com/RedTurtle/volto-editablefooter
+
+
+Translations
+------------
+
+This product has been translated into
+
+- Italian
+
+
+Installation
+------------
+
+Install redturtle.voltoplugin.editablefooter by adding it to your buildout::
+
+    [buildout]
+
+    ...
+
+    eggs =
+        redturtle.voltoplugin.editablefooter
+
+
+and then running ``bin/buildout``
+
+
+Contribute
+----------
+
+- Issue Tracker: https://github.com/RedTurtle/redturtle.voltoplugin.editablefooter/issues
+- Source Code: https://github.com/RedTurtle/redturtle.voltoplugin.editablefooter
+
+
+License
+-------
+
+The project is licensed under the GPLv2.
+
+Authors
+-------
+
+This product was developed by **RedTurtle Technology** team.
+
+.. image:: https://avatars1.githubusercontent.com/u/1087171?s=100&v=4
+   :alt: RedTurtle Technology Site
+   :target: http://www.redturtle.it/
+
+
+Contributors
+============
+
+- RedTurtle Techonolgy, sviluppo@redturtle.it
+
+
+Changelog
+=========
+
+1.3.4 (2024-12-12)
+------------------
+
+- Fix it translations
+  [lucabel]
+
+
+1.3.3 (2024-04-24)
+------------------
+
+- Fix serializer/deserializer for footerTop blocks: use blocks handlers to fix data.
+  [cekk]
+
+
+1.3.2 (2024-03-14)
+------------------
+
+- Revert changes to 1.2.1 branch. We haven't deleted 1.3.0 and 1.3.1 branches because there are some releases on pypi.
+  [cekk]
+
+1.3.1 (2024-03-14)
+------------------
+
+- Handle missing record in restapi endpoint.
+  [cekk]
+
+
+1.3.0 (2024-03-07)
+------------------
+
+- Add footer_top field in settings, to manage a new footer row before columns.
+  [cekk]
+
+1.2.1 (2024-01-17)
+------------------
+
+- Handle /api (remove it) urls when absolut-ize urls.
+  [cekk]
+
+
+1.2.0 (2024-01-17)
+------------------
+
+- absolut-ize urls
+  [mamico]
+
+
+1.1.2 (2023-03-17)
+------------------
+
+- Fix requirements
+  [foxtrot-dfm1]
+
+
+1.1.1 (2021-10-27)
+------------------
+
+- Fix python_requires.
+  [nzambello]
+
+1.1.0 (2021-10-11)
+------------------
+
+- p.a.caching rules for rest api services.
+  [cekk]
+
+
+1.0.1 (2021-02-11)
+------------------
+
+- Do not break endpoint if nothing set in registry.
+  [cekk]
+
+
+1.0.0 (2020-12-15)
+------------------
+
+- Initial release.
+  [cekk]
