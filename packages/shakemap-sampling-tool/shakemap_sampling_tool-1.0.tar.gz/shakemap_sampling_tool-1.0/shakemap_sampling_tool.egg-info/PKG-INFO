@@ -1,0 +1,306 @@
+Metadata-Version: 2.1
+Name: shakemap-sampling-tool
+Version: 1.0
+Summary: USGS Earthquake Basic Geographic Utilities
+Author-email: Mike Hearne <mhearne@usgs.gov>
+License: License
+        =======
+        
+        Unless otherwise noted, This project is in the public domain in the United
+        States because it contains materials that originally came from the United
+        States Geological Survey, an agency of the United States Department of
+        Interior. For more information, see the official USGS copyright policy at
+        https://www2.usgs.gov/visual-id/credit_usgs.html#copyright
+        
+        Additionally, we waive copyright and related rights in the work
+        worldwide through the CC0 1.0 Universal public domain dedication.
+        
+        
+        CC0 1.0 Universal Summary
+        -------------------------
+        
+        This is a human-readable summary of the
+        [Legal Code (read the full text)][1].
+        
+        
+        ### No Copyright
+        
+        The person who associated a work with this deed has dedicated the work to
+        the public domain by waiving all of his or her rights to the work worldwide
+        under copyright law, including all related and neighboring rights, to the
+        extent allowed by law.
+        
+        You can copy, modify, distribute and perform the work, even for commercial
+        purposes, all without asking permission.
+        
+        
+        ### Other Information
+        
+        In no way are the patent or trademark rights of any person affected by CC0,
+        nor are the rights that other persons may have in the work or in how the
+        work is used, such as publicity or privacy rights.
+        
+        Unless expressly stated otherwise, the person who associated a work with
+        this deed makes no warranties about the work, and disclaims liability for
+        all uses of the work, to the fullest extent permitted by applicable law.
+        When using or citing the work, you should not imply endorsement by the
+        author or the affirmer.
+        
+        There are dependencies on numerous third party software packages, as detailed
+        in environment.yml, all of which are open-source.
+        
+        
+        [1]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+        
+Keywords: shakemap,sampling
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: pandas>=2.2.1
+Requires-Dist: openpyxl>=3.1.4
+Requires-Dist: h5py>=3.11.0
+Provides-Extra: dev
+Requires-Dist: build>=0.7.0; extra == "dev"
+Requires-Dist: black>=21; extra == "dev"
+Requires-Dist: flake8>=3.9; extra == "dev"
+Requires-Dist: ipython>=7.26; extra == "dev"
+Requires-Dist: twine>=4.0.2; extra == "dev"
+Provides-Extra: test
+Requires-Dist: pytest>=6.2; extra == "test"
+Requires-Dist: pytest-cov>=2.12.0; extra == "test"
+Provides-Extra: build
+Requires-Dist: build; extra == "build"
+Requires-Dist: twine; extra == "build"
+Requires-Dist: check-wheel-contents; extra == "build"
+
+# ShakeMap Sampling Tool
+
+This page describes tools that can be used to extract station data and sample modeled values from ShakeMaps either online or on a user's local system.
+
+*NOTE: All tools described here only sample binary HDF files, not grid.xml, and only sample from NEIC (source=us)
+ShakeMaps when sampling online!*
+
+ - [Install](#install)
+ - [Update](#update)
+ - [Usage](#usage)
+   - [Getting Help](#help)
+   - [Sampling](#sampling)
+     - [Sample Locally](#local)
+     - [Sample at Station Locations](#sample_stations)
+	 - [Sample at a Single Coordinate](#sample_coordinates)
+	 - [Sample at All Stations](#sample_all_stations)
+   - [Get All Values for Point ShakeMaps](#sample_locations)
+   - [Sample From Input Spreadsheet](#sample_spreadsheet)
+
+## Reference
+
+If you wish to cite this software, please use this reference:
+
+- Hearne, M., and D. J. Wald (2021). ShakeMap Sampling Tool, USGS 
+  Software Release, 
+  doi: [10.5066/P94RJYCS](https://doi.org/10.5066/P94RJYCS).
+
+
+## <a name="install">Install
+
+- `pip install git+https://code.usgs.gov/ghsc/esi/shakemap-sampling-tool.git`
+- Run `sst --help` to see an how the command works.
+
+## <a name="update">Update
+
+ - `pip install --upgrade git+https://code.usgs.gov/ghsc/esi/shakemap-sampling-tool.git`
+
+## <a name="update">Usage:
+
+### <a name="help">Getting Help
+First type `sst -h`
+
+and you will see help for the main program, along with a list of sub-commands:
+
+```
+usage: sst [-h] {get-stations,sample} ...
+
+Sample ShakeMap data, online or on local ShakeMap installation.
+
+This program offers a number of sub-commands, listed below. To see the help
+for any of these commands, type:
+
+sst [SUB-COMMAND] --help
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Sub-commands:
+  {get-stations,sample}
+                        sub-command help
+    get-stations        Get list of stations included in ShakeMap
+    sample              Sample online ShakeMap.
+```
+
+To see the help for the first sub-command, get-stations, type `sst get-stations -h`:
+
+```
+usage: sst get-stations [-h] [-l] [-o OUTFILE] [-m] eventid
+
+Return a list of stations contained in the processed files.
+
+positional arguments:
+  eventid               ComCat event ID.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l, --local           Search for ShakeMap information on local system. (default: False)
+  -o OUTFILE, --outfile OUTFILE
+                        Output station information to Excel/CSV file. (default: None)
+  -m, --max-horizontal  Only return rows with maximum horizontal value. (default: False)
+```
+
+To see the help for the second sub-command, type `sst sample -h`:
+
+```
+usage: sst sample [-h] (-c ID LAT LON | -s STATIONS [STATIONS ...] | -a | -f FILE) [-o OUTFILE] [-l LOCAL] eventid
+
+Sample local data sets using one of a number of methods.
+
+Mutually exclusive sampling options include:
+ - By a single set of coordinates: (-c, --coordinates)
+ - By supplying station IDs found in ShakeMap: (-s, --stations)
+ - Sample locations of every station found in ShakeMap: (-a, --all-stations
+ - By supplying an input file with IDs and coordinates: (-f, --file)
+
+positional arguments:
+  eventid               ComCat event ID.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c ID LAT LON, --coordinates ID LAT LON
+                        Use an ID string and single set of coordinates to sample ShakeMap. (default: None)
+  -s STATIONS [STATIONS ...], --stations STATIONS [STATIONS ...]
+                        Use station codes (NET.STA format) (found in ShakeMap) to sample ShakeMap. (default: None)
+  -a, --all-stations    Output values at nearest point of all stations found in ShakeMap. (default: False)
+  -f FILE, --file FILE  Use CSV/Excel file to sample ShakeMap. File must at least contain columns that start with
+                        "lat" or "lon" (case does not matter. Optionally, it may contain a column called "id" (again,
+                        case insensitive) which will be used to identify each point. In the absence of this column,
+                        each point will be assigned an oridinal ID number "Point1", "Point2", and so on. (default:
+                        None)
+  -o OUTFILE, --outfile OUTFILE
+                        Output station information to Excel/CSV file. (default: None)
+  -l LOCAL, --local LOCAL
+                        Sample local HDF file. (default: None)
+
+```
+### <a name="sampling">Sampling
+
+
+Cut and paste the "event id" from a ComCat event page:
+
+For this URL:
+
+`https://earthquake.usgs.gov/earthquakes/eventpage/ci38695658/executive`
+
+The event ID is "ci38695658".
+
+--------------------------------------------------------------------------------------------------
+
+#### <a name="local">Sample Locally
+
+If you have ShakeMap installed locally, you can run any event found in ComCat with its input
+data. See the [ShakeMap Wiki](https://github.com/usgs/shakemap/wiki/inputs) which describes 
+basic installation and running.
+
+Any command described below can be used to sample the local copy of an event simply by
+adding the "-l" or "--local" options:
+
+`sst sample ci38695658 -c "Mobil Refinery" 33.853 -118.336`
+
+will work assuming that you have
+
+1) Installed ShakeMap locally and
+2) Run the event ci38695658 on your system.
+
+--------------------------------------------------------------------------------------------------
+
+#### <a name="stations">Get List of Stations
+You can get a list of all stations contained in that ShakeMap by running:
+
+`sst get-stations ci38695658 -o ~/tmp/ci38695658_stations.xlsx`
+
+This command will take several seconds to run, as it must download a binary data file from the ANSS 
+ComCat system and then extract information from that file.
+
+--------------------------------------------------------------------------------------------------
+
+#### <a name="sample_stations">Sample at Station Locations
+Opening that file you will see a list of all station data that was provided to ShakeMap. Note that
+*not* all of the stations listed here will be inside the bounds of the ShakeMap. If you want to be assured
+that the stations at which you sample the ShakeMap are inside the map, you can use the interactive ShakeMap
+on the page above by clicking on "ShakeMap" on the left hand side, and then clicking anywhere in the 
+map shown in the center. You can click on any of the triangle symbols on this map and bring up the name
+and code of a station:
+
+![Rose Hills](rose_hills_station.png)
+
+To sample the data at this station:
+
+`sst sample ci38695658 -s CI.RHC2`
+
+You will see output that looks like this:
+
+```
+     id      lat        lon sample_lat sample_lon sample_distance_m       vs30  MMI_mean  MMI_std  PGA_mean  PGA_std  PGV_mean  PGV_std  SA(0.3)_mean  SA(0.3)_std  SA(1.0)_mean  SA(1.0)_std  SA(3.0)_mean  SA(3.0)_std
+CI.RHC2 34.00100 -118.01330   34.00000 -118.01667          329.6720 408.831879  4.353083 0.512055 -2.877283 0.521441  0.654555 0.448521     -2.217618     0.548467     -4.778402     0.427761     -6.815022     0.356534
+```
+
+You can sample multiple stations at the same time, and output the results to a CSV or Excel file:
+
+`sst sample ci38695658 -s CI.RHC2 CI.RUS CE.23077 -o ~/tmp/ci38695658_samples.xlsx`
+
+![Three Stations Sampled](three_stations_sampled.png)
+
+--------------------------------------------------------------------------------------------------
+
+#### <a name="sample_coordinates">Sample at a Single Coordinate
+You can also sample one station by providing an ID and lat/lon coordinates at the command line:
+
+`sst sample ci38695658 -c "Mobil Refinery" 33.853 -118.336`
+
+```
+            id      lat        lon sample_lat sample_lon sample_distance_m       vs30  MMI_mean  MMI_std  PGA_mean  PGA_std  PGV_mean  PGV_std  SA(0.3)_mean  SA(0.3)_std  SA(1.0)_mean  SA(1.0)_std  SA(3.0)_mean  SA(3.0)_std
+Mobil Refinery 33.85300 -118.33600   33.85000 -118.33333          414.6328 283.185089  3.149629 0.497229 -4.092396 0.537725 -0.605861 0.464171     -3.528294     0.562528     -5.650388     0.444138     -7.813053     0.377669
+```
+
+--------------------------------------------------------------------------------------------------
+
+#### <a name="sample_all_stations">Sample at All Stations
+
+To sample the ShakeMap at *all* of the stations provided to ShakeMap that are also inside the boundaries of
+the map:
+
+`sst sample ci38695658 -a -o ~/tmp/ci38695658_sample_all_stations.xlsx`
+
+![All Stations Sampled](all_stations_sampled.png)
+
+Note that stations not inside the map bounds have blank values for intensities.
+
+#### <a name="sample_locations">Get All Values for Point ShakeMaps
+ShakeMap allows for creation of "point-based" maps that only calculate the model at specific input locations.
+(see https://cbworden.github.io/shakemap/manual4_0/tg_processing.html#output-points-vs-grids)
+
+This command only works for local files, as there are no Global ShakeMaps online that are constructed in this way.
+
+To extract all the values for the input points:
+
+`sst locations nc216859 -o ~/tmp/loma_prieta_buildings.xlsx`
+
+![Locations](loma_prieta_points.png)
+
+--------------------------------------------------------------------------------------------------
+
+#### <a name="sample_spreadsheet">Sample From Input Spreadsheet
+Finally, you can sample stations at locations you have predefined from a spreadsheet or CSV file:
+
+![Sampling Sites](sampling_sites.png)
+
+`sst sample ci38695658 -f ~/tmp/socal_sampling_sites.xlsx -o ~/tmp/ci38695658_sample_socal.xlsx`
+
+![SoCal Sampled](socal_sampled.png)
