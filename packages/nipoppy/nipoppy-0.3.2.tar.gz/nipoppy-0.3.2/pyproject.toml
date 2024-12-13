@@ -1,0 +1,80 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling", "hatch-vcs"]
+
+[project]
+authors = [{ name = "Nipoppy developpers" }]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved",
+    "Programming Language :: Python",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+]
+dependencies = [
+    "boutiques",
+    "pandas",
+    "pybids!=0.18.0",
+    "pydantic",
+    'requests',
+    "pydicom!=3.0.0",
+    "rich",
+    "rich_argparse",
+    "typing-extensions",
+]
+description = "Standardized organization and processing of neuroimaging-clinical datasets"
+license = { file = "LICENSE" }
+name = "nipoppy"
+readme = "README.md"
+requires-python = ">=3.9"
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["nipoppy[doc]", "nipoppy[test]", "pre-commit"]
+doc = [
+    "furo",
+    "sphinx",
+    "sphinx-argparse!=0.5.0",
+    "sphinx-autoapi",
+    "sphinx-copybutton",
+    "sphinx-github-changelog",
+    "sphinx-jsonschema",
+    "sphinx-togglebutton",
+    "mdit-py-plugins",
+    "myst-parser",
+]
+test = [
+    "packaging",
+    "pytest>=6.0.0",
+    "pytest-cov",
+    "pytest-mock",
+    "fids>=0.1.0",
+]
+tests = ["nipoppy[test]"] # alias in case of typo
+
+[project.scripts]
+nipoppy = "nipoppy.cli.run:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["nipoppy"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.hooks.vcs]
+version-file = "nipoppy/_version.py"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.codespell]
+skip = '.git,.github,pyproject.toml'
+
+[tool.pytest.ini_options]
+addopts = "-ra -q -vv"
+testpaths = ["tests/"]
+minversion = "6.0"
+xfail_strict = true
