@@ -1,0 +1,30 @@
+name: test
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  run_tests:
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest', 'macos-13', 'windows-latest']
+        pyver: ['3.10', '3.11', '3.12', '3.13']
+    runs-on:
+      ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.pyver }}
+    - name: Install
+      run: |
+        pip install -U pip wheel
+        # flit 3.10 not working on windows
+        pip install flit==3.9.0
+        flit install
+    - name: Run tests
+      run: python -m unittest test.test_emulator
