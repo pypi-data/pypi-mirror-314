@@ -1,0 +1,124 @@
+Metadata-Version: 2.1
+Name: trafiklab-sl
+Version: 0.3.0
+Summary: Storstockholms Lokaltrafik (SL) data via Trafiklab API
+Author-email: Mikalai Kukhta <mikalai.kukhta@gmail.com>
+License: Copyright (c) 2024 Mikalai Kukhta and individual contributors.
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Repository, https://github.com/NecroKote/trafiklab-sl
+Project-URL: Issues, https://github.com/NecroKote/trafiklab-sl/issues
+Keywords: SL,Storstockholms Lokaltrafik,Trafiklab
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: >=3.9.0
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: aiohttp
+Requires-Dist: dataclasses_json
+Provides-Extra: dev
+Requires-Dist: wheel; extra == "dev"
+Requires-Dist: build; extra == "dev"
+Requires-Dist: twine; extra == "dev"
+Requires-Dist: tox; extra == "dev"
+Provides-Extra: test
+Requires-Dist: pytest==8.0.0; extra == "test"
+Requires-Dist: pytest-asyncio==0.23.5; extra == "test"
+
+# Trafiklab-Sl
+
+[![version](https://img.shields.io/pypi/v/trafiklab-sl)](https://pypi.org/project/trafiklab-sl)
+[![python version](https://img.shields.io/pypi/pyversions/trafiklab-sl)](https://github.com/NecroKote/trafiklab-sl)
+[![license](https://img.shields.io/github/license/necrokote/trafiklab-sl)](https://github.com/NecroKote/trafiklab-sl/blob/main/LICENSE.txt)
+
+A data model for Storstockholms Lokaltrafik (SL) data.
+
+Also contains an async client for fetching data from the [Trafiklab API](https://www.trafiklab.se/api/).
+
+## Installation
+
+Install using `pip install -U trafiklab-sl`
+
+### Development
+
+To install the package for development, clone the repository and run:
+```shell
+python -m venv .venv
+source .venv/bin/activate
+pip install -e '.[dev,test]'
+```
+
+## Usage
+
+The client is based on the `aiohttp` library and is async. It is used to fetch data from the Trafiklab API.
+The library supports two SL APIs:
+- [SL Deviatons API](https://www.trafiklab.se/api/trafiklab-apis/sl/deviations/)
+- [SL Transport API](https://www.trafiklab.se/api/trafiklab-apis/sl/transport/) - just "Departures from Site" and "Sites" for now
+- [SL Stop lookup API](https://www.trafiklab.se/api/trafiklab-apis/sl/stop-lookup/)
+
+More APIs will be added in the future.
+
+## Example
+
+Here is an example of how to use the client to get upcoming train departures at Stockholm Central (site Id 1002).
+
+```python
+import asyncio
+
+from tsl.clients.stoplookup import StopLookupClient
+from tsl.clients.transport import TransportClient
+from tsl.models.common import TransportMode
+
+
+async def main():
+    # perform stop lookup to get the site id for Stockholm Central
+    lookup_client = StopLookupClient("your-SL-Platsuppslag-api-key")
+    stops = await lookup_client.get_stops("Stockholm Central")
+    if (central_station := next(iter(stops), None)) is None:
+        raise RuntimeError(r"Could not find Stockholm Central. Weird ¯\_(ツ)_/¯")
+
+    # get the transport API site id for Stockholm Central
+    transport_api_siteid = central_station.SiteId.transport_siteid
+
+    # get upcoming train departures
+    client = TransportClient()
+    reponse = await client.get_site_departures(transport_api_siteid, transport=TransportMode.TRAIN)
+
+    print(f"Upcoming trains at {central_station.Name}:")
+    for departure in sorted(reponse.departures, key=lambda d: d.expected):
+        print(
+            f"[{departure.line.designation}] platform {departure.stop_point.designation}"
+            f" to {departure.destination} ({departure.display})"
+        )
+
+
+asyncio.run(main())
+```
+
+## Contributing
+
+Both bug reports and pull requests are appreciated.
