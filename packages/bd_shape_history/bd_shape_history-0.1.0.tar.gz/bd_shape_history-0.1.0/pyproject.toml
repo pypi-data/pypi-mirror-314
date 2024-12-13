@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "bd_shape_history"
+version = "0.1.0"
+description = "A tool to manage and visualize the modification history of Build123D objects."
+authors = ["Nathanaël Jourdane <njourdane@protonmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://codeberg.org/roipoussiere/bd_shape_history"
+keywords = ["cad", "build123d", "history"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Manufacturing",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Debuggers"
+]
+exclude = [
+    "tests",
+    "examples",
+    "docs",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.7.3"
+build123d = "^0.7.0"
+
+[tool.poetry.group.examples]
+optional = true
+
+[tool.poetry.group.examples.dependencies]
+ocp-vscode = "^2.6.1"
+ocp-tessellate = "^3.0.8"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+
+[tool.ruff]
+line-length = 80
+target-version = "py311"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
