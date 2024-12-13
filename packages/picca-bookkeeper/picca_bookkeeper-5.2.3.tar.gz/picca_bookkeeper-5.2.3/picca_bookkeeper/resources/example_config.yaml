@@ -1,0 +1,249 @@
+general:
+  #python environment to be used when running jobs
+  #something that would be activated as:
+  # source activate picca
+  conda environment: picca
+  
+  # default system to run bookkeeper on
+  # slurm_cori: slurm for cori
+  # slurm_perlmutter: slurm for perlmutter
+  # bash: run on terminal (login nodes at NERSC)
+  system: slurm_perlmutter
+
+  # general slurm args, e.g. mail options
+  slurm args:
+    mail-type: fail
+    mail-user: user@host.com
+
+  defaults file: # Use a defaults file like Y1v7
+
+data:
+  # Parent path of the bookkeeper.
+  bookkeeper dir: /blabla
+
+  healpix data: /global/cfs/cdirs/desi/spectro/redux/iron/healpix/
+
+  catalog: /global/cfs/cdirs/desicollab/science/lya/y1-kp6/iron-tests/catalogs/QSO_cat_iron_main_dark_healpix_zlya-altbal_zwarn_cut_20230918.fits
+
+
+
+delta extraction:
+  # If full delta extraction already computed can use this to always point to it
+  # use existing: /path/to/bookkeeper (bookkeeper folder)
+
+  calib: 0
+  calib region: mgii_r
+  
+  dla: # If added, DLAs will be masked automatically
+  bal: # If added, BALs selected from added catalog, if True BALs from data/catalog above
+
+  mask file: # Add a line mask file
+
+  # Only if you want to re-use calibration data from a different analysis.
+  # Insert here the path of a delta-attributes.fits.gz file to use it as 
+  # calibration data for the current run..
+  calibration data:
+    step 1:
+    step 2: # leave this empty if only 1 step calib.
+
+  # If you want to use deltas from another place you can use the following
+  # options.
+  # Insert here the parent folder containing both Delta and Log folders
+  # One can use general to use all deltas from given folder.
+  computed deltas:
+    # general: /path/to/deltas/results
+    # lya: /path/to/deltas/results/lya
+    
+  # extra args to be used by the bookkeeper
+  # match the section name with the name of the scripts under picca.bin
+  extra args:
+    picca_delta_extraction:
+      # Default value for all regions
+      general:
+        expected flux:
+          type: Dr16FixedFudgeExpectedFlux # This to deactivate fudge.
+          fudge value: 0
+        data:
+          wave solution: lin # This is an example, wave solution is set to lin by default in the bookkeeper.
+
+      # To affect an specific region use 
+      # remember fo follow the region names in picca_bookkeeper.Bookkeeper.forest_regions
+      # The values set here will extend the ones defined in picca_delta_extraction
+      # for the ciii region only.
+      ciii:
+
+      # To force the change even if there are specific defaults for some regions
+      # in the default config file, use all regions
+      # all:
+
+    # Scripts with terminal argumentss are also compatible
+    picca_convert_transmission:
+      general:
+        nspec: 30
+        # use-splines: ""# use empty string for action args like no-project.
+
+    
+  # Slurm arguments to be used by the bookkeeper
+  slurm args:
+    general:
+    
+    picca_delta_extraction:
+      general:
+        time: "00:16:00"
+        qos: debug
+
+correlations:
+  # If full correlations already computed can use this to always point to it
+  # if in use, this should be the only key and everything else should be
+  # commented out or removed
+  # use existing: /path/to/bookkeeper (bookkeeper folder)
+
+  # catalog_tracer could be set up to use a different catalog for cross-correlations
+  # by default will use the previous one for all the analyses.
+  catalog tracer: 
+
+  # Unblind correlations. Only use this if you are allowed to!
+  unblind: False
+  unblind y1: False
+
+  # whether to use the new fast_metals code
+  fast metals: True
+
+  computed correlations:
+    # general: /path/to/correlations/results
+    # lyalya_lyalya: /path/to/correlations/results/lyalya_lyalya/cf.fits
+    # qso_lyalya: /path/to/correlations/results/lyalya/xcf.fits
+
+  computed exports:
+    # general: /path/to/correlations/results
+    # lyalya_lyalya: /path/to/correlations/results/lyalya_lyalya/cf_exp.fits
+    # qso_lyalya: /path/to/correlations/results/lyalya/xcf_exp.fits
+  
+  computed distortions:
+    # general: /path/to/correlations/results
+    # lyalya_lyalya: /path/to/correlations/results/lyalya_lyalya/dmat.fits
+    # qso_lyalya: /path/to/correlations/results/lyalya/xdmat.fits
+
+  computed metals:
+    # general: /path/to/correlations/results
+    # lyalya_lyalya: /path/to/correlations/results/lyalya_lyalya/metal.fits
+    # qso_lyalya: /path/to/correlations/results/lyalya/xmetal.fits
+
+  extra args:
+    picca_cf:
+      general:
+        nside: 16
+        # no-project: "" # use empty string for action args like no-project.
+
+      # To affect an specific region use the following format
+      # remember fo follow the region names in picca_bookkeeper.Bookkeeper.forest_regions
+      # The values set here will overlap the ones defined in picca_cf, so both will be applied
+      lyalya_lyalya:
+
+      # lyalyb: Lyman alpha in the lyman beta forest.
+      lyalya_lyalyb:
+
+    picca_xcf:
+
+    # For the cross we se lyalya format.
+    picca_xcf_lyalya:
+
+    picca_dmat:
+
+    picca_xdmat:
+
+    picca_metal_dmat:
+
+    picca_metal_xdmat:
+
+    picca_export:
+
+  slurm args:
+    picca_cf:
+      general:
+        #
+
+fits:
+  # This is the user-friendly name for the fit run
+  run name: default
+
+  # Add covariance matrix options
+  compute covariance: False
+  smooth covariance: False
+
+  # Either provide general or both smoothed and full.
+  computed covariances: 
+    # general: /path/to/fits/results
+    # full-covariance: /path/to/fits/results/full-covariance.fits
+    # full-covariance-smoothed: /path/to/fits/results/full-covariance-smoothed.fits
+
+  # These are the correlations to use. If running the full analysis, 
+  # the correspondent deltas and correlations will be computed
+  auto correlations: lya.lya-lya.lya lya.lya-lya.lyb
+  cross correlations: lya.lya 
+
+  # Whether to use a different environment for sampler. If empty, the general
+  # environment will be used. The one below is mantained by Andrei Cuceu.
+  sampler environment: /global/common/software/desi/users/acuceu/stable_vega/activate_vega.sh
+
+  # If we want to compute zeff right before the fit
+  compute zeff: True
+
+  # If we want Vega to compute metals:
+  vega metals: False
+
+  
+  # Remove some fit options
+  no distortion: False # Whether to use distortion matrix
+  no bao: False
+  no hcd: False
+  no metals: False
+  no sky: False
+  no qso rad: False
+
+  rmin cf:
+  rmax cf: 
+  rmin xcf:
+  rmax xcf:
+
+
+  # To use same functions we call this extra_args although vega is used.
+  extra args:
+    vega_auto:
+      data:
+        tracer1-type: continuous
+
+    vega_auto:
+      general:
+      
+      lyalya_lyalya:
+
+    vega_cross:
+      general:
+
+      lyalya:
+
+    vega_main:
+      general:
+
+  ## It is possible to remove certain configuration parameters using the extra 
+  ## args section. For this, we use $ in the following way:
+  # exta args:
+  #   vega_main: 
+  #     all: # you can remove from general, specific regions or everywhere with "all"
+  #       sample:
+  #         ap: $
+  #         at: $
+    
+  slurm args:
+    run_vega: # minimizer args
+      general:
+        qos: shared
+        ntasks-per-node: 1
+        cpus-per-task: 8
+        OMP_NUM_THREADS: 1
+
+    run_vega_mpi: # sampler args
+      general:
+        nodes: 2
+        ntasks-per-node: 128 # Use always per-node within the bookkeeper!
