@@ -1,0 +1,11 @@
+#! /bin/bash
+
+set -e
+echo Running ruff src tests
+uv run ruff check --fix src tests
+echo Running isort
+uv run isort src tests
+echo Running black.
+uv run black src tests
+echo Running mypy
+uv run mypy src tests
