@@ -1,0 +1,132 @@
+Metadata-Version: 2.1
+Name: pbip-extractor
+Version: 0.1.0
+Summary: pbip extractor helps to get an overview of all the variables used in a Power BI report.
+Author-email: Jeanine Schoonemann <jeanine.schoonemann@cmotions.com>
+License: MIT License
+        
+        Copyright (c) 2024, Jeanine J. Schoonemann
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Repository, https://github.com/example/pbip-extractor.git
+Keywords: powerbi,pbip,json,semantic model
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=1.1.5
+Provides-Extra: dev
+Requires-Dist: pbip-extractor[docs,test]; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: mkdocs==1.5.3; extra == "docs"
+Requires-Dist: mkdocs-material==9.5.18; extra == "docs"
+Requires-Dist: mkdocstrings-python==1.10.0; extra == "docs"
+Requires-Dist: mkdocstrings==0.24.3; extra == "docs"
+Provides-Extra: publish
+Requires-Dist: setuptools>=68.2.2; extra == "publish"
+Requires-Dist: bump2version>=1.0.1; extra == "publish"
+Requires-Dist: wheel>=0.41.2; extra == "publish"
+Requires-Dist: twine>=5.1.1; extra == "publish"
+Provides-Extra: test
+Requires-Dist: pytest>=5.4.3; extra == "test"
+Requires-Dist: pytest-cov>=2.6.1; extra == "test"
+Requires-Dist: ruff~=0.4.7; extra == "test"
+
+# pbip_extractor
+`pbip_extractor` is a Python package designed to extract metadata and information from Power BI reports (pbip files). It helps in analyzing and understanding the components of Power BI reports, giving insights into which columns and measures are used in the report and where/how.
+
+## Installation
+
+Install the package using pip:
+
+```bash
+pip install pbip_extractor
+```
+
+## Usage
+
+Import the package in your Python script or notebook:
+
+```python
+from pbip_extractor import PbipExtractor
+```
+
+### Extracting from a Report with a Data Model
+
+For reports containing an embedded data model:
+
+```python
+# initialize the extractor
+pbip_path = "path/to/datamodel_dir/"
+pbip_filename = "datamodel"
+pbip = PbipExtractor(pbip_path=pbip_path, 
+                    pbip_filename=pbip_filename, 
+                    verbose=False,
+                    )
+# run the analysis
+pbip.run()
+# inspect the output
+pbip.report_df.head()
+pbip.column_in_report_df.head()
+```
+
+### Extracting from a Report with a Live Connection
+
+For reports using live connections to external data sources:
+
+```python
+# report with the datamodel
+# initialize the extractor
+pbip_path_datamodel = "path/to/datamodel_dir/"
+pbip_filename_datamodel = "datamodel"
+datamodel_pbip = PbipExtractor(pbip_path=pbip_path, 
+                               pbip_filename=pbip_filename, 
+                               verbose=False,
+                               )
+# run the analysis
+datamodel_pbip.run()
+# extract the output needed as input in the next step
+df_datamodel_overview = datamodel_pbip.report_df[['table', 'column']]
+
+# report with live connection
+# initialize the extractor
+pbip_path_liveconn = "path/to/report_dir/"
+pbip_filename_liveconn = "live connection report"
+pbip_liveconn = PbipExtractor(pbip_path=pbip_path_liveconn, 
+                              pbip_filename=pbip_filename_liveconn, 
+                              df_source=df_datamodel_overview, 
+                              verbose=True,
+                              )
+# run the analysis
+pbip_liveconn.run()
+# inspect the output
+pbip_liveconn.report_df.head()
+pbip_liveconn.column_in_report_df.head()
+```
+
+## Repository
+
+The source code is available on [GitLab](https://gitlab.com/jeaninejuliette/pbip_extractor).
+
+## Contributing
+
+Contributions are welcome. Please fork the repository and submit merge requests on GitLab. For major changes, open an issue to discuss proposed modifications.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
