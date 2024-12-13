@@ -1,0 +1,127 @@
+Metadata-Version: 2.1
+Name: atr-dan
+Version: 0.2.0rc12
+Summary: Teklia DAN
+Author-email: Teklia <contact@teklia.com>
+Project-URL: Homepage, https://atr.pages.teklia/dan/
+Project-URL: Documentation, https://atr.pages.teklia/dan/
+Project-URL: Repository, https://gitlab.teklia.com/atr/dan
+Project-URL: Bug Tracker, https://gitlab.teklia.com/atr/dan/issues
+Project-URL: Maintainers, https://teklia.com
+Keywords: python,HTR,OCR,NER,machine learning,pytorch
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: CeCILL-C Free Software License Agreement (CECILL-C)
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Text Processing :: Linguistic
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Image Recognition
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: LICENCE
+Requires-Dist: albumentations==1.3.1
+Requires-Dist: arkindex-export==0.1.12
+Requires-Dist: flashlight-text==0.0.7
+Requires-Dist: imageio==2.26.1
+Requires-Dist: imagesize==1.4.1
+Requires-Dist: lxml==5.2.1
+Requires-Dist: matplotlib==3.8.3
+Requires-Dist: mdutils==1.6.0
+Requires-Dist: nltk==3.8.1
+Requires-Dist: numpy==1.24.3
+Requires-Dist: PyYAML==6.0.1
+Requires-Dist: scipy==1.12.0
+Requires-Dist: sentencepiece==0.1.99
+Requires-Dist: teklia-line-image-extractor==0.5.0
+Requires-Dist: teklia-nerval==0.3.3rc3
+Requires-Dist: tenacity==8.2.3
+Requires-Dist: tensorboard==2.17.0
+Requires-Dist: torch==2.2.0
+Requires-Dist: torchaudio==2.2.0
+Requires-Dist: torchvision==0.17.0
+Requires-Dist: tqdm==4.65.0
+Requires-Dist: wandb==0.17.0
+Provides-Extra: mlflow
+Requires-Dist: mlflow-skinny==2.2.2; extra == "mlflow"
+Requires-Dist: pandas==2.0.0; extra == "mlflow"
+Requires-Dist: boto3==1.26.124; extra == "mlflow"
+
+# DAN: a Segmentation-free Document Attention Network for Handwritten Document Recognition
+
+[![Python >= 3.10](https://img.shields.io/badge/Python-%3E%3D3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+
+For more details about this package, make sure to see the documentation available at <https://atr.pages.teklia.com/dan/>.
+
+This is an open-source project, licensed using [the CeCILL-C license](https://cecill.info/index.en.html).
+
+## Inference
+
+To apply DAN to an image, one needs to first add a few imports and to load an image. Note that the image should be in RGB.
+
+```python
+import cv2
+from dan.ocr.predict.inference import DAN
+
+image = cv2.cvtColor(cv2.imread(IMAGE_PATH), cv2.COLOR_BGR2RGB)
+```
+
+Then one can initialize and load the trained model with the parameters used during training. The directory passed as parameter should have:
+
+- a `model.pt` file,
+- a `charset.pkl` file,
+- a `parameters.yml` file corresponding to the `inference_parameters.yml` file generated during training.
+
+```python
+from pathlib import Path
+
+model_path = Path("models")
+
+model = DAN("cpu")
+model.load(model_path, mode="eval")
+```
+
+To run the inference on a GPU, one can replace `cpu` by the name of the GPU. In the end, one can run the prediction:
+
+```python
+from pathlib import Path
+from dan.utils import parse_charset_pattern
+
+# Load image
+image_path = "images/page.jpg"
+_, image = dan_model.preprocess(str(image_path))
+
+input_tensor = image.unsqueeze(0)
+input_tensor = input_tensor.to("cpu")
+input_sizes = [image.shape[1:]]
+
+# Predict
+text, confidence_scores = model.predict(
+    input_tensor,
+    input_sizes,
+    char_separators=parse_charset_pattern(dan_model.charset),
+    confidences=True,
+)
+```
+
+## Training
+
+This package provides three subcommands. To get more information about any subcommand, use the `--help` option.
+
+### Get started
+
+See the [dedicated page](https://atr.pages.teklia.com/dan/get_started/training/) on the official DAN documentation.
+
+### Data extraction from Arkindex
+
+See the [dedicated page](https://atr.pages.teklia.com/dan/usage/datasets/extract/) on the official DAN documentation.
+
+### Model training
+
+See the [dedicated page](https://atr.pages.teklia.com/dan/usage/train/) on the official DAN documentation.
+
+### Model prediction
+
+See the [dedicated page](https://atr.pages.teklia.com/dan/usage/predict/) on the official DAN documentation.
