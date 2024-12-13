@@ -1,0 +1,107 @@
+Metadata-Version: 2.1
+Name: regbot
+Version: 0.1.0
+Summary: Fetch regulatory approval data for drug terms
+Author: Wagner Lab
+License: MIT License
+        
+        Copyright (c) 2024 Wagner Laboratory at the Institute for Genomic Medicine
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/genomicmedlab/regbot
+Project-URL: Documentation, https://github.com/genomicmedlab/regbot
+Project-URL: Changelog, https://github.com/genomicmedlab/regbot/releases
+Project-URL: Source, https://github.com/genomicmedlab/regbot
+Project-URL: Bug Tracker, https://github.com/genomicmedlab/regbot/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: pytest-cov; extra == "tests"
+Requires-Dist: requests-mock; extra == "tests"
+Provides-Extra: dev
+Requires-Dist: pre-commit>=3.7.1; extra == "dev"
+Requires-Dist: ruff==0.5.0; extra == "dev"
+
+# 🤖 regbot 🤖
+
+[![image](https://img.shields.io/pypi/v/regbot.svg)](https://pypi.python.org/pypi/regbot)
+[![image](https://img.shields.io/pypi/l/regbot.svg)](https://pypi.python.org/pypi/regbot)
+[![image](https://img.shields.io/pypi/pyversions/regbot.svg)](https://pypi.python.org/pypi/regbot)
+[![Actions status](https://github.com/genomicmedlab/regbot/actions/workflows/checks.yaml/badge.svg)](https://github.com/genomicmedlab/regbot/actions/checks.yaml)
+
+<!-- description -->
+Fetch regulatory approval data for drug terms
+<!-- /description -->
+
+
+
+---
+
+## Installation
+
+Install from [PyPI](https://pypi.org/project/regbot/):
+
+```shell
+python3 -m pip install regbot
+```
+
+---
+
+## Development
+
+Clone the repo and create a virtual environment:
+
+```shell
+git clone https://github.com/genomicmedlab/regbot
+cd regbot
+python3 -m virtualenv venv
+source venv/bin/activate
+```
+
+Install development dependencies and `pre-commit`:
+
+```shell
+python3 -m pip install -e '.[dev,tests]'
+pre-commit install
+```
+
+Check style with `ruff`:
+
+```shell
+python3 -m ruff format . && python3 -m ruff check --fix .
+```
+
+Run tests with `pytest`:
+
+```shell
+pytest
+```
