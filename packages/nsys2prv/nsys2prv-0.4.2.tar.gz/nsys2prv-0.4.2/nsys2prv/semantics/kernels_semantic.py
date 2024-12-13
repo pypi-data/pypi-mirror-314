@@ -1,0 +1,64 @@
+from .nsys_event import NsysEvent
+import os.path
+from sqlalchemy import text
+
+class KernelsSemantic(NsysEvent):
+    def __init__(self, report) -> None:
+        super().__init__(report)
+    
+    def Setup(self):
+        subset_tables = []
+        base_query = """
+            WITH recs AS (
+                {subset_tables_q}
+            )
+            SELECT
+                start AS "Start (ns)",
+                duration AS "Duration:dur_ns",
+                correlation AS "CorrID",
+                gridX AS "GrdX",
+                gridY AS "GrdY",
+                gridZ AS "GrdZ",
+                blockX AS "BlkX",
+                blockY AS "BlkY",
+                blockZ AS "BlkZ",
+                regsperthread AS "Reg/Trd",
+                ssmembytes AS "StcSMem:mem_B",
+                dsmembytes AS "DymSMem:mem_B",
+                bytes AS "bytes_b",
+                CASE
+                    WHEN bytes IS NULL
+                        THEN NULL
+                    ELSE
+                        bytes * (1000000000 / duration)
+                END AS "Throughput:thru_B",
+                srcmemkind AS "SrcMemKd",
+                dstmemkind AS "DstMemKd",
+                device AS "Device",
+                deviceId as "deviceid",
+                PID AS "Pid",
+                context AS "Ctx",
+                NULLIF(greenContext, 0) AS "GreenCtx",
+                stream AS "Strm",
+                name AS "Name"
+            FROM recs
+            ORDER BY start;
+        """
+        union = """
+            UNION ALL
+        """
+
+        if self.check_table("CUPTI_ACTIVITY_KIND_KERNEL"):
+            with open(os.path.join(os.path.dirname(__file__), '../scripts/kernels.sql'), 'r') as query:
+                subset_tables.append(query.read())
+        if self.check_table("CUPTI_ACTIVITY_KIND_MEMCPY"):
+            with open(os.path.join(os.path.dirname(__file__), '../scripts/memcpy.sql'), 'r') as query:
+                subset_tables.append(query.read())
+        if self.check_table("CUPTI_ACTIVITY_KIND_MEMSET"):
+            with open(os.path.join(os.path.dirname(__file__), '../scripts/memset.sql'), 'r') as query:
+                subset_tables.append(query.read())
+        
+        if len(subset_tables) == 0:
+            self._empty = True
+
+        self.query = text(base_query.format(subset_tables_q = union.join(subset_tables)))
