@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "polite-config"
+version = "1.0.0"
+authors = ["Mathew Toppper <damm_horse@yahoo.co.uk>"]
+description = "Easy functions for paths, logging and configuration files"
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/DTOcean/dtocean"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+packages = [{include = "polite_config", from="src"}]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/DTOcean/dtocean/issues"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.dependencies]
+python = "^3.13"
+configobj = "^5.0.9"
+pyyaml = "^6.0.2"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+pytest-mock = "^3.14.0"
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "src/polite_config/appdirs.py" # omit appdirs as developed externally
+]
+source = [
+    "src"
+]
+
+[tool.ruff]
+line-length = 80
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
