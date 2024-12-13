@@ -1,0 +1,69 @@
+name: setup-dev-env
+description: "Setup development environment"
+
+inputs:
+  python-version:
+    default: "3.10"
+    description: "Python version to install."
+  optional-dependencies:
+    default: "true"
+    description: "Install ragna with [all], i.e. all optional dependencies"
+
+runs:
+  using: composite
+
+  steps:
+    - name: Setup miniforge and empty development environment
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        miniforge-version: latest
+        activate-environment: ragna-dev
+
+    - name: Display conda info
+      shell: bash -elo pipefail {0}
+      run: conda info
+
+    - name: Set cache date
+      id: cache-key
+      shell: bash
+      run: |
+        DATE=$(date +'%Y%m%d')
+        echo "date=${DATE}" | tee -a "${GITHUB_OUTPUT}"
+
+    - name: Restore conda environment
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.CONDA }}/envs
+        key:
+          env-${{ runner.os }}-${{ runner.arch }}-${{ inputs.python-version
+          }}|${{steps.cache-key.outputs.date }}-${{ hashFiles('environment-dev.yml',
+          'pyproject.toml') }}
+
+    - name: Update conda environment if necessary
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        sed -i'' -e 's/python *= *[0-9.]\+/python =${{ inputs.python-version }}/g' environment-dev.yml
+        cat environment-dev.yml
+        mamba env update --quiet --file environment-dev.yml
+        git checkout -- environment-dev.yml
+
+    #    - name: Install playwright
+    #      shell: bash -el {0}
+    #      run: playwright install
+
+    - name: Install ragna
+      shell: bash -elo pipefail {0}
+      run: |
+        if [[ ${{ inputs.optional-dependencies }} == true ]]
+        then
+          PROJECT_PATH='.[all]'
+        else
+          PROJECT_PATH='.'
+        fi
+        pip install --verbose --progress-bar=off --editable "${PROJECT_PATH}"
+
+    - name: Display development environment
+      shell: bash -elo pipefail {0}
+      run: conda list

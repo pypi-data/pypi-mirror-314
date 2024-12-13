@@ -1,0 +1,27 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: end-of-file-fixer
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        types_or:
+          - markdown
+          - toml
+          - yaml
+          - javascript
+          - css
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.1
+    hooks:
+      - id: ruff-format
+        exclude: "^docs/(tutorials|examples)/gallery_.*?\\.py$"
+      - id: ruff-format
+        files: "^docs/(tutorials|examples)/gallery_.*?\\.py$"
+        args: [--line-length=83]
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]

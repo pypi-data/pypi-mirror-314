@@ -1,0 +1,98 @@
+site_name: Ragna
+
+repo_url: https://github.com/Quansight/ragna
+copyright: Copyright &copy; 2023 Ragna Development Team at Quansight LLC
+extra:
+  social:
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/ragna/
+  analytics:
+    provider: plausible
+    domain: ragna.chat
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  logo: assets/brand/logo-symbol/logo-symbol-white.png
+  palette:
+    primary: custom
+    accent: custom
+  font:
+    text: Fira Sans
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - search
+    - search.suggest
+    - search.highlight
+    - announce.dismiss
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
+  - footnotes
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - mdx_truly_sane_lists
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+            show_root_heading: true
+            show_bases: false
+            unwrap_annotated: true
+          import:
+            - https://docs.python.org/3/objects.inv
+            - https://fastapi.tiangolo.com/objects.inv
+  - gallery:
+      examples_dirs:
+        - docs/examples
+        - docs/tutorials
+      gallery_dirs:
+        - docs/generated/examples
+        - docs/generated/tutorials
+      filename_pattern: "/gallery_"
+      default_thumb_file: docs/assets/brand/logo-symbol/logo-symbol.svg
+  - gen-files:
+      scripts:
+        - scripts/docs/gen_files.py
+  - material-plausible
+
+hooks:
+  - scripts/docs/rtd.py
+
+watch:
+  - ragna
+  - scripts/docs
+
+extra_css:
+  - assets/stylesheet.css
+
+# Explicit navigation
+nav:
+  - index.md
+  - install.md
+  - Examples: generated/examples
+  - Tutorials: generated/tutorials
+  - Community:
+      - community/welcome.md
+      - community/contribute.md
+  - References:
+      - references/python-api.md
+      - references/deploy.md
+      - references/cli.md
+      - references/config.md
+      - references/faq.md
+      - references/release-notes.md
