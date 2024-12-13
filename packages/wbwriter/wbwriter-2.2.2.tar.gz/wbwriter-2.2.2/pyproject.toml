@@ -1,0 +1,32 @@
+[project]
+name = "wbwriter"
+description = ""
+authors = [{ name = "Christopher Wittlinger", email = "c.wittlinger@stainly.com"}]
+dynamic = ["version"]
+
+dependencies = [
+  "wbcore",
+  "pillow == 9.1.*",
+  "reportlab == 3.*",
+  "weasyprint == 57.*",
+]
+
+[tool.uv.sources]
+wbcore = { workspace = true }
+
+[tool.uv]
+package = true
+
+[tool.hatch.version]
+path = "../../pyproject.toml"
+
+[tool.hatch.build.targets.sdist]
+include = ["wbwriter/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wbwriter"]
+only-packages = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
