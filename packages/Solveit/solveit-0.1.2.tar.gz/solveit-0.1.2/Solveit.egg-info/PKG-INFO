@@ -1,0 +1,123 @@
+Metadata-Version: 2.1
+Name: Solveit
+Version: 0.1.2
+Summary: A comprehensive toolkit for data processing and problem-solving
+Home-page: https://github.com/KashyapSinh-Gohil/Solveit
+Author: Kashyapsinh Gohil
+Author-email: k.agohil000@gmail.com
+Project-URL: Bug Tracker, https://github.com/KashyapSinh-Gohil/Solveit/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: matplotlib>=3.4.0
+Requires-Dist: scipy>=1.7.0
+Requires-Dist: networkx>=2.6.0
+Requires-Dist: pytest>=7.0.0
+Requires-Dist: pytest-cov>=4.0.0
+Requires-Dist: openpyxl>=3.0.0
+Requires-Dist: xlrd>=2.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: isort>=5.0.0; extra == "dev"
+Requires-Dist: mypy>=0.900; extra == "dev"
+Requires-Dist: twine>=3.4.0; extra == "dev"
+
+# Solveit
+
+[![PyPI version](https://badge.fury.io/py/Solveit.svg)](https://badge.fury.io/py/Solveit)
+[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/release/python-370/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A comprehensive Python toolkit for data processing and problem-solving.
+
+## Features
+
+- **Data Cleaning**: Advanced tools for handling missing values, outliers, and duplicates
+- **Unit Conversion**: Comprehensive unit conversion system
+- **Pathfinding**: Implementation of various pathfinding algorithms
+- **Financial Calculations**: Tools for financial computations
+- **Time Management**: Scheduling and timeline optimization
+- **Visualization**: Easy-to-use plotting utilities
+
+## Installation
+
+```bash
+pip install Solveit
+```
+
+## Usage Examples
+
+### Data Cleaning
+```python
+from solveit.data.cleaner import DataCleaner
+import pandas as pd
+
+# Create sample data
+data = {
+    'Name': ['John', 'Jane', 'John', None, 'Bob'],
+    'Age': [25, 30, 25, None, 100],
+    'Salary': [50000, None, 50000, 60000, 1000000]
+}
+df = pd.DataFrame(data)
+
+# Initialize cleaner
+cleaner = DataCleaner()
+
+# Clean the data
+cleaned_df = cleaner.process_file(
+    input_path='data.csv',
+    output_path='cleaned_data.csv',
+    operations=[
+        ('remove_duplicates', {}),
+        ('handle_missing_values', {'strategy': 'mean'}),
+        ('remove_outliers', {'columns': ['Age', 'Salary']})
+    ]
+)
+```
+
+### Unit Conversion
+```python
+from solveit.units.converter import UnitConverter, UnitType
+
+converter = UnitConverter()
+
+# Convert kilometers to miles
+miles = converter.convert(100, "km", "mile", UnitType.LENGTH)
+print(f"100 km = {miles:.2f} miles")
+
+# Convert Celsius to Fahrenheit
+fahrenheit = converter.convert(0, "C", "F", UnitType.TEMPERATURE)
+print(f"0°C = {fahrenheit}°F")
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Author
+
+- **Kashyapsinh Gohil** - [GitHub](https://github.com/KashyapSinh-Gohil)
+- Email: k.agohil000@gmail.com
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
