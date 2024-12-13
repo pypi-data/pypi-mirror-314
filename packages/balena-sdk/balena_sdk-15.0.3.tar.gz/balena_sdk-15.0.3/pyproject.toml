@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "balena-sdk"
+version = "15.0.3"
+description = ""
+authors = ["Balena <info@balena.io>"]
+license = "Apache License 2.0"
+readme = "README.md"
+packages = [{include = "balena"}]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+PyJWT = ">=2.0.0"
+requests = ">=2.19.1"
+pyOpenSSL = ">=18.0.0"
+Twisted = ">=18.7.0"
+service-identity = "*"
+semver = "^3.0.0"
+pine-client= "*"
+typing_extensions = "*"
+deprecated = "^1.2.13"
+ratelimit = "^2.2.1"
+
+[tool.poetry.dev-dependencies]
+black = {version = "*", python = ">=3.8.1"}
+pydocstyle = "*"
+flake8 = "*"
+pytest= "*"
+
+[tool.pytest.ini_options]
+# Tests are run via the custom action in .github/actions/test/action.yml
+addopts = "-s"
+python_files = ["skip.py"]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
