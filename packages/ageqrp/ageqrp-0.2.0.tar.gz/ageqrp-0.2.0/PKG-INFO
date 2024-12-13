@@ -1,0 +1,110 @@
+Metadata-Version: 2.3
+Name: ageqrp
+Version: 0.2.0
+Summary: Query Results Parser (QRP) for Apache AGE database queries using psycopg
+Project-URL: Homepage, https://github.com/cjoakim/ageqrp
+Project-URL: Issues, https://github.com/cjoakim/ageqrp/issues
+Project-URL: Repository, https://github.com/cjoakim/ageqrp
+Author-email: Chris Joakim <christopher.joakim@gmail.com>
+Maintainer-email: Chris Joakim <christopher.joakim@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2024 Chris Joakim
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Keywords: Apache AGE,parser,psycopg,query,results
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+
+# ageqrp
+
+Query Results Parser (QRP) for Apache AGE database queries using psycopg
+
+## Urls
+
+- PyPi: https://pypi.org/project/ageqrp/
+- GitHub: https://github.com/cjoakim/ageqrp
+
+## Features
+
+- Easy to use
+- Transforms the augmented AGE JSON into regular JSON
+
+
+## Quick start
+
+
+### Installation
+
+```
+$ pip install ageqrp
+```
+
+### Use
+
+```
+import json
+
+from ageqrp import QueryResultParser
+
+import psycopg_pool
+
+...
+
+# This example is from a FastAPI web application
+
+async def post_query(req: Request, query_type):
+    form_data = await req.form()
+    cypher_query = form_data.get("cypher_query").replace("\r\n", "").strip()
+    result_objects = list()
+    qrp = QueryResultParser()
+        
+    try:
+        async with req.app.async_pool.connection() as conn:
+            async with conn.cursor() as cursor:
+                try:
+                    await asyncio.wait_for(cursor.execute(cypher_query), timeout=10.0)
+                    results = await cursor.fetchall()
+                    for row in results:
+                        # psycopg results parsed into regular JSON objects here
+                        result_objects.append(qrp.parse(row))
+```
+
+The above cypher_query may look something like this:
+
+```
+select * from ag_catalog.cypher('legal_cases',
+  $$ MATCH (c:Case {id: 999494})-[r:cites*1..2]->(c2:Case) RETURN c,r limit 100 $$)
+  as (c agtype, r agtype);
+```
+
+Also see file **sample-program.py** in the GitHub repo as well as the unit tests
+in the tests/ directory.
+
+---
+
+## Changelog
+
+Current version: 0.2.0
+
+-  2024/12/12, version 0.2.0, Docs and tests enhanced
+-  2024/12/01, version 0.1.0, Initial Production release
