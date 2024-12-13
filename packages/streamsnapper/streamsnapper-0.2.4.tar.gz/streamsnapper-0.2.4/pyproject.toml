@@ -1,0 +1,66 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "streamsnapper"
+version = "0.2.4"
+description = "StreamSnapper is an intuitive library designed to simplify, enhance, and organize media downloads from a variety of audiovisual platforms. It offers efficient, high-speed media extraction with optional tools for extracting data from these platforms."
+authors = ["henrique-coder <hjyz6rqyb@mozmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/henrique-coder/streamsnapper"
+documentation = "https://github.com/henrique-coder/streamsnapper"
+repository = "https://github.com/henrique-coder/streamsnapper"
+keywords = ["stream", "snapper", "scraper", "downloader", "merger", "youtube"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = { version = "2.32.3", optional = true }
+rich = { version = "13.9.4", optional = true }
+scrapetube = { version = "2.5.1", optional = true }
+yt-dlp = { version = "2024.12.6", optional = true }
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+rich = "*"
+
+[tool.poetry.extras]
+downloader = ["requests", "rich"]
+merger = []
+youtube = ["requests", "rich", "scrapetube", "yt-dlp"]
+all = ["requests", "rich", "scrapetube", "yt-dlp"]
+
+[tool.ruff]
+include = ["streamsnapper/*.py", "streamsnapper/platforms/*.py", "tests/*.py"]
+exclude = [".venv", "__pycache__", ".ruff_cache"]
+target-version = "py313"
+line-length = 130
+indent-width = 4
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+unfixable = []
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = true
+line-ending = "auto"
