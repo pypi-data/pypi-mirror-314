@@ -1,0 +1,19 @@
+[package]
+name = "pyisg"
+version = "0.1.8"
+edition = "2021"
+rust-version = "1.63" # by PyO3
+authors = ["Kentaro Tatsumi <paqira.2019@gmail.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/paqira/pyisg"
+
+[lib]
+name = "rust_impl"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.23.3" }
+libisg = { version = "0.2.5" }
+
+[profile]
+release = { lto = true }

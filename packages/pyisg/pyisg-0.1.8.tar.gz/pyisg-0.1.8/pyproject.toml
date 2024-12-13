@@ -1,0 +1,113 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "pyisg"
+authors = [
+    { name = "Kentaro Tatsumi", email = "paqira.2019@gmail.com" },
+]
+description = "Library reading/writing the ISG 2.0 format"
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = [
+    "GIS",
+    "ISG",
+    "isg file",
+]
+license = { text = "MIT OR Apache-2.0" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+
+dependencies = [
+    'typing-extensions >= 4.0.0; python_version < "3.11"'
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://pyisg.readthedocs.io"
+Issues = "https://github.com/paqira/pyisg/issues"
+Source = "https://github.com/paqira/pyisg"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "pyisg.rust_impl"
+
+[tool.hatch.version]
+path = "pyisg/__init__.py"
+
+# types
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+    "mypy>=1.0.0",
+]
+
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:pyisg}"
+
+# docs
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "sphinx",
+    "myst_nb",
+    "sphinx_book_theme",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -b html ./doc/source ./doc/build/html"
+
+# test
+# Workaround: hatch test does not support pre-test command,
+# see .github/workflows/CI.yml
+[[tool.hatch.envs.test.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+# [[tool.hatch.envs.hatch-test.matrix]]
+# python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+# ruff
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    "tests",
+    "doc",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "C90",
+    "I",
+    "N",
+    "B",
+    "D",
+]
+ignore = [
+    "N999", # Invalid module name:
+    "D104", #  Missing docstring in public package
+    "D105", # Missing docstring in magic method
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+required-imports = [
+    "from __future__ import annotations",
+]

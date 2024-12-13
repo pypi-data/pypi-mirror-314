@@ -1,0 +1,16 @@
+version: 2
+
+build:
+  os: ubuntu-lts-latest
+  tools:
+    python: latest
+    rust: latest
+  commands:
+    - python3 -m venv venv
+    - pip install sphinx myst_nb sphinx_book_theme maturin
+    - |
+      . venv/bin/activate
+      maturin develop
+    - sphinx-build -b html ./doc/source ./doc/build/html
+    - mkdir --parents $READTHEDOCS_OUTPUT
+    - mv doc/build/html $READTHEDOCS_OUTPUT/html
