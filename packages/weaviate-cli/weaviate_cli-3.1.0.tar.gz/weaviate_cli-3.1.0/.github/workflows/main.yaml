@@ -1,0 +1,77 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint-and-format:
+    name: Run Linter and Formatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements-dev.txt
+      - name: "Black"
+        run: black --check cli.py weaviate_cli test
+      - name: "Check release for pypi"
+        run: |
+          python -m build
+          python -m twine check dist/*
+
+  unit-tests:
+    name: Run Unit Tests
+    needs: [lint-and-format]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.version }}
+    - run: pip install -e .
+    - name: Run unit tests with pytest
+      run: |
+        pip install pytest-html
+        pytest test/unittests --html=test-report-${{ matrix.version }}.html --self-contained-html
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.version }}
+        path: test-report-${{ matrix.version }}.html
+
+  integration-tests:
+    needs: [unit-tests]
+    env:
+      WEAVIATE_VERSION: "1.27.0"
+      MODULES: "text2vec-transformers,text2vec-contextionary"
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.version }}
+    - run: pip install -e .
+    - name: Start up Weaviate cluster
+      uses: weaviate/weaviate-local-k8s@v2
+      with:
+        workers: 1
+        replicas: 1
+        weaviate-version: ${{ env.WEAVIATE_VERSION }}
+        modules: ${{ env.MODULES }}
+        enable-backup: true
+    - name: Run integration tests with pytest
+      run: |
+        pip install pytest-html
+        pytest test/integration/ --html=test-report-${{ matrix.version }}.html --self-contained-html

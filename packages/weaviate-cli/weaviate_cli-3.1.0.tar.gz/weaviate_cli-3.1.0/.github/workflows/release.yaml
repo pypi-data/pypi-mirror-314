@@ -1,0 +1,69 @@
+name: Build and Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-package:
+    name: Build a package
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Set up Python 3.11
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.11"
+        - name: Install dependencies
+          run: pip install -r requirements-dev.txt
+        - name: Build a binary wheel
+          run: python -m build
+        - name: Create Wheel Artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            path: "dist/*.whl"
+            name: weaviate-cli-wheel
+            retention-days: 30
+  gh-release:
+      name: Create a GitHub Release on new tags
+      needs: [build-package]
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+      steps:
+        - name: Download build artifact to append to release
+          uses: actions/download-artifact@v4
+          with:
+            name: weaviate-cli-wheel
+            path: dist
+        - name: Release
+          uses: softprops/action-gh-release@v2
+          with:
+            generate_release_notes: true
+            draft: true
+            files: dist/*.whl
+  publish:
+    runs-on: ubuntu-latest
+    needs: [gh-release]
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Set up Python 3.11
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.11"
+        - name: Install dependencies
+          run: pip install -r requirements-dev.txt
+        - name: Build a binary wheel
+          run: python -m build
+        - name: Publish distribution 📦 to PyPI on new tags
+          uses: pypa/gh-action-pypi-publish@release/v1
+          with:
+            verbose: true
+            password: ${{ secrets.PYPI_API_TOKEN }}
