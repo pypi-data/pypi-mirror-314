@@ -1,0 +1,54 @@
+{% extends 'allianceauth/base-bs5.html' %}
+{% load outfit_tags %}
+
+{% block page_title %}418 Audit{% endblock page_title %}
+
+{% block extra_css %}
+    {% include "bundles/datatables-css-bs5.html" %}
+    <link rel="stylesheet" type="text/css" href="{% allianceauth_pve_static 'allianceauth_pve/css/spop.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% allianceauth_pve_static 'allianceauth_pve/css/copy_text.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12" style="padding: 10px 10px 10px 10px">
+        <table class="table table-aa">
+            <thead>
+                <tr>
+                    <th>Main</th>
+                    <th>Characters</th>
+                    <th>Last login (ET)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for main in mains %}
+                    <tr>
+                        <td><span class="copy-text">{{ main.character.character_name }}</span></td>
+                        <td>
+                            {% for char in main.character.character_ownership.user.chars %}
+                                <span class="badge {% if char.character|ct_is_active %}text-bg-primary{% else %}text-bg-danger{% endif %} copy-text" data-bs-toggle="tooltip" data-bs-title="Last login (ET): {{ char.last_login|date:"Y/m/d H:i" }}">{{ char.character.character_name }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <span class="badge {% if main.is_updating %}text-bg-primary{% else %}text-bg-danger{% endif %}" data-bs-toggle="tooltip" data-bs-title="Older update between all chars: {% if main.older_last_update %}{{ main.older_last_update|date:"Y/m/d H:i" }}{% else %}Never{% endif %}">{{ main.last_login|date:"Y/m/d H:i" }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+
+{% block extra_javascript %}
+    {% include "bundles/datatables-js-bs5.html" %}
+    <script src="{% allianceauth_pve_static 'allianceauth_pve/js/spop.js' %}"></script>
+    <script src="{% allianceauth_pve_static 'allianceauth_pve/js/copy_text.js' %}"></script>
+{% endblock extra_javascript %}
+
+{% block extra_script %}
+    $(document).ready(function() {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('.table').DataTable({
+            "pageLength": 50
+        });
+    });
+{% endblock extra_script %}
