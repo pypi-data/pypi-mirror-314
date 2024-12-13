@@ -1,0 +1,132 @@
+[tool.poetry]
+name = "oqtant"
+version = "3.3.4"
+description = "Oqtant Desktop Suite"
+authors = [
+  "Larry Buza <lawrence.buza@coldquanta.com>",
+  "Hannah North <hannah.north@coldquanta.com>",
+  "Mike McGrath <michael.mcgrath@coldquanta.com>",
+  "Noah Fitch <noah.fitch@coldquanta.com>",
+]
+license = "Apache-2.0"
+readme = "README.md"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+]
+include = ["documentation"]
+exclude = [
+  "oqtant/.pytest_cache/**/*",
+  "oqtant/**/__pycache__",
+  "oqtant/.gitignore",
+  "oqtant/tests/**/*",
+  "oqtant/README-DEV.md",
+  "oqtant/settings_dev.py"
+]
+homepage = "https://oqtant.infleqtion.com/"
+repository = "https://gitlab.com/infleqtion/albert/oqtant"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+matplotlib = "~3.6.2"
+numpy = "^1.23.2"
+requests = "^2.28.1"
+scipy = "1.10.0"
+urllib3 = "^1.26.12"
+uvicorn = { extras = ["standard"], version = "^0.20.0" }
+semver = "^3.0.0"
+tabulate = "^0.9.0"
+ipyauth = "^0.2.6"
+fastapi = "^0.103.1"
+pydantic = "^2.3.0"
+pydantic-settings = "^2.0.3"
+pyjwt = "^2.8.0"
+ipykernel = "^6.23.1"
+ipywidgets = "^7.6.5"
+traitlets = "5.9.0"
+notebook = "^6.4.12"
+killport = "^1.2.0"
+click = "^8.1.7"
+bert-schemas = {version = "^4.6.0", source = "bert-packages", allow-prereleases = true}
+
+[[tool.poetry.source]]
+name = "bert-packages"
+url = "https://gitlab.com/api/v4/projects/39544653/packages/pypi/simple"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[tool.poetry.group.dev.dependencies]
+responses = "^0.23.1"
+lazydocs = "^0.4.8"
+lxml = "^5.3.0"
+mypy = "^1.11.2"
+pre-commit = "^3.8.0"
+pydantic-factories = "^1.17.3"
+pytest = "^8.3.3"
+pytest-xdist = "^3.6.1"
+pytest-ordering = "^0.6"
+pytest-cov = "^5.0.0"
+ruff = "^0.6.8"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.lazydocs]
+overview-file = "oqtant_api_docs"
+ignored-modules = ["settings"]
+
+[tool.black]
+line-length = 100 
+
+[tool.ruff]
+target-version = 'py310'
+
+select = [
+  "C4",  # flake8-comprehensions
+  "E",   # Error
+  "F",   # pyflakes
+  "I",   # isort
+  "ISC", # flake8-implicit-str-concat
+  "N",   # pep8-naming
+  "Q",   # flake8-quotes
+  "S",   # bandit
+  "SIM", # flake8-simplify
+  "TRY", # tryceratops
+  "UP",  # pyupgrade
+  "W",   # Warning
+  "YTT", # flake8-2020
+]
+
+exclude = [
+  "tests",
+  "testing",
+  "alembic",
+  "__pycache__",
+  ".pytest_cache",
+  ".env",
+  ".venv",
+]
+
+ignore = [
+  "B905",   # zip strict=True; remove once python <3.10 support is dropped.
+  "E402",
+  "F401",
+  "TRY003", # Avoid specifying messages outside exception class; overly strict, especially for ValueError
+  "TRY301", # Abstract `raise` to an inner function
+  "TRY200", # raise from; not really needed when raising HTTPExceptions
+  "N802",   # function should be in lowercase; turn back on after refactoring schemas/job.py vars?
+  "N803",   # args should be in lowercase; turn back on after refactoring schemas/job.py vars?
+  "N806",   # variable should be in lowercase; turn back on after refactoring schemas/job.py vars?
+  "W505"    # ignore line length of docstrings
+]
+line-length = 120 # Must agree with Black
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
