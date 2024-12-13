@@ -1,0 +1,92 @@
+
+
+{% load static %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet"> 
+    <style>
+        .mail {
+            width: 95%;
+            max-width: 1050px;
+            margin: auto;
+            border: solid 1px  #65aa04;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .title {
+            background-color: #65aa04;
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: flex;
+            border-radius: 20px 20px 0 0;
+        }
+        h2 {
+            color: white;
+            font-size: 35px;
+            font-weight: 800;
+            margin: auto;
+        }
+        .logo {
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .logo img {
+            width:150px;
+            object-fit: contain;
+            background-color: white
+        }
+        .email-content {
+            max-width: 800px;
+            margin: auto;
+            width: 90%;
+        }
+        p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 20px;
+            margin: 40px 0 10px;
+        }
+        p.mb-30 {
+            margin-bottom: 30px;
+        }
+        a {
+            color:#65aa04;
+        }
+        b {
+            font-weight: 600;
+        }
+        ul, ol {
+            margin-top: 0 ;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        ol li {
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<div class="mail">
+    <div class="title">
+        <h2>
+          Vous avez été ajouté à la fiche acteur {{actor.longname}}
+        </h2>
+    </div>
+    <div class="logo">
+        <img src="{{uri}}{{actor.regionalnetwork.logo}}"
+        alt="logo">
+    </div>
+    <div class="email-content">
+        <p>Bonjour {{user.first_name}} {{user.last_name}},</p>
+        <p>Vous avez été ajouté comme utilisateur membre sur la fiche de l'acteur {{actor.longname}}.</p>
+        <p>Pour initialiser votre mot de passe et accéder à votre espace personnel Énergie Partagée, nous vous invitons à faire la procédure <a href="{{back_url}}/auth/password_reset/?email={{user.email}}">mot de passe oublié</a>.</p>
+        <p>Une fois votre mot de passe initialisé, vous retrouverez les informations de <a href="{{front_url}}/actors/actor/@{{back_url}}/actors/{{actor.id}}/@" target="_blank">{{actor.longname}}</a>.</p>
+        <p>A bientôt,</p>
+        <p class="mb-30">
+            <b>L'équipe Énergie Partagée</b>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}connexion{% endblock %}
+{% block content %}
+    <section id="login">
+        <div class="formulaire">
+            <h1>Connectez-vous</h1>
+            <form class="block_creat_count" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% if form.errors %}
+                <p class="error">
+                    Votre identifiant et votre mot de passe ne correspondent pas. Veuillez réessayer.
+                </p>
+                {% endif %}
+                <label>Identifiant ou e-mail</label>
+                {{ form.username }}
+                <label>Mot de passe</label>
+                {{ form.password }}
+                <input type="submit" value="Connexion" />
+                <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+            <div class="helptext fw500 helplink">
+                Mot de passe oublié ?
+                <a class="sib-link" href="/auth/password_reset/">cliquez ici</a>
+            </div>
+            <div class="helptext fw500 helplink">
+                Pas encore de compte ?
+                <a class="sib-link sib-register-link" href="{% url 'django_registration_register' %}?next={{next|urlencode}}"> Inscrivez-vous</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

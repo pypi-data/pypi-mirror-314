@@ -1,0 +1,32 @@
+Appel à cotisation  {{contribution.year}}
+
+Bonjour {{user.name}},
+Nous avons le plaisir de compter {{actor.longname}} parmi nos membres et vous êtes indiqué comme contact de gestion.
+
+
+
+Pour renouveler l’adhésion de votre structure au réseau de l’énergie citoyenne, nous vous invitons à récupérer votre appel à cotisation dans votre espace membre ici : {{front_url}}
+
+
+{% if actor.regionalnetwork.nationale == True %}
+Grâce à cette adhésion à Énergie Partagée, vous avez accès à l'ensemble des services du réseau.
+{% else %}
+Grâce à cette double adhésion à {{actor.regionalnetwork.name}} et Énergie Partagée, vous avez accès à l'ensemble des services du réseau.
+{% endif %}
+
+Votre cotisation {{contribution.year}} est de {{contribution.amount}}€. 
+Référence : {{actor.regionalnetwork.code}}-{{contribution.year}}-{{contribution.id}}
+
+Nous vous invitons à régler
+- par virement (de préférence) :
+IBAN : {{actor.regionalnetwork.iban}}
+BIC : {{actor.regionalnetwork.bic}}
+- ou par chèque à l'ordre :
+{{actor.regionalnetwork.orderpayment}} 
+{{actor.regionalnetwork.addresspayment}} 
+{{actor.regionalnetwork.postcodepayment}} {{actor.regionalnetwork.citypayment}}
+
+Après réception de votre cotisation, nous mettrons votre reçu à disposition dans votre espace membre.
+
+Pour toute question sur l'adhésion et la cotisation, n'hésitez pas à nous contacter.
+{{sender.name}}

@@ -1,0 +1,115 @@
+
+
+{% load static %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet"> 
+    <style>
+        .mail {
+            width: 95%;
+            max-width: 1050px;
+            margin: auto;
+            border: solid 1px  #65aa04;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .title {
+            background-color: #65aa04;
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: flex;
+            border-radius: 20px 20px 0 0;
+        }
+        h2 {
+            color: white;
+            font-size: 35px;
+            font-weight: 800;
+            margin: auto;
+        }
+        .logo {
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .logo img {
+            width:150px;
+            object-fit: contain;
+            background-color: white
+        }
+        .email-content {
+            max-width: 800px;
+            margin: auto;
+            width: 90%;
+        }
+        p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 20px;
+            margin: 30px 0;
+        }
+        a {
+            color:#65aa04;
+        }
+        b {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<div class="mail">
+    <div class="title">
+        <h2>
+        Appel à cotisation {{contribution.year}}
+        </h2>
+    </div>
+    <div class="logo">
+        <img src="{{uri}}{{actor.regionalnetwork.logo}}"
+        alt="logo">
+    </div>
+    <div class="email-content">
+        <p>
+            Bonjour {{user.name}},
+        </p>
+        <p>
+            <b>Nous avons le plaisir de compter {{actor.longname}} parmi nos membres</b> et vous êtes indiqué comme contact de gestion.
+        </p>
+        <p>
+            Pour renouveler l’adhésion de votre structure au réseau de l’énergie citoyenne, nous vous invitons à <b>récupérer votre appel à cotisation dans votre espace membre ici :</b><br/>
+            <a href="{{front_url}}" target="_blank">www.moncompte.energie-partagee.org</a>
+        </p>
+        <p>
+            
+            {% if actor.regionalnetwork.nationale == True %}
+            Grâce à cette adhésion à Énergie Partagée, vous avez accès à l'ensemble des services du réseau.
+            {% else %}
+            Grâce à cette double adhésion à {{actor.regionalnetwork.name}} et Énergie Partagée, vous avez accès à l'ensemble des services du réseau.
+            {% endif %}
+       
+        </p>
+        <p>
+            <b>Votre cotisation {{contribution.year}}</b> est de {{contribution.amount}}€. <br/>
+            Référence : <b>{{actor.regionalnetwork.code}}-{{contribution.year}}-{{contribution.contributionnumber}}</b>
+        </p>
+        <p>
+            Nous vous invitons à régler <br/>
+            - par virement (de préférence) :<br/>
+            IBAN : {{actor.regionalnetwork.iban}}<br/>
+            BIC : {{actor.regionalnetwork.bic}}<br/>
+            - ou par chèque à l'ordre :<br/>
+            {{actor.regionalnetwork.orderpayment}} <br/>
+            {{actor.regionalnetwork.addresspayment}} <br/>
+            {{actor.regionalnetwork.postcodepayment}} {{actor.regionalnetwork.citypayment}}
+        </p>
+        <p>
+            Après réception de votre cotisation, nous mettrons votre reçu à disposition dans votre espace membre.
+        </p>
+        <p>
+            Pour toute question sur l'adhésion et la cotisation, n'hésitez pas à nous contacter.
+        </p>
+        
+        <p>
+            {{sender.name}}
+        </p>
+    </div>
+</div>

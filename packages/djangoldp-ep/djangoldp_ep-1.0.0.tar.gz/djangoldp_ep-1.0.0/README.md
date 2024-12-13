@@ -1,0 +1,51 @@
+# DjangoLDP Energie Partagee
+
+## Custom Commands
+
+With `djangold-energiepartagee` installed as an app, you will be able to run:
+
+```sh
+python manage.py create_annual_contributions
+```
+
+This command calculates the contribution for every actor in the database and creates a Contribution for each. The amount is calculated following an algorithm which can be found in the `Actor` model (`Actor.get_next_contribution_amount`). A contribution will not be added for any actors which have already paid a contribution in the same year. Use the `-F` option to override this, creating one contribution for every actor in the databae.
+
+## Enable the context preprocessors
+
+```yaml
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                'djangoldp_ep.context_processors.is_amorce',
+            ],
+        },
+    },
+]
+```
+
+Or, with SIB Platform:
+
+```yaml
+apps:
+  hosts:
+    xxx:
+      services:
+        context:
+          processor: djangoldp_ep.context_processors.is_amorce
+```
+
+## Disable AMORCE Specific routines
+
+In your `settings.yml`:
+
+```yaml
+server:
+  IS_AMORCE: False
+```
+
+TODO: Improve me.
