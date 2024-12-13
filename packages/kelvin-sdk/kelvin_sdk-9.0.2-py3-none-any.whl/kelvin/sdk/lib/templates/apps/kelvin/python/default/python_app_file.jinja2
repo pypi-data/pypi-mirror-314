@@ -1,0 +1,124 @@
+"""
+Data Application.
+"""
+
+from typing import Sequence
+from kelvin.app import DataApplication
+from kelvin.sdk.datatype import Message
+from kelvin.sdk.datatype import KRN
+from datetime import datetime, timedelta
+from random import random
+
+
+class App(DataApplication):
+    def init(self) -> None:
+        self.logger.info("Initialising")
+
+        # Build a Dict to store each asset/metric last value
+        self.ASSETS = {}
+        for asset in self.app_configuration.app.kelvin.assets:
+            self.ASSETS[asset.name] = {
+                "temperature": None,
+                "speed_sp": None,
+                "last_recommendation_expiration_date": datetime.now()
+            }
+
+        # Load Application Global Configurations
+        self.temperature_metric_name = self.app_configuration.app.kelvin.configuration.temperature_metric_name
+        self.speed_sp_metric_name = self.app_configuration.app.kelvin.configuration.speed_sp_metric_name
+        # OR
+        # self.temperature_metric_name = self.config.temperature_metric_name
+        # self.speed_sp_metric_name = self.config.speed_sp_metric_name
+
+    # Callback for Asset Parameter Configurations runtime updates
+    def on_parameter(self, parameters) -> None:
+        self.logger.info("Parameters Received", parameters=parameters)
+        self.params.update(parameters)
+
+    # Callback to process Data Messages
+    def process_data(self, data: Sequence[Message]) -> None:
+        # Process every Data Message in Sequence
+        for message in data:
+            # Load Data Message content into variables
+            msg_asset_name = message.header.asset_name
+            msg_metric_name = message.header.name
+            msg_value = message.value
+
+            self.logger.info("Processing Data Message", asset_name=msg_asset_name, metric_name=msg_metric_name, value=msg_value)
+
+            # Validate and Store Asset/Metric Values
+            if msg_metric_name == self.speed_sp_metric_name:
+                self.ASSETS[msg_asset_name]["speed_sp"] = msg_value
+            elif msg_metric_name == self.temperature_metric_name:
+                self.ASSETS[msg_asset_name]["temperature"] = msg_value
+
+                # Load Min/Max Temperature Threshold Asset Parameters values into variables
+                max_temperature = self.params.get(msg_asset_name, {}).get("temperature_max_threshold", {}).get("value")
+                min_temperature = self.params.get(msg_asset_name, {}).get("temperature_min_threshold", {}).get("value")
+
+                # Validate if the current Temperature is within the Min/Max Threshold values
+                if not min_temperature <= self.ASSETS[msg_asset_name]["temperature"] <= max_temperature:
+                    # Load Recommendended Speed SP and Closed Loop Asset Parameters values into variables
+                    recommended_speed_setpoint = self.params.get(msg_asset_name, {}).get("recommended_speed_setpoint", {}).get("value")
+                    closed_loop_enabled = self.params.get(msg_asset_name, {}).get("closed_loop", {}).get("value")
+
+                    # Validate if the current Speed SetPoint is different than the Recommended Value
+                    if self.ASSETS[msg_asset_name]["speed_sp"] != recommended_speed_setpoint:
+                        # Validate if the Asset is currently configured to run in Closed Loop (Emit Control Change) or Open Loop (Emit Recommendation)
+                        if closed_loop_enabled:
+                            self.logger.info("Closed Loop Enabled - Emitting Control Change", value=recommended_speed_setpoint)
+                            expiration_time_in_sec = 300
+
+                            # Build and Emit a Control Change
+                            self.make_control_change(
+                                _asset_name=msg_asset_name,
+                                _name=self.speed_sp_metric_name,
+                                _value=recommended_speed_setpoint,
+                                _expiration=expiration_time_in_sec,
+                                emit=True,
+                            )
+
+                            # Update Last Speed SP Value in order to avoid duplicate Control Changes generation until we receive a new Speed SP (Data Message) Value
+                            self.ASSETS[msg_asset_name]["speed_sp"] = recommended_speed_setpoint
+                        else:
+                            if datetime.now() > self.ASSETS[msg_asset_name]["last_recommendation_expiration_date"] or self.ASSETS[msg_asset_name]["speed_sp"] != recommended_speed_setpoint:
+                                self.logger.info("Closed Loop Disabled - Emitting Control Change Recommendation", value=recommended_speed_setpoint)
+                                expiration_date = datetime.now() + timedelta(minutes=10)
+
+                                # Build and Emit a Recommendation (Control Change)
+                                self.make_recommendation(
+                                    # Build Kelvin Resource Name (KRN)
+                                    resource=KRN("asset", msg_asset_name),
+                                    type="generic",
+                                    description="Recommendation generated by Demo Model",
+                                    control_changes=[{"asset_name": msg_asset_name, "metric_name": self.speed_sp_metric_name, "expiration_date": expiration_date, "payload": {"value": recommended_speed_setpoint}}],
+                                    confidence=1,
+                                    emit=True,
+                                )
+
+                                # Update Last Recommendation Expiration Date Value in order to avoid duplicate Recommendations generation until the last one has expired
+                                self.ASSETS[msg_asset_name]["last_recommendation_expiration_date"] = expiration_date
+                    else:
+                        self.logger.info("Speed SetPoint is the same as the recommended value - Ignoring", speed_sp=self.ASSETS[msg_asset_name]["speed_sp"], recommended_speed_sp=recommended_speed_setpoint)
+                else:
+                    self.logger.info("Temperature is within thresholds - Ignoring", temperature=self.ASSETS[msg_asset_name]["temperature"], max_threshold=max_temperature, min_threshold=min_temperature)
+    
+    # Process Loop
+    def process(self):
+        # Generate and Publish a random value for each Asset
+        for asset in self.app_configuration.app.kelvin.assets:
+            # Build and Emit a Data Message
+            random_value = round(random(), 2)
+
+            self.make_message(self.app_configuration.app.kelvin.outputs[1].data_type,
+                            self.app_configuration.app.kelvin.outputs[1].name,
+                            value=random_value,
+                            _asset_name=asset.name,
+                            emit=True)
+
+            self.logger.info("Published Data Message", asset=asset.name, output=self.app_configuration.app.kelvin.outputs[1].name, value=random_value)
+
+
+{#
+  vim:ft=python.jinja2:sw=4
+#}
