@@ -1,0 +1,168 @@
+import polars as pl
+
+from adsToolBox.loadEnv import env
+from adsToolBox.dbMssql import dbMssql
+from adsToolBox.logger import Logger
+from adsToolBox.global_config import set_timer
+from adsToolBox.pipeline import pipeline
+
+logger = Logger(Logger.DEBUG, "AdsLogger")
+env = env(logger, 'C:/Users/mvann/Desktop/ADS/Projects/adsGenericFunctions/adsToolBox/demo/.env')
+set_timer(True)
+source_mssql = dbMssql({'database': env.MSSQL_DWH_DB,
+                      'user': env.MSSQL_DWH_USER,
+                      'password': env.MSSQL_DWH_PWD,
+                      'port': env.MSSQL_DWH_PORT_VPN,
+                      'host': env.MSSQL_DWH_HOST_VPN}, logger)
+source_mssql.connect()
+
+df_csv = pl.read_csv(
+    "data.D365_CustomersV3.csv",
+    has_header=True,  #Indique si le fichier a une ligne d'en-tête
+    null_values=["NULL"],  #Interpréter ces valeurs comme nulles
+    infer_schema_length=10_000
+)
+column_names = list(df_csv.columns)
+print(', '.join(column_names))
+
+source_mssql.sqlExec("""
+DROP TABLE [D365_CustomersV4];
+CREATE TABLE [D365_CustomersV4](
+	[lineNumber] [int] NULL,
+	[fileName] [varchar](200) NULL,
+	[CUSTOMERACCOUNT] [varchar](500) NOT NULL,
+	[ADDRESSBUILDINGCOMPLEMENT] [varchar](500) NULL,
+	[ADDRESSCITY] [varchar](500) NULL,
+	[ADDRESSCOUNTRYREGIONID] [varchar](500) NULL,
+	[ADDRESSCOUNTRYREGIONISOCODE] [varchar](500) NULL,
+	[ADDRESSDESCRIPTION] [varchar](500) NULL,
+	[ADDRESSLOCATIONROLES] [varchar](500) NULL,
+	[ADDRESSSTREET] [varchar](500) NULL,
+	[ADDRESSSTREETNUMBER] [varchar](500) NULL,
+	[ADDRESSZIPCODE] [varchar](500) NULL,
+	[ALLOWONACCOUNT] [varchar](500) NULL,
+	[COMMISSIONCUSTOMERGROUPID] [varchar](500) NULL,
+	[COMMISSIONSALESGROUPID] [varchar](500) NULL,
+	[COMPANYCHAIN] [varchar](500) NULL,
+	[CONTACTPERSONID] [varchar](500) NULL,
+	[CREDITCARDADDRESSVERIFICATION] [varchar](500) NULL,
+	[CREDITLIMIT] [decimal](31, 6) NULL,
+	[CREDITLIMITISMANDATORY] [varchar](500) NULL,
+	[CREDMANACCOUNTSTATUSID] [varchar](500) NULL,
+	[CREDMANCUSTCREDITMAXALT] [decimal](31, 6) NULL,
+	[CREDMANCUSTUNLIMITEDCREDIT] [varchar](500) NULL,
+	[CREDMANELIGIBLECREDITLIMITCURRENCY] [varchar](500) NULL,
+	[CREDMANELIGIBLECREDITLIMITDATE] [datetime] NULL,
+	[CREDMANELIGIBLECREDITMAX] [decimal](31, 6) NULL,
+	[CREDMANGROUPID] [varchar](500) NULL,
+	[CREDMANSTATUSREASONID] [varchar](500) NULL,
+	[CUSTCLASSIFICATIONID] [varchar](500) NULL,
+	[CUSTOMERGROUPID] [varchar](500) NULL,
+	[DEFAULTDIMENSIONDISPLAYVALUE] [varchar](500) NULL,
+	[DELIVERYADDRESSBUILDINGCOMPLEMENT] [varchar](500) NULL,
+	[DELIVERYADDRESSCITY] [varchar](500) NULL,
+	[DELIVERYADDRESSCOUNTRYREGIONID] [varchar](500) NULL,
+	[DELIVERYADDRESSCOUNTRYREGIONISOCODE] [varchar](500) NULL,
+	[DELIVERYADDRESSDESCRIPTION] [varchar](500) NULL,
+	[DELIVERYADDRESSLOCATIONID] [varchar](500) NULL,
+	[DELIVERYADDRESSSTREET] [varchar](500) NULL,
+	[DELIVERYADDRESSSTREETNUMBER] [varchar](500) NULL,
+	[DELIVERYADDRESSZIPCODE] [varchar](500) NULL,
+	[DELIVERYMODE] [varchar](500) NULL,
+	[DELIVERYTERMS] [varchar](500) NULL,
+	[EINVOICEATTACHMENT] [varchar](500) NULL,
+	[ELECTRONICLOCATIONID] [varchar](500) NULL,
+	[EMPLOYEERESPONSIBLENUMBER] [varchar](500) NULL,
+	[FRENCHSIRET] [varchar](500) NULL,
+	[FULLPRIMARYADDRESS] [varchar](500) NULL,
+	[GPLDOCUMGMTDONOTARCHIVE] [varchar](10) NULL,
+	[GPLINTERNALMEMO] [nvarchar](4000) NULL,
+	[GPLMAINAFFACTUROR] [varchar](500) NULL,
+	[GPLMESSAGESEDI_NAMEDESADV] [varchar](500) NULL,
+	[GPLMESSAGESEDI_NAMEINVOIC] [varchar](500) NULL,
+	[GPLMESSAGESEDI_NAMEORDRSP] [varchar](500) NULL,
+	[GPLMESSAGESEDIORDERSSALESTYPE] [varchar](500) NULL,
+	[GPLMESSAGESEDIORDERSSPECIFICSALESTYPE] [varchar](500) NULL,
+	[GPLVATCHECKMODE] [varchar](500) NULL,
+	[IDENTIFICATIONNUMBER] [varchar](500) NULL,
+	[INVOICEACCOUNT] [varchar](500) NULL,
+	[INVOICEADDRESS] [varchar](500) NULL,
+	[INVOICEADDRESSBUILDINGCOMPLEMENT] [varchar](500) NULL,
+	[INVOICEADDRESSCITY] [varchar](500) NULL,
+	[INVOICEADDRESSCOUNTRYREGIONID] [varchar](500) NULL,
+	[INVOICEADDRESSCOUNTRYREGIONISOCODE] [varchar](500) NULL,
+	[INVOICEADDRESSDESCRIPTION] [varchar](500) NULL,
+	[INVOICEADDRESSSTREET] [varchar](500) NULL,
+	[INVOICEADDRESSSTREETNUMBER] [varchar](500) NULL,
+	[INVOICEADDRESSZIPCODE] [varchar](500) NULL,
+	[KPMCUSTPRODUCTINSTRUCTIONGROUPID] [varchar](500) NULL,
+	[LANGUAGEID] [varchar](500) NULL,
+	[LINEDISCOUNTCODE] [varchar](500) NULL,
+	[LINEOFBUSINESSID] [varchar](500) NULL,
+	[NAFCODE] [varchar](500) NULL,
+	[NAMEALIAS] [varchar](500) NULL,
+	[ONHOLDSTATUS] [varchar](500) NULL,
+	[ORGANIZATIONNAME] [varchar](500) NULL,
+	[ORGANIZATIONNUMBER] [varchar](500) NULL,
+	[OVERRIDESALESTAX] [varchar](10) NULL,
+	[PARTYCOUNTRY] [varchar](500) NULL,
+	[PARTYNUMBER] [varchar](500) NULL,
+	[PARTYTYPE] [varchar](500) NULL,
+	[PAYMENTBANKACCOUNT] [varchar](500) NULL,
+	[PAYMENTMETHOD] [varchar](500) NULL,
+	[PAYMENTTERMS] [varchar](500) NULL,
+	[PAYMENTUSECASHDISCOUNT] [varchar](500) NULL,
+	[PERSONFIRSTNAME] [varchar](500) NULL,
+	[PERSONGENDER] [varchar](500) NULL,
+	[PERSONLASTNAME] [varchar](500) NULL,
+	[PRIMARYCONTACTEMAIL] [varchar](500) NULL,
+	[PRIMARYCONTACTEMAILDESCRIPTION] [varchar](500) NULL,
+	[PRIMARYCONTACTEMAILRECORDID] [varchar](500) NULL,
+	[PRIMARYCONTACTPHONE] [varchar](500) NULL,
+	[PRIMARYCONTACTPHONEDESCRIPTION] [varchar](500) NULL,
+	[PRIMARYCONTACTPHONERECORDID] [varchar](500) NULL,
+	[PRIMARYCONTACTURL] [varchar](500) NULL,
+	[PRIMARYCONTACTURLDESCRIPTION] [varchar](500) NULL,
+	[PRIORITY] [varchar](500) NULL,
+	[RECEIPTOPTION] [varchar](500) NULL,
+	[SALESCURRENCYCODE] [varchar](500) NULL,
+	[SALESDISTRICT] [varchar](500) NULL,
+	[SALESSEGMENTID] [varchar](500) NULL,
+	[SALESSUBSEGMENTID] [varchar](500) NULL,
+	[SALESTAXGROUP] [varchar](500) NULL,
+	[SPLBANKACCOUNTID] [varchar](500) NULL,
+	[SPLBULKWAREHOUSE] [varchar](500) NULL,
+	[SPLMESSAGEEDIRECIPIENTDESADV] [varchar](500) NULL,
+	[SPLMESSAGEEDIRECIPIENTINVOIC] [varchar](500) NULL,
+	[SPLMESSAGEEDIRECIPIENTORDRSP] [varchar](500) NULL,
+	[SPLOPENTRANSNOTINVOICED] [decimal](31, 6) NULL,
+	[SPLSALESGROUP] [varchar](500) NULL,
+	[SPLSFONUMBER] [varchar](500) NULL,
+	[SPLWORKERSALESRESPONSIBLE] [varchar](500) NULL,
+	[STATISTICSGROUPID] [varchar](500) NULL,
+	[TAXEXEMPTNUMBER] [varchar](500) NULL,
+	[creationDate] [datetime] NULL,
+	[nx_hash] [varchar](256) NULL,
+	[nx_creation_date] [datetime] NULL,
+	[nx_update_date] [datetime] NULL,
+	[HBEDELIVERYTYPE] [varchar](150) NULL,
+	[HBENIFCODE] [varchar](150) NULL
+) ON [PRIMARY]
+""")
+
+destination = {
+    'name': 'test',
+    'db': source_mssql,
+    'table': 'D365_CustomersV4',
+    'cols': column_names
+}
+query = "SELECT * FROM D365_CustomersV3"
+
+pipe = pipeline({
+    'db_source': source_mssql, # La source du pipeline
+    'query_source': query, # La requête qui sera exécutée sur cette source
+    'db_destination': destination, # La destination du pipeline
+    'checkup': True, # Vérifie par la suite si la table destination
+}, logger)
+
+pipe.run()
