@@ -1,0 +1,16 @@
+{#- For name header -#}
+#ifndef {{ name|upper }}_LAYER_H
+#define {{ name|upper }}_LAYER_H
+#include "kernels/rescaling.hpp"
+{# For layer configuration -#}
+{% include "./_def_io.jinja" %}
+{% include "./_meminfo.jinja" %}
+#define {{ name|upper }}_ACTIVATION {{ activation }}
+static const {{ rescaling }} {{ name|upper }}_RESCALING = {};
+
+{#- Calculate sizes #}
+{%- set weights_size = out_chan[0] * in_chan[0] * in_height[0] * in_width[0] %}
+#define {{ name|upper }}_WEIGHTS_SIZE {{ weights_size }}
+#define {{ name|upper }}_BIASES_SIZE {{ out_chan[0] }}
+
+#endif /* {{ name|upper }}_LAYER_H */

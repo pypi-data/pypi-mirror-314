@@ -1,0 +1,8 @@
+{% filter indent(width=4, first=False) %}
+{% include "./_mem_offset.jinja" %}
+elemwise_forward<{{name|upper}}_NB_ELTS,
+                 {{name|upper}}_ELEM_OP,
+                 {{name|upper}}_ACTIVATION>
+                 ({{out_name[0]}}, {{name|upper}}_RESCALING, {{in_name[0]}}, {{in_name[1]}});
+{% include "./_save_outputs.jinja" %}
+{% endfilter %}

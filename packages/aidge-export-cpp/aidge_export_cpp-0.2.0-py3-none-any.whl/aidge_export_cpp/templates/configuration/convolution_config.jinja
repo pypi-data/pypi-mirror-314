@@ -1,0 +1,25 @@
+{#- For name header -#}
+#ifndef {{ name|upper }}_LAYER_H
+#define {{ name|upper }}_LAYER_H
+#include "kernels/rescaling.hpp"
+{# For layer configuration -#}
+{% include "./_def_io.jinja" %}
+{% include "./_meminfo.jinja" %}
+#define {{ name|upper }}_PADDING_Y {{ padding[1] }}
+#define {{ name|upper }}_PADDING_X {{ padding[0] }}
+#define {{ name|upper }}_STRIDE_Y {{ stride_dims[1] }}
+#define {{ name|upper }}_STRIDE_X {{ stride_dims[0] }}
+#define {{ name|upper }}_DILATION_Y {{ dilation_dims[1] }}
+#define {{ name|upper }}_DILATION_X {{ dilation_dims[0] }}
+#define {{ name|upper }}_KERNEL_HEIGHT {{ kernel_dims[1] }}
+#define {{ name|upper }}_KERNEL_WIDTH {{ kernel_dims[0] }}
+#define {{ name|upper }}_ACTIVATION {{ activation }}
+static const {{ rescaling }} {{ name|upper }}_RESCALING = {};
+
+{#- Calculate sizes #}
+{%- set weights_size = out_chan[0] * in_chan[0] * kernel_dims[1] * kernel_dims[0] %}
+#define {{ name|upper }}_WEIGHTS_SIZE {{ weights_size }}
+#define {{ name|upper }}_BIASES_SIZE {{ out_chan[0] }}
+
+
+#endif /* {{ name|upper }}_LAYER_H */

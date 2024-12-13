@@ -1,0 +1,14 @@
+{#- For name header -#}
+#ifndef {{ name|upper }}_LAYER_H
+#define {{ name|upper }}_LAYER_H
+#include "kernels/rescaling.hpp"
+
+{# For layer configuration -#}
+{%- set nb_data = in_chan[0] * in_height[0] * in_width[0] %}
+#define {{ name|upper }}_NB_DATA {{ nb_data }}
+#define {{ name|upper }}_ACTIVATION {{ activation }}
+{% include "./_def_io.jinja" %}
+{% include "./_meminfo.jinja" %}
+static const {{ rescaling }} {{ name|upper }}_RESCALING = {};
+
+#endif /* {{ name|upper }}_LAYER_H */

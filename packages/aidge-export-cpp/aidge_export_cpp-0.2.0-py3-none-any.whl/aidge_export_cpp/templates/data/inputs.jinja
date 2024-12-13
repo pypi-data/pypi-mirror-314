@@ -1,0 +1,58 @@
+{#- For libraries #}
+#include <stdint.h>
+
+{#- Design dimensions of the array #}
+{%- set dims_str = "" %}
+
+{%- if dims|length == 1 %}
+  {%- set dims_str = "[" + dims[0]|string + "]" %}
+{%- elif dims|length == 2 %}
+  {%- set dims_str = "[" + (dims[0] * dims[1])|string + "]" %}
+{%- elif dims|length == 3 %}
+  {%- set dims_str = "[" + dims[0]|string + "]" + "[" + (dims[1] * dims[2])|string + "]" %}
+{%- else %}
+  {%- set dims_str = "" %}
+{%- endif %}
+
+{# Design header of the array -#}
+static const {{ data_t }} {{ name }}{{ dims_str }} __attribute__((section(".nn_data"))) =
+{
+    {#- For loop to add new elements #}
+    {%- if dims|length == 3 %}
+        {%- for i in range(dims[0]) %}
+    {
+            {%- for j in range(dims[1]) -%}
+                {% for k in range(dims[2]) -%}
+                {%- if (j*(range(dims[2])|int) + k) % 10 == 0 -%}
+                {{ values[i][j][k]|string + ",\n " }}
+                {%- else -%}
+                {{ values[i][j][k]|string + ", " }}
+                {%- endif -%}
+                {%- endfor %}
+            {%- endfor %}
+    }, 
+        {%- endfor %}
+    {%- endif %}
+
+    {%- if dims|length == 2 %}
+        {%- for i in range(dims[0]) %}
+            {%- for j in range(dims[1]) -%}
+                {%- if (i*(range(dims[1])|int) + j +1) % 10 == 0 -%}
+                {{ values[i][j]|string + ",\n " }}
+                {%- else -%}
+                {{ values[i][j]|string + ", " }}
+                {%- endif -%}
+            {%- endfor %}
+        {%- endfor %}
+    {%- endif %}
+
+    {%- if dims|length == 1 %}
+        {%- for i in range(dims[0]) %}
+            {%- if (i+1) % 10 == 0 -%}
+            {{ values[i]|string + ",\n " }}
+            {%- else -%}
+            {{ values[i]|string + ", " }}
+            {%- endif -%}
+        {%- endfor %}
+    {%- endif %}
+};
