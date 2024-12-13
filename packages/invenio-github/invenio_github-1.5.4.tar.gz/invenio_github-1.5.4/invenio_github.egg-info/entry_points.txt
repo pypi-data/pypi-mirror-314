@@ -1,0 +1,33 @@
+[invenio_assets.webpack]
+invenio_github = invenio_github.webpack:theme
+
+[invenio_base.api_apps]
+invenio_github = invenio_github:InvenioGitHub
+
+[invenio_base.api_blueprints]
+invenio_github = invenio_github.views.github:create_api_blueprint
+
+[invenio_base.apps]
+invenio_github = invenio_github:InvenioGitHub
+
+[invenio_base.blueprints]
+invenio_github_badge = invenio_github.views.badge:blueprint
+invenio_github_github = invenio_github.views.github:create_ui_blueprint
+
+[invenio_base.finalize_app]
+invenio_github = invenio_github.ext:finalize_app
+
+[invenio_celery.tasks]
+invenio_github = invenio_github.tasks
+
+[invenio_db.alembic]
+invenio_github = invenio_github:alembic
+
+[invenio_db.models]
+invenio_github = invenio_github.models
+
+[invenio_i18n.translations]
+messages = invenio_github
+
+[invenio_webhooks.receivers]
+github = invenio_github.receivers:GitHubReceiver
