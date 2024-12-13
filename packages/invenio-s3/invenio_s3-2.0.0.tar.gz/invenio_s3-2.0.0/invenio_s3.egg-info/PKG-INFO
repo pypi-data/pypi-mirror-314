@@ -1,0 +1,123 @@
+Metadata-Version: 2.1
+Name: invenio-s3
+Version: 2.0.0
+Summary: "S3 file storage support for Invenio. "
+Home-page: https://github.com/inveniosoftware/invenio-s3
+Author: Esteban J. G. Gabancho
+Author-email: egabancho@gmail.com
+License: MIT
+Keywords: invenio s3
+Platform: any
+Classifier: Development Status :: 3 - Alpha
+Requires-Python: >=3.7
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: boto3>=1.9.91
+Requires-Dist: invenio-files-rest<4.0.0,>=3.0.0
+Requires-Dist: s3fs>=0.3.0
+Provides-Extra: tests
+Requires-Dist: pytest-black-ng>=0.4.0; extra == "tests"
+Requires-Dist: pytest-invenio<4.0.0,>=3.0.0; extra == "tests"
+Requires-Dist: invenio-base<3.0.0,>=2.0.0; extra == "tests"
+Requires-Dist: invenio-app<3.0.0,>=2.0.0; extra == "tests"
+Requires-Dist: invenio-db<3.0.0,>=2.0.0; extra == "tests"
+Requires-Dist: moto>=1.3.7; extra == "tests"
+Requires-Dist: mock>=4.0.0; extra == "tests"
+Requires-Dist: redis>=2.10.5; extra == "tests"
+Requires-Dist: Sphinx>=4.2.0; extra == "tests"
+
+..
+    Copyright (C) 2018 Esteban J. G. Gabancho.
+    Invenio-S3 is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+
+============
+ Invenio-S3
+============
+
+.. image:: https://github.com/inveniosoftware/invenio-s3/workflows/CI/badge.svg
+        :target: https://github.com/inveniosoftware/invenio-s3/actions
+
+.. image:: https://img.shields.io/coveralls/inveniosoftware/invenio-s3.svg
+        :target: https://coveralls.io/r/inveniosoftware/invenio-s3
+
+.. image:: https://img.shields.io/github/tag/inveniosoftware/invenio-s3.svg
+        :target: https://github.com/inveniosoftware/invenio-s3/releases
+
+.. image:: https://img.shields.io/pypi/dm/invenio-s3.svg
+        :target: https://pypi.python.org/pypi/invenio-s3
+
+.. image:: https://img.shields.io/github/license/inveniosoftware/invenio-s3.svg
+        :target: https://github.com/inveniosoftware/invenio-s3/blob/master/LICENSE
+
+S3 file storage support for Invenio.
+
+The package offers integration with any S3 REST API compatible object storage.
+
+Further documentation is available on
+https://invenio-s3.readthedocs.io/
+
+..
+    Copyright (C) 2018, 2019, 2020 Esteban J. G. Gabancho.
+    Copyright (C) 2024 Graz University of Technology.
+    Invenio-S3 is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+
+Changes
+=======
+
+Version 2.0.0 (release 2024-12-10)
+
+- filename: replace encoding/decoding
+- setup: bump major dependencies
+
+Version 1.0.7 (release 2024-11-30)
+
+- setup: change to reusable workflows
+- setup: pin dependencies
+- Update GitHub Actions versions
+- Update Python versions in workflows
+- remove future imports
+- Update dependencies and fix import in conftest.py
+- global: fix revision id due to rebase
+- fix docs compatibilty problem with Sphinx>=5.0.0
+- global: clean test infrastructure
+- add .git-blame-ignore-revs
+- migrate to use black as opinionated auto formater
+- migrate setup.py to setup.cfg
+- global: fix ci
+
+Version 1.0.6 (released 2021-10-21)
+
+- Unpin boto3 and s3fs
+
+Version 1.0.5 (released 2021-10-20)
+
+- Bump versions to support Flask v2.
+
+Version 1.0.4 (released 2021-07-30)
+
+- Fix number of parts calculations.
+- Removed Python 2.7 support.
+
+Version 1.0.3 (released 2020-04-25)
+
+- Allow for dynamic part size for multipart uploads.
+- Adds new configuration variables to define default part size and maximum
+  number of parts.
+
+Version 1.0.2 (released 2020-02-17)
+
+- Fixes typos on configuration variables and cached properties.
+- Adds AWS region name and signature version to configuration.
+
+Version 1.0.1 (released 2019-01-23)
+
+- New configuration variable for URL expiration.
+- Enhances file serving.
+- Unpins Boto3 library.
+- Fixes test suit configuration.
+
+Version 1.0.0 (released 2018-09-19)
+
+- Initial public release.
