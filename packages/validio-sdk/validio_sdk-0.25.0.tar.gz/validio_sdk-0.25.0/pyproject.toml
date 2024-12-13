@@ -1,0 +1,179 @@
+[tool.poetry]
+name = "validio-sdk"
+# This version does not represent the released version or any tag. For each
+# release we automatically bump this before building and publishing so this
+# should be kept at 0.0.1dev1
+version = "0.25.0"
+description = "SDK to interact with the Validio platform"
+authors = ["Validio <support@validio.io>"]
+license = "Apache-2.0"
+homepage = "https://validio.io/"
+documentation = "https://dev.validio.io/sdk-docs"
+packages = [{ include = "validio_sdk" }]
+exclude = [
+    "./validio_sdk/bin/pull_graphql.py",
+    "./schema/**",
+    "./plugins/**",
+    "./examples/**",
+]
+readme = "README_PUBLIC.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+camel-converter = "^3.0.0"
+httpx = "^0.24.0"
+platformdirs = "^3.5.0"
+gql = { extras = ["all"], version = "^3.5.0" }
+rich = "13.9.4"
+
+[tool.poetry.group.dev.dependencies]
+licensecheck = "^2023.1.1"
+mypy = "^1.2.0"
+pytest = "^7.3.1"
+pytest-asyncio = "^0.21.0"
+ruff = "^0.1.11"
+sphinx = "^6.2.1"           # We use <7 because most themes only work with that.
+sphinx-rtd-theme = "^1.2.1"
+ariadne-codegen = "0.14.0"
+tqdm = "^4.65.0"
+types-tqdm = "^4.65.0.1"
+python-dotenv = "^1.0.0"
+deepdiff = "^6.5.0"
+furo = "^2024.8.6"
+
+[tool.ariadne-codegen]
+queries_path = "./schema/operations/"
+schema_path = "./schema/schema.graphql"
+target_package_path = "./validio_sdk/"
+include_comments = "none"
+plugins = [
+    "ariadne_codegen.contrib.no_reimports.NoReimportsPlugin",
+    "ariadne_codegen.contrib.shorter_results.ShorterResultsPlugin",
+    "plugins.schema_translation.SchemaFieldTranslationPlugin",
+    "plugins.naming.FixNaming",
+    "plugins.alias.UseOriginalName",
+    "ariadne_codegen.contrib.client_forward_refs.ClientForwardRefsPlugin",
+]
+
+[tool.ariadne-codegen.scalars.CredentialId]
+type = "validio_sdk.scalars.CredentialId"
+
+[tool.ariadne-codegen.scalars.SegmentationId]
+type = "validio_sdk.scalars.SegmentationId"
+
+[tool.ariadne-codegen.scalars.SourceId]
+type = "validio_sdk.scalars.SourceId"
+
+[tool.ariadne-codegen.scalars.ValidatorId]
+type = "validio_sdk.scalars.ValidatorId"
+
+[tool.ariadne-codegen.scalars.WindowId]
+type = "validio_sdk.scalars.WindowId"
+
+[tool.ariadne-codegen.scalars.DateTime]
+type = "datetime.datetime"
+serialize = "validio_sdk.scalars.serialize_rfc3339_datetime"
+
+[tool.ariadne-codegen.scalars.JsonPointer]
+type = "validio_sdk.scalars.JsonPointer"
+
+# The JsonFilterExpression is a scalar but a union in python representation so
+# we need to add a map between all our union types.
+[tool.ariadne-codegen.scalars.JsonFilterExpression]
+type = "validio_sdk.scalars.JsonFilterExpression"
+serialize = "validio_sdk.scalars.serialize_json_filter_expression"
+
+[tool.ariadne-codegen.scalars.BooleanFilter]
+type = "validio_sdk.scalars.BooleanFilter"
+
+[tool.ariadne-codegen.scalars.EnumFilter]
+type = "validio_sdk.scalars.EnumFilter"
+
+[tool.ariadne-codegen.scalars.NullFilter]
+type = "validio_sdk.scalars.NullFilter"
+
+[tool.ariadne-codegen.scalars.StringFilter]
+type = "validio_sdk.scalars.StringFilter"
+
+[tool.ariadne-codegen.scalars.ThresholdFilter]
+type = "validio_sdk.scalars.ThresholdFilter"
+
+[tool.ariadne-codegen.scalars.SqlFilter]
+type = "validio_sdk.scalars.SqlFilter"
+
+[tool.ariadne-codegen.scalars.JsonTypeDefinition]
+type = "validio_sdk.scalars.JsonTypeDefinition"
+
+[tool.ariadne-codegen.scalars.CronExpression]
+type = "validio_sdk.scalars.CronExpression"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+example-config = "examples.use_config:run"
+pull-graphql = "validio_sdk.bin.pull_graphql:run"
+graphql-client = "examples.graphql_client:run"
+
+[tool.ruff]
+fix = true
+
+exclude = [
+    # Generated code
+    "validio_sdk/graphql_client/*",
+    # Docs (mostly generated)
+    "docs/*",
+]
+
+select = [
+    "ARG", # flake8-unused-argument
+    "C4",  # flake8-comprehension
+    "D",   # pydocstyle
+    "E",   # pycodestyle error
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "PIE", # flake8-pie
+    "PL",  # pylint
+    "PT",  # flake8-pytest-style
+    "PTH", # flake8-use-pathlib
+    "RET", # flake8-ret
+    "RUF", # ruff specific rules
+    "SIM", # flake8-simplify
+    "UP",  # pyupgrade
+    "W",   # pycodestyle warning
+]
+
+ignore = [
+    "D203",    # `one-blank-line-before-class` Incompatible with D211
+    "D212",    # `multi-line-summary-first-line` Incompatible with D213
+    "D205",    #  blank line required between summary line and description
+    "PLR0913", # Too many arguments to function call (named arguments take care of this)
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = [
+    # We don't need docstrings in __init__
+    "D104",
+]
+
+# Raw error handling for testing purposes
+# No need for documentation in binaries, examples or generated code
+"*/bin/*.py" = ["D"]
+"examples/*.py" = ["D", "E"]
+"*/graphql_client/*.py" = ["D"]
+"*/tests/*.py" = ["D"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+plugins = "pydantic.mypy"
+exclude = "examples"
