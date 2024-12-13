@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: openstack-s11auth
+Version: 1.0.1.dev14
+Summary: Openstack client middleware for authenticating with s11
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown; charset=UTF-8
+License-File: AUTHORS
+Requires-Dist: pbr!=2.1.0,>=2.0.0
+Requires-Dist: six>=1.10.0
+Requires-Dist: positional>=1.1.1
+Requires-Dist: keystoneauth1>=2.10.0
+Requires-Dist: pkce>=1.0
+
+# openstack-s11-auth
+
+## install
+
+```bash
+pip install openstack-s11auth
+```
+
+OR
+
+```bash
+brew install openstackclient
+python3 -m pip --python /opt/homebrew/Cellar/openstackclient/$(brew info openstackclient --json | jq -r '.[].linked_keg')/libexec/bin/python install openstack-s11auth
+```
+
+OR
+
+```bash
+git clone $REPO && cd $REPO
+pip install -e .
+```
+
+## usage
+
+```bash
+export OS_AUTH_URL="https://$KEYSTONE:5000/v3/"
+export OS_AUTH_TYPE="v3s11"
+openstack project list
+```
+
+Use `--os-redirect-port 8181` to change the port of the local redirect server in case it's occupied already.
+
+### Helper: Differently scoped tokens on password auth
+
+```bash
+# project-scoped
+openstack --os-auth-type "password" --os-username "admin" --os-project-name "myproject" --os-project-domain-id "default" --os-user-domain-id "default" --os-auth-url "http://localhost:8001/v3" project set --description "foobar" myproject
+
+# domain-scoped
+openstack --os-auth-type "password" --os-username "admin" --os-domain-id "default" --os-user-domain-id "default" --os-auth-url "http://localhost:8001/v3" project set --description "foobar" myproject
+```
+
