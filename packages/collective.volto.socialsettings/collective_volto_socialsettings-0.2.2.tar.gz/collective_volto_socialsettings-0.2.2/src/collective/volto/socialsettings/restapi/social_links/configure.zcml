@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:cache="http://namespaces.zope.org/cache"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
+
+  <plone:service
+    method="GET"
+    name="@social-links"
+    for="Products.CMFCore.interfaces.ISiteRoot"
+    factory=".get.SocialLinksGet"
+    permission="zope2.View"
+    layer="collective.volto.socialsettings.interfaces.ICollectiveVoltoSocialsettingsLayer"
+    />
+
+  <cache:ruleset ruleset="plone.content.dynamic" for=".get.SocialLinksGet" />
+
+</configure>
