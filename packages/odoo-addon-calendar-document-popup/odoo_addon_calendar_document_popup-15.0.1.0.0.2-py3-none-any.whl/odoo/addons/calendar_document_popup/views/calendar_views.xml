@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 Ángel García de la Chica Herrera <angel.garcia@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="display_documents_view_calendar_event_calendar" model="ir.ui.view">
+        <field name="name">display.documents.view.calendar.event.calendar</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_calendar" />
+        <field name="arch" type="xml">
+            <xpath expr="//calendar/field[@name='attendee_status']" position="before">
+                <field
+                    name="documents_link"
+                    widget="url"
+                    text="link"
+                    attrs="{'invisible': [('documents_link', '=', False)]}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
