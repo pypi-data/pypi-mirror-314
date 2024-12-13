@@ -1,0 +1,172 @@
+# Email sending using Zoho ZeptoMail in Django
+
+## Django ZeptoMail
+
+ZeptoMail for Django facilitates email sending from Django applications using ZeptoMail APIs.
+
+## Installation
+
+```
+pip install django-zoho-zeptomail
+```
+
+## Settings configuration
+
+Add the following parameters in the application settings.
+
+```python
+EMAIL_BACKEND = 'zoho_zeptomail.backend.zeptomail_backend.ZohoZeptoMailEmailBackend'
+DEFAULT_FROM_EMAIL = 'rebecca@zylker.com' #The default FROM address that will be used for all emails. Optional parameter.
+ZOHO_ZEPTOMAIL_API_KEY_TOKEN = 'Send Mail Token' #Send Mail Token generated from the ZeptoMail account.
+ZOHO_ZEPTOMAIL_HOSTED_REGION = 'zeptomail.zoho.com' #Region where the account is hosted. Optional for US. Mandatory for other regions.
+```
+
+## Email-sending
+
+### Text-only emails
+
+- To send a plain text message using Django's send_mail function
+
+```python
+from django.core.mail import send_mail
+
+send_mail(
+    subject='Hello!',
+    message='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    recipient_list=['sam@zylker.com']
+)
+```
+
+- To add other recipients (CC, BCC) using EmailMessage class
+
+```python
+from django.core.mail.message import EmailMessage
+
+email_message = EmailMessage(
+    subject='Hello!',
+    body='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    to=['sam@zylker.com'],
+    bcc=['john@zylker.com'], # Optional
+    cc=['george@zylker.com'], # Optional
+    reply_to=['samuel@zylker.com'] # Optional
+)
+email_message.send()
+```
+
+### Text + HTML emails
+
+- To send text and HTML emails,
+
+```python
+from django.core.mail import send_mail
+
+send_mail(
+    subject='Hello!',
+    message='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    recipient_list=['sam@zylker.com'],
+    html_message='This is an acknowledgement for your action on our website'
+)
+```
+
+- To add other recipients (CC, BCC) using EmailMultiAlternatives class
+
+```python
+from django.core.mail.message import EmailMultiAlternatives
+
+email_message = EmailMultiAlternatives(
+    subject='Hello!',
+    body='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    to=['sam@zylker.com'],
+    bcc=['john@zylker.com'], # Optional
+    cc=['george@zylker.com'], # Optional
+    reply_to=['samuel@zylker.com'] # Optional
+)
+email_message.attach_alternative(
+    'This is an acknowledgement for your action on our website',
+    'text/html'
+)
+email_message.send()
+```
+
+### Using attachments
+
+You can add attachments while using EmailMessage as well as EmailMultiAlternatives classes. This can be achieved in three ways using different methods:
+
+- Using file path
+    
+```python
+from django.core.mail.message import EmailMessage
+
+email_message = EmailMessage(
+    subject='Hello!',
+    body='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    to=['sam@zylker.com']
+)
+email_message.attach_file('/example/attachment.txt')
+email_message.attach_file('/example/attachment.jpg')
+email_message.send()
+```
+
+- Using a filename and file content
+    
+```python
+from django.core.mail.message import EmailMessage
+
+email_message = EmailMessage(
+    subject='Hello!',
+    body='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    to=['sam@zylker.com']
+)
+
+# Text file (Read mode 'r')
+with open('/example/attachment.txt', 'r') as file:
+    email_message.attach('attachment.txt', file.read())
+
+# Binary file (Read mode 'rb')
+with open('/example/attachment.jpg', 'rb') as file:
+    email_message.attach('attachment.jpg', file.read())
+
+email_message.send()
+```
+
+- Using MIMEBase instance
+    
+```python
+from email.mime.image import MIMEImage
+from email.mime.text import MIMEText
+from django.core.mail.message import EmailMessage
+
+email_message = EmailMessage(
+    subject='Hello!',
+    body='This is an acknowledgement for your action on our website',
+    from_email='rebecca@zylker.com',
+    to=['sam@zylker.com']
+)
+
+# Text file (Read mode 'r')
+with open('/example/attachment.txt', 'r') as file:
+    mime_text = MIMEText(file.read())
+    mime_text.add_header(
+        'Content-Disposition', 'attachment; filename=attachment.txt')
+    email_message.attach(mime_text)
+
+# Binary file (Read mode 'rb')
+with open('/example/attachment.jpg', 'rb') as file:
+    mime_image = MIMEImage(file.read())
+    mime_image.add_header(
+        'Content-Disposition', 'inline; filename=attachment.jpg')
+    email_message.attach(mime_image)
+
+email_message.send()
+```
+
+## Resources
+
+- Django : https://www.djangoproject.com/
+- Zoho ZeptoMail : https://www.zoho.com/zeptomail/
