@@ -1,0 +1,157 @@
+[project]
+name = "cityseer"
+version = '4.17.3'
+description = "Computational tools for network-based pedestrian-scale urban analysis"
+readme = "README.md"
+requires-python = ">=3.10, <3.14"
+license = { text = "AGPL-3.0" }
+keywords = [
+  "network-topology",
+  "numpy",
+  "architecture",
+  "openstreetmap",
+  "urban-planning",
+  "python3",
+  "networkx",
+  "networks",
+  "spatial-analysis",
+  "geographical-information-system",
+  "spatial-data",
+  "morphometrics",
+  "network-analysis",
+  "momepy",
+  "spatial-data-analysis",
+  "centrality",
+  "shapely",
+  "landuse",
+  "osmnx",
+  "network-centralities",
+]
+authors = [{ name = "Gareth Simons", email = "info@benchmarkurbanism.com" }]
+maintainers = [{ name = "Gareth Simons", email = "info@benchmarkurbanism.com" }]
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Rust",
+]
+dependencies = [
+  "matplotlib>=3.5.1",
+  "networkx>=3.0.0",
+  "pyproj>=3.3.0",
+  "requests>=2.27.1",
+  "scikit-learn>=1.0.2",
+  "tqdm>=4.63.1",
+  "shapely>=2.0.0",
+  "numpy>=2.0.0",
+  "geopandas>=1.0.0",
+  "rasterio>=1.3.9",
+  "fiona>=1.9.6",
+  "osmnx>=2.0.0",
+]
+
+[project.urls]
+homepage = "https://cityseer.benchmarkurbanism.com/"
+documentation = "https://cityseer.benchmarkurbanism.com/"
+repository = "https://github.com/benchmark-urbanism/cityseer-api"
+
+[tool.maturin]
+python-source = "pysrc"
+module-name = 'cityseer.rustalgos'
+features = ["pyo3/extension-module"]
+
+# ruff pending script support
+# https://github.com/astral-sh/uv/issues/5903#issuecomment-2360856896
+[tool.poe.tasks]
+generate_docs = "python docs/generate_docs.py"
+docs_dev = { shell = "uv run poe generate_docs && npm run dev --prefix docs" }
+docs_build = { shell = "uv run poe generate_docs && npm run build --prefix docs" }
+docs_preview = { shell = "uv run poe generate_docs && npm run preview --prefix docs" }
+verify_project = { shell = "ruff format && ruff check && pyright . && pytest ./tests" }
+
+[tool.uv]
+dev-dependencies = [
+  "pytest>=7.2.0",
+  "momepy>=0.5.4",
+  "pandas-stubs>=1.5.2.221213",
+  "types-requests>=2.28.11.7",
+  "jupyterlab>=3.5.2",
+  "jupyter>=1.0.0",
+  "maturin>=1.1.0",
+  "pip>=23.2",
+  "pdoc>=14.1.0",
+  "docstring-parser>=0.15",
+  "dominate>=2.8.0",
+  "utm>=0.7.0",
+  "ruff>=0.5.1",
+  "pyright>=1.1.380",
+  "poethepoet>=0.29.0",
+]
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[tool.setuptools]
+packages = ["cityseer"]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[tool.pyright]
+pythonVersion = "3.10"
+include = ["pysrc/cityseer"]
+exclude = [
+  "**/node_modules",
+  "**/__pycache__",
+  "**/__pypackages__",
+  "build",
+  "demos",
+  "docs",
+  "**/temp/",
+  "tests/",
+  "dist",
+  ".venv",
+]
+typeCheckingMode = "strict"
+stubPath = "pysrc/cityseer/stubs"
+useLibraryCodeForTypes = true
+reportUntypedFunctionDecorator = false
+reportUntypedClassDecorator = false
+reportUnknownMemberType = false
+reportMissingTypeStubs = false
+reportUnnecessaryIsInstance = false
+
+[tool.pytest.ini_options]
+console_output_style = "count"
+log_cli = true
+log_cli_level = "INFO"
+testpaths = ["tests"]
+addopts = "--ignore=tests/test_performance.py --ignore=temp/"
