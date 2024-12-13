@@ -1,0 +1,5 @@
+- [ ] Estudar formato de arquivo de .CVS resultantes da máquina Instron 23-5D
+- [ ] Estudar formato de arquivo de .CVS resultantes da máquina 68FM100
+- [ x ] Estudar a criação de um packpage no pip
+- [ x ] Convidar colaboradores
+- [ ] Gerar script para criar o package
