@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "collaborative-article-sharing"
+version = "0.1.0-beta.9"
+description = "Command-line interface for interacting with the CAS API"
+authors = [
+    { name = "upayan", email = "upayanm3@gmail.com" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["requests", "argparse", "rich", "flask"]
+
+[tool.setuptools.packages.find]
+include = ["src", "src.commands"]
+
+[project.scripts]
+cas = "src.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/upayanmazumder/collaborative-Article-Sharing"
+Issues = "https://github.com/upayanmazumder/Collaborative-Article-Sharing/issues"
