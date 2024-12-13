@@ -1,0 +1,44 @@
+package LogicalArchitecture
+public
+	with messages,Base_Types,MBED;
+
+{% for element in elements %}
+-- ****************************** {{element.name}} component ****************************** --
+	process {{element.name}}
+		features
+		    {% for interface in element.interfaces %}
+		    {% for variable in interface.variables %}
+			{{variable.name}}: in event data port messages::{{variable.type}};  -- TODO: CHECK IF CORRECT
+			{% endfor %}
+			{% endfor %}
+			{% for var in element.machines[0].variables %}
+			{{var.name}}: out event data port messages::{{var.type}};       -- TODO: CANNOT DETERMINE TYPE (event|data|event data)
+			{% endfor %}
+	end {{element.name}};
+
+	process implementation {{element.name}}.impl
+		subcomponents
+		    {% for state in element.machines[0].states %}
+			{{state.name}}: thread {{state.name}};                          -- TODO: FILTER SO THAT NOT ALL STATES ARE TRANSFORMED INTO THREADS
+			{% endfor %}
+
+		connections
+			I1: port input_name -> thread_name.input_name;               -- TODO: CANNOT RESOLVE CONNECTIONS!!
+			O1: port thread_name.output_name -> output_name;             -- TODO: CANNOT RESOLVE CONNECTIONS!!
+
+	end {{element.name}}.impl;
+
+    {% for state in element.machines[0].states %}
+	thread {{state.name}}
+		features
+			input_name: in event data port messages::input_type;                 -- TODO: CANNOT RESOLVE INPUT/OUTPUT DATA/EVENTS TO STATE LEVEL!!
+			output_name: out event data port messages::output_name;              -- TODO: CANNOT RESOLVE INPUT/OUTPUT DATA/EVENTS TO STATE LEVEL!!
+	end {{state.name}};
+
+	thread implementation {{state.name}}.impl
+	end {{state.name}}.impl;
+
+	{% endfor %}
+{% endfor %}
+
+end LogicalArchitecture;
