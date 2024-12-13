@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Zippy Form</title>
+      <style>
+         body, html {
+         height: 100%;
+         margin: 0;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         font-family: Arial, sans-serif;
+         text-align: center;
+         }
+         .container {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         }
+         .message {
+         margin-top: 20px;
+         font-size: 18px;
+         font-style: italic;
+         }
+         .lds-grid {
+         display: inline-block;
+         position: relative;
+         width: 69px;
+         height: 69px;
+         }
+         .lds-grid div {
+         position: absolute;
+         width: 16px;
+         height: 16px;
+         border-radius: 50%;
+         background: #635bff;
+         animation: lds-grid 1.2s linear infinite;
+         }
+         .lds-grid div:nth-child(1) {
+         top: 6px;
+         left: 6px;
+         animation-delay: 0s;
+         }
+         .lds-grid div:nth-child(2) {
+         top: 6px;
+         left: 26px;
+         animation-delay: -0.4s;
+         }
+         .lds-grid div:nth-child(3) {
+         top: 6px;
+         left: 45px;
+         animation-delay: -0.8s;
+         }
+         .lds-grid div:nth-child(4) {
+         top: 26px;
+         left: 6px;
+         animation-delay: -0.4s;
+         }
+         .lds-grid div:nth-child(5) {
+         top: 26px;
+         left: 26px;
+         animation-delay: -0.8s;
+         }
+         .lds-grid div:nth-child(6) {
+         top: 26px;
+         left: 45px;
+         animation-delay: -1.2s;
+         }
+         .lds-grid div:nth-child(7) {
+         top: 45px;
+         left: 6px;
+         animation-delay: -0.8s;
+         }
+         .lds-grid div:nth-child(8) {
+         top: 45px;
+         left: 26px;
+         animation-delay: -1.2s;
+         }
+         .lds-grid div:nth-child(9) {
+         top: 45px;
+         left: 45px;
+         animation-delay: -1.6s;
+         }
+         @keyframes lds-grid {
+         0%,
+         100% {
+         opacity: 1;
+         }
+         50% {
+         opacity: 0.5;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container">
+         <section class="content-section">
+            <div class="login-section pt-5 pb-5">
+               <div class="container">
+                  <div class="row">
+                     <div class="col-lg-12">
+                        <div class="banner-text d-flex align-items-center justify-content-center">
+                           <div class="text-center">
+                              <div class="lds-grid">
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                                 <div></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+         <h2 class="message">
+            This page will redirect automatically in 5 Seconds. Please don't go back or don't perform any actions.
+         </h2>
+      </div>
+      <script type="text/javascript">
+         (function() {
+             setTimeout(function() {
+                 window.location.href = '{{url}}';
+             }, 5000);
+         })();
+      </script>
+   </body>
+</html>
