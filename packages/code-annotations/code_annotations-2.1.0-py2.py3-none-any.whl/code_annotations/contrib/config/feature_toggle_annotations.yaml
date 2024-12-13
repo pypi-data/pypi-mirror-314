@@ -1,0 +1,29 @@
+# This code-annotations configuration file supports OEP-17, Feature Toggles.
+
+source_path: ./
+report_path: reports
+safelist_path: .annotation_safe_list.yml
+coverage_target: 50.0
+annotations:
+  feature_toggle:
+    # See annotation format documentation: https://edx-toggles.readthedocs.io/en/latest/how_to/documenting_new_feature_toggles.html
+    - ".. toggle_name:":
+    - ".. toggle_implementation:":
+        choices: [WaffleFlag, WaffleSwitch, CourseWaffleFlag, ExperimentWaffleFlag, SettingToggle, SettingDictToggle, ConfigurationModel, DjangoSetting]
+    - ".. toggle_default:":
+    - ".. toggle_description:":
+    - ".. toggle_use_cases:":
+        choices: [temporary, circuit_breaker, vip, opt_out, opt_in, open_edx]
+    - ".. toggle_creation_date:":
+    - ".. toggle_removal_ticket:":
+        optional: true
+    - ".. toggle_target_removal_date:":
+        optional: true            
+    - ".. toggle_warning:":
+        optional: true
+    - ".. toggle_tickets:":
+        optional: true
+extensions:
+    python:
+        - py
+rst_template: doc.rst.j2
