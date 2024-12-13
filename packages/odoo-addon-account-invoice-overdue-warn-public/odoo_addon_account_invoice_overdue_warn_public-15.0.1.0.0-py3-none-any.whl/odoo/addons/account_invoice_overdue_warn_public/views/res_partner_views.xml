@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Alberto Martínez <alberto.martinez@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="view_partner_form_overdue_warn" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field
+            name="inherit_id"
+            ref="account_invoice_overdue_warn.view_partner_form_overdue_warn"
+        />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='overdue_invoice_count']/.."
+                position="attributes"
+            >
+                <attribute name="groups" />
+            </xpath>
+            <xpath
+                expr="//button[@name='jump_to_overdue_invoices']"
+                position="attributes"
+            >
+                <attribute
+                    name="groups"
+                >account.group_account_invoice,account.group_account_readonly</attribute>
+            </xpath>
+            <xpath expr="//button[@name='jump_to_overdue_invoices']" position="before">
+                <span
+                    groups="!account.group_account_invoice,!account.group_account_readonly"
+                > overdue invoice(s) for a total residual of </span>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
