@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Manuel Regidor <manuel.regidor@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="website_transfer_payment_mode_acquirer_form" model="ir.ui.view">
+        <field name="name">website.transfer.payment.mode.acquirer.form</field>
+        <field name="model">payment.acquirer</field>
+        <field name="inherit_id" ref="payment.payment_acquirer_form" />
+        <field name="arch" type="xml">
+             <xpath expr="//group[@name='payment_state']" position="after">
+                <group name="sale_payment">
+                    <field name="sale_payment_mode_id" options="{'no_create': True}" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
