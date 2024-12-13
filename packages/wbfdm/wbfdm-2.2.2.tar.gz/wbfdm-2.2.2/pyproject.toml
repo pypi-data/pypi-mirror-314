@@ -1,0 +1,43 @@
+[project]
+name = "wbfdm"
+description = "The workbench module ensures rapid access to diverse financial data (market, fundamental, forecasts, ESG), with features for storing instruments, classifying them, and conducting financial analysis."
+authors = [{ name = "Christopher Wittlinger", email = "c.wittlinger@stainly.com"}]
+dynamic = ["version"]
+
+dependencies = [
+  "wbcore",
+  "wbnews",
+  "stockstats == 0.6.*",
+  "roman == 4.*",
+]
+
+[project.optional-dependencies]
+qa = [
+  "mssql-django == 1.4.*",
+  "jinjasql2 == 0.1.*",
+]
+dsws = [
+  "requests-cache == 1.0.*",
+  "datastreampy == 2.0.*",
+]
+
+[tool.uv.sources]
+wbcore = { workspace = true }
+wbnews = { workspace = true }
+
+[tool.uv]
+package = true
+
+[tool.hatch.version]
+path = "../../pyproject.toml"
+
+[tool.hatch.build.targets.sdist]
+include = ["wbfdm/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wbfdm"]
+only-packages = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
