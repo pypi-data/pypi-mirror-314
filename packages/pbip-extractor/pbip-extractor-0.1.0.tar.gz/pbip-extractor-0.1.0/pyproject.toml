@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pbip-extractor"
+version = "0.1.0"
+description = "pbip extractor helps to get an overview of all the variables used in a Power BI report."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+authors = [
+    { name = "Jeanine Schoonemann", email = "jeanine.schoonemann@cmotions.com" },
+]
+keywords = [
+    "powerbi",
+    "pbip",
+    "json",
+    "semantic model",
+]
+
+dependencies = [
+    "pandas>=1.1.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pbip-extractor[docs,test]",
+]
+docs = [
+    "mkdocs==1.5.3",
+    "mkdocs-material==9.5.18",
+    "mkdocstrings-python==1.10.0",
+    "mkdocstrings==0.24.3",
+]
+test = [
+    "pytest>=5.4.3",
+    "pytest-cov>=2.6.1",
+    "ruff~=0.4.7",
+]
+publish = [
+    "setuptools>=68.2.2",
+    "bump2version>=1.0.1",
+    "wheel>=0.41.2",
+    "twine>=5.1.1",
+
+]
+
+[project.urls]
+Repository = "https://github.com/example/pbip-extractor.git"
+
+[tool.setuptools.packages.find]
+include = ["pbip-extractor*"]
+exclude = ["tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [  
+  "E4",  # Ruff Defaults
+  "E7",
+  "E9",
+  "F",   # End Ruff Defaults,
+  "D"
+]
+
+ignore = [
+  "D100", # Missing docstring in public module
+  "D104", # Missing docstring in public package
+  "D205", # 1 blank line required between summary line and description
+  "E731", # Do not assign a lambda expression, use a def
+  "D107",  # Missing docstring in __init__
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["D"] # Ignore all docstring errors in tests
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
