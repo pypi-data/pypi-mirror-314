@@ -1,0 +1,101 @@
+# Event SMS Notifier
+
+A Python library for event notifications with SMS capabilities using Africa's Talking API. Perfect for period tracking, appointment reminders, and general event notifications.
+
+## Installation
+
+```bash
+pip install event-sms-notifier
+```
+
+## Quick Start
+
+```python
+from event_notifier import EventNotifier
+from datetime import datetime, timedelta
+
+# Initialize the notifier
+notifier = EventNotifier(
+    username="your_username",  # Your Africa's Talking username
+    api_key="your_api_key",    # Your Africa's Talking API key
+    sender_id="your_sender_id" # Your sender ID
+)
+
+# Add an event
+notifier.add_event({
+    "name": "Important Meeting",
+    "datetime": datetime.now() + timedelta(minutes=30)
+})
+
+# Start monitoring
+notifier.start_monitoring(
+    recipients="+1234567890",  # Phone number to receive notifications
+    interval_seconds=120       # Check every 2 minutes
+)
+```
+
+## Features
+
+- Event monitoring and SMS notifications
+- Flexible datetime input (string or datetime object)
+- Customizable message templates
+- Support for multiple recipients
+- Configurable check intervals
+- Built-in period tracking capabilities
+
+## Period Tracking Example
+
+```python
+from event_notifier import EventNotifier
+from datetime import datetime, timedelta
+
+notifier = EventNotifier(
+    username="your_username",
+    api_key="your_api_key",
+    sender_id="your_sender_id"
+)
+
+# Add period events
+events = [
+    {
+        "name": "Period Starts",
+        "datetime": datetime.now() + timedelta(days=1)
+    },
+    {
+        "name": "Ovulation Day",
+        "datetime": datetime.now() + timedelta(days=14)
+    }
+]
+
+for event in events:
+    notifier.add_event(event)
+
+# Custom message template
+template = """
+🔴 Period Alert: {name}
+Time: {time}
+Take care!
+"""
+
+# Start monitoring
+notifier.start_monitoring(
+    recipients="+1234567890",
+    interval_seconds=300,
+    message_template=template
+)
+```
+
+## Requirements
+
+- Python 3.6+
+- Africa's Talking account
+- Valid API credentials
+- Registered phone number
+
+## Documentation
+
+For more examples and detailed documentation, visit our [GitHub repository](https://github.com/yourusername/event-notifier).
+
+## License
+
+MIT License - see LICENSE file for details.
