@@ -1,0 +1,133 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "holisticai"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [{ name = "research", email = "research@holisticai.com" }]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "scikit-learn>=1.0.2",
+  "pandas",
+  "matplotlib",
+  "networkx>=3.1",
+  "seaborn",
+  "numpy>=1.25",
+  "pybind11>=2.12",
+  "pyarrow"
+  ]
+
+[project.optional-dependencies]
+bias = ["networkx>=3.1", "pygad==3.3.1", "jax>=0.4.30", "jaxopt>=0.8.3", "optax>=0.2.3", "flax>=0.8.5"]
+explainability = ["lime>=0.2.0.1", "shap>=0.42.1"]
+security = ["jax>=0.4.30", "jaxopt>=0.8.3"]
+all = ["networkx>=3.1", "pygad==3.3.1", "lime>=0.2.0.1", "shap>=0.42.1",  "jax>=0.4.30", "jaxopt>=0.8.3", "optax>=0.2.3", "flax>=0.8.5"]
+
+[project.urls]
+Documentation = "https://github.com/holistic-ai/holisticai#readme"
+Issues = "https://github.com/holistic-ai/holisticai/issues"
+Source = "https://github.com/holistic-ai/holisticai"
+
+[tool.hatch.version]
+path = "src/holisticai/__about__.py"
+
+[tool.coverage.run]
+source_pkgs = ["holisticai", "tests"]
+branch = true
+parallel = true
+omit = ["src/holisticai/__about__.py"]
+
+[tool.coverage.paths]
+holistic_ai = ["src/holisticai", "*/holisticai/src/holisticai"]
+tests = ["tests", "*/holisticai/tests"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.hatch.envs.hatch-static-analysis]
+config-path = "ruff_default.toml"
+
+[tool.ruff]
+extend = "ruff_default.toml"
+exclude = ["docs/**", "tests/**", "tutorials/**", "src/holisticai/utils/trade_off_analysers/**"]
+
+[tool.hatch.envs.sphinx]
+inherit = ["all"]
+dependencies = [
+  "scikit-learn>=1.0.2", 
+  "cvxpy",
+  "sphinx",
+  "pydata-sphinx-theme",
+  "myst_parser",
+  "nbsphinx",
+  "jupyter",
+  "sphinx_copybutton",
+  "sphinx_design",
+  "sphinx_togglebutton",
+  "sphinxcontrib.youtube",
+  "pandas",
+  "numpy==1.26",
+  "pybind11>=2.12",
+  "pyarrow",
+
+  "jax",
+  "jaxopt",
+  "optax",
+  "flax"
+]
+
+[tool.hatch.envs.sphinx.scripts]
+build = ["sphinx-build -b html docs/source docs/build"]
+tutorials = ["python docs/run_tutorials.py"]
+
+
+
+[tool.hatch.envs.testing]
+dependencies = [
+  "scikit-learn>=1.0.2", 
+  "pandas>=1.1.5", 
+  "numpy>=1.19.5",
+  "seaborn>=0.11.2",
+  "networkx>=3.1",
+  "lime>=0.2.0.1",
+  "shap>=0.42.1",
+  "flake8>=5.0.4",
+  "pre-commit>=2.20.0",
+  "pytest>=7.1.3",
+  "commitizen>=2.40.0",
+  "lime>=0.2.0.1",
+  "shap>=0.42.1",
+  "ipykernel>=6.25.2",
+  "ruff",
+  "jax",
+  "jaxopt",
+  "optax",
+  "flax"
+]
+env-vars = { PYTHONPATH = "src" }
+
+[tool.hatch.envs.testing.scripts]
+run = ["python -m pytest tests --cache-clear"]
+foo = ["which python"]
+
+[tool.hatch.envs.default]
+env-vars = { PYTHONPATH = "src" }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/holisticai"]

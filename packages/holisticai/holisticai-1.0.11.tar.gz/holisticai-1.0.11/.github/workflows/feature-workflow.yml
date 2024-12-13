@@ -1,0 +1,36 @@
+name: Test and Lint feature/bugfix branches
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - 'feature/*'
+      - 'bugfix/*'
+    paths-ignore:
+      - '**.md'
+      - '**.rst'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.9"
+          cache: "pip"
+      
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip 
+            pip install hatch
+
+      - name: Lint and Format
+        run: hatch fmt --check
+
+      - name: Run tests
+        run: hatch run testing:run
