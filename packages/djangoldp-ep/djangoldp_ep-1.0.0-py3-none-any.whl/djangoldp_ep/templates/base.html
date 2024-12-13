@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <title>{% block title %}Énergie partagée{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/registration.css' %}"> 
+        {% if is_amorce %}
+            <link rel="stylesheet" href="{% static 'css/css_amorce.css' %}">
+        {% else %}
+            <link rel="stylesheet" href="{% static 'css/css_ep.css' %}">
+        {% endif %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    </head>
+
+    <body>
+        <header>
+            <div class="container">
+                <div class="logo-header">
+                    {% if is_amorce %}
+                        <img src="{% static 'img/Amorcelogo.svg' %}" alt="Amorce">
+                    {% else %}
+                        <img src="{% static 'img/EPlogo.svg' %}" alt="Énergie Partagée">
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+
+    </body>
+</html>

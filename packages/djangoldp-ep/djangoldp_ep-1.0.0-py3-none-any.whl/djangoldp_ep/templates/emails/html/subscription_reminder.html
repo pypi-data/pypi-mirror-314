@@ -1,0 +1,97 @@
+
+
+{% load static %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet"> 
+    <style>
+        .mail {
+            width: 95%;
+            max-width: 1050px;
+            margin: auto;
+            border: solid 1px  #65aa04;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .title {
+            background-color: #65aa04;
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: flex;
+            border-radius: 20px 20px 0 0;
+        }
+        h2 {
+            color: white;
+            font-size: 35px;
+            font-weight: 800;
+            margin: auto;
+        }
+        .logo {
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .logo img {
+            width:150px;
+            object-fit: contain;
+            background-color: white
+        }
+        .email-content {
+            max-width: 800px;
+            margin: auto;
+            width: 90%;
+        }
+        p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 20px;
+            margin: 30px 0;
+        }
+        a {
+            color:#65aa04;
+        }
+        b {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<div class="mail">
+    <div class="title">
+        <h2>
+        Relance de cotisation {{contribution.year}}
+        </h2>
+    </div>
+    <div class="logo">
+        <img src="{{uri}}{{actor.regionalnetwork.logo}}"
+        alt="logo">
+    </div>
+    <div class="email-content">
+        <p>
+            Bonjour {{user.name}},
+        </p>
+        <p>
+            Sauf erreur de notre part, nous n'avons pas reçu votre règlement pour l'adhésion {{contribution.year}} de {{actor.longname}}.<br/>Nous vous invitons à procéder au règlement de {{contribution.amount}}€.
+        </p>
+        <p>
+            Référence : <b>{{actor.regionalnetwork.code}}-{{contribution.year}}-{{contribution.contributionnumber}}</b>
+        </p>
+        <p>
+            Vous trouverez votre appel à cotisation sur votre espace membre : <a href="{{front_url}}" target="_blank">www.moncompte.energie-partagee.org</a>
+        </p>
+        <p>
+            Modalité de règlement :
+            <ul>
+                <li> par virement (de préférence) : IBAN : {{actor.regionalnetwork.iban}} - BIC {{actor.regionalnetwork.bic}}</li>
+                <li>ou par chèque à l'ordre de {{actor.regionalnetwork.orderpayment}}, {{actor.regionalnetwork.addresspayment}}, {{actor.regionalnetwork.postcodepayment}} {{actor.regionalnetwork.citypayment}}</li>
+            </ul>
+        </p>
+        <p>Après réception de votre cotisation, nous mettrons votre reçu à disposition dans votre espace membre.</p>
+        <p>Pour toutes autres questions sur votre adhésion, nous restons à votre disposition.</p>
+        <p>Cordialement,</p>
+        <p>
+            {{sender.name}}
+        </p>
+    </div>
+</div>

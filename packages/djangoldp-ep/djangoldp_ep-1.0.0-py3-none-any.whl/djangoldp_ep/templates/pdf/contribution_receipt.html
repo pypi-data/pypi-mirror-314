@@ -1,0 +1,108 @@
+<head>
+  <title>{% block title %}Reçu de cotisation {{contribution.year}} {% endblock %}</title>
+</head>
+<style>
+  .w-60 {
+    width: 60%;
+  }
+  .w-40 {
+    width: 40%;
+  }
+  .color-white {
+    color: white;
+  }
+  .background-green {
+    background-color: #65aa04;
+  }
+  .ft-20 {
+    font-size: 20px;
+  }
+  .t-align-center {
+    text-align: center;
+  }
+  .page {
+    font-family: sans-serif;
+    color: #1F1F22;
+    font-size: 14px;
+  }
+  .margin-bottom-medium {
+    margin-bottom: 15px;
+  }
+  .margin-bottom-xlarge {
+    margin-bottom: 40px;
+  }
+  .margin-top-medium {
+    margin-top: 15px;
+  }
+  .margin-top-large {
+    margin-top: 20px;
+  }
+  .margin-top-xlarge {
+    margin-top: 40px;
+  }
+  .margin-top-xxlarge {
+    margin-top: 60px;
+  }
+  .padding-top-medium {
+    padding-top: 25px;
+  }
+  .padding-bottom-medium {
+    padding-bottom: 10px;
+  }
+  .padding-left-medium {
+    padding-left: 15px;
+  }
+  .padding-right-medium {
+    padding-right: 15px;
+  }
+</style>
+<div class="page padding-left-medium padding-right-medium">
+  <table>
+    <tr>
+      <td class="w-60">
+        <img src='{{uri}}{{ contribution.receivedby.logo }}' alt="logo" width="150"></img>
+        <div class="margin-top-medium"><b>{{ contribution.receivedby.name }}</b></div>
+        <div>{{ contribution.receivedby.address }}</div>
+        <div>{{ contribution.receivedby.postcode }} {{ contribution.receivedby.city }}</div>
+        <div class="margin-bottom-medium">N° de siret : {{ contribution.receivedby.siren }}</div>
+      </td>
+      <td class="w-40">
+        <div class="margin-bottom-medium">A {{ contribution.receivedby.city }} , le {{ contribution.calldate|date:"d/m/Y" }}</div>
+        <div><b>A l'attention de :</b></div>
+        <div>{{ contribution.actor.managementcontact.name }}</div>
+        <div>{{ contribution.actor.longname }}</div>
+        <div>{{ contribution.actor.address }}</div>
+        <div class="margin-bottom-medium">{{ contribution.actor.postcode }} {{ contribution.actor.city }}</div>
+        <div class="margin-bottom-medium">SIRET ou RNA : {{contribution.actor.siren|default_if_none:"" }}</div>
+        <div><b>Interlocuteur.trice :</b></div>
+        <div>{{ contribution.callcontact.name}}</div>
+        <div>{{ contribution.callcontact.email}}</div>
+      </td>
+    </tr>
+  </table>
+  <div class="background-green color-white margin-top-xxlarge margin-bottom-xlarge padding-left-medium padding-right-medium padding-top-medium padding-bottom-medium ft-20"><b>REÇU - COTISATION {{ contribution.year }} {{ contribution.receivedby.name }} {% if contribution.receivedby.nationale == False %}& Énergie Partagée {% endif %}</b></div>
+  
+  <div><b>Référence : {{ contribution.receivedby.code }}-{{ contribution.year}}-{{ contribution.contributionnumber }}</b></div>
+  <div class="margin-top-large">Le réseau {{ contribution.receivedby.name }} reconnait avoir reçu la somme de <b>{{ contribution.amount }} €</b> de la part de <b>{{ contribution.actor.longname }}</b>, pour son adhésion dans la catégorie 
+    <b>
+      {% if contribution.actor.category == "collectivite" %}Collectivité
+      {% elif contribution.actor.category == "partenaire" %}Partenaire
+      {% elif contribution.actor.category == "porteur_exploit" %} Porteur de projet en exploitation
+      {% elif contribution.actor.category == "porteur_dev" %} Porteur de projet en développement
+      {% endif %}
+    </b>
+    {% for discount in contribution.discount.all %}
+      {% if discount.name == 'villageoise' %}
+      (Remise de {{discount.amount}}% dans le cadre de son appartenance au réseau des Centrales Villageoises)
+      {% endif %}
+    {% endfor %}
+    .
+  </div>
+  <div class="margin-top-medium">L'adhésion a été réglée par un {{ contribution.paymentmethod.name }} en date du {{ contribution.paymentdate|date:"d/m/Y" }}.</div>
+  <div class="margin-top-medium">Ce versement vaut pour cotisation pour {{ contribution.year }} pour {{ contribution.receivedby.name }} {% if contribution.receivedby.nationale == False %}& Énergie Partagée {% endif %}</div>
+  <div class="margin-top-medium">Vous rejoignez {% if contribution.receivedby.nationale == False %}le collège {{ contribution.actor.college.name }} de {{ contribution.receivedby.name }} et le college {{ contribution.actor.collegeepa.name }} d'Énergie Partagée Association. {% else %}le college {{ contribution.actor.collegeepa.name }} d'Énergie Partagée Association.{% endif %}</div>
+  <div class="margin-top-medium">{{ contribution.receivedby.mandat }} {{ contribution.receivedby.respfirstname }} {{ contribution.receivedby.respname }} </div>
+  <div class="margin-top-xlarge t-align-center">
+    <img src='{{uri}}{{ contribution.receivedby.signature }}' alt="signature" width="150px" height="auto"></img>
+    </div>
+</div>

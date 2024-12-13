@@ -1,0 +1,204 @@
+<head>
+  <title>{% block title %}Appel à cotisation {{contribution.year}} {% endblock %}</title>
+</head>
+<style>
+
+  .w-60 {
+    width: 60%;
+  }
+  .w-40 {
+    width: 40%;
+  }
+  .color-white {
+    color: white;
+  }
+  .background-grey-green {
+    background-color: #F2F5EA;
+  }
+  .color-grey-green {
+    color: #F2F5EA;
+  }
+  .background-green {
+    background-color: #65aa04;
+  }
+  .ft-16 {
+    font-size: 16px;
+  }
+  .t-align-right {
+    text-align: right;
+  }
+  .t-uppercase {
+    text-transform: uppercase;
+  }
+  .page {
+    font-family: sans-serif;
+    color: #1F1F22;
+    font-size: 14px;
+  }
+  .titre {
+    color: #65aa04;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+  }
+  .margin-small {
+    margin: 10px;
+  }
+  .margin-bottom-medium {
+    margin-bottom: 15px;
+  }
+  .margin-top-xsmall {
+    margin-top: 5px;
+  }
+  .margin-top-small {
+    margin-top: 10px;
+  }
+  .margin-top-medium {
+    margin-top: 15px;
+  }
+  .margin-top-large {
+    margin-top: 20px;
+  }
+  .margin-top-xxlarge {
+    margin-top: 40px;
+  }
+  .margin-right-medium {
+    margin-right: 15px;
+  }
+  .margin-null {
+    margin: 0;
+  }
+  .padding-xsmall {
+    padding: 5px;
+  }
+  .padding-small {
+    padding: 10px;
+  }
+  .padding-medium {
+    padding: 15px;
+  }
+  .padding-top-xsmall {
+    padding-top: 5px;
+  }
+  .padding-top-small {
+    padding-top: 10px;
+  }
+  .padding-top-large {
+    padding-top: 20px;
+  }
+  .padding-bottom-xsmall {
+    padding-bottom: 5px;
+  }
+  .padding-bottom-small {
+    padding-bottom: 10px;
+  }
+  .padding-bottom-medium {
+    padding-bottom: 15px;
+  }
+  .padding-bottom-large {
+    padding-bottom: 20px;
+  }
+  .padding-right-small {
+    padding-right: 10px;
+  }
+  .padding-right-medium {
+    padding-right: 15px;
+  }
+  .padding-left-small {
+    padding-left: 10px;
+  }
+  .padding-left-medium {
+    padding-left: 15px;
+  }
+</style>
+<div class="page">
+
+  <table>
+    <tr>
+      <td class="w-60">
+        <img src='{{uri}}{{ contribution.actor.regionalnetwork.logo }}' alt="logo" width="150"></img>
+        <div class="margin-top-medium"><b>{{ contribution.actor.regionalnetwork.name }}</b></div>
+        <div>{{ contribution.actor.regionalnetwork.address }}</div>
+        <div>{{ contribution.actor.regionalnetwork.postcode }} {{ contribution.actor.regionalnetwork.city }}</div>
+        <div class="margin-bottom-medium">N° de siret : {{ contribution.actor.regionalnetwork.siren }}</div>
+        <div><b>Référence : </b>{{ contribution.actor.regionalnetwork.code }}- {{ contribution.year}}- {{ contribution.contributionnumber }}</div>
+      </td>
+      <td class="w-40">
+        <div class="margin-bottom-medium">A {{ contribution.actor.regionalnetwork.city }} , le {{ contribution.calldate|date:"d/m/Y" }}</div>
+        <div><b>A l'attention de :</b></div>
+        <div>{{ contribution.actor.managementcontact.name }}</div>
+        <div>{{ contribution.actor.longname }}</div>
+        <div>{{ contribution.actor.address }}</div>
+        <div class="margin-bottom-medium">{{ contribution.actor.postcode }} {{ contribution.actor.city }}</div>
+        <div class="margin-bottom-medium">SIRET ou RNA : {{contribution.actor.siren|default_if_none:"" }}</div>
+        <div><b>Interlocuteur.trice :</b></div>
+        <div>{{ contribution.callcontact.name}}</div>
+        <div>{{ contribution.callcontact.email}}</div>
+      </td>
+    </tr>
+  </table>
+  <div class="margin-top-xxlarge titre padding-left-small">Adhésion {{ contribution.year }} {{ contribution.actor.regionalnetwork.name }} {% if contribution.actor.regionalnetwork.nationale == False %} & Énergie Partagée {% endif %}
+  </div>
+  <div class="margin-top-large padding-left-small">Modalité de calcul de votre adhésion</div>
+  <table>
+    <tr class="background-grey-green ft-16">
+      <td class="margin-small padding-left-medium">
+        {% if contribution.actor.category == 'collectivite' %} 
+          <div class="color-grey-green">Collectivité</div>
+          <div class="margin-top-small"><b>Collectivité</b></div>
+          <div class="padding-bottom-large"> 2c€ /habitants ({{ contribution.numberpeople}})<br/>Plancher 50 € , Plafond 1000 €</div>
+        {% elif  contribution.actor.category == 'partenaire' %}
+          <div class="color-grey-green">partenaire</div>
+          <div class="margin-top-small"><b>Partenaire</b></div>
+          <div class="padding-bottom-large"> 1 à 4 salarié.es : 100 € <br/>5 à 10 salarié.es : 250 € <br/>10 salarié.es : 400 €<br/>({{ contribution.numberemployees}} salarié.es)</div>
+        {% elif  contribution.actor.category == 'porteur_exploit' %}
+          <div class="color-grey-green">Porteur de projet en exploitation</div>
+          <div class="margin-top-small"><b>Porteur de projet en exploitation</b></div>
+          <div class="padding-bottom-large">0,5% du CA annuel ({{ contribution.turnover }} € )<br/>Plancher 50 € , Plafond 1000 €</div>
+        {% elif  contribution.actor.category == 'porteur_dev' %}
+          <div class="color-grey-green">Porteur de projet en développement</div>
+          <div class="margin-top-small"><b>Porteur de projet en développement</b></div>
+          <div class="padding-bottom-large">Cotisation fixe (50 € )</div>
+        {% endif %}
+        {% for discount in contribution.discount.all %}
+          {% if discount.name == 'villageoise' %}
+            <div class="padding-bottom-large"><b>Remise de {{discount.amount}}% dans le cadre de votre appartenance au réseau des Centrales Villageoises.</b></div>
+          {% endif %}
+        {% endfor %}
+      </td>
+      <td class=""><div class="margin-right-medium t-align-right"><b>{{ contribution.amount }} €</b></div></td>
+    </tr>
+    <tr>
+      <td class="w-60"></td>
+      <td class="background-green padding-xsmall color-white w-40">
+        <table class="margin-null">
+          <tr>
+            <td class="padding-top-small"><b>Net à payer</b></td>
+            <td class="padding-top-small t-align-right"><b>{{ contribution.amount }} €</b></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <div class="margin-top-xxlarge background-green color-white padding-medium padding-top-large"><b>Date d'échéance de règlement : à réception</b></div>
+  <div class="background-grey-green">
+    <div class="color-grey-green">Merci</div>
+    <div class="padding-medium">Merci d'adresser votre réglement en indiquant la référence</div>
+    <table class="margin-null background-grey-green">
+      <tr>
+        <td class="w-60 padding-left-small">
+          <div><b>De préférence par virement sur le compte suivant :</b></div>
+          <div class="t-uppercase">{{ contribution.actor.regionalnetwork.bank }} </div>
+          <div>IBAN : {{ contribution.actor.regionalnetwork.iban }} </div>
+          <div class="padding-bottom-medium">BIC : {{ contribution.actor.regionalnetwork.bic }} </div>
+        </td>
+        <td  class="w-40 padding-right-small">
+          <div><b>Ou par chèque à l'ordre de:</b></div>
+          <div>{{ contribution.actor.regionalnetwork.orderpayment }}</div>
+          <div>{{ contribution.actor.regionalnetwork.addresspayment }}</div>
+          <div class="padding-bottom-medium">{{ contribution.actor.regionalnetwork.postcodepayment }} {{ contribution.actor.regionalnetwork.citypayment }}</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}Inscription à la plate-forme{% endblock %}
+{% block content %}
+    <section id="registration_form">
+        <div class="formulaire">
+            <h1>Création de votre compte utilisateur</h1>
+            <form method='post' action=''>
+                {% csrf_token %}
+                {% if form.errors %}
+                <p class="error">
+                    Il y a des erreurs dans le formulaire. Veuillez les corriger avant de valider.
+                    {% for key, value in form.errors.items %}
+                        {% for error in value %}
+                            <div class="errortext">{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </p>
+                {% endif %}
+                <div class="d-flex d-flex-left">
+                    <div class="w50 last-name">                            
+                        <label class="required">Nom</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="w50">
+                        <label class="required">Prénom</label>
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <label class="required">Identifiant</label>
+                <div class="helptext">Pas plus de 150 caractères, seulement des chiffres, lettres sans accent et - ou _ </div>
+                <input type="text" name="username" maxlength="150" pattern="[a-zA-Z0-9-_]+" title="Vous ne devez rentrer que des lettres sans accent, des chiffres ici ou des caractères tels que -_" autofocus="" required="" id="id_username">
+                <label class="required">Email</label>
+                {{ form.email }}
+                <label class="required">Mot de passe</label>
+                {{ form.password1 }}
+                <label class="required">Mot de passe</label>
+                <div class="helptext">Entrez le même mot de passe que précédemment pour vérification</div>
+                {{ form.password2 }}
+                <input type="submit" class="submit_registration" value="M'inscrire" />
+            </form>
+            <div class="helptext fw500 helplink">
+                Déjà un compte ?
+                <a class="sib-link sib-register-link" href="{% url 'login' %}?next={{next|urlencode}}"> Connectez-vous</a>
+            </div>
+            <div class="helptext fw500 helplink">
+                Mot de passe oublié ?
+                <a class="sib-link" href="/auth/password_reset/">cliquez ici</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
