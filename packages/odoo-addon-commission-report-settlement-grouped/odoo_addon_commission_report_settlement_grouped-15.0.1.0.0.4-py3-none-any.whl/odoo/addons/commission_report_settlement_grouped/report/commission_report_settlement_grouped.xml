@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Alberto Martínez <alberto.martinez@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <template id="report_settlement_grouped">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t
+                    t-call="commission_report_settlement_grouped.report_settlement_grouped_document"
+                    t-lang="o.agent_id.lang"
+                />
+            </t>
+        </t>
+    </template>
+
+    <template id="report_settlement_grouped_document">
+        <t t-set="o" t-value="o.with_context(lang=o.agent_id.lang)" />
+        <t t-call="web.external_layout">
+            <div class="mt-5">
+                <div class="page" style="font-size: 12px;">
+                    <h2 style="font-size: 1.6rem;">Settlement</h2>
+                    <h6><p t-field="o.agent_id.name" /></h6>
+                    <div id="informations" class="row mt-4 mb-4">
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.date_from">
+                            <strong>From:</strong>
+                            <p t-field="o.date_from" />
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2" t-if="o.date_to">
+                            <strong>To:</strong>
+                            <p t-field="o.date_to" />
+                        </div>
+                    </div>
+                    <table class="table table-sm" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <th class="text-start">Date</th>
+                                <th class="text-start">Invoice</th>
+                                <th class="text-start">Customer</th>
+                                <th class="text-start">Amount</th>
+                                <th class="text-end">Amount settled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t
+                                t-set="invoice_ids"
+                                t-value="o.mapped('line_ids.invoice_agent_line_id.object_id.move_id')"
+                            />
+                            <tr t-foreach="invoice_ids" t-as="inv">
+                                <td class="text-start">
+                                    <span t-esc="inv.invoice_date" />
+                                </td>
+                                <td class="text-start">
+                                    <span t-esc="inv.name" />
+                                </td>
+                                <td class="text-start">
+                                    <span t-esc="inv.partner_id.name" />
+                                </td>
+                                <td class="text-start">
+                                    <span
+                                        t-esc="inv.amount_total_signed"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"
+                                    />
+                                </td>
+                                <td class="text-end">
+                                    <span
+                                        t-esc="inv._get_commission_total_by_salesman(o.agent_id)"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"
+                                    />
+                                </td>
+                            </tr>
+                            <t t-if="not invoice_ids">
+                                <td>
+                                    There are no invoices to group
+                                </td>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td />
+                                <td />
+                                <td />
+                                <td class="text-end">
+                                    <strong>Total</strong>
+                                </td>
+                                <td class="text-end">
+                                    <span
+                                        t-field="o.total"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"
+                                    />
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="action_report_settlement_grouped" model="ir.actions.report">
+        <field name="name">Settlement Report Grouped</field>
+        <field name="model">commission.settlement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field
+            name="report_name"
+        >commission_report_settlement_grouped.report_settlement_grouped</field>
+        <field
+            name="report_file"
+        >commission_report_settlement_grouped.report_settlement_grouped</field>
+        <field name="binding_model_id" ref="commission.model_commission_settlement" />
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>
