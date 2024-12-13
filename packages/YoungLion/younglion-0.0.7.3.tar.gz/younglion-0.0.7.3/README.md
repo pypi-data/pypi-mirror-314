@@ -1,0 +1,2100 @@
+
+# Young Lion Python Library
+
+The **Young Lion Python Library** is designed to simplify the work of developers, especially *Young Lion Developers*. This library provides a wide range of functionalities for handling various file formats, managing directories, and executing file-related operations efficiently.
+
+This library is under development and will be expanded with more features in the future.
+
+---
+
+# Attention! 
+If an error or problem occurs during the installation, you may need to run this code in the terminal:
+```
+pip cache purge
+python -m pip install --upgrade pip
+pip install YoungLion
+```
+## Badges
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
+## Unlike 0.0.7:
+We fixed some minor bugs in VISTA in version 0.0.7.1. We did not make the version 0.0.8 because there were no major changes.
+
+## Modules
+
+- ## Functions
+- ## VISTA
+
+## Function Features and Overview
+
+This file contains a very comprehensive set of Python classes that perform various functions. Below is a general summary of these classes and the main features they offer:
+
+---
+
+#### **1. `File` Class**
+- **Purpose**: File processing (JSON, TXT, CSV, LOG, PDF, XML, YAML, INI, etc.) and directory management.
+- **Supported Operations**:
+  - Reading and writing JSON, TXT, LOG files.
+  - Reading, writing, adding and updating CSV files.
+  - Reading, writing, and creating PDF content.
+  - Read, write and edit XML files.
+  - Compressing and extracting compressed files (`.zip`).
+  - Read/write HTML, CSS, and JS files.
+  - **Python File Management**:
+    - Executing Python files with argument and terminal options.
+    - Adding code blocks to Python files (start, end, or specific line).
+    - Validating and preparing Python file paths.
+  - Executing SQL queries and creating tables.
+  - **JavaScript File Management**:
+    - Reading, writing, and executing JavaScript files.
+    - Terminal-based or background execution.
+  - **LaTeX Processing**:
+    - Converting Markdown to LaTeX.
+    - Reading and writing `.tex` files.
+    - Compiling LaTeX to plain text.
+    - Converting LaTeX to Markdown.
+    - Appending content to `.tex` files.
+    - Converting LaTeX to HTML with MathJax support.
+    - Rendering LaTeX as images.
+
+---
+
+#### **2. `ScriptRunner` Class**
+- **Objective**: Execute scripts in Node.js or a specified interpreter.
+- **Key Features**:
+  - Run a script in the terminal or in the background.
+  - Providing input data for the script.
+  - Capture and process outputs.
+
+---
+
+#### **3. `TaskScheduler` Class
+- **Purpose**: Schedule, pause, resume and cancel tasks.
+- **Supported Functions**:
+  - Create one-off or repetitive tasks.
+  - Prioritizing tasks.
+  - CLI-based task listing.
+
+---
+
+#### **4. `Logger` Class**
+- Purpose**: Flexible logging at the application level.
+- **Features**:
+  - Write information, error and warning messages to log file.
+  - Support for different log levels (INFO, DEBUG, ERROR, etc.).
+  - Console and file logging support.
+
+---
+
+#### **5. `EmailManager` Class**
+- **Purpose**: Email sending and management.
+- **Basic Functions**:
+  - Sending email instantly.
+  - Scheduling email based on a specific time.
+  - Check the last messages in your inbox.
+
+---
+
+#### **6. `FileTransferManager` Class**
+- **Purpose**: Uploading and downloading files using FTP and SFTP.
+- **Features**:
+  - File upload and download.
+  - Track transfer status.
+  - Supported protocols: FTP and SFTP.
+
+---
+
+#### **7. `TextProcessor` Class**
+- **Purpose**: Text analysis and editing.
+- **Key Features**:
+  - Word and character counting.
+  - Keyword search.
+  - Text replacement and summarization.
+  - Finding the most frequently used words.
+  - Readability score calculation.
+
+---
+
+With their modular structure and rich feature set, these classes provide powerful tools for many application development processes. Each one is optimized for a specific type of data processing or management operations.
+
+---
+
+## VISTA Features and Overview
+
+**VISTA (Visual Information System and Technological Analysis)** is a comprehensive Python library designed for advanced visual data processing and analysis. It seamlessly interacts with image and video content and can be used in a wide range of applications such as data visualization and machine learning preprocessing. Its modular structure provides classes and methods suitable for various data processing needs.
+
+---
+
+### **Highlights**
+
+#### **1. Image Processing (`ImageTool`, `Image` classes)**
+- **Image Operations**:
+  - Image loading, saving and resizing.
+  - Image conversion to grayscale or binary format.
+  - Extracting text from an image (OCR).
+  - Adding text on an image.
+  - Uploading online images via URL.
+- **Supported Formats**:
+  - Raster (PNG, JPEG) and vector images.
+
+#### **2. Video Processing (`VideoTool` Class)**
+- **Basic Functions**:
+  - Upload, cut and resize videos.
+  - Change video format (e.g. MP4, AVI).
+  - Extracting audio from or adding audio to videos.
+  - Create videos from images.
+  - Create an audio waveform and combine it with video.
+  - Add text to videos and merge videos.
+- **Visualization**:
+  - Special effects and color-themed visualization for audio and video.
+
+#### **3. Audio Processing (`AudioTool` Class)**
+- **Audio File Manipulation**:
+  - Cut, change speed, change pitch and adjust volume.
+  - Merge audio files and create remixes.
+  - Create sine wave or custom tones.
+- **Additional Features**:
+  - Create reverse audio.
+  - Extracting and editing audio segments.
+
+#### **4. Data Visualization and Graphical Analysis (`AnalysisTableTool` Class)**
+- Graphs and Graphical Representation**:
+  - Bar graphs, line graphs, pie charts and histograms.
+  - Dot plots and box plots.
+  - Visualize complex relationships with your own custom node-edge charts.
+- **Dynamic Settings**:
+  - Customize color, background, title and axis labels.
+  - Save charts or export them as an interactive HTML file.
+
+#### **5. Error Management and Customizable Settings**
+- **Flexible Structure**:
+  - Robust error handling against file and format incompatibilities.
+  - Customizable parameters and solutions to suit user needs.
+
+---
+
+VISTA is the ideal solution for developers of all levels with its comprehensive tools that address advanced visual analysis and data processing needs.
+
+Translated with DeepL.com (free version)
+# Usage/Examples
+
+### **Comprehensive Guide to Using the `File` Class**
+
+The `File` class is a robust utility for managing and processing various file types such as JSON, TXT, CSV, PDF, XML, YAML, and more. With built-in error handling and directory management, it simplifies complex file operations for developers. Below is a detailed guide on its usage and capabilities.
+
+---
+
+### **Initialization**
+The `File` class can optionally be initialized with a `filefolder` parameter, which sets a default directory for file operations.
+
+```python
+import YoungLion
+
+# Initialize with a default directory
+file_manager = YoungLion.File(filefolder="/path/to/default/directory")
+```
+
+---
+
+### **Supported File Operations**
+
+#### **1. Directory Management**
+The `list_files_and_folders` method lists all files and folders in a given directory.
+
+```python
+# List files and folders in the default directory
+items = file_manager.list_files_and_folders()
+
+# List files and folders in a specific directory
+items = file_manager.list_files_and_folders(path="/path/to/directory")
+```
+
+---
+
+#### **2. JSON File Handling**
+**Reading JSON Files**: Reads data from a JSON file, with optional defaults and automatic creation of empty files if missing.
+
+```python
+# Reading a JSON file
+data = file_manager.json_read("data.json", default={"key": "value"})
+
+# Access nested data safely
+value = data["key"]["nested_key"]
+```
+
+**Writing JSON Files**: Writes a dictionary to a JSON file.
+
+```python
+# Writing data to a JSON file
+file_manager.json_write("data.json", {"name": "John", "age": 30})
+```
+
+---
+
+#### **3. TXT File Handling**
+**Reading Text Files**: Read an entire text file or process it line-by-line.
+
+```python
+# Read the whole file as a string
+content = file_manager.txt_read_str("notes.txt")
+
+# Read line-by-line into a dictionary with line numbers as keys
+lines = file_manager.txt_read_linear("notes.txt")
+```
+
+**Writing Text Files**: Write strings or line-based dictionaries to a text file.
+
+```python
+# Write a string to a file
+file_manager.txt_write_str("output.txt", "This is a sample text.")
+
+# Write lines to a file with line numbers
+lines_to_write = {1: "First line", 2: "Second line"}
+file_manager.txt_write_linear("output.txt", lines_to_write)
+```
+
+---
+
+#### **4. CSV File Handling**
+**Reading CSV Files**: Reads a CSV file into a list of dictionaries.
+
+```python
+# Read CSV file
+rows = file_manager.csv_read("data.csv")
+```
+
+**Writing CSV Files**: Writes a list of dictionaries to a CSV file.
+
+```python
+# Write rows to a CSV file
+file_manager.csv_write("output.csv", [{"Name": "Alice", "Age": 25}, {"Name": "Bob", "Age": 30}])
+```
+
+**Appending and Updating CSV Data**: Append new rows or update existing ones based on unique identifiers.
+
+```python
+# Append rows to an existing CSV
+file_manager.csv_append("data.csv", [{"Name": "Charlie", "Age": 35}])
+
+# Update rows in a CSV
+file_manager.csv_update("data.csv", [{"Name": "Alice", "Age": 26}], identifier="Name")
+```
+
+---
+
+#### **5. PDF File Handling**
+**Reading PDF Files**: Extracts text content from a PDF file.
+
+```python
+# Extract text from a PDF
+text = file_manager.pdf_read("document.pdf")
+```
+
+**Writing PDF Files**: Writes text content to a PDF.
+
+```python
+# Write text to a PDF
+file_manager.pdf_write("output.pdf", "This is a sample PDF content.")
+```
+
+---
+
+#### **6. XML File Handling**
+**Reading XML Files**: Parses XML files into dictionaries.
+
+```python
+# Read an XML file
+xml_data = file_manager.xml_read("data.xml")
+```
+
+**Writing and Appending XML Files**: Writes or appends dictionaries to XML files.
+
+```python
+# Write XML data
+file_manager.xml_write("output.xml", {"root": {"child": "value"}})
+
+# Append XML data
+file_manager.xml_append("data.xml", {"additional": "value"})
+```
+
+---
+
+#### **7. YAML and INI File Handling**
+**YAML Operations**: Read and write YAML files.
+
+```python
+# Read YAML file
+yaml_data = file_manager.yaml_read("config.yml", default={"setting": "default"})
+
+# Write YAML data
+file_manager.yaml_write("config.yml", {"setting": "custom"})
+```
+
+**INI Operations**: Read and write INI configuration files.
+
+```python
+# Read INI file
+ini_data = file_manager.ini_read("config.ini")
+
+# Write INI data
+file_manager.ini_write("config.ini", {"Section": {"Key": "Value"}})
+```
+
+---
+
+#### **8. Properties File Handling**
+Reads and writes `.properties` files, commonly used for configuration.
+
+```python
+# Read properties file
+props = file_manager.properties_read("config.properties")
+
+# Write to properties file
+file_manager.properties_write("config.properties", {"key": "value"}, append=True)
+```
+
+---
+
+#### **9. HTML, CSS, and JavaScript**
+Handles web-related file types like HTML, CSS, and JS.
+
+```python
+# Read an HTML file
+html_content = file_manager.html_read("index.html")
+
+# Write to an HTML file
+file_manager.html_write("index.html", "<h1>Hello World</h1>")
+```
+
+---
+
+#### **10. Compressed Files**
+Compress or extract files and folders.
+
+```python
+# Compress a folder
+file_manager.handle_compressed("folder_path", action="compress", target="archive.zip")
+
+# Extract a zip file
+file_manager.handle_compressed("archive.zip", action="extract", target="output_folder")
+```
+
+---
+
+#### **11. LaTeX Processing**
+The `File` class includes comprehensive support for LaTeX operations.
+
+**Converting Markdown to LaTeX**: Converts a Markdown string to a LaTeX-formatted string.
+
+```python
+# Convert Markdown to LaTeX
+latex_content = file.markdown_to_latex("# Heading\nThis is a paragraph.")
+```
+
+**Reading and Writing `.tex` Files**: Provides utilities to read, write, and append `.tex` files.
+
+```python
+# Read a .tex file
+content = file.tex_read("document.tex")
+
+# Write content to a .tex file
+file.tex_write("output.tex", "\\section{Introduction}\nThis is a LaTeX document.")
+
+# Append content to a .tex file
+file.tex_append("document.tex", "\\subsection{Conclusion}\nThank you!")
+```
+
+**Compiling LaTeX to Plain Text**: Converts LaTeX-formatted content to plain text, stripping out special commands.
+
+```python
+# Compile LaTeX to plain text
+plain_text = file.latex_compile(r"V_{SC} = \frac{N}{G}")
+```
+
+**Converting LaTeX to Markdown**: Transforms LaTeX content into Markdown format.
+
+```python
+# Convert LaTeX to Markdown
+markdown_content = file.tex_to_markdown(r"\section{Hello World}")
+```
+
+**Generating HTML with MathJax Support**: Creates an HTML file displaying LaTeX content using MathJax.
+
+```python
+# Convert LaTeX to HTML
+html_content = file.latex_to_html(r"V_{SC} = \frac{YL_{bank}}{YL_{official}}", "output.html")
+```
+
+**Rendering LaTeX as an Image**: Generates a visual representation of LaTeX formulas as images.
+
+```python
+# Render LaTeX formula as an image
+image_data = file.latex_to_image(r"V_{SC} = \sqrt{N}", "output.png")
+```
+
+---
+
+### **12. Python File Handling**
+The `File` class includes enhanced support for managing and manipulating Python files, such as executing scripts and dynamically adding code blocks.
+
+#### **Executing Python Files**
+You can execute a Python file with optional arguments and capture its output.
+
+```python
+# Run a Python script
+output = file.py_run("example.py", args=["--arg1", "value"])
+print(output)
+```
+
+#### **Adding Code to Python Files**
+Dynamically add new functions or code snippets to an existing Python file.
+
+**Adding Code to the End of a File**:
+```python
+new_function = """
+def say_hello():
+    print("Hello, Python!")
+"""
+file.py_add_code("example.py", new_function, position="end")
+```
+
+**Adding Code to the Start of a File**:
+```python
+new_function = """
+def initialize():
+    print("Initialization complete!")
+"""
+file.py_add_code("example.py", new_function, position="start")
+```
+
+**Adding Code at a Specific Line**:
+```python
+new_code = "print('This is a new line of code.')"
+file.py_add_code("example.py", new_code, position=5)
+```
+
+---
+
+### **Error Handling**
+The `File` class incorporates robust error handling mechanisms to deal with:
+- Missing files or directories.
+- Invalid formats (e.g., corrupted JSON or XML).
+- Permission issues.
+
+For instance, if a file is missing during a `json_read` operation, it will automatically create an empty JSON file to ensure smooth operation.
+
+---
+
+### **Advantages**
+- **Versatile**: Supports a wide variety of file formats and operations.
+- **Error-Resilient**: Handles common issues like missing files or invalid data gracefully.
+- **Customizable**: Flexible options for path validation and directory management.
+- **Integrated**: Provides a unified API for diverse file handling needs.
+
+---
+
+The `File` class is a powerful addition to any Python developer’s toolkit, offering a comprehensive suite of file management capabilities in a single interface. Whether you are dealing with structured data files or generating dynamic outputs, this class simplifies and accelerates your workflow.
+
+---
+
+### **Comprehensive Guide to Using the `ScriptRunner` Class**
+
+The `ScriptRunner` class provides a streamlined interface for executing scripts across various interpreters, such as Node.js, Python, or others. It supports input handling, terminal execution, and capturing output, making it ideal for dynamic script management.
+
+---
+
+### **Initialization**
+The `ScriptRunner` is initialized with a default interpreter, which will be used unless another is specified during execution.
+
+```python
+import YoungLion
+
+# Initialize with a default interpreter (Node.js)
+runner = Younglion.ScriptRunner(default_interpreter="node")
+
+# Change the default interpreter
+runner.set_default_interpreter("python")
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Setting and Validating Paths**
+The `_validate_path` method ensures the provided script path is valid and converts it to an absolute path. If the file does not exist, it raises a `FileNotFoundError`.
+
+```python
+# Example usage (internal)
+validated_path = runner._validate_path("script.js")
+print(validated_path)  # Outputs the absolute path of the script
+```
+
+---
+
+#### **2. Running Scripts**
+The `run_script` method is the core functionality of this class. It allows executing scripts with a specified interpreter, in the terminal or background, with optional input and output handling.
+
+**Parameters**:
+- `path`: Path to the script file.
+- `interpreter`: Interpreter to use (defaults to the class's default interpreter).
+- `terminal`: If `True`, runs the script in a terminal window.
+- `inputs`: Input data passed as a string or list of strings.
+- `output`: If `True`, captures and returns the script output.
+
+**Example: Basic Script Execution**
+```python
+# Run a Node.js script in the background
+output = runner.run_script("script.js")
+print(output)  # Prints the script output
+```
+
+**Example: Changing Interpreters**
+```python
+# Run a Python script with inputs
+output = runner.run_script("script.py", interpreter="python", inputs=["arg1", "arg2"])
+print(output)
+```
+
+**Example: Terminal Execution**
+```python
+# Run a script in the terminal (e.g., on macOS/Linux)
+runner.run_script("script.js", terminal=True)
+```
+
+---
+
+#### **3. Handling Inputs**
+The `inputs` parameter can handle either a single string or a list of strings. The class ensures the inputs are formatted correctly for the script.
+
+**Example: Passing Inputs**
+```python
+# Pass a single input string
+runner.run_script("script.js", inputs="input_data")
+
+# Pass multiple inputs as a list
+runner.run_script("script.js", inputs=["arg1", "arg2", "arg3"])
+```
+
+---
+
+#### **4. Output Management**
+By default, the method captures and returns the script's output when executed in the background. If `output` is set to `False`, the script is executed without returning the output.
+
+**Example: Suppressing Output**
+```python
+# Execute without returning output
+runner.run_script("script.js", output=False)
+```
+
+---
+
+#### **5. Terminal Execution**
+When `terminal=True`, the script is run in a terminal window. This feature depends on the operating system and requires a terminal emulator.
+
+- **Windows**: Uses the `cmd` terminal.
+- **macOS/Linux**: Uses `xterm` or similar terminal emulators.
+
+**Example: Terminal Execution**
+```python
+# Run a script in a terminal
+runner.run_script("script.js", terminal=True)
+```
+
+If no terminal emulator is found, a `RuntimeError` is raised.
+
+---
+
+### **Error Handling**
+The `ScriptRunner` class includes robust error handling for common issues:
+1. **File Not Found**: If the script file path is invalid or does not exist.
+2. **Interpreter Not Found**: If the specified interpreter is unavailable.
+3. **Execution Errors**: If the script fails during execution (e.g., syntax errors).
+
+**Example: Error Handling**
+```python
+try:
+    runner.run_script("nonexistent.js")
+except FileNotFoundError as e:
+    print(f"Error: {e}")
+except RuntimeError as e:
+    print(f"Execution Error: {e}")
+```
+
+---
+
+### **Changing the Default Interpreter**
+You can dynamically update the default interpreter using the `set_default_interpreter` method.
+
+```python
+# Change to Python as the default interpreter
+runner.set_default_interpreter("python")
+
+# Execute a Python script using the new default interpreter
+runner.run_script("example.py")
+```
+
+---
+
+### **Advantages**
+- **Flexibility**: Supports multiple interpreters (e.g., Node.js, Python).
+- **Input Handling**: Seamless integration of inputs for scripts.
+- **Terminal/Background Execution**: Run scripts in various modes depending on your needs.
+- **Cross-Platform**: Works on Windows, macOS, and Linux with appropriate configurations.
+
+---
+
+### **Usage Scenarios**
+- **Automated Script Execution**: Dynamically run scripts for tasks such as testing or data processing.
+- **Multi-Interpreter Environments**: Manage scripts in different programming languages without switching environments.
+- **Real-Time Input/Output**: Capture output and integrate with larger Python workflows.
+
+The `ScriptRunner` class is a powerful utility for developers needing streamlined script execution across diverse environments. It bridges the gap between Python and other runtime environments, making it an essential tool for automation and scripting.
+
+---
+
+### **Comprehensive Guide to Using the `TaskScheduler` Class**
+
+The `TaskScheduler` class is a robust solution for managing and executing tasks with features such as priority-based scheduling, pausing/resuming tasks, repeating intervals, and detailed task tracking. Designed with multi-threading and thread safety, it is ideal for building dynamic and flexible applications.
+
+---
+
+### **Initialization**
+The `TaskScheduler` initializes the necessary data structures and locks for managing tasks. 
+
+```python
+import YoungLion
+
+# Initialize a TaskScheduler instance
+scheduler = YoungLion.TaskScheduler()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Scheduling Tasks**
+The `schedule_task` method allows scheduling tasks with optional repeating intervals and priority control.
+
+**Parameters**:
+- `task`: The callable function to execute.
+- `interval`: Time interval (in seconds) for repeating tasks. If `None`, the task runs only once.
+- `repeat`: Whether the task repeats (`True`) or runs once (`False`).
+- `priority`: Lower values indicate higher priority.
+
+**Returns**: A unique `task_id` for tracking the task.
+
+**Example: One-Time Task**
+```python
+# Schedule a one-time task
+task_id = scheduler.schedule_task(lambda: print("Hello, world!"), repeat=False)
+```
+
+**Example: Repeating Task**
+```python
+# Schedule a repeating task with an interval of 5 seconds
+task_id = scheduler.schedule_task(lambda: print("Repeating task"), interval=5, repeat=True)
+```
+
+**Example: Priority-Based Task Scheduling**
+```python
+# Schedule tasks with different priorities
+scheduler.schedule_task(lambda: print("High priority task"), priority=1)
+scheduler.schedule_task(lambda: print("Low priority task"), priority=10)
+```
+
+---
+
+#### **2. Pausing and Resuming Tasks**
+Tasks can be paused and resumed using their unique `task_id`.
+
+**Pausing a Task**
+```python
+# Pause a running task
+scheduler.pause_task(task_id)
+```
+
+**Resuming a Task**
+```python
+# Resume a paused task
+scheduler.resume_task(task_id)
+```
+
+**Example: Pausing and Resuming**
+```python
+# Pause and resume a repeating task
+scheduler.pause_task(task_id)
+scheduler.resume_task(task_id)
+```
+
+---
+
+#### **3. Canceling Tasks**
+Tasks can be canceled at any point using their `task_id`. This sets the task's status to `"cancelled"` and prevents further execution.
+
+**Example: Cancel a Task**
+```python
+scheduler.cancel_task(task_id)
+```
+
+---
+
+#### **4. Listing Tasks**
+The `list_tasks` method displays all scheduled tasks with their:
+- **Status**: `running`, `paused`, `queued`, or `cancelled`.
+- **Priority**: Task priority level.
+- **Repeat**: Whether the task repeats.
+
+**Example: List All Tasks**
+```python
+scheduler.list_tasks()
+```
+
+**Sample Output**:
+```
+Scheduled Tasks:
+ID: 12345, Status: running, Priority: 5, Repeat: True
+ID: 67890, Status: paused, Priority: 10, Repeat: False
+```
+
+---
+
+#### **5. Thread Safety**
+The `TaskScheduler` uses threading locks to ensure thread-safe operations, especially when modifying shared data like `tasks` and `task_status`.
+
+**Internal Example: Lock Usage**
+```python
+with self.lock:
+    # Safe access or modification of shared resources
+    self.task_status[task_id] = "paused"
+```
+
+---
+
+### **Advanced Concepts**
+
+#### **Task Lifecycle**
+1. **Queued**: The task is added to the priority queue but has not started execution.
+2. **Running**: The task is actively executing.
+3. **Paused**: The task is temporarily halted and can be resumed.
+4. **Cancelled**: The task is stopped and will not execute further.
+5. **Completed**: The task has finished execution.
+
+#### **Priority Queue**
+Tasks are added to a priority queue (`PriorityQueue`), ensuring higher-priority tasks are executed first.
+
+---
+
+### **Error Handling**
+The `TaskScheduler` provides robust error handling:
+- Ensures invalid operations (e.g., pausing a completed task) are gracefully managed.
+- Catches and logs exceptions during task execution without crashing the scheduler.
+
+**Example: Error Handling**
+```python
+# Schedule a task with intentional error
+def faulty_task():
+    raise ValueError("An intentional error.")
+
+scheduler.schedule_task(faulty_task)
+
+# Output: Task <task_id> encountered an error: An intentional error.
+```
+
+---
+
+### **Advantages**
+- **Flexibility**: Supports both one-time and repeating tasks.
+- **Priority-Based Execution**: Ensures critical tasks are executed first.
+- **Thread Safety**: Enables safe multi-threaded task management.
+- **Dynamic Control**: Tasks can be paused, resumed, and canceled dynamically.
+
+---
+
+### **Usage Scenarios**
+1. **Background Data Processing**: Schedule repeating tasks to fetch or process data periodically.
+2. **Dynamic Workflows**: Adjust task execution based on changing priorities or conditions.
+3. **Task Automation**: Automate processes with time-based or event-driven triggers.
+
+The `TaskScheduler` class simplifies complex task management while maintaining flexibility and control. It is a powerful utility for developers needing reliable and dynamic task scheduling in Python applications.
+
+---
+
+### **Comprehensive Guide to Using the `Logger` Class**
+
+The `Logger` class provides a structured and customizable logging solution for Python applications. It supports logging at various levels, including `INFO`, `WARNING`, and `ERROR`, with output directed to both console and log files.
+
+---
+
+### **Initialization**
+The `Logger` class initializes with a specified log file and default log level.
+
+```python
+import YoungLion
+
+# Create a logger with default log level (INFO) and log file
+logger = YoungLion.Logger(log_file="application.log", log_level="INFO")
+```
+
+**Parameters**:
+- `log_file`: Path to the log file (default: `app.log`).
+- `log_level`: Default logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`).
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Setting Log Levels**
+The `set_log_level` method updates the logging level dynamically.
+
+**Example: Setting Log Level**
+```python
+logger.set_log_level("DEBUG")  # Enables detailed debug-level logs
+```
+
+Supported log levels:
+- `DEBUG`: Detailed debug information.
+- `INFO`: General operational information.
+- `WARNING`: Indicates potential issues.
+- `ERROR`: Errors in application execution.
+- `CRITICAL`: Severe errors causing application crashes.
+
+---
+
+#### **2. Logging Messages**
+The `Logger` provides methods to log messages at different levels.
+
+**Log an Informational Message**
+```python
+logger.log_info("Application started successfully.")
+```
+
+**Log a Warning**
+```python
+logger.log_warning("API response took longer than expected.")
+```
+
+**Log an Error**
+```python
+logger.log_error("Failed to connect to the database.")
+```
+
+**Example Output** (Console and `application.log`):
+```
+[2024-12-10 10:00:00] [INFO]: Application started successfully.
+[2024-12-10 10:05:00] [WARNING]: API response took longer than expected.
+[2024-12-10 10:10:00] [ERROR]: Failed to connect to the database.
+```
+
+---
+
+#### **3. Configurable Handlers**
+The logger is configured with both file and console handlers for dual output. The format is customizable and defaults to:
+```
+[<timestamp>] [<level>]: <message>
+```
+
+---
+
+### **Advantages**
+- **Dual Output**: Logs are saved to a file and displayed on the console.
+- **Dynamic Configuration**: Update log levels during runtime.
+- **Error Resilience**: Ensures critical logs are captured and tracked.
+
+---
+
+### **Usage Scenarios**
+1. **Debugging**: Enable `DEBUG` logs to trace code execution.
+2. **Monitoring**: Use `INFO` and `WARNING` logs for operational insights.
+3. **Error Tracking**: Capture `ERROR` and `CRITICAL` logs for issue diagnosis.
+
+---
+
+### **Comprehensive Guide to Using the `EmailManager` Class**
+
+The `EmailManager` class simplifies email management, providing functionalities for sending, scheduling, and checking inbox emails.
+
+---
+
+### **Initialization**
+The class is initialized with SMTP details and login credentials.
+
+```python
+import YoungLion
+
+# Initialize the EmailManager
+email_manager = YoungLion.EmailManager(
+    smtp_server="smtp.gmail.com",
+    smtp_port=587,
+    email_address="your_email@gmail.com",
+    email_password="your_password"
+)
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Sending Emails**
+The `send_email` method sends emails instantly.
+
+**Example: Sending an Email**
+```python
+email_manager.send_email(
+    to="recipient@example.com",
+    subject="Test Email",
+    body="This is a test email."
+)
+```
+
+---
+
+#### **2. Scheduling Emails**
+The `schedule_email` method schedules an email to be sent at a specific time.
+
+**Example: Scheduling an Email**
+```python
+from datetime import datetime, timedelta
+
+# Schedule an email 1 hour from now
+send_time = datetime.now() + timedelta(hours=1)
+email_manager.schedule_email(
+    to="recipient@example.com",
+    subject="Scheduled Email",
+    body="This email is sent at the scheduled time.",
+    send_time=send_time
+)
+```
+
+---
+
+#### **3. Checking the Inbox**
+The `check_inbox` method retrieves the latest 10 emails.
+
+**Example: Checking Emails**
+```python
+emails = email_manager.check_inbox(user="your_email@gmail.com")
+for subject, sender in emails:
+    print(f"From: {sender}, Subject: {subject}")
+```
+
+---
+
+### **Advantages**
+- **Flexibility**: Immediate or scheduled email delivery.
+- **Inbox Management**: Retrieve and display email metadata.
+- **Error Handling**: Resilient to network or authentication issues.
+
+---
+
+### **Usage Scenarios**
+1. **Notifications**: Send automated alerts to users.
+2. **Reminders**: Schedule emails for important events.
+3. **Report Delivery**: Email logs or reports periodically.
+
+---
+
+### **Comprehensive Guide to Using the `FileTransferManager` Class**
+
+The `FileTransferManager` handles file uploads and downloads via FTP and SFTP protocols. It supports tracking transfer status, ensuring robust and transparent operations.
+
+---
+
+### **Initialization**
+The `FileTransferManager` initializes with a transfer status dictionary.
+
+```python
+import YoungLion
+
+# Initialize the manager
+transfer_manager = YoungLion.FileTransferManager()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Uploading Files**
+The `upload` method uploads files using FTP or SFTP.
+
+**Example: FTP Upload**
+```python
+transfer_id = transfer_manager.upload(
+    file_path="local_file.txt",
+    destination="/remote/path/file.txt",
+    protocol="ftp",
+    host="ftp.example.com",
+    username="user",
+    password="password"
+)
+```
+
+**Example: SFTP Upload**
+```python
+transfer_id = transfer_manager.upload(
+    file_path="local_file.txt",
+    destination="/remote/path/file.txt",
+    protocol="sftp",
+    host="sftp.example.com",
+    username="user",
+    password="password",
+    port=22
+)
+```
+
+---
+
+#### **2. Downloading Files**
+The `download` method retrieves files using FTP or SFTP.
+
+**Example: FTP Download**
+```python
+transfer_id = transfer_manager.download(
+    remote_path="/remote/path/file.txt",
+    local_path="local_file.txt",
+    protocol="ftp",
+    host="ftp.example.com",
+    username="user",
+    password="password"
+)
+```
+
+---
+
+#### **3. Checking Transfer Status**
+Check the status of uploads or downloads using the transfer ID.
+
+**Example: Checking Status**
+```python
+status = transfer_manager.check_transfer_status(transfer_id)
+print(f"Transfer status: {status}")
+```
+
+---
+
+### **Advantages**
+- **Protocol Support**: Works with FTP and SFTP.
+- **Status Tracking**: Provides real-time transfer updates.
+- **Error Handling**: Ensures smooth recovery from failed transfers.
+
+---
+
+### **Usage Scenarios**
+1. **Data Migration**: Automate file uploads and downloads.
+2. **Backup Management**: Transfer backups to secure locations.
+3. **Content Distribution**: Efficiently distribute files to multiple servers.
+
+---
+
+### **Comprehensive Guide to Using the `TextProcessor` Class**
+
+The `TextProcessor` class offers a range of text analysis and manipulation tools. Its versatile methods can handle word counting, keyword searching, text replacement, readability scoring, and more. It is designed to simplify text processing tasks for applications such as natural language processing, data cleaning, and analysis.
+
+---
+
+### **Initialization**
+The `TextProcessor` class does not require any specific initialization and can be directly used by calling its methods.
+
+```python
+from text_processor_module import TextProcessor
+
+# Instantiate the TextProcessor
+text_processor = TextProcessor()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Word Counting**
+The `word_count` method calculates the number of words in a given text.
+
+**Example**:
+```python
+text = "This is a sample text with several words."
+count = text_processor.word_count(text)
+print(f"Word count: {count}")
+```
+**Output**:
+```
+Word count: 7
+```
+
+---
+
+#### **2. Finding Keywords**
+The `find_keywords` method identifies specific keywords and counts their occurrences.
+
+**Example**:
+```python
+text = "Python is powerful. Python is easy to learn."
+keywords = ["Python", "easy", "hard"]
+result = text_processor.find_keywords(text, keywords)
+print(result)
+```
+**Output**:
+```python
+{'Python': 2, 'easy': 1, 'hard': 0}
+```
+
+---
+
+#### **3. Text Replacement**
+The `replace_text` method replaces all occurrences of a substring with another string.
+
+**Example**:
+```python
+text = "Hello world! Welcome to the world of Python."
+replaced_text = text_processor.replace_text(text, "world", "universe")
+print(replaced_text)
+```
+**Output**:
+```
+Hello universe! Welcome to the universe of Python.
+```
+
+---
+
+#### **4. Sentence Counting**
+The `sentence_count` method counts the number of sentences in a text.
+
+**Example**:
+```python
+text = "This is a sentence. Here's another! And one more?"
+count = text_processor.sentence_count(text)
+print(f"Sentence count: {count}")
+```
+**Output**:
+```
+Sentence count: 3
+```
+
+---
+
+#### **5. Character Counting**
+The `character_count` method calculates the number of characters, optionally excluding spaces.
+
+**Example**:
+```python
+text = "Hello, world!"
+count_with_spaces = text_processor.character_count(text)
+count_without_spaces = text_processor.character_count(text, include_spaces=False)
+print(f"With spaces: {count_with_spaces}, Without spaces: {count_without_spaces}")
+```
+**Output**:
+```
+With spaces: 13, Without spaces: 11
+```
+
+---
+
+#### **6. Most Frequent Words**
+The `most_frequent_words` method identifies the most commonly used words.
+
+**Example**:
+```python
+text = "apple banana apple orange banana apple orange"
+top_words = text_processor.most_frequent_words(text, top_n=2)
+print(top_words)
+```
+**Output**:
+```python
+[('apple', 3), ('banana', 2)]
+```
+
+---
+
+#### **7. Removing Stopwords**
+The `remove_stopwords` method removes specified stopwords from the text.
+
+**Example**:
+```python
+text = "This is a simple text processing example."
+stopwords = ["is", "a", "this"]
+filtered_text = text_processor.remove_stopwords(text, stopwords)
+print(filtered_text)
+```
+**Output**:
+```
+simple text processing example.
+```
+
+---
+
+#### **8. Finding Unique Words**
+The `unique_words` method extracts unique words from the text.
+
+**Example**:
+```python
+text = "Python Python programming is fun!"
+unique = text_processor.unique_words(text)
+print(unique)
+```
+**Output**:
+```python
+['fun', 'is', 'programming', 'python']
+```
+
+---
+
+#### **9. Text Summarization**
+The `text_summary` method generates a summary by selecting the first few sentences.
+
+**Example**:
+```python
+text = "Sentence one. Sentence two. Sentence three. Sentence four."
+summary = text_processor.text_summary(text, max_sentences=2)
+print(summary)
+```
+**Output**:
+```
+Sentence one. Sentence two.
+```
+
+---
+
+#### **10. Finding the Longest Word**
+The `find_longest_word` method identifies the longest word in the text.
+
+**Example**:
+```python
+text = "Short and sweet words are sometimes powerful."
+longest_word = text_processor.find_longest_word(text)
+print(longest_word)
+```
+**Output**:
+```
+sometimes
+```
+
+---
+
+#### **11. Readability Scoring**
+The `calculate_readability` method computes the Flesch Reading Ease score for the text.
+
+**Example**:
+```python
+text = "This is an example text for readability scoring. It calculates the ease of reading."
+score = text_processor.calculate_readability(text)
+print(f"Readability score: {score}")
+```
+**Output**:
+```
+Readability score: 76.5 (example value, may vary based on text)
+```
+
+---
+
+### **Advantages**
+- **Comprehensive Tools**: Covers a wide range of text processing functionalities.
+- **Customizable**: Flexible parameters for various methods.
+- **Efficient**: Lightweight and easy to integrate into applications.
+
+---
+
+### **Usage Scenarios**
+1. **Natural Language Processing**: Preprocess text for machine learning models.
+2. **Content Analysis**: Extract insights from articles, documents, or web content.
+3. **Data Cleaning**: Remove stopwords, redundant phrases, or noise from raw text.
+4. **Summarization**: Generate concise overviews for long texts or documents.
+
+The `TextProcessor` class simplifies text processing and analysis, making it an essential utility for developers handling textual data.
+
+---
+
+### **Comprehensive Guide to Using the `ImageTool` and `Image` Classes**
+
+The `ImageTool` and `Image` classes, part of the `YoungLion` module, provide a comprehensive set of tools for image processing. They handle tasks such as loading, saving, resizing, converting images to grayscale, drawing text, and extracting text using OCR.
+
+---
+
+### **Initialization**
+These classes are accessed through the `YoungLion` module.
+
+```python
+import YoungLion
+
+# Initialize ImageTool for utility operations
+image_tool = YoungLion.ImageTool()
+
+# Initialize Image for instance-based operations
+image = YoungLion.Image()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Loading Images**
+Load an image from a local path or a URL.
+
+**Using `ImageTool`**:
+```python
+# Load from a file
+image = image_tool.load("example.png")
+
+# Load from a URL
+image_from_url = image_tool.load_url("https://example.com/image.png", mode="RGB")
+```
+
+**Using `Image`**:
+```python
+# Load using Image class (method chaining)
+image_instance = YoungLion.Image().load("example.png")
+
+# Load from URL using Image class
+image_instance = YoungLion.Image().load_from_url("https://example.com/image.png", mode="RGB")
+```
+
+---
+
+#### **2. Saving Images**
+Save an image to a specified file path with customizable format, optimization, and quality.
+
+**Using `ImageTool`**:
+```python
+# Save image with PNG format
+image_tool.save(image, "output.png", format="PNG", optimize=True, quality=90)
+```
+
+**Using `Image`**:
+```python
+# Save directly using the Image instance
+image_instance.save("output.jpg", format="JPEG", quality=85)
+```
+
+---
+
+#### **3. Resizing Images**
+Resize an image to a specific width and height.
+
+**Using `ImageTool`**:
+```python
+resized_image = image_tool.resize(image, (200, 200))
+```
+
+**Using `Image`**:
+```python
+# Resize using method chaining
+image_instance = image_instance.resize((200, 200))
+```
+
+---
+
+#### **4. Converting Images**
+Convert an image to grayscale or binary format.
+
+**Grayscale Conversion**:
+```python
+# Using ImageTool
+grayscale_image = image_tool.convert_to_grayscale(image)
+
+# Using Image
+image_instance = image_instance.convert_to_grayscale()
+```
+
+**Binary Conversion**:
+```python
+# Using ImageTool
+binary_image = image_tool.convert_to_binary(image, threshold=128)
+
+# Using Image
+image_instance = image_instance.convert_to_binary(threshold=128)
+```
+
+---
+
+#### **5. Drawing Text on Images**
+Overlay text on an image with customizable font size, color, and position.
+
+**Using `ImageTool`**:
+```python
+text_image = image_tool.draw_text_on_image(image, "Hello, World!", position=(50, 50), font_size=20, color="red")
+```
+
+**Using `Image`**:
+```python
+# Draw text directly on the Image instance
+image_instance = image_instance.draw_text("Hello, World!", position=(50, 50), font_size=20, color="red")
+```
+
+---
+
+#### **6. Extracting Text from Images**
+Use Optical Character Recognition (OCR) to extract text.
+
+**Using `ImageTool`**:
+```python
+extracted_text = image_tool.read_text_from_image(image)
+print(extracted_text)
+```
+
+**Using `Image`**:
+```python
+# Extract text directly
+extracted_text = image_instance.read_text()
+print(extracted_text)
+```
+
+---
+
+#### **7. Displaying Images**
+The `Image` class provides a method to display the image using the system's default viewer.
+
+```python
+image_instance.show()
+```
+
+---
+
+### **Advantages**
+- **Utility vs. Instance-Based**: Use `ImageTool` for standalone operations and `Image` for object-oriented workflows.
+- **Feature-Rich**: Handles essential and advanced image processing tasks.
+- **Integration-Ready**: Compatible with broader workflows, including web development and data analysis.
+
+---
+
+### **Usage Scenarios**
+1. **Data Augmentation**: Resize and manipulate images for machine learning datasets.
+2. **Content Creation**: Overlay text or apply filters for dynamic image content.
+3. **Document Analysis**: Extract text from scanned documents or images for automated processing.
+
+The `ImageTool` and `Image` classes in the `YoungLion` module provide a complete toolkit for modern image processing needs, combining utility-based and instance-based workflows.
+
+---
+
+### **Comprehensive Guide to Using the `VideoTool` Class**
+
+The `VideoTool` class, part of the `YoungLion` module, offers a wide range of video processing functionalities. It supports tasks such as creating videos from images, adding audio, resizing videos, trimming, merging, and waveform visualization.
+
+---
+
+### **Initialization**
+
+The `VideoTool` class is accessed via the `YoungLion` module.
+
+```python
+import YoungLion
+
+# Initialize VideoTool
+video_tool = YoungLion.VideoTool()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Creating Videos**
+
+**Convert an Image to Video**
+```python
+video_tool.image_to_video(
+    image_path="example.jpg",
+    duration=5,
+    output_path="output_video.mp4",
+    fps=24
+)
+```
+
+**Create Video from Multiple Images**
+```python
+video_tool.create_video_from_images(
+    images=["img1.jpg", "img2.jpg", "img3.jpg"],
+    duration=2,
+    output_path="slideshow.mp4",
+    fps=24
+)
+```
+
+---
+
+#### **2. Adding or Extracting Audio**
+
+**Add Audio to Video**
+```python
+video_tool.add_audio_to_video(
+    video_path="video.mp4",
+    audio_path="audio.mp3",
+    output_path="video_with_audio.mp4"
+)
+```
+
+**Extract Audio from Video**
+```python
+video_tool.extract_audio_from_video(
+    video_path="video.mp4",
+    output_audio_path="extracted_audio.mp3"
+)
+```
+
+---
+
+#### **3. Waveform Visualization**
+
+Generate a waveform video from an audio file.
+
+```python
+video_tool.audio_to_waveform_video(
+    audio_path="audio.mp3",
+    output_path="waveform_video.mp4",
+    sample_rate=44100,
+    fps=24,
+    height=5,
+    width=10,
+    sensitivity=1.5
+)
+```
+
+---
+
+#### **4. Editing Videos**
+
+**Resize a Video**
+```python
+video_tool.resize_video(
+    video_path="input.mp4",
+    output_path="resized_video.mp4",
+    size=(1280, 720)
+)
+```
+
+**Trim a Video**
+```python
+video_tool.trim_video(
+    video_path="input.mp4",
+    start_time=5,
+    end_time=15,
+    output_path="trimmed_video.mp4"
+)
+```
+
+---
+
+#### **5. Adding Text to Videos**
+Overlay text on a video with customizable font size, position, and color.
+
+```python
+video_tool.add_text_to_video(
+    video_path="video.mp4",
+    text="Hello, World!",
+    output_path="video_with_text.mp4",
+    position=(50, 50),
+    font_size=40,
+    color="yellow"
+)
+```
+
+---
+
+#### **6. Format Conversion**
+
+Change the format of a video to the desired type.
+
+```python
+video_tool.change_video_format(
+    input_path="input.avi",
+    output_path="output.mp4",
+    target_format="mp4"
+)
+```
+
+---
+
+#### **7. Merging and Concatenation**
+
+**Merge Videos**
+```python
+video_tool.merge_videos(
+    video_paths=["video1.mp4", "video2.mp4"],
+    output_path="merged_video.mp4"
+)
+```
+
+**Concatenate Videos**
+```python
+video_tool.concatenate_videos(
+    video_paths=["clip1.mp4", "clip2.mp4", "clip3.mp4"],
+    output_path="concatenated_video.mp4"
+)
+```
+
+---
+
+#### **8. Loading and Saving Videos**
+
+**Load a Video**
+```python
+video = video_tool.load_video("input_video.mp4")
+```
+
+**Save a Video**
+```python
+video_tool.save_video(
+    video_clip=video,
+    path="saved_video.mp4",
+    codec="libx264",
+    fps=30
+)
+```
+
+---
+
+### **Advantages**
+
+- **Versatile**: Supports a wide range of video processing tasks.
+- **Efficient**: Includes features like batch processing and waveform visualization.
+- **Customizable**: Allows parameter tuning for specific use cases.
+
+---
+
+### **Usage Scenarios**
+
+1. **Content Creation**: Create engaging videos from images and audio.
+2. **Data Visualization**: Generate waveform videos for presentations.
+3. **Video Editing**: Resize, trim, and overlay text for video customization.
+4. **Media Conversion**: Convert videos to different formats or merge multiple files.
+
+The `VideoTool` class in the `YoungLion` module provides a complete toolkit for modern video processing, suitable for beginners and advanced users alike.
+
+---
+
+### **Comprehensive Guide to Using the `AudioTool` Class**
+
+The `AudioTool` class, part of the `YoungLion` module, provides a versatile set of utilities for audio processing tasks. It includes functions for trimming audio, adjusting speed and pitch, merging multiple audio files, generating sine waves, and more.
+
+---
+
+### **Initialization**
+
+The `AudioTool` class is accessed via the `YoungLion` module.
+
+```python
+import YoungLion
+
+# Initialize AudioTool
+audio_tool = YoungLion.AudioTool()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Trimming Audio**
+
+**Trim Audio to Target Duration**
+```python
+audio_tool.trim_audio(
+    audio_path="input.wav",
+    output_path="trimmed_output.wav",
+    target_duration=10.0
+)
+```
+
+**Trim Specific Section of Audio**
+```python
+audio_tool.trim_audio_section(
+    audio_path="input.wav",
+    output_path="section_output.wav",
+    start_time=5.0,
+    end_time=15.0
+)
+```
+
+---
+
+#### **2. Adjusting Audio**
+
+**Change Speed of Audio**
+```python
+audio_tool.change_speed(
+    audio_path="input.wav",
+    output_path="speed_changed.wav",
+    speed_factor=1.5
+)
+```
+
+**Change Pitch of Audio**
+```python
+audio_tool.change_pitch(
+    audio_path="input.wav",
+    output_path="pitch_changed.wav",
+    n_steps=2  # Shift pitch up by 2 semitones
+)
+```
+
+**Adjust Volume of Audio**
+```python
+audio_tool.adjust_volume(
+    audio_path="input.wav",
+    output_path="volume_adjusted.wav",
+    volume_factor=1.2  # Increase volume by 20%
+)
+```
+
+---
+
+#### **3. Merging and Combining Audios**
+
+**Merge Multiple Audio Files**
+```python
+audio_tool.merge_audios(
+    audio_paths=["audio1.wav", "audio2.wav"],
+    output_path="merged_output.wav"
+)
+```
+
+**Remix Two Audio Files**
+```python
+audio_tool.remix_audios(
+    audio_path1="audio1.wav",
+    audio_path2="audio2.wav",
+    output_path="remix_output.wav",
+    volume1=1.0,
+    volume2=0.8
+)
+```
+
+---
+
+#### **4. Generating Audio**
+
+**Generate a Sine Wave**
+```python
+audio_tool.generate_sine_wave(
+    frequency=440.0,
+    duration=5.0,
+    output_path="sine_wave.wav"
+)
+```
+
+**Generate Tone (Sine Wave)**
+```python
+tone = audio_tool.generate_tone(
+    frequency=440.0,
+    duration=2.0
+)
+# Save the tone if necessary
+audio_tool.save_composition(tone, "tone_output.wav")
+```
+
+---
+
+#### **5. Extracting Audio Segments**
+
+**Extract Specific Segment from Audio**
+```python
+audio_tool.extract_segment(
+    audio_path="input.wav",
+    output_path="extracted_segment.wav",
+    start_time=10.0,
+    end_time=20.0
+)
+```
+
+---
+
+#### **6. Audio Reversal and Rhythm**
+
+**Reverse the Audio**
+```python
+audio_tool.reverse_audio(
+    audio_path="input.wav",
+    output_path="reversed_output.wav"
+)
+```
+
+**Apply Rhythm to Tones**
+```python
+tones = [tone1, tone2, tone3]  # List of tone numpy arrays
+durations = [1.0, 0.5, 0.7]  # List of durations for each tone
+rhythm = audio_tool.apply_rhythm(tones, durations)
+audio_tool.save_composition(rhythm, "rhythm_output.wav")
+```
+
+---
+
+#### **7. Saving Audio**
+
+**Save the Composition (e.g., after merging or remixing)**
+```python
+audio_tool.save_composition(
+    waveform=rhythm,  # Or any processed waveform
+    output_path="final_composition.wav"
+)
+```
+
+---
+
+### **Advantages**
+
+- **Comprehensive Audio Processing**: From trimming and merging to generating sine waves and modifying pitch, the `AudioTool` class covers a broad range of functionalities.
+- **High Customizability**: Adjust parameters like speed, pitch, volume, and duration for precise audio manipulation.
+- **Easy Integration**: The class methods can be easily integrated into broader workflows, such as music production, sound design, and data processing.
+
+---
+
+### **Usage Scenarios**
+
+1. **Audio Editing**: Trim, speed up, or change the pitch of audio files for editing and remixing.
+2. **Sound Design**: Generate tones, sine waves, and custom audio compositions for sound effects or music production.
+3. **Data Processing**: Use in machine learning or audio analysis tasks, including rhythm creation or feature extraction from audio.
+4. **Multimedia Projects**: Combine and modify multiple audio tracks for videos, presentations, or interactive media.
+
+The `AudioTool` class in the `YoungLion` module provides a comprehensive toolkit for all your audio processing needs, enabling both simple and advanced manipulation of sound files.
+
+---
+
+### **Comprehensive Guide to Using the `AnalysisTableTool` Class**
+
+The `AnalysisTableTool` class, part of the `YoungLion` module, provides a powerful set of tools for visualizing and analyzing data. It includes features for generating various types of plots and charts such as bar charts, line charts, pie charts, histograms, and more. Additionally, it provides graph visualization with node-edge relationships, including curved edges for more aesthetically pleasing graphs.
+
+---
+
+### **Initialization**
+
+The `AnalysisTableTool` class is accessed via the `YoungLion` module.
+
+```python
+import YoungLion
+
+# Initialize AnalysisTableTool
+analysis_tool = YoungLion.AnalysisTableTool()
+```
+
+---
+
+### **Key Features and Methods**
+
+#### **1. Creating a Graph with Nodes and Edges**
+
+**Plot a Graph with Curved Edges**
+```python
+nodes = {
+    "Node1": {"color": "red", "pos": (0, 1)},
+    "Node2": {"color": "blue", "pos": (1, 0)},
+    "Node3": {"color": "green", "pos": (2, 1)}
+}
+edges = [
+    ("Node1", "Node2", "black"),
+    ("Node2", "Node3", "blue")
+]
+
+analysis_tool.plot_graph(
+    nodes=nodes, 
+    edges=edges, 
+    title="Network Graph", 
+    rad=20,
+    backgroundcolor="black",
+    save_path="graph_output.png",
+    show=True
+)
+```
+
+- **Description**: This function allows creating a graph where nodes and edges are defined by a dictionary and list, respectively. You can customize the background color, edge curvature, and save the graph as an image or HTML file.
+- **Parameters**:
+    - `nodes`: Dictionary containing node positions and colors.
+    - `edges`: List of edges connecting the nodes with specified colors.
+    - `title`: Title of the graph.
+    - `rad`: Radius for the curvature of edges.
+    - `backgroundcolor`: Background color of the graph.
+    - `save_path`: Path to save the output graph.
+    - `show`: Whether to display the graph.
+    - `save_html`: Whether to save the graph as an HTML file.
+
+---
+
+#### **2. Generating Bar Charts**
+
+**Generate a Bar Chart**
+```python
+data = {"Category A": 30, "Category B": 40, "Category C": 20}
+analysis_tool.generate_bar_chart(
+    data=data,
+    x_axis_label="Categories",
+    y_axis_label="Values",
+    bar_colors=["red", "blue", "green"],
+    save_path="bar_chart.png",
+    show=True,
+    title="Bar Chart Example"
+)
+```
+
+- **Description**: This method generates a bar chart based on the provided data, with customizable axis labels, colors, and the option to save the chart.
+- **Parameters**:
+    - `data`: Dictionary containing categories (x-axis) and values (y-axis).
+    - `x_axis_label`: Label for the x-axis.
+    - `y_axis_label`: Label for the y-axis.
+    - `bar_colors`: List of colors for each bar.
+    - `save_path`: Path to save the bar chart as an image.
+    - `show`: Whether to display the chart.
+    - `title`: Title of the bar chart.
+
+---
+
+#### **3. Generating Line Charts**
+
+**Generate a Line Chart**
+```python
+x_data = [1, 2, 3, 4, 5]
+y_data = [10, 20, 30, 25, 40]
+analysis_tool.generate_line_chart(
+    x_data=x_data,
+    y_data=y_data,
+    title="Line Chart Example",
+    x_axis_label="X Axis",
+    y_axis_label="Y Axis",
+    line_color="blue",
+    save_path="line_chart.png",
+    show=True
+)
+```
+
+- **Description**: This method generates a line chart with custom x and y data, labels, and line colors.
+- **Parameters**:
+    - `x_data`: List of x-axis values.
+    - `y_data`: List of y-axis values.
+    - `title`: Title of the line chart.
+    - `x_axis_label`: Label for the x-axis.
+    - `y_axis_label`: Label for the y-axis.
+    - `line_color`: Color of the line.
+    - `save_path`: Path to save the line chart.
+    - `show`: Whether to display the chart.
+
+---
+
+#### **4. Generating Pie Charts**
+
+**Generate a Pie Chart**
+```python
+data = {"Apple": 40, "Banana": 30, "Cherry": 20, "Date": 10}
+analysis_tool.generate_pie_chart(
+    data=data,
+    title="Pie Chart Example",
+    save_path="pie_chart.png",
+    show=True
+)
+```
+
+- **Description**: This method generates a pie chart with labels and values, with the option to save and display the chart.
+- **Parameters**:
+    - `data`: Dictionary containing categories and corresponding values.
+    - `title`: Title of the pie chart.
+    - `save_path`: Path to save the pie chart.
+    - `show`: Whether to display the chart.
+
+---
+
+#### **5. Generating Scatter Plots**
+
+**Generate a Scatter Plot**
+```python
+x_data = [1, 2, 3, 4, 5]
+y_data = [5, 10, 15, 20, 25]
+analysis_tool.generate_scatter_plot(
+    x_data=x_data,
+    y_data=y_data,
+    title="Scatter Plot Example",
+    x_axis_label="X Axis",
+    y_axis_label="Y Axis",
+    marker_color="red",
+    save_path="scatter_plot.png",
+    show=True
+)
+```
+
+- **Description**: This method creates a scatter plot with customizable markers and labels.
+- **Parameters**:
+    - `x_data`: List of x-axis values.
+    - `y_data`: List of y-axis values.
+    - `title`: Title of the scatter plot.
+    - `x_axis_label`: Label for the x-axis.
+    - `y_axis_label`: Label for the y-axis.
+    - `marker_color`: Color of the scatter points.
+    - `save_path`: Path to save the scatter plot.
+    - `show`: Whether to display the chart.
+
+---
+
+#### **6. Generating Histograms**
+
+**Generate a Histogram**
+```python
+data = [1, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8, 9, 9, 10]
+analysis_tool.generate_histogram(
+    data=data,
+    x_axis_label="Values",
+    y_axis_label="Frequency",
+    num_bins=10,
+    title="Histogram Example",
+    bar_color="blue",
+    save_path="histogram.png",
+    show=True
+)
+```
+
+- **Description**: This method generates a histogram based on the provided data.
+- **Parameters**:
+    - `data`: List of numerical data.
+    - `x_axis_label`: Label for the x-axis.
+    - `y_axis_label`: Label for the y-axis.
+    - `num_bins`: Number of bins in the histogram.
+    - `bar_color`: Color of the bars.
+    - `save_path`: Path to save the histogram.
+    - `show`: Whether to display the histogram.
+
+---
+
+#### **7. Generating Box Plots**
+
+**Generate a Box Plot**
+```python
+data = [np.random.rand(10), np.random.rand(10), np.random.rand(10)]
+labels = ["Group 1", "Group 2", "Group 3"]
+analysis_tool.generate_box_plot(
+    data=data,
+    labels=labels,
+    title="Box Plot Example",
+    y_axis_label="Values",
+    box_color="blue",
+    save_path="box_plot.png",
+    show=True
+)
+```
+
+- **Description**: This method generates a box plot for multiple datasets.
+- **Parameters**:
+    - `data`: List of numerical datasets for the box plot.
+    - `labels`: List of labels for each dataset.
+    - `title`: Title of the box plot.
+    - `y_axis_label`: Label for the y-axis.
+    - `box_color`: Color of the box outlines.
+    - `save_path`: Path to save the box plot.
+    - `show`: Whether to display the box plot.
+
+---
+
+### **Advantages**
+
+- **Versatile Charting**: Supports a variety of chart types, including bar charts, line charts, pie charts, and more.
+- **Customizable**: Each chart type is highly customizable with options for labels, colors, and formatting.
+- **Integration-Ready**: The generated charts can be easily integrated into reports, presentations, or web applications.
+
+---
+
+### **Usage Scenarios**
+
+1. **Data Analysis**: Visualize data distributions, trends, and relationships with bar charts, line charts, and histograms.
+2. **Network Visualization**: Plot graphs with nodes and edges to visualize networks or systems.
+3. **Statistical Analysis**: Use box plots and pie charts to represent statistical data.
+4. **Scientific Research**: Display complex datasets in a clear and engaging manner.
+
+The `AnalysisTableTool` class in the `YoungLion` module provides an essential toolkit for data visualization, making it ideal for a wide range of analytical and presentation tasks.
+## Contribution
+Contributions to the **Young Lion Python Library** are welcome! Please open issues or submit pull requests to suggest enhancements or report bugs.
+
+![Logo](https://younglionofficial.com/Images/logo.webp)
+## LICENSE
+
+This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) License.
+
+  
