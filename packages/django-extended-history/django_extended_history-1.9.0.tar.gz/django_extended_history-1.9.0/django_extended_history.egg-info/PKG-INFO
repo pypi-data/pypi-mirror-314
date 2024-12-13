@@ -1,0 +1,103 @@
+Metadata-Version: 2.1
+Name: django-extended-history
+Version: 1.9.0
+Summary: Drop-in replacement for default Django history
+Home-page: https://github.com/HealthyFridge/django-extended-history
+Author: Rob Aben
+Author-email: rob@healthyfridge.nl
+License: BSD-3-Clause
+Project-URL: Bug Tracker, https://github.com/HealthyFridge/django-extended-history/issues
+Project-URL: repository, https://github.com/HealthyFridge/django-extended-history
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Framework :: Django :: 4.2
+Classifier: Framework :: Django :: 5.0
+Classifier: Framework :: Django :: 5.1
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 5 - Production/Stable
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: django>=4.2
+Requires-Dist: json2html>=1.3.0
+
+|PyPI| |PyPI download month|
+
+.. |PyPI| image:: https://img.shields.io/pypi/pyversions/Django.svg?style=plastic
+   :target: https://pypi.python.org/pypi/django-extended-history
+.. |PyPI download month| image:: https://img.shields.io/pypi/dm/django-extended-history.svg
+   :target: https://pypi.python.org/pypi/django-extended-history/
+
+
+django-extended-history
+========================
+
+**django-extended-history** is (IMHO) the simplest way to record all changes made in admin-screens.
+
+=============
+Requirements
+=============
+
+- Django >=4.2
+
+=============
+Features
+=============
+
+-  Drop-in extension for Django history. No changes in any model, hence no migrations.
+-  Records all changes in JSON format, extending what Django stores by default.
+-  Adds a view 'Log entries' under 'Administration', showing all content types for which a user has permissions.
+-  Safe to remove. Django will ignore all extra recorded information and revert to it's default history. So give it a spin!
+
+=============
+
+
+------------
+Installation
+------------
+
+.. code-block::
+
+    pip install django-extended-history
+
+------------
+Setup
+------------
+
+Add **django_extended_history** to **INSTALLED_APPS** setting like this:
+
+.. code-block:: python
+
+    INSTALLED_APPS = [
+    ...,
+    'django_extended_history',
+    ]
+
+Done!
+
+------------
+Usage
+------------
+
+Apply the **DjangoExtendedHistory** mixin to all applicable admin-views:
+
+.. code-block:: python
+    
+    from django.contrib import admin
+    from .models import MyModel
+    from django_extended_history.admin import DjangoExtendedHistory
+    
+    @admin.register(MyModel)
+    class MyModelAdmin(DjangoExtendedHistory, admin.ModelAdmin):
+        ...
+
+------------
+Misc
+------------
+
+Django extended history is released under the BSD-3 license, like Django. If you like it, please consider contributing.
