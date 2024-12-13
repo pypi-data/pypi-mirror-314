@@ -1,0 +1,33 @@
+[build-system]
+requires = [
+    "setuptools",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teos10"
+description = "Unofficial Python implementation of the TEOS-10 properties of water"
+readme = "README.md"
+dependencies = [
+    "jax",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Oceanography",
+]
+dynamic = ["version"]
+
+[tool.setuptools.packages.find]
+include = ["teos10*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "teos10.__version__"}
