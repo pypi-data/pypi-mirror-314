@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NGPIris.cli &#8212; NGPIris  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=61cd365c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for NGPIris.cli</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">click</span>
+<span class="kn">from</span> <span class="nn">click.core</span> <span class="kn">import</span> <span class="n">Context</span>
+<span class="kn">from</span> <span class="nn">json</span> <span class="kn">import</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">NGPIris.hcp</span> <span class="kn">import</span> <span class="n">HCPHandler</span>
+
+<div class="viewcode-block" id="get_HCPHandler">
+<a class="viewcode-back" href="../../NGPIris.cli.html#NGPIris.cli.get_HCPHandler">[docs]</a>
+<span class="k">def</span> <span class="nf">get_HCPHandler</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">HCPHandler</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;hcph&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="format_list">
+<a class="viewcode-back" href="../../NGPIris.cli.html#NGPIris.cli.format_list">[docs]</a>
+<span class="k">def</span> <span class="nf">format_list</span><span class="p">(</span><span class="n">list_of_things</span> <span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">list_of_buckets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span> <span class="p">:</span> <span class="n">s</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">list_of_things</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_of_buckets</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;credentials&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">version_option</span><span class="p">(</span><span class="n">package_name</span> <span class="o">=</span> <span class="s2">&quot;NGPIris&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">credentials</span> <span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    NGP Intelligence and Repository Interface Software, IRIS. </span>
+<span class="sd">    </span>
+<span class="sd">    CREDENTIALS refers to the path to the JSON credentials file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">ensure_object</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;hcph&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HCPHandler</span><span class="p">(</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;file-or-folder&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_or_folder</span> <span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Upload files to an HCP bucket/namespace. </span>
+<span class="sd">    </span>
+<span class="sd">    BUCKET is the name of the upload destination bucket.</span>
+
+<span class="sd">    FILE-OR-FOLDER is the path to the file or folder of files to be uploaded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_or_folder</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">hcph</span><span class="o">.</span><span class="n">upload_folder</span><span class="p">(</span><span class="n">file_or_folder</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hcph</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">file_or_folder</span><span class="p">)</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;object_path&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;local_path&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-f&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;--force&quot;</span><span class="p">,</span> 
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Overwrite existing file with the same name&quot;</span><span class="p">,</span> 
+    <span class="n">is_flag</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">object_path</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">local_path</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">force</span> <span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download a file from an HCP bucket/namespace.</span>
+
+<span class="sd">    BUCKET is the name of the upload destination bucket.</span>
+
+<span class="sd">    OBJECT_PATH is the path to the object to be downloaded.</span>
+
+<span class="sd">    LOCAL_PATH is the folder where the downloaded object is to be stored locally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">local_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+    <span class="n">downloaded_object_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">object_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="n">downloaded_object_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+        <span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Object already exists. If you wish to overwrite the existing file, use the -f, --force option&quot;</span><span class="p">)</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">object_path</span><span class="p">,</span> <span class="n">downloaded_object_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">delete_object</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">object</span> <span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete an object from an HCP bucket/namespace. </span>
+
+<span class="sd">    BUCKET is the name of the bucket where the object to be deleted exist.</span>
+
+<span class="sd">    OBJECT is the name of the object to be deleted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">delete_object</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;folder&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">delete_folder</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">folder</span> <span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a folder from an HCP bucket/namespace. </span>
+
+<span class="sd">    BUCKET is the name of the bucket where the folder to be deleted exist.</span>
+
+<span class="sd">    FOLDER is the name of the folder to be deleted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">delete_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">list_buckets</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    List the available buckets/namespaces on the HCP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">format_list</span><span class="p">(</span><span class="n">hcph</span><span class="o">.</span><span class="n">list_buckets</span><span class="p">()))</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-no&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;--name-only&quot;</span><span class="p">,</span> 
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Output only the name of the objects instead of all the associated metadata&quot;</span><span class="p">,</span> 
+    <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">list_objects</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name_only</span> <span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    List the objects in a certain bucket/namespace on the HCP.</span>
+
+<span class="sd">    BUCKET is the name of the bucket in which to list its objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="n">objects_list</span> <span class="o">=</span> <span class="n">hcph</span><span class="o">.</span><span class="n">list_objects</span><span class="p">(</span><span class="n">name_only</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name_only</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">format_list</span><span class="p">(</span><span class="n">objects_list</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">objects_list</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">indent</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;search_string&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-cs&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;--case_sensitive&quot;</span><span class="p">,</span> 
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Use case sensitivity? Default value is False&quot;</span><span class="p">,</span> 
+    <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">simple_search</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">search_string</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">case_sensitive</span> <span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make simple search using substrings in a bucket/namespace on the HCP.</span>
+
+<span class="sd">    BUCKET is the name of the bucket in which to make the search.</span>
+
+<span class="sd">    SEARCH_STRING is any string that is to be used for the search.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">hcph</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="n">list_of_results</span> <span class="o">=</span> <span class="n">hcph</span><span class="o">.</span><span class="n">search_objects_in_bucket</span><span class="p">(</span><span class="n">search_string</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Search results:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">list_of_results</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;- &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">)</span>
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;bucket&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span> <span class="nf">test_connection</span><span class="p">(</span><span class="n">context</span> <span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">bucket</span> <span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the connection to a bucket/namespace.</span>
+
+<span class="sd">    BUCKET is the name of the bucket for which a connection test should be made.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hcph</span> <span class="p">:</span> <span class="n">HCPHandler</span> <span class="o">=</span> <span class="n">get_HCPHandler</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">hcph</span><span class="o">.</span><span class="n">test_connection</span><span class="p">(</span><span class="n">bucket</span><span class="p">))</span>
+
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--path&quot;</span><span class="p">,</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Path for where to put the new credentials file.&quot;</span><span class="p">,</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--name&quot;</span><span class="p">,</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Custom name for the credentials file. Will filter out everything after a </span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2"> character, if any exist.&quot;</span><span class="p">,</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;credentials&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">iris_generate_credentials_file</span><span class="p">(</span><span class="n">path</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span> <span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate blank credentials file for the HCI and HCP. </span>
+
+<span class="sd">    WARNING: This file will store sensitive information (such as passwords) in plaintext.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">credentials_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;hcp&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;endpoint&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;aws_access_key_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;aws_secret_access_key&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;hci&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;username&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;password&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;address&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;auth_port&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;api_port&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span>
+    <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">name</span>    
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="n">name</span>
+    
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">name</span>
+        
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">dump</span><span class="p">(</span><span class="n">credentials_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+
+    
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">NGPIris</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NGPIris.html">NGPIris package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Author.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

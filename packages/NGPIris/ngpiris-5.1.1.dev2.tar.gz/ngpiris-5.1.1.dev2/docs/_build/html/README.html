@@ -1,0 +1,681 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="NGPIris" href="modules.html" /><link rel="prev" title="Welcome to NGP Iris’s documentation!" href="index.html" />
+
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
+        <title>NGP IRIS 👀 - NGPIris 5.0.0-beta1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" /
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">NGPIris 5.0.0-beta1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">NGPIris 5.0.0-beta1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">README</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Technical documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="NGPIris.html">NGPIris package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of NGPIris package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="NGPIris.cli.html">NGPIris.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NGPIris.hci.html">NGPIris.hci package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NGPIris.hcp.html">NGPIris.hcp package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NGPIris.parse_credentials.html">NGPIris.parse_credentials package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="NGPIris.utils.html">NGPIris.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IRIS_5_changelog.html">Changelog for IRIS 5</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/README.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="ngp-iris">
+<h1>NGP IRIS 👀<a class="headerlink" href="#ngp-iris" title="Link to this heading">¶</a></h1>
+<p>NGP IRIS, or just Iris, is a tool for interacting with a Hitachi Content Platform (HCP) using S3 in the <code class="docutils literal notranslate"><span class="pre">boto3</span></code> package. NGP Iris is designed with two use cases in mind:</p>
+<ul class="simple">
+<li><p>A simple, clear, real-time interaction with NGPr file management</p></li>
+<li><p>Improving process flow for performing off-site data analysis by using automated transfer scripts</p></li>
+</ul>
+<p>Both of these cases can be achieved as either a <a class="reference internal" href="#as-a-python-package"><span class="xref myst">Python package</span></a> or as a <a class="reference internal" href="#as-a-command-line-tool"><span class="xref myst">Command Line Interface (CLI)</span></a>.</p>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Python 3.11.5<a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+<li><p>NGPr credentials (see <a class="reference internal" href="#ngpr-credentials"><span class="xref myst">“NGPr credentials”</span></a>)</p></li>
+</ul>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h3>
+<p>Iris can be installed via PyPi by running the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>NGPIris
+</pre></div>
+</div>
+<p>If you wish, you can also install Iris with the following steps:</p>
+<ol class="arabic simple">
+<li><p>Clone this repository</p></li>
+<li><p>Open a terminal in your local copy of the repository</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>. This will install Iris along with the required Python packages in your Python environment</p></li>
+</ol>
+</section>
+<section id="ngpr-credentials">
+<h3>NGPr credentials<a class="headerlink" href="#ngpr-credentials" title="Link to this heading">¶</a></h3>
+<p>In order to use Iris, a JSON file containing your credentials for the NGPr. The template of the JSON file can be found in <a class="reference download internal" download="" href="_downloads/ee00c4f6f22dc2671c766f728f00006f/credentials_template.json"><span class="xref download myst">credentials/credentials_template.json</span></a>. Depending on your needs, you can either enter only the credentials for the HCP, only for the HCI <em><strong>or</strong></em> both. Do note that you can’t leave some parts of either the HCP or HCI credentials empty:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;hcp&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;endpoint&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_endpoint&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;aws_access_key_id&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">    </span>
+<span class="w">      </span><span class="nt">&quot;aws_secret_access_key&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;hci&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;username&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_user&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;password&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_password&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;address&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_address&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;auth_port&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_auth_port&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;api_port&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;some_api_port&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will prompt Iris to complain about incomplete credentials (since the entries <code class="docutils literal notranslate"><span class="pre">aws_access_key_id</span></code> and <code class="docutils literal notranslate"><span class="pre">aws_secret_access_key</span></code> are empty). Of course, the same error would occur if the reverse between the HCP and HCI fields would be true.</p>
+<p><strong>NOTE:</strong> the <code class="docutils literal notranslate"><span class="pre">endpoint</span></code> field should not contain <code class="docutils literal notranslate"><span class="pre">https://</span></code> or any port number.</p>
+</section>
+</section>
+<section id="technical-package-documentation">
+<h2>Technical package documentation<a class="headerlink" href="#technical-package-documentation" title="Link to this heading">¶</a></h2>
+<p>A thorough package documentation can be found in the <a class="reference internal" href="#"><span class="xref myst">technical documentation page</span></a>.</p>
+</section>
+<section id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
+<p>Iris can be used as a Python package or by using the command line. The following sections cover some examples of how Iris might be used as a package and how to use its various commands. However, we highly recommend checking out the <a class="reference internal" href="#/docs/Tutorial.md"><span class="xref myst">tutorial</span></a> containing more example use cases.</p>
+<section id="as-a-python-package">
+<h3>As a Python package<a class="headerlink" href="#as-a-python-package" title="Link to this heading">¶</a></h3>
+<section id="connect-to-hcp">
+<h4>Connect to HCP<a class="headerlink" href="#connect-to-hcp" title="Link to this heading">¶</a></h4>
+<p>In order to connect to the HCP, we first need to create an <code class="docutils literal notranslate"><span class="pre">HCPHandler</span></code> object and mount it to some bucket:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NGPIris.hcp</span> <span class="kn">import</span> <span class="n">HCPHandler</span>
+
+<span class="n">hcp_h</span> <span class="o">=</span> <span class="n">HCPHandler</span><span class="p">(</span><span class="s2">&quot;credentials.json&quot;</span><span class="p">)</span>
+
+<span class="n">hcp_h</span><span class="o">.</span><span class="n">mount_bucket</span><span class="p">(</span><span class="s2">&quot;myBucket&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you are unsure which buckets you are allowed to see, you can use <code class="docutils literal notranslate"><span class="pre">hcp_h.list_buckets()</span></code> in order to list all available buckets to you.</p>
+<p>When you have successfully mounted a bucket, you can then do different operations onto the bucket. Object names on the bucket can be listed by typing <code class="docutils literal notranslate"><span class="pre">print(hcp_h.list_objects(True))</span></code>.</p>
+<section id="upload-files">
+<h5>Upload files<a class="headerlink" href="#upload-files" title="Link to this heading">¶</a></h5>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Upload a single file to HCP</span>
+<span class="n">hcp_h</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="s2">&quot;myFile&quot;</span><span class="p">)</span>
+
+<span class="c1"># Upload folder contents to HCP</span>
+<span class="n">hcp_h</span><span class="o">.</span><span class="n">upload_folder</span><span class="p">(</span><span class="s2">&quot;myFiles/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="download-files">
+<h5>Download files<a class="headerlink" href="#download-files" title="Link to this heading">¶</a></h5>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download a single object from HCP</span>
+<span class="n">hcp_h</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="s2">&quot;myFile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="connect-to-hci">
+<h4>Connect to HCI<a class="headerlink" href="#connect-to-hci" title="Link to this heading">¶</a></h4>
+<p>In order to connect to the HCI, we first need to create an <code class="docutils literal notranslate"><span class="pre">HCIHandler</span></code> object and request an authorization token:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NGPIris.hci</span> <span class="kn">import</span> <span class="n">HCIHandler</span>
+
+<span class="n">hci_h</span> <span class="o">=</span> <span class="n">HCIHandler</span><span class="p">(</span><span class="s2">&quot;credentials.json&quot;</span><span class="p">)</span>
+
+<span class="n">hci_h</span><span class="o">.</span><span class="n">request_token</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that the token is stored inside of the <code class="docutils literal notranslate"><span class="pre">HCIHandler</span></code> object called <code class="docutils literal notranslate"><span class="pre">hci_h</span></code>. We can now request a list of indexes that are available by typing <code class="docutils literal notranslate"><span class="pre">print(hci_h.list_index_names())</span></code>. We can also look up information about a certain index with <code class="docutils literal notranslate"><span class="pre">print(hci_h.look_up_index(&quot;myIndex&quot;))</span></code>. It is recommended to combine the use of the pretty print module <code class="docutils literal notranslate"><span class="pre">pprint</span></code> and the <code class="docutils literal notranslate"><span class="pre">json</span></code> module for this output, as it is mostly unreadable otherwise:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NGPIris.hci</span> <span class="kn">import</span> <span class="n">HCIHandler</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">hci_h</span> <span class="o">=</span> <span class="n">HCIHandler</span><span class="p">(</span><span class="s2">&quot;credentials.json&quot;</span><span class="p">)</span>
+
+<span class="n">hci_h</span><span class="o">.</span><span class="n">request_token</span><span class="p">()</span>
+
+<span class="n">pprint</span><span class="p">(</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="n">hci_h</span><span class="o">.</span><span class="n">look_up_index</span><span class="p">(</span><span class="s2">&quot;myIndex&quot;</span><span class="p">),</span> 
+        <span class="n">indent</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="miscellaneous-utilities-utils-py">
+<h3>Miscellaneous utilities (<code class="docutils literal notranslate"><span class="pre">utils.py</span></code>)<a class="headerlink" href="#miscellaneous-utilities-utils-py" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">utils</span></code> module can be contains two functions: one for converting a string to <code class="docutils literal notranslate"><span class="pre">base64</span></code> encoding and one for <code class="docutils literal notranslate"><span class="pre">MD5</span></code> encoding.</p>
+</section>
+<section id="as-a-command-line-tool">
+<h3>As a command line tool<a class="headerlink" href="#as-a-command-line-tool" title="Link to this heading">¶</a></h3>
+<p>NGP Iris comes with two commands: <code class="docutils literal notranslate"><span class="pre">iris</span></code> and <code class="docutils literal notranslate"><span class="pre">iris_generate_credentials_file</span></code>. The latter command is used solely to generate the <code class="docutils literal notranslate"><span class="pre">.json</span></code> credentials file. Running <code class="docutils literal notranslate"><span class="pre">iris_generate_credentials_file</span> <span class="pre">--help</span></code> we get the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris_generate_credentials_file</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+
+  <span class="n">Generate</span> <span class="n">blank</span> <span class="n">credentials</span> <span class="n">file</span> <span class="k">for</span> <span class="n">the</span> <span class="n">HCI</span> <span class="ow">and</span> <span class="n">HCP</span><span class="o">.</span>
+
+  <span class="n">WARNING</span><span class="p">:</span> <span class="n">This</span> <span class="n">file</span> <span class="n">will</span> <span class="n">store</span> <span class="n">sensisitve</span> <span class="n">information</span> <span class="p">(</span><span class="n">such</span> <span class="k">as</span> <span class="n">passwords</span><span class="p">)</span> <span class="ow">in</span>
+  <span class="n">plaintext</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">path</span> <span class="n">TEXT</span>  <span class="n">Path</span> <span class="k">for</span> <span class="n">where</span> <span class="n">to</span> <span class="n">put</span> <span class="n">the</span> <span class="n">new</span> <span class="n">credentials</span> <span class="n">file</span>
+  <span class="o">--</span><span class="n">name</span> <span class="n">TEXT</span>  <span class="n">Custom</span> <span class="n">name</span> <span class="k">for</span> <span class="n">the</span> <span class="n">credentials</span> <span class="n">file</span>
+  <span class="o">--</span><span class="n">help</span>       <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">iris</span></code> command is used for communicating with the HCP and HCI. This includes upload and download to and from the HCP/HCI. Running <code class="docutils literal notranslate"><span class="pre">iris</span> <span class="pre">--help</span></code> yields the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">CREDENTIALS</span> <span class="n">COMMAND</span> <span class="p">[</span><span class="n">ARGS</span><span class="p">]</span><span class="o">...</span>
+
+  <span class="n">NGP</span> <span class="n">Intelligence</span> <span class="ow">and</span> <span class="n">Repository</span> <span class="n">Interface</span> <span class="n">Software</span><span class="p">,</span> <span class="n">IRIS</span><span class="o">.</span>
+
+  <span class="n">CREDENTIALS</span> <span class="n">refers</span> <span class="n">to</span> <span class="n">the</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">JSON</span> <span class="n">credentials</span> <span class="n">file</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">version</span>  <span class="n">Show</span> <span class="n">the</span> <span class="n">version</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">help</span>     <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+
+<span class="n">Commands</span><span class="p">:</span>
+  <span class="n">delete</span><span class="o">-</span><span class="n">folder</span>    <span class="n">Delete</span> <span class="n">a</span> <span class="n">folder</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+  <span class="n">delete</span><span class="o">-</span><span class="nb">object</span>    <span class="n">Delete</span> <span class="n">an</span> <span class="nb">object</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+  <span class="n">download</span>         <span class="n">Download</span> <span class="n">files</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+  <span class="nb">list</span><span class="o">-</span><span class="n">buckets</span>     <span class="n">List</span> <span class="n">the</span> <span class="n">available</span> <span class="n">buckets</span><span class="o">/</span><span class="n">namespaces</span> <span class="n">on</span> <span class="n">the</span> <span class="n">HCP</span><span class="o">.</span>
+  <span class="nb">list</span><span class="o">-</span><span class="n">objects</span>     <span class="n">List</span> <span class="n">the</span> <span class="n">objects</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">certain</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span> <span class="n">on</span> <span class="n">the</span><span class="o">...</span>
+  <span class="n">simple</span><span class="o">-</span><span class="n">search</span>    <span class="n">Make</span> <span class="n">simple</span> <span class="n">search</span> <span class="n">using</span> <span class="n">substrings</span> <span class="ow">in</span> <span class="n">a</span><span class="o">...</span>
+  <span class="n">test</span><span class="o">-</span><span class="n">connection</span>  <span class="n">Test</span> <span class="n">the</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">a</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+  <span class="n">upload</span>           <span class="n">Upload</span> <span class="n">files</span> <span class="n">to</span> <span class="n">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+</pre></div>
+</div>
+<section id="the-delete-folder-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">delete-folder</span></code> command<a class="headerlink" href="#the-delete-folder-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="n">delete</span><span class="o">-</span><span class="n">folder</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">FOLDER</span> <span class="n">BUCKET</span>
+
+  <span class="n">Delete</span> <span class="n">a</span> <span class="n">folder</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+
+  <span class="n">FOLDER</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">folder</span> <span class="n">to</span> <span class="n">be</span> <span class="n">deleted</span><span class="o">.</span>
+
+  <span class="n">BUCKET</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">bucket</span> <span class="n">where</span> <span class="n">the</span> <span class="n">folder</span> <span class="n">to</span> <span class="n">be</span> <span class="n">deleted</span> <span class="n">exist</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-delete-object-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">delete-object</span></code> command<a class="headerlink" href="#the-delete-object-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="n">delete</span><span class="o">-</span><span class="nb">object</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">OBJECT</span> <span class="n">BUCKET</span>
+
+  <span class="n">Delete</span> <span class="n">an</span> <span class="nb">object</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+
+  <span class="n">OBJECT</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">object</span> <span class="n">to</span> <span class="n">be</span> <span class="n">deleted</span><span class="o">.</span>
+
+  <span class="n">BUCKET</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">bucket</span> <span class="n">where</span> <span class="n">the</span> <span class="nb">object</span> <span class="n">to</span> <span class="n">be</span> <span class="n">deleted</span> <span class="n">exist</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-download-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">download</span></code> command<a class="headerlink" href="#the-download-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="n">download</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">OBJECT</span> <span class="n">BUCKET</span> <span class="n">LOCAL_PATH</span>
+
+  <span class="n">Download</span> <span class="n">files</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+
+  <span class="n">OBJECT</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="nb">object</span> <span class="n">to</span> <span class="n">be</span> <span class="n">downloaded</span><span class="o">.</span>
+
+  <span class="n">BUCKET</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">upload</span> <span class="n">destination</span> <span class="n">bucket</span><span class="o">.</span>
+
+  <span class="n">LOCAL_PATH</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">path</span> <span class="n">to</span> <span class="n">where</span> <span class="n">the</span> <span class="n">downloaded</span> <span class="n">objects</span> <span class="n">are</span> <span class="n">to</span> <span class="n">be</span> <span class="n">stored</span>
+  <span class="n">locally</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-list-buckets-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">list-buckets</span></code> command<a class="headerlink" href="#the-list-buckets-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="nb">list</span><span class="o">-</span><span class="n">buckets</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+
+  <span class="n">List</span> <span class="n">the</span> <span class="n">available</span> <span class="n">buckets</span><span class="o">/</span><span class="n">namespaces</span> <span class="n">on</span> <span class="n">the</span> <span class="n">HCP</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-list-objects-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">list-objects</span></code> command<a class="headerlink" href="#the-list-objects-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="nb">list</span><span class="o">-</span><span class="n">objects</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">BUCKET</span>
+
+  <span class="n">List</span> <span class="n">the</span> <span class="n">objects</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">certain</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span> <span class="n">on</span> <span class="n">the</span> <span class="n">HCP</span><span class="o">.</span>
+
+  <span class="n">BUCKET</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">which</span> <span class="n">to</span> <span class="nb">list</span> <span class="n">its</span> <span class="n">objects</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">no</span><span class="p">,</span> <span class="o">--</span><span class="n">name</span><span class="o">-</span><span class="n">only</span> <span class="n">BOOLEAN</span>  <span class="n">Output</span> <span class="n">only</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">objects</span> <span class="n">instead</span> <span class="n">of</span> <span class="nb">all</span>
+                            <span class="n">the</span> <span class="n">associated</span> <span class="n">metadata</span>
+  <span class="o">--</span><span class="n">help</span>                    <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-simple-search-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">simple-search</span></code> command<a class="headerlink" href="#the-simple-search-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Usage: iris CREDENTIALS simple-search [OPTIONS] BUCKET SEARCH_STRING
+
+  Make simple search using substrings in a bucket/namespace on the HCP.
+
+  BUCKET is the name of the bucket in which to make the search.
+
+  SEARCH_STRING is any string that is to be used for the search.
+
+Options:
+  -cs, --case_sensitive BOOLEAN  Use case sensitivity?
+  --help                         Show this message and exit.
+</pre></div>
+</div>
+</section>
+<section id="the-test-connection-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">test-connection</span></code> command<a class="headerlink" href="#the-test-connection-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">BUCKET</span>
+
+  <span class="n">Test</span> <span class="n">the</span> <span class="n">connection</span> <span class="n">to</span> <span class="n">a</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+
+  <span class="n">BUCKET</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">bucket</span> <span class="k">for</span> <span class="n">which</span> <span class="n">a</span> <span class="n">connection</span> <span class="n">test</span> <span class="n">should</span> <span class="n">be</span> <span class="n">made</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-upload-command">
+<h4>The <code class="docutils literal notranslate"><span class="pre">upload</span></code> command<a class="headerlink" href="#the-upload-command" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">iris</span> <span class="n">CREDENTIALS</span> <span class="n">upload</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">FILE_OR_FOLDER</span> <span class="n">BUCKET</span>
+
+  <span class="n">Upload</span> <span class="n">files</span> <span class="n">to</span> <span class="n">an</span> <span class="n">HCP</span> <span class="n">bucket</span><span class="o">/</span><span class="n">namespace</span><span class="o">.</span>
+
+  <span class="n">FILE</span><span class="o">-</span><span class="n">OR</span><span class="o">-</span><span class="n">FOLDER</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">folder</span> <span class="n">of</span> <span class="n">files</span> <span class="n">to</span> <span class="n">be</span> <span class="n">uploaded</span><span class="o">.</span>
+
+  <span class="n">BUCKET</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">upload</span> <span class="n">destination</span> <span class="n">bucket</span><span class="o">.</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
+<p>Assuming that the repository has been cloned, run the following tests:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pytype
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+</section>
+<section id="compiling-the-documentation">
+<h2>Compiling the documentation<a class="headerlink" href="#compiling-the-documentation" title="Link to this heading">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
+make<span class="w"> </span>html
+</pre></div>
+</div>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Most versions of Python 3 should work</p>
+</aside>
+</aside>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="modules.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">NGPIris</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">NGP IRIS 👀</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#ngpr-credentials">NGPr credentials</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#technical-package-documentation">Technical package documentation</a></li>
+<li><a class="reference internal" href="#basic-usage">Basic usage</a><ul>
+<li><a class="reference internal" href="#as-a-python-package">As a Python package</a><ul>
+<li><a class="reference internal" href="#connect-to-hcp">Connect to HCP</a><ul>
+<li><a class="reference internal" href="#upload-files">Upload files</a></li>
+<li><a class="reference internal" href="#download-files">Download files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connect-to-hci">Connect to HCI</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#miscellaneous-utilities-utils-py">Miscellaneous utilities (<code class="docutils literal notranslate"><span class="pre">utils.py</span></code>)</a></li>
+<li><a class="reference internal" href="#as-a-command-line-tool">As a command line tool</a><ul>
+<li><a class="reference internal" href="#the-delete-folder-command">The <code class="docutils literal notranslate"><span class="pre">delete-folder</span></code> command</a></li>
+<li><a class="reference internal" href="#the-delete-object-command">The <code class="docutils literal notranslate"><span class="pre">delete-object</span></code> command</a></li>
+<li><a class="reference internal" href="#the-download-command">The <code class="docutils literal notranslate"><span class="pre">download</span></code> command</a></li>
+<li><a class="reference internal" href="#the-list-buckets-command">The <code class="docutils literal notranslate"><span class="pre">list-buckets</span></code> command</a></li>
+<li><a class="reference internal" href="#the-list-objects-command">The <code class="docutils literal notranslate"><span class="pre">list-objects</span></code> command</a></li>
+<li><a class="reference internal" href="#the-simple-search-command">The <code class="docutils literal notranslate"><span class="pre">simple-search</span></code> command</a></li>
+<li><a class="reference internal" href="#the-test-connection-command">The <code class="docutils literal notranslate"><span class="pre">test-connection</span></code> command</a></li>
+<li><a class="reference internal" href="#the-upload-command">The <code class="docutils literal notranslate"><span class="pre">upload</span></code> command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#compiling-the-documentation">Compiling the documentation</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=2385625f"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=4e2eecee"></script>
+    </body>
+</html>
