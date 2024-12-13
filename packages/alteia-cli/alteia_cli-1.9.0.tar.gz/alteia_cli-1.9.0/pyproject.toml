@@ -1,0 +1,76 @@
+# === Poetry ===
+[tool.poetry]
+name = "alteia-cli"
+version = "1.9.0"  # must match the version in alteia_cli/__init__.py
+license = "MIT"
+readme = "README.md"
+description = "CLI for Alteia"
+authors = ["Alteia Backend Team <backend-team@alteia.com>"]
+keywords = ["cli",
+            "alteia"]
+include = ["custom_analytics/share/*"]
+
+[tool.poetry.scripts]
+alteia = "alteia_cli.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+typer = "^0.6.1"
+click_spinner = "^0.1.8"
+tabulate = ">=0.8.9"
+pyyaml = ">=5.0.0 <7.0.0"
+jsonschema = ">=3.0.0 <5.0.0"
+alteia = "^2.15.0"
+semver = "^2.13.0"
+pyinquirer = "^1.0.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pycodestyle = "*"
+flake8 = ">=4 <5"
+pylint = ">=2.9"
+mypy = "*"
+pre-commit = "*"
+types-click-spinner = "*"
+types-pyyaml = "*"
+types-tabulate = "*"
+
+[[tool.poetry.source]]
+priority = "primary"
+name = "devpi"
+url = "https://alteia-183650284468.d.codeartifact.us-east-1.amazonaws.com/pypi/pypi-store/simple/"
+
+# === Tox configuration (unit tests) ===
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py38, py39, py310
+isolated_build = True
+skipsdist = True
+
+[testenv]
+skip_install = True
+setenv =
+   PIP_INDEX_URL = https://{env:PYTHON_INDEX_USER}:{env:PYTHON_INDEX_PASSWORD}@{env:PYTHON_INDEX_URL_NO_PROTOCOL}
+commands =
+    pytest
+deps =
+    pytest
+
+[testenv:py39]
+skip_install = True
+setenv =
+   PIP_INDEX_URL = https://{env:PYTHON_INDEX_USER}:{env:PYTHON_INDEX_PASSWORD}@{env:PYTHON_INDEX_URL_NO_PROTOCOL}
+commands =
+    coverage erase
+    pytest --cov alteia_cli --cov-report term --cov-report html
+deps =
+    pytest-cov
+    pytest
+    coverage
+"""
+
+# === Build ===
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
