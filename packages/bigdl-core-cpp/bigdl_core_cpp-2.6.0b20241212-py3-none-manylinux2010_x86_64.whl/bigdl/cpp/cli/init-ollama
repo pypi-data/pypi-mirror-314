@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Default values
+llm_dir="$(dirname "$(python -c "import bigdl.cpp;print(bigdl.cpp.__file__)")")"
+lib_dir="$llm_dir/libs"
+
+ln -sf "${lib_dir}"/{ollama,libggml.so,libllama.so,libllava_shared.so,libmllama.so,libsample.so} "${PWD}"
+eval "$command"
