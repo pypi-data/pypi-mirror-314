@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: ghexplain
+Version: 0.0.2
+Summary: AI-powered explanations for GitHub issues using LangChain
+Author-email: Stefano Fancello <stefano.fancello@nethesis.it>
+Project-URL: Homepage, https://github.com/Stell0/ghexplain
+Project-URL: Bug Tracker, https://github.com/Stell0/ghexplain/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# ghexplain
+
+A Python library that provides AI-powered explanations for GitHub issues using LangChain.
+
+## Installation
+
+```bash
+pip install ghexplain
+```
+
+## Usage
+
+### Python API
+
+```python
+import ghexplain
+
+# Get a summary of a GitHub issue
+summary = ghexplain.issue("https://github.com/owner/repo/issues/123")
+
+# Get a summary in a specific language
+summary_es = ghexplain.issue("https://github.com/owner/repo/issues/123", language="spanish")
+```
+
+### Command Line Interface
+
+The package provides a CLI tool that can be used directly from your terminal:
+
+```bash
+# Export github token as environment
+export GITHUB_TOKEN=$(gh auth token)
+
+# Basic usage
+ghexplain https://github.com/owner/repo/issues/123
+
+# Get summary in a different language
+ghexplain https://github.com/owner/repo/issues/123 -l spanish
+
+# Show help
+ghexplain --help
+```
+
+You can also use it with python -m:
+```bash
+python -m ghexplain.cli https://github.com/owner/repo/issues/123
+```
