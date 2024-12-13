@@ -1,0 +1,33 @@
+# Specify the build system for the project.
+[build-system]
+requires = ["sip >=6.9, <7", "PyQt-builder >=1.17, <2"]
+build-backend = "sipbuild.api"
+
+[project]
+name = "PyQt6-Graphs"
+version = "6.8.0"
+description = "Python bindings for the Qt Graphs library"
+readme = "README.md"
+urls.homepage = "https://www.riverbankcomputing.com/software/pyqtgraphs/"
+dependencies = []
+license = {text = "GPL v3"}
+
+[[project.authors]]
+name = "Riverbank Computing Limited"
+email = "info@riverbankcomputing.com"
+
+
+# Specify a PyQt-based project.
+[tool.sip]
+project-factory = "pyqtbuild:PyQtProject"
+
+# Configure the project.
+[tool.sip.project]
+tag-prefix = "QtGraphs"
+
+# Define and configure each set of bindings.
+[tool.sip.bindings.QtGraphs]
+qmake-QT = ["graphs"]
+
+[tool.sip.bindings.QtGraphsWidgets]
+qmake-QT = ["graphswidgets"]
